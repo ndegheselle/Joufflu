@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:Joufflu.Inputs">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/TextBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/TextBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/ComboBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/NamedStyles/IconButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

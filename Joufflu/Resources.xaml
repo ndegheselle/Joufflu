@@ -3,39 +3,48 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/FontIcon.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
 
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/ToggleButton.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Button.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Button.named.xaml" />
+        <!--  Actions  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
 
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/NamedStyles/Card.xaml" />
+        <!--  Data input  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/CheckBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/RadioButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/Slider.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/TextBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/ListBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/Calendar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/ComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/DatePicker.xaml" />
 
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ScrollBar.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ScrollViewer.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Hyperlink.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/CheckBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Label.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ProgressBar.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/RadioButton.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Slider.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/TextBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/StatusBar.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Window.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/GridSplitter.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/GroupBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ListBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Menu.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/MenuItem.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Calendar.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/TreeView.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/TabControl.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ListView.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/DataGrid.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Expander.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ComboBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/DatePicker.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ToolBar.xaml" />
+        <!--  Data display  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Label.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/ListView.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/DataGrid.xaml" />
+
+        <!--  Navigation  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/Hyperlink.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/Menu.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/MenuItem.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/TabControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/ToolBar.xaml" />
+
+        <!--  Feedback  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/ProgressBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/StatusBar.xaml" />
+
+        <!--  Layout  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/ScrollBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/ScrollViewer.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/Window.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/GridSplitter.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/GroupBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/Expander.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/Border.named.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
 

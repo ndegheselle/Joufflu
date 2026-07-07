@@ -2,8 +2,8 @@
 
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Button.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/ToggleButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style

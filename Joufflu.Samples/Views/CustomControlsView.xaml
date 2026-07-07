@@ -114,29 +114,6 @@
             </c:CodeExample>
 
             <c:CodeExample
-                Title="Card"
-                Code="{Binding CardCode}"
-                Description="A surface with an optional header. The header collapses automatically when not set.">
-                <WrapPanel>
-                    <controls:Card Width="240" Margin="0,0,12,0" Header="Profile">
-                        <StackPanel>
-                            <TextBlock Text="A titled surface that groups related content." TextWrapping="Wrap" />
-                            <controls:Badge
-                                Margin="0,8,0,0"
-                                HorizontalAlignment="Left"
-                                Variant="Success">
-                                Active
-                            </controls:Badge>
-                        </StackPanel>
-                    </controls:Card>
-
-                    <controls:Card Width="240">
-                        <TextBlock Text="A card with no header — just a padded, bordered surface." TextWrapping="Wrap" />
-                    </controls:Card>
-                </WrapPanel>
-            </c:CodeExample>
-
-            <c:CodeExample
                 Title="Spinner"
                 Code="{Binding SpinnerCode}"
                 Description="An indeterminate loading indicator. Color comes from Foreground, diameter from ControlProperties.Size.">

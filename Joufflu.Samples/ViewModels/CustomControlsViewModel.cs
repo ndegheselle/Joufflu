@@ -36,11 +36,6 @@ public class CustomControlsViewModel : ObservableObject
         "<controls:Badge Variant=\"Success\">Active</controls:Badge>\n" +
         "<controls:Badge Variant=\"Danger\" joufflu:ControlProperties.Size=\"sm\">3</controls:Badge>";
 
-    public string CardCode =>
-        "<controls:Card Header=\"Profile\">\n" +
-        "    <TextBlock Text=\"Card body content\" />\n" +
-        "</controls:Card>";
-
     public string SpinnerCode =>
         "<controls:Spinner />\n" +
         "<controls:Spinner joufflu:ControlProperties.Size=\"lg\" />";
