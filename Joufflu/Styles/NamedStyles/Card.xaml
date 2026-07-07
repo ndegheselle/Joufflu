@@ -7,7 +7,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" />
     </Style>
 
     <Style x:Key="CardSecondary" TargetType="Border">
@@ -15,6 +15,6 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" />
     </Style>
 </ResourceDictionary>

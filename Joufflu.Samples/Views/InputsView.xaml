@@ -5,66 +5,59 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="24" VerticalScrollBarVisibility="Auto">
-        <StackPanel MaxWidth="900" HorizontalAlignment="Left">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock
                 Margin="0,0,0,16"
                 FontSize="22"
                 FontWeight="Bold"
                 Text="Inputs" />
 
-            <c:CodeExample Title="Text" Code="{Binding TextBoxCode}">
-                <StackPanel>
-                    <TextBox Width="280" HorizontalAlignment="Left" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock
-                        Margin="0,8,0,0"
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                        Text="{Binding Text, StringFormat='You typed: {0}'}" />
-                </StackPanel>
-            </c:CodeExample>
-
-            <c:CodeExample Title="Selection" Code="{Binding ComboCode}">
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox
-                        Width="200"
-                        ItemsSource="{Binding Options}"
-                        SelectedItem="{Binding SelectedOption}" />
-                    <ComboBox
-                        Width="200"
-                        Margin="8,0,0,0"
-                        IsEditable="True"
-                        ItemsSource="{Binding Options}"
-                        Text="{Binding SelectedOption}" />
-                </StackPanel>
-            </c:CodeExample>
-
-            <c:CodeExample Title="Toggles" Code="{Binding CheckCode}">
-                <StackPanel>
-                    <CheckBox Content="Check box" IsChecked="{Binding IsChecked}" />
-                    <CheckBox Margin="0,8,0,0" Content="Disabled" IsEnabled="False" />
-                    <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
-                        <RadioButton Content="Option A" IsChecked="True" />
-                        <RadioButton Margin="16,0,0,0" Content="Option B" />
+            <WrapPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+                <c:CodeExample Title="Text" Width="320">
+                    <StackPanel joufflu:Spacing.Gap="4">
+                        <TextBox Text="Small" joufflu:ControlProperties.Size="sm" />
+                        <TextBox Text="Medium" />
+                        <TextBox Text="Large" joufflu:ControlProperties.Size="lg" />
                     </StackPanel>
-                    <ToggleButton
+                </c:CodeExample>
+
+                <c:CodeExample Title="Selection" Width="320">
+                    <StackPanel joufflu:Spacing.Gap="4">
+                        <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:ControlProperties.Size="sm" />
+                        <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" />
+                        <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:ControlProperties.Size="lg" />
+                    </StackPanel>
+                </c:CodeExample>
+
+                <c:CodeExample Title="Toggles" Width="320">
+                    <StackPanel>
+                        <CheckBox Content="Check box" IsChecked="{Binding IsChecked}" />
+                        <CheckBox Margin="0,8,0,0" Content="Disabled" IsEnabled="False" />
+                        <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                            <RadioButton Content="Option A" IsChecked="True" />
+                            <RadioButton Margin="16,0,0,0" Content="Option B" />
+                        </StackPanel>
+                        <ToggleButton
                         Margin="0,8,0,0"
                         HorizontalAlignment="Left"
                         Content="Toggle"
                         IsChecked="{Binding IsToggled}" />
-                </StackPanel>
-            </c:CodeExample>
+                    </StackPanel>
+                </c:CodeExample>
 
-            <c:CodeExample Title="Date &amp; range">
-                <StackPanel>
-                    <DatePicker Width="200" HorizontalAlignment="Left" SelectedDate="{Binding SelectedDate}" />
-                    <Slider
+                <c:CodeExample Title="Date &amp; range" Width="320">
+                    <StackPanel>
+                        <DatePicker Width="200" HorizontalAlignment="Left" SelectedDate="{Binding SelectedDate}" />
+                        <Slider
                         Width="280"
                         Margin="0,12,0,0"
                         HorizontalAlignment="Left"
                         Maximum="100"
                         Minimum="0"
                         Value="{Binding SliderValue}" />
-                </StackPanel>
-            </c:CodeExample>
+                    </StackPanel>
+                </c:CodeExample>
+            </WrapPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

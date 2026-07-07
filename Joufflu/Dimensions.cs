@@ -7,6 +7,7 @@ public static class Dimensions
     public static ComponentResourceKey CornerRadius => new(typeof(Dimensions), "CornerRadius");
     public static ComponentResourceKey BorderThickness => new(typeof(Dimensions), "BorderThickness");
     public static ComponentResourceKey Spacing => new(typeof(Dimensions), "Spacing");
+    public static ComponentResourceKey SpacingThickness => new(typeof(Dimensions), "SpacingThickness");
 
     public static ComponentResourceKey ControlHeightXs => new(typeof(Dimensions), "ControlHeightXs");
     public static ComponentResourceKey ControlHeightSm => new(typeof(Dimensions), "ControlHeightSm");

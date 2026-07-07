@@ -8,13 +8,12 @@
 
     <!--  Live preview + code snippet card  -->
     <Style TargetType="{x:Type c:CodeExample}">
-        <Setter Property="Margin" Value="0,0,0,16" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type c:CodeExample}">
                     <Border Style="{StaticResource Card}">
-                        <Grid>
+                        <Grid joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />

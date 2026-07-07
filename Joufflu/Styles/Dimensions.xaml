@@ -6,7 +6,14 @@
 
     <Thickness x:Key="{x:Static joufflu:Dimensions.BorderThickness}">1</Thickness>
     <CornerRadius x:Key="{x:Static joufflu:Dimensions.CornerRadius}">8</CornerRadius>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.Spacing}">12</Thickness>
+
+    <system:Double x:Key="{x:Static joufflu:Dimensions.Spacing}">12</system:Double>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.SpacingThickness}" 
+               Top="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
+               Bottom="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
+               Left="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
+               Right="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
+               />
 
     <!-- Vertical size of single line controls -->
     <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightXs}">24</system:Double>

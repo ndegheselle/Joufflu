@@ -17,7 +17,7 @@
                         Margin="{TemplateBinding Padding}"
                         Focusable="False"
                         HorizontalScrollBarVisibility="Hidden"
-                        Template="{StaticResource TextBoxScrollViewerTemplate}"
+                        Template="{DynamicResource TextBoxScrollViewerTemplate}"
                         VerticalScrollBarVisibility="Hidden" />
                 </ControlTemplate>
             </Setter.Value>

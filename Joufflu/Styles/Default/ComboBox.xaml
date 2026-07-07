@@ -165,7 +165,7 @@
                                         Name="PART_ContentHost"
                                         Focusable="False"
                                         HorizontalScrollBarVisibility="Hidden"
-                                        Template="{StaticResource TextBoxScrollViewerTemplate}"
+                                        Template="{DynamicResource TextBoxScrollViewerTemplate}"
                                         VerticalScrollBarVisibility="Hidden" />
                                 </ControlTemplate>
                             </TextBox.Template>

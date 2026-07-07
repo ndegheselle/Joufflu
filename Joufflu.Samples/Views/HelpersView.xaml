@@ -83,6 +83,63 @@
                     </Button>
                 </StackPanel>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Spacing.Gap"
+                Code="{Binding GapCode}"
+                Description="Gap adds spacing between the children of a StackPanel, WrapPanel or Grid by applying margins. Use Gap for a uniform gap on both axes, or HorizontalGap / VerticalGap to set a single axis.">
+                <StackPanel>
+                    <!-- StackPanel: gap along the Orientation axis -->
+                    <TextBlock
+                        Margin="0,0,0,6"
+                        FontWeight="SemiBold"
+                        Text="StackPanel (Gap=8)" />
+                    <StackPanel joufflu:Spacing.Gap="8" Orientation="Horizontal">
+                        <Button>One</Button>
+                        <Button>Two</Button>
+                        <Button>Three</Button>
+                    </StackPanel>
+
+                    <!-- WrapPanel: independent gap per axis -->
+                    <TextBlock
+                        Margin="0,20,0,6"
+                        FontWeight="SemiBold"
+                        Text="WrapPanel (HorizontalGap=8, VerticalGap=12)" />
+                    <WrapPanel
+                        MaxWidth="260"
+                        HorizontalAlignment="Left"
+                        joufflu:Spacing.HorizontalGap="8"
+                        joufflu:Spacing.VerticalGap="12">
+                        <Button>Alpha</Button>
+                        <Button>Beta</Button>
+                        <Button>Gamma</Button>
+                        <Button>Delta</Button>
+                        <Button>Epsilon</Button>
+                    </WrapPanel>
+
+                    <!-- Grid: gap between rows and columns -->
+                    <TextBlock
+                        Margin="0,20,0,6"
+                        FontWeight="SemiBold"
+                        Text="Grid (Gap=12)" />
+                    <Grid
+                        HorizontalAlignment="Left"
+                        joufflu:Spacing.Gap="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" Grid.Column="0">Top left</Button>
+                        <Button Grid.Row="0" Grid.Column="1">Top right</Button>
+                        <Button Grid.Row="1" Grid.Column="0">Bottom left</Button>
+                        <Button Grid.Row="1" Grid.Column="1">Bottom right</Button>
+                    </Grid>
+                </StackPanel>
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

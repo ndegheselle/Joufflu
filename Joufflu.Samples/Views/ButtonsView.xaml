@@ -6,9 +6,11 @@
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="24" VerticalScrollBarVisibility="Auto">
-        <StackPanel MaxWidth="900" HorizontalAlignment="Left">
+        <StackPanel
+            MaxWidth="900"
+            HorizontalAlignment="Left"
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock
-                Margin="0,0,0,16"
                 FontSize="22"
                 FontWeight="Bold"
                 Text="Buttons" />
@@ -17,63 +19,46 @@
                 Title="Variants"
                 Code="{Binding VariantsCode}"
                 Description="Named styles map to the design system's semantic brushes.">
-                <WrapPanel>
-                    <Button Margin="0,0,8,8">Default</Button>
-                    <Button Margin="0,0,8,8" Style="{StaticResource Primary}">Primary</Button>
-                    <Button Margin="0,0,8,8" Style="{StaticResource Secondary}">Secondary</Button>
-                    <Button Margin="0,0,8,8" Style="{StaticResource Ghost}">Ghost</Button>
-                    <Button Margin="0,0,8,8" Style="{StaticResource Success}">Success</Button>
-                    <Button Margin="0,0,8,8" Style="{StaticResource Danger}">Danger</Button>
-                    <Button Margin="0,0,8,8" IsEnabled="False">Disabled</Button>
+                <WrapPanel joufflu:Spacing.HorizontalGap="8">
+                    <Button>Default</Button>
+                    <Button Style="{StaticResource Primary}">Primary</Button>
+                    <Button Style="{StaticResource Secondary}">Secondary</Button>
+                    <Button Style="{StaticResource Ghost}">Ghost</Button>
+                    <Button Style="{StaticResource Success}">Success</Button>
+                    <Button Style="{StaticResource Danger}">Danger</Button>
+                    <Button IsEnabled="False">Disabled</Button>
                 </WrapPanel>
+            </c:CodeExample>
+            
+            <c:CodeExample
+                Title="Icon buttons"
+                Code="{Binding IconCode}"
+                Description="IsSquare makes a button as wide as it is tall — ideal for a single icon.">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                    <Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Primary}">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
+                    </Button>
+                    <Button joufflu:ControlProperties.IsSquare="True">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+                    </Button>
+                    <Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Danger}">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
+                    </Button>
+                </StackPanel>
             </c:CodeExample>
 
             <c:CodeExample
                 Title="Sizes"
                 Code="{Binding SizesCode}"
                 Description="The inherited ControlProperties.Size attached property scales height, font size and padding.">
-                <StackPanel Orientation="Horizontal">
-                    <Button
-                        Margin="0,0,8,0"
-                        VerticalAlignment="Center"
-                        joufflu:ControlProperties.Size="xs">XS</Button>
-                    <Button
-                        Margin="0,0,8,0"
-                        VerticalAlignment="Center"
-                        joufflu:ControlProperties.Size="sm">SM</Button>
-                    <Button
-                        Margin="0,0,8,0"
-                        VerticalAlignment="Center"
-                        joufflu:ControlProperties.Size="md">MD</Button>
-                    <Button
-                        Margin="0,0,8,0"
-                        VerticalAlignment="Center"
-                        joufflu:ControlProperties.Size="lg">LG</Button>
+                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="xs">XS</Button>
+                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="sm">SM</Button>
+                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="md">MD</Button>
+                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="lg">LG</Button>
                 </StackPanel>
             </c:CodeExample>
 
-            <c:CodeExample
-                Title="Icon buttons"
-                Code="{Binding IconCode}"
-                Description="IsSquare makes a button as wide as it is tall — ideal for a single icon.">
-                <StackPanel Orientation="Horizontal">
-                    <Button
-                        Margin="0,0,8,0"
-                        joufflu:ControlProperties.IsSquare="True"
-                        Style="{StaticResource Primary}">
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
-                    </Button>
-                    <Button Margin="0,0,8,0" joufflu:ControlProperties.IsSquare="True">
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
-                    </Button>
-                    <Button
-                        Margin="0,0,8,0"
-                        joufflu:ControlProperties.IsSquare="True"
-                        Style="{StaticResource Danger}">
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
-                    </Button>
-                </StackPanel>
-            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
