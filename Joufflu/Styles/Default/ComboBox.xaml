@@ -7,7 +7,8 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
-        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}" />
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -17,7 +18,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBoxItem">
                     <Border
-                        Name="Border"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -41,62 +41,26 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
             </Trigger>
+
+            <!--  Size variants (md is the default, no trigger needed)  -->
+            <Trigger Property="joufflu:ControlProperties.Size" Value="xs">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingXs}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="sm">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingSm}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="lg">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingLg}}" />
+            </Trigger>
         </Style.Triggers>
     </Style>
 
+    <!--  Chrome-less hit target used to open the drop down when clicking the control  -->
     <ControlTemplate x:Key="ComboBoxToggleButtonTemplate" TargetType="ToggleButton">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="20" />
-            </Grid.ColumnDefinitions>
-
-            <Border
-                x:Name="Border"
-                Grid.ColumnSpan="2"
-                Background="Transparent"
-                BorderBrush="Transparent"
-                BorderThickness="0"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-
-            <Border
-                x:Name="ButtonBorder"
-                Grid.Column="1"
-                Margin="1"
-                Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}"
-                BorderThickness="0"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
-                Visibility="Collapsed" />
-
-            <Viewbox
-                Grid.Column="1"
-                Width="10"
-                Height="10"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-                <Path
-                    Data="M 0 0 L 5 5 L 10 0"
-                    Stroke="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
-                    StrokeEndLineCap="Round"
-                    StrokeLineJoin="Round"
-                    StrokeStartLineCap="Round"
-                    StrokeThickness="1.5" />
-            </Viewbox>
-        </Grid>
-
-        <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding IsEditable, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}" Value="True">
-                <Setter TargetName="ButtonBorder" Property="Visibility" Value="Visible" />
-            </DataTrigger>
-
-            <Trigger Property="IsChecked" Value="True">
-                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
-            </Trigger>
-
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-            </Trigger>
-        </ControlTemplate.Triggers>
+        <Border Background="Transparent" />
     </ControlTemplate>
 
     <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
@@ -104,7 +68,9 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
-        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -119,25 +85,31 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
-                    <Grid>
-                        <Border
-                            x:Name="Border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                    <Border
+                        x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                        SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <ToggleButton
-                            x:Name="ToggleButton"
-                            ClickMode="Press"
-                            Focusable="False"
-                            Foreground="{TemplateBinding Foreground}"
-                            IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                            Template="{StaticResource ComboBoxToggleButtonTemplate}" />
+                            <!--  Whole-control click target (sits behind the content)  -->
+                            <ToggleButton
+                                Grid.ColumnSpan="2"
+                                ClickMode="Press"
+                                Focusable="False"
+                                IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                Template="{StaticResource ComboBoxToggleButtonTemplate}" />
 
-                        <Border Margin="0,0,20,0">
+                            <!--  Selected item display (non editable)  -->
                             <ContentPresenter
                                 x:Name="ContentSite"
+                                Grid.Column="0"
                                 Margin="{TemplateBinding Padding}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -145,62 +117,77 @@
                                 ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                 IsHitTestVisible="False" />
-                        </Border>
 
-                        <TextBox
-                            x:Name="PART_EditableTextBox"
-                            Margin="0,0,20,0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Background="{TemplateBinding Background}"
-                            Focusable="True"
-                            Foreground="{TemplateBinding Foreground}"
-                            IsReadOnly="{TemplateBinding IsReadOnly}"
-                            Visibility="Hidden">
-                            <TextBox.Template>
-                                <ControlTemplate TargetType="TextBox">
-                                    <ScrollViewer
-                                        Name="PART_ContentHost"
-                                        Focusable="False"
-                                        HorizontalScrollBarVisibility="Hidden"
-                                        Template="{DynamicResource TextBoxScrollViewerTemplate}"
-                                        VerticalScrollBarVisibility="Hidden" />
-                                </ControlTemplate>
-                            </TextBox.Template>
-                        </TextBox>
+                            <!--  Editable text entry (shown only when IsEditable)  -->
+                            <TextBox
+                                x:Name="PART_EditableTextBox"
+                                Grid.Column="0"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Background="Transparent"
+                                Focusable="True"
+                                Foreground="{TemplateBinding Foreground}"
+                                IsReadOnly="{TemplateBinding IsReadOnly}"
+                                Visibility="Collapsed">
+                                <TextBox.Template>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <ScrollViewer
+                                            Name="PART_ContentHost"
+                                            Margin="{TemplateBinding Padding}"
+                                            Focusable="False"
+                                            HorizontalScrollBarVisibility="Hidden"
+                                            Template="{DynamicResource TextBoxScrollViewerTemplate}"
+                                            VerticalScrollBarVisibility="Hidden" />
+                                    </ControlTemplate>
+                                </TextBox.Template>
+                            </TextBox>
 
-                        <Popup
-                            x:Name="PART_Popup"
-                            AllowsTransparency="True"
-                            Focusable="False"
-                            IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
-                            Placement="Bottom"
-                            PopupAnimation="Slide">
-                            <Grid
-                                x:Name="DropDown"
-                                MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
-                                MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}"
-                                SnapsToDevicePixels="True">
+                            <!--  Drop down chevron  -->
+                            <Viewbox
+                                Grid.Column="1"
+                                Width="10"
+                                Height="10"
+                                Margin="6,0,10,0"
+                                IsHitTestVisible="False">
+                                <Path
+                                    Data="M 0 0 L 5 5 L 10 0"
+                                    Stroke="{TemplateBinding Foreground}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="1.5" />
+                            </Viewbox>
+
+                            <!--  Drop down list  -->
+                            <Popup
+                                x:Name="PART_Popup"
+                                AllowsTransparency="True"
+                                Focusable="False"
+                                IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
+                                Placement="Bottom"
+                                PopupAnimation="Slide">
                                 <Border
                                     x:Name="DropDownBorder"
+                                    MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                    MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}"
                                     Margin="0,1,0,0"
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                                    SnapsToDevicePixels="True">
                                     <ScrollViewer SnapsToDevicePixels="True">
                                         <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
                                 </Border>
-                            </Grid>
-                        </Popup>
-                    </Grid>
+                            </Popup>
+                        </Grid>
+                    </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasItems" Value="False">
-                            <Setter TargetName="DropDownBorder" Property="FrameworkElement.MinHeight" Value="95" />
+                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
                         </Trigger>
 
                         <Trigger Property="IsGrouping" Value="True">
@@ -209,9 +196,12 @@
 
                         <Trigger Property="IsEditable" Value="True">
                             <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
-                            <Setter TargetName="PART_EditableTextBox" Property="UIElement.Visibility" Value="Visible" />
-                            <Setter TargetName="ContentSite" Property="UIElement.Visibility" Value="Collapsed" />
-                            <Setter TargetName="ToggleButton" Property="HorizontalAlignment" Value="Right" />
+                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                        <Trigger Property="IsDropDownOpen" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
                         </Trigger>
 
                         <Trigger Property="Validation.HasError" Value="True">
@@ -239,6 +229,23 @@
 
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+            </Trigger>
+
+            <!--  Size variants (md is the default, no trigger needed)  -->
+            <Trigger Property="joufflu:ControlProperties.Size" Value="xs">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightXs}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingXs}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="sm">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightSm}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingSm}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="lg">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightLg}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
