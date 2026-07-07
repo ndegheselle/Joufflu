@@ -4,11 +4,12 @@
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/FontIcon.xaml" />
+        
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/NamedStyles/IconButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/NamedStyles/Card.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ScrollBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ScrollViewer.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/TextBlock.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Hyperlink.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/CheckBox.xaml" />

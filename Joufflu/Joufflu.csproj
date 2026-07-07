@@ -23,38 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Styles\Default\Calendar.xaml" />
-    <Page Remove="Styles\Default\CheckBox.xaml" />
-    <Page Remove="Styles\Default\ComboBox.xaml" />
-    <Page Remove="Styles\Default\DataGrid.xaml" />
-    <Page Remove="Styles\Default\DatePicker.xaml" />
-    <Page Remove="Styles\Default\Expander.xaml" />
-    <Page Remove="Styles\Default\GridSplitter.xaml" />
-    <Page Remove="Styles\Default\GroupBox.xaml" />
-    <Page Remove="Styles\Default\Hyperlink.xaml" />
-    <Page Remove="Styles\Default\Label.xaml" />
-    <Page Remove="Styles\Default\ListBox.xaml" />
-    <Page Remove="Styles\Default\ListView.xaml" />
-    <Page Remove="Styles\Default\Menu.xaml" />
-    <Page Remove="Styles\Default\MenuItem.xaml" />
-    <Page Remove="Styles\Default\MessageBoxWindow.xaml" />
-    <Page Remove="Styles\Default\ProgressBar.xaml" />
-    <Page Remove="Styles\Default\RadioButton.xaml" />
-    <Page Remove="Styles\Default\ScrollBar.xaml" />
-    <Page Remove="Styles\Default\ScrollViewer.xaml" />
-    <Page Remove="Styles\Default\Slider.xaml" />
-    <Page Remove="Styles\Default\SplitButton.xaml" />
-    <Page Remove="Styles\Default\StatusBar.xaml" />
-    <Page Remove="Styles\Default\TabControl.xaml" />
-    <Page Remove="Styles\Default\TextBlock.xaml" />
-    <Page Remove="Styles\Default\TextBox.xaml" />
-    <Page Remove="Styles\Default\ToggleButton.xaml" />
-    <Page Remove="Styles\Default\ToolBar.xaml" />
-    <Page Remove="Styles\Default\TreeView.xaml" />
-    <Page Remove="Styles\Default\Window.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Assets\Fonts\lucide.ttf" />
   </ItemGroup>
 

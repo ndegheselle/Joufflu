@@ -10,7 +10,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Sizes.ControlFontSizeMd}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Padding" Value="8,2" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -74,15 +74,15 @@
             </Trigger>
 
             <Trigger Property="joufflu:ControlProperties.Size" Value="xs">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Sizes.ControlFontSizeXs}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
                 <Setter Property="Padding" Value="6,1" />
             </Trigger>
             <Trigger Property="joufflu:ControlProperties.Size" Value="sm">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Sizes.ControlFontSizeSm}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
                 <Setter Property="Padding" Value="7,2" />
             </Trigger>
             <Trigger Property="joufflu:ControlProperties.Size" Value="lg">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Sizes.ControlFontSizeLg}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
                 <Setter Property="Padding" Value="12,4" />
             </Trigger>
         </Style.Triggers>

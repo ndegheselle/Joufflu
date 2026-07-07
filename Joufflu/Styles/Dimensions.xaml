@@ -6,21 +6,24 @@
 
     <Thickness x:Key="{x:Static joufflu:Dimensions.BorderThickness}">1</Thickness>
     <CornerRadius x:Key="{x:Static joufflu:Dimensions.CornerRadius}">8</CornerRadius>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.Spacing}">8,4</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.Spacing}">12</Thickness>
 
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlHeightXs}">24</system:Double>
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlHeightSm}">28</system:Double>
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlHeightMd}">32</system:Double>
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlHeightLg}">40</system:Double>
+    <!-- Vertical size of single line controls -->
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightXs}">24</system:Double>
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightSm}">28</system:Double>
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightMd}">32</system:Double>
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightLg}">40</system:Double>
 
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlFontSizeXs}">11</system:Double>
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlFontSizeSm}">12</system:Double>
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlFontSizeMd}">13</system:Double>
-    <system:Double x:Key="{x:Static joufflu:Sizes.ControlFontSizeLg}">15</system:Double>
+    <!-- Font size -->
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlFontSizeXs}">11</system:Double>
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlFontSizeSm}">12</system:Double>
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlFontSizeMd}">13</system:Double>
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ControlFontSizeLg}">15</system:Double>
 
-    <Thickness x:Key="{x:Static joufflu:Sizes.ControlPaddingXs}">4,2</Thickness>
-    <Thickness x:Key="{x:Static joufflu:Sizes.ControlPaddingSm}">6,3</Thickness>
-    <Thickness x:Key="{x:Static joufflu:Sizes.ControlPaddingMd}">8,4</Thickness>
-    <Thickness x:Key="{x:Static joufflu:Sizes.ControlPaddingLg}">12,6</Thickness>
+    <!-- Control paddings  -->
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ControlPaddingXs}">4,2</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ControlPaddingSm}">6,3</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ControlPaddingMd}">8,4</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ControlPaddingLg}">12,6</Thickness>
 
 </ResourceDictionary>
