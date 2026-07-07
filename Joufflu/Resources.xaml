@@ -4,21 +4,22 @@
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/FontIcon.xaml" />
-        
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/NamedStyles/IconButton.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/ToggleButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Button.named.xaml" />
+
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/NamedStyles/Card.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ScrollBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ScrollViewer.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Hyperlink.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/CheckBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Label.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ProgressBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/RadioButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Slider.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/TextBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/ToggleButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/StatusBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/Window.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Default/GridSplitter.xaml" />
