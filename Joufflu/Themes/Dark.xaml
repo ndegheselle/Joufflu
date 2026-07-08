@@ -9,7 +9,6 @@
 
     <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#2e2e2e</Color>
     <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#a1a1a1</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Border200Color}">#a1a1a1</Color>
 
     <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#0a0a0a</Color>
     <Color x:Key="{x:Static joufflu:Colors.Background100Color}">#171717</Color>
@@ -58,7 +57,6 @@
     <!--  Border Brushes  -->
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BorderBrush}" Color="{DynamicResource {x:Static joufflu:Colors.BorderColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Border100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Border100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Border200Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Border200Color}}" />
 
     <!--  Background Brushes  -->
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BackgroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.BackgroundColor}}" />

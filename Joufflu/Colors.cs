@@ -9,12 +9,11 @@ public static class Colors
     public static ComponentResourceKey Foreground200Color => new ComponentResourceKey(typeof(Colors), "Foreground200Color");
 
     public static ComponentResourceKey BackgroundColor => new ComponentResourceKey(typeof(Colors), "BackgroundColor");
-    public static ComponentResourceKey Background100Color => new ComponentResourceKey(typeof(Colors), "Background100Color");
-    public static ComponentResourceKey Background200Color => new ComponentResourceKey(typeof(Colors), "Background200Color");
+    public static ComponentResourceKey Background100Color => new ComponentResourceKey(typeof(Colors), "Background100Color"); // Elevated
+    public static ComponentResourceKey Background200Color => new ComponentResourceKey(typeof(Colors), "Background200Color"); // Selected
 
     public static ComponentResourceKey BorderColor => new ComponentResourceKey(typeof(Brushes), "BorderColor");
-    public static ComponentResourceKey Border100Color => new ComponentResourceKey(typeof(Brushes), "Border100Color");
-    public static ComponentResourceKey Border200Color => new ComponentResourceKey(typeof(Brushes), "Border200Color");
+    public static ComponentResourceKey Border100Color => new ComponentResourceKey(typeof(Brushes), "Border100Color"); 
 
     // Primary
     public static ComponentResourceKey PrimaryColor => new ComponentResourceKey(typeof(Colors), "PrimaryColor");
@@ -64,7 +63,6 @@ public static class Brushes
 
     public static ComponentResourceKey BorderBrush => new ComponentResourceKey(typeof(Brushes), "BorderBrush");
     public static ComponentResourceKey Border100Brush => new ComponentResourceKey(typeof(Brushes), "Border100Brush");
-    public static ComponentResourceKey Border200Brush => new ComponentResourceKey(typeof(Brushes), "Border200Brush");
 
     // Primary
     public static ComponentResourceKey PrimaryBrush => new ComponentResourceKey(typeof(Brushes), "PrimaryBrush");

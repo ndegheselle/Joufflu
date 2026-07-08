@@ -96,7 +96,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="0.6" />
@@ -154,69 +154,4 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
-
-    <Style
-        x:Key="Ghost"
-        BasedOn="{StaticResource {x:Type Button}}"
-        TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-    </Style>
-
-    <Style
-        x:Key="Primary"
-        BasedOn="{StaticResource {x:Type Button}}"
-        TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style
-        x:Key="Secondary"
-        BasedOn="{StaticResource {x:Type Button}}"
-        TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Secondary100Brush}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style
-        x:Key="Success"
-        BasedOn="{StaticResource {x:Type Button}}"
-        TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Success100Brush}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style
-        x:Key="Danger"
-        BasedOn="{StaticResource {x:Type Button}}"
-        TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Danger100Brush}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
 </ResourceDictionary>
