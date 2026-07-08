@@ -1,0 +1,38 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.DataDisplay.TypographySamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock Style="{StaticResource H1}" Text="Typography" />
+
+            <c:CodeExample
+                Title="Headings"
+                Code="{Binding HeadingsCode}"
+                Description="Named TextBlock styles form a heading scale from H1 down to H6. Apply them through the Style property.">
+                <StackPanel joufflu:Spacing.Gap="4">
+                    <TextBlock Style="{StaticResource H1}" Text="H1 — The quick brown fox" />
+                    <TextBlock Style="{StaticResource H2}" Text="H2 — The quick brown fox" />
+                    <TextBlock Style="{StaticResource H3}" Text="H3 — The quick brown fox" />
+                    <TextBlock Style="{StaticResource H4}" Text="H4 — The quick brown fox" />
+                    <TextBlock Style="{StaticResource H5}" Text="H5 — The quick brown fox" />
+                    <TextBlock Style="{StaticResource H6}" Text="H6 — The quick brown fox" />
+                </StackPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Body text"
+                Code="{Binding BodyCode}"
+                Description="Lead introduces a section, Small is fine print, and Muted de-emphasizes secondary text. Plain text without a style is the default body size.">
+                <StackPanel joufflu:Spacing.Gap="8">
+                    <TextBlock Style="{StaticResource Lead}" Text="Lead — a larger, lighter introductory paragraph that sets up the content that follows." />
+                    <TextBlock Text="Default — the standard body text size used across the app." />
+                    <TextBlock Style="{StaticResource Muted}" Text="Muted — secondary text, dimmed to sit quietly next to primary content." />
+                    <TextBlock Style="{StaticResource Small}" Text="Small — fine print, captions and footnotes." />
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,47 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.DataInput.ComboBoxSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Combo box" />
+
+            <c:CodeExample
+                Title="Selection"
+                
+                Code="{Binding SelectionCode}"
+                Description="Bind ItemsSource and SelectedItem to the view model.">
+                <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedOption}" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Editable"
+                
+                Code="{Binding EditableCode}"
+                Description="IsEditable lets the user type a value alongside the drop-down.">
+                <ComboBox
+                    IsEditable="True"
+                    ItemsSource="{Binding Options}"
+                    Text="{Binding SelectedOption}" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Sizes"
+                
+                Code="{Binding SizesCode}"
+                Description="Sized through the inherited ControlProperties.Size.">
+                <StackPanel joufflu:Spacing.Gap="4">
+                    <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:ControlProperties.Size="sm" />
+                    <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" />
+                    <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:ControlProperties.Size="lg" />
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,52 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Toolkit.SpacingSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Spacing" />
+
+            <c:CodeExample
+                Title="Spacing.Gap"
+                Code="{Binding GapCode}"
+                Description="Gap adds even spacing between the children of a panel — no per-child margins. StackPanel spaces along its orientation; WrapPanel and Grid can space on both axes.">
+                <StackPanel joufflu:Spacing.Gap="16">
+                    <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8">
+                        <Button>One</Button>
+                        <Button>Two</Button>
+                        <Button>Three</Button>
+                    </StackPanel>
+
+                    <WrapPanel joufflu:Spacing.HorizontalGap="8" joufflu:Spacing.VerticalGap="12">
+                        <Button>Alpha</Button>
+                        <Button>Beta</Button>
+                        <Button>Gamma</Button>
+                        <Button>Delta</Button>
+                        <Button>Epsilon</Button>
+                    </WrapPanel>
+
+                    <Grid Width="240" HorizontalAlignment="Left" joufflu:Spacing.Gap="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Row="0" Grid.Column="0">A1</Button>
+                        <Button Grid.Row="0" Grid.Column="1">A2</Button>
+                        <Button Grid.Row="1" Grid.Column="0">B1</Button>
+                        <Button Grid.Row="1" Grid.Column="1">B2</Button>
+                    </Grid>
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

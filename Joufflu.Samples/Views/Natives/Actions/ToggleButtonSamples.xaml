@@ -1,0 +1,58 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.Actions.ToggleButtonSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Toggle button" />
+
+            <c:CodeExample
+                Title="Variants"
+                Code="{Binding VariantsCode}"
+                Description="Toggle buttons mirror the button variants but stay pressed when checked. Toggle one on to see its checked state.">
+                <WrapPanel joufflu:Spacing.HorizontalGap="8">
+                    <ToggleButton IsChecked="True">Default</ToggleButton>
+                    <ToggleButton Style="{StaticResource TogglePrimary}">Primary</ToggleButton>
+                    <ToggleButton Style="{StaticResource ToggleSecondary}">Secondary</ToggleButton>
+                    <ToggleButton Style="{StaticResource ToggleGhost}">Ghost</ToggleButton>
+                    <ToggleButton Style="{StaticResource ToggleSuccess}">Success</ToggleButton>
+                    <ToggleButton Style="{StaticResource ToggleDanger}">Danger</ToggleButton>
+                    <ToggleButton IsEnabled="False">Disabled</ToggleButton>
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Icon toggle buttons"
+                Code="{Binding IconCode}"
+                Description="IconToggleButton is a ready-made square toggle for a single icon.">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                    <ToggleButton Style="{StaticResource IconToggleButton}">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+                    </ToggleButton>
+                    <ToggleButton joufflu:ControlProperties.IsSquare="True" Style="{StaticResource TogglePrimary}">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+                    </ToggleButton>
+                </StackPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Sizes"
+                Code="{Binding SizesCode}"
+                Description="Toggle buttons scale through the inherited ControlProperties.Size attached property.">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="xs">XS</ToggleButton>
+                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="sm">SM</ToggleButton>
+                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="md">MD</ToggleButton>
+                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="lg">LG</ToggleButton>
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

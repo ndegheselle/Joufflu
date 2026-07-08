@@ -1,0 +1,48 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Toolkit.ShellSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Application shell" />
+
+            <TextBlock
+                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                Text="These styles shape the whole window rather than a control on a page — this gallery window itself is the live example. The snippets below show how to wire them up."
+                TextWrapping="Wrap" />
+
+            <c:CodeExample
+                Title="Window"
+                Description="The default Window style themes a standard WPF window (background, foreground and native chrome) to match the design system."
+                Code="&lt;Window ...&gt;&#x0a;    &lt;!-- inherits the themed Window style automatically --&gt;&#x0a;&lt;/Window&gt;">
+                <TextBlock
+                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                    Text="Applied implicitly to every Window." />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="ThemedWindow"
+                Description="ThemedWindow is a custom window with a fully styled title bar and caption buttons. This gallery's MainWindow derives from it."
+                Code="&lt;controls:ThemedWindow xmlns:controls=&quot;clr-namespace:Joufflu.Controls;assembly=Joufflu&quot;&#x0a;                       Title=&quot;My app&quot;&gt;&#x0a;    ...&#x0a;&lt;/controls:ThemedWindow&gt;">
+                <TextBlock
+                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                    Text="You are looking at a ThemedWindow right now." />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="NavigationContainer"
+                Description="NavigationContainer hosts the current page and layers overlays and toasts above it. Pair it with a NavigationMenu, driving both from a shared Navigator."
+                Code="&lt;nav:NavigationContainer Navigator=&quot;{Binding Navigator}&quot;&#x0a;                         Overlays=&quot;{Binding Overlays}&quot;&#x0a;                         Toasts=&quot;{Binding Toasts}&quot; /&gt;">
+                <TextBlock
+                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                    Text="The right-hand area of this window is a NavigationContainer." />
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

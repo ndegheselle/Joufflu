@@ -1,0 +1,46 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Controls.DataDisplay.FontIconSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Font icon" />
+
+            <c:CodeExample
+                Title="Glyphs"
+                Code="{Binding Code}"
+                Description="A Lucide icon-font glyph. Foreground uses the design-system brushes and the size follows the inherited ControlProperties.Size.">
+                <StackPanel joufflu:Spacing.Gap="16">
+                    <WrapPanel joufflu:Spacing.HorizontalGap="12">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
+                    </WrapPanel>
+
+                    <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="12">
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="xs" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="sm" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="md" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="lg" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="12">
+                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    </StackPanel>
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

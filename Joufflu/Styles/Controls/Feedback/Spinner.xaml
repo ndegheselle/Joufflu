@@ -36,12 +36,12 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation
+                                        RepeatBehavior="Forever"
                                         Storyboard.TargetName="Rotation"
                                         Storyboard.TargetProperty="Angle"
                                         From="0"
                                         To="360"
-                                        Duration="0:0:0.9"
-                                        RepeatBehavior="Forever" />
+                                        Duration="0:0:0.9" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>

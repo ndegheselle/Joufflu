@@ -2,9 +2,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:customDisplay="clr-namespace:Joufflu.Samples.Views.Controls.DataDisplay"
+    xmlns:customFeedback="clr-namespace:Joufflu.Samples.Views.Controls.Feedback"
+    xmlns:customNav="clr-namespace:Joufflu.Samples.Views.Controls.Navigation"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels"
-    xmlns:views="clr-namespace:Joufflu.Samples.Views">
+    xmlns:nativeActions="clr-namespace:Joufflu.Samples.Views.Natives.Actions"
+    xmlns:nativeDisplay="clr-namespace:Joufflu.Samples.Views.Natives.DataDisplay"
+    xmlns:nativeFeedback="clr-namespace:Joufflu.Samples.Views.Natives.Feedback"
+    xmlns:nativeInput="clr-namespace:Joufflu.Samples.Views.Natives.DataInput"
+    xmlns:toolkit="clr-namespace:Joufflu.Samples.Views.Toolkit"
+    xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels">
 
     <!--  Live preview + code snippet card  -->
     <Style TargetType="{x:Type c:CodeExample}">
@@ -21,9 +28,7 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel>
-                                <TextBlock
-                                    FontSize="15"
-                                    FontWeight="Bold"
+                                <TextBlock Style="{StaticResource H2}"
                                     Text="{TemplateBinding Title}" />
                                 <TextBlock
                                     x:Name="Desc"
@@ -71,33 +76,97 @@
         </Setter>
     </Style>
 
-    <!--  View model → view mapping used by the navigation container and overlays  -->
-    <DataTemplate DataType="{x:Type vm:ButtonsViewModel}">
-        <views:ButtonsView />
+    <!--  View model → view mapping used by the navigation container and overlays.  -->
+    <!--  Only pages that have a view model need a mapping; static pages are navigated to directly.  -->
+
+    <!--  Natives / Actions  -->
+    <DataTemplate DataType="{x:Type nativeActions:ButtonSamplesViewModel}">
+        <nativeActions:ButtonSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:InputsViewModel}">
-        <views:InputsView />
+    <DataTemplate DataType="{x:Type nativeActions:ToggleButtonSamplesViewModel}">
+        <nativeActions:ToggleButtonSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:DisplayViewModel}">
-        <views:DisplayView />
+
+    <!--  Natives / Data input  -->
+    <DataTemplate DataType="{x:Type nativeInput:TextBoxSamplesViewModel}">
+        <nativeInput:TextBoxSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:HelpersViewModel}">
-        <views:HelpersView />
+    <DataTemplate DataType="{x:Type nativeInput:ComboBoxSamplesViewModel}">
+        <nativeInput:ComboBoxSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:OverlaysViewModel}">
-        <views:OverlaysView />
+    <DataTemplate DataType="{x:Type nativeInput:CheckBoxSamplesViewModel}">
+        <nativeInput:CheckBoxSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:ToastsViewModel}">
-        <views:ToastsView />
+    <DataTemplate DataType="{x:Type nativeInput:SliderSamplesViewModel}">
+        <nativeInput:SliderSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:CustomControlsViewModel}">
-        <views:CustomControlsView />
+    <DataTemplate DataType="{x:Type nativeInput:DatePickerSamplesViewModel}">
+        <nativeInput:DatePickerSamples />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type nativeInput:CalendarSamplesViewModel}">
+        <nativeInput:CalendarSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type nativeInput:ListBoxSamplesViewModel}">
+        <nativeInput:ListBoxSamples />
+    </DataTemplate>
+
+    <!--  Natives / Data display  -->
+    <DataTemplate DataType="{x:Type nativeDisplay:TypographySamplesViewModel}">
+        <nativeDisplay:TypographySamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type nativeDisplay:ListViewSamplesViewModel}">
+        <nativeDisplay:ListViewSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type nativeDisplay:TreeViewSamplesViewModel}">
+        <nativeDisplay:TreeViewSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type nativeDisplay:DataGridSamplesViewModel}">
+        <nativeDisplay:DataGridSamples />
+    </DataTemplate>
+
+    <!--  Natives / Feedback  -->
+    <DataTemplate DataType="{x:Type nativeFeedback:ProgressBarSamplesViewModel}">
+        <nativeFeedback:ProgressBarSamples />
+    </DataTemplate>
+
+    <!--  Controls / Data display  -->
+    <DataTemplate DataType="{x:Type customDisplay:FontIconSamplesViewModel}">
+        <customDisplay:FontIconSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type customDisplay:BadgeSamplesViewModel}">
+        <customDisplay:BadgeSamples />
+    </DataTemplate>
+
+    <!--  Controls / Feedback  -->
+    <DataTemplate DataType="{x:Type customFeedback:SpinnerSamplesViewModel}">
+        <customFeedback:SpinnerSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type customFeedback:ToastSamplesViewModel}">
+        <customFeedback:ToastSamples />
+    </DataTemplate>
+
+    <!--  Controls / Navigation  -->
+    <DataTemplate DataType="{x:Type customNav:NavigationMenuSamplesViewModel}">
+        <customNav:NavigationMenuSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type customNav:OverlaySamplesViewModel}">
+        <customNav:OverlaySamples />
+    </DataTemplate>
+
+    <!--  Toolkit  -->
+    <DataTemplate DataType="{x:Type toolkit:SizingSamplesViewModel}">
+        <toolkit:SizingSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type toolkit:SpacingSamplesViewModel}">
+        <toolkit:SpacingSamples />
+    </DataTemplate>
+
+    <!--  Overlay content (shown inside overlays, not in the menu)  -->
     <DataTemplate DataType="{x:Type vm:ConfirmViewModel}">
-        <views:ConfirmView />
+        <customNav:ConfirmView />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:SampleFormViewModel}">
-        <views:SampleFormView />
+        <customNav:SampleFormView />
     </DataTemplate>
 
 </ResourceDictionary>

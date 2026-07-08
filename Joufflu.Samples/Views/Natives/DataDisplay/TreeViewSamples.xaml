@@ -1,0 +1,28 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.DataDisplay.TreeViewSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Samples.Views.Natives.DataDisplay">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Tree view" />
+
+            <c:CodeExample
+                Title="Hierarchy"
+                Code="{Binding Code}"
+                Description="A HierarchicalDataTemplate binds children recursively.">
+                <TreeView Height="220" ItemsSource="{Binding Tree}">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type local:TreeNode}" ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Name}" />
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,31 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.Layout.ScrollViewerSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Scroll viewer" />
+
+            <c:CodeExample
+                Title="Scrollable content"
+                
+                Description="ScrollViewer adds scroll bars when its content overflows. The styled ScrollBar (Natives/Layout/ScrollBar.xaml) is exercised here."
+                Code="&lt;ScrollViewer VerticalScrollBarVisibility=&quot;Auto&quot;&gt;&#x0a;    ...tall content...&#x0a;&lt;/ScrollViewer&gt;">
+                <ScrollViewer
+                    Height="160"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Auto">
+                    <TextBlock
+                        Width="500"
+                        Text="This content is deliberately larger than its container so both the vertical and horizontal scroll bars appear. Line one.&#x0a;Line two.&#x0a;Line three.&#x0a;Line four.&#x0a;Line five.&#x0a;Line six.&#x0a;Line seven.&#x0a;Line eight." />
+                </ScrollViewer>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

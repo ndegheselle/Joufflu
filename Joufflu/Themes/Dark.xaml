@@ -26,8 +26,8 @@
     <Color x:Key="{x:Static joufflu:Colors.SecondaryContentColor}">#FFFAFAFA</Color>
 
     <!--  Accent: zinc-800 background, zinc-50 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.AccentColor}">#FF27272A</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Accent100Color}">#FF3F3F46</Color>
+    <Color x:Key="{x:Static joufflu:Colors.AccentColor}">#a1a1a1</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Accent100Color}">#a1a1a1</Color>
     <Color x:Key="{x:Static joufflu:Colors.AccentContentColor}">#FFFAFAFA</Color>
 
     <!--  Success: green-500 / green-950 content  -->

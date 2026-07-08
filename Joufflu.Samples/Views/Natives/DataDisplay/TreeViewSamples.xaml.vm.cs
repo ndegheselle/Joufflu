@@ -1,0 +1,39 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
+
+namespace Joufflu.Samples.Views.Natives.DataDisplay;
+
+public class TreeNode
+{
+    public string Name { get; set; } = "";
+
+    public ObservableCollection<TreeNode> Children { get; } = new();
+}
+
+public class TreeViewSamplesViewModel : ObservableObject
+{
+    public ObservableCollection<TreeNode> Tree { get; } = new();
+
+    public TreeViewSamplesViewModel()
+    {
+        var fruits = new TreeNode { Name = "Fruits" };
+        fruits.Children.Add(new TreeNode { Name = "Apple" });
+        fruits.Children.Add(new TreeNode { Name = "Banana" });
+
+        var veggies = new TreeNode { Name = "Vegetables" };
+        veggies.Children.Add(new TreeNode { Name = "Carrot" });
+        veggies.Children.Add(new TreeNode { Name = "Potato" });
+
+        Tree.Add(fruits);
+        Tree.Add(veggies);
+    }
+
+    public string Code =>
+        "<TreeView ItemsSource=\"{Binding Tree}\">\n" +
+        "    <TreeView.ItemTemplate>\n" +
+        "        <HierarchicalDataTemplate ItemsSource=\"{Binding Children}\">\n" +
+        "            <TextBlock Text=\"{Binding Name}\" />\n" +
+        "        </HierarchicalDataTemplate>\n" +
+        "    </TreeView.ItemTemplate>\n" +
+        "</TreeView>";
+}

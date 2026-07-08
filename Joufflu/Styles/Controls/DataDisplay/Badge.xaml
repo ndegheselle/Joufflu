@@ -25,7 +25,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="999"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
                         SnapsToDevicePixels="True">
                         <ContentPresenter
                             Margin="{TemplateBinding Padding}"
@@ -75,15 +75,15 @@
 
             <Trigger Property="joufflu:ControlProperties.Size" Value="xs">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
-                <Setter Property="Padding" Value="6,1" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingXs}}" />
             </Trigger>
             <Trigger Property="joufflu:ControlProperties.Size" Value="sm">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
-                <Setter Property="Padding" Value="7,2" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingSm}}" />
             </Trigger>
             <Trigger Property="joufflu:ControlProperties.Size" Value="lg">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
-                <Setter Property="Padding" Value="12,4" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

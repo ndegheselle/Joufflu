@@ -1,0 +1,29 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.Navigation.HyperlinkSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Hyperlink" />
+
+            <c:CodeExample
+                Title="Inline links"
+                Code="&lt;TextBlock&gt;&#x0a;    Read the &lt;Hyperlink&gt;documentation&lt;/Hyperlink&gt;.&#x0a;&lt;/TextBlock&gt;"
+                Description="A Hyperlink is an inline flow element hosted inside a TextBlock.">
+                <StackPanel joufflu:Spacing.Gap="8">
+                    <TextBlock TextWrapping="Wrap">
+                        Read the <Hyperlink>documentation</Hyperlink>
+                        or <Hyperlink>report an issue</Hyperlink>
+                        for more details.</TextBlock>
+                    <TextBlock>
+                        <Hyperlink IsEnabled="False">Disabled link</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

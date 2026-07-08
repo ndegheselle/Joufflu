@@ -1,0 +1,42 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.Layout.CardSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Card" />
+
+            <c:CodeExample
+                Title="Surfaces"
+                Description="Card and CardSecondary are named Border styles (Natives/Layout/Border.named.xaml) that provide the app's padded, rounded surfaces. CardSecondary is a subtly inset panel used inside a Card."
+                Code="&lt;Border Style=&quot;{StaticResource Card}&quot;&gt; ... &lt;/Border&gt;&#x0a;&lt;Border Style=&quot;{StaticResource CardSecondary}&quot;&gt; ... &lt;/Border&gt;">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="16">
+                    <Border Width="220" Style="{StaticResource Card}">
+                        <StackPanel joufflu:Spacing.Gap="4">
+                            <TextBlock FontWeight="Bold" Text="Card" />
+                            <TextBlock
+                                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                Text="The primary surface for grouping content."
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Width="220" Style="{StaticResource Card}">
+                        <StackPanel joufflu:Spacing.Gap="8">
+                            <TextBlock FontWeight="Bold" Text="Nested" />
+                            <Border Style="{StaticResource CardSecondary}">
+                                <TextBlock Text="CardSecondary inside a Card." TextWrapping="Wrap" />
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

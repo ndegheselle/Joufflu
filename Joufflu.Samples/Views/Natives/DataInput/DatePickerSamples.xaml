@@ -1,0 +1,27 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Natives.DataInput.DatePickerSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Date picker" />
+
+            <c:CodeExample
+                Title="Pick a date"
+                
+                Code="{Binding Code}"
+                Description="A text field with a drop-down calendar. Bind SelectedDate to the view model.">
+                <StackPanel joufflu:Spacing.Gap="8">
+                    <DatePicker Width="200" HorizontalAlignment="Left" SelectedDate="{Binding SelectedDate}" />
+                    <TextBlock Text="{Binding SelectedDate, StringFormat={}Selected: {0:D}}" />
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

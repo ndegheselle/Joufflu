@@ -1,0 +1,60 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Toolkit.SizingSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel
+
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock
+                Style="{StaticResource H1}"
+                Text="Sizing" />
+
+            <c:CodeExample
+                Title="ControlProperties.Size"
+                Code="{Binding SizeCode}"
+                Description="The inherited Size attached property (xs / sm / md / lg) scales height, font size and padding. Because it inherits, setting it on a panel sizes every child.">
+                <StackPanel joufflu:Spacing.Gap="12">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" joufflu:Spacing.HorizontalGap="8">
+                        <Button joufflu:ControlProperties.Size="xs" VerticalAlignment="Center">xs</Button>
+                        <Button joufflu:ControlProperties.Size="sm" VerticalAlignment="Center">sm</Button>
+                        <Button joufflu:ControlProperties.Size="md" VerticalAlignment="Center">md</Button>
+                        <Button joufflu:ControlProperties.Size="lg" VerticalAlignment="Center">lg</Button>
+                    </StackPanel>
+
+                    <StackPanel
+                        Width="240"
+                        HorizontalAlignment="Left"
+                        joufflu:ControlProperties.Size="lg"
+                        joufflu:Spacing.Gap="4">
+                        <TextBox Text="Inherited lg" />
+                        <ComboBox SelectedIndex="0">
+                            <ComboBoxItem>Inherited lg</ComboBoxItem>
+                        </ComboBox>
+                        <Button>Inherited lg</Button>
+                    </StackPanel>
+                </StackPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="ControlProperties.IsSquare"
+                Code="{Binding SquareCode}"
+                Description="IsSquare forces equal width and height — ideal for single-icon buttons.">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                    <Button joufflu:ControlProperties.IsSquare="True" joufflu:ControlProperties.Size="sm">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    </Button>
+                    <Button joufflu:ControlProperties.IsSquare="True" joufflu:ControlProperties.Size="md">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    </Button>
+                    <Button joufflu:ControlProperties.IsSquare="True" joufflu:ControlProperties.Size="lg">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    </Button>
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

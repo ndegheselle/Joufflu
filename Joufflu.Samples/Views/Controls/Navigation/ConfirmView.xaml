@@ -1,0 +1,9 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Controls.Navigation.ConfirmView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <TextBlock
+        Margin="0,4,0,8"
+        Text="{Binding Message}"
+        TextWrapping="Wrap" />
+</UserControl>
