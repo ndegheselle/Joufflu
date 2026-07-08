@@ -1,4 +1,4 @@
-﻿using Usuel.Shared.Extensions;
+﻿using Joufflu.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text.RegularExpressions;

@@ -1,4 +1,4 @@
-﻿using PropertyChanged;
+﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using Usuel.Shared;
 
 namespace Joufflu.Inputs
 {
@@ -24,7 +23,7 @@ namespace Joufflu.Inputs
         }
 
         public ICollectionView? SourceView { get; private set; }
-        public DelegateCommand ClearCommand { get; set; }
+        public RelayCommand ClearCommand { get; set; }
 
         private TextBox? _editableTextBox;
         /// <summary>
@@ -34,7 +33,7 @@ namespace Joufflu.Inputs
 
         public ComboBoxSearch()
         {
-            ClearCommand = new DelegateCommand(() => Text = null);
+            ClearCommand = new RelayCommand(() => Text = null);
             // Set default options
             IsEditable = true;
             StaysOpenOnEdit = true;
@@ -102,7 +101,6 @@ namespace Joufflu.Inputs
             base.OnPreviewKeyDown(e);
         }
 
-        [SuppressPropertyChangedWarnings]
         void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (SelectedItem != null && Text == GetTextFromItem(SelectedItem))
@@ -131,7 +129,6 @@ namespace Joufflu.Inputs
             base.OnPreviewLostKeyboardFocus(e);
         }
 
-        [SuppressPropertyChangedWarnings]
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             if (_editableTextBox == null)

@@ -1,5 +1,4 @@
 ﻿using Joufflu.Inputs.Format;
-using PropertyChanged;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -170,7 +169,6 @@ namespace Joufflu.Inputs.Format
             e.Handled = true;
         }
 
-        [SuppressPropertyChangedWarnings]
         protected override void OnSelectionChanged(RoutedEventArgs e)
         {
             if (_isSelectionChanging)
@@ -434,7 +432,6 @@ namespace Joufflu.Inputs.Format
             return (T?)Values.FirstOrDefault();
         }
 
-        [SuppressPropertyChangedWarnings]
         protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
         {
             if (EqualityComparer<T>.Default.Equals(Value, _previousValue))

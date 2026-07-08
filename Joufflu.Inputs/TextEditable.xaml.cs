@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Usuel.Shared;
 
 namespace Joufflu.Inputs
 {
@@ -38,9 +38,9 @@ namespace Joufflu.Inputs
 
         public TextEditable()
         {
-            EditCommand = new DelegateCommand(Edit);
-            ValidateCommand = new DelegateCommand(ValidateEdit);
-            CancelCommand = new DelegateCommand(EndEditing);
+            EditCommand = new RelayCommand(Edit);
+            ValidateCommand = new RelayCommand(ValidateEdit);
+            CancelCommand = new RelayCommand(EndEditing);
         }
 
         public override void OnApplyTemplate()

@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:format="clr-namespace:Joufflu.Inputs.Format;assembly=Joufflu.Inputs"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs;assembly=Joufflu.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="24" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
@@ -55,6 +57,23 @@
                         Maximum="100"
                         Minimum="0"
                         Value="{Binding SliderValue}" />
+                    </StackPanel>
+                </c:CodeExample>
+
+                <c:CodeExample
+                    Title="Joufflu.Inputs"
+                    Width="320"
+                    Code="{Binding CustomInputsCode}"
+                    Description="Custom inputs from the Joufflu.Inputs library.">
+                    <StackPanel joufflu:Spacing.Gap="4">
+                        <inputs:NumericUpDown Width="200" HorizontalAlignment="Left" Value="{Binding Number}" />
+                        <inputs:DecimalUpDown Width="200" HorizontalAlignment="Left" Value="{Binding Amount}" />
+                        <inputs:TimeSpanPicker Width="200" HorizontalAlignment="Left" Value="{Binding Duration}" />
+                        <inputs:ComboBoxSearch
+                            Width="200"
+                            HorizontalAlignment="Left"
+                            ItemsSource="{Binding Options}"
+                            SelectedItem="{Binding SelectedOption}" />
                     </StackPanel>
                 </c:CodeExample>
             </WrapPanel>

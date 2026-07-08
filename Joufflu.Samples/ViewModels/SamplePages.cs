@@ -33,6 +33,9 @@ public class InputsViewModel : ObservableObject
     private string? _selectedOption = "Two";
     private DateTime? _selectedDate = DateTime.Today;
     private double _sliderValue = 40;
+    private int _number = 42;
+    private decimal _amount = 12.5m;
+    private TimeSpan? _duration = TimeSpan.FromMinutes(90);
 
     public string Text { get => _text; set => SetProperty(ref _text, value); }
 
@@ -48,6 +51,12 @@ public class InputsViewModel : ObservableObject
 
     public double SliderValue { get => _sliderValue; set => SetProperty(ref _sliderValue, value); }
 
+    public int Number { get => _number; set => SetProperty(ref _number, value); }
+
+    public decimal Amount { get => _amount; set => SetProperty(ref _amount, value); }
+
+    public TimeSpan? Duration { get => _duration; set => SetProperty(ref _duration, value); }
+
     public string TextBoxCode => "<TextBox Text=\"{Binding Text}\" />";
 
     public string ComboCode => "<ComboBox ItemsSource=\"{Binding Options}\"\n          SelectedItem=\"{Binding SelectedOption}\" />";
@@ -55,6 +64,13 @@ public class InputsViewModel : ObservableObject
     public string CheckCode =>
         "<CheckBox Content=\"Enabled\" IsChecked=\"{Binding IsChecked}\" />\n" +
         "<RadioButton Content=\"Choice\" />";
+
+    public string CustomInputsCode =>
+        "<inputs:NumericUpDown Value=\"{Binding Number}\" />\n" +
+        "<inputs:DecimalUpDown Value=\"{Binding Amount}\" />\n" +
+        "<inputs:TimeSpanPicker Value=\"{Binding Duration}\" />\n" +
+        "<inputs:ComboBoxSearch ItemsSource=\"{Binding Options}\"\n" +
+        "                       SelectedItem=\"{Binding SelectedOption}\" />";
 }
 
 public class TreeNode

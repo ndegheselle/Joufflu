@@ -1,4 +1,7 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Format/FormatTextBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/TimeSpanPicker.xaml" />
@@ -11,6 +14,8 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Search.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Dropdown.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <converters:VisibilityConverter x:Key="UniversalVisibilityConverter" />
 
     <!--  HACK : fix a binding error  -->
     <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">

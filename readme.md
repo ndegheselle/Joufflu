@@ -1,75 +1,58 @@
-# Wpf components
+# Joufflu — WPF components
 
-WPF inputs and components, inputs can be used in most projects and other components are exemples of complexe reusable WPF component.
+A small WPF design system plus a set of reusable inputs.
 
 ![preview](./images/preview.gif)
 
-## Description
+## Projects
 
-Inputs, that can be used in most projects :
-- `FormatTextBox` :
-    - Accept a format string representing groups (like "{numeric|max:99|padded} and {decimal|max:99}")
-    - Each groups are parsed in individual value
-    - Handle navigation between groups
-    - Handle button to clear and increment / decrement numeric groups
-    - Can be used to create other inputs
-- `TimeSpanPicker` :
-    - Select a TimeSpan value
-    - Based on a `FormatTextBox` with format "{max:365}d {max:23}h {max:59}m {max:59}s"
-- `NumericUpDown` :
-    - Select a long value
-    - Based on a `FormatTextBox` with format "{numeric|noGlobalSelection}"
-- `DecimalUpDown` :
-    - Select a double value
-    - Based on a `FormatTextBox` with format "{decimal|noGlobalSelection}"
+The solution builds two shippable libraries and a gallery app:
 
-- `ComboBoxSearch` :
-    - Improved ComboBox with that allow to search in the ComboBox Items
-    - Accept a `FilterMemberPath` that act like `DiplayMemberPath` for the filter
-- `ComboBoxTags` :
-    - Allow for multiple items selection
-    - Based on `ComboBoxSearch`
+- **`Joufflu`** — the design system: colors/brushes, dimensions and spacing, restyled default
+  WPF controls (dark & light themes), a few custom controls (`Card`, `Badge`, `Spinner`,
+  `ThemedWindow`), the Lucide icon font, and an MVVM navigation stack (navigator, modal
+  overlays, toasts, side menu).
+- **`Joufflu.Inputs`** — reusable inputs built on top of `Joufflu` (see below).
+- **`Joufflu.Samples`** — a gallery app that demonstrates both. Start this project to explore.
 
-FileExplorer, display a folder files and sub folders :
-- Real time up date of the content
-- Drag & drop of files, zip and outlook attachments
-- Allow you to apply specific logic and icon to specific path
+### Inputs (`Joufflu.Inputs`)
 
-> TODO : Could be improved with a better ContextMenu, improved performances, better handling of the node tree refreshes, ...
+- `FormatTextBox` — accepts a format string of groups (e.g. `"{numeric|max:99|padded} and {decimal|max:99}"`),
+  parses each group into an individual value, handles navigation between groups and clear /
+  increment / decrement buttons. Used as the base for the numeric pickers.
+- `TimeSpanPicker` — selects a `TimeSpan`; a `FormatTextBox` with `"{max:365}d {max:23}h {max:59}m {max:59}s"`.
+- `NumericUpDown` — selects an `int`; a `FormatTextBox` with `"{numeric|noGlobalSelection}"`.
+- `DecimalUpDown` — selects a `decimal`; a `FormatTextBox` with `"{decimal|noGlobalSelection}"`.
+- `ComboBoxSearch` — a `ComboBox` that filters its items; accepts a `FilterMemberPath` that
+  behaves like `DisplayMemberPath` for the filter.
+- `ComboBoxTags` — multiple-item selection, built on `ComboBoxSearch`.
 
-Filters, visually create a lambda that can be used to filter data :
-- Properties are dynamically created from a class type
-- Recursively work on the class property
-- Differents inputs based on property type
+To use the inputs, reference `Joufflu.Inputs` and merge its resource dictionary:
 
-> TODO : Add group creation and drag & drop. This could be done more elegantly.
+```xml
+<ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Resources.xaml" />
+```
 
-### Why does this exist
+## Getting started
 
-To train myself to create generic components that can easily be used in different projects.
-Tried to find the best way to do this since there is several way to acheive this in WPF :
-- Derive from ContentControl or other base component
-    - Customize with a Dictionnary
-        - Is a pain to bind events and data to the UI (even with Commands)
-    - Customize with a XAML class directly attached to the component
-        - Doesn't allow the consumer to customize the control content easily
+- Requires the **.NET Desktop development** workload and the .NET 10 SDK.
+- Open `WpfComponents.sln` and run `Joufflu.Samples`.
 
-## Getting Started
+## Dependencies
 
-### Dependencies
+- [CommunityToolkit.Mvvm](https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/) for MVVM primitives.
+- [Lucide](https://lucide.dev/) icon font (`Joufflu/Assets/Fonts/lucide.ttf`).
 
-- Created with Visual studio Community 2022 (64 bits) Version 17.8.4
-- Require *.NET Desktop development* workload installed
+## Experimental
 
-### Executing program
+The `Experimental` solution folder holds parked, unsupported work that is not part of the
+shippable libraries and is excluded from the default build where it does not compile:
+`Joufflu.Data` / `Joufflu.Data.Shared` (a generic-object schema editor), `Joufflu.Layouts`
+(`FlexibleGrid`), `Usuel` / `Usuel.History` (helpers and an undo/redo handler), and `Bariole`
+(a syntax-highlighting stub).
 
-- Start the project `Joufflu.Samples`
+### Why this exists
 
-## Acknowledgments
-
-Use :
-* [Adonis UI](https://benruehl.github.io/adonis-ui/) for styles
-* [Fontawesome](https://fontawesome.com/) icons
-* [PropertyChanged.Fody](https://www.nuget.org/packages/PropertyChanged.Fody) for boilerplate
-
-I know [Extended WPF Toolkit](https://github.com/xceedsoftware/wpftoolkit) have already done all the inputs and way more but you can't appreciate something fully without knowing how hard it is to do.
+To explore building generic, reusable WPF components. There are several ways to do this in
+WPF; this repo settles on deriving from a base control and attaching a styled template so the
+control ships with a default look while consumers can still restyle it.

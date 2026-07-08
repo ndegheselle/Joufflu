@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Usuel.Shared;
 
 namespace Joufflu.Inputs
 {
@@ -45,8 +45,8 @@ namespace Joufflu.Inputs
 
         public FilePicker()
         {
-            ClearCommand = new DelegateCommand(Clear);
-            SelectCommand = new DelegateCommand(Select);
+            ClearCommand = new RelayCommand(Clear);
+            SelectCommand = new RelayCommand(Select);
         }
 
         private void Clear() { FilePath = ""; }

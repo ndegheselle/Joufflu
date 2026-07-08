@@ -1,4 +1,4 @@
-﻿using PropertyChanged;
+﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using Usuel.Shared;
 
 namespace Joufflu.Inputs
 {
@@ -58,7 +57,7 @@ namespace Joufflu.Inputs
 
         public bool AllowAdd { get; set; } = false;
 
-        public DelegateCommand<object> RemoveSelectedCmd { get; }
+        public RelayCommand<object> RemoveSelectedCmd { get; }
 
         // Only add to selection then clicking or pressing enter (like combobox with IsEditable = false)
         // Sad that the combobox doesn't allow to set this behavior
@@ -68,7 +67,7 @@ namespace Joufflu.Inputs
 
         public ComboBoxTags()
         {
-            RemoveSelectedCmd = new DelegateCommand<object>((parameter) => InternalSelectedItems.Remove(parameter));
+            RemoveSelectedCmd = new RelayCommand<object>((parameter) => InternalSelectedItems.Remove(parameter));
 
             SizeChanged += (s, e) =>
             {
@@ -121,7 +120,6 @@ namespace Joufflu.Inputs
              */
         }
 
-        [SuppressPropertyChangedWarnings]
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
