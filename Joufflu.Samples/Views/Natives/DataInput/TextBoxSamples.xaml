@@ -6,15 +6,16 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Text box" />
+            <TextBlock Style="{StaticResource H1}" Text="Text box" />
 
             <c:CodeExample
                 Title="Text input"
                 Code="{Binding TextCode}"
                 Description="A standard TextBox bound to the view model.">
-                <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel joufflu:Spacing.Gap="4">
+                    <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox IsEnabled="False" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
             </c:CodeExample>
 
             <c:CodeExample

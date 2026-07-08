@@ -3,49 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu">
 
-
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <Style
-        x:Key="ItemButton"
-        BasedOn="{StaticResource {x:Type Button}}"
-        TargetType="Button">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-    </Style>
-
-    <Style
-        x:Key="IconButton"
-        BasedOn="{StaticResource Ghost}"
-        TargetType="Button">
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Height" Value="24" />
-        <Setter Property="Width" Value="24" />
-    </Style>
-
-    <Style
-        x:Key="IconButtonSmall"
-        BasedOn="{StaticResource Ghost}"
-        TargetType="Button">
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Height" Value="22" />
-        <Setter Property="Width" Value="22" />
-    </Style>
-
-    <Style
-        x:Key="IconToggleButton"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="ToggleButton">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Height" Value="24" />
-        <Setter Property="Width" Value="24" />
-    </Style>
 
     <Style
         x:Key="Ghost"
@@ -111,4 +72,41 @@
         </Style.Triggers>
     </Style>
 
+    <Style
+        x:Key="ItemButton"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+    </Style>
+
+    <Style
+        x:Key="IconButton"
+        BasedOn="{StaticResource Ghost}"
+        TargetType="Button">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Width" Value="24" />
+    </Style>
+
+    <Style
+        x:Key="IconButtonSmall"
+        BasedOn="{StaticResource Ghost}"
+        TargetType="Button">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Width" Value="22" />
+    </Style>
+
+    <Style
+        x:Key="IconToggleButton"
+        BasedOn="{StaticResource {x:Type ToggleButton}}"
+        TargetType="ToggleButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Width" Value="24" />
+    </Style>
 </ResourceDictionary>

@@ -25,14 +25,14 @@
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border
                         x:Name="ThumbBorder"
-                        Background="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}"
+                        Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}"
                         CornerRadius="4" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Accent100Brush}}" />
+                            <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
                         </Trigger>
                         <Trigger Property="IsDragging" Value="True">
-                            <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Accent100Brush}}" />
+                            <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

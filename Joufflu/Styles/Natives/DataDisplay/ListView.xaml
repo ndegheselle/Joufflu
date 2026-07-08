@@ -20,11 +20,11 @@
 
                         <DockPanel Margin="{TemplateBinding Padding}">
                             <ScrollViewer
+                                Padding="0"
                                 DockPanel.Dock="Top"
                                 Focusable="False"
                                 HorizontalScrollBarVisibility="Hidden"
-                                VerticalScrollBarVisibility="Hidden"
-                                Padding="0">
+                                VerticalScrollBarVisibility="Hidden">
                                 <GridViewHeaderRowPresenter
                                     x:Name="PART_GridViewHeaderRowPresenter"
                                     AllowsColumnReorder="{Binding Path=TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
@@ -68,10 +68,10 @@
 
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding Columns, ElementName=PART_GridViewHeaderRowPresenter}" Value="{x:Null}">
-                            <Setter Property="Visibility" TargetName="PART_GridViewHeaderRowPresenter" Value="Collapsed" />
+                            <Setter TargetName="PART_GridViewHeaderRowPresenter" Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Columns.Count, ElementName=PART_GridViewHeaderRowPresenter}" Value="0">
-                            <Setter Property="Visibility" TargetName="PART_GridViewHeaderRowPresenter" Value="Collapsed" />
+                            <Setter TargetName="PART_GridViewHeaderRowPresenter" Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -101,12 +101,15 @@
                         <ContentPresenter
                             Name="HeaderContent"
                             Margin="{TemplateBinding Padding}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             RecognizesAccessKey="True"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 
-                        <Thumb x:Name="PART_HeaderGripper" HorizontalAlignment="Right" Margin="0,0,-8,0">
+                        <Thumb
+                            x:Name="PART_HeaderGripper"
+                            Margin="0,0,-8,0"
+                            HorizontalAlignment="Right">
                             <Thumb.Style>
                                 <Style TargetType="Thumb">
                                     <Setter Property="Width" Value="16" />
@@ -115,7 +118,10 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type Thumb}">
                                                 <Border Padding="{TemplateBinding Padding}" Background="Transparent">
-                                                    <Rectangle HorizontalAlignment="Center" Width="1" Fill="{TemplateBinding Background}" />
+                                                    <Rectangle
+                                                        Width="1"
+                                                        HorizontalAlignment="Center"
+                                                        Fill="{TemplateBinding Background}" />
                                                 </Border>
                                             </ControlTemplate>
                                         </Setter.Value>
@@ -159,10 +165,10 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                         <GridViewRowPresenter
-                            Content="{TemplateBinding Content}"
                             Margin="{TemplateBinding Padding}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -175,15 +181,14 @@
                     <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" />
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
 
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.AccentContentBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">

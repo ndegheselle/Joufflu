@@ -5,18 +5,13 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel
-
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Label" />
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock Style="{StaticResource H1}" Text="Label" />
 
             <c:CodeExample
                 Title="Field labels"
-                
-                Description="Label captions a control and forwards focus to its Target when the access key is pressed (Alt+N here)."
-                Code="&lt;Label Content=&quot;_Name&quot; Target=&quot;{Binding ElementName=NameBox}&quot; /&gt;&#x0a;&lt;TextBox x:Name=&quot;NameBox&quot; /&gt;">
+                Code="&lt;Label Content=&quot;_Name&quot; Target=&quot;{Binding ElementName=NameBox}&quot; /&gt;&#x0a;&lt;TextBox x:Name=&quot;NameBox&quot; /&gt;"
+                Description="Label captions a control and forwards focus to its Target when the access key is pressed (Alt+N here).">
                 <StackPanel joufflu:Spacing.Gap="4">
                     <Label Content="_Name" Target="{Binding ElementName=NameBox}" />
                     <TextBox x:Name="NameBox" />

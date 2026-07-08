@@ -6,12 +6,8 @@
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel
-
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Button" />
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            <TextBlock Style="{StaticResource H1}" Text="Button" />
 
             <c:CodeExample
                 Title="Variants"
@@ -32,7 +28,7 @@
                 Title="Icon buttons"
                 Code="{Binding IconCode}"
                 Description="IsSquare makes a button as wide as it is tall — ideal for a single icon.">
-                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
                     <Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Primary}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
                     </Button>
@@ -49,7 +45,7 @@
                 Title="Named icon styles"
                 Code="{Binding NamedCode}"
                 Description="Button.named.xaml adds ready-made icon-button styles: IconButton, IconButtonSmall and the list-row ItemButton.">
-                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
                     <Button Style="{StaticResource IconButton}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
                     </Button>
@@ -64,7 +60,7 @@
                 Title="Sizes"
                 Code="{Binding SizesCode}"
                 Description="The inherited ControlProperties.Size attached property scales height, font size and padding.">
-                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
                     <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="xs">XS</Button>
                     <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="sm">SM</Button>
                     <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="md">MD</Button>

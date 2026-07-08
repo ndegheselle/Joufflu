@@ -7,8 +7,8 @@
     <Color x:Key="{x:Static joufflu:Colors.Foreground100Color}">#FFFAFAFA</Color>
     <Color x:Key="{x:Static joufflu:Colors.Foreground200Color}">#FFFAFAFA</Color>
 
-    <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#2e2e2e</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#a1a1a1</Color>
+    <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#202020</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#2e2e2e</Color>
 
     <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#0a0a0a</Color>
     <Color x:Key="{x:Static joufflu:Colors.Background100Color}">#171717</Color>
@@ -23,11 +23,6 @@
     <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#FF27272A</Color>
     <Color x:Key="{x:Static joufflu:Colors.Secondary100Color}">#FF3F3F46</Color>
     <Color x:Key="{x:Static joufflu:Colors.SecondaryContentColor}">#FFFAFAFA</Color>
-
-    <!--  Accent: zinc-800 background, zinc-50 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.AccentColor}">#a1a1a1</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Accent100Color}">#a1a1a1</Color>
-    <Color x:Key="{x:Static joufflu:Colors.AccentContentColor}">#FFFAFAFA</Color>
 
     <!--  Success: green-500 / green-950 content  -->
     <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#00d390</Color>
@@ -71,10 +66,6 @@
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Secondary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Secondary100Color}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryContentColor}}" />
-
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.AccentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.AccentColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Accent100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Accent100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.AccentContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.AccentContentColor}}" />
 
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SuccessBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Success100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Success100Color}}" />

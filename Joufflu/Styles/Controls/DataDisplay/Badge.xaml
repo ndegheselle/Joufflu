@@ -47,11 +47,6 @@
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
             </Trigger>
-            <Trigger Property="Variant" Value="Accent">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.AccentContentBrush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
-            </Trigger>
             <Trigger Property="Variant" Value="Success">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />

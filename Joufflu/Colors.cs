@@ -25,11 +25,6 @@ public static class Colors
     public static ComponentResourceKey Secondary100Color => new ComponentResourceKey(typeof(Colors), "Secondary100Color");
     public static ComponentResourceKey SecondaryContentColor => new ComponentResourceKey(typeof(Colors), "SecondaryContentColor");
 
-    // Accent
-    public static ComponentResourceKey AccentColor => new ComponentResourceKey(typeof(Colors), "AccentColor");
-    public static ComponentResourceKey Accent100Color => new ComponentResourceKey(typeof(Colors), "Accent100Color");
-    public static ComponentResourceKey AccentContentColor => new ComponentResourceKey(typeof(Colors), "AccentContentColor");
-
     // Success
     public static ComponentResourceKey SuccessColor => new ComponentResourceKey(typeof(Colors), "SuccessColor");
     public static ComponentResourceKey Success100Color => new ComponentResourceKey(typeof(Colors), "Success100Color");
@@ -73,11 +68,6 @@ public static class Brushes
     public static ComponentResourceKey SecondaryBrush => new ComponentResourceKey(typeof(Brushes), "SecondaryBrush");
     public static ComponentResourceKey Secondary100Brush => new ComponentResourceKey(typeof(Brushes), "Secondary100Brush");
     public static ComponentResourceKey SecondaryContentBrush => new ComponentResourceKey(typeof(Brushes), "SecondaryContentBrush");
-
-    // Accent
-    public static ComponentResourceKey AccentBrush => new ComponentResourceKey(typeof(Brushes), "AccentBrush");
-    public static ComponentResourceKey Accent100Brush => new ComponentResourceKey(typeof(Brushes), "Accent100Brush");
-    public static ComponentResourceKey AccentContentBrush => new ComponentResourceKey(typeof(Brushes), "AccentContentBrush");
 
     // Success
     public static ComponentResourceKey SuccessBrush => new ComponentResourceKey(typeof(Brushes), "SuccessBrush");

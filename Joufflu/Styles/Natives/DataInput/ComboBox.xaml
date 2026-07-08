@@ -39,7 +39,7 @@
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="0.6" />
             </Trigger>
 
             <!--  Size variants (md is the default, no trigger needed)  -->
@@ -166,6 +166,7 @@
                                 Focusable="False"
                                 IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
                                 Placement="Bottom"
+                                Popup.VerticalOffset="4"
                                 PopupAnimation="Slide">
                                 <Border
                                     x:Name="DropDownBorder"
@@ -201,7 +202,7 @@
                         </Trigger>
 
                         <Trigger Property="IsDropDownOpen" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
                         </Trigger>
 
                         <Trigger Property="Validation.HasError" Value="True">
@@ -219,7 +220,7 @@
             </Trigger>
 
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">

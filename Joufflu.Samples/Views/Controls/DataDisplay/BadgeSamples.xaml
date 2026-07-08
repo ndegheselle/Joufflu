@@ -17,7 +17,6 @@
                     <controls:Badge>Default</controls:Badge>
                     <controls:Badge Variant="Primary">Primary</controls:Badge>
                     <controls:Badge Variant="Secondary">Secondary</controls:Badge>
-                    <controls:Badge Variant="Accent">Accent</controls:Badge>
                     <controls:Badge Variant="Success">Success</controls:Badge>
                     <controls:Badge Variant="Info">Info</controls:Badge>
                     <controls:Badge Variant="Warning">Warning</controls:Badge>

@@ -6,7 +6,7 @@
 
     <!--  ============================ Spinner ============================  -->
     <Style TargetType="{x:Type controls:Spinner}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
         <Setter Property="Width" Value="28" />
         <Setter Property="Height" Value="28" />
         <Setter Property="HorizontalAlignment" Value="Left" />

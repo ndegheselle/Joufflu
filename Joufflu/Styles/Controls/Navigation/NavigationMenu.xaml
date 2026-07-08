@@ -54,8 +54,8 @@
 
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                    <Setter TargetName="ItemButton" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
-                                    <Setter TargetName="ItemButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.AccentContentBrush}}" />
+                                    <Setter TargetName="ItemButton" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                                    <Setter TargetName="ItemButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsCollapsed, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}" Value="True">
                                     <Setter TargetName="ItemTitle" Property="Visibility" Value="Collapsed" />

@@ -9,7 +9,6 @@ public enum BadgeVariant
     Default,
     Primary,
     Secondary,
-    Accent,
     Success,
     Info,
     Warning,

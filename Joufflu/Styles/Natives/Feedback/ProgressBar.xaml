@@ -4,7 +4,7 @@
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <Style x:Key="{x:Type ProgressBar}" TargetType="ProgressBar">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.AccentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
