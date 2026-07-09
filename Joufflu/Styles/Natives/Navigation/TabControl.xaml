@@ -3,6 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style x:Key="{x:Type TabItem}" TargetType="TabItem">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
@@ -15,15 +19,24 @@
                         <Border
                             x:Name="Border"
                             Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                            <Border.BorderThickness>
+                                <Thickness 
+                                    Top="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" 
+                                    Left="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" 
+                                    Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
+                            </Border.BorderThickness>
+                            <Border.CornerRadius>
+                                <CornerRadius 
+                                    TopLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}" 
+                                    TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}"  />
+                            </Border.CornerRadius>
                             <ContentPresenter
+                                Margin="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}"
                                 x:Name="ContentSite"
                                 ContentSource="Header"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
-                                Margin="8,4"
                                 RecognizesAccessKey="True" />
                         </Border>
                     </Grid>
@@ -52,14 +65,15 @@
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="0.6" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="{x:Type TabControl}" TargetType="TabControl">
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -86,13 +100,18 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
                             KeyboardNavigation.TabNavigation="Local"
                             KeyboardNavigation.DirectionalNavigation="Contained"
                             KeyboardNavigation.TabIndex="2">
+                            <Border.CornerRadius>
+                                <CornerRadius 
+                                    BottomLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
+                                    BottomRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
+                                    TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}"  />
+                            </Border.CornerRadius>
                             <ContentPresenter
+                                Margin="{TemplateBinding Padding}"
                                 x:Name="PART_SelectedContentHost"
-                                Margin="8,12,8,8"
                                 ContentSource="SelectedContent" />
                         </Border>
                     </Grid>

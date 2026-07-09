@@ -4,8 +4,15 @@
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
+    <system:Double x:Key="{x:Static joufflu:Dimensions.Thickness}">1</system:Double>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.BorderThickness}" 
+               Top="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" 
+               Left="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" 
+               Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" 
+               Bottom="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" 
+               />
+
     <system:Double x:Key="{x:Static joufflu:Dimensions.Radius}">8</system:Double>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.BorderThickness}">1</Thickness>
     <CornerRadius x:Key="{x:Static joufflu:Dimensions.CornerRadius}" 
                   TopLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
                   TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}"

@@ -105,6 +105,7 @@
                                             Storyboard.TargetProperty="Angle"
                                             Storyboard.TargetName="ExpanderRotateTransform"
                                             Duration="00:00:0.2"
+                                            
                                             From="-45" />
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -143,7 +144,6 @@
 
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
             </Trigger>
 

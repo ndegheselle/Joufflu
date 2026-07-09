@@ -18,13 +18,13 @@
                 Code="&lt;TabControl&gt;&#x0a;    &lt;TabItem Header=&quot;First&quot;&gt;...&lt;/TabItem&gt;&#x0a;    &lt;TabItem Header=&quot;Second&quot;&gt;...&lt;/TabItem&gt;&#x0a;&lt;/TabControl&gt;">
                 <TabControl Height="160">
                     <TabItem Header="First">
-                        <TextBlock Margin="12" Text="First tab content" />
+                        <TextBlock Text="First tab content" />
                     </TabItem>
                     <TabItem Header="Second">
-                        <TextBlock Margin="12" Text="Second tab content" />
+                        <TextBlock Text="Second tab content" />
                     </TabItem>
                     <TabItem Header="Third">
-                        <TextBlock Margin="12" Text="Third tab content" />
+                        <TextBlock Text="Third tab content" />
                     </TabItem>
                     <TabItem Header="Disabled" IsEnabled="False" />
                 </TabControl>
