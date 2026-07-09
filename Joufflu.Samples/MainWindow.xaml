@@ -39,6 +39,7 @@
                 Toggle buttons
             </nav:NavigationItem>
 
+            
             <nav:NavigationTitle Title="Data input" />
             <nav:NavigationItem Target="Text box">
                 <nav:NavigationItem.Icon>
