@@ -12,7 +12,7 @@
                Bottom="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" 
                />
 
-    <system:Double x:Key="{x:Static joufflu:Dimensions.Radius}">8</system:Double>
+    <system:Double x:Key="{x:Static joufflu:Dimensions.Radius}">4</system:Double>
     <CornerRadius x:Key="{x:Static joufflu:Dimensions.CornerRadius}" 
                   TopLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
                   TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
