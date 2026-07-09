@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:Joufflu.Inputs">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/NamedStyles/IconButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/ComboBoxSearch.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

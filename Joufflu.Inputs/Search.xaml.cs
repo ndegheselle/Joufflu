@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Threading;
-using Usuel.Shared;
+using Usuel.Data;
 
 namespace Joufflu.Inputs
 {

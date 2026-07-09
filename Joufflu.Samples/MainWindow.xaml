@@ -197,6 +197,30 @@
                 Hyperlink
             </nav:NavigationItem>
 
+            <!--  Inputs (Joufflu.Inputs library)  -->
+            <nav:NavigationTitle Title="Inputs" />
+            <nav:NavigationItem Target="Numeric inputs">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
+                </nav:NavigationItem.Icon>
+                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Numeric inputs" />
+                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
+                </StackPanel>
+            </nav:NavigationItem>
+            <nav:NavigationItem Target="Search &amp; combo">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListFilter}" />
+                </nav:NavigationItem.Icon>
+                Search &amp; combo
+            </nav:NavigationItem>
+            <nav:NavigationItem Target="Editors">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
+                </nav:NavigationItem.Icon>
+                Editors
+            </nav:NavigationItem>
+
             <!--  Custom controls  -->
             <nav:NavigationTitle Title="Custom controls" />
             <nav:NavigationItem Target="Font icon">

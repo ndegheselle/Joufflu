@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Usuel.Shared;
+using Usuel.Data;
 
 namespace Joufflu.Inputs
 {
@@ -27,7 +27,12 @@ namespace Joufflu.Inputs
 
         public string Text { get { return (string)GetValue(TextProperty); } set { SetValue(TextProperty, value); } }
 
-        public bool IsEditing { get; private set; }
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            private set { _isEditing = value; NotifyPropertyChanged(); }
+        }
 
         protected const string ElementTextBox = "PART_TextBox";
         protected TextBox? EditTextBox;

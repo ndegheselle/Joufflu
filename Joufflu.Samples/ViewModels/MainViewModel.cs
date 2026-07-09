@@ -3,6 +3,7 @@ using Joufflu.Navigation;
 using Joufflu.Samples.Views.Controls.DataDisplay;
 using Joufflu.Samples.Views.Controls.Feedback;
 using Joufflu.Samples.Views.Controls.Navigation;
+using Joufflu.Samples.Views.Inputs;
 using Joufflu.Samples.Views.Natives.Actions;
 using Joufflu.Samples.Views.Natives.DataDisplay;
 using Joufflu.Samples.Views.Natives.DataInput;
@@ -68,6 +69,11 @@ public class MainViewModel : ObservableObject
             ["Tab control"] = new TabControlSamples(),
             ["Tool bar"] = new ToolBarSamples(),
             ["Hyperlink"] = new HyperlinkSamples(),
+
+            // Inputs (Joufflu.Inputs library)
+            ["Numeric inputs"] = new NumericInputsSamplesViewModel(),
+            ["Search & combo"] = new SelectionInputsSamplesViewModel(),
+            ["Editors"] = new EditorInputsSamplesViewModel(),
 
             // Custom controls
             ["Font icon"] = new FontIconSamplesViewModel(),

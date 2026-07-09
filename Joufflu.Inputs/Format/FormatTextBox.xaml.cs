@@ -1,5 +1,4 @@
 ﻿using Joufflu.Inputs.Format;
-using PropertyChanged;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -53,9 +52,19 @@ namespace Joufflu.Inputs.Format
         #region Options
         public bool AllowSelectionOutsideGroups { get; set; } = false;
 
-        public bool ShowDeleteButton { get; set; } = true;
+        private bool _showDeleteButton = true;
+        public bool ShowDeleteButton
+        {
+            get => _showDeleteButton;
+            set { _showDeleteButton = value; OnPropertyChanged(); }
+        }
 
-        public bool ShowIncrementsButtons { get; set; } = true;
+        private bool _showIncrementsButtons = true;
+        public bool ShowIncrementsButtons
+        {
+            get => _showIncrementsButtons;
+            set { _showIncrementsButtons = value; OnPropertyChanged(); }
+        }
 
         public int IncrementValue { get; set; } = 1;
 
@@ -170,7 +179,6 @@ namespace Joufflu.Inputs.Format
             e.Handled = true;
         }
 
-        [SuppressPropertyChangedWarnings]
         protected override void OnSelectionChanged(RoutedEventArgs e)
         {
             if (_isSelectionChanging)
@@ -434,7 +442,6 @@ namespace Joufflu.Inputs.Format
             return (T?)Values.FirstOrDefault();
         }
 
-        [SuppressPropertyChangedWarnings]
         protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
         {
             if (EqualityComparer<T>.Default.Equals(Value, _previousValue))
