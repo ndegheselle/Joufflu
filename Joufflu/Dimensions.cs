@@ -1,10 +1,10 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 namespace Joufflu;
 
 public static class Dimensions
 {
+    public static ComponentResourceKey Radius => new(typeof(Dimensions), "Radius");
     public static ComponentResourceKey CornerRadius => new(typeof(Dimensions), "CornerRadius");
     public static ComponentResourceKey BorderThickness => new(typeof(Dimensions), "BorderThickness");
     public static ComponentResourceKey Spacing => new(typeof(Dimensions), "Spacing");

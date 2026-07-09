@@ -21,4 +21,13 @@ public class DataGridSamplesViewModel : ObservableObject
         "        <DataGridTextColumn Header=\"Role\" Binding=\"{Binding Role}\" />\n" +
         "    </DataGrid.Columns>\n" +
         "</DataGrid>";
+
+    public string CompactCode =>
+        "<DataGrid joufflu:ControlProperties.Size=\"xs\"\n" +
+        "          ItemsSource=\"{Binding People}\" AutoGenerateColumns=\"False\">\n" +
+        "    <DataGrid.Columns>\n" +
+        "        <DataGridTextColumn Header=\"Name\" Binding=\"{Binding Name}\" />\n" +
+        "        <DataGridTextColumn Header=\"Role\" Binding=\"{Binding Role}\" />\n" +
+        "    </DataGrid.Columns>\n" +
+        "</DataGrid>";
 }

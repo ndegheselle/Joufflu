@@ -28,6 +28,24 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Compact (xs) grid"
+                Code="{Binding CompactCode}"
+                Description="The inherited ControlProperties.Size attached property scales the padding of headers and cells, and the font size of cells.">
+                <DataGrid
+                    Height="220"
+                    joufflu:ControlProperties.Size="xs"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ItemsSource="{Binding People}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="*" Binding="{Binding Name}" Header="Name" />
+                        <DataGridTextColumn Width="*" Binding="{Binding Role}" Header="Role" />
+                        <DataGridTextColumn Width="80" Binding="{Binding Age}" Header="Age" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
