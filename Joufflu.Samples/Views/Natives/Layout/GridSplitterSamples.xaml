@@ -36,7 +36,7 @@
 
                         <GridSplitter
                             Grid.Column="1"
-                            Width="6"
+                            Width="4"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Stretch" />
 

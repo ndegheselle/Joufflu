@@ -2,12 +2,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="{x:Type GroupBox}" TargetType="GroupBox">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="Padding" Value="8" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
@@ -30,12 +34,14 @@
                             <Border
                                 x:Name="HeaderBorder"
                                 Grid.Row="0"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                Background="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}">
+                                <Border.CornerRadius>
+                                    <CornerRadius TopLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}" TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}" />
+                                </Border.CornerRadius>
                                 <ContentPresenter
+                                    Margin="{TemplateBinding Padding}"
                                     ContentSource="Header"
-                                    RecognizesAccessKey="True"
-                                    Margin="{TemplateBinding Padding}" />
+                                    RecognizesAccessKey="True" />
                             </Border>
 
                             <Border Grid.Row="1">
@@ -46,7 +52,7 @@
 
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding Header, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
-                            <Setter Property="Visibility" TargetName="HeaderBorder" Value="Collapsed" />
+                            <Setter TargetName="HeaderBorder" Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
