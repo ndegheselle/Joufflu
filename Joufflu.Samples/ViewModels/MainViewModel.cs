@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.Assets.Fonts;
 using Joufflu.Navigation;
 using Joufflu.Samples.Views.Controls.DataDisplay;
 using Joufflu.Samples.Views.Controls.Feedback;
@@ -11,14 +10,13 @@ using Joufflu.Samples.Views.Natives.Feedback;
 using Joufflu.Samples.Views.Natives.Layout;
 using Joufflu.Samples.Views.Natives.Navigation;
 using Joufflu.Samples.Views.Toolkit;
-using System.Collections.ObjectModel;
 
 namespace Joufflu.Samples.ViewModels;
 
 /// <summary>
-/// Shell view model: owns the shared navigation services and builds the side menu.
-/// Menu items target a page's view model when it has one, otherwise the view itself
-/// (static pages need no view model).
+/// Shell view model: owns the shared navigation services and the pages the side menu can reach.
+/// The menu items are declared in XAML and point at a page through a text target; this view model
+/// maps those targets to the actual pages via <see cref="ResolveTarget"/>.
 /// </summary>
 public class MainViewModel : ObservableObject
 {
@@ -28,69 +26,70 @@ public class MainViewModel : ObservableObject
 
     public ToastService Toasts { get; } = new();
 
-    public ObservableCollection<NavigationMenuEntry> Menu { get; } = new();
+    /// <summary>Pages keyed by the text target used on the menu's <c>NavigationItem</c>s.</summary>
+    private readonly Dictionary<string, object> _pages;
+
+    /// <summary>Bound to <c>NavigationMenu.TargetResolver</c> so the menu can resolve its text targets.</summary>
+    public Func<string, object?> ResolveTarget { get; }
 
     public MainViewModel()
     {
-        var buttons = new ButtonSamplesViewModel();
+        _pages = new()
+        {
+            // Native controls
+            ["Buttons"] = new ButtonSamplesViewModel(),
+            ["Toggle buttons"] = new ToggleButtonSamplesViewModel(),
 
-        // Native controls
-        Menu.Add(new NavigationMenuTitle("Actions"));
-        Menu.Add(Item(LucideFontIcons.MousePointerClick, "Buttons", buttons));
-        Menu.Add(Item(LucideFontIcons.ToggleLeft, "Toggle buttons", new ToggleButtonSamplesViewModel()));
+            ["Text box"] = new TextBoxSamplesViewModel(),
+            ["Combo box"] = new ComboBoxSamplesViewModel(),
+            ["Check box"] = new CheckBoxSamplesViewModel(),
+            ["Radio button"] = new RadioButtonSamples(),
+            ["Slider"] = new SliderSamplesViewModel(),
+            ["Date picker"] = new DatePickerSamplesViewModel(),
+            ["Calendar"] = new CalendarSamplesViewModel(),
+            ["List box"] = new ListBoxSamplesViewModel(),
 
-        Menu.Add(new NavigationMenuTitle("Data input"));
-        Menu.Add(Item(LucideFontIcons.TextCursorInput, "Text box", new TextBoxSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.List, "Combo box", new ComboBoxSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.CheckSquare, "Check box", new CheckBoxSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.CircleDot, "Radio button", new RadioButtonSamples()));
-        Menu.Add(Item(LucideFontIcons.SlidersHorizontal, "Slider", new SliderSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Calendar, "Date picker", new DatePickerSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.CalendarDays, "Calendar", new CalendarSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.LayoutList, "List box", new ListBoxSamplesViewModel()));
+            ["Typography"] = new TypographySamplesViewModel(),
+            ["Label"] = new LabelSamples(),
+            ["List view"] = new ListViewSamplesViewModel(),
+            ["Tree view"] = new TreeViewSamplesViewModel(),
+            ["Data grid"] = new DataGridSamplesViewModel(),
 
-        Menu.Add(new NavigationMenuTitle("Data display"));
-        Menu.Add(Item(LucideFontIcons.Type, "Typography", new TypographySamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Tag, "Label", new LabelSamples()));
-        Menu.Add(Item(LucideFontIcons.Table, "List view", new ListViewSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Layers2, "Tree view", new TreeViewSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Table2, "Data grid", new DataGridSamplesViewModel()));
+            ["Progress bar"] = new ProgressBarSamplesViewModel(),
+            ["Status bar"] = new StatusBarSamples(),
 
-        Menu.Add(new NavigationMenuTitle("Feedback"));
-        Menu.Add(Item(LucideFontIcons.Loader, "Progress bar", new ProgressBarSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.PanelBottom, "Status bar", new StatusBarSamples()));
+            ["Card"] = new CardSamples(),
+            ["Group box"] = new GroupBoxSamples(),
+            ["Expander"] = new ExpanderSamples(),
+            ["Scroll viewer"] = new ScrollViewerSamples(),
+            ["Grid splitter"] = new GridSplitterSamples(),
 
-        Menu.Add(new NavigationMenuTitle("Layout"));
-        Menu.Add(Item(LucideFontIcons.Square, "Card", new CardSamples()));
-        Menu.Add(Item(LucideFontIcons.Component, "Group box", new GroupBoxSamples()));
-        Menu.Add(Item(LucideFontIcons.PanelTop, "Expander", new ExpanderSamples()));
-        Menu.Add(Item(LucideFontIcons.Move, "Scroll viewer", new ScrollViewerSamples()));
-        Menu.Add(Item(LucideFontIcons.StretchHorizontal, "Grid splitter", new GridSplitterSamples()));
+            ["Menu"] = new MenuSamples(),
+            ["Tab control"] = new TabControlSamples(),
+            ["Tool bar"] = new ToolBarSamples(),
+            ["Hyperlink"] = new HyperlinkSamples(),
 
-        Menu.Add(new NavigationMenuTitle("Navigation"));
-        Menu.Add(Item(LucideFontIcons.Menu, "Menu", new MenuSamples()));
-        Menu.Add(Item(LucideFontIcons.GalleryHorizontal, "Tab control", new TabControlSamples()));
-        Menu.Add(Item(LucideFontIcons.Wrench, "Tool bar", new ToolBarSamples()));
-        Menu.Add(Item(LucideFontIcons.Link, "Hyperlink", new HyperlinkSamples()));
+            // Custom controls
+            ["Font icon"] = new FontIconSamplesViewModel(),
+            ["Badge"] = new BadgeSamplesViewModel(),
+            ["Spinner"] = new SpinnerSamplesViewModel(),
+            ["Toasts"] = new ToastSamplesViewModel(Toasts),
+            ["Navigation menu"] = new NavigationMenuSamplesViewModel(),
+            ["Overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
 
-        // Custom controls
-        Menu.Add(new NavigationMenuTitle("Custom controls"));
-        Menu.Add(Item(LucideFontIcons.Sparkles, "Font icon", new FontIconSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Badge, "Badge", new BadgeSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Circle, "Spinner", new SpinnerSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Bell, "Toasts", new ToastSamplesViewModel(Toasts)));
-        Menu.Add(Item(LucideFontIcons.PanelLeft, "Navigation menu", new NavigationMenuSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.SquareStack, "Overlays", new OverlaySamplesViewModel(Overlays, Toasts)));
+            // Toolkit
+            ["Sizing"] = new SizingSamplesViewModel(),
+            ["Spacing"] = new SpacingSamplesViewModel(),
+            ["Application shell"] = new ShellSamples(),
+        };
 
-        // Toolkit
-        Menu.Add(new NavigationMenuTitle("Toolkit"));
-        Menu.Add(Item(LucideFontIcons.Scaling, "Sizing", new SizingSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.Space, "Spacing", new SpacingSamplesViewModel()));
-        Menu.Add(Item(LucideFontIcons.AppWindow, "Application shell", new ShellSamples()));
+        ResolveTarget = ResolvePage;
 
-        Navigator.Navigate(buttons);
+        if (ResolvePage("Buttons") is { } home)
+            Navigator.Navigate(home);
     }
 
-    private static NavigationMenuItem Item(string icon, string title, object target) =>
-        new() { Icon = icon, Title = title, Target = target };
+    /// <summary>Maps a menu item's text target to its page (view model), or null when unknown.</summary>
+    private object? ResolvePage(string target) =>
+        _pages.TryGetValue(target, out object? page) ? page : null;
 }

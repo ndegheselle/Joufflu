@@ -1,59 +1,95 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Joufflu.Navigation;
 
-/// <summary>Base type for entries hosted by a <see cref="NavigationMenu"/>.</summary>
-public abstract class NavigationMenuEntry : ObservableObject
-{
-}
-
 /// <summary>
-/// A section title. Rendered as a label when the menu is expanded and as a simple
-/// line separator when it is collapsed.
+/// A section title hosted by a <see cref="NavigationMenu"/>. Rendered as a label when the menu
+/// is expanded and as a simple separator line when it is collapsed.
 /// </summary>
-public class NavigationMenuTitle : NavigationMenuEntry
+public class NavigationTitle : Control
 {
-    public NavigationMenuTitle()
+    static NavigationTitle()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(NavigationTitle),
+            new FrameworkPropertyMetadata(typeof(NavigationTitle)));
+    }
+
+    public NavigationTitle()
     { }
 
-    public NavigationMenuTitle(string title) => Title = title;
+    public NavigationTitle(string title) => Title = title;
 
-    public string Title { get; set; } = "";
+    public string Title
+    {
+        get => (string)GetValue(TitleProperty);
+        set => SetValue(TitleProperty, value);
+    }
+
+    public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+        nameof(Title), typeof(string), typeof(NavigationTitle), new PropertyMetadata(""));
 }
 
 /// <summary>
-/// A clickable navigation entry pointing at a <see cref="Target"/> page (view model).
+/// A clickable entry hosted by a <see cref="NavigationMenu"/>. Its <see cref="ContentControl.Content"/>
+/// is the expanded content (title, badges, …); the <see cref="Icon"/> is shown when the menu is
+/// collapsed to an icons-only rail. Selecting it navigates to the page resolved from <see cref="Target"/>.
 /// </summary>
-public class NavigationMenuItem : NavigationMenuEntry
+public class NavigationItem : ContentControl
 {
-    private bool _isSelected;
+    static NavigationItem()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(NavigationItem),
+            new FrameworkPropertyMetadata(typeof(NavigationItem)));
+    }
 
-    public string Icon { get; set; } = "";
+    /// <summary>Content shown when the menu is collapsed (typically a <c>FontIcon</c>).</summary>
+    public object? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
 
-    public string Title { get; set; } = "";
+    public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
+        nameof(Icon), typeof(object), typeof(NavigationItem), new PropertyMetadata(null));
 
-    /// <summary>The page (view model) navigated to when this item is selected.</summary>
-    public object? Target { get; set; }
+    /// <summary>Text key resolved to a page (view model) through <see cref="NavigationMenu.TargetResolver"/>.</summary>
+    public string? Target
+    {
+        get => (string?)GetValue(TargetProperty);
+        set => SetValue(TargetProperty, value);
+    }
+
+    public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(
+        nameof(Target), typeof(string), typeof(NavigationItem), new PropertyMetadata(null));
 
     public bool IsSelected
     {
-        get => _isSelected;
-        internal set => SetProperty(ref _isSelected, value);
+        get => (bool)GetValue(IsSelectedProperty);
+        internal set => SetValue(IsSelectedPropertyKey, value);
     }
+
+    private static readonly DependencyPropertyKey IsSelectedPropertyKey = DependencyProperty.RegisterReadOnly(
+        nameof(IsSelected), typeof(bool), typeof(NavigationItem), new PropertyMetadata(false));
+
+    public static readonly DependencyProperty IsSelectedProperty = IsSelectedPropertyKey.DependencyProperty;
 }
 
 /// <summary>
-/// Side menu that plugs into an <see cref="INavigator"/>. It accepts <see cref="NavigationMenuItem"/>
-/// entries (icon, title, target) and <see cref="NavigationMenuTitle"/> section headers, and can
-/// collapse to an icons-only rail.
+/// Side menu that plugs into an <see cref="INavigator"/>. Its <see cref="NavigationItem"/> and
+/// <see cref="NavigationTitle"/> children are declared directly in XAML. Items point at a page
+/// through a text <see cref="NavigationItem.Target"/>, mapped to the actual view model by
+/// <see cref="TargetResolver"/>. The menu can collapse to an icons-only rail.
 /// </summary>
 public class NavigationMenu : ItemsControl
 {
+    /// <summary>Pages resolved from each item's target, cached so selection stays stable.</summary>
+    private readonly Dictionary<NavigationItem, object?> _resolvedPages = new();
+
     static NavigationMenu()
     {
         DefaultStyleKeyProperty.OverrideMetadata(
@@ -63,11 +99,11 @@ public class NavigationMenu : ItemsControl
 
     public NavigationMenu()
     {
-        SelectCommand = new RelayCommand<NavigationMenuItem>(OnSelect);
+        SelectCommand = new RelayCommand<NavigationItem>(OnSelect);
         ToggleCollapseCommand = new RelayCommand(() => IsCollapsed = !IsCollapsed);
     }
 
-    /// <summary>Selects (navigates to) the <see cref="NavigationMenuItem"/> passed as parameter.</summary>
+    /// <summary>Selects (navigates to) the <see cref="NavigationItem"/> passed as parameter.</summary>
     public ICommand SelectCommand { get; }
 
     /// <summary>Flips <see cref="IsCollapsed"/>.</summary>
@@ -92,6 +128,19 @@ public class NavigationMenu : ItemsControl
         nameof(Navigator), typeof(INavigator), typeof(NavigationMenu),
         new PropertyMetadata(null, OnNavigatorChanged));
 
+    /// <summary>
+    /// Turns an item's text <see cref="NavigationItem.Target"/> into the page (view model) to
+    /// navigate to. Usually bound to a method on the shell view model.
+    /// </summary>
+    public Func<string, object?>? TargetResolver
+    {
+        get => (Func<string, object?>?)GetValue(TargetResolverProperty);
+        set => SetValue(TargetResolverProperty, value);
+    }
+
+    public static readonly DependencyProperty TargetResolverProperty = DependencyProperty.Register(
+        nameof(TargetResolver), typeof(Func<string, object?>), typeof(NavigationMenu), new PropertyMetadata(null));
+
     private static void OnNavigatorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var menu = (NavigationMenu)d;
@@ -111,24 +160,31 @@ public class NavigationMenu : ItemsControl
     protected override void OnItemsChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         base.OnItemsChanged(e);
+        _resolvedPages.Clear();
         UpdateSelection(Navigator?.CurrentPage);
     }
 
-    private void OnSelect(NavigationMenuItem? item)
+    private void OnSelect(NavigationItem? item)
     {
-        if (item?.Target == null)
-            return;
+        object? page = item == null ? null : ResolvePage(item);
+        if (page != null)
+            Navigator?.Navigate(page);
+    }
 
-        Navigator?.Navigate(item.Target);
+    /// <summary>Resolves (and caches) the page a navigation item points at.</summary>
+    private object? ResolvePage(NavigationItem item)
+    {
+        if (_resolvedPages.TryGetValue(item, out object? cached))
+            return cached;
+
+        object? page = item.Target is { Length: > 0 } target ? TargetResolver?.Invoke(target) : null;
+        _resolvedPages[item] = page;
+        return page;
     }
 
     private void UpdateSelection(object? currentPage)
     {
-        IEnumerable source = ItemsSource ?? Items;
-        foreach (object? entry in source)
-        {
-            if (entry is NavigationMenuItem item)
-                item.IsSelected = currentPage != null && ReferenceEquals(item.Target, currentPage);
-        }
+        foreach (NavigationItem item in Items.OfType<NavigationItem>())
+            item.IsSelected = currentPage != null && ReferenceEquals(ResolvePage(item), currentPage);
     }
 }

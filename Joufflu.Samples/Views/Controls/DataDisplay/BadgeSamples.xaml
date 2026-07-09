@@ -21,6 +21,7 @@
                     <controls:Badge Variant="Info">Info</controls:Badge>
                     <controls:Badge Variant="Warning">Warning</controls:Badge>
                     <controls:Badge Variant="Danger">Danger</controls:Badge>
+                    <controls:Badge Variant="Outline">Outline</controls:Badge>
                 </WrapPanel>
             </c:CodeExample>
 
