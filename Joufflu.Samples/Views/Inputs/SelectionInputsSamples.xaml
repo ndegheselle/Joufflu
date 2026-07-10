@@ -13,7 +13,12 @@
                 Title="Search"
                 Code="{Binding SearchCode}"
                 Description="A text box with a built-in delay before it raises SearchChanged, to limit calls to an API or database. Escape clears it.">
-                <inputs:Search Width="260" HorizontalAlignment="Left" />
+                <StackPanel joufflu:Spacing.Gap="4">
+                    <inputs:Search joufflu:ControlProperties.Size="xs" />
+                    <inputs:Search joufflu:ControlProperties.Size="sm" />
+                    <inputs:Search />
+                    <inputs:Search joufflu:ControlProperties.Size="lg" />
+                </StackPanel>
             </c:CodeExample>
 
             <c:CodeExample

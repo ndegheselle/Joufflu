@@ -12,7 +12,10 @@ public class NavigationMenuSamplesViewModel : ObservableObject
     private readonly Dictionary<string, object> _pages = new()
     {
         ["Home"] = "Home page",
-        ["Inbox"] = "Inbox page",
+        ["Submenu 1"] = "Submenu 1 page",
+        ["Submenu 2"] = "Submenu 2 page",
+        ["Nested submenu 1"] = "Nested submenu 1 page",
+        ["Nested submenu 2"] = "Nested submenu 2 page",
         ["Settings"] = "Settings page",
     };
 
@@ -40,6 +43,14 @@ public class NavigationMenuSamplesViewModel : ObservableObject
         "        </nav:NavigationItem.Icon>\n" +
         "        Home\n" +
         "    </nav:NavigationItem>\n" +
-        "    <!-- … more items … -->\n" +
+        "    <!-- A group displays like an item but expands to reveal children -->\n" +
+        "    <nav:NavigationGroup Header=\"Parent\">\n" +
+        "        <nav:NavigationItem Target=\"Submenu 1\">Submenu 1</nav:NavigationItem>\n" +
+        "        <nav:NavigationItem Target=\"Submenu 2\">Submenu 2</nav:NavigationItem>\n" +
+        "        <!-- Groups can nest -->\n" +
+        "        <nav:NavigationGroup Header=\"Parent\">\n" +
+        "            <!-- … more items … -->\n" +
+        "        </nav:NavigationGroup>\n" +
+        "    </nav:NavigationGroup>\n" +
         "</nav:NavigationMenu>";
 }

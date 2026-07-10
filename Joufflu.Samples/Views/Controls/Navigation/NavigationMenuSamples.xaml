@@ -38,12 +38,20 @@
                                 </nav:NavigationItem.Icon>
                                 Home
                             </nav:NavigationItem>
-                            <nav:NavigationItem Target="Inbox">
-                                <nav:NavigationItem.Icon>
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
-                                </nav:NavigationItem.Icon>
-                                Inbox
-                            </nav:NavigationItem>
+                            <nav:NavigationGroup Header="Parent" IsExpanded="True">
+                                <nav:NavigationGroup.Icon>
+                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
+                                </nav:NavigationGroup.Icon>
+                                <nav:NavigationItem Target="Submenu 1">Submenu 1</nav:NavigationItem>
+                                <nav:NavigationItem Target="Submenu 2">Submenu 2</nav:NavigationItem>
+                                <nav:NavigationGroup Header="Parent" IsExpanded="True">
+                                    <nav:NavigationGroup.Icon>
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
+                                    </nav:NavigationGroup.Icon>
+                                    <nav:NavigationItem Target="Nested submenu 1">Submenu 1</nav:NavigationItem>
+                                    <nav:NavigationItem Target="Nested submenu 2">Submenu 2</nav:NavigationItem>
+                                </nav:NavigationGroup>
+                            </nav:NavigationGroup>
                             <nav:NavigationItem Target="Settings">
                                 <nav:NavigationItem.Icon>
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />

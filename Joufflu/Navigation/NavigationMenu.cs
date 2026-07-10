@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Input;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -80,8 +81,54 @@ public class NavigationItem : ContentControl
 }
 
 /// <summary>
-/// Side menu that plugs into an <see cref="INavigator"/>. Its <see cref="NavigationItem"/> and
-/// <see cref="NavigationTitle"/> children are declared directly in XAML. Items point at a page
+/// An expandable entry hosted by a <see cref="NavigationMenu"/>. It looks like a
+/// <see cref="NavigationItem"/> (its <see cref="HeaderedItemsControl.Header"/> and <see cref="Icon"/>
+/// form the row) but instead of navigating it toggles <see cref="IsExpanded"/> to reveal its child
+/// items. Children may themselves be <see cref="NavigationItem"/>s, <see cref="NavigationTitle"/>s or
+/// nested <see cref="NavigationGroup"/>s.
+/// </summary>
+public class NavigationGroup : HeaderedItemsControl
+{
+    static NavigationGroup()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(NavigationGroup),
+            new FrameworkPropertyMetadata(typeof(NavigationGroup)));
+    }
+
+    public NavigationGroup()
+    {
+        ToggleCommand = new RelayCommand(() => IsExpanded = !IsExpanded);
+    }
+
+    /// <summary>Flips <see cref="IsExpanded"/>.</summary>
+    public ICommand ToggleCommand { get; }
+
+    /// <summary>Content shown when the menu is collapsed (typically a <c>FontIcon</c>).</summary>
+    public object? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+
+    public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
+        nameof(Icon), typeof(object), typeof(NavigationGroup), new PropertyMetadata(null));
+
+    /// <summary>Whether the child items are shown. Closed by default.</summary>
+    public bool IsExpanded
+    {
+        get => (bool)GetValue(IsExpandedProperty);
+        set => SetValue(IsExpandedProperty, value);
+    }
+
+    public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register(
+        nameof(IsExpanded), typeof(bool), typeof(NavigationGroup), new PropertyMetadata(false));
+}
+
+/// <summary>
+/// Side menu that plugs into an <see cref="INavigator"/>. Its <see cref="NavigationItem"/>,
+/// <see cref="NavigationGroup"/> and <see cref="NavigationTitle"/> children are declared directly in
+/// XAML. Items point at a page
 /// through a text <see cref="NavigationItem.Target"/>, mapped to the actual view model by
 /// <see cref="TargetResolver"/>. The menu can collapse to an icons-only rail.
 /// </summary>
@@ -182,9 +229,29 @@ public class NavigationMenu : ItemsControl
         return page;
     }
 
-    private void UpdateSelection(object? currentPage)
+    private void UpdateSelection(object? currentPage) => UpdateSelection(Items, currentPage);
+
+    /// <summary>
+    /// Walks the item tree, flagging the item that resolves to <paramref name="currentPage"/> and
+    /// expanding any group that contains it. Returns whether the selected item was found in this subtree.
+    /// </summary>
+    private bool UpdateSelection(IEnumerable items, object? currentPage)
     {
-        foreach (NavigationItem item in Items.OfType<NavigationItem>())
-            item.IsSelected = currentPage != null && ReferenceEquals(ResolvePage(item), currentPage);
+        bool containsSelection = false;
+        foreach (object? element in items)
+        {
+            switch (element)
+            {
+                case NavigationItem item:
+                    item.IsSelected = currentPage != null && ReferenceEquals(ResolvePage(item), currentPage);
+                    containsSelection |= item.IsSelected;
+                    break;
+                case NavigationGroup group when UpdateSelection(group.Items, currentPage):
+                    group.IsExpanded = true;
+                    containsSelection = true;
+                    break;
+            }
+        }
+        return containsSelection;
     }
 }

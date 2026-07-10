@@ -1,6 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts"
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
@@ -41,8 +42,6 @@
                             x:Name="Expander"
                             Grid.Row="0"
                             Grid.Column="0"
-                            Width="12"
-                            Height="12"
                             Focusable="False"
                             ClickMode="Press"
                             IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
@@ -50,19 +49,15 @@
                             RenderTransformOrigin="0.5,0.5">
                             <ToggleButton.Template>
                                 <ControlTemplate TargetType="ToggleButton">
-                                    <Viewbox Stretch="Uniform">
-                                        <Path
-                                            Data="M 0 0 L 5 5 L 10 0"
-                                            Stroke="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=TreeViewItem}}"
-                                            StrokeThickness="1.5"
-                                            StrokeLineJoin="Round"
-                                            StrokeStartLineCap="Round"
-                                            StrokeEndLineCap="Round" />
-                                    </Viewbox>
+                                    <fonts:FontIcon
+                                        VerticalAlignment="Center"
+                                        FontSize="16"
+                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=TreeViewItem}}"
+                                        Text="{x:Static fonts:LucideFontIcons.ChevronRight}" />
                                 </ControlTemplate>
                             </ToggleButton.Template>
                             <ToggleButton.RenderTransform>
-                                <RotateTransform x:Name="ExpanderRotateTransform" Angle="-90" />
+                                <RotateTransform x:Name="ExpanderRotateTransform" Angle="0" />
                             </ToggleButton.RenderTransform>
                         </ToggleButton>
 
@@ -72,6 +67,7 @@
                             Grid.Column="1"
                             ContentSource="Header"
                             Margin="0,4,8,4"
+                            VerticalAlignment="Center"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
 
                         <ItemsPresenter
@@ -94,7 +90,7 @@
                                             Storyboard.TargetProperty="Angle"
                                             Storyboard.TargetName="ExpanderRotateTransform"
                                             Duration="00:00:0.2"
-                                            To="-45" />
+                                            To="90" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -105,8 +101,7 @@
                                             Storyboard.TargetProperty="Angle"
                                             Storyboard.TargetName="ExpanderRotateTransform"
                                             Duration="00:00:0.2"
-                                            
-                                            From="-45" />
+                                            To="0" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -138,7 +133,6 @@
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
                     <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
                 </MultiTrigger.Setters>
             </MultiTrigger>
 

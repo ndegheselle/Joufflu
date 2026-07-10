@@ -11,7 +11,6 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type local:Search}">
-        <Setter Property="Padding" Value="6,3" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Search}">
@@ -23,27 +22,27 @@
                         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <Grid>
-                            <TextBlock
-                                Name="PlaceholderText"
+                            <TextBlock 
                                 Margin="{TemplateBinding Padding}"
+                                Name="PlaceholderText"
                                 VerticalAlignment="Center"
                                 IsHitTestVisible="False"
                                 Opacity="0.5"
                                 Text="Search ..."
                                 Visibility="Collapsed" />
                             <ScrollViewer x:Name="PART_ContentHost" />
-                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" >
                                 <fonts:FontIcon
-                                    Margin="0,0,4,0"
-                                    FontSize="12"
+                                    Margin="{TemplateBinding Padding}"
                                     Opacity="0.5"
                                     Text="{x:Static fonts:LucideFontIcons.Search}" />
                                 <!--  Clear button  -->
                                 <Button
                                     Name="ClearButton"
                                     Command="{Binding ClearCommand}"
-                                    Style="{StaticResource IconButtonSmall}">
-                                    <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                    Style="{StaticResource Ghost}"
+                                    joufflu:ControlProperties.IsSquare="True">
+                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                 </Button>
                             </StackPanel>
                         </Grid>
