@@ -31,7 +31,12 @@ namespace Joufflu.Inputs
 
         #endregion
 
-        public bool IsEditing { get; set; } = false;
+        private bool _isEditing = false;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; NotifyPropertyChanged(); }
+        }
         private readonly int MaxNumberOfKeys = 3;
 
         public ShortcutSelector()

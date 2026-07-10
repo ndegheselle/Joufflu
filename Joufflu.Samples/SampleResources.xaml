@@ -5,6 +5,7 @@
     xmlns:customDisplay="clr-namespace:Joufflu.Samples.Views.Controls.DataDisplay"
     xmlns:customFeedback="clr-namespace:Joufflu.Samples.Views.Controls.Feedback"
     xmlns:customNav="clr-namespace:Joufflu.Samples.Views.Controls.Navigation"
+    xmlns:inputs="clr-namespace:Joufflu.Samples.Views.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nativeActions="clr-namespace:Joufflu.Samples.Views.Natives.Actions"
     xmlns:nativeDisplay="clr-namespace:Joufflu.Samples.Views.Natives.DataDisplay"
@@ -151,6 +152,17 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type customNav:OverlaySamplesViewModel}">
         <customNav:OverlaySamples />
+    </DataTemplate>
+
+    <!--  Inputs (Joufflu.Inputs library)  -->
+    <DataTemplate DataType="{x:Type inputs:NumericInputsSamplesViewModel}">
+        <inputs:NumericInputsSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type inputs:SelectionInputsSamplesViewModel}">
+        <inputs:SelectionInputsSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type inputs:EditorInputsSamplesViewModel}">
+        <inputs:EditorInputsSamples />
     </DataTemplate>
 
     <!--  Toolkit  -->

@@ -1,5 +1,4 @@
-﻿using PropertyChanged;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
@@ -8,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using Usuel.Shared;
+using Usuel.Data;
 
 namespace Joufflu.Inputs
 {
@@ -36,7 +35,7 @@ namespace Joufflu.Inputs
         { throw new NotSupportedException(); }
     }
 
-    public class ComboBoxTags : ComboBoxSearch, INotifyPropertyChanged
+    public class ComboBoxTags : ComboBoxSearch
     {
         #region Dependency Properties
         public static readonly DependencyProperty SelectedItemsProperty =
@@ -54,7 +53,16 @@ namespace Joufflu.Inputs
         #endregion
 
         #region Properties
-        public IList InternalSelectedItems { get; set; } = new ObservableCollection<object>();
+        private IList _internalSelectedItems = new ObservableCollection<object>();
+        public IList InternalSelectedItems
+        {
+            get => _internalSelectedItems;
+            set
+            {
+                _internalSelectedItems = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool AllowAdd { get; set; } = false;
 
@@ -121,7 +129,6 @@ namespace Joufflu.Inputs
              */
         }
 
-        [SuppressPropertyChangedWarnings]
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
