@@ -55,13 +55,12 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
                                                     <Button
-                                                        Width="20"
-                                                        Height="20"
-                                                        Background="Transparent"
+                                                        joufflu:ControlProperties.IsSquare="True"
+                                                        joufflu:ControlProperties.Size="xs"
                                                         Command="{Binding RemoveSelectedCmd, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
                                                         CommandParameter="{Binding}"
-                                                        Style="{StaticResource IconButtonSmall}">
-                                                        <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                                        Style="{StaticResource Ghost}">
+                                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                                     </Button>
                                                 </StackPanel>
                                             </Border>

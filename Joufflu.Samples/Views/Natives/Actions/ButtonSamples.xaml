@@ -42,21 +42,6 @@
             </c:CodeExample>
 
             <c:CodeExample
-                Title="Named icon styles"
-                Code="{Binding NamedCode}"
-                Description="Button.named.xaml adds ready-made icon-button styles: IconButton, IconButtonSmall and the list-row ItemButton.">
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
-                    <Button Style="{StaticResource IconButton}">
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
-                    </Button>
-                    <Button Style="{StaticResource IconButtonSmall}">
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
-                    </Button>
-                    <Button Style="{StaticResource ItemButton}">Item button</Button>
-                </StackPanel>
-            </c:CodeExample>
-
-            <c:CodeExample
                 Title="Sizes"
                 Code="{Binding SizesCode}"
                 Description="The inherited ControlProperties.Size attached property scales height, font size and padding.">

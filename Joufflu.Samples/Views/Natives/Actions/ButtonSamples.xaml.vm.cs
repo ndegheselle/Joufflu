@@ -17,13 +17,6 @@ public class ButtonSamplesViewModel : ObservableObject
         "    <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Plus}\" />\n" +
         "</Button>";
 
-    public string NamedCode =>
-        "<Button Style=\"{StaticResource IconButton}\">\n" +
-        "    <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Settings}\" />\n" +
-        "</Button>\n" +
-        "<Button Style=\"{StaticResource IconButtonSmall}\"> ... </Button>\n" +
-        "<Button Style=\"{StaticResource ItemButton}\">Item button</Button>";
-
     public string SizesCode =>
         "<Button joufflu:ControlProperties.Size=\"xs\">XS</Button>\n" +
         "<Button joufflu:ControlProperties.Size=\"sm\">SM</Button>\n" +

@@ -14,39 +14,47 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Search}">
-                    <Border
-                        Name="border"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
-                        DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                        <Grid>
-                            <TextBlock 
-                                Margin="{TemplateBinding Padding}"
-                                Name="PlaceholderText"
-                                VerticalAlignment="Center"
-                                IsHitTestVisible="False"
-                                Opacity="0.5"
-                                Text="Search ..."
-                                Visibility="Collapsed" />
-                            <ScrollViewer x:Name="PART_ContentHost" />
-                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" >
+                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                        <Border
+                            Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
                                 <fonts:FontIcon
-                                    Margin="{TemplateBinding Padding}"
+                                    Margin="6,0,0,0"
+                                    HorizontalAlignment="Right"
                                     Opacity="0.5"
                                     Text="{x:Static fonts:LucideFontIcons.Search}" />
-                                <!--  Clear button  -->
-                                <Button
-                                    Name="ClearButton"
-                                    Command="{Binding ClearCommand}"
-                                    Style="{StaticResource Ghost}"
-                                    joufflu:ControlProperties.IsSquare="True">
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+
+                                <TextBlock Grid.Column="1"
+                                    Name="PlaceholderText"
+                                    Margin="{TemplateBinding Padding}"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
+                                    Opacity="0.5"
+                                    Text="Search ..."
+                                    Visibility="Collapsed" />
+
+                                <ScrollViewer Grid.Column="1" x:Name="PART_ContentHost" />
+                            </Grid>
+                        </Border>
+                        <!--  Clear button  -->
+                        <Button
+                            Name="ClearButton"
+                            HorizontalAlignment="Right"
+                            joufflu:ControlProperties.IsSquare="True"
+                            Command="{Binding ClearCommand}"
+                            Style="{StaticResource Ghost}">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
+                        </Button>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Text" Value="{x:Null}">
                             <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />

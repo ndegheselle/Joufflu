@@ -5,6 +5,10 @@
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <!--  ============================ NavigationItem ============================  -->
     <Style TargetType="{x:Type nav:NavigationItem}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
@@ -13,12 +17,8 @@
                 <ControlTemplate TargetType="{x:Type nav:NavigationItem}">
                     <Button
                         x:Name="ItemButton"
-                        Height="40"
-                        Margin="0,2"
-                        Padding="8,0"
+                        Style="{DynamicResource Ghost}"
                         HorizontalContentAlignment="Stretch"
-                        Background="Transparent"
-                        BorderThickness="0"
                         Command="{Binding SelectCommand, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}"
                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <Grid>
@@ -69,12 +69,8 @@
                     <StackPanel>
                         <Button
                             x:Name="HeaderButton"
-                            Height="40"
-                            Margin="0,2"
-                            Padding="8,0"
-                            HorizontalContentAlignment="Stretch"
-                            Background="Transparent"
-                            BorderThickness="0"
+                        HorizontalContentAlignment="Stretch"
+                        Style="{DynamicResource Ghost}"
                             Command="{Binding ToggleCommand, RelativeSource={RelativeSource TemplatedParent}}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -152,7 +148,7 @@
                             Text="{TemplateBinding Title}" />
                         <Border
                             x:Name="TitleLine"
-                            Height="1"
+                            Height="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
                             Margin="4,0"
                             VerticalAlignment="Center"
                             Background="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
@@ -175,7 +171,11 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="BorderThickness">
+            <Setter.Value>
+                <Thickness Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="Width" Value="220" />
         <Setter Property="Template">
             <Setter.Value>

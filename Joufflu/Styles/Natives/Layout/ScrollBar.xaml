@@ -101,7 +101,7 @@
     </Style>
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-        <Border Margin="{TemplateBinding Padding}" Background="Transparent">
+        <Border Margin="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -141,7 +141,7 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
-        <Border Margin="{TemplateBinding Padding}" Background="Transparent">
+        <Border Margin="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
