@@ -28,7 +28,7 @@ public class ToastSamplesViewModel : ObservableObject
 
         InfoCommand = new RelayCommand(() => _toasts.Info("A neutral, informational message.", "Heads up"));
         SuccessCommand = new RelayCommand(() => _toasts.Success("Your changes were saved.", "Success"));
-        WarningCommand = new RelayCommand(() => _toasts.Warning("This might need your attention.", "Warning"));
+        WarningCommand = new RelayCommand(() => throw new Exception("This might need your attention."));
         ErrorCommand = new RelayCommand(() => _toasts.Error("Something went wrong.", "Error"));
         StickyCommand = new RelayCommand(() => _toasts.Show(new ToastOptions
         {

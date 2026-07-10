@@ -20,14 +20,14 @@
                             MinWidth="100"
                             Text="{Binding FilePath, TargetNullValue='', Mode=TwoWay}" />
 
-                        <StackPanel
-                            Margin="2,1"
-                            HorizontalAlignment="Right"
-                            Orientation="Horizontal">
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                             <!--  Clear button  -->
-                            <Button VerticalAlignment="Center" Command="{Binding ClearCommand}">
+                            <Button
+                                VerticalAlignment="Center"
+                                joufflu:ControlProperties.IsSquare="True"
+                                Command="{Binding ClearCommand}">
                                 <Button.Style>
-                                    <Style BasedOn="{StaticResource IconButtonSmall}" TargetType="{x:Type Button}">
+                                    <Style BasedOn="{StaticResource Ghost}" TargetType="{x:Type Button}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding FilePath}" Value="">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -35,12 +35,12 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Button.Style>
-                                <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
                             <Button
-                                VerticalAlignment="Center"
+                                joufflu:ControlProperties.IsSquare="True"
                                 Command="{Binding SelectCommand}"
-                                Style="{StaticResource IconButtonSmall}">
+                                Style="{DynamicResource Ghost}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
                             </Button>
                         </StackPanel>

@@ -1,4 +1,5 @@
 ﻿using Joufflu.Controls;
+using Joufflu.Samples.ViewModels;
 
 namespace Joufflu.Samples
 {
@@ -7,8 +8,9 @@ namespace Joufflu.Samples
     /// </summary>
     public partial class MainWindow : ThemedWindow
     {
-        public MainWindow()
+        public MainWindow(MainViewModel viewModel)
         {
+            this.DataContext = viewModel;
             InitializeComponent();
         }
     }

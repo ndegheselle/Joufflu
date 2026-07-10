@@ -4,10 +4,10 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Inputs">
     <Style TargetType="{x:Type local:Dropdown}">
-        <Setter Property="Height" Value="24" />
         <Setter Property="Padding" Value="6,3" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="ButtonStyle" Value="{DynamicResource {x:Type ToggleButton}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Dropdown}">
@@ -20,10 +20,16 @@
                             Padding="{TemplateBinding Padding}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            Content="{TemplateBinding Header}" />
-                        <Popup IsOpen="{Binding IsChecked, ElementName=button}" StaysOpen="False">
+                            Content="{TemplateBinding Header}"
+                            Style="{TemplateBinding ButtonStyle}" />
+                        <Popup
+                            Name="PART_Popup"
+                            HorizontalOffset="{TemplateBinding HorizontalOffset}"
+                            IsOpen="{Binding IsChecked, ElementName=button}"
+                            StaysOpen="False"
+                            Style="{TemplateBinding PopupStyle}"
+                            VerticalOffset="{TemplateBinding VerticalOffset}">
                             <Border
-                                MinWidth="{Binding ActualWidth, ElementName=button}"
                                 Background="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}"
                                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                                 BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"

@@ -23,30 +23,39 @@
                 Title="FilePicker"
                 Code="{Binding FilePickerCode}"
                 Description="Selects a file through the system dialog and exposes the chosen path with a clear button.">
-                <inputs:FilePicker Width="360" HorizontalAlignment="Left" FilePath="{Binding FilePath, Mode=TwoWay}" />
+                <inputs:FilePicker
+                    Width="360"
+                    HorizontalAlignment="Left"
+                    FilePath="{Binding FilePath, Mode=TwoWay}" />
             </c:CodeExample>
 
             <c:CodeExample
                 Title="Dropdown"
                 Code="{Binding DropdownCode}"
-                Description="A themed button that reveals arbitrary content in a popup.">
-                <inputs:Dropdown
-                    Width="160"
-                    HorizontalAlignment="Left"
-                    Header="Options">
-                    <StackPanel Margin="8" joufflu:Spacing.Gap="4">
-                        <TextBlock Text="Any content fits here:" />
-                        <CheckBox Content="Enable feature" />
-                        <CheckBox Content="Send notifications" />
-                    </StackPanel>
-                </inputs:Dropdown>
-            </c:CodeExample>
-
-            <c:CodeExample
-                Title="ShortcutSelector"
-                Code="{Binding ShortcutCode}"
-                Description="Records a keyboard shortcut. Click the pencil, then press up to three keys (Escape cancels).">
-                <inputs:ShortcutSelector Width="220" HorizontalAlignment="Left" />
+                Description="A themed button that reveals arbitrary content in a popup. PopupPlacement chooses the corner alignment (e.g. BottomRight keeps the popup's right edge on the button's right edge).">
+                <StackPanel joufflu:Spacing.HorizontalGap="12" Orientation="Horizontal">
+                    <inputs:Dropdown
+                        Width="160"
+                        HorizontalAlignment="Left"
+                        Header="Bottom-left">
+                        <StackPanel Margin="8" joufflu:Spacing.Gap="4">
+                            <TextBlock Text="Any content fits here:" />
+                            <CheckBox Content="Enable feature" />
+                            <CheckBox Content="Send notifications" />
+                        </StackPanel>
+                    </inputs:Dropdown>
+                    <inputs:Dropdown
+                        Width="160"
+                        HorizontalAlignment="Left"
+                        Header="Bottom-right"
+                        PopupPlacement="BottomRight">
+                        <StackPanel Margin="8" joufflu:Spacing.Gap="4">
+                            <TextBlock Text="Right-aligned popup:" />
+                            <CheckBox Content="Enable feature" />
+                            <CheckBox Content="Send notifications" />
+                        </StackPanel>
+                    </inputs:Dropdown>
+                </StackPanel>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

@@ -34,7 +34,7 @@
                             <ScrollViewer x:Name="PART_ContentHost" Padding="{TemplateBinding Padding}" />
                             <!--  Actions buttons  -->
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <Button x:Name="PART_ClearButton" Style="{StaticResource IconButtonSmall}">
+                                <Button x:Name="PART_ClearButton">
                                     <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.x}" />
                                 </Button>
                                 <Grid>
@@ -46,8 +46,7 @@
                                         x:Name="PART_UpButton"
                                         Height="auto"
                                         Padding="6,0"
-                                        Focusable="False"
-                                        Style="{StaticResource IconButtonSmall}">
+                                        Focusable="False">
                                         <fonts:FontIcon FontSize="8" Text="{x:Static fonts:LucideFontIcons.ChevronUp}" />
                                     </Button>
                                     <Button
@@ -55,8 +54,7 @@
                                         Grid.Row="1"
                                         Height="auto"
                                         Padding="6,0"
-                                        Focusable="False"
-                                        Style="{StaticResource IconButtonSmall}">
+                                        Focusable="False">
                                         <fonts:FontIcon FontSize="8" Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
                                     </Button>
                                 </Grid>

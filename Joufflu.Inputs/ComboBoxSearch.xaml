@@ -70,8 +70,7 @@
                                 x:Name="ClearButton"
                                 Grid.Column="1"
                                 Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                                Focusable="False"
-                                Style="{StaticResource IconButtonSmall}">
+                                Focusable="False">
                                 <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
 

@@ -13,7 +13,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TextEditable}">
-                    <Grid Height="24" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <Grid x:Name="DisplayContainer">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -53,8 +53,10 @@
                             </TextBlock>
                             <Button
                                 Grid.Column="1"
+                                joufflu:ControlProperties.IsSquare="True"
+                                joufflu:ControlProperties.Size="xs"
                                 Command="{Binding EditCommand}"
-                                Style="{StaticResource IconButtonSmall}">
+                                Style="{DynamicResource Ghost}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
                             </Button>
                         </Grid>
@@ -77,15 +79,20 @@
                                 </TextBox.InputBindings>
                             </TextBox>
 
-                            <StackPanel
-                                Margin="1"
-                                HorizontalAlignment="Right"
-                                Orientation="Horizontal">
-                                <Button Command="{Binding CancelCommand}" Style="{StaticResource IconButtonSmall}">
-                                    <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.x}" />
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Button
+                                    joufflu:ControlProperties.IsSquare="True"
+                                    joufflu:ControlProperties.Size="xs"
+                                    Command="{Binding CancelCommand}"
+                                    Style="{DynamicResource Ghost}">
+                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                 </Button>
-                                <Button Command="{Binding ValidateCommand}" Style="{StaticResource IconButtonSmall}">
-                                    <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.Check}" />
+                                <Button
+                                    joufflu:ControlProperties.IsSquare="True"
+                                    joufflu:ControlProperties.Size="xs"
+                                    Command="{Binding ValidateCommand}"
+                                    Style="{DynamicResource Ghost}">
+                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Check}" />
                                 </Button>
                             </StackPanel>
                         </Grid>

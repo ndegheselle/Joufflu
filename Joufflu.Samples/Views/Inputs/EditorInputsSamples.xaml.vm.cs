@@ -18,12 +18,9 @@ public class EditorInputsSamplesViewModel : ObservableObject
         "<inputs:FilePicker FilePath=\"{Binding FilePath, Mode=TwoWay}\" />";
 
     public string DropdownCode =>
-        "<inputs:Dropdown Header=\"Options\">\n" +
+        "<inputs:Dropdown Header=\"Bottom-right\" PopupPlacement=\"BottomRight\">\n" +
         "    <StackPanel>\n" +
         "        <CheckBox Content=\"Enable feature\" />\n" +
         "    </StackPanel>\n" +
         "</inputs:Dropdown>";
-
-    public string ShortcutCode =>
-        "<inputs:ShortcutSelector />";
 }
