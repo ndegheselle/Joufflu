@@ -38,6 +38,10 @@ namespace Joufflu.Inputs
             IsEditable = true;
             StaysOpenOnEdit = true;
             IsTextSearchEnabled = false;
+            // Don't let selection follow the view's current item: refreshing the filter moves
+            // the CollectionView's CurrentItem, which would otherwise raise spurious selection
+            // changes (and auto-add tags) the first time the filter runs.
+            IsSynchronizedWithCurrentItem = false;
         }
 
         public override void OnApplyTemplate()

@@ -25,12 +25,15 @@
                     <Grid Tag="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <Border
                             x:Name="Border"
+                            MinHeight="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                            <WrapPanel>
+                            <!--  VerticalAlignment=Center keeps a single row centered within MinHeight; the panel still grows and wraps to a new line when tags fill the row  -->
+                            <WrapPanel VerticalAlignment="Center">
                                 <ItemsControl
+                                    x:Name="TagsPresenter"
                                     Padding="0"
                                     BorderThickness="0"
                                     ItemsSource="{Binding InternalSelectedItems, RelativeSource={RelativeSource TemplatedParent}}"
@@ -69,30 +72,41 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
 
-                                <TextBox
-                                    x:Name="PART_EditableTextBox"
-                                    Height="auto"
-                                    MinWidth="50"
+                                <Grid
                                     Margin="{TemplateBinding Padding}"
                                     HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Background="{TemplateBinding Background}"
-                                    Focusable="True"
-                                    Foreground="{TemplateBinding Foreground}"
-                                    IsReadOnly="{TemplateBinding IsReadOnly}"
-                                    Visibility="Hidden">
-                                    <TextBox.Template>
-                                        <ControlTemplate TargetType="TextBox">
-                                            <ScrollViewer
-                                                Name="PART_ContentHost"
-                                                Focusable="False"
-                                                HorizontalScrollBarVisibility="Hidden"
-                                                Template="{StaticResource TextBoxScrollViewerTemplate}"
-                                                VerticalScrollBarVisibility="Hidden" />
-                                        </ControlTemplate>
-                                    </TextBox.Template>
-                                </TextBox>
+                                    VerticalAlignment="Center">
+                                    <TextBox
+                                        x:Name="PART_EditableTextBox"
+                                        Height="auto"
+                                        MinWidth="50"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Background="{TemplateBinding Background}"
+                                        Focusable="True"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        IsReadOnly="{TemplateBinding IsReadOnly}"
+                                        Visibility="Hidden">
+                                        <TextBox.Template>
+                                            <ControlTemplate TargetType="TextBox">
+                                                <ScrollViewer
+                                                    Name="PART_ContentHost"
+                                                    Focusable="False"
+                                                    HorizontalScrollBarVisibility="Hidden"
+                                                    Template="{StaticResource TextBoxScrollViewerTemplate}"
+                                                    VerticalScrollBarVisibility="Hidden" />
+                                            </ControlTemplate>
+                                        </TextBox.Template>
+                                    </TextBox>
+
+
+                                    <TextBlock
+                                        x:Name="PlaceholderText"
+                                        IsHitTestVisible="False"
+                                        Opacity="0.5"
+                                        Text="Search ..."
+                                        Visibility="Collapsed" />
+                                </Grid>
                             </WrapPanel>
                         </Border>
 
@@ -132,6 +146,21 @@
                         </Popup>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <!--  Show the placeholder only while empty and unfocused (Text is "" initially, null after blur)  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                                <Condition Property="Text" Value="" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                                <Condition Property="Text" Value="{x:Null}" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="DropDownBorder" Property="FrameworkElement.MinHeight" Value="95" />
                         </Trigger>

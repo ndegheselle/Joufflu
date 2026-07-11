@@ -43,6 +43,15 @@
                                     ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                     IsHitTestVisible="False" />
 
+                                <TextBlock
+                                    x:Name="PlaceholderText"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
+                                    Opacity="0.5"
+                                    Text="Search ..."
+                                    Visibility="Collapsed" />
+
                                 <TextBox
                                     x:Name="PART_EditableTextBox"
                                     HorizontalAlignment="Stretch"
@@ -121,6 +130,21 @@
                         <Trigger Property="Text" Value="{x:Null}">
                             <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>
+                        <!--  Show the placeholder only while empty and unfocused (Text is "" initially, null after blur)  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                                <Condition Property="Text" Value="" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                                <Condition Property="Text" Value="{x:Null}" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="DropDownBorder" Property="FrameworkElement.MinHeight" Value="95" />
                         </Trigger>
