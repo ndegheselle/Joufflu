@@ -122,11 +122,15 @@
     <Style
         x:Key="{x:Type TextBox}"
         BasedOn="{StaticResource TextBoxDefaultStyle}"
-        TargetType="TextBox" />
+        TargetType="TextBox">
+        <Setter Property="CaretBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
+    </Style>
 
     <Style
         x:Key="{x:Type PasswordBox}"
         BasedOn="{StaticResource TextBoxDefaultStyle}"
-        TargetType="PasswordBox" />
+        TargetType="PasswordBox">
+        <Setter Property="CaretBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
+    </Style>
 
 </ResourceDictionary>

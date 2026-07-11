@@ -51,18 +51,31 @@ namespace Joufflu.Inputs
 
         protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
-            if (newValue != oldValue && newValue != null)
-            {
-                // XXX : could use new ListCollectionView((IList)newValue) to avoid conflicts on the DefaultView
-                // XXX : actualy if the same list is used on two ComboBoxSearch there will be conflicts
-                SourceView = CollectionViewSource.GetDefaultView(newValue);
-                SourceView.Filter += DoesItemPassFilter;
+            if (SourceView != null)
+                SourceView.Filter -= DoesItemPassFilter;
+            SourceView = null;
 
-                // Clean events
-                if (oldValue != null)
-                    CollectionViewSource.GetDefaultView(oldValue).Filter -= DoesItemPassFilter;
+            if (newValue is ICollectionView view)
+            {
+                // Dedicated per-instance view (created below) or a view supplied by the caller.
+                SourceView = view;
+                SourceView.Filter += DoesItemPassFilter;
+                base.OnItemsSourceChanged(oldValue, newValue);
             }
-            base.OnItemsSourceChanged(oldValue, newValue);
+            else if (newValue != null)
+            {
+                // Wrap raw collections in a dedicated view so two controls bound to the same
+                // collection don't share the singleton DefaultView (and its filter).
+                // SetCurrentValue preserves the user's ItemsSource binding.
+                ICollectionView dedicated = newValue is IList list
+                    ? new ListCollectionView(list)
+                    : new CollectionViewSource { Source = newValue }.View;
+                SetCurrentValue(ItemsSourceProperty, dedicated); // re-enters via the branch above
+            }
+            else
+            {
+                base.OnItemsSourceChanged(oldValue, newValue);
+            }
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)

@@ -18,6 +18,7 @@
             <local:DisplayMemberPathConverter x:Key="DisplayMemberPathConverter" />
         </Style.Resources>
         <Setter Property="Padding" Value="3" />
+        <Setter Property="Height" Value="auto" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ComboBoxTags}">
@@ -70,6 +71,7 @@
 
                                 <TextBox
                                     x:Name="PART_EditableTextBox"
+                                    Height="auto"
                                     MinWidth="50"
                                     Margin="{TemplateBinding Padding}"
                                     HorizontalAlignment="Stretch"
