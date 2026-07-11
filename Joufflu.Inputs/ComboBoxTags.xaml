@@ -17,7 +17,7 @@
         <Style.Resources>
             <local:DisplayMemberPathConverter x:Key="DisplayMemberPathConverter" />
         </Style.Resources>
-        <Setter Property="Padding" Value="3" />
+        <Setter Property="Padding" Value="2" />
         <Setter Property="Height" Value="auto" />
         <Setter Property="Template">
             <Setter.Value>
@@ -47,7 +47,7 @@
                                                 Background="{Binding BorderBrush, ElementName=Border}"
                                                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Margin="4,2" VerticalAlignment="Center">
+                                                    <TextBlock Margin="8,0,2,0" VerticalAlignment="Center">
                                                         <TextBlock.Text>
                                                             <MultiBinding Converter="{StaticResource DisplayMemberPathConverter}">
                                                                 <Binding />
@@ -56,8 +56,8 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
                                                     <Button
-                                                        joufflu:ControlProperties.IsSquare="True"
-                                                        joufflu:ControlProperties.Size="xs"
+                                                        Width="28"
+                                                        Height="28"
                                                         Command="{Binding RemoveSelectedCmd, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
                                                         CommandParameter="{Binding}"
                                                         Style="{StaticResource Ghost}">
@@ -75,7 +75,6 @@
                                     MinWidth="50"
                                     Margin="{TemplateBinding Padding}"
                                     HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                     Background="{TemplateBinding Background}"

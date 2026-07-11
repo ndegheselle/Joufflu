@@ -26,7 +26,7 @@
                 Code="{Binding ComboSearchCode}"
                 Description="An editable combo box that filters its items as you type.">
                 <inputs:ComboBoxSearch
-                    Width="260"
+                    Width="360"
                     HorizontalAlignment="Left"
                     ItemsSource="{Binding Countries}"
                     SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />

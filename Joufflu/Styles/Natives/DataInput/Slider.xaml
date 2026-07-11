@@ -176,7 +176,7 @@
 
     <Style x:Key="{x:Type Slider}" TargetType="Slider">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="16" />

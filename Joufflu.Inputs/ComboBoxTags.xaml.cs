@@ -142,6 +142,16 @@ namespace Joufflu.Inputs
         }
 
         #region UI events
+        protected override void OnPreviewMouseWheel(MouseWheelEventArgs e)
+        {
+            // ComboBox cycles the selection on mouse wheel when the dropdown is closed,
+            // which would auto-add a tag. Block it, but still allow scrolling the open list.
+            if (IsDropDownOpen == false)
+                e.Handled = true;
+
+            base.OnPreviewMouseWheel(e);
+        }
+
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Up || e.Key == Key.Down)

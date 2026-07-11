@@ -290,6 +290,15 @@
                 </nav:NavigationItem.Icon>
                 Spacing
             </nav:NavigationItem>
+            <nav:NavigationItem Target="Customize theme">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
+                </nav:NavigationItem.Icon>
+                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Customize theme" />
+                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
+                </StackPanel>
+            </nav:NavigationItem>
             <nav:NavigationItem Target="Application shell">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />

@@ -86,6 +86,7 @@ public class MainViewModel : ObservableObject
             // Toolkit
             ["Sizing"] = new SizingSamplesViewModel(),
             ["Spacing"] = new SpacingSamplesViewModel(),
+            ["Customize theme"] = new ThemeCustomizerViewModel(),
             ["Application shell"] = new ShellSamples(),
         };
 
