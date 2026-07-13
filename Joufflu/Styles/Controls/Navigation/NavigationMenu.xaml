@@ -12,6 +12,7 @@
     <!--  ============================ NavigationItem ============================  -->
     <Style TargetType="{x:Type nav:NavigationItem}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationItem}">
