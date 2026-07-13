@@ -24,5 +24,5 @@ public class NumericInputsSamplesViewModel : ObservableObject
         "<inputs:TimeSpanPicker Value=\"{Binding Duration, Mode=TwoWay}\" />";
 
     public string FormatCode =>
-        "<format:FormatTextBox Format=\"{}{max:23}h {max:59}m {max:59}s\" />";
+        "<format:FormatTextBox Format=\"{}{max:23}h {max:59}m {max:59}s\" GlobalFormat=\"numeric\" />";
 }

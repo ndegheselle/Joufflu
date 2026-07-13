@@ -15,7 +15,7 @@
                 Code="{Binding NumericCode}"
                 Description="Selects a whole number. Built on FormatTextBox with the numeric format, clear and increment/decrement buttons included.">
                 <StackPanel joufflu:Spacing.HorizontalGap="12" Orientation="Horizontal">
-                    <inputs:NumericUpDown Width="140" Value="{Binding NumericValue, Mode=TwoWay}" />
+                    <inputs:NumericUpDown Width="180" Value="{Binding NumericValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding NumericValue, StringFormat='Value: {0}'}" />
                 </StackPanel>
             </c:CodeExample>
@@ -25,7 +25,7 @@
                 Code="{Binding DecimalCode}"
                 Description="Selects a double / decimal value using the decimal format.">
                 <StackPanel joufflu:Spacing.HorizontalGap="12" Orientation="Horizontal">
-                    <inputs:DecimalUpDown Width="140" Value="{Binding DecimalValue, Mode=TwoWay}" />
+                    <inputs:DecimalUpDown Width="180" Value="{Binding DecimalValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding DecimalValue, StringFormat='Value: {0}'}" />
                 </StackPanel>
             </c:CodeExample>
@@ -44,7 +44,12 @@
                 Title="FormatTextBox"
                 Code="{Binding FormatCode}"
                 Description="The base input: a format string describes groups that are parsed into individual values and navigated with Tab / arrows.">
-                <format:FormatTextBox Width="180" Format="{}{max:23}h {max:59}m {max:59}s" />
+                <StackPanel joufflu:Spacing.Gap="4">
+                    <format:FormatTextBox joufflu:ControlProperties.Size="xs" Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
+                    <format:FormatTextBox joufflu:ControlProperties.Size="sm" Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
+                    <format:FormatTextBox Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
+                    <format:FormatTextBox joufflu:ControlProperties.Size="lg" Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
+                </StackPanel>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

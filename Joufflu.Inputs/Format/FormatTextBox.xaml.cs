@@ -39,10 +39,10 @@ namespace Joufflu.Inputs.Format
 
         protected virtual void OnValuesChanged()
         {
-            if (Groups.Count == 0)
+            if (!_isParsed)
                 ParseGroups(Format, GlobalFormat);
             ValuesChanged?.Invoke(this, Values);
-            FormatText(Groups);
+            FormatText();
         }
 
         #endregion
@@ -68,9 +68,29 @@ namespace Joufflu.Inputs.Format
 
         public int IncrementValue { get; set; } = 1;
 
-        public string? GlobalFormat { get; set; }
+        public static readonly DependencyProperty GlobalFormatProperty = DependencyProperty.Register(
+            nameof(GlobalFormat),
+            typeof(string),
+            typeof(FormatTextBox),
+            new FrameworkPropertyMetadata(null, (o, e) => ((FormatTextBox)o).InvalidateFormat()));
 
-        public string Format { get; set; } = "";
+        public string? GlobalFormat
+        {
+            get => (string?)GetValue(GlobalFormatProperty);
+            set => SetValue(GlobalFormatProperty, value);
+        }
+
+        public static readonly DependencyProperty FormatProperty = DependencyProperty.Register(
+            nameof(Format),
+            typeof(string),
+            typeof(FormatTextBox),
+            new FrameworkPropertyMetadata("", (o, e) => ((FormatTextBox)o).InvalidateFormat()));
+
+        public string Format
+        {
+            get => (string)GetValue(FormatProperty);
+            set => SetValue(FormatProperty, value);
+        }
         #endregion
 
         private int _selectedGroupIndex = -1;
@@ -81,23 +101,23 @@ namespace Joufflu.Inputs.Format
             set
             {
                 _selectedGroupIndex = value;
-                if (_selectedGroupIndex < 0)
-                {
-                    SelectedGroup = null;
-                }
-                else
-                {
-                    SelectedGroup = Groups[value];
-                }
+                SelectedGroup = (value >= 0 && value < _groups.Count) ? _groups[value] : null;
             }
         }
 
         public BaseGroup? SelectedGroup { get; set; }
 
-        public List<BaseGroup> Groups = new List<BaseGroup>();
+        private readonly List<BaseGroup> _groups = new List<BaseGroup>();
+        public IReadOnlyList<BaseGroup> Groups => _groups;
 
-        private string _outputFormat = "";
+        // Ordered format parts: BaseGroup for a group, string for literal text between groups.
+        private List<object> _parts = new List<object>();
         private bool _isSelectionChanging = false;
+        private bool _isParsed = false;
+
+        // Matches the content inside curly braces, ignoring escaped ones
+        private static readonly Regex _formatRegex =
+            new Regex(@"(?<!\\)\{(.*?)(?<!\\)\}|[^{}]+", RegexOptions.Compiled);
 
         // UI Parts
         private Button? _clearButton;
@@ -149,8 +169,11 @@ namespace Joufflu.Inputs.Format
 
         protected virtual void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ParseGroups(Format, GlobalFormat);
-            FormatText(Groups);
+            // Parse only once: Loaded fires again whenever the control re-enters the
+            // visual tree (tab switches, virtualization) and re-parsing would reset groups.
+            if (!_isParsed)
+                ParseGroups(Format, GlobalFormat);
+            FormatText();
         }
 
         public override void OnApplyTemplate()
@@ -189,7 +212,7 @@ namespace Joufflu.Inputs.Format
             int currentRegexGroupIndex = -1;
             for (int i = 0; i < Groups.Count; i++)
             {
-                if (SelectionStart >= Groups[i].Index && SelectionStart <= Groups[i].Index + Groups[i].Length)
+                if (SelectionStart >= Groups[i].Index && SelectionStart <= Groups[i].Index + Groups[i].RenderedLength)
                 {
                     currentRegexGroupIndex = i;
                     break;
@@ -244,8 +267,26 @@ namespace Joufflu.Inputs.Format
                     e.Handled = true;
                 }
             }
-            // If suppr
-            else if (e.Key == Key.Delete)
+            // Up/Down arrows increment or decrement the selected numeric group
+            else if (e.Key == Key.Up)
+            {
+                if (SelectedGroup is IBaseNumericGroup)
+                {
+                    Spin(1);
+                    e.Handled = true;
+                }
+            }
+            else if (e.Key == Key.Down)
+            {
+                if (SelectedGroup is IBaseNumericGroup)
+                {
+                    Spin(-1);
+                    e.Handled = true;
+                }
+            }
+            // Delete and Backspace clear the selected group. The text is fully driven
+            // by the groups, so the key is always handled to prevent raw text editing.
+            else if (e.Key == Key.Delete || e.Key == Key.Back)
             {
                 if (SelectedGroup != null)
                 {
@@ -254,44 +295,43 @@ namespace Joufflu.Inputs.Format
                 }
                 e.Handled = true;
             }
-            // Backspace
-            else if (e.Key == Key.Back)
+        }
+
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            base.OnMouseWheel(e);
+
+            // Only spin when focused so we don't hijack scrolling of a parent container
+            if (IsKeyboardFocusWithin && SelectedGroup is IBaseNumericGroup)
             {
-                if (SelectedGroup != null)
-                {
-                    SelectedGroup.OnDelete();
-                    UpdateCurrentValue();
-                }
+                Spin(e.Delta > 0 ? 1 : -1);
                 e.Handled = true;
             }
         }
 
-        private void UpButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Increment (direction &gt; 0) or decrement the selected numeric group.
+        /// </summary>
+        private void Spin(int direction)
         {
             if (SelectedGroup == null)
                 ChangeSelectedGroup(1);
 
             if (SelectedGroup is IBaseNumericGroup numericGroup)
             {
-                numericGroup.Increment();
+                if (direction >= 0)
+                    numericGroup.Increment();
+                else
+                    numericGroup.Decrement();
 
                 UpdateCurrentValue();
                 SelectedGroup?.OnAfterInput();
             }
         }
 
-        private void DownButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedGroup == null)
-                ChangeSelectedGroup(1);
+        private void UpButton_Click(object sender, RoutedEventArgs e) => Spin(1);
 
-            if (SelectedGroup is IBaseNumericGroup numericGroup)
-            {
-                numericGroup.Decrement();
-                UpdateCurrentValue();
-                SelectedGroup?.OnAfterInput();
-            }
-        }
+        private void DownButton_Click(object sender, RoutedEventArgs e) => Spin(-1);
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
@@ -314,13 +354,34 @@ namespace Joufflu.Inputs.Format
             Select(Groups[newindex].Index, 0);
         }
 
-        private void FormatText(IEnumerable<BaseGroup> groups)
+        private void FormatText()
         {
             // Change text and prevent selection from changing
             _isSelectionChanging = true;
             int selectionStart = SelectionStart;
             int selectionLength = SelectionLength;
-            this.Text = string.Format(_outputFormat, groups.ToArray());
+
+            // Build the text from the ordered parts, recording each group's actual
+            // start index and rendered length. Groups can render fewer characters than
+            // their max Length (e.g. an unpadded "0"), so positions must come from the
+            // real text, not from the max width, otherwise selection drifts.
+            StringBuilder builder = new StringBuilder();
+            foreach (object part in _parts)
+            {
+                if (part is BaseGroup group)
+                {
+                    string rendered = group.ToString() ?? "";
+                    group.Index = builder.Length;
+                    group.RenderedLength = rendered.Length;
+                    builder.Append(rendered);
+                }
+                else if (part is string literal)
+                {
+                    builder.Append(literal);
+                }
+            }
+            this.Text = builder.ToString();
+
             Select(selectionStart, selectionLength);
             _isSelectionChanging = false;
         }
@@ -337,7 +398,8 @@ namespace Joufflu.Inputs.Format
             else
             {
                 object? oldValue = Values[SelectedGroupIndex];
-                if (oldValue != SelectedGroup.Value)
+                // Values are boxed (int/decimal), so compare by value, not reference.
+                if (!Equals(oldValue, SelectedGroup.Value))
                     UpdateValues();
             }
         }
@@ -350,29 +412,33 @@ namespace Joufflu.Inputs.Format
         #endregion
 
         #region Parsing
+        /// <summary>
+        /// Reset the parsed state after <see cref="Format"/> or <see cref="GlobalFormat"/> change.
+        /// Re-parses immediately when the control is loaded, otherwise defers to <see cref="OnLoaded"/>.
+        /// </summary>
+        private void InvalidateFormat()
+        {
+            SelectedGroupIndex = -1;
+            _isParsed = false;
+            if (IsLoaded)
+            {
+                ParseGroups(Format, GlobalFormat);
+                FormatText();
+            }
+        }
+
         public void ParseGroups(string format, string? globalFormat)
         {
-            Groups.Clear();
-            List<object> groups = ParseFormatString(format, globalFormat);
+            _groups.Clear();
+            _parts = ParseFormatString(format, globalFormat);
 
-            // CreateValue format for output
-            StringBuilder outputFormatBuilder = new StringBuilder();
-            int paramIndex = 0;
-            for (int i = 0; i < groups.Count; i++)
+            foreach (object part in _parts)
             {
-                if (groups[i] is BaseGroup groupParam)
-                {
-                    Groups.Add(groupParam);
-                    outputFormatBuilder.Append("{" + paramIndex + "}");
-                    paramIndex++;
-                }
-                else if (groups[i] is string outputPart)
-                {
-                    outputFormatBuilder.Append(outputPart);
-                }
+                if (part is BaseGroup group)
+                    _groups.Add(group);
             }
 
-            _outputFormat = outputFormatBuilder.ToString();
+            _isParsed = true;
 
             if (Values == null || Values.Count != Groups.Count)
                 return;
@@ -380,7 +446,7 @@ namespace Joufflu.Inputs.Format
             // Update group values from parts
             for (int i = 0; i < Groups.Count; i++)
             {
-                Groups[i].Value = Values[i];
+                _groups[i].Value = Values[i];
             }
         }
 
@@ -396,9 +462,7 @@ namespace Joufflu.Inputs.Format
             List<object> groups = new List<object>();
             int index = 0;
 
-            // This regex matches the content inside curly braces, ignoring escaped ones
-            string pattern = @"(?<!\\)\{(.*?)(?<!\\)\}|[^{}]+";
-            MatchCollection matches = Regex.Matches(format, pattern);
+            MatchCollection matches = _formatRegex.Matches(format);
 
             foreach (Match match in matches)
             {

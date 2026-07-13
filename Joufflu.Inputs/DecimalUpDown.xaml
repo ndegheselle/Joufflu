@@ -8,6 +8,5 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:DecimalUpDown}" BasedOn="{StaticResource {x:Type format:FormatTextBox}}">
-        <Setter Property="HorizontalContentAlignment" Value="Right" />
     </Style>
 </ResourceDictionary>

@@ -22,6 +22,9 @@
             TargetResolver="{Binding ResolveTarget}">
 
             <!--  Featured native controls (kept at top level)  -->
+
+            <nav:NavigationTitle Title="Natives" />
+
             <nav:NavigationItem Target="Buttons">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />

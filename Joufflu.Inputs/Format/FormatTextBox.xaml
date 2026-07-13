@@ -14,8 +14,9 @@
         x:Key="{x:Type local:FormatTextBox}"
         BasedOn="{StaticResource {x:Type TextBox}}"
         TargetType="{x:Type local:FormatTextBox}">
-        <Setter Property="Padding" Value="2,1" />
-        <Setter Property="Height" Value="24" />
+        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBoxBase}">
@@ -34,8 +35,8 @@
                             <ScrollViewer x:Name="PART_ContentHost" Padding="{TemplateBinding Padding}" />
                             <!--  Actions buttons  -->
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <Button x:Name="PART_ClearButton">
-                                    <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                <Button x:Name="PART_ClearButton" Style="{StaticResource Ghost}" Margin="-1">
+                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                 </Button>
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -45,17 +46,19 @@
                                     <Button
                                         x:Name="PART_UpButton"
                                         Height="auto"
-                                        Padding="6,0"
+                                        Padding="4,0"
+                                        Style="{StaticResource Ghost}"
                                         Focusable="False">
-                                        <fonts:FontIcon FontSize="8" Text="{x:Static fonts:LucideFontIcons.ChevronUp}" />
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronUp}" />
                                     </Button>
                                     <Button
                                         x:Name="PART_DownButton"
                                         Grid.Row="1"
                                         Height="auto"
-                                        Padding="6,0"
+                                        Padding="4,0"
+                                        Style="{StaticResource Ghost}"
                                         Focusable="False">
-                                        <fonts:FontIcon FontSize="8" Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
                                     </Button>
                                 </Grid>
                             </StackPanel>
@@ -73,5 +76,24 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <!--  Size variants (md is the default, no trigger needed)  -->
+            <Trigger Property="joufflu:ControlProperties.Size" Value="xs">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightXs}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingXs}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="sm">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightSm}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingSm}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="lg">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightLg}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingLg}}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
