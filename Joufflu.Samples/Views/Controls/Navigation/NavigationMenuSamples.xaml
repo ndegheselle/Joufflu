@@ -5,7 +5,7 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    xmlns:nav="clr-namespace:Joufflu.Navigation;assembly=Joufflu">
+    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 

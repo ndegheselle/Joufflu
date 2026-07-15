@@ -1,6 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Joufflu.Controls;
 using Joufflu.Navigation;
+using Joufflu.Navigation.Controls;
 using Joufflu.Samples.ViewModels;
 
 namespace Joufflu.Samples.Views.Controls.Navigation;
@@ -37,10 +39,8 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenConfirmAsync()
     {
-        var content = new ConfirmViewModel("Delete the selected item? This action cannot be undone.");
+        var content = new DeleteConfirmViewModel(_overlays, "Delete the selected item? This action cannot be undone.");
         var options = new OverlayOptions { Title = "Please confirm", CloseOnClickAway = false };
-        options.Actions.Add(new OverlayAction { Label = "Cancel", Style = OverlayActionStyle.Secondary, Result = false });
-        options.Actions.Add(new OverlayAction { Label = "Delete", Style = OverlayActionStyle.Danger, Result = true });
 
         bool? result = await _overlays.Show(content, options);
         if (result == true)
@@ -51,10 +51,8 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenFormAsync()
     {
-        var form = new SampleFormViewModel();
+        var form = new SampleFormViewModel(_overlays);
         var options = new OverlayOptions { Title = "Edit profile", CloseOnClickAway = false };
-        options.Actions.Add(new OverlayAction { Label = "Cancel", Style = OverlayActionStyle.Secondary, Result = false });
-        options.Actions.Add(new OverlayAction { Label = "Save", Style = OverlayActionStyle.Primary, Result = true });
 
         bool? result = await _overlays.Show(form, options);
         if (result == true)
@@ -73,10 +71,9 @@ public class OverlaySamplesViewModel : ObservableObject
     }
 
     public string Code =>
-        "// Inject the service, then await a result\n" +
+        "// The overlay content owns its buttons and closes itself\n" +
+        "// via the service, e.g. overlays.CloseTop(true/false).\n" +
+        "var content = new DeleteConfirmViewModel(overlays, \"Delete?\");\n" +
         "var options = new OverlayOptions { Title = \"Please confirm\" };\n" +
-        "options.Actions.Add(new OverlayAction { Label = \"Cancel\", Result = false });\n" +
-        "options.Actions.Add(new OverlayAction { Label = \"Delete\",\n" +
-        "    Style = OverlayActionStyle.Danger, Result = true });\n" +
-        "bool? result = await overlays.Show(new ConfirmViewModel(...), options);";
+        "bool? result = await overlays.Show(content, options);";
 }

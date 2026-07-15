@@ -180,6 +180,9 @@
     <DataTemplate DataType="{x:Type vm:ConfirmViewModel}">
         <customNav:ConfirmView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:DeleteConfirmViewModel}">
+        <customNav:DeleteConfirmView />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type vm:SampleFormViewModel}">
         <customNav:SampleFormView />
     </DataTemplate>

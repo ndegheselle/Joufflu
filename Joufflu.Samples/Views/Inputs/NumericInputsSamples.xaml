@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
-    xmlns:format="clr-namespace:Joufflu.Inputs.Format;assembly=Joufflu.Inputs"
-    xmlns:inputs="clr-namespace:Joufflu.Inputs;assembly=Joufflu.Inputs"
+    xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">

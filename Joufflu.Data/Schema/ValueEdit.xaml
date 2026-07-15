@@ -7,7 +7,7 @@
     xmlns:extensions="clr-namespace:Joufflu.Extensions;assembly=Joufflu"
     xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-    xmlns:inputs="clr-namespace:Joufflu.Inputs;assembly=Joufflu.Inputs"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:local="clr-namespace:Joufflu.Data.Schema"
     xmlns:components="clr-namespace:Joufflu.Data.Schema.Components"
     xmlns:schema="clr-namespace:Joufflu.Data.Shared;assembly=Joufflu.Data.Shared"

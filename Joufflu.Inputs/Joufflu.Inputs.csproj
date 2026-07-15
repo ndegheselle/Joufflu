@@ -11,7 +11,7 @@
     <None Remove="ComboBoxSearch.xaml" />
     <None Remove="ComboBoxTags.xaml" />
     <None Remove="DecimalUpDown.xaml" />
-    <None Remove="Format\FormatTextBox.xaml" />
+    <None Remove="Controls\Format\FormatTextBox.xaml" />
     <None Remove="NumericUpDown.xaml" />
   </ItemGroup>
 
@@ -21,18 +21,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="ComboBoxSearch.xaml">
+    <Page Update="Controls\ComboBoxSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="ComboBoxTags.xaml">
+    <Page Update="Controls\ComboBoxTags.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="DecimalUpDown.xaml">
+    <Page Update="Controls\DecimalUpDown.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="NumericUpDown.xaml">
+    <Page Update="Controls\NumericUpDown.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

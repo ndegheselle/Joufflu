@@ -1,7 +1,7 @@
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Joufflu.Navigation;
-using System.Windows.Input;
+using Joufflu.Controls;
 
 namespace Joufflu.Samples.Views.Controls.Feedback;
 

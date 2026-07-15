@@ -1,0 +1,51 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Feedback/Toast.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/Overlay.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  ============================ NavigationContainer ============================  -->
+    <Style TargetType="{x:Type nav:NavigationContainer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type nav:NavigationContainer}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <!--  Unique content display  -->
+                        <ContentControl Content="{Binding Navigator.CurrentPage, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                        <!--  Modal overlay stack  -->
+                        <ItemsControl
+                            ItemTemplate="{StaticResource OverlayTemplate}"
+                            ItemsSource="{Binding Overlays.Overlays, RelativeSource={RelativeSource TemplatedParent}}"
+                            Visibility="{Binding Overlays.HasOverlays, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVis}}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                        <!--  Toast stack (always on top)  -->
+                        <ItemsControl
+                            Margin="16"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            ItemTemplate="{StaticResource ToastTemplate}"
+                            ItemsSource="{Binding Toasts.Toasts, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

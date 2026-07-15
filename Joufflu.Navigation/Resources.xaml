@@ -1,0 +1,8 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/Overlay.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/NavigationContainer.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/NavigationMenu.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/Dropdown.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

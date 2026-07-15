@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Usuel", "Usuel\Usuel.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu", "Joufflu\Joufflu.csproj", "{61C27C74-620A-4499-A6EB-53BC12B17050}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu.Navigation", "Joufflu.Navigation\Joufflu.Navigation.csproj", "{198FAAA5-141A-46EC-99A0-24C1727CFEDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{61C27C74-620A-4499-A6EB-53BC12B17050}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61C27C74-620A-4499-A6EB-53BC12B17050}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61C27C74-620A-4499-A6EB-53BC12B17050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{198FAAA5-141A-46EC-99A0-24C1727CFEDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{198FAAA5-141A-46EC-99A0-24C1727CFEDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{198FAAA5-141A-46EC-99A0-24C1727CFEDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{198FAAA5-141A-46EC-99A0-24C1727CFEDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +77,7 @@ Global
 		{706BC55E-97AB-4687-A752-1528CD1151B5} = {DB72DC5E-D46F-42BB-A6CB-F75A8F74F7AB}
 		{8966E73B-DB99-4F1C-8E69-3C5BA0C0D72C} = {53808F22-1369-4585-A9E9-F109CC9DD37D}
 		{1B14F776-8830-439C-8833-F61FF3032253} = {53808F22-1369-4585-A9E9-F109CC9DD37D}
+		{198FAAA5-141A-46EC-99A0-24C1727CFEDA} = {DB72DC5E-D46F-42BB-A6CB-F75A8F74F7AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0C9F7DF-8AFE-4B1A-BC6C-D18AA5E6D2DC}

@@ -1,0 +1,180 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Inputs.Controls">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Controls/ComboBoxSearch.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style
+        x:Key="{x:Type local:ComboBoxTags}"
+        BasedOn="{StaticResource {x:Type local:ComboBoxSearch}}"
+        TargetType="{x:Type local:ComboBoxTags}">
+        <Style.Resources>
+            <local:DisplayMemberPathConverter x:Key="DisplayMemberPathConverter" />
+        </Style.Resources>
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Height" Value="auto" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ComboBoxTags}">
+                    <Grid Tag="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                        <Border
+                            x:Name="Border"
+                            MinHeight="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                            <!--  VerticalAlignment=Center keeps a single row centered within MinHeight; the panel still grows and wraps to a new line when tags fill the row  -->
+                            <WrapPanel VerticalAlignment="Center">
+                                <ItemsControl
+                                    x:Name="TagsPresenter"
+                                    Padding="0"
+                                    BorderThickness="0"
+                                    ItemsSource="{Binding InternalSelectedItems, RelativeSource={RelativeSource TemplatedParent}}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                Margin="1"
+                                                Background="{Binding BorderBrush, ElementName=Border}"
+                                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Margin="8,0,2,0" VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource DisplayMemberPathConverter}">
+                                                                <Binding />
+                                                                <Binding Path="DisplayMemberPath" RelativeSource="{RelativeSource AncestorType=local:ComboBoxTags}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <Button
+                                                        Width="28"
+                                                        Height="28"
+                                                        Command="{Binding RemoveSelectedCmd, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource Ghost}">
+                                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Grid
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center">
+                                    <TextBox
+                                        x:Name="PART_EditableTextBox"
+                                        Height="auto"
+                                        MinWidth="50"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Background="{TemplateBinding Background}"
+                                        Focusable="True"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        IsReadOnly="{TemplateBinding IsReadOnly}"
+                                        Visibility="Hidden">
+                                        <TextBox.Template>
+                                            <ControlTemplate TargetType="TextBox">
+                                                <ScrollViewer
+                                                    Name="PART_ContentHost"
+                                                    Focusable="False"
+                                                    HorizontalScrollBarVisibility="Hidden"
+                                                    Template="{StaticResource TextBoxScrollViewerTemplate}"
+                                                    VerticalScrollBarVisibility="Hidden" />
+                                            </ControlTemplate>
+                                        </TextBox.Template>
+                                    </TextBox>
+
+
+                                    <TextBlock
+                                        x:Name="PlaceholderText"
+                                        IsHitTestVisible="False"
+                                        Opacity="0.5"
+                                        Text="Search ..."
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </WrapPanel>
+                        </Border>
+
+                        <ToggleButton
+                            x:Name="ToggleButton"
+                            ClickMode="Press"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                            Template="{StaticResource ComboBoxToggleButtonTemplate}" />
+
+                        <!--  Popup showing items  -->
+                        <Popup
+                            x:Name="PART_Popup"
+                            AllowsTransparency="True"
+                            Focusable="False"
+                            IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
+                            Placement="Bottom"
+                            PopupAnimation="Slide">
+                            <Grid
+                                x:Name="DropDown"
+                                MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
+                                MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}"
+                                SnapsToDevicePixels="True">
+                                <Border
+                                    x:Name="DropDownBorder"
+                                    Margin="0,1,0,0"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <ScrollViewer SnapsToDevicePixels="True">
+                                        <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!--  Show the placeholder only while empty and unfocused (Text is "" initially, null after blur)  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                                <Condition Property="Text" Value="" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                                <Condition Property="Text" Value="{x:Null}" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter TargetName="DropDownBorder" Property="FrameworkElement.MinHeight" Value="95" />
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="True">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="True">
+                            <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+                            <Setter TargetName="PART_EditableTextBox" Property="UIElement.Visibility" Value="Visible" />
+                            <Setter TargetName="ToggleButton" Property="HorizontalAlignment" Value="Right" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

@@ -7,7 +7,7 @@
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:nav="clr-namespace:Joufflu.Navigation;assembly=Joufflu"
+    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
     xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels"
     Title="Joufflu — Component Gallery"
     Width="1100"

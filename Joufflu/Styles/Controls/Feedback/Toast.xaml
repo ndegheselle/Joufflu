@@ -3,12 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts"
     xmlns:joufflu="clr-namespace:Joufflu"
-    xmlns:nav="clr-namespace:Joufflu.Navigation">
+    xmlns:local="clr-namespace:Joufflu.Controls">
 
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
     <!--  ============================ Toast ============================  -->
-    <DataTemplate x:Key="ToastTemplate" DataType="{x:Type nav:ToastInstance}">
+    <DataTemplate x:Key="ToastTemplate" DataType="{x:Type local:ToastInstance}">
         <Border
             x:Name="Card"
             MinWidth="280"

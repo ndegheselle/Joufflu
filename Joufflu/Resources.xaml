@@ -3,8 +3,15 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
 
+        <!-- == Joufflu controls == -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/Badge.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Layout/ThemedWindow.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Feedback/Spinner.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Feedback/Toast.xaml" />
+
+        <!-- == Natives == -->
         <!--  Actions  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />

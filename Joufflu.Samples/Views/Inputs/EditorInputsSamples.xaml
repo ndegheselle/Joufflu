@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-    xmlns:inputs="clr-namespace:Joufflu.Inputs;assembly=Joufflu.Inputs"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
@@ -28,37 +28,6 @@
                     Width="360"
                     HorizontalAlignment="Left"
                     FilePath="{Binding FilePath, Mode=TwoWay}" />
-            </c:CodeExample>
-
-            <c:CodeExample
-                Title="Dropdown"
-                Code="{Binding DropdownCode}"
-                Description="A themed button that reveals arbitrary content in a popup. PopupPlacement chooses the corner alignment (e.g. BottomRight keeps the popup's right edge on the button's right edge).">
-                <StackPanel joufflu:Spacing.HorizontalGap="12" Orientation="Horizontal">
-                    <inputs:Dropdown HorizontalAlignment="Left" Header="Bottom-left">
-                        <StackPanel Margin="8" joufflu:Spacing.Gap="4">
-                            <TextBlock Text="Any content fits here:" />
-                            <CheckBox Content="Enable feature" />
-                            <CheckBox Content="Send notifications" />
-                        </StackPanel>
-                    </inputs:Dropdown>
-                    <inputs:Dropdown HorizontalAlignment="Left" PopupPlacement="BottomRight">
-                        <inputs:Dropdown.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock>Bottom-right</TextBlock>
-                                <fonts:FontIcon
-                                    Margin="8,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
-                            </StackPanel>
-                        </inputs:Dropdown.Header>
-                        <StackPanel Margin="8" joufflu:Spacing.Gap="4">
-                            <TextBlock Text="Right-aligned popup:" />
-                            <CheckBox Content="Enable feature" />
-                            <CheckBox Content="Send notifications" />
-                        </StackPanel>
-                    </inputs:Dropdown>
-                </StackPanel>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

@@ -9,7 +9,7 @@
     xmlns:extensions="clr-namespace:Joufflu.Extensions;assembly=Joufflu"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:schema="clr-namespace:Joufflu.Data.Shared;assembly=Joufflu.Data.Shared"
-    xmlns:inputs="clr-namespace:Joufflu.Inputs;assembly=Joufflu.Inputs"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:local="clr-namespace:Joufflu.Data.Schema"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="ContainerElement"
