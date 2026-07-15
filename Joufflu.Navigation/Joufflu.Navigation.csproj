@@ -11,4 +11,10 @@
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Controls\Paging.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
