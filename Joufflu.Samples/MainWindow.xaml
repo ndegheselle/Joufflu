@@ -237,6 +237,24 @@
                 Editors
             </nav:NavigationItem>
 
+            <!--  Navigation (Joufflu.Navigation library)  -->
+            <nav:NavigationTitle Title="Navigation" />
+            <nav:NavigationItem Target="Navigation menu">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
+                </nav:NavigationItem.Icon>
+                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Navigation menu" />
+                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
+                </StackPanel>
+            </nav:NavigationItem>
+            <nav:NavigationItem Target="Overlays">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SquareStack}" />
+                </nav:NavigationItem.Icon>
+                Overlays
+            </nav:NavigationItem>
+
             <!--  Custom controls  -->
             <nav:NavigationTitle Title="Custom controls" />
             <nav:NavigationItem Target="Font icon">
@@ -262,21 +280,6 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
                 </nav:NavigationItem.Icon>
                 Toasts
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="Navigation menu">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
-                </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Navigation menu" />
-                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
-                </StackPanel>
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="Overlays">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SquareStack}" />
-                </nav:NavigationItem.Icon>
-                Overlays
             </nav:NavigationItem>
 
             <!--  Toolkit  -->

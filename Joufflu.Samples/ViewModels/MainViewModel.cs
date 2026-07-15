@@ -77,13 +77,15 @@ public class MainViewModel : ObservableObject
             ["Search & combo"] = new SelectionInputsSamplesViewModel(),
             ["Editors"] = new EditorInputsSamplesViewModel(),
 
+            // Navigation (Joufflu.Navigation library)
+            ["Navigation menu"] = new NavigationMenuSamplesViewModel(),
+            ["Overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
+
             // Custom controls
             ["Font icon"] = new FontIconSamplesViewModel(),
             ["Badge"] = new BadgeSamplesViewModel(),
             ["Spinner"] = new SpinnerSamplesViewModel(),
             ["Toasts"] = new ToastSamplesViewModel(Toasts),
-            ["Navigation menu"] = new NavigationMenuSamplesViewModel(),
-            ["Overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
 
             // Toolkit
             ["Sizing"] = new SizingSamplesViewModel(),
