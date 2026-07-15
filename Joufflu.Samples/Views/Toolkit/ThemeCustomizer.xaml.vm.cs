@@ -7,6 +7,7 @@ using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using JBrushes = Joufflu.Brushes;
 using JColors = Joufflu.Colors;
 using JDimensions = Joufflu.Dimensions;
 
@@ -128,6 +129,21 @@ public class ThemeCustomizerViewModel : ObservableObject
     public ObservableCollection<ThemeColorGroup> ColorGroups { get; } = new();
     public ObservableCollection<ThemeDimensionGroup> DimensionGroups { get; } = new();
 
+    /// <summary>Selectable preset palettes shown as cards at the top of the editor.</summary>
+    public IReadOnlyList<ThemePreset> Presets { get; } = ThemePresets.All;
+
+    private ThemePreset? _selectedPreset;
+    /// <summary>The currently selected preset; assigning a non-null value applies its palette.</summary>
+    public ThemePreset? SelectedPreset
+    {
+        get => _selectedPreset;
+        set
+        {
+            if (SetProperty(ref _selectedPreset, value) && value is not null && !_suppress)
+                ApplyPreset(value);
+        }
+    }
+
     private string _generatedXaml = "";
     public string GeneratedXaml
     {
@@ -248,11 +264,43 @@ public class ThemeCustomizerViewModel : ObservableObject
 
     #region Live application
 
+    /// <summary>Applies a preset palette: seeds the editors and pushes every colour to the live resources.</summary>
+    private void ApplyPreset(ThemePreset preset)
+    {
+        _suppress = true;
+        try
+        {
+            var res = Application.Current.Resources;
+            foreach (var entry in _allColors)
+            {
+                if (!preset.Colors.TryGetValue(entry.ResourceName, out Color color))
+                    continue;
+                entry.SetColorSilently(color);
+                res[entry.Key] = color;
+                res[BrushKey(entry.ResourceName)] = new SolidColorBrush(color);
+            }
+        }
+        finally
+        {
+            _suppress = false;
+        }
+
+        RegenerateXaml();
+    }
+
     private void OnColorChanged(ThemeColorEntry entry)
     {
         if (_suppress)
             return;
-        Application.Current.Resources[entry.Key] = entry.Color;
+        // A manual edit no longer matches any preset — drop the highlight without re-applying.
+        SetProperty(ref _selectedPreset, null, nameof(SelectedPreset));
+        var res = Application.Current.Resources;
+        res[entry.Key] = entry.Color;
+        // The semantic brushes bind their Color via DynamicResource, but each brush lives in the
+        // same merged theme dictionary as its colour and resolves it there before reaching this
+        // app-level override. Override the derived brush explicitly so the preview moves
+        // (same reason ApplyDimension overrides the derived Thickness/CornerRadius keys).
+        res[BrushKey(entry.ResourceName)] = new SolidColorBrush(entry.Color);
         RegenerateXaml();
     }
 
@@ -303,7 +351,10 @@ public class ThemeCustomizerViewModel : ObservableObject
 
             // Drop every override so lookups fall back to the merged theme dictionary…
             foreach (var color in _allColors)
+            {
                 res.Remove(color.Key);
+                res.Remove(BrushKey(color.ResourceName));
+            }
             foreach (var key in AllDimensionKeys())
                 res.Remove(key);
 
@@ -318,6 +369,7 @@ public class ThemeCustomizerViewModel : ObservableObject
             _suppress = false;
         }
 
+        SelectedPreset = null;
         RegenerateXaml();
     }
 
@@ -357,6 +409,10 @@ public class ThemeCustomizerViewModel : ObservableObject
 
     private static double ReadDouble(ComponentResourceKey key)
         => Application.Current.TryFindResource(key) is double value ? value : 0d;
+
+    /// <summary>The brush key derived from a colour's accessor name (e.g. <c>PrimaryColor</c> → <c>PrimaryBrush</c>).</summary>
+    private static ComponentResourceKey BrushKey(string colorName)
+        => new(typeof(JBrushes), colorName.Replace("Color", "Brush"));
 
     private static ComponentResourceKey DimensionKey(string name) => name switch
     {
