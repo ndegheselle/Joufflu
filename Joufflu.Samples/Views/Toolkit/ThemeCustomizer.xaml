@@ -58,34 +58,6 @@
                 </TextBlock>
             </Grid>
         </DataTemplate>
-
-        <!--  A selectable preset card: rendered in the preset's own colours, ringed when selected  -->
-        <Style x:Key="ThemeCardContainerStyle" TargetType="ListBoxItem">
-            <Setter Property="Margin" Value="0,0,8,8" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <Border
-                            x:Name="Ring"
-                            Padding="2"
-                            BorderBrush="Transparent"
-                            BorderThickness="2"
-                            CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                            <ContentPresenter />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Ring" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Ring" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
 
     <Grid Margin="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" joufflu:Spacing.VerticalGap="12">
@@ -127,48 +99,27 @@
                             <!--  Preset themes  -->
                             <StackPanel joufflu:Spacing.VerticalGap="10">
                                 <TextBlock Style="{StaticResource H2}" Text="Preset themes" />
-                                <ListBox
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    ItemContainerStyle="{StaticResource ThemeCardContainerStyle}"
+                                <ComboBox
                                     ItemsSource="{Binding Presets}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                     SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel />
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
-                                    <ListBox.ItemTemplate>
+                                    <ComboBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ThemePreset}">
-                                            <Border
-                                                Width="188"
-                                                Padding="10,8"
-                                                Background="{Binding Background}"
-                                                BorderBrush="{Binding Border}"
-                                                BorderThickness="1"
-                                                CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                                <DockPanel>
-                                                    <StackPanel
-                                                        DockPanel.Dock="Right"
-                                                        joufflu:Spacing.HorizontalGap="3"
-                                                        Orientation="Horizontal">
-                                                        <Border Width="12" Height="24" Background="{Binding Primary}" CornerRadius="3" />
-                                                        <Border Width="12" Height="24" Background="{Binding Secondary}" CornerRadius="3" />
-                                                        <Border Width="12" Height="24" Background="{Binding Accent}" CornerRadius="3" />
-                                                        <Border Width="12" Height="24" Background="{Binding Neutral}" CornerRadius="3" />
-                                                    </StackPanel>
-                                                    <TextBlock
-                                                        VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
-                                                        Foreground="{Binding Foreground}"
-                                                        Text="{Binding Name}" />
-                                                </DockPanel>
-                                            </Border>
+                                            <DockPanel>
+                                                <StackPanel
+                                                    Margin="12,0,0,0"
+                                                    DockPanel.Dock="Right"
+                                                    joufflu:Spacing.HorizontalGap="3"
+                                                    Orientation="Horizontal">
+                                                    <Border Width="10" Height="18" Background="{Binding Primary}" CornerRadius="2" />
+                                                    <Border Width="10" Height="18" Background="{Binding Secondary}" CornerRadius="2" />
+                                                    <Border Width="10" Height="18" Background="{Binding Accent}" CornerRadius="2" />
+                                                    <Border Width="10" Height="18" Background="{Binding Neutral}" CornerRadius="2" />
+                                                </StackPanel>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                            </DockPanel>
                                         </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </StackPanel>
 
                             <!--  Colours  -->
