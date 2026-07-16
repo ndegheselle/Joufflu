@@ -5,7 +5,7 @@ description: >-
 
 # GitHub Pages: served from the /docs folder on the main branch.
 url: https://ndegheselle.github.io
-baseurl: /MeJoufflu-wpf-components
+baseurl: /Joufflu-wpf-lib
 
 # just-the-docs is served through GitHub Pages' native remote-theme support.
 remote_theme: just-the-docs/just-the-docs@v0.8.2
@@ -18,7 +18,7 @@ heading_anchors: true
 
 aux_links:
   "GitHub repository":
-    - "https://github.com/ndegheselle/MeJoufflu-wpf-components"
+    - "https://github.com/ndegheselle/Joufflu-wpf-lib/"
 aux_links_new_tab: true
 
 # Coloured callout boxes used with {: .note } in the pages.
