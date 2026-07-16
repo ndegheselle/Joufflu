@@ -75,7 +75,10 @@ public class MainViewModel : ObservableObject
             // Inputs (Joufflu.Inputs library)
             ["Numeric inputs"] = new NumericInputsSamplesViewModel(),
             ["Search & combo"] = new SelectionInputsSamplesViewModel(),
-            ["Editors"] = new EditorInputsSamplesViewModel(),
+            ["Combo box tags"] = new ComboBoxTagsSamplesViewModel(),
+            ["Text editable"] = new TextEditableSamplesViewModel(),
+            ["File picker"] = new FilePickerSamplesViewModel(),
+            ["Color picker"] = new ColorPickerSamplesViewModel(),
 
             // Navigation (Joufflu.Navigation library)
             ["Navigation menu"] = new NavigationMenuSamplesViewModel(),

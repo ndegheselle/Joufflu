@@ -29,10 +29,7 @@
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />
                 </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Buttons" />
-                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
-                </StackPanel>
+                Buttons
             </nav:NavigationItem>
             <nav:NavigationItem Target="Typography">
                 <nav:NavigationItem.Icon>
@@ -66,19 +63,13 @@
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.TextCursorInput}" />
                     </nav:NavigationItem.Icon>
-                    <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Text box" />
-                        <controls:Badge joufflu:ControlProperties.Size="xs">Size</controls:Badge>
-                    </StackPanel>
+                    Text box
                 </nav:NavigationItem>
                 <nav:NavigationItem Target="Combo box">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.List}" />
                     </nav:NavigationItem.Icon>
-                    <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Combo box" />
-                        <controls:Badge joufflu:ControlProperties.Size="xs">Size</controls:Badge>
-                    </StackPanel>
+                    Combo box
                 </nav:NavigationItem>
                 <nav:NavigationItem Target="Check box">
                     <nav:NavigationItem.Icon>
@@ -140,10 +131,7 @@
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table2}" />
                     </nav:NavigationItem.Icon>
-                    <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Data grid" />
-                        <controls:Badge joufflu:ControlProperties.Size="xs">Size</controls:Badge>
-                    </StackPanel>
+                    Data grid
                 </nav:NavigationItem>
 
                 <nav:NavigationTitle Title="Feedback" />
@@ -219,10 +207,7 @@
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
                 </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Numeric inputs" />
-                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
-                </StackPanel>
+                Numeric inputs
             </nav:NavigationItem>
             <nav:NavigationItem Target="Search &amp; combo">
                 <nav:NavigationItem.Icon>
@@ -230,11 +215,29 @@
                 </nav:NavigationItem.Icon>
                 Search &amp; combo
             </nav:NavigationItem>
-            <nav:NavigationItem Target="Editors">
+            <nav:NavigationItem Target="Combo box tags">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tags}" />
+                </nav:NavigationItem.Icon>
+                Combo box tags
+            </nav:NavigationItem>
+            <nav:NavigationItem Target="Text editable">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
                 </nav:NavigationItem.Icon>
-                Editors
+                Text editable
+            </nav:NavigationItem>
+            <nav:NavigationItem Target="File picker">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
+                </nav:NavigationItem.Icon>
+                File picker
+            </nav:NavigationItem>
+            <nav:NavigationItem Target="Color picker">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
+                </nav:NavigationItem.Icon>
+                Color picker
             </nav:NavigationItem>
 
             <!--  Navigation (Joufflu.Navigation library)  -->
@@ -243,10 +246,7 @@
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
                 </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Navigation menu" />
-                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
-                </StackPanel>
+                Navigation menu
             </nav:NavigationItem>
             <nav:NavigationItem Target="Overlays">
                 <nav:NavigationItem.Icon>
@@ -296,20 +296,17 @@
                 </nav:NavigationItem.Icon>
                 Spacing
             </nav:NavigationItem>
-            <nav:NavigationItem Target="Customize theme">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
-                </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Customize theme" />
-                    <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
-                </StackPanel>
-            </nav:NavigationItem>
             <nav:NavigationItem Target="Application shell">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
                 </nav:NavigationItem.Icon>
                 Application shell
+            </nav:NavigationItem>
+            <nav:NavigationItem Target="Customize theme">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
+                </nav:NavigationItem.Icon>
+                Customize theme
             </nav:NavigationItem>
         </nav:NavigationMenu>
 

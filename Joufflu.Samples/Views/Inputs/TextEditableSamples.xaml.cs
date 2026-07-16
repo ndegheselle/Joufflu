@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace Joufflu.Samples.Views.Inputs;
 
-public partial class EditorInputsSamples : UserControl
+public partial class TextEditableSamples : UserControl
 {
-    public EditorInputsSamples()
+    public TextEditableSamples()
     {
         InitializeComponent();
     }

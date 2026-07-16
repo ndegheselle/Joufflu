@@ -31,18 +31,6 @@
                     ItemsSource="{Binding Countries}"
                     SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
             </c:CodeExample>
-
-            <c:CodeExample
-                Title="ComboBoxTags"
-                Code="{Binding TagsCode}"
-                Description="Builds on ComboBoxSearch to allow selecting several items, shown as removable tags.">
-                <inputs:ComboBoxTags
-                    Width="360"
-                    HorizontalAlignment="Left"
-                    AllowAdd="True"
-                    ItemsSource="{Binding Countries}"
-                    SelectedItems="{Binding SelectedCountries}" />
-            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

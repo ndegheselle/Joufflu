@@ -161,8 +161,17 @@
     <DataTemplate DataType="{x:Type inputs:SelectionInputsSamplesViewModel}">
         <inputs:SelectionInputsSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type inputs:EditorInputsSamplesViewModel}">
-        <inputs:EditorInputsSamples />
+    <DataTemplate DataType="{x:Type inputs:ComboBoxTagsSamplesViewModel}">
+        <inputs:ComboBoxTagsSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type inputs:TextEditableSamplesViewModel}">
+        <inputs:TextEditableSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type inputs:FilePickerSamplesViewModel}">
+        <inputs:FilePickerSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type inputs:ColorPickerSamplesViewModel}">
+        <inputs:ColorPickerSamples />
     </DataTemplate>
 
     <!--  Toolkit  -->

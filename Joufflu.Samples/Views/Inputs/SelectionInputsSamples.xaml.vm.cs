@@ -1,6 +1,5 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Joufflu.Samples.Views.Inputs;
 
@@ -16,8 +15,6 @@ public class SelectionInputsSamplesViewModel : ObservableObject
 
     public string? SelectedCountry { get => _selectedCountry; set => SetProperty(ref _selectedCountry, value); }
 
-    public IList SelectedCountries { get; } = new ObservableCollection<object> { "France", "Japan" };
-
     public string SearchCode =>
         "<inputs:Search />\n" +
         "// code-behind: search.SearchChanged += text => Filter(text);";
@@ -25,9 +22,4 @@ public class SelectionInputsSamplesViewModel : ObservableObject
     public string ComboSearchCode =>
         "<inputs:ComboBoxSearch ItemsSource=\"{Binding Countries}\"\n" +
         "                       SelectedItem=\"{Binding SelectedCountry}\" />";
-
-    public string TagsCode =>
-        "<inputs:ComboBoxTags AllowAdd=\"True\"\n" +
-        "                     ItemsSource=\"{Binding Countries}\"\n" +
-        "                     SelectedItems=\"{Binding SelectedCountries}\" />";
 }

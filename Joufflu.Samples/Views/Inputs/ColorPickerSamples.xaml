@@ -1,0 +1,23 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Inputs.ColorPickerSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Color picker" />
+
+            <c:CodeExample
+                Title="ColorPicker"
+                Code="{Binding ColorPickerCode}"
+                Description="Edits a colour through an editable hex value and a popup with a saturation square, hue and alpha sliders.">
+                <StackPanel joufflu:Spacing.Gap="12,0" Orientation="Horizontal">
+                    <inputs:ColorPicker Width="220" Color="{Binding Color, Mode=TwoWay}" />
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Color, StringFormat='Value: {0}'}" />
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
