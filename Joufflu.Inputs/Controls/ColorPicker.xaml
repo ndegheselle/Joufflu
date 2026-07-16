@@ -4,6 +4,107 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Inputs.Controls">
 
+    <!--  Checkerboard shown behind translucent colours (alpha slider + swatches).  -->
+    <DrawingBrush
+        x:Key="ColorPickerCheckerBrush"
+        Stretch="None"
+        TileMode="Tile"
+        Viewport="0,0,12,12"
+        ViewportUnits="Absolute">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#FFFFFF">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,12,12" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#D0D0D0">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <RectangleGeometry Rect="0,0,6,6" />
+                            <RectangleGeometry Rect="6,6,6,6" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
+    <!--  Round white knob used by the hue/alpha slider thumbs.  -->
+    <Style x:Key="ColorPickerSliderThumb" TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Width" Value="18" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Grid>
+                        <Ellipse
+                            Fill="White"
+                            Stroke="#40000000"
+                            StrokeThickness="1">
+                            <Ellipse.Effect>
+                                <DropShadowEffect
+                                    BlurRadius="4"
+                                    Direction="270"
+                                    Opacity="0.35"
+                                    ShadowDepth="1" />
+                            </Ellipse.Effect>
+                        </Ellipse>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ColorPickerSliderRepeatButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="Transparent" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  Horizontal slider whose track is a caller-provided gradient (hue rainbow / alpha ramp).  -->
+    <Style x:Key="ColorPickerBarSlider" TargetType="{x:Type Slider}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Slider}">
+                    <Grid>
+                        <!--  Track background is supplied through Slider.Background  -->
+                        <Border
+                            Height="12"
+                            VerticalAlignment="Center"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                            BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}"
+                            CornerRadius="6" />
+                        <Track x:Name="PART_Track">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorPickerSliderRepeatButton}" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource ColorPickerSliderThumb}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorPickerSliderRepeatButton}" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type local:ColorPicker}">
         <Setter Property="Template">
             <Setter.Value>
@@ -14,7 +115,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <!--  Editable hex value: paste or type a #AARRGGBB / #RRGGBB colour  -->
+                        <!--  Editable hex value: paste or type a #RRGGBB / #AARRGGBB colour  -->
                         <TextBox
                             Grid.Column="0"
                             MinWidth="100"
@@ -23,7 +124,7 @@
                             MaxLength="9"
                             Text="{Binding HexText, UpdateSourceTrigger=LostFocus}" />
 
-                        <!--  Swatch button: click to open the RGBA popup and pick manually  -->
+                        <!--  Swatch button: click to open the picker popup  -->
                         <ToggleButton
                             x:Name="SwatchButton"
                             Grid.Column="1"
@@ -34,10 +135,10 @@
                             Padding="0"
                             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                             BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}">
-                            <Border
-                                Margin="3"
-                                Background="{Binding SwatchBrush}"
-                                CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            <Grid Margin="3">
+                                <Border Background="{StaticResource ColorPickerCheckerBrush}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                                <Border Background="{Binding SwatchBrush}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            </Grid>
                         </ToggleButton>
 
                         <Popup
@@ -48,49 +149,143 @@
                             StaysOpen="False">
                             <!--  DataContext doesn't reliably inherit into a templated Popup's separate visual tree, so flow it in explicitly.  -->
                             <Border
-                                Margin="0,4,0,0"
                                 DataContext="{Binding DataContext, ElementName=Root}"
                                 Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}"
                                 Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
                                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                                 BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}"
                                 CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                <StackPanel Width="220" joufflu:Spacing.VerticalGap="6">
-                                    <Border
-                                        Height="40"
-                                        Background="{Binding SwatchBrush}"
-                                        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                                        BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                                        CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                                <StackPanel Width="240">
 
-                                    <Grid joufflu:Spacing.Gap="6">
+                                    <!--  Saturation / brightness square  -->
+                                    <Border
+                                        Height="150">
+                                        <Grid x:Name="PART_SaturationArea" Cursor="Cross">
+                                            <!--  Pure-hue base; the gradients on top build the saturation/brightness field  -->
+                                            <Border Background="{Binding HueBrush}" />
+                                            <Border>
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                        <GradientStop Offset="0" Color="#FFFFFFFF" />
+                                                        <GradientStop Offset="1" Color="#00FFFFFF" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                            <!--  Transparent -> black (bottom) gives the brightness axis  -->
+                                            <Border>
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientStop Offset="0" Color="#00000000" />
+                                                        <GradientStop Offset="1" Color="#FF000000" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                            <!--  Selector knob; positioned in code via a TranslateTransform  -->
+                                            <Grid
+                                                x:Name="PART_SaturationSelector"
+                                                Width="16"
+                                                Height="16"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                IsHitTestVisible="False"
+                                                Margin="-8">
+                                                <Ellipse
+                                                    Fill="{Binding OpaqueBrush}"
+                                                    Stroke="White"
+                                                    StrokeThickness="2">
+                                                    <Ellipse.Effect>
+                                                        <DropShadowEffect
+                                                            BlurRadius="4"
+                                                            Opacity="0.4"
+                                                            ShadowDepth="0" />
+                                                    </Ellipse.Effect>
+                                                </Ellipse>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+
+                                    <!--  Hue slider  -->
+                                    <Slider
+                                        Maximum="360"
+                                        Minimum="0"
+                                        SmallChange="1"
+                                        Style="{StaticResource ColorPickerBarSlider}"
+                                        Value="{Binding Hue, Mode=TwoWay}">
+                                        <Slider.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Offset="0.00" Color="#FF0000" />
+                                                <GradientStop Offset="0.17" Color="#FFFF00" />
+                                                <GradientStop Offset="0.33" Color="#00FF00" />
+                                                <GradientStop Offset="0.50" Color="#00FFFF" />
+                                                <GradientStop Offset="0.67" Color="#0000FF" />
+                                                <GradientStop Offset="0.83" Color="#FF00FF" />
+                                                <GradientStop Offset="1.00" Color="#FF0000" />
+                                            </LinearGradientBrush>
+                                        </Slider.Background>
+                                    </Slider>
+
+                                    <!--  Alpha slider (checkerboard behind a transparent->opaque ramp)  -->
+                                    <Grid>
+                                        <Border
+                                            Height="12"
+                                            VerticalAlignment="Center"
+                                            Background="{StaticResource ColorPickerCheckerBrush}"
+                                            CornerRadius="6" />
+                                        <Slider
+                                            Maximum="1"
+                                            Minimum="0"
+                                            SmallChange="0.01"
+                                            Style="{StaticResource ColorPickerBarSlider}"
+                                            Value="{Binding Alpha, Mode=TwoWay}">
+                                            <Slider.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                    <GradientStop Offset="0" Color="Transparent" />
+                                                    <GradientStop Offset="1" Color="{Binding OpaqueBrush.Color}" />
+                                                </LinearGradientBrush>
+                                            </Slider.Background>
+                                        </Slider>
+                                    </Grid>
+
+                                    <!--  Swatch + hex + opacity readout  -->
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="R" />
-                                        <Slider Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Maximum="255" Minimum="0" SmallChange="1" Value="{Binding R, Mode=TwoWay}" />
-                                        <TextBlock Grid.Row="0" Grid.Column="2" MinWidth="26" VerticalAlignment="Center" Text="{Binding R, StringFormat=0}" TextAlignment="Right" />
+                                        <Border Padding="1" Background="{StaticResource ColorPickerCheckerBrush}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                                        <Border
+                                            Grid.Column="0"
+                                            Width="{StaticResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
+                                            Height="{StaticResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
+                                            Background="{Binding SwatchBrush}"
+                                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                                            BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}"
+                                            CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                        </Border>
 
-                                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="G" />
-                                        <Slider Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Maximum="255" Minimum="0" SmallChange="1" Value="{Binding G, Mode=TwoWay}" />
-                                        <TextBlock Grid.Row="1" Grid.Column="2" MinWidth="26" VerticalAlignment="Center" Text="{Binding G, StringFormat=0}" TextAlignment="Right" />
+                                        <TextBox
+                                            Grid.Column="1"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Consolas, Cascadia Mono, monospace"
+                                            MaxLength="9"
+                                            Text="{Binding HexText, UpdateSourceTrigger=LostFocus}" />
 
-                                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="B" />
-                                        <Slider Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Maximum="255" Minimum="0" SmallChange="1" Value="{Binding B, Mode=TwoWay}" />
-                                        <TextBlock Grid.Row="2" Grid.Column="2" MinWidth="26" VerticalAlignment="Center" Text="{Binding B, StringFormat=0}" TextAlignment="Right" />
-
-                                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="A" />
-                                        <Slider Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Maximum="255" Minimum="0" SmallChange="1" Value="{Binding A, Mode=TwoWay}" />
-                                        <TextBlock Grid.Row="3" Grid.Column="2" MinWidth="26" VerticalAlignment="Center" Text="{Binding A, StringFormat=0}" TextAlignment="Right" />
+                                        <Grid Grid.Column="2" MinWidth="56">
+                                            <TextBox
+                                                VerticalContentAlignment="Center"
+                                                Padding="6,0,18,0"
+                                                TextAlignment="Right"
+                                                Text="{Binding AlphaPercent, StringFormat={}{0:0}, UpdateSourceTrigger=LostFocus}" />
+                                            <TextBlock
+                                                Margin="0,0,6,0"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                                IsHitTestVisible="False"
+                                                Text="%" />
+                                        </Grid>
                                     </Grid>
                                 </StackPanel>
                             </Border>
