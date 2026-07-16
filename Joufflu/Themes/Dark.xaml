@@ -4,8 +4,8 @@
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#FFFAFAFA</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Foreground100Color}">#FFFAFAFA</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Foreground200Color}">#FFFAFAFA</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Foreground100Color}">#a1a1a1</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Foreground200Color}">#a1a1a1</Color>
 
     <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#202020</Color>
     <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#2e2e2e</Color>

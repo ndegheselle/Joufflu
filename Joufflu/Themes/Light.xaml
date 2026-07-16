@@ -3,47 +3,45 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu">
 
-    <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#000000</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Foreground100Color}">#000000</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Foreground200Color}">#000000</Color>
+    <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#0a0a0a</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Foreground100Color}">#737373</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Foreground200Color}">#737373</Color>
 
-    <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#FFFAFAFA</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#FFF4F4F5</Color>
+    <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#e0e0e0</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#e0e0e0</Color>
 
-    <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#FFFAFAFA</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Background100Color}">#FFF4F4F5</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Background200Color}">#FFE4E4E7</Color>
+    <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#f5f5f5</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Background100Color}">#ffffff</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Background200Color}">#f2f2f2</Color>
 
     <!--  Primary: zinc-900 background, white content  -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#FF18181B</Color>
     <Color x:Key="{x:Static joufflu:Colors.PrimaryContentColor}">#FFFAFAFA</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Primary100Color}">#FF27272A</Color>
 
     <!--  Secondary: zinc-200 background, zinc-800 content  -->
     <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#FFE4E4E7</Color>
     <Color x:Key="{x:Static joufflu:Colors.SecondaryContentColor}">#FF27272A</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Secondary100Color}">#FFD4D4D8</Color>
 
     <!--  Success: green-500 / green-950 content  -->
     <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#FF22C55E</Color>
     <Color x:Key="{x:Static joufflu:Colors.SuccessContentColor}">#FF052E16</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Success100Color}">#FF16A34A</Color>
 
     <!--  Info: blue-500 / blue-950 content  -->
     <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#FF3B82F6</Color>
     <Color x:Key="{x:Static joufflu:Colors.InfoContentColor}">#FF172554</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Info100Color}">#FF2563EB</Color>
 
     <!--  Warning: yellow-500 / yellow-950 content  -->
     <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#FFEAB308</Color>
     <Color x:Key="{x:Static joufflu:Colors.WarningContentColor}">#FF422006</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Warning100Color}">#FFCA8A04</Color>
 
     <!--  Danger (Destructive): red-900 background, red-200 content  -->
     <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#FF7F1D1D</Color>
     <Color x:Key="{x:Static joufflu:Colors.DangerContentColor}">#FFFECACA</Color>
-
-    <!--  Hover (X100) variants for semantic colors  -->
-    <Color x:Key="{x:Static joufflu:Colors.Primary100Color}">#FF27272A</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Secondary100Color}">#FFD4D4D8</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Success100Color}">#FF16A34A</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Info100Color}">#FF2563EB</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Warning100Color}">#FFCA8A04</Color>
     <Color x:Key="{x:Static joufflu:Colors.Danger100Color}">#FF991B1B</Color>
 
     <!--  Foreground Brushes  -->
@@ -63,28 +61,26 @@
     <!--  Semantic Brushes  -->
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.PrimaryBrush}" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.PrimaryContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryContentColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Primary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Primary100Color}}" />
 
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryContentColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Secondary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Secondary100Color}}" />
 
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SuccessBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SuccessContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SuccessContentColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Success100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Success100Color}}" />
 
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InfoBrush}" Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InfoContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.InfoContentColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Info100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Info100Color}}" />
 
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.WarningBrush}" Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.WarningContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.WarningContentColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Warning100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Warning100Color}}" />
 
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DangerBrush}" Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DangerContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.DangerContentColor}}" />
-
-    <!--  X100 Hover Brushes  -->
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Primary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Primary100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Secondary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Secondary100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Success100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Success100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Info100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Info100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Warning100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Warning100Color}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Danger100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Danger100Color}}" />
 
 </ResourceDictionary>

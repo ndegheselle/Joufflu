@@ -1,4 +1,5 @@
 ﻿using Joufflu.Samples.ViewModels;
+using Joufflu.Themes;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -17,6 +18,9 @@ namespace Joufflu.Samples
 
             Current.DispatcherUnhandledException += CurrentOnDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
+
+            // Restore the persisted theme (or follow the system) and insert its dictionary before any window is shown.
+            ThemeManager.Instance.Initialize();
 
             mainViewModel = new MainViewModel();
 

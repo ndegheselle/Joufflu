@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Themes/Dark.xaml" />
+                <!--  The active theme (Light/Dark) is inserted here at runtime by ThemeManager.Initialize().  -->
                 <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Resources.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Resources.xaml" />

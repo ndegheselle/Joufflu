@@ -40,66 +40,67 @@ public class MainViewModel : ObservableObject
         _pages = new()
         {
             // Native controls
-            ["Buttons"] = new ButtonSamplesViewModel(),
-            ["Toggle buttons"] = new ToggleButtonSamplesViewModel(),
+            ["natives/buttons"] = new ButtonSamplesViewModel(),
+            ["natives/toggle-buttons"] = new ToggleButtonSamplesViewModel(),
 
-            ["Text box"] = new TextBoxSamplesViewModel(),
-            ["Combo box"] = new ComboBoxSamplesViewModel(),
-            ["Check box"] = new CheckBoxSamplesViewModel(),
-            ["Radio button"] = new RadioButtonSamples(),
-            ["Slider"] = new SliderSamplesViewModel(),
-            ["Date picker"] = new DatePickerSamplesViewModel(),
-            ["Calendar"] = new CalendarSamplesViewModel(),
-            ["List box"] = new ListBoxSamplesViewModel(),
+            ["natives/text-box"] = new TextBoxSamplesViewModel(),
+            ["natives/combo-box"] = new ComboBoxSamplesViewModel(),
+            ["natives/check-box"] = new CheckBoxSamplesViewModel(),
+            ["natives/radio-button"] = new RadioButtonSamples(),
+            ["natives/slider"] = new SliderSamplesViewModel(),
+            ["natives/date-picker"] = new DatePickerSamplesViewModel(),
+            ["natives/calendar"] = new CalendarSamplesViewModel(),
+            ["natives/list-box"] = new ListBoxSamplesViewModel(),
 
-            ["Typography"] = new TypographySamplesViewModel(),
-            ["Label"] = new LabelSamples(),
-            ["List view"] = new ListViewSamplesViewModel(),
-            ["Tree view"] = new TreeViewSamplesViewModel(),
-            ["Data grid"] = new DataGridSamplesViewModel(),
+            ["natives/typography"] = new TypographySamplesViewModel(),
+            ["natives/label"] = new LabelSamples(),
+            ["natives/list-view"] = new ListViewSamplesViewModel(),
+            ["natives/tree-view"] = new TreeViewSamplesViewModel(),
+            ["natives/data-grid"] = new DataGridSamplesViewModel(),
 
-            ["Progress bar"] = new ProgressBarSamplesViewModel(),
-            ["Status bar"] = new StatusBarSamples(),
+            ["natives/progress-bar"] = new ProgressBarSamplesViewModel(),
+            ["natives/status-bar"] = new StatusBarSamples(),
 
-            ["Card"] = new CardSamples(),
-            ["Group box"] = new GroupBoxSamples(),
-            ["Expander"] = new ExpanderSamples(),
-            ["Scroll viewer"] = new ScrollViewerSamples(),
-            ["Grid splitter"] = new GridSplitterSamples(),
+            ["natives/card"] = new CardSamples(),
+            ["natives/group-box"] = new GroupBoxSamples(),
+            ["natives/expander"] = new ExpanderSamples(),
+            ["natives/scroll-viewer"] = new ScrollViewerSamples(),
+            ["natives/grid-splitter"] = new GridSplitterSamples(),
 
-            ["Menu"] = new MenuSamples(),
-            ["Tab control"] = new TabControlSamples(),
-            ["Tool bar"] = new ToolBarSamples(),
-            ["Hyperlink"] = new HyperlinkSamples(),
+            ["natives/menu"] = new MenuSamples(),
+            ["natives/tab-control"] = new TabControlSamples(),
+            ["natives/tool-bar"] = new ToolBarSamples(),
+            ["natives/hyperlink"] = new HyperlinkSamples(),
 
             // Inputs (Joufflu.Inputs library)
-            ["Numeric inputs"] = new NumericInputsSamplesViewModel(),
-            ["Search & combo"] = new SelectionInputsSamplesViewModel(),
-            ["Combo box tags"] = new ComboBoxTagsSamplesViewModel(),
-            ["Text editable"] = new TextEditableSamplesViewModel(),
-            ["File picker"] = new FilePickerSamplesViewModel(),
-            ["Color picker"] = new ColorPickerSamplesViewModel(),
+            ["inputs/numeric"] = new NumericInputsSamplesViewModel(),
+            ["inputs/search"] = new SelectionInputsSamplesViewModel(),
+            ["inputs/combo-box-tags"] = new ComboBoxTagsSamplesViewModel(),
+            ["inputs/text-editable"] = new TextEditableSamplesViewModel(),
+            ["inputs/file-picker"] = new FilePickerSamplesViewModel(),
+            ["inputs/color-picker"] = new ColorPickerSamplesViewModel(),
 
             // Navigation (Joufflu.Navigation library)
-            ["Navigation menu"] = new NavigationMenuSamplesViewModel(),
-            ["Overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
+            ["navigation/menu"] = new NavigationMenuSamplesViewModel(),
+            ["navigation/overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
 
             // Custom controls
-            ["Font icon"] = new FontIconSamplesViewModel(),
-            ["Badge"] = new BadgeSamplesViewModel(),
-            ["Spinner"] = new SpinnerSamplesViewModel(),
-            ["Toasts"] = new ToastSamplesViewModel(Toasts),
+            ["controls/font-icon"] = new FontIconSamplesViewModel(),
+            ["controls/badge"] = new BadgeSamplesViewModel(),
+            ["controls/spinner"] = new SpinnerSamplesViewModel(),
+            ["controls/toasts"] = new ToastSamplesViewModel(Toasts),
 
             // Toolkit
-            ["Sizing"] = new SizingSamplesViewModel(),
-            ["Spacing"] = new SpacingSamplesViewModel(),
-            ["Customize theme"] = new ThemeCustomizerViewModel(),
-            ["Application shell"] = new ShellSamples(),
+            ["toolkit/sizing"] = new SizingSamplesViewModel(),
+            ["toolkit/spacing"] = new SpacingSamplesViewModel(),
+            ["toolkit/theme"] = new ThemeSamplesViewModel(),
+            ["toolkit/customize-theme"] = new ThemeCustomizerViewModel(),
+            ["toolkit/application-shell"] = new ShellSamples(),
         };
 
         ResolveTarget = ResolvePage;
 
-        if (ResolvePage("Buttons") is { } home)
+        if (ResolvePage("natives/buttons") is { } home)
             Navigator.Navigate(home);
     }
 
