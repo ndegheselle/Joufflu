@@ -6,14 +6,14 @@
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Button" />
 
             <c:CodeExample
                 Title="Variants"
                 Code="{Binding VariantsCode}"
                 Description="Named styles map to the design system's semantic brushes. Apply them through the Style property.">
-                <WrapPanel joufflu:Spacing.HorizontalGap="8">
+                <WrapPanel joufflu:Spacing.Gap="8,0">
                     <Button>Default</Button>
                     <Button Style="{StaticResource Primary}">Primary</Button>
                     <Button Style="{StaticResource Secondary}">Secondary</Button>
@@ -28,7 +28,7 @@
                 Title="Icon buttons"
                 Code="{Binding IconCode}"
                 Description="IsSquare makes a button as wide as it is tall — ideal for a single icon.">
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                     <Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Primary}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
                     </Button>
@@ -45,7 +45,7 @@
                 Title="Sizes"
                 Code="{Binding SizesCode}"
                 Description="The inherited ControlProperties.Size attached property scales height, font size and padding.">
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                     <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="xs">XS</Button>
                     <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="sm">SM</Button>
                     <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="md">MD</Button>

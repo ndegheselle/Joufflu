@@ -29,14 +29,15 @@ public static class ControlProperties
 }
 
 /// <summary>
-/// Attached properties that add a gap between the children of a <see cref="Panel"/>
+/// Attached property that adds a gap between the children of a <see cref="Panel"/>
 /// (<see cref="StackPanel"/>, <see cref="WrapPanel"/> and <see cref="Grid"/>) by
 /// applying margins to those children.
 /// <para>
-/// Use <see cref="GapProperty"/> for a uniform gap on both axes, and
-/// <see cref="HorizontalGapProperty"/> / <see cref="VerticalGapProperty"/>
-/// to override a single axis.
-/// Otherwise spacing only applies when a value is explicitly set.
+/// <see cref="GapProperty"/> takes a <see cref="Thickness"/>, so you can write a single
+/// value for a uniform gap on both axes (<c>"8"</c>), or use the horizontal/vertical pair
+/// to set each axis independently (<c>"8,0"</c> = 8 horizontal / 0 vertical). The gap's
+/// <see cref="Thickness.Left"/> drives the horizontal axis and <see cref="Thickness.Top"/>
+/// the vertical one; the right/bottom components are ignored.
 /// </para>
 /// <para>
 /// Because spacing is implemented through child margins, any margin set directly on a
@@ -45,38 +46,16 @@ public static class ControlProperties
 /// </summary>
 public static class Spacing
 {
-    /// <summary>Uniform gap (in DIPs) applied on both axes between children.</summary>
+    /// <summary>Gap (in DIPs) applied between children; Left is the horizontal gap and Top the vertical gap.</summary>
     public static readonly DependencyProperty GapProperty =
         DependencyProperty.RegisterAttached(
             "Gap",
-            typeof(double),
+            typeof(Thickness),
             typeof(Spacing),
-            new FrameworkPropertyMetadata(double.NaN, OnGapChanged));
+            new FrameworkPropertyMetadata(new Thickness(), OnGapChanged));
 
-    public static double GetGap(DependencyObject obj) => (double)obj.GetValue(GapProperty);
-    public static void SetGap(DependencyObject obj, double value) => obj.SetValue(GapProperty, value);
-
-    /// <summary>Horizontal gap (in DIPs); overrides <see cref="GapProperty"/> on the horizontal axis.</summary>
-    public static readonly DependencyProperty HorizontalGapProperty =
-        DependencyProperty.RegisterAttached(
-            "HorizontalGap",
-            typeof(double),
-            typeof(Spacing),
-            new FrameworkPropertyMetadata(double.NaN, OnGapChanged));
-
-    public static double GetHorizontalGap(DependencyObject obj) => (double)obj.GetValue(HorizontalGapProperty);
-    public static void SetHorizontalGap(DependencyObject obj, double value) => obj.SetValue(HorizontalGapProperty, value);
-
-    /// <summary>Vertical gap (in DIPs); overrides <see cref="GapProperty"/> on the vertical axis.</summary>
-    public static readonly DependencyProperty VerticalGapProperty =
-        DependencyProperty.RegisterAttached(
-            "VerticalGap",
-            typeof(double),
-            typeof(Spacing),
-            new FrameworkPropertyMetadata(double.NaN, OnGapChanged));
-
-    public static double GetVerticalGap(DependencyObject obj) => (double)obj.GetValue(VerticalGapProperty);
-    public static void SetVerticalGap(DependencyObject obj, double value) => obj.SetValue(VerticalGapProperty, value);
+    public static Thickness GetGap(DependencyObject obj) => (Thickness)obj.GetValue(GapProperty);
+    public static void SetGap(DependencyObject obj, Thickness value) => obj.SetValue(GapProperty, value);
 
     // Marks a panel whose children collection we already observe, so we only hook once.
     private static readonly DependencyProperty IsHookedProperty =
@@ -105,9 +84,10 @@ public static class Spacing
 
     private static void ApplySpacing(Panel panel)
     {
-        double fallbackH = 0, fallbackV = 0;
-        double horizontal = Resolve(GetHorizontalGap(panel), GetGap(panel), fallbackH);
-        double vertical = Resolve(GetVerticalGap(panel), GetGap(panel), fallbackV);
+        // Left drives the horizontal gap, Top the vertical one (NaN falls back to 0).
+        Thickness gap = GetGap(panel);
+        double horizontal = double.IsNaN(gap.Left) ? 0 : gap.Left;
+        double vertical = double.IsNaN(gap.Top) ? 0 : gap.Top;
 
         switch (panel)
         {
@@ -121,14 +101,6 @@ public static class Spacing
                 ApplyUniform(panel, horizontal, vertical);
                 break;
         }
-    }
-
-    // A per-axis override wins; otherwise the uniform value; otherwise the fallback
-    private static double Resolve(double axisValue, double uniform, double fallback)
-    {
-        if (!double.IsNaN(axisValue))
-            return axisValue;
-        return double.IsNaN(uniform) ? fallback : uniform;
     }
 
     // StackPanel is one-dimensional: gap every child except the first, on the leading

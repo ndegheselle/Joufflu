@@ -6,7 +6,7 @@
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
 
             <TextBlock Style="{StaticResource H1}" Text="Spinner" />
             <c:CodeExample
@@ -15,7 +15,7 @@
                 Description="An indeterminate loading indicator. Color comes from Foreground, diameter from ControlProperties.Size.">
                 <StackPanel
                     VerticalAlignment="Center"
-                    joufflu:Spacing.HorizontalGap="16"
+                    joufflu:Spacing.Gap="16,0"
                     Orientation="Horizontal">
                     <controls:Spinner joufflu:ControlProperties.Size="xs" />
                     <controls:Spinner joufflu:ControlProperties.Size="sm" />

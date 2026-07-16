@@ -10,9 +10,9 @@ public class SpacingSamplesViewModel : ObservableObject
         "<StackPanel Orientation=\"Horizontal\" joufflu:Spacing.Gap=\"8\">\n" +
         "    <Button>One</Button> <Button>Two</Button> <Button>Three</Button>\n" +
         "</StackPanel>\n\n" +
-        "<!-- WrapPanel: gap on both axes, or per axis -->\n" +
-        "<WrapPanel joufflu:Spacing.HorizontalGap=\"8\"\n" +
-        "           joufflu:Spacing.VerticalGap=\"12\">\n" +
+        "<!-- Gap is a Thickness: one value is uniform, -->\n" +
+        "<!-- \"horizontal,vertical\" sets each axis (Left/Top) -->\n" +
+        "<WrapPanel joufflu:Spacing.Gap=\"8,12\">\n" +
         "    ...\n" +
         "</WrapPanel>\n\n" +
         "<!-- Grid: gap sits between rows and columns -->\n" +

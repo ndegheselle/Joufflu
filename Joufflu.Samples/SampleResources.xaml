@@ -21,7 +21,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type c:CodeExample}">
                     <Border Style="{StaticResource Card}">
-                        <Grid joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+                        <Grid joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />

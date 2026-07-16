@@ -8,7 +8,7 @@
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock
                 Style="{StaticResource H1}"
                 Text="Toggle button" />
@@ -17,7 +17,7 @@
                 Title="Variants"
                 Code="{Binding VariantsCode}"
                 Description="Toggle buttons mirror the button variants but stay pressed when checked. Toggle one on to see its checked state.">
-                <WrapPanel joufflu:Spacing.HorizontalGap="8">
+                <WrapPanel joufflu:Spacing.Gap="8,0">
                     <ToggleButton IsChecked="True">Default</ToggleButton>
                     <ToggleButton Style="{StaticResource TogglePrimary}">Primary</ToggleButton>
                     <ToggleButton Style="{StaticResource ToggleSecondary}">Secondary</ToggleButton>
@@ -32,7 +32,7 @@
                 Title="Icon toggle buttons"
                 Code="{Binding IconCode}"
                 Description="IconToggleButton is a ready-made square toggle for a single icon.">
-                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8,0">
                     <ToggleButton Style="{StaticResource IconToggleButton}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
                     </ToggleButton>
@@ -46,7 +46,7 @@
                 Title="Sizes"
                 Code="{Binding SizesCode}"
                 Description="Toggle buttons scale through the inherited ControlProperties.Size attached property.">
-                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="8">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8,0">
                     <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="xs">XS</ToggleButton>
                     <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="sm">SM</ToggleButton>
                     <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="md">MD</ToggleButton>

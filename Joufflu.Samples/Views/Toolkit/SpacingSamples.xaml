@@ -7,7 +7,7 @@
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock
                 Style="{StaticResource H1}"
                 Text="Spacing" />
@@ -23,7 +23,7 @@
                         <Button>Three</Button>
                     </StackPanel>
 
-                    <WrapPanel joufflu:Spacing.HorizontalGap="8" joufflu:Spacing.VerticalGap="12">
+                    <WrapPanel joufflu:Spacing.Gap="8,12">
                         <Button>Alpha</Button>
                         <Button>Beta</Button>
                         <Button>Gamma</Button>

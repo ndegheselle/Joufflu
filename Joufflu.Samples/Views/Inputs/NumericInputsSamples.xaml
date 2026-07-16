@@ -7,14 +7,14 @@
     xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Numeric &amp; format inputs" />
 
             <c:CodeExample
                 Title="NumericUpDown"
                 Code="{Binding NumericCode}"
                 Description="Selects a whole number. Built on FormatTextBox with the numeric format, clear and increment/decrement buttons included.">
-                <StackPanel joufflu:Spacing.HorizontalGap="12" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:NumericUpDown Width="180" Value="{Binding NumericValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding NumericValue, StringFormat='Value: {0}'}" />
                 </StackPanel>
@@ -24,7 +24,7 @@
                 Title="DecimalUpDown"
                 Code="{Binding DecimalCode}"
                 Description="Selects a double / decimal value using the decimal format.">
-                <StackPanel joufflu:Spacing.HorizontalGap="12" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:DecimalUpDown Width="180" Value="{Binding DecimalValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding DecimalValue, StringFormat='Value: {0}'}" />
                 </StackPanel>
@@ -34,7 +34,7 @@
                 Title="TimeSpanPicker"
                 Code="{Binding TimeSpanCode}"
                 Description="Selects a TimeSpan through a days/hours/minutes/seconds format.">
-                <StackPanel joufflu:Spacing.HorizontalGap="12" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:TimeSpanPicker Width="180" Value="{Binding Duration, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding Duration, StringFormat='Value: {0}'}" />
                 </StackPanel>

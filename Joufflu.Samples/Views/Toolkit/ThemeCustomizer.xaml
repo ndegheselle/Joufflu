@@ -14,7 +14,7 @@
     <UserControl.Resources>
         <!--  One editable colour row: swatch/hex editor + label  -->
         <DataTemplate x:Key="ColorRowTemplate" DataType="{x:Type vm:ThemeColorEntry}">
-            <Grid Margin="0,3" joufflu:Spacing.HorizontalGap="10">
+            <Grid Margin="0,3" joufflu:Spacing.Gap="10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="160" />
                     <ColumnDefinition Width="*" />
@@ -30,7 +30,7 @@
 
         <!--  One editable dimension row: label + slider + value  -->
         <DataTemplate x:Key="DimensionRowTemplate" DataType="{x:Type vm:ThemeDimensionEntry}">
-            <Grid Margin="0,3" joufflu:Spacing.HorizontalGap="10">
+            <Grid Margin="0,3" joufflu:Spacing.Gap="10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition Width="*" />
@@ -60,7 +60,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" joufflu:Spacing.VerticalGap="12">
+    <Grid Margin="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" joufflu:Spacing.Gap="0,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -76,7 +76,7 @@
         </StackPanel>
 
         <!--  Editor | Preview  -->
-        <Grid Grid.Row="1" joufflu:Spacing.HorizontalGap="12">
+        <Grid Grid.Row="1" joufflu:Spacing.Gap="12,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="440" />
                 <ColumnDefinition Width="*" />
@@ -87,7 +87,7 @@
                 <DockPanel>
                     <StackPanel
                         DockPanel.Dock="Top"
-                        joufflu:Spacing.HorizontalGap="8"
+                        joufflu:Spacing.Gap="8,0"
                         Orientation="Horizontal">
                         <Button Command="{Binding CopyCommand}" Style="{StaticResource Primary}">Copy XAML</Button>
                         <Button Command="{Binding SaveCommand}" Style="{StaticResource Secondary}">Save .xaml…</Button>
@@ -95,9 +95,9 @@
                     </StackPanel>
 
                     <ScrollViewer Margin="0,12,0,0" VerticalScrollBarVisibility="Auto">
-                        <StackPanel joufflu:Spacing.VerticalGap="16">
+                        <StackPanel joufflu:Spacing.Gap="0,16">
                             <!--  Preset themes  -->
-                            <StackPanel joufflu:Spacing.VerticalGap="10">
+                            <StackPanel joufflu:Spacing.Gap="0,10">
                                 <TextBlock Style="{StaticResource H2}" Text="Preset themes" />
                                 <ComboBox
                                     ItemsSource="{Binding Presets}"
@@ -108,7 +108,7 @@
                                                 <StackPanel
                                                     Margin="12,0,0,0"
                                                     DockPanel.Dock="Right"
-                                                    joufflu:Spacing.HorizontalGap="3"
+                                                    joufflu:Spacing.Gap="3,0"
                                                     Orientation="Horizontal">
                                                     <Border Width="10" Height="18" Background="{Binding Primary}" CornerRadius="2" />
                                                     <Border Width="10" Height="18" Background="{Binding Secondary}" CornerRadius="2" />
@@ -123,7 +123,7 @@
                             </StackPanel>
 
                             <!--  Colours  -->
-                            <StackPanel joufflu:Spacing.VerticalGap="10">
+                            <StackPanel joufflu:Spacing.Gap="0,10">
                                 <TextBlock Style="{StaticResource H2}" Text="Colours" />
                                 <ItemsControl ItemsSource="{Binding ColorGroups}">
                                     <ItemsControl.ItemTemplate>
@@ -138,7 +138,7 @@
                             </StackPanel>
 
                             <!--  Dimensions  -->
-                            <StackPanel joufflu:Spacing.VerticalGap="10">
+                            <StackPanel joufflu:Spacing.Gap="0,10">
                                 <TextBlock Style="{StaticResource H2}" Text="Dimensions" />
                                 <ItemsControl ItemsSource="{Binding DimensionGroups}">
                                     <ItemsControl.ItemTemplate>
@@ -158,13 +158,13 @@
 
             <!--  Preview  -->
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel joufflu:Spacing.VerticalGap="12">
+                <StackPanel joufflu:Spacing.Gap="0,12">
 
                     <!--  Semantic swatches  -->
                     <Border Style="{StaticResource Card}">
-                        <StackPanel joufflu:Spacing.VerticalGap="10">
+                        <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Palette" />
-                            <WrapPanel joufflu:Spacing.HorizontalGap="8" joufflu:Spacing.VerticalGap="8">
+                            <WrapPanel joufflu:Spacing.Gap="8,8">
                                 <Border Width="120" Height="56" Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <TextBlock Margin="8" VerticalAlignment="Bottom" Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" Text="Primary" />
                                 </Border>
@@ -189,9 +189,9 @@
 
                     <!--  Buttons  -->
                     <Border Style="{StaticResource Card}">
-                        <StackPanel joufflu:Spacing.VerticalGap="10">
+                        <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Buttons" />
-                            <WrapPanel joufflu:Spacing.HorizontalGap="8" joufflu:Spacing.VerticalGap="8">
+                            <WrapPanel joufflu:Spacing.Gap="8,8">
                                 <Button>Default</Button>
                                 <Button Style="{StaticResource Primary}">Primary</Button>
                                 <Button Style="{StaticResource Secondary}">Secondary</Button>
@@ -205,9 +205,9 @@
 
                     <!--  Sizes (one control per size variant so the height/font-size sliders have visible targets)  -->
                     <Border Style="{StaticResource Card}">
-                        <StackPanel joufflu:Spacing.VerticalGap="10">
+                        <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Sizes" />
-                            <WrapPanel VerticalAlignment="Center" joufflu:Spacing.HorizontalGap="8" joufflu:Spacing.VerticalGap="8">
+                            <WrapPanel VerticalAlignment="Center" joufflu:Spacing.Gap="8,8">
                                 <Button joufflu:ControlProperties.Size="xs" Style="{StaticResource Primary}">Extra small</Button>
                                 <Button joufflu:ControlProperties.Size="sm" Style="{StaticResource Primary}">Small</Button>
                                 <Button joufflu:ControlProperties.Size="md" Style="{StaticResource Primary}">Medium</Button>
@@ -218,9 +218,9 @@
 
                     <!--  Inputs  -->
                     <Border Style="{StaticResource Card}">
-                        <StackPanel joufflu:Spacing.VerticalGap="10">
+                        <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Inputs" />
-                            <WrapPanel joufflu:Spacing.HorizontalGap="12" joufflu:Spacing.VerticalGap="10">
+                            <WrapPanel joufflu:Spacing.Gap="12,10">
                                 <TextBox Width="180" Text="Editable text" />
                                 <ComboBox Width="160" SelectedIndex="0">
                                     <ComboBoxItem>First option</ComboBoxItem>
@@ -228,7 +228,7 @@
                                     <ComboBoxItem>Third option</ComboBoxItem>
                                 </ComboBox>
                                 <CheckBox VerticalAlignment="Center" IsChecked="True" Content="Checkbox" />
-                                <StackPanel VerticalAlignment="Center" joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                                <StackPanel VerticalAlignment="Center" joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                                     <RadioButton IsChecked="True" Content="One" />
                                     <RadioButton Content="Two" />
                                 </StackPanel>
@@ -240,15 +240,15 @@
 
                     <!--  Surface layers + badges  -->
                     <Border Style="{StaticResource Card}">
-                        <StackPanel joufflu:Spacing.VerticalGap="10">
+                        <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Surfaces &amp; badges" />
                             <Border Padding="12" Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                <StackPanel joufflu:Spacing.VerticalGap="8">
+                                <StackPanel joufflu:Spacing.Gap="0,8">
                                     <TextBlock Text="Elevated surface (Background 100)" />
                                     <Border Padding="10" Background="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                         <TextBlock Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="Selected surface (Background 200)" />
                                     </Border>
-                                    <WrapPanel joufflu:Spacing.HorizontalGap="8" joufflu:Spacing.VerticalGap="8">
+                                    <WrapPanel joufflu:Spacing.Gap="8,8">
                                         <controls:Badge>Default</controls:Badge>
                                         <controls:Badge joufflu:ControlProperties.Size="xs">Small</controls:Badge>
                                     </WrapPanel>
@@ -259,7 +259,7 @@
 
                     <!--  Generated dictionary  -->
                     <Border Style="{StaticResource Card}">
-                        <StackPanel joufflu:Spacing.VerticalGap="10">
+                        <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Generated dictionary" />
                             <Border Style="{StaticResource CardSecondary}">
                                 <TextBox

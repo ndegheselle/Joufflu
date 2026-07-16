@@ -7,7 +7,7 @@
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock
                 Style="{StaticResource H1}"
                 Text="Card" />
@@ -16,7 +16,7 @@
                 Title="Surfaces"
                 Description="Card and CardSecondary are named Border styles (Natives/Layout/Border.named.xaml) that provide the app's padded, rounded surfaces. CardSecondary is a subtly inset panel used inside a Card."
                 Code="&lt;Border Style=&quot;{StaticResource Card}&quot;&gt; ... &lt;/Border&gt;&#x0a;&lt;Border Style=&quot;{StaticResource CardSecondary}&quot;&gt; ... &lt;/Border&gt;">
-                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="16">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="16,0">
                     <Border Width="220" Style="{StaticResource Card}">
                         <StackPanel joufflu:Spacing.Gap="4">
                             <TextBlock FontWeight="Bold" Text="Card" />

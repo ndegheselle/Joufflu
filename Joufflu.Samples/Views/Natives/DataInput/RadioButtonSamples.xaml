@@ -7,17 +7,16 @@
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock
                 Style="{StaticResource H1}"
                 Text="Radio button" />
 
             <c:CodeExample
                 Title="Groups"
-                
                 Description="Radio buttons sharing a GroupName are mutually exclusive. Two independent groups are shown side by side."
                 Code="&lt;RadioButton GroupName=&quot;plan&quot; Content=&quot;Free&quot; IsChecked=&quot;True&quot; /&gt;&#x0a;&lt;RadioButton GroupName=&quot;plan&quot; Content=&quot;Pro&quot; /&gt;">
-                <StackPanel Orientation="Horizontal" joufflu:Spacing.HorizontalGap="32">
+                <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="32,0">
                     <StackPanel joufflu:Spacing.Gap="8">
                         <RadioButton Content="Free" GroupName="plan" IsChecked="True" />
                         <RadioButton Content="Pro" GroupName="plan" />

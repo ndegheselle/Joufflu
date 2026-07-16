@@ -106,10 +106,17 @@
     </Style>
 
     <Style TargetType="{x:Type local:ColorPicker}">
+        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ColorPicker}">
-                    <Grid x:Name="Root" DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:ColorPicker}}" joufflu:Spacing.HorizontalGap="8">
+                    <Grid
+                        x:Name="Root"
+                        joufflu:Spacing.Gap="4"
+                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:ColorPicker}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -128,15 +135,16 @@
                         <ToggleButton
                             x:Name="SwatchButton"
                             Grid.Column="1"
-                            Width="32"
-                            Height="{StaticResource {x:Static joufflu:Dimensions.ControlHeightSm}}"
                             HorizontalContentAlignment="Stretch"
                             VerticalContentAlignment="Stretch"
-                            Padding="0"
+                            joufflu:ControlProperties.IsSquare="True"
                             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                             BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}">
-                            <Grid Margin="3">
-                                <Border Background="{StaticResource ColorPickerCheckerBrush}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            <Grid Margin="2">
+                                <Border
+                                    Margin="1"
+                                    Background="{StaticResource ColorPickerCheckerBrush}"
+                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
                                 <Border Background="{Binding SwatchBrush}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
                             </Grid>
                         </ToggleButton>
@@ -149,17 +157,16 @@
                             StaysOpen="False">
                             <!--  DataContext doesn't reliably inherit into a templated Popup's separate visual tree, so flow it in explicitly.  -->
                             <Border
-                                DataContext="{Binding DataContext, ElementName=Root}"
                                 Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}"
                                 Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
                                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                                 BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                                CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                <StackPanel Width="240">
+                                CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                                DataContext="{Binding DataContext, ElementName=Root}">
+                                <StackPanel Width="240" joufflu:Spacing.Gap="4">
 
                                     <!--  Saturation / brightness square  -->
-                                    <Border
-                                        Height="150">
+                                    <Border Height="150">
                                         <Grid x:Name="PART_SaturationArea" Cursor="Cross">
                                             <!--  Pure-hue base; the gradients on top build the saturation/brightness field  -->
                                             <Border Background="{Binding HueBrush}" />
@@ -185,10 +192,10 @@
                                                 x:Name="PART_SaturationSelector"
                                                 Width="16"
                                                 Height="16"
+                                                Margin="-8"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
-                                                IsHitTestVisible="False"
-                                                Margin="-8">
+                                                IsHitTestVisible="False">
                                                 <Ellipse
                                                     Fill="{Binding OpaqueBrush}"
                                                     Stroke="White"
@@ -247,37 +254,25 @@
                                     </Grid>
 
                                     <!--  Swatch + hex + opacity readout  -->
-                                    <Grid>
+                                    <Grid joufflu:Spacing.Gap="4">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Border Padding="1" Background="{StaticResource ColorPickerCheckerBrush}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-                                        <Border
-                                            Grid.Column="0"
-                                            Width="{StaticResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
-                                            Height="{StaticResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
-                                            Background="{Binding SwatchBrush}"
-                                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                                            BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                                            CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                        </Border>
-
                                         <TextBox
-                                            Grid.Column="1"
+                                            Grid.Column="0"
                                             VerticalContentAlignment="Center"
                                             FontFamily="Consolas, Cascadia Mono, monospace"
                                             MaxLength="9"
                                             Text="{Binding HexText, UpdateSourceTrigger=LostFocus}" />
 
-                                        <Grid Grid.Column="2" MinWidth="56">
+                                        <Grid Grid.Column="1" MinWidth="56">
                                             <TextBox
-                                                VerticalContentAlignment="Center"
                                                 Padding="6,0,18,0"
-                                                TextAlignment="Right"
-                                                Text="{Binding AlphaPercent, StringFormat={}{0:0}, UpdateSourceTrigger=LostFocus}" />
+                                                VerticalContentAlignment="Center"
+                                                Text="{Binding AlphaPercent, StringFormat={}{0:0}, UpdateSourceTrigger=LostFocus}"
+                                                TextAlignment="Right" />
                                             <TextBlock
                                                 Margin="0,0,6,0"
                                                 HorizontalAlignment="Right"
@@ -294,5 +289,24 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <!--  Size variants  -->
+            <Trigger Property="joufflu:ControlProperties.Size" Value="xs">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightXs}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingXs}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="sm">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightSm}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingSm}}" />
+            </Trigger>
+            <Trigger Property="joufflu:ControlProperties.Size" Value="lg">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightLg}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingLg}}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

@@ -29,7 +29,7 @@
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />
                 </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Buttons" />
                     <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
                 </StackPanel>
@@ -66,7 +66,7 @@
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.TextCursorInput}" />
                     </nav:NavigationItem.Icon>
-                    <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                    <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="Text box" />
                         <controls:Badge joufflu:ControlProperties.Size="xs">Size</controls:Badge>
                     </StackPanel>
@@ -75,7 +75,7 @@
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.List}" />
                     </nav:NavigationItem.Icon>
-                    <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                    <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="Combo box" />
                         <controls:Badge joufflu:ControlProperties.Size="xs">Size</controls:Badge>
                     </StackPanel>
@@ -140,7 +140,7 @@
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table2}" />
                     </nav:NavigationItem.Icon>
-                    <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                    <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="Data grid" />
                         <controls:Badge joufflu:ControlProperties.Size="xs">Size</controls:Badge>
                     </StackPanel>
@@ -219,7 +219,7 @@
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
                 </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Numeric inputs" />
                     <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
                 </StackPanel>
@@ -243,7 +243,7 @@
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
                 </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Navigation menu" />
                     <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
                 </StackPanel>
@@ -300,7 +300,7 @@
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
                 </nav:NavigationItem.Icon>
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Customize theme" />
                     <controls:Badge joufflu:ControlProperties.Size="xs">New</controls:Badge>
                 </StackPanel>

@@ -6,14 +6,14 @@
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.Spacing}}">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Badge" />
 
             <c:CodeExample
                 Title="Variants"
                 Code="{Binding VariantsCode}"
                 Description="A pill themed from the semantic brushes. Pick a variant with the Variant property.">
-                <WrapPanel joufflu:Spacing.HorizontalGap="8">
+                <WrapPanel joufflu:Spacing.Gap="8,0">
                     <controls:Badge>Default</controls:Badge>
                     <controls:Badge Variant="Primary">Primary</controls:Badge>
                     <controls:Badge Variant="Secondary">Secondary</controls:Badge>
@@ -28,7 +28,7 @@
                 Title="Sizes"
                 Code="{Binding SizesCode}"
                 Description="Sized through the inherited ControlProperties.Size attached property.">
-                <StackPanel joufflu:Spacing.HorizontalGap="8" Orientation="Horizontal">
+                <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
                     <controls:Badge joufflu:ControlProperties.Size="xs" Variant="Primary">xs</controls:Badge>
                     <controls:Badge joufflu:ControlProperties.Size="sm" Variant="Primary">sm</controls:Badge>
                     <controls:Badge joufflu:ControlProperties.Size="md" Variant="Primary">md</controls:Badge>
