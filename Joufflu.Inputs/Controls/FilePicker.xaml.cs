@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Usuel.Data;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Joufflu.Inputs.Controls
 {
@@ -11,7 +10,7 @@ namespace Joufflu.Inputs.Controls
         public string DefaultExtension { get; set; } = "*.*";
     }
 
-    public class FilePicker : Control
+    public partial class FilePicker : Control
     {
         #region Dependency Properties
         public static readonly DependencyProperty FilePathProperty = DependencyProperty.Register(
@@ -39,18 +38,10 @@ namespace Joufflu.Inputs.Controls
         }
         #endregion
 
-        public ICommand ClearCommand { get; set; }
-
-        public ICommand SelectCommand { get; set; }
-
-        public FilePicker()
-        {
-            ClearCommand = new DelegateCommand(Clear);
-            SelectCommand = new DelegateCommand(Select);
-        }
-
+        [RelayCommand]
         private void Clear() { FilePath = ""; }
 
+        [RelayCommand]
         private void Select()
         {
             Options ??= new FilePickerOptions();

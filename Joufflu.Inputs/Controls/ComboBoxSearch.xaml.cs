@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -7,14 +8,13 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using Usuel.Data;
 
 namespace Joufflu.Inputs.Controls
 {
     /// <summary>
     /// Inspired from : https://stackoverflow.com/a/41986141/10404482 
     /// </summary>
-    public class ComboBoxSearch : ComboBox, INotifyPropertyChanged
+    public partial class ComboBoxSearch : ComboBox, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -23,7 +23,6 @@ namespace Joufflu.Inputs.Controls
         }
 
         public ICollectionView? SourceView { get; private set; }
-        public DelegateCommand ClearCommand { get; set; }
 
         private TextBox? _editableTextBox;
         /// <summary>
@@ -33,7 +32,6 @@ namespace Joufflu.Inputs.Controls
 
         public ComboBoxSearch()
         {
-            ClearCommand = new DelegateCommand(() => Text = null);
             // Set default options
             IsEditable = true;
             StaysOpenOnEdit = true;
@@ -43,6 +41,8 @@ namespace Joufflu.Inputs.Controls
             // changes (and auto-add tags) the first time the filter runs.
             IsSynchronizedWithCurrentItem = false;
         }
+
+        #region On changed
 
         public override void OnApplyTemplate()
         {
@@ -82,6 +82,9 @@ namespace Joufflu.Inputs.Controls
             }
         }
 
+        #endregion
+
+        #region UI events
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             switch (e.Key)
@@ -139,7 +142,7 @@ namespace Joufflu.Inputs.Controls
         {
             // Prevent having a value that doesn't match any item (could be misleading)
             if (SelectedItem == null)
-                Text = null;
+                Clear();
             else if (_editableTextBox != null)
                 _editableTextBox.FontStyle = FontStyles.Normal;
 
@@ -164,6 +167,16 @@ namespace Joufflu.Inputs.Controls
             }
 
             e.Handled = true;
+        }
+
+        #endregion
+
+        #region Search & filters
+
+        [RelayCommand]
+        private void Clear()
+        {
+            Text = null;
         }
 
         private void RefreshFilter()
@@ -223,5 +236,6 @@ namespace Joufflu.Inputs.Controls
                 return displayMemberProperty.GetValue(item)?.ToString();
             return item.ToString();
         }
+        #endregion
     }
 }

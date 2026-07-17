@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Threading;
-using Usuel.Data;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Joufflu.Inputs.Controls
 {
@@ -10,13 +10,11 @@ namespace Joufflu.Inputs.Controls
     public partial class Search : TextBox
     {
         public event Action<string>? SearchChanged;
-        public DelegateCommand ClearCommand { get; set; }
 
         private readonly DispatcherTimer _searchTimer;
         public Search()
         {
             _searchTimer = InitSearchTimer();
-            ClearCommand = new DelegateCommand(ClearSearch);
             this.KeyUp += OnKeyUp;
         }
 
@@ -45,6 +43,7 @@ namespace Joufflu.Inputs.Controls
             SearchChanged?.Invoke(this.Text);
         }
 
+        [RelayCommand]
         public void ClearSearch()
         {
             Clear();

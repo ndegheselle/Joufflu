@@ -50,7 +50,7 @@
                             Name="ClearButton"
                             HorizontalAlignment="Right"
                             joufflu:ControlProperties.IsSquare="True"
-                            Command="{Binding ClearCommand}"
+                            Command="{Binding ClearSearchCommand}"
                             Style="{StaticResource Ghost}">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                         </Button>

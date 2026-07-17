@@ -61,7 +61,7 @@
                                                     <Button
                                                         Width="28"
                                                         Height="28"
-                                                        Command="{Binding RemoveSelectedCmd, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
+                                                        Command="{Binding RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
                                                         CommandParameter="{Binding}"
                                                         Style="{StaticResource Ghost}">
                                                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
@@ -6,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using Usuel.Data;
 
 namespace Joufflu.Inputs.Controls
 {
@@ -34,7 +34,7 @@ namespace Joufflu.Inputs.Controls
         { throw new NotSupportedException(); }
     }
 
-    public class ComboBoxTags : ComboBoxSearch
+    public partial class ComboBoxTags : ComboBoxSearch
     {
         #region Dependency Properties
         public static readonly DependencyProperty SelectedItemsProperty =
@@ -65,8 +65,6 @@ namespace Joufflu.Inputs.Controls
 
         public bool AllowAdd { get; set; } = false;
 
-        public DelegateCommand<object> RemoveSelectedCmd { get; }
-
         // Only add to selection then clicking or pressing enter (like combobox with IsEditable = false)
         // Sad that the combobox doesn't allow to set this behavior
         private bool _ignoreNextSelection = false;
@@ -75,8 +73,6 @@ namespace Joufflu.Inputs.Controls
 
         public ComboBoxTags()
         {
-            RemoveSelectedCmd = new DelegateCommand<object>((parameter) => InternalSelectedItems.Remove(parameter));
-
             SizeChanged += (s, e) =>
             {
                 if (_popup == null)
@@ -203,6 +199,9 @@ namespace Joufflu.Inputs.Controls
             InternalSelectedItems.Add(SelectedItem);
             Text = string.Empty;
         }
+
+        [RelayCommand]
+        private void RemoveSelected(object? parameter) => InternalSelectedItems.Remove(parameter);
         #endregion
     }
 }

@@ -2,8 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Usuel.Data;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Joufflu.Inputs.Controls
 {
@@ -11,7 +10,7 @@ namespace Joufflu.Inputs.Controls
     /// Text that can be edited, can be used outside a form to indicate clearly that a value can be edited
     /// </summary>
     [TemplatePart(Name = ElementTextBox, Type = typeof(FrameworkElement))]
-    public class TextEditable : ContentControl, INotifyPropertyChanged
+    public partial class TextEditable : ContentControl, INotifyPropertyChanged
     {
         public struct TextEditedArgs
         {
@@ -37,24 +36,14 @@ namespace Joufflu.Inputs.Controls
         protected const string ElementTextBox = "PART_TextBox";
         protected TextBox? EditTextBox;
 
-        public ICommand EditCommand { get; set; }
-        public ICommand ValidateCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
-
-        public TextEditable()
-        {
-            EditCommand = new DelegateCommand(Edit);
-            ValidateCommand = new DelegateCommand(ValidateEdit);
-            CancelCommand = new DelegateCommand(EndEditing);
-        }
-
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
             EditTextBox = Template.FindName(ElementTextBox, this) as TextBox;
         }
 
-        private void EndEditing()
+        [RelayCommand]
+        private void Cancel()
         {
             IsEditing = false;
         }
@@ -64,6 +53,7 @@ namespace Joufflu.Inputs.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        [RelayCommand]
         private void Edit()
         {
             if (!IsEditing && EditTextBox != null)
@@ -73,7 +63,8 @@ namespace Joufflu.Inputs.Controls
             }
         }
 
-        private void ValidateEdit()
+        [RelayCommand]
+        private void Validate()
         {
             if (IsEditing)
             {
