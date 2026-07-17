@@ -4,7 +4,7 @@
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Feedback/Toast.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/Toast.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/Overlay.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

@@ -4,14 +4,14 @@
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
 
-        <!-- == Joufflu controls == -->
+        <!--  == Joufflu controls ==  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/Badge.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Layout/ThemedWindow.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Feedback/Spinner.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/Feedback/Toast.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/Badge.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/ThemedWindow.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/Spinner.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/Toast.xaml" />
 
-        <!-- == Natives == -->
+        <!--  == Natives ==  -->
         <!--  Actions  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />

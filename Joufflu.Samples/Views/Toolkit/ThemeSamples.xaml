@@ -4,17 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+    xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:themes="clr-namespace:Joufflu.Themes;assembly=Joufflu"
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Toolkit"
     d:DataContext="{d:DesignInstance Type=vm:ThemeSamplesViewModel}"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <conv:EnumMatchToBooleanConverter x:Key="EnumMatch" />
+    </UserControl.Resources>
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Theme" />
+            <TextBlock Style="{StaticResource H1}" Text="Theme" />
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                 Text="System / Light / Dark, applied by swapping the active theme resource dictionary at runtime."
@@ -24,7 +28,29 @@
                 Title="Theme switcher"
                 Code="{Binding SwitcherCode}"
                 Description="A drop-in control bound to ThemeManager. Pick a mode and the whole gallery re-themes live; the choice is remembered across launches.">
-                <controls:ThemeSwitcher HorizontalAlignment="Left" />
+                <StackPanel joufflu:Spacing.Gap="4">
+
+                    <RadioButton IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter={x:Static themes:ThemeMode.System}, Mode=TwoWay}" ToolTip="Follow the system theme">
+                        <StackPanel joufflu:Spacing.Gap="6,0" Orientation="Horizontal">
+                            <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Monitor}" />
+                            <TextBlock VerticalAlignment="Center" Text="System" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter={x:Static themes:ThemeMode.Light}, Mode=TwoWay}" ToolTip="Use the light theme">
+                        <StackPanel joufflu:Spacing.Gap="6,0" Orientation="Horizontal">
+                            <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Sun}" />
+                            <TextBlock VerticalAlignment="Center" Text="Light" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter={x:Static themes:ThemeMode.Dark}, Mode=TwoWay}" ToolTip="Use the dark theme">
+                        <StackPanel joufflu:Spacing.Gap="6,0" Orientation="Horizontal">
+                            <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Moon}" />
+                            <TextBlock VerticalAlignment="Center" Text="Dark" />
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
             </c:CodeExample>
 
             <c:CodeExample

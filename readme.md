@@ -1,75 +1,88 @@
-# Wpf components
+# Joufflu WPF Components
 
-WPF inputs and components, inputs can be used in most projects and other components are exemples of complexe reusable WPF component.
+WPF inputs and reusable components for .NET, built on a small design system of
+themed brushes, dimensions and layout helpers. Every control reads its colours
+through `DynamicResource`, so the whole UI re-themes live between Light and Dark.
 
-![preview](./images/preview.gif)
+![preview](./images/preview.PNG)
 
-## Description
+📖 **Full documentation:** <https://ndegheselle.github.io/Joufflu-wpf-lib/>
 
-Inputs, that can be used in most projects :
-- `FormatTextBox` :
-    - Accept a format string representing groups (like "{numeric|max:99|padded} and {decimal|max:99}")
-    - Each groups are parsed in individual value
-    - Handle navigation between groups
-    - Handle button to clear and increment / decrement numeric groups
-    - Can be used to create other inputs
-- `TimeSpanPicker` :
-    - Select a TimeSpan value
-    - Based on a `FormatTextBox` with format "{max:365}d {max:23}h {max:59}m {max:59}s"
-- `NumericUpDown` :
-    - Select a long value
-    - Based on a `FormatTextBox` with format "{numeric|noGlobalSelection}"
-- `DecimalUpDown` :
-    - Select a double value
-    - Based on a `FormatTextBox` with format "{decimal|noGlobalSelection}"
+## What's inside
 
-- `ComboBoxSearch` :
-    - Improved ComboBox with that allow to search in the ComboBox Items
-    - Accept a `FilterMemberPath` that act like `DiplayMemberPath` for the filter
-- `ComboBoxTags` :
-    - Allow for multiple items selection
-    - Based on `ComboBoxSearch`
+| Section | Contents |
+|---|---|
+| **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
+| **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `NavigationContainer` and modal overlays driven by a `Navigator` |
+| **Custom controls** (`Joufflu`) | `FontIcon`, `Badge`, `Spinner`, toasts |
+| **Toolkit** (`Joufflu`) | Sizing and spacing attached properties, `ThemeManager` / `ThemeSwitcher`, live theme customization, and the application shell (`ThemedWindow`) |
 
-FileExplorer, display a folder files and sub folders :
-- Real time up date of the content
-- Drag & drop of files, zip and outlook attachments
-- Allow you to apply specific logic and icon to specific path
+The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
+data grid, …) restyled to match the design system — come along with the core
+`Joufflu` styles.
 
-> TODO : Could be improved with a better ContextMenu, improved performances, better handling of the node tree refreshes, ...
+## Getting started
 
-Filters, visually create a lambda that can be used to filter data :
-- Properties are dynamically created from a class type
-- Recursively work on the class property
-- Differents inputs based on property type
+1. Reference the `Joufflu` projects you need (`Joufflu`, `Joufflu.Inputs`,
+   `Joufflu.Navigation`) from your WPF app.
+2. Merge the control styles in `App.xaml`:
 
-> TODO : Add group creation and drag & drop. This could be done more elegantly.
+   ```xml
+   <Application.Resources>
+       <ResourceDictionary>
+           <ResourceDictionary.MergedDictionaries>
+               <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
+           </ResourceDictionary.MergedDictionaries>
+       </ResourceDictionary>
+   </Application.Resources>
+   ```
 
-### Why does this exist
+3. Initialize the theme manager once at startup, before the first window shows:
 
-To train myself to create generic components that can easily be used in different projects.
-Tried to find the best way to do this since there is several way to acheive this in WPF :
-- Derive from ContentControl or other base component
-    - Customize with a Dictionnary
-        - Is a pain to bind events and data to the UI (even with Commands)
-    - Customize with a XAML class directly attached to the component
-        - Doesn't allow the consumer to customize the control content easily
+   ```csharp
+   // App.xaml.cs — OnStartup
+   ThemeManager.Instance.Initialize();
+   ```
 
-## Getting Started
+4. Use the controls as shown in the [documentation](https://ndegheselle.github.io/Joufflu-wpf-lib/).
 
-### Dependencies
+### Design system
 
-- Created with Visual studio Community 2022 (64 bits) Version 17.8.4
-- Require *.NET Desktop development* workload installed
+The design system is exposed as resource keys you can override in your own
+dictionary (merged **after** the Joufflu resources):
 
-### Executing program
+- **Colours / brushes** — `joufflu:Colors.*` and `joufflu:Brushes.*`, including
+  the semantic families (primary, secondary, success, info, warning, danger).
+- **Dimensions** — `joufflu:Dimensions.*` (corner radius, border thickness,
+  spacing, control heights, font sizes and padding per size).
 
-- Start the project `Joufflu.Samples`
+Run the gallery and open **Customize theme** to tweak these interactively and
+generate a ready-to-merge dictionary.
+
+## Running the samples
+
+- Created with Visual Studio Community 2022, requires the *.NET Desktop
+  development* workload.
+- Open `Joufflu.sln` and start the `Joufflu.Samples` project to explore
+  every control, theme and toolkit helper interactively.
+
+## Why does this exist
+
+To train myself to create generic components that can easily be reused across
+projects, and to find a clean way to build them — WPF offers several approaches,
+each with trade-offs:
+
+- Derive from `ContentControl` (or another base control), customized with a
+  resource dictionary — binding events and data to the UI is painful (even with
+  commands).
+- Customize with a XAML class attached directly to the control — doesn't let the
+  consumer easily customize the control's content.
 
 ## Acknowledgments
 
-Use :
-* [Adonis UI](https://benruehl.github.io/adonis-ui/) for styles
-* [Fontawesome](https://fontawesome.com/) icons
-* [PropertyChanged.Fody](https://www.nuget.org/packages/PropertyChanged.Fody) for boilerplate
+- [Lucide](https://lucide.dev/) icon font
+- [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm) for MVVM boilerplate
 
-I know [Extended WPF Toolkit](https://github.com/xceedsoftware/wpftoolkit) have already done all the inputs and way more but you can't appreciate something fully without knowing how hard it is to do.
+I know [Extended WPF Toolkit](https://github.com/xceedsoftware/wpftoolkit) has
+already done all the inputs and much more, but you can't fully appreciate
+something without knowing how hard it is to do.
