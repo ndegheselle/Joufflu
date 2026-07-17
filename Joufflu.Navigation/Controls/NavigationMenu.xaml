@@ -186,22 +186,36 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <DockPanel>
-                            <Button
-                                x:Name="CollapseButton"
-                                Width="32"
-                                Height="32"
-                                Margin="8"
-                                Padding="0"
-                                HorizontalAlignment="Right"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Command="{Binding ToggleCollapseCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                                DockPanel.Dock="Top">
-                                <fonts:FontIcon
-                                    x:Name="CollapseIcon"
-                                    FontSize="18"
-                                    Text="{x:Static fonts:LucideFontIcons.PanelLeftClose}" />
-                            </Button>
+                            <Grid DockPanel.Dock="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <ContentPresenter
+                                    x:Name="HeaderPresenter"
+                                    Grid.Column="0"
+                                    Margin="8"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Header}" />
+
+                                <Button
+                                    x:Name="CollapseButton"
+                                    Grid.Column="1"
+                                    Width="32"
+                                    Height="32"
+                                    Margin="8"
+                                    Padding="0"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding ToggleCollapseCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <fonts:FontIcon
+                                        x:Name="CollapseIcon"
+                                        FontSize="18"
+                                        Text="{x:Static fonts:LucideFontIcons.PanelLeftClose}" />
+                                </Button>
+                            </Grid>
 
                             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                                 <ItemsPresenter Margin="8,0,8,8" />
@@ -212,6 +226,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsCollapsed" Value="True">
                             <Setter Property="Width" Value="auto" />
+                            <Setter TargetName="HeaderPresenter" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="CollapseButton" Property="HorizontalAlignment" Value="Center" />
                             <Setter TargetName="CollapseIcon" Property="Text" Value="{x:Static fonts:LucideFontIcons.PanelLeftOpen}" />
                         </Trigger>

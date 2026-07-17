@@ -36,6 +36,13 @@ public class NavigationMenuSamplesViewModel : ObservableObject
     public string Code =>
         "<nav:NavigationMenu Navigator=\"{Binding DemoNavigator}\"\n" +
         "                    TargetResolver=\"{Binding ResolveTarget}\">\n" +
+        "    <!-- Optional header slot, hidden when collapsed -->\n" +
+        "    <nav:NavigationMenu.Header>\n" +
+        "        <StackPanel Orientation=\"Horizontal\" joufflu:Spacing.Gap=\"8\">\n" +
+        "            <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Rocket}\" />\n" +
+        "            <TextBlock Text=\"Joufflu\" />\n" +
+        "        </StackPanel>\n" +
+        "    </nav:NavigationMenu.Header>\n" +
         "    <nav:NavigationTitle Title=\"Demo\" />\n" +
         "    <nav:NavigationItem Target=\"Home\">\n" +
         "        <nav:NavigationItem.Icon>\n" +

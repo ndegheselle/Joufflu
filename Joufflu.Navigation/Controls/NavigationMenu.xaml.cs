@@ -153,6 +153,19 @@ public class NavigationMenu : ItemsControl
     /// <summary>Selects (navigates to) the <see cref="NavigationItem"/> passed as parameter.</summary>
     public ICommand SelectCommand { get; }
 
+    /// <summary>
+    /// Optional content shown at the top of the menu (typically a logo or title). Hidden when the
+    /// menu is collapsed. Left unset, the slot takes no space.
+    /// </summary>
+    public object? Header
+    {
+        get => GetValue(HeaderProperty);
+        set => SetValue(HeaderProperty, value);
+    }
+
+    public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
+        nameof(Header), typeof(object), typeof(NavigationMenu), new PropertyMetadata(null));
+
     /// <summary>Flips <see cref="IsCollapsed"/>.</summary>
     public ICommand ToggleCollapseCommand { get; }
 

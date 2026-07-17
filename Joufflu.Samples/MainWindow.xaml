@@ -20,6 +20,18 @@
             DockPanel.Dock="Left"
             Navigator="{Binding Navigator}"
             TargetResolver="{Binding ResolveTarget}">
+            <nav:NavigationMenu.Header>
+                <StackPanel
+                    VerticalAlignment="Center"
+                    joufflu:Spacing.Gap="8"
+                    Orientation="Horizontal">
+                    <fonts:FontIcon FontSize="20" Text="{x:Static fonts:LucideFontIcons.Rocket}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Text="Joufflu" />
+                </StackPanel>
+            </nav:NavigationMenu.Header>
 
             <!--  Featured native controls (kept at top level)  -->
 

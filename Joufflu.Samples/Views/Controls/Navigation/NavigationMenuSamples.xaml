@@ -7,12 +7,8 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel
-
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Navigation menu" />
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Navigation menu" />
 
             <c:CodeExample
                 Title="Collapsible side menu"
@@ -31,6 +27,18 @@
                         </Grid.ColumnDefinitions>
 
                         <nav:NavigationMenu Navigator="{Binding DemoNavigator}" TargetResolver="{Binding ResolveTarget}">
+                            <nav:NavigationMenu.Header>
+                                <StackPanel
+                                    VerticalAlignment="Center"
+                                    joufflu:Spacing.Gap="8"
+                                    Orientation="Horizontal">
+                                    <fonts:FontIcon FontSize="20" Text="{x:Static fonts:LucideFontIcons.Rocket}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="SemiBold"
+                                        Text="Joufflu" />
+                                </StackPanel>
+                            </nav:NavigationMenu.Header>
                             <nav:NavigationTitle Title="Demo" />
                             <nav:NavigationItem Target="Home">
                                 <nav:NavigationItem.Icon>
