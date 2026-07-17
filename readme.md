@@ -6,7 +6,7 @@ through `DynamicResource`, so the whole UI re-themes live between Light and Dark
 
 ![preview](./images/preview.PNG)
 
-📖 **Full documentation:** <https://ndegheselle.github.io/Joufflu-wpf-lib/>
+📖 **Full documentation:** <https://ndegheselle.github.io/Joufflu/>
 
 ## What's inside
 
@@ -44,7 +44,7 @@ data grid, …) restyled to match the design system — come along with the core
    ThemeManager.Instance.Initialize();
    ```
 
-4. Use the controls as shown in the [documentation](https://ndegheselle.github.io/Joufflu-wpf-lib/).
+4. Use the controls as shown in the [documentation](https://ndegheselle.github.io/Joufflu/).
 
 ### Design system
 
