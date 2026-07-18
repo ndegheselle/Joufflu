@@ -63,14 +63,14 @@ public static class ThemePresets
             danger: "#FF627D", danger1: "#F54A6A", dangerC: "#4D0218"),
 
         Full("Light",
-            bg: "#FAFAFA", bg1: "#F4F4F5", bg2: "#E4E4E7", border: "#FAFAFA", border1: "#F4F4F5",
-            fg: "#000000", fg1: "#000000", fg2: "#000000",
-            primary: "#18181B", primary1: "#27272A", primaryC: "#FAFAFA",
-            secondary: "#E4E4E7", secondary1: "#D4D4D8", secondaryC: "#27272A",
-            success: "#22C55E", success1: "#16A34A", successC: "#052E16",
-            info: "#3B82F6", info1: "#2563EB", infoC: "#172554",
-            warning: "#EAB308", warning1: "#CA8A04", warningC: "#422006",
-            danger: "#7F1D1D", danger1: "#991B1B", dangerC: "#FECACA"),
+            bg: "#f5f5f5", bg1: "#ffffff", bg2: "#E6E6E6", border: "#E6E6E6", border1: "#C5C5C5",
+            fg: "#0a0a0a", fg1: "#737373", fg2: "#737373",
+            primary: "#FF18181B", primary1: "#FF27272A", primaryC: "#FFFAFAFA",
+            secondary: "#FFE4E4E7", secondary1: "#FFD4D4D8", secondaryC: "#FF27272A",
+            success: "#FF22C55E", success1: "#FF16A34A", successC: "#FF052E16",
+            info: "#FF3B82F6", info1: "#FF2563EB", infoC: "#FF172554",
+            warning: "#FFEAB308", warning1: "#FFCA8A04", warningC: "#FF422006",
+            danger: "#FF7F1D1D", danger1: "#FF991B1B", dangerC: "#FFFECACA"),
 
         // Flavours inspired by daisyUI — hover/muted shades are derived.
         Derived("Cupcake",
