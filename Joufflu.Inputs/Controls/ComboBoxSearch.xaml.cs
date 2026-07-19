@@ -30,6 +30,10 @@ namespace Joufflu.Inputs.Controls
         /// </summary>
         private string? _previousRefreshText;
 
+        // True while DoesItemPassFilter is attached to SourceView, so attach/detach stay
+        // idempotent across ItemsSource changes and Loaded/Unloaded cycles.
+        private bool _filterAttached;
+
         public ComboBoxSearch()
         {
             // Set default options
@@ -40,30 +44,53 @@ namespace Joufflu.Inputs.Controls
             // the CollectionView's CurrentItem, which would otherwise raise spurious selection
             // changes (and auto-add tags) the first time the filter runs.
             IsSynchronizedWithCurrentItem = false;
+
+            // Attach once here (not in OnApplyTemplate, which can run repeatedly and would
+            // otherwise stack duplicate handlers).
+            AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(OnTextChanged));
+
+            // Release the filter on a possibly caller-owned view while off the visual tree,
+            // so the view cannot keep this control (and its subtree) alive.
+            Loaded += (_, _) => AttachFilter();
+            Unloaded += (_, _) => DetachFilter();
         }
 
         #region On changed
 
         public override void OnApplyTemplate()
         {
-            AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(OnTextChanged));
             _editableTextBox = (TextBox)GetTemplateChild("PART_EditableTextBox");
             _editableTextBox.FontStyle = FontStyles.Italic;
 
             base.OnApplyTemplate();
         }
 
+        private void AttachFilter()
+        {
+            if (SourceView is null || _filterAttached)
+                return;
+            SourceView.Filter += DoesItemPassFilter;
+            _filterAttached = true;
+        }
+
+        private void DetachFilter()
+        {
+            if (SourceView is null || !_filterAttached)
+                return;
+            SourceView.Filter -= DoesItemPassFilter;
+            _filterAttached = false;
+        }
+
         protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
-            if (SourceView != null)
-                SourceView.Filter -= DoesItemPassFilter;
+            DetachFilter();
             SourceView = null;
 
             if (newValue is ICollectionView view)
             {
                 // Dedicated per-instance view (created below) or a view supplied by the caller.
                 SourceView = view;
-                SourceView.Filter += DoesItemPassFilter;
+                AttachFilter();
                 base.OnItemsSourceChanged(oldValue, newValue);
             }
             else if (newValue != null)
@@ -146,7 +173,7 @@ namespace Joufflu.Inputs.Controls
             else if (_editableTextBox != null)
                 _editableTextBox.FontStyle = FontStyles.Normal;
 
-            base.OnPreviewLostKeyboardFocus(e);
+            base.OnLostKeyboardFocus(e);
         }
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)

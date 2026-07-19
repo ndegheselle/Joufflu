@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using Joufflu.Inputs.Controls.Format;
 
 namespace Joufflu.Inputs.Controls
 {
-    public partial class NumericUpDown : SingleValueFormatTextBox<int>, INotifyPropertyChanged
+    public partial class NumericUpDown : SingleValueFormatTextBox<int>
     {
         public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register("Value", typeof(int), typeof(NumericUpDown), new PropertyMetadata(default(int), (o, e) => ((NumericUpDown)o).OnValueChanged(e)

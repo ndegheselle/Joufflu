@@ -148,7 +148,20 @@ public class NavigationMenu : ItemsControl
     {
         SelectCommand = new RelayCommand<NavigationItem>(OnSelect);
         ToggleCollapseCommand = new RelayCommand(() => IsCollapsed = !IsCollapsed);
+
+        // Release the Navigator subscription while off the visual tree so a long-lived
+        // Navigator cannot keep a removed menu (and its subtree) alive.
+        Loaded += (_, _) =>
+        {
+            AttachNavigator(Navigator);
+            UpdateSelection(Navigator?.CurrentPage);
+        };
+        Unloaded += (_, _) => DetachNavigator(Navigator);
     }
+
+    // True while OnNavigated is subscribed to the current Navigator, so attach/detach
+    // stay idempotent across property changes and Loaded/Unloaded cycles.
+    private bool _navigatorSubscribed;
 
     /// <summary>Selects (navigates to) the <see cref="NavigationItem"/> passed as parameter.</summary>
     public ICommand SelectCommand { get; }
@@ -205,14 +218,29 @@ public class NavigationMenu : ItemsControl
     {
         var menu = (NavigationMenu)d;
 
-        if (e.OldValue is INavigator oldNavigator)
-            oldNavigator.Navigated -= menu.OnNavigated;
+        menu.DetachNavigator(e.OldValue as INavigator);
 
         if (e.NewValue is INavigator newNavigator)
         {
-            newNavigator.Navigated += menu.OnNavigated;
+            menu.AttachNavigator(newNavigator);
             menu.UpdateSelection(newNavigator.CurrentPage);
         }
+    }
+
+    private void AttachNavigator(INavigator? navigator)
+    {
+        if (navigator is null || _navigatorSubscribed)
+            return;
+        navigator.Navigated += OnNavigated;
+        _navigatorSubscribed = true;
+    }
+
+    private void DetachNavigator(INavigator? navigator)
+    {
+        if (navigator is null || !_navigatorSubscribed)
+            return;
+        navigator.Navigated -= OnNavigated;
+        _navigatorSubscribed = false;
     }
 
     private void OnNavigated(object? sender, object? page) => UpdateSelection(page);

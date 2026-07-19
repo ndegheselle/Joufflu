@@ -7,7 +7,7 @@ namespace Joufflu.Helpers;
 /// <summary>
 /// Helper class for interactions with system window events
 /// </summary>
-public class HwndInterop
+public class HwndInterop : IDisposable
 {
     [DllImport("user32.dll")]
     public static extern IntPtr SendMessage(IntPtr hwnd, uint Msg, IntPtr wParam, IntPtr lParam);
@@ -33,6 +33,7 @@ public class HwndInterop
     private const Int32 SC_MINIMIZE = 0xF020;
 
     private readonly IntPtr _handle;
+    private HwndSource? _source;
 
     /// <summary>
     /// Is raised when the <see cref="WM_SIZE"/> is occuring.
@@ -51,8 +52,16 @@ public class HwndInterop
     {
         _handle = new WindowInteropHelper(window).Handle;
 
-        HwndSource source = HwndSource.FromHwnd(_handle);
-        source?.AddHook(WndProc);
+        _source = HwndSource.FromHwnd(_handle);
+        _source?.AddHook(WndProc);
+    }
+
+    /// <summary>Removes the message hook so the window can be collected.</summary>
+    public void Dispose()
+    {
+        _source?.RemoveHook(WndProc);
+        _source = null;
+        GC.SuppressFinalize(this);
     }
 
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

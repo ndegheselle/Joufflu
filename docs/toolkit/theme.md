@@ -50,10 +50,27 @@ bool isDark = ThemeManager.Instance.IsDark;      // the theme actually on screen
 In `ThemeMode.System` the manager reads the Windows apps theme and keeps following it while
 the app runs, so the UI tracks the OS light/dark switch automatically.
 
-## ThemeSwitcher
+## Building a theme switcher
 
-A drop-in segmented control (System / Light / Dark) bound to `ThemeManager`:
+There is no dedicated switcher control — bind any UI directly to
+`ThemeManager.Instance.Mode`. For a System / Light / Dark selector, map each mode to a
+`RadioButton` with an enum-to-boolean converter:
 
 ```xml
-<controls:ThemeSwitcher xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu" />
+xmlns:themes="clr-namespace:Joufflu.Themes;assembly=Joufflu"
+
+<RadioButton Content="System"
+    IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance},
+        Converter={StaticResource EnumMatch},
+        ConverterParameter={x:Static themes:ThemeMode.System}, Mode=TwoWay}" />
+<RadioButton Content="Light"
+    IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance},
+        Converter={StaticResource EnumMatch},
+        ConverterParameter={x:Static themes:ThemeMode.Light}, Mode=TwoWay}" />
+<RadioButton Content="Dark"
+    IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance},
+        Converter={StaticResource EnumMatch},
+        ConverterParameter={x:Static themes:ThemeMode.Dark}, Mode=TwoWay}" />
 ```
+
+See the **Theme** page in the sample gallery for the full working example.

@@ -1,19 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="ComboBoxSearch.xaml" />
-    <None Remove="ComboBoxTags.xaml" />
-    <None Remove="DecimalUpDown.xaml" />
-    <None Remove="Controls\Format\FormatTextBox.xaml" />
-    <None Remove="NumericUpDown.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
@@ -21,23 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Controls\ComboBoxSearch.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Controls\ComboBoxTags.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Controls\DecimalUpDown.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Controls\NumericUpDown.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 
 </Project>

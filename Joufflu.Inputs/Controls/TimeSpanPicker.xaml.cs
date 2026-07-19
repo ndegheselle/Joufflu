@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using Joufflu.Inputs.Controls.Format;
 
 namespace Joufflu.Inputs.Controls
 {
-    public partial class TimeSpanPicker : SingleValueFormatTextBox<TimeSpan?>, INotifyPropertyChanged
+    public partial class TimeSpanPicker : SingleValueFormatTextBox<TimeSpan?>
     {
         public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register(
@@ -27,18 +26,19 @@ namespace Joufflu.Inputs.Controls
 
         public override TimeSpan? ConvertFrom()
         {
-            if (Values.Count() < 4)
+            if (Values.Count < 4)
                 return null;
 
-            int? hour = Values[0] as int?;
-            int? minute = Values[1] as int?;
-            int? second = Values[2] as int?;
-            int? millisecond = Values[3] as int?;
+            // Groups are days / hours / minutes / seconds (see the Format above).
+            int? days = Values[0] as int?;
+            int? hours = Values[1] as int?;
+            int? minutes = Values[2] as int?;
+            int? seconds = Values[3] as int?;
 
-            if (!hour.HasValue || !minute.HasValue || !second.HasValue || !millisecond.HasValue)
+            if (!days.HasValue || !hours.HasValue || !minutes.HasValue || !seconds.HasValue)
                 return null;
 
-            return new TimeSpan(hour.Value, minute.Value, second.Value, millisecond.Value);
+            return new TimeSpan(days.Value, hours.Value, minutes.Value, seconds.Value);
         }
 
         public override List<object?> ConvertTo()

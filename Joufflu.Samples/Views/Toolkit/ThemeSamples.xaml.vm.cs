@@ -5,8 +5,14 @@ namespace Joufflu.Samples.Views.Toolkit;
 public class ThemeSamplesViewModel : ObservableObject
 {
     public string SwitcherCode =>
-        "<!-- Drop-in segmented control bound to ThemeManager -->\n" +
-        "<controls:ThemeSwitcher xmlns:controls=\"clr-namespace:Joufflu.Controls;assembly=Joufflu\" />";
+        "<!-- Bind any control to ThemeManager.Instance.Mode. Here RadioButtons -->\n" +
+        "<!-- using EnumMatchToBooleanConverter to map each mode to a choice.   -->\n" +
+        "<RadioButton Content=\"System\"\n" +
+        "    IsChecked=\"{Binding Mode, Source={x:Static themes:ThemeManager.Instance},\n" +
+        "        Converter={StaticResource EnumMatch},\n" +
+        "        ConverterParameter={x:Static themes:ThemeMode.System}, Mode=TwoWay}\" />\n" +
+        "<RadioButton Content=\"Light\" IsChecked=\"{Binding Mode, ... ThemeMode.Light ...}\" />\n" +
+        "<RadioButton Content=\"Dark\"  IsChecked=\"{Binding Mode, ... ThemeMode.Dark ...}\" />";
 
     public string ManagerCode =>
         "// 1. At startup (App.OnStartup), before showing any window:\n" +

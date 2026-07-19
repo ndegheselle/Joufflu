@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Templates\**" />
-    <EmbeddedResource Remove="Templates\**" />
-    <None Remove="Templates\**" />
-    <Page Remove="Templates\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
   </ItemGroup>
 

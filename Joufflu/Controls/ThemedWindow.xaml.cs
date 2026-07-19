@@ -34,6 +34,13 @@ public class ThemedWindow : Window
 
     protected HwndInterop? HwndInterop { get; private set; }
 
+    // Kept so the AddValueChanged subscription in HandleTitleBarActualHeightChanged
+    // can be removed on Closed (AddValueChanged otherwise roots the title bar and this
+    // window in a process-wide static table for the app's lifetime).
+    private DependencyPropertyDescriptor? _titleBarHeightDescriptor;
+    private Border? _titleBar;
+    private EventHandler? _titleBarHeightChangedHandler;
+
     public FrameworkElement? DragMoveThumb { get; protected set; }
 
     public FrameworkElement? IconPresenter { get; protected set; }
@@ -238,7 +245,14 @@ public class ThemedWindow : Window
     {
         base.OnApplyTemplate();
 
-        HwndInterop = new HwndInterop(this);
+        // Create the interop once: OnApplyTemplate can run several times (e.g. restyling),
+        // and each HwndInterop adds a message hook that must be balanced by a Dispose.
+        if (HwndInterop is null)
+        {
+            HwndInterop = new HwndInterop(this);
+            HwndInterop.PositionChanging += DisableSizeToContentWhenMaximizing;
+            Closed += OnThemedWindowClosed;
+        }
 
         DragMoveThumb = GetTemplateChild(PART_DragMoveThumb) as FrameworkElement;
         IconPresenter = GetTemplateChild(PART_IconPresenter) as FrameworkElement;
@@ -258,8 +272,21 @@ public class ThemedWindow : Window
             InitCloseButton(CloseButton);
 
         UpdateLayoutForSizeToContent();
-        HwndInterop.PositionChanging += DisableSizeToContentWhenMaximizing;
         HandleTitleBarActualHeightChanged();
+    }
+
+    private void OnThemedWindowClosed(object? sender, EventArgs e)
+    {
+        Closed -= OnThemedWindowClosed;
+
+        if (HwndInterop is not null)
+        {
+            HwndInterop.PositionChanging -= DisableSizeToContentWhenMaximizing;
+            HwndInterop.Dispose();
+            HwndInterop = null;
+        }
+
+        DetachTitleBarActualHeightChanged();
     }
 
     /// <summary>
@@ -498,18 +525,32 @@ public class ThemedWindow : Window
 
     private void HandleTitleBarActualHeightChanged()
     {
+        // Detach any previous subscription first: OnApplyTemplate may run again and
+        // AddValueChanged would otherwise leak the old title bar (and this window).
+        DetachTitleBarActualHeightChanged();
+
         if (!(GetTemplateChild("TitleBar") is Border titleBar))
-        {
             return;
-        };
 
-        var titleBarHeightPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(ActualHeightProperty, typeof(Border));
-
-        titleBarHeightPropertyDescriptor.AddValueChanged(titleBar, (sender, e) =>
+        _titleBar = titleBar;
+        _titleBarHeightDescriptor = DependencyPropertyDescriptor.FromProperty(ActualHeightProperty, typeof(Border));
+        _titleBarHeightChangedHandler = (sender, e) =>
         {
             TitleBarActualHeight = PlaceTitleBarOverContent
                 ? titleBar.ActualHeight
                 : 0.0d;
-        });
+        };
+
+        _titleBarHeightDescriptor.AddValueChanged(titleBar, _titleBarHeightChangedHandler);
+    }
+
+    private void DetachTitleBarActualHeightChanged()
+    {
+        if (_titleBarHeightDescriptor is not null && _titleBar is not null && _titleBarHeightChangedHandler is not null)
+            _titleBarHeightDescriptor.RemoveValueChanged(_titleBar, _titleBarHeightChangedHandler);
+
+        _titleBarHeightDescriptor = null;
+        _titleBar = null;
+        _titleBarHeightChangedHandler = null;
     }
 }

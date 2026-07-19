@@ -16,6 +16,9 @@ namespace Joufflu.Inputs.Controls
         {
             _searchTimer = InitSearchTimer();
             this.KeyUp += OnKeyUp;
+            // Stop the debounce timer when leaving the visual tree: a running timer would
+            // otherwise keep this control alive (and could fire SearchChanged after unload).
+            this.Unloaded += (_, _) => _searchTimer.Stop();
         }
 
         private DispatcherTimer InitSearchTimer()
