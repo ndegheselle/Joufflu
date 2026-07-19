@@ -1,0 +1,12 @@
+<Project>
+
+  <!--
+    Bundle the shared readme and icon into every package. Imported after each project file, so
+    $(IsPackable) already reflects the per-library opt-in and non-packable projects are skipped.
+  -->
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)readme.md" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+
+</Project>

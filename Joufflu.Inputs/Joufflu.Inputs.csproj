@@ -1,19 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="ComboBoxSearch.xaml" />
-    <None Remove="ComboBoxTags.xaml" />
-    <None Remove="DecimalUpDown.xaml" />
-    <None Remove="Controls\Format\FormatTextBox.xaml" />
-    <None Remove="NumericUpDown.xaml" />
-  </ItemGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>Joufflu.Inputs</PackageId>
+    <Title>Joufflu.Inputs</Title>
+    <Description>WPF input controls for Joufflu: numeric / decimal / timespan pickers, searchable and tag combo boxes, file and color pickers, and inline-editable text.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
@@ -21,23 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Controls\ComboBoxSearch.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Controls\ComboBoxTags.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Controls\DecimalUpDown.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Controls\NumericUpDown.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 
 </Project>

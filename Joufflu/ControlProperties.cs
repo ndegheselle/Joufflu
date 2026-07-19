@@ -57,29 +57,61 @@ public static class Spacing
     public static Thickness GetGap(DependencyObject obj) => (Thickness)obj.GetValue(GapProperty);
     public static void SetGap(DependencyObject obj, Thickness value) => obj.SetValue(GapProperty, value);
 
-    // Marks a panel whose children collection we already observe, so we only hook once.
-    private static readonly DependencyProperty IsHookedProperty =
+    // Holds the per-panel watcher so its LayoutUpdated handler stays removable.
+    private static readonly DependencyProperty WatcherProperty =
         DependencyProperty.RegisterAttached(
-            "IsHooked",
-            typeof(bool),
+            "Watcher",
+            typeof(SpacingWatcher),
             typeof(Spacing),
-            new PropertyMetadata(false));
+            new PropertyMetadata(null));
 
     private static void OnGapChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is not Panel panel)
             return;
 
-        if (!(bool)panel.GetValue(IsHookedProperty))
+        var watcher = (SpacingWatcher?)panel.GetValue(WatcherProperty);
+        if (watcher is null)
         {
-            panel.SetValue(IsHookedProperty, true);
-            // Re-apply after every layout pass so dynamically added/removed children
-            // (e.g. an ItemsControl's generated items) keep their spacing. Applying an
-            // unchanged margin is a no-op and does not re-trigger layout, so this settles.
-            panel.LayoutUpdated += (_, _) => ApplySpacing(panel);
+            watcher = new SpacingWatcher(panel);
+            panel.SetValue(WatcherProperty, watcher);
         }
 
-        ApplySpacing(panel);
+        watcher.Apply();
+    }
+
+    /// <summary>
+    /// Watches a single panel and re-applies spacing when its children change.
+    /// <para>
+    /// Dynamically added/removed children (e.g. an ItemsControl's generated items) are
+    /// caught through <see cref="UIElement.LayoutUpdated"/>, but the handler only does work
+    /// when the child count actually changes — on every other layout pass it is a single
+    /// integer comparison, so spacing no longer costs a full margin sweep per layout pass.
+    /// </para>
+    /// </summary>
+    private sealed class SpacingWatcher
+    {
+        private readonly Panel _panel;
+        private int _lastChildCount = -1;
+
+        public SpacingWatcher(Panel panel)
+        {
+            _panel = panel;
+            _panel.LayoutUpdated += OnLayoutUpdated;
+        }
+
+        private void OnLayoutUpdated(object? sender, EventArgs e)
+        {
+            if (_panel.Children.Count == _lastChildCount)
+                return;
+            Apply();
+        }
+
+        public void Apply()
+        {
+            _lastChildCount = _panel.Children.Count;
+            ApplySpacing(_panel);
+        }
     }
 
     private static void ApplySpacing(Panel panel)

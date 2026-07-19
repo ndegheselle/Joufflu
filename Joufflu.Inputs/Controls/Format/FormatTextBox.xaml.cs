@@ -65,8 +65,6 @@ namespace Joufflu.Inputs.Controls.Format
             set { _showIncrementsButtons = value; OnPropertyChanged(); }
         }
 
-        public int IncrementValue { get; set; } = 1;
-
         public static readonly DependencyProperty GlobalFormatProperty = DependencyProperty.Register(
             nameof(GlobalFormat),
             typeof(string),

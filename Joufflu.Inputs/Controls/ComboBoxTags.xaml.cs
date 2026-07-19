@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,7 +43,7 @@ namespace Joufflu.Inputs.Controls
             nameof(SelectedItems),
             typeof(IList),
             typeof(ComboBoxTags),
-            new FrameworkPropertyMetadata(null, (o, e) => ((ComboBoxTags)o).OnSelectedItemsChanged()));
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((ComboBoxTags)o).OnSelectedItemsChanged()));
 
         public IList SelectedItems
         {
@@ -52,16 +53,14 @@ namespace Joufflu.Inputs.Controls
         #endregion
 
         #region Properties
-        private IList _internalSelectedItems = new ObservableCollection<object>();
-        public IList InternalSelectedItems
-        {
-            get => _internalSelectedItems;
-            set
-            {
-                _internalSelectedItems = value;
-                OnPropertyChanged();
-            }
-        }
+        // The control always edits this working collection (the tag list is bound to it). Edits are
+        // mirrored back into the bound SelectedItems, so two-way binding works for any mutable IList,
+        // not only ObservableCollection.
+        private readonly ObservableCollection<object> _internalSelectedItems = new();
+        public IList InternalSelectedItems => _internalSelectedItems;
+
+        // Guards the internal -> source mirroring while we are loading source -> internal.
+        private bool _syncingSelection;
 
         public bool AllowAdd { get; set; } = false;
 
@@ -73,6 +72,8 @@ namespace Joufflu.Inputs.Controls
 
         public ComboBoxTags()
         {
+            _internalSelectedItems.CollectionChanged += OnInternalSelectedItemsChanged;
+
             SizeChanged += (s, e) =>
             {
                 if (_popup == null)
@@ -90,38 +91,50 @@ namespace Joufflu.Inputs.Controls
             base.OnApplyTemplate();
         }
 
+        // Load the bound selection into the working collection. Fired when the SelectedItems
+        // reference changes (e.g. a view model assigns its collection).
         void OnSelectedItemsChanged()
         {
-            if (SelectedItems == null || InternalSelectedItems == SelectedItems)
-                return;
-
-            if (SelectedItems.GetType().IsGenericType &&
-                SelectedItems.GetType().GetGenericTypeDefinition() == typeof(ObservableCollection<>))
+            _syncingSelection = true;
+            try
             {
-
-                InternalSelectedItems = SelectedItems;
-            }
-            else
-            {
-                InternalSelectedItems = new ObservableCollection<object>();
-                foreach (var item in SelectedItems)
+                _internalSelectedItems.Clear();
+                if (SelectedItems != null)
                 {
-                    if (Items.Contains(item))
-                        InternalSelectedItems.Add(item);
+                    foreach (var item in SelectedItems)
+                        _internalSelectedItems.Add(item);
                 }
             }
-
-            /* XXX : may want to handle binding two way with simple list with something like this : 
-             if (bindingExpression?.ParentBinding.Mode == BindingMode.TwoWay ||
-                bindingExpression?.ParentBinding.Mode == BindingMode.OneWayToSource)
+            finally
             {
-                SelectedItems.Clear();
-                foreach (var item in InternalSelectedItems)
-                    SelectedItems.CreateValue(item);
-                // For non ObservableCollection
-                bindingExpression.UpdateSource();
+                _syncingSelection = false;
             }
-             */
+        }
+
+        // Mirror edits made through the control back into the bound collection, whatever concrete
+        // (mutable) IList it is, so the binding source stays in sync.
+        private void OnInternalSelectedItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_syncingSelection || SelectedItems == null || SelectedItems.IsReadOnly || SelectedItems.IsFixedSize)
+                return;
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var item in e.NewItems!)
+                        SelectedItems.Add(item);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var item in e.OldItems!)
+                        SelectedItems.Remove(item);
+                    break;
+                default:
+                    // Replace / Move / Reset: rebuild the source from the working collection.
+                    SelectedItems.Clear();
+                    foreach (var item in _internalSelectedItems)
+                        SelectedItems.Add(item);
+                    break;
+            }
         }
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)

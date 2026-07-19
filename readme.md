@@ -15,7 +15,7 @@ through `DynamicResource`, so the whole UI re-themes live between Light and Dark
 | **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `NavigationContainer` and modal overlays driven by a `Navigator` |
 | **Custom controls** (`Joufflu`) | `FontIcon`, `Badge`, `Spinner`, toasts |
-| **Toolkit** (`Joufflu`) | Sizing and spacing attached properties, `ThemeManager` / `ThemeSwitcher`, live theme customization, and the application shell (`ThemedWindow`) |
+| **Toolkit** (`Joufflu`) | Sizing and spacing attached properties, `ThemeManager`, live theme customization, and the application shell (`ThemedWindow`) |
 
 The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
 data grid, …) restyled to match the design system — come along with the core
@@ -23,8 +23,11 @@ data grid, …) restyled to match the design system — come along with the core
 
 ## Getting started
 
-1. Reference the `Joufflu` projects you need (`Joufflu`, `Joufflu.Inputs`,
-   `Joufflu.Navigation`) from your WPF app.
+1. Add the `Joufflu` packages you need — `Joufflu` (core styles & theming),
+   `Joufflu.Inputs` (input controls) and `Joufflu.Navigation` (navigation &
+   overlays) — as NuGet packages, or reference the projects directly.
+   `Joufflu.Inputs` and `Joufflu.Navigation` both build on the core `Joufflu`
+   package.
 2. Merge the control styles in `App.xaml`:
 
    ```xml

@@ -22,7 +22,8 @@ namespace Joufflu.Inputs.Controls
         public event EventHandler<TextEditedArgs>? TextChanged;
 
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register(nameof(Text), typeof(string), typeof(TextEditable), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(TextEditable),
+                new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Text { get { return (string)GetValue(TextProperty); } set { SetValue(TextProperty, value); } }
 
