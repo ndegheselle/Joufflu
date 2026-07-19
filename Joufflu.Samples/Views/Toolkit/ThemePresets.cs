@@ -67,10 +67,10 @@ public static class ThemePresets
             fg: "#0a0a0a", fg1: "#737373", fg2: "#737373",
             primary: "#FF18181B", primary1: "#FF27272A", primaryC: "#FFFAFAFA",
             secondary: "#FFE4E4E7", secondary1: "#FFD4D4D8", secondaryC: "#FF27272A",
-            success: "#FF22C55E", success1: "#FF16A34A", successC: "#FF052E16",
-            info: "#FF3B82F6", info1: "#FF2563EB", infoC: "#FF172554",
-            warning: "#FFEAB308", warning1: "#FFCA8A04", warningC: "#FF422006",
-            danger: "#FF7F1D1D", danger1: "#FF991B1B", dangerC: "#FFFECACA"),
+            success: "#00ba7b", success1: "#00a76e", successC: "#002c21",
+            info: "#FF3B82F6", info1: "#1d6ff4", infoC: "#FF172554",
+            warning: "#eeaf00", warning1: "#d69d00", warningC: "#411e03",
+            danger: "#ff627d", danger1: "#fd718a", dangerC: "#4d0218"),
 
         // Flavours inspired by daisyUI — hover/muted shades are derived.
         Derived("Cupcake",
