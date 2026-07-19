@@ -139,13 +139,13 @@
                             VerticalContentAlignment="Stretch"
                             joufflu:ControlProperties.IsSquare="True"
                             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                            BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}">
+                            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
                             <Grid Margin="2">
                                 <Border
                                     Margin="1"
-                                    Background="{StaticResource ColorPickerCheckerBrush}"
-                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-                                <Border Background="{Binding SwatchBrush}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                                    Background="{DynamicResource ColorPickerCheckerBrush}"
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                                <Border Background="{Binding SwatchBrush}" CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
                             </Grid>
                         </ToggleButton>
 
@@ -160,8 +160,8 @@
                                 Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}"
                                 Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
                                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                                BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                                CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
+                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
                                 DataContext="{Binding DataContext, ElementName=Root}">
                                 <StackPanel Width="240" joufflu:Spacing.Gap="4">
 

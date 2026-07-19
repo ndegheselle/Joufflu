@@ -17,9 +17,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
                     <BulletDecorator
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                         Background="Transparent"
-                        SnapsToDevicePixels="False"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        SnapsToDevicePixels="False">
                         <BulletDecorator.Bullet>
                             <Border
                                 x:Name="Bullet"
@@ -28,7 +28,7 @@
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="4">
+                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
 
                                 <Viewbox Margin="3" Stretch="Uniform">
                                     <Grid Width="10" Height="10">
@@ -36,10 +36,10 @@
                                             x:Name="CheckMark"
                                             Data="M 1 5 L 4 8 L 9 2"
                                             Stroke="{TemplateBinding Foreground}"
-                                            StrokeThickness="1.5"
+                                            StrokeEndLineCap="Round"
                                             StrokeLineJoin="Round"
                                             StrokeStartLineCap="Round"
-                                            StrokeEndLineCap="Round"
+                                            StrokeThickness="1.5"
                                             Visibility="Collapsed" />
                                         <Rectangle
                                             x:Name="IndeterminateMark"

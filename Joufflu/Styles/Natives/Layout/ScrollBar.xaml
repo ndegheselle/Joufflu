@@ -1,8 +1,11 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters"
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">16</system:Double>
     <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeight}">16</system:Double>
@@ -70,8 +73,16 @@
                     <Grid>
                         <Border
                             Name="Border"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
-                            Background="{TemplateBinding Background}" />
+                            Background="{TemplateBinding Background}"
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                            <Border.CornerRadius>
+                                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Border.CornerRadius>
+                        </Border>
                     </Grid>
 
                     <ControlTemplate.Triggers>

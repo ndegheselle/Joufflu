@@ -26,7 +26,7 @@
                     <Border
                         x:Name="ThumbBorder"
                         Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}"
-                        CornerRadius="4" />
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
@@ -52,8 +52,8 @@
                 x:Name="TopTick"
                 Grid.Row="0"
                 Height="4"
-                Fill="{TemplateBinding BorderBrush}"
                 Margin="0,0,0,2"
+                Fill="{TemplateBinding BorderBrush}"
                 Placement="Top"
                 SnapsToDevicePixels="True"
                 Visibility="Collapsed" />
@@ -67,15 +67,15 @@
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
 
-            <Track Grid.Row="1" x:Name="PART_Track">
+            <Track x:Name="PART_Track" Grid.Row="1">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb
                         Width="10"
-                        Style="{StaticResource SliderThumbStyle}"
-                        VerticalAlignment="Stretch" />
+                        VerticalAlignment="Stretch"
+                        Style="{StaticResource SliderThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderButtonStyle}" />
@@ -86,8 +86,8 @@
                 x:Name="BottomTick"
                 Grid.Row="2"
                 Height="4"
-                Fill="{TemplateBinding BorderBrush}"
                 Margin="0,2,0,0"
+                Fill="{TemplateBinding BorderBrush}"
                 Placement="Bottom"
                 SnapsToDevicePixels="True"
                 Visibility="Collapsed" />
@@ -119,8 +119,8 @@
                 x:Name="TopTick"
                 Grid.Column="0"
                 Width="4"
-                Fill="{TemplateBinding BorderBrush}"
                 Margin="0,0,2,0"
+                Fill="{TemplateBinding BorderBrush}"
                 Placement="Left"
                 SnapsToDevicePixels="True"
                 Visibility="Collapsed" />
@@ -134,15 +134,15 @@
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
 
-            <Track Grid.Column="1" x:Name="PART_Track">
+            <Track x:Name="PART_Track" Grid.Column="1">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb
                         Height="10"
-                        Style="{StaticResource SliderThumbStyle}"
-                        HorizontalAlignment="Stretch" />
+                        HorizontalAlignment="Stretch"
+                        Style="{StaticResource SliderThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderButtonStyle}" />
@@ -153,8 +153,8 @@
                 x:Name="BottomTick"
                 Grid.Column="2"
                 Width="4"
-                Fill="{TemplateBinding BorderBrush}"
                 Margin="2,0,0,0"
+                Fill="{TemplateBinding BorderBrush}"
                 Placement="Right"
                 SnapsToDevicePixels="True"
                 Visibility="Collapsed" />

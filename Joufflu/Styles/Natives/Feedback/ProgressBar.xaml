@@ -1,7 +1,10 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters"
     xmlns:joufflu="clr-namespace:Joufflu">
+
+    <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <Style x:Key="{x:Type ProgressBar}" TargetType="ProgressBar">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
@@ -20,20 +23,43 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                            <Border.CornerRadius>
+                                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Border.CornerRadius>
+                        </Border>
 
                         <Border
                             x:Name="PART_Indicator"
                             Background="{TemplateBinding Foreground}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
-                            HorizontalAlignment="Left" />
+                            HorizontalAlignment="Left"
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                            <Border.CornerRadius>
+                                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Border.CornerRadius>
+                        </Border>
 
                         <!--  Indeterminate sliding indicator  -->
                         <Border
                             x:Name="IndeterminateRoot"
                             ClipToBounds="True"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}"
                             Visibility="Collapsed">
+                            <Border.CornerRadius>
+                                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Border.CornerRadius>
                             <Rectangle
                                 x:Name="IndeterminateRect"
                                 Width="80"

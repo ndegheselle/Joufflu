@@ -86,8 +86,8 @@
             <Border Grid.Column="0" Style="{StaticResource Card}">
                 <DockPanel>
                     <StackPanel
-                        DockPanel.Dock="Top"
                         joufflu:Spacing.Gap="8,0"
+                        DockPanel.Dock="Top"
                         Orientation="Horizontal">
                         <Button Command="{Binding CopyCommand}" Style="{StaticResource Primary}">Copy XAML</Button>
                         <Button Command="{Binding SaveCommand}" Style="{StaticResource Secondary}">Save .xaml…</Button>
@@ -99,21 +99,35 @@
                             <!--  Preset themes  -->
                             <StackPanel joufflu:Spacing.Gap="0,10">
                                 <TextBlock Style="{StaticResource H2}" Text="Preset themes" />
-                                <ComboBox
-                                    ItemsSource="{Binding Presets}"
-                                    SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
+                                <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ThemePreset}">
                                             <DockPanel>
                                                 <StackPanel
                                                     Margin="12,0,0,0"
-                                                    DockPanel.Dock="Right"
                                                     joufflu:Spacing.Gap="3,0"
+                                                    DockPanel.Dock="Right"
                                                     Orientation="Horizontal">
-                                                    <Border Width="10" Height="18" Background="{Binding Primary}" CornerRadius="2" />
-                                                    <Border Width="10" Height="18" Background="{Binding Secondary}" CornerRadius="2" />
-                                                    <Border Width="10" Height="18" Background="{Binding Accent}" CornerRadius="2" />
-                                                    <Border Width="10" Height="18" Background="{Binding Neutral}" CornerRadius="2" />
+                                                    <Border
+                                                        Width="10"
+                                                        Height="18"
+                                                        Background="{Binding Primary}"
+                                                        CornerRadius="2" />
+                                                    <Border
+                                                        Width="10"
+                                                        Height="18"
+                                                        Background="{Binding Secondary}"
+                                                        CornerRadius="2" />
+                                                    <Border
+                                                        Width="10"
+                                                        Height="18"
+                                                        Background="{Binding Accent}"
+                                                        CornerRadius="2" />
+                                                    <Border
+                                                        Width="10"
+                                                        Height="18"
+                                                        Background="{Binding Neutral}"
+                                                        CornerRadius="2" />
                                                 </StackPanel>
                                                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                                             </DockPanel>
@@ -165,23 +179,71 @@
                         <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Palette" />
                             <WrapPanel joufflu:Spacing.Gap="8,8">
-                                <Border Width="120" Height="56" Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock Margin="8" VerticalAlignment="Bottom" Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" Text="Primary" />
+                                <Border
+                                    Width="120"
+                                    Height="56"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}"
+                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Bottom"
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}"
+                                        Text="Primary" />
                                 </Border>
-                                <Border Width="120" Height="56" Background="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock Margin="8" VerticalAlignment="Bottom" Foreground="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" Text="Secondary" />
+                                <Border
+                                    Width="120"
+                                    Height="56"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}"
+                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Bottom"
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}"
+                                        Text="Secondary" />
                                 </Border>
-                                <Border Width="120" Height="56" Background="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock Margin="8" VerticalAlignment="Bottom" Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" Text="Success" />
+                                <Border
+                                    Width="120"
+                                    Height="56"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}"
+                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Bottom"
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}"
+                                        Text="Success" />
                                 </Border>
-                                <Border Width="120" Height="56" Background="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock Margin="8" VerticalAlignment="Bottom" Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" Text="Info" />
+                                <Border
+                                    Width="120"
+                                    Height="56"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
+                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Bottom"
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}"
+                                        Text="Info" />
                                 </Border>
-                                <Border Width="120" Height="56" Background="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock Margin="8" VerticalAlignment="Bottom" Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" Text="Warning" />
+                                <Border
+                                    Width="120"
+                                    Height="56"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}"
+                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Bottom"
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}"
+                                        Text="Warning" />
                                 </Border>
-                                <Border Width="120" Height="56" Background="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock Margin="8" VerticalAlignment="Bottom" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" Text="Danger" />
+                                <Border
+                                    Width="120"
+                                    Height="56"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
+                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Bottom"
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}"
+                                        Text="Danger" />
                                 </Border>
                             </WrapPanel>
                         </StackPanel>
@@ -227,14 +289,26 @@
                                     <ComboBoxItem>Second option</ComboBoxItem>
                                     <ComboBoxItem>Third option</ComboBoxItem>
                                 </ComboBox>
-                                <CheckBox VerticalAlignment="Center" IsChecked="True" Content="Checkbox" />
-                                <StackPanel VerticalAlignment="Center" joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                                    <RadioButton IsChecked="True" Content="One" />
+                                <CheckBox
+                                    VerticalAlignment="Center"
+                                    Content="Checkbox"
+                                    IsChecked="True" />
+                                <StackPanel
+                                    VerticalAlignment="Center"
+                                    joufflu:Spacing.Gap="8,0"
+                                    Orientation="Horizontal">
+                                    <RadioButton Content="One" IsChecked="True" />
                                     <RadioButton Content="Two" />
                                 </StackPanel>
                             </WrapPanel>
-                            <Slider Maximum="100" Minimum="0" Value="60" />
-                            <ProgressBar Height="8" Maximum="100" Value="60" />
+                            <Slider
+                                Maximum="100"
+                                Minimum="0"
+                                Value="60" />
+                            <ProgressBar
+                                Height="8"
+                                Maximum="100"
+                                Value="60" />
                         </StackPanel>
                     </Border>
 
@@ -242,10 +316,10 @@
                     <Border Style="{StaticResource Card}">
                         <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Surfaces &amp; badges" />
-                            <Border Padding="12" Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" BorderThickness="{StaticResource {x:Static joufflu:Dimensions.BorderThickness}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                            <Border Style="{StaticResource Card}">
                                 <StackPanel joufflu:Spacing.Gap="0,8">
                                     <TextBlock Text="Elevated surface (Background 100)" />
-                                    <Border Padding="10" Background="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    <Border Style="{StaticResource CardSecondary}">
                                         <TextBlock Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="Selected surface (Background 200)" />
                                     </Border>
                                     <WrapPanel joufflu:Spacing.Gap="8,8">
