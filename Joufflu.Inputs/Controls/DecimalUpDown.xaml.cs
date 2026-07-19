@@ -6,7 +6,7 @@ namespace Joufflu.Inputs.Controls
     public partial class DecimalUpDown : SingleValueFormatTextBox<decimal>
     {
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(decimal), typeof(DecimalUpDown), new PropertyMetadata(default(decimal), (o, e) => ((DecimalUpDown)o).OnValueChanged(e)
+        DependencyProperty.Register("Value", typeof(decimal), typeof(DecimalUpDown), new FrameworkPropertyMetadata(default(decimal), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((DecimalUpDown)o).OnValueChanged(e)
         ));
 
         public override decimal Value

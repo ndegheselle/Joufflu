@@ -23,8 +23,11 @@ data grid, …) restyled to match the design system — come along with the core
 
 ## Getting started
 
-1. Reference the `Joufflu` projects you need (`Joufflu`, `Joufflu.Inputs`,
-   `Joufflu.Navigation`) from your WPF app.
+1. Add the `Joufflu` packages you need — `Joufflu` (core styles & theming),
+   `Joufflu.Inputs` (input controls) and `Joufflu.Navigation` (navigation &
+   overlays) — as NuGet packages, or reference the projects directly.
+   `Joufflu.Inputs` and `Joufflu.Navigation` both build on the core `Joufflu`
+   package.
 2. Merge the control styles in `App.xaml`:
 
    ```xml

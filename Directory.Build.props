@@ -1,0 +1,29 @@
+<Project>
+
+  <!--
+    Shared metadata for every project in the repository.
+    Only the three shipped component libraries set <IsPackable>true</IsPackable> (in their own
+    .csproj); everything else (samples, experimental projects) inherits IsPackable=false and is
+    never packed.
+  -->
+  <PropertyGroup>
+    <Authors>ndegheselle</Authors>
+    <Company>ndegheselle</Company>
+    <Product>Joufflu</Product>
+    <Version>0.1.0</Version>
+    <Copyright>Copyright (c) ndegheselle</Copyright>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://ndegheselle.github.io/Joufflu/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ndegheselle/Joufflu</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wpf;controls;ui;theme;dark-mode;mvvm</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Opt in per library. -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

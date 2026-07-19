@@ -10,7 +10,7 @@ namespace Joufflu.Inputs.Controls
             nameof(Value),
             typeof(TimeSpan?),
             typeof(TimeSpanPicker),
-            new PropertyMetadata(default(TimeSpan?), (o, e) => ((TimeSpanPicker)o).OnValueChanged(e)));
+            new FrameworkPropertyMetadata(default(TimeSpan?), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((TimeSpanPicker)o).OnValueChanged(e)));
 
         public override TimeSpan? Value
         {

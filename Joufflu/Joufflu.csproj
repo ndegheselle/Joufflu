@@ -5,6 +5,13 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <IsPackable>true</IsPackable>
+    <PackageId>Joufflu</PackageId>
+    <Title>Joufflu</Title>
+    <Description>WPF design system: themed styles for the native controls, live Light/Dark theming, a custom-chrome window, icons, badges, toasts and sizing/spacing layout helpers.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@ namespace Joufflu.Inputs.Controls
     public partial class NumericUpDown : SingleValueFormatTextBox<int>
     {
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(int), typeof(NumericUpDown), new PropertyMetadata(default(int), (o, e) => ((NumericUpDown)o).OnValueChanged(e)
+        DependencyProperty.Register("Value", typeof(int), typeof(NumericUpDown), new FrameworkPropertyMetadata(default(int), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((NumericUpDown)o).OnValueChanged(e)
         ));
 
         public override int Value
