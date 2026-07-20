@@ -1,10 +1,27 @@
-# Joufflu WPF Components
+# Joufflu
 
-WPF inputs and reusable components for .NET, built on a small design system of
-themed brushes, dimensions and layout helpers. Every control reads its colours
-through `DynamicResource`, so the whole UI re-themes live between Light and Dark.
+**A modern WPF component library that makes your desktop apps look good by default.**
+
+Joufflu gives .NET WPF apps a cohesive set of inputs and reusable controls built
+on a design system of themed brushes, dimensions and layout helpers. Every
+control reads its colours through `DynamicResource`, so the whole UI re-themes
+live between Light and Dark — no restart, no flicker.
+
+[![Joufflu on NuGet](https://img.shields.io/nuget/v/Joufflu?label=Joufflu&logo=nuget)](https://www.nuget.org/packages/Joufflu)
+[![Joufflu.Inputs on NuGet](https://img.shields.io/nuget/v/Joufflu.Inputs?label=Joufflu.Inputs&logo=nuget)](https://www.nuget.org/packages/Joufflu.Inputs)
+[![Joufflu.Navigation on NuGet](https://img.shields.io/nuget/v/Joufflu.Navigation?label=Joufflu.Navigation&logo=nuget)](https://www.nuget.org/packages/Joufflu.Navigation)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
 ![preview](./images/preview.PNG)
+
+## Highlights
+
+- 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
+- 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
+- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text.
+- 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
+- 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
+- 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
 📖 **Full documentation:** <https://ndegheselle.github.io/Joufflu/>
 
@@ -23,11 +40,15 @@ data grid, …) restyled to match the design system — come along with the core
 
 ## Getting started
 
-1. Add the `Joufflu` packages you need — `Joufflu` (core styles & theming),
-   `Joufflu.Inputs` (input controls) and `Joufflu.Navigation` (navigation &
-   overlays) — as NuGet packages, or reference the projects directly.
-   `Joufflu.Inputs` and `Joufflu.Navigation` both build on the core `Joufflu`
-   package.
+1. Add the packages you need. `Joufflu` is the core (styles & theming);
+   `Joufflu.Inputs` and `Joufflu.Navigation` are optional and both build on it:
+
+   ```sh
+   dotnet add package Joufflu
+   dotnet add package Joufflu.Inputs      # optional: input controls
+   dotnet add package Joufflu.Navigation  # optional: navigation & overlays
+   ```
+
 2. Merge the control styles in `App.xaml`:
 
    ```xml
@@ -68,18 +89,6 @@ generate a ready-to-merge dictionary.
   development* workload.
 - Open `Joufflu.sln` and start the `Joufflu.Samples` project to explore
   every control, theme and toolkit helper interactively.
-
-## Why does this exist
-
-To train myself to create generic components that can easily be reused across
-projects, and to find a clean way to build them — WPF offers several approaches,
-each with trade-offs:
-
-- Derive from `ContentControl` (or another base control), customized with a
-  resource dictionary — binding events and data to the UI is painful (even with
-  commands).
-- Customize with a XAML class attached directly to the control — doesn't let the
-  consumer easily customize the control's content.
 
 ## Acknowledgments
 
