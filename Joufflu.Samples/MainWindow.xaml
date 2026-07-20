@@ -9,10 +9,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
     xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels"
-    Title="Joufflu — Component Gallery"
     Width="1100"
     Height="720"
     d:DataContext="{d:DesignInstance Type=vm:AppViewModel}"
+    PlaceTitleBarOverContent="True"
+    IconVisibility="Collapsed"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <DockPanel>
