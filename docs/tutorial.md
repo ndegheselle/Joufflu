@@ -46,8 +46,9 @@ stacks; the `NavigationMenu` drives the same `Navigator` from the side.
 ## Step 1 — The shared shell view model
 
 The shell view model owns the three services so the window **and** every page can
-use the same instances. It also maps each menu item's text `Target` to the page
-to navigate to.
+use the same instances. It also keeps a registry that maps each menu item's text
+`Target` to the page to navigate to. We start with an empty registry and add our
+first page in Step 4.
 
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -57,42 +58,36 @@ using Joufflu.Navigation;
 public class ShellViewModel : ObservableObject
 {
     // Shared with the NavigationContainer and NavigationMenu in the shell window,
-    // and injected into pages that need them.
+    // and injected into the pages that need them.
     public Navigator Navigator { get; } = new();
     public OverlayService Overlays { get; } = new();
     public ToastService Toasts { get; } = new();
 
     // Pages keyed by the text target used on the menu's NavigationItems.
-    private readonly Dictionary<string, object> _pages;
+    // Filled in as we add pages (Step 4).
+    private readonly Dictionary<string, object> _pages = new();
 
-    // Bound to NavigationMenu.TargetResolver so the menu can resolve its targets.
+    // Bound to NavigationMenu.TargetResolver so the menu can turn a target
+    // string into the page to navigate to.
     public Func<string, object?> ResolveTarget { get; }
 
     public ShellViewModel()
     {
-        _pages = new()
-        {
-            ["home"] = new HomeViewModel(Overlays, Toasts),
-            ["settings"] = new SettingsViewModel(),
-        };
-
         ResolveTarget = target => _pages.GetValueOrDefault(target);
-
-        // Land on a page at startup.
-        Navigator.Navigate(_pages["home"]);
     }
 }
 ```
 
-Pages that need to open overlays or raise toasts receive the services through
-their constructor (see `HomeViewModel` below). Because the shell created the
-services, the page and the shell window share the exact same instances.
+Because the shell creates the three services, any page it hosts can share the
+exact same instances — we'll inject `Overlays` and `Toasts` into a page in
+Step 4.
 
 ## Step 2 — Map view models to views
 
 Navigation resolves a view model to its view through an implicit `DataTemplate`
-(a `DataTemplate` with a `DataType` but no `x:Key`). Declare one per page,
-typically in `App.xaml`:
+(a `DataTemplate` with a `DataType` but no `x:Key`). You add one per page,
+typically in `App.xaml`. We'll create the `HomeViewModel` / `HomeView` pair in
+Step 4 — here is the mapping they need:
 
 ```xml
 <Application.Resources>
@@ -101,19 +96,16 @@ typically in `App.xaml`:
             <!-- Joufflu resource dictionaries merged here (see Getting started) -->
         </ResourceDictionary.MergedDictionaries>
 
-        <!-- Each page view model resolves to its view. -->
+        <!-- One DataTemplate per page: the view model resolves to its view. -->
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-            <views:SettingsView />
         </DataTemplate>
     </ResourceDictionary>
 </Application.Resources>
 ```
 
-The same mechanism resolves overlay content, so add a `DataTemplate` for every
-overlay view model too.
+The same mechanism resolves overlay content, so you'll add a `DataTemplate` for
+every overlay view model too (see Step 5).
 
 ## Step 3 — The shell window
 
@@ -122,17 +114,26 @@ The shell window is a `ThemedWindow` with the side `NavigationMenu` and the
 in sync — selecting a menu item navigates the container, and the container's
 overlays/toasts use the shared services.
 
+The `d:DataContext` line tells the XAML designer the runtime view-model type, so
+bindings like `{Binding Navigator}` and `{Binding ResolveTarget}` get IntelliSense
+and are validated at design time. It has no effect at runtime.
+
 ```xml
 <controls:ThemedWindow
     x:Class="MyApp.ShellWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+    xmlns:vm="clr-namespace:MyApp.ViewModels"
     Title="My App"
     Width="1000"
-    Height="640">
+    Height="640"
+    d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
+    mc:Ignorable="d">
     <DockPanel>
         <nav:NavigationMenu
             DockPanel.Dock="Left"
@@ -145,12 +146,6 @@ overlays/toasts use the shared services.
                 </nav:NavigationItem.Icon>
                 Home
             </nav:NavigationItem>
-            <nav:NavigationItem Target="settings">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
-                </nav:NavigationItem.Icon>
-                Settings
-            </nav:NavigationItem>
         </nav:NavigationMenu>
 
         <!-- Renders the current page and hosts the overlay + toast stacks. -->
@@ -162,8 +157,8 @@ overlays/toasts use the shared services.
 </controls:ThemedWindow>
 ```
 
-Set the window's `DataContext` to the shell view model when you show it, e.g. in
-`App.xaml.cs`:
+Create the window in code so you can pass the shell view model as its
+`DataContext`, e.g. in `App.xaml.cs`:
 
 ```csharp
 protected override void OnStartup(StartupEventArgs e)
@@ -177,9 +172,15 @@ protected override void OnStartup(StartupEventArgs e)
 ```
 
 {: .note }
+> Since the window is created here, remove the `StartupUri="MainWindow.xaml"`
+> attribute from `App.xaml` — otherwise WPF also opens that window automatically
+> and you end up with two.
+
+{: .note }
 > Each menu item's `Target` string is passed to `TargetResolver`, which returns
-> the page to navigate to. A `NavigationGroup` expands to reveal children instead
-> of navigating, and a `NavigationTitle` is a section label — see
+> the page to navigate to. Add more items by repeating the recipe in Step 4. A
+> `NavigationGroup` expands to reveal children instead of navigating, and a
+> `NavigationTitle` is a section label — see
 > [Navigation menu]({{ site.baseurl }}/navigation/navigation-menu/) for the full
 > menu markup.
 
@@ -233,9 +234,29 @@ Its view:
 </UserControl>
 ```
 
-Register the page and add its menu item (already done in Steps 1–3): put it in
-the shell's `_pages` dictionary under `"home"`, add the matching `DataTemplate`,
-and point a `NavigationItem` at `Target="home"`.
+Now register the page in the shell and land on it at startup. Add this to
+`ShellViewModel` from Step 1 — the constructor builds the page (passing the
+shared services) and navigates to it:
+
+```csharp
+public ShellViewModel()
+{
+    // Register the page under the target used by its NavigationItem.
+    _pages["home"] = new HomeViewModel(Overlays, Toasts);
+
+    ResolveTarget = target => _pages.GetValueOrDefault(target);
+
+    // Navigate to the default page so the window doesn't start empty.
+    Navigator.Navigate(_pages["home"]);
+}
+```
+
+That's the whole recipe for a page — repeat these four things for each one:
+
+1. Write its view model and view.
+2. Map them with a `DataTemplate` (Step 2).
+3. Register the view model under a target in `_pages` (above).
+4. Point a `NavigationItem` at that target (Step 3).
 
 ## Step 5 — Modals and toasts from the page
 
