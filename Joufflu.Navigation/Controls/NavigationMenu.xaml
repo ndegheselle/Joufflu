@@ -19,28 +19,27 @@
                     <Button
                         x:Name="ItemButton"
                         Style="{DynamicResource Ghost}"
+                        Height="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
                         HorizontalContentAlignment="Stretch"
                         Command="{Binding SelectCommand, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}"
                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
                             <ContentPresenter
                                 x:Name="IconPresenter"
                                 Grid.Column="0"
-                                Width="24"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
                                 Content="{TemplateBinding Icon}" />
 
                             <ContentPresenter
                                 x:Name="ContentPresenter"
                                 Grid.Column="1"
-                                Margin="10,0,0,0"
-                                VerticalAlignment="Center" />
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center">
+                            </ContentPresenter>
                         </Grid>
                     </Button>
 
@@ -54,6 +53,8 @@
                         </Trigger>
                         <DataTrigger Binding="{Binding IsCollapsed, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}" Value="True">
                             <Setter TargetName="ContentPresenter" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="ItemButton" Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
+                            <Setter TargetName="ItemButton" Property="HorizontalContentAlignment" Value="Center" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -83,15 +84,12 @@
                                 <ContentPresenter
                                     x:Name="IconPresenter"
                                     Grid.Column="0"
-                                    Width="24"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
                                     Content="{TemplateBinding Icon}" />
 
                                 <ContentPresenter
                                     x:Name="ContentPresenter"
                                     Grid.Column="1"
-                                    Margin="10,0,0,0"
+                                    Margin="8,0,0,0"
                                     VerticalAlignment="Center"
                                     ContentSource="Header" />
 
@@ -127,6 +125,8 @@
                             <Setter TargetName="ChildrenHost" Property="Margin" Value="0" />
                             <Setter TargetName="ChildrenHost" Property="Padding" Value="0" />
                             <Setter TargetName="ChildrenHost" Property="BorderThickness" Value="0" />
+                            <Setter TargetName="HeaderButton" Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
+                            <Setter TargetName="HeaderButton" Property="HorizontalContentAlignment" Value="Center" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -142,15 +142,12 @@
                     <Grid Margin="0,12,0,4">
                         <TextBlock
                             x:Name="TitleText"
-                            Margin="8,0,0,0"
-                            FontSize="11"
-                            FontWeight="SemiBold"
+                            Style="{StaticResource Small}"
                             Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                             Text="{TemplateBinding Title}" />
                         <Border
                             x:Name="TitleLine"
                             Height="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
-                            Margin="4,0"
                             VerticalAlignment="Center"
                             Background="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                             Visibility="Collapsed" />
