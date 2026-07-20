@@ -12,7 +12,7 @@
     Title="Joufflu — Component Gallery"
     Width="1100"
     Height="720"
-    d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+    d:DataContext="{d:DesignInstance Type=vm:AppViewModel}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <DockPanel>

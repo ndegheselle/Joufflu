@@ -10,7 +10,7 @@ namespace Joufflu.Samples
     /// </summary>
     public partial class App : Application
     {
-        private MainViewModel? mainViewModel;
+        private AppViewModel? appViewModel;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -22,9 +22,9 @@ namespace Joufflu.Samples
             // Restore the persisted theme (or follow the system) and insert its dictionary before any window is shown.
             ThemeManager.Instance.Initialize();
 
-            mainViewModel = new MainViewModel();
+            appViewModel = new AppViewModel();
 
-            MainWindow mainWindow = new MainWindow(mainViewModel);
+            MainWindow mainWindow = new MainWindow(appViewModel);
             mainWindow.Show();
         }
 
@@ -47,7 +47,7 @@ namespace Joufflu.Samples
         {
             try
             {
-                mainViewModel?.Toasts.Error("An unexpected error happend ...", "Ooops");
+                appViewModel?.Toasts.Error("An unexpected error happend ...", "Ooops");
             }
             catch
             {}

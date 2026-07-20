@@ -21,7 +21,7 @@ namespace Joufflu.Samples.ViewModels;
 /// The menu items are declared in XAML and point at a page through a text target; this view model
 /// maps those targets to the actual pages via <see cref="ResolveTarget"/>.
 /// </summary>
-public class MainViewModel : ObservableObject
+public class AppViewModel : ObservableObject
 {
     public Navigator Navigator { get; } = new();
 
@@ -35,7 +35,7 @@ public class MainViewModel : ObservableObject
     /// <summary>Bound to <c>NavigationMenu.TargetResolver</c> so the menu can resolve its text targets.</summary>
     public Func<string, object?> ResolveTarget { get; }
 
-    public MainViewModel()
+    public AppViewModel()
     {
         _pages = new()
         {

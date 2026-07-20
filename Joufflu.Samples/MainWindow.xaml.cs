@@ -8,7 +8,7 @@ namespace Joufflu.Samples
     /// </summary>
     public partial class MainWindow : ThemedWindow
     {
-        public MainWindow(MainViewModel viewModel)
+        public MainWindow(AppViewModel viewModel)
         {
             this.DataContext = viewModel;
             InitializeComponent();
