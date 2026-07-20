@@ -74,4 +74,7 @@ markup you can paste into your own views.
 
 4. Use the controls as shown in the pages above.
 
+New to the library? The [Tutorial]({{ site.baseurl }}/tutorial/) builds a full
+navigable app shell — side menu, pages, modals and toasts — from scratch.
+
 To explore everything interactively, run the **`Joufflu.Samples`** project.
