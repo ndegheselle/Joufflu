@@ -59,6 +59,34 @@
     </Style>
 
     <Style
+        x:Key="Info"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Info100Brush}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="Warning"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Warning100Brush}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
         x:Key="Danger"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">

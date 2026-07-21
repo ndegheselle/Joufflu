@@ -20,6 +20,8 @@
                     <Button Style="{StaticResource Ghost}">Ghost</Button>
                     <Button Style="{StaticResource Success}">Success</Button>
                     <Button Style="{StaticResource Danger}">Danger</Button>
+                    <Button Style="{StaticResource Info}">Info</Button>
+                    <Button Style="{StaticResource Warning}">Warning</Button>
                     <Button IsEnabled="False">Disabled</Button>
                 </WrapPanel>
             </c:CodeExample>

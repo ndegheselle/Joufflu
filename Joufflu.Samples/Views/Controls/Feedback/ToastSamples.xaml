@@ -5,22 +5,30 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel
-
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Toast" />
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Toast" />
 
             <c:CodeExample
                 Title="Toast types"
                 Code="{Binding Code}"
                 Description="Toasts stack in the top-right corner, always above page content and overlays, and auto-dismiss after a few seconds (unless sticky).">
                 <WrapPanel joufflu:Spacing.Gap="8,8">
-                    <Button Command="{Binding InfoCommand}" Content="Info" />
-                    <Button Command="{Binding SuccessCommand}" Content="Success" Style="{StaticResource Success}" />
-                    <Button Command="{Binding WarningCommand}" Content="Warning" />
-                    <Button Command="{Binding ErrorCommand}" Content="Error" Style="{StaticResource Danger}" />
+                    <Button
+                        Command="{Binding InfoCommand}"
+                        Content="Info"
+                        Style="{StaticResource Info}" />
+                    <Button
+                        Command="{Binding SuccessCommand}"
+                        Content="Success"
+                        Style="{StaticResource Success}" />
+                    <Button
+                        Command="{Binding WarningCommand}"
+                        Content="Warning"
+                        Style="{StaticResource Warning}" />
+                    <Button
+                        Command="{Binding ErrorCommand}"
+                        Content="Error"
+                        Style="{StaticResource Danger}" />
                     <Button Command="{Binding StickyCommand}" Content="Sticky" />
                     <Button Command="{Binding StackCommand}" Content="Stack ×3" />
                 </WrapPanel>

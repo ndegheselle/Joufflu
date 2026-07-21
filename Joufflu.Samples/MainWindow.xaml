@@ -12,8 +12,8 @@
     Width="1100"
     Height="720"
     d:DataContext="{d:DesignInstance Type=vm:AppViewModel}"
-    PlaceTitleBarOverContent="True"
     IconVisibility="Collapsed"
+    PlaceTitleBarOverContent="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <DockPanel>

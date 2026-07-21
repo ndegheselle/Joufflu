@@ -25,9 +25,9 @@
     <Color x:Key="{x:Static joufflu:Colors.Secondary100Color}">#FFD4D4D8</Color>
 
     <!--  Success: green-500 / green-950 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#00ba7b</Color>
-    <Color x:Key="{x:Static joufflu:Colors.SuccessContentColor}">#002c21</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Success100Color}">#00a76e</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#00d390</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessContentColor}">#004c39</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Success100Color}">#00bd81</Color>
 
     <!--  Info: blue-500 / blue-950 content  -->
     <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#FF3B82F6</Color>
@@ -40,9 +40,9 @@
     <Color x:Key="{x:Static joufflu:Colors.Warning100Color}">#d69d00</Color>
 
     <!--  Danger (Destructive): red-900 background, red-200 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#fe1c55</Color>
+    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#ff627d</Color>
     <Color x:Key="{x:Static joufflu:Colors.DangerContentColor}">#4d0218</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Danger100Color}">#fc0140</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Danger100Color}">#ff3e5f</Color>
 
     <!--  Foreground Brushes  -->
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ForegroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}" />
