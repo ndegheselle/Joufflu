@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
@@ -16,10 +17,14 @@
     PlaceTitleBarOverContent="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <controls:ThemedWindow.Resources>
+        <converters:TopThicknessConverter x:Key="TopThickness" />
+    </controls:ThemedWindow.Resources>
     <DockPanel>
         <nav:NavigationMenu
             DockPanel.Dock="Left"
             Navigator="{Binding Navigator}"
+            Padding="{Binding TitleBarActualHeight, RelativeSource={RelativeSource AncestorType={x:Type controls:ThemedWindow}}, Converter={StaticResource TopThickness}}"
             TargetResolver="{Binding ResolveTarget}">
             <nav:NavigationMenu.Header>
                 <StackPanel
@@ -338,6 +343,7 @@
         <nav:NavigationContainer
             Navigator="{Binding Navigator}"
             Overlays="{Binding Overlays}"
+            Padding="{Binding TitleBarActualHeight, RelativeSource={RelativeSource AncestorType={x:Type controls:ThemedWindow}}, Converter={StaticResource TopThickness}}"
             Toasts="{Binding Toasts}" />
     </DockPanel>
 </controls:ThemedWindow>

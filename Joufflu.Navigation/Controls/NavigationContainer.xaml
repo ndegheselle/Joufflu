@@ -14,8 +14,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationContainer}">
                     <Grid Background="{TemplateBinding Background}">
-                        <!--  Unique content display  -->
-                        <ContentControl Content="{Binding Navigator.CurrentPage, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <!--  Unique content display. Padding insets the page (and its scrollbar) only,
+                              so an overlaid title bar clears it while overlays/toasts stay full-bleed.  -->
+                        <ContentControl
+                            Margin="{TemplateBinding Padding}"
+                            Content="{Binding Navigator.CurrentPage, RelativeSource={RelativeSource TemplatedParent}}" />
 
                         <!--  Modal overlay stack  -->
                         <ItemsControl
