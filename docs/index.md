@@ -28,13 +28,16 @@ markup you can paste into your own views.
 
 {: .note }
 > The gallery's **Natives** group (WPF's built-in controls restyled to match the
-> design system — buttons, text boxes, combo boxes, data grid, and so on) is not
-> documented here. These pages cover only the custom controls the library adds.
+> design system — text boxes, combo boxes, data grid, and so on) is mostly not
+> documented here; only natives with named style variants worth spelling out (see
+> [Native controls]({{ site.baseurl }}/natives/)) are. Otherwise these pages cover
+> the custom controls the library adds.
 
 ## Sections
 
 | Section | What's inside |
 |---|---|
+| [Native controls]({{ site.baseurl }}/natives/) | Buttons (solid, soft & outline variants) |
 | [Inputs]({{ site.baseurl }}/inputs/) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | [Navigation]({{ site.baseurl }}/navigation/) | `NavigationMenu`, overlays (modal dialogs) |
 | [Custom controls]({{ site.baseurl }}/custom-controls/) | `FontIcon`, `Badge`, `Spinner`, toasts |
