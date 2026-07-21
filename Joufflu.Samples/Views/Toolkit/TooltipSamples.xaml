@@ -1,0 +1,53 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Toolkit.TooltipSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Tooltip" />
+
+            <c:CodeExample
+                Title="Tooltip.Placement"
+                Code="{Binding PlacementCode}"
+                Description="Set Tooltip.Content on any element to show a themed tooltip on hover. Tooltip.Placement chooses the side it sits on — Top, Bottom, Left or Right — and it still flips automatically near a screen edge.">
+                <WrapPanel joufflu:Spacing.Gap="8,8">
+                    <Button
+                        Content="Top"
+                        joufflu:Tooltip.Content="Placed above"
+                        joufflu:Tooltip.Placement="Top" />
+                    <Button
+                        Content="Bottom"
+                        joufflu:Tooltip.Content="Placed below"
+                        joufflu:Tooltip.Placement="Bottom" />
+                    <Button
+                        Content="Left"
+                        joufflu:Tooltip.Content="Placed left"
+                        joufflu:Tooltip.Placement="Left" />
+                    <Button
+                        Content="Right"
+                        joufflu:Tooltip.Content="Placed right"
+                        joufflu:Tooltip.Placement="Right" />
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Custom content"
+                Code="{Binding ContentCode}"
+                Description="Tooltip.Content is an object, so it accepts arbitrary XAML — not just text.">
+                <WrapPanel joufflu:Spacing.Gap="8,8">
+                    <Button Content="Rich tooltip" joufflu:Tooltip.Placement="Bottom">
+                        <joufflu:Tooltip.Content>
+                            <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8">
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
+                                <TextBlock Text="Arbitrary content, icons included." />
+                            </StackPanel>
+                        </joufflu:Tooltip.Content>
+                    </Button>
+                </WrapPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

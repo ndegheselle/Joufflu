@@ -309,6 +309,12 @@
                 </nav:NavigationItem.Icon>
                 Spacing
             </nav:NavigationItem>
+            <nav:NavigationItem Target="toolkit/tooltip">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
+                </nav:NavigationItem.Icon>
+                Tooltip
+            </nav:NavigationItem>
             <nav:NavigationItem Target="toolkit/application-shell">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />

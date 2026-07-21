@@ -44,6 +44,7 @@
         <!--  Feedback  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/ProgressBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/StatusBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/ToolTip.xaml" />
 
         <!--  Layout  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/ScrollBar.xaml" />

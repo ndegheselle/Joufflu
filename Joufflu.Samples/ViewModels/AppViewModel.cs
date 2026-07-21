@@ -93,6 +93,7 @@ public class AppViewModel : ObservableObject
             // Toolkit
             ["toolkit/sizing"] = new SizingSamplesViewModel(),
             ["toolkit/spacing"] = new SpacingSamplesViewModel(),
+            ["toolkit/tooltip"] = new TooltipSamplesViewModel(),
             ["toolkit/theme"] = new ThemeSamplesViewModel(),
             ["toolkit/customize-theme"] = new ThemeCustomizerViewModel(),
             ["toolkit/application-shell"] = new ShellSamples(),
