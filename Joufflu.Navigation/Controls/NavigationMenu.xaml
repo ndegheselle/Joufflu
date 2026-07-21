@@ -55,6 +55,9 @@
                             <Setter TargetName="ContentPresenter" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="ItemButton" Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
                             <Setter TargetName="ItemButton" Property="HorizontalContentAlignment" Value="Center" />
+                            <!--  Collapsed: the label is hidden, so surface it as a tooltip beside the icon  -->
+                            <Setter TargetName="ItemButton" Property="joufflu:Tooltip.Content" Value="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="ItemButton" Property="joufflu:Tooltip.Placement" Value="Right" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -127,6 +130,9 @@
                             <Setter TargetName="ChildrenHost" Property="BorderThickness" Value="0" />
                             <Setter TargetName="HeaderButton" Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
                             <Setter TargetName="HeaderButton" Property="HorizontalContentAlignment" Value="Center" />
+                            <!--  Collapsed: the header is hidden, so surface it as a tooltip beside the icon  -->
+                            <Setter TargetName="HeaderButton" Property="joufflu:Tooltip.Content" Value="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="HeaderButton" Property="joufflu:Tooltip.Placement" Value="Right" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

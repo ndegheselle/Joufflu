@@ -12,6 +12,10 @@ The collapsible side menu plugged into its own `Navigator`. Use the chevron to
 collapse it to an icons-only rail. A `NavigationGroup` displays like an item but
 expands to reveal children, and groups can nest.
 
+When collapsed, each item and group hides its label and instead surfaces it as a
+right-placed [tooltip](../toolkit/tooltip.html) on hover, so the icons-only rail
+stays discoverable.
+
 ```xml
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}"
                     TargetResolver="{Binding ResolveTarget}">

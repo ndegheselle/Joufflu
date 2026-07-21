@@ -11,6 +11,7 @@ controls themselves.
 
 - **Sizing** — the `ControlProperties.Size` and `IsSquare` attached properties.
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.
+- **Tooltip** — the `Tooltip.Content` and `Tooltip.Placement` attached properties for themed tooltips on any element.
 - **Theme** — `ThemeManager` for System/Light/Dark, and how to bind a theme switcher UI to it.
 - **Customize theme** — the live theme editor and preset themes.
 - **Application shell** — the window styles and navigation container.

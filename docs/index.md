@@ -38,7 +38,7 @@ markup you can paste into your own views.
 | [Inputs]({{ site.baseurl }}/inputs/) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | [Navigation]({{ site.baseurl }}/navigation/) | `NavigationMenu`, overlays (modal dialogs) |
 | [Custom controls]({{ site.baseurl }}/custom-controls/) | `FontIcon`, `Badge`, `Spinner`, toasts |
-| [Toolkit]({{ site.baseurl }}/toolkit/) | Sizing, spacing, theme customization, application shell |
+| [Toolkit]({{ site.baseurl }}/toolkit/) | Sizing, spacing, tooltips, theme customization, application shell |
 
 ## Getting started
 
