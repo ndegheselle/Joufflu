@@ -27,6 +27,34 @@
             </c:CodeExample>
 
             <c:CodeExample
+                Title="Soft"
+                Code="{Binding SoftCode}"
+                Description="A tinted background — the semantic hue at low opacity — with the hue itself as text. Because the tint is derived by opacity, it adapts to light/dark and to custom themes. Secondary is achromatic, so it uses a neutral foreground wash.">
+                <WrapPanel joufflu:Spacing.Gap="8,0">
+                    <Button Style="{StaticResource SoftPrimary}">Primary</Button>
+                    <Button Style="{StaticResource SoftSecondary}">Secondary</Button>
+                    <Button Style="{StaticResource SoftSuccess}">Success</Button>
+                    <Button Style="{StaticResource SoftInfo}">Info</Button>
+                    <Button Style="{StaticResource SoftWarning}">Warning</Button>
+                    <Button Style="{StaticResource SoftDanger}">Danger</Button>
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Outline"
+                Code="{Binding OutlineCode}"
+                Description="A coloured border and text over a transparent fill; hovering fills it with the soft tint. Secondary uses the neutral border and foreground.">
+                <WrapPanel joufflu:Spacing.Gap="8,0">
+                    <Button Style="{StaticResource OutlinePrimary}">Primary</Button>
+                    <Button Style="{StaticResource OutlineSecondary}">Secondary</Button>
+                    <Button Style="{StaticResource OutlineSuccess}">Success</Button>
+                    <Button Style="{StaticResource OutlineInfo}">Info</Button>
+                    <Button Style="{StaticResource OutlineWarning}">Warning</Button>
+                    <Button Style="{StaticResource OutlineDanger}">Danger</Button>
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
                 Title="Icon buttons"
                 Code="{Binding IconCode}"
                 Description="IsSquare makes a button as wide as it is tall — ideal for a single icon.">
