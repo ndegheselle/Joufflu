@@ -6,14 +6,13 @@ nav_order: 6
 
 # Application shell
 
-These styles shape the whole window rather than a control on a page. The
-`Joufflu.Samples` gallery window itself is the live example.
+Styles that shape the whole window rather than a control on a page. The
+`Joufflu.Samples` gallery window is the live example.
 
 ## Window
 
-The default `Window` style themes a standard WPF window (background, foreground
-and native chrome) to match the design system. It is applied implicitly to every
-`Window`.
+The default `Window` style themes a standard WPF window (background, foreground,
+native chrome) to match the design system. Applied implicitly to every `Window`.
 
 ```xml
 <Window ...>
@@ -35,10 +34,9 @@ buttons.
 
 ### Title bar over content
 
-Set `PlaceTitleBarOverContent="True"` to draw the window content beneath a
-transparent title bar instead of below it. A full-height side panel's background
-then reaches the very top of the window, while the caption buttons keep floating
-at the top-right:
+Set `PlaceTitleBarOverContent="True"` to draw content beneath a transparent title
+bar instead of below it. A full-height side panel's background then reaches the
+top of the window, while the caption buttons keep floating top-right:
 
 ```xml
 <controls:ThemedWindow ...
@@ -54,20 +52,18 @@ own header.
 
 #### Keeping content clear of the bar
 
-**Why.** In this mode the title bar spans the full width of the window and stays
-draggable across its whole surface — that is what lets you move the window by
-grabbing anywhere along the top. The trade-off is that the bar is drawn *over*
-the content: even though it is transparent, its drag surface is hit-test visible,
-so any control that sits in the top strip is covered by it. A side-panel collapse
-button becomes unclickable, and a page's vertical scrollbar runs up behind the
-caption buttons.
+**Why.** In this mode the title bar spans the full window width and stays
+draggable across its whole surface — that is what lets you drag the window from
+anywhere along the top. But the bar is drawn *over* the content, and though
+transparent its drag surface is hit-test visible: any control in the top strip is
+covered by it. A side-panel collapse button becomes unclickable; a page's
+vertical scrollbar runs behind the caption buttons.
 
-**How.** Rather than punch holes in the draggable bar, reserve a strip of empty
-space at the top of your content equal to the bar's height. The window exposes
-its measured height as the read-only `TitleBarActualHeight` property — and it is
-**0 unless `PlaceTitleBarOverContent` is on**, so the same binding adds no gap
-when you switch back to a standard stacked title bar. That makes the offset
-automatic and optional.
+**How.** Reserve a strip of empty space at the top of your content equal to the
+bar's height. The window exposes its measured height as the read-only
+`TitleBarActualHeight` property, which is **0 unless `PlaceTitleBarOverContent` is
+on** — so the same binding adds no gap when you switch back to a stacked title
+bar. The offset is automatic and optional.
 
 Convert that height to a top-only `Thickness` with `TopThicknessConverter`
 (`0, height, 0, 0`) and bind it to the `Padding` of the panels that reach the top:
@@ -100,20 +96,20 @@ Convert that height to a top-only `Thickness` with `TopThicknessConverter`
 </controls:ThemedWindow>
 ```
 
-Using `Padding` (not `Margin`) keeps each panel's background running edge-to-edge
-under the transparent bar; only the inner content is pushed down. The
-`Joufflu.Samples` gallery window uses this exact setup as its live example.
+Using `Padding` (not `Margin`) keeps each panel's background edge-to-edge under
+the transparent bar; only the inner content is pushed down. The `Joufflu.Samples`
+gallery window uses this setup.
 
 {: .note }
 > `NavigationMenu` and `NavigationContainer` honour `Padding` for this purpose:
 > the menu insets its entire column (header and collapse button included), while
-> the container insets the hosted page only — its overlays and toasts deliberately
-> stay full-bleed so modal backdrops still cover the whole window.
+> the container insets the hosted page only — overlays and toasts stay full-bleed
+> so modal backdrops still cover the whole window.
 
 ## NavigationContainer
 
-`NavigationContainer` hosts the current page and layers overlays and toasts above
-it. Pair it with a `NavigationMenu`, driving both from a shared `Navigator`.
+Hosts the current page and layers overlays and toasts above it. Pair it with a
+`NavigationMenu`, driving both from a shared `Navigator`.
 
 ```xml
 <nav:NavigationContainer Navigator="{Binding Navigator}"

@@ -6,7 +6,7 @@ has_children: true
 
 # Custom controls
 
-Small custom controls that build on the design system.
+Custom controls built on the design system.
 
 - **Font icon** — a Lucide icon-font glyph.
 - **Badge** — a themed pill in the semantic colours.

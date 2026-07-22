@@ -8,8 +8,8 @@ nav_order: 6
 
 ## ColorPicker
 
-Edits a colour through an editable hex value and a popup with a saturation
-square, hue and alpha sliders. Two-way bindable through the `Color` property
+Edits a colour through an editable hex value and a popup with a saturation square,
+hue and alpha sliders. Two-way bindable through `Color`
 (`System.Windows.Media.Color`).
 
 ```xml

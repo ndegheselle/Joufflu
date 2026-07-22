@@ -13,9 +13,9 @@ brushes, dimensions and layout helpers. Every control reads its colours through
 `DynamicResource`, so the whole UI re-themes live between Light and Dark — no
 restart, no flicker.
 
-These pages mirror the controls shown in the **`Joufflu.Samples`** gallery app —
-same titles, descriptions and code snippets. Each control page lists the example
-markup you can paste into your own views.
+These pages mirror the controls in the **`Joufflu.Samples`** gallery app — same
+titles, descriptions and code snippets. Each control page lists example markup you
+can paste into your views.
 
 ## Highlights
 
@@ -27,11 +27,11 @@ markup you can paste into your own views.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
 {: .note }
-> The gallery's **Natives** group (WPF's built-in controls restyled to match the
-> design system — text boxes, combo boxes, data grid, and so on) is mostly not
-> documented here; only natives with named style variants worth spelling out (see
-> [Native controls]({{ site.baseurl }}/natives/)) are. Otherwise these pages cover
-> the custom controls the library adds.
+> The gallery's **Natives** group — WPF's built-in controls restyled to match the
+> design system (text boxes, combo boxes, data grid, …) — is mostly undocumented
+> here; only natives with named style variants are (see
+> [Native controls]({{ site.baseurl }}/natives/)). Otherwise these pages cover the
+> custom controls the library adds.
 
 ## Sections
 

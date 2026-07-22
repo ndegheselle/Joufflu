@@ -6,8 +6,8 @@ has_children: true
 
 # Toolkit
 
-The design-system helpers that shape controls and layouts rather than being
-controls themselves.
+Design-system helpers that shape controls and layouts rather than being controls
+themselves.
 
 - **Sizing** — the `ControlProperties.Size` and `IsSquare` attached properties.
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.

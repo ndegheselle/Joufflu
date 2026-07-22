@@ -8,8 +8,8 @@ nav_order: 1
 
 ## Glyphs
 
-A Lucide icon-font glyph. `Foreground` uses the design-system brushes and the
-size follows the inherited `ControlProperties.Size`.
+A Lucide icon-font glyph. `Foreground` uses the design-system brushes; size
+follows the inherited `ControlProperties.Size`.
 
 ```xml
 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />

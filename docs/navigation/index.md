@@ -6,9 +6,8 @@ has_children: true
 
 # Navigation
 
-Navigation building blocks from the `Joufflu.Navigation` library: a collapsible
-side menu driven by a `Navigator`, and modal overlays shown above the current
-page.
+Navigation building blocks from `Joufflu.Navigation`: a collapsible side menu
+driven by a `Navigator`, and modal overlays shown above the current page.
 
 The snippets use the `nav` XML namespace:
 

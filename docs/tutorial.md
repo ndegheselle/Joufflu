@@ -5,18 +5,15 @@ nav_order: 2
 
 # Tutorial: a navigable app shell
 
-This walkthrough builds a small MVVM app on top of `Joufflu.Navigation`: a
-collapsible side menu that switches between pages, a shared shell view model that
-owns the navigation services, an example page, and — from that page — a modal
-overlay and a toast.
-
-By the end you will have the same wiring the **`Joufflu.Samples`** gallery uses.
+Builds a small MVVM app on `Joufflu.Navigation`: a collapsible side menu that
+switches pages, a shared shell view model owning the navigation services, an
+example page, and a modal overlay plus a toast raised from it. The result
+matches the wiring the **`Joufflu.Samples`** gallery uses.
 
 {: .note }
-> This assumes the packages are installed and `App.xaml` merges the Joufflu
-> resource dictionaries, with `ThemeManager.Instance.Initialize()` called at
-> startup. See [Getting started]({{ site.baseurl }}/#getting-started) if you
-> haven't done that yet.
+> Assumes the packages are installed and `App.xaml` merges the Joufflu resource
+> dictionaries, with `ThemeManager.Instance.Initialize()` called at startup. See
+> [Getting started]({{ site.baseurl }}/#getting-started) first if not.
 
 The snippets use these namespaces:
 
@@ -29,8 +26,7 @@ xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation
 
 ## How it fits together
 
-Three services drive everything, and they are shared between the shell window and
-the pages:
+Three services drive everything, shared between the shell window and the pages:
 
 | Service | Role |
 |---|---|
@@ -38,17 +34,16 @@ the pages:
 | `OverlayService` | Shows modal overlays on top of the current page. |
 | `ToastService` | Shows stacking, auto-dismissing notifications. |
 
-Navigation is **view-model-first**: you navigate to a *view model*, and WPF
-resolves the matching *view* through an implicit `DataTemplate`. The
-`NavigationContainer` renders the current page and hosts the overlay and toast
-stacks; the `NavigationMenu` drives the same `Navigator` from the side.
+Navigation is **view-model-first**: navigate to a *view model* and WPF resolves
+the matching *view* through an implicit `DataTemplate`. `NavigationContainer`
+renders the current page and hosts the overlay and toast stacks; `NavigationMenu`
+drives the same `Navigator` from the side.
 
 ## Step 1 — The shared shell view model
 
-The shell view model owns the three services so the window **and** every page can
-use the same instances. It also keeps a registry that maps each menu item's text
-`Target` to the page to navigate to. We start with an empty registry and add our
-first page in Step 4.
+The shell view model owns the three services so the window and every page share
+the same instances. It also keeps a registry mapping each menu item's text
+`Target` to a page. It starts empty; the first page is added in Step 4.
 
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -78,16 +73,11 @@ public class ShellViewModel : ObservableObject
 }
 ```
 
-Because the shell creates the three services, any page it hosts can share the
-exact same instances — we'll inject `Overlays` and `Toasts` into a page in
-Step 4.
-
 ## Step 2 — Map view models to views
 
-Navigation resolves a view model to its view through an implicit `DataTemplate`
-(a `DataTemplate` with a `DataType` but no `x:Key`). You add one per page,
-typically in `App.xaml`. We'll create the `HomeViewModel` / `HomeView` pair in
-Step 4 — here is the mapping they need:
+An implicit `DataTemplate` (a `DataType` with no `x:Key`) maps each view model to
+its view. Add one per page, typically in `App.xaml`. The `HomeViewModel` /
+`HomeView` pair comes in Step 4; here is the mapping it needs:
 
 ```xml
 <Application.Resources>
@@ -104,19 +94,19 @@ Step 4 — here is the mapping they need:
 </Application.Resources>
 ```
 
-The same mechanism resolves overlay content, so you'll add a `DataTemplate` for
-every overlay view model too (see Step 5).
+The same mechanism resolves overlay content — add a `DataTemplate` for every
+overlay view model too (Step 5).
 
 ## Step 3 — The shell window
 
-The shell window is a `ThemedWindow` with the side `NavigationMenu` and the
-`NavigationContainer`. Bind both to the shell view model's services so they stay
-in sync — selecting a menu item navigates the container, and the container's
-overlays/toasts use the shared services.
+A `ThemedWindow` holding the side `NavigationMenu` and the `NavigationContainer`.
+Bind both to the shell view model's services so they stay in sync: selecting a
+menu item navigates the container, and its overlays/toasts use the shared
+services.
 
-The `d:DataContext` line tells the XAML designer the runtime view-model type, so
+The `d:DataContext` line gives the XAML designer the runtime view-model type, so
 bindings like `{Binding Navigator}` and `{Binding ResolveTarget}` get IntelliSense
-and are validated at design time. It has no effect at runtime.
+and design-time validation. No runtime effect.
 
 ```xml
 <controls:ThemedWindow
@@ -157,8 +147,8 @@ and are validated at design time. It has no effect at runtime.
 </controls:ThemedWindow>
 ```
 
-Create the window in code so you can pass the shell view model as its
-`DataContext`, e.g. in `App.xaml.cs`:
+Create the window in code to pass the shell view model as its `DataContext`,
+e.g. in `App.xaml.cs`:
 
 ```csharp
 protected override void OnStartup(StartupEventArgs e)
@@ -172,22 +162,20 @@ protected override void OnStartup(StartupEventArgs e)
 ```
 
 {: .note }
-> Since the window is created here, remove the `StartupUri="MainWindow.xaml"`
-> attribute from `App.xaml` — otherwise WPF also opens that window automatically
-> and you end up with two.
+> Remove `StartupUri="MainWindow.xaml"` from `App.xaml`, or WPF opens that window
+> too and you end up with two.
 
 {: .note }
-> Each menu item's `Target` string is passed to `TargetResolver`, which returns
-> the page to navigate to. Add more items by repeating the recipe in Step 4. A
-> `NavigationGroup` expands to reveal children instead of navigating, and a
-> `NavigationTitle` is a section label — see
+> Each item's `Target` is passed to `TargetResolver`, which returns the page. Add
+> more items with the Step 4 recipe. A `NavigationGroup` expands to reveal
+> children instead of navigating; a `NavigationTitle` is a section label. See
 > [Navigation menu]({{ site.baseurl }}/navigation/navigation-menu/) for the full
-> menu markup.
+> markup.
 
 ## Step 4 — An example page
 
-A page is just a view model and a matching view. The view model takes the shared
-services so it can open overlays and raise toasts:
+A page is a view model plus a matching view. The view model takes the shared
+services to open overlays and raise toasts:
 
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -234,9 +222,9 @@ Its view:
 </UserControl>
 ```
 
-Now register the page in the shell and land on it at startup. Add this to
-`ShellViewModel` from Step 1 — the constructor builds the page (passing the
-shared services) and navigates to it:
+Register the page in the shell and land on it at startup. In `ShellViewModel`
+(Step 1), the constructor builds the page with the shared services and navigates
+to it:
 
 ```csharp
 public ShellViewModel()
@@ -251,7 +239,7 @@ public ShellViewModel()
 }
 ```
 
-That's the whole recipe for a page — repeat these four things for each one:
+The recipe per page, repeated for each:
 
 1. Write its view model and view.
 2. Map them with a `DataTemplate` (Step 2).
@@ -262,7 +250,7 @@ That's the whole recipe for a page — repeat these four things for each one:
 
 ### A toast
 
-Toasts are one call on the shared `ToastService`. They stack in the top-right and
+One call on the shared `ToastService`. Toasts stack in the top-right and
 auto-dismiss:
 
 ```csharp
@@ -272,10 +260,10 @@ private void SayHello() => _toasts.Success("Hello!", "Greetings");
 ### A modal overlay, then a toast with the result
 
 `OverlayService.Show` returns a `Task<bool?>` that completes when the overlay
-closes — `true`/`false` from the action buttons, or `null` when dismissed. The
+closes: `true`/`false` from the action buttons, `null` when dismissed. The
 overlay content owns its buttons and closes itself through the service.
 
-First the overlay content view model:
+Overlay content view model:
 
 ```csharp
 public class DeleteConfirmViewModel : ObservableObject
@@ -316,7 +304,7 @@ Its view (add a matching `DataTemplate` as in Step 2):
 </UserControl>
 ```
 
-Now open it from the page and react to the result with a toast:
+Open it from the page and react to the result with a toast:
 
 ```csharp
 private async Task DeleteAsync()
@@ -333,9 +321,9 @@ private async Task DeleteAsync()
 }
 ```
 
-That's the full loop: the menu navigates the `Navigator`, the page opens a modal
-through the shared `OverlayService`, awaits its result, and confirms with the
-shared `ToastService`.
+The full loop: the menu navigates the `Navigator`, the page opens a modal through
+the shared `OverlayService`, awaits its result, and confirms with the shared
+`ToastService`.
 
 ## Where to go next
 

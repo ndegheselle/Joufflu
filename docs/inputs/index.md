@@ -6,8 +6,8 @@ has_children: true
 
 # Inputs
 
-Inputs from the `Joufflu.Inputs` library. They can be dropped into most projects
-and are two-way bindable like the built-in WPF inputs.
+Inputs from the `Joufflu.Inputs` library. Two-way bindable like the built-in WPF
+inputs.
 
 - **Numeric & format inputs** — `NumericUpDown`, `DecimalUpDown`,
   `TimeSpanPicker` and the underlying `FormatTextBox`.
