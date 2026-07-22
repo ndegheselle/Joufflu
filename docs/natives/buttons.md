@@ -6,14 +6,13 @@ nav_order: 1
 
 # Buttons
 
-A plain `<Button>` is themed by default. Named styles, applied through the
-`Style` property, give it a semantic intent and a visual emphasis — solid, soft
-or outline.
+A plain `<Button>` is themed by default. Named styles, applied through `Style`,
+give it a semantic intent and a visual emphasis — solid, soft or outline.
 
 ## Variants
 
-The solid named styles map to the design system's semantic brushes: a filled
-background with its matching content colour.
+The solid named styles map to the semantic brushes: a filled background with its
+matching content colour.
 
 ```xml
 <Button>Default</Button>
@@ -28,11 +27,10 @@ background with its matching content colour.
 
 ## Soft
 
-The soft variant is a tinted background with the semantic hue as text — lower
-emphasis than solid, useful for secondary actions. The tint is the semantic
-colour at low opacity (≈14 %, ≈24 % on hover) rather than a dedicated palette
-entry, so it is derived automatically in both Light and Dark and follows any
-custom theme.
+A tinted background with the semantic hue as text — lower emphasis than solid,
+for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
+≈24 % on hover), not a dedicated palette entry, so it derives automatically in
+both Light and Dark and follows any custom theme.
 
 ```xml
 <Button Style="{StaticResource SoftPrimary}">Primary</Button>
@@ -44,15 +42,15 @@ custom theme.
 ```
 
 {: .note }
-> Because the soft text is the semantic hue itself, the brighter semantics
-> (Success, Warning) sit at a lower text-contrast on the pale tint in the Light
-> theme. Reserve soft buttons for short labels / secondary actions, or use the
-> solid variant when contrast matters.
+> Since the soft text is the semantic hue itself, the brighter semantics (Success,
+> Warning) sit at lower text-contrast on the pale tint in the Light theme. Reserve
+> soft buttons for short labels / secondary actions, or use solid when contrast
+> matters.
 
 ## Outline
 
-The outline variant is a coloured border and text over a transparent fill;
-hovering fills it with the soft tint.
+A coloured border and text over a transparent fill; hovering fills it with the
+soft tint.
 
 ```xml
 <Button Style="{StaticResource OutlinePrimary}">Primary</Button>
@@ -65,8 +63,8 @@ hovering fills it with the soft tint.
 
 ## Icon buttons
 
-`IsSquare` makes a button as wide as it is tall — ideal for a single icon. It
-composes with any variant.
+`IsSquare` makes a button as wide as it is tall, for a single icon. Composes with
+any variant.
 
 ```xml
 <Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Primary}">

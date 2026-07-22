@@ -7,9 +7,9 @@ nav_order: 4
 # Theme
 
 Joufflu ships two colour palettes — `Themes/Light.xaml` and `Themes/Dark.xaml` — with the
-same keys and different values. `ThemeManager` picks the active one at runtime by swapping a
-single merged dictionary; because every control reads its colours through `DynamicResource`,
-the whole UI re-themes live.
+same keys, different values. `ThemeManager` swaps the active one at runtime through a single
+merged dictionary; since every control reads its colours through `DynamicResource`, the whole
+UI re-themes live.
 
 ## App setup
 
@@ -36,7 +36,7 @@ ThemeManager.Instance.Initialize();
 
 ## ThemeManager
 
-The manager owns the active theme. Set `Mode` from anywhere; the choice is persisted (to
+Owns the active theme. Set `Mode` from anywhere; the choice is persisted (to
 `%AppData%\joufflu\settings.json`) and restored on the next launch.
 
 ```csharp
@@ -47,14 +47,14 @@ ThemeManager.Instance.Mode = ThemeMode.Dark;    // Light / Dark / System
 bool isDark = ThemeManager.Instance.IsDark;      // the theme actually on screen
 ```
 
-In `ThemeMode.System` the manager reads the Windows apps theme and keeps following it while
-the app runs, so the UI tracks the OS light/dark switch automatically.
+In `ThemeMode.System` the manager reads the Windows apps theme and keeps following it, so the
+UI tracks the OS light/dark switch automatically.
 
 ## Building a theme switcher
 
-There is no dedicated switcher control — bind any UI directly to
-`ThemeManager.Instance.Mode`. For a System / Light / Dark selector, map each mode to a
-`RadioButton` with an enum-to-boolean converter:
+No dedicated switcher control — bind any UI directly to `ThemeManager.Instance.Mode`. For a
+System / Light / Dark selector, map each mode to a `RadioButton` with an enum-to-boolean
+converter:
 
 ```xml
 xmlns:themes="clr-namespace:Joufflu.Themes;assembly=Joufflu"

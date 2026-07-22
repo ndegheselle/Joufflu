@@ -1,0 +1,52 @@
+# Joufflu WPF Components
+
+> WPF inputs and reusable controls for .NET, built on a small design system of themed brushes, dimensions, sizing and spacing helpers. Every control reads its colours through `DynamicResource`, so the whole UI re-themes live between Light and Dark with no restart.
+
+Joufflu ships as three NuGet packages that build on each other: `Joufflu` (core styles, theming, custom controls, and restyled native WPF controls), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
+
+## Start here
+
+- [Overview and getting started](https://github.com/ndegheselle/Joufflu/blob/main/docs/index.md): what the library is, package layout, and the four-step setup (add packages, merge `Resources.xaml`, initialize `ThemeManager`).
+- [Tutorial: a navigable app shell](https://github.com/ndegheselle/Joufflu/blob/main/docs/tutorial.md): builds an MVVM app on `Joufflu.Navigation` — shared shell view model, view-model-first navigation, an example page, a modal overlay and a toast.
+
+## Native controls
+
+- [Buttons](https://github.com/ndegheselle/Joufflu/blob/main/docs/natives/buttons.md): default button plus named styles — solid, soft and outline variants, icon (`IsSquare`) buttons, and `ControlProperties.Size`.
+
+## Inputs (`Joufflu.Inputs`)
+
+- [Numeric & format inputs](https://github.com/ndegheselle/Joufflu/blob/main/docs/inputs/numeric-inputs.md): `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, and the underlying `FormatTextBox`.
+- [Search & combo](https://github.com/ndegheselle/Joufflu/blob/main/docs/inputs/search-and-combo.md): debounced `Search` box and the filtering `ComboBoxSearch`.
+- [Combo box tags](https://github.com/ndegheselle/Joufflu/blob/main/docs/inputs/combo-box-tags.md): multi-selection `ComboBoxTags` with removable tags and optional free entry.
+- [Text editable](https://github.com/ndegheselle/Joufflu/blob/main/docs/inputs/text-editable.md): `TextEditable`, a value that becomes an editable text box on demand.
+- [File picker](https://github.com/ndegheselle/Joufflu/blob/main/docs/inputs/file-picker.md): `FilePicker`, selects a file through the system dialog.
+- [Color picker](https://github.com/ndegheselle/Joufflu/blob/main/docs/inputs/color-picker.md): `ColorPicker` with hex field and a saturation/hue/alpha popup.
+
+## Navigation (`Joufflu.Navigation`)
+
+- [Navigation menu](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/navigation-menu.md): collapsible side menu driven by a `Navigator`, with groups, nesting and a `TargetResolver`.
+- [Overlays](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/overlays.md): stacking modal overlays, `OverlayOptions`, and awaiting a result from `Show`.
+
+## Custom controls (`Joufflu`)
+
+- [Font icon](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/font-icon.md): `FontIcon`, a Lucide icon-font glyph.
+- [Badge](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/badge.md): themed pill in the semantic colours, sized via `ControlProperties.Size`.
+- [Spinner](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/spinner.md): indeterminate loading indicator.
+- [Toasts](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/toasts.md): transient notifications from `IToastService`, including sticky toasts.
+
+## Toolkit (`Joufflu`)
+
+- [Sizing](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/sizing.md): `ControlProperties.Size` and `IsSquare` attached properties.
+- [Spacing](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
+- [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
+- [Theme](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark) and binding a theme switcher.
+- [Customize theme](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/customize-theme.md): the live theme editor, presets and override resource keys.
+- [Application shell](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/application-shell.md): `ThemedWindow`, title-bar-over-content, and `NavigationContainer`.
+
+## Optional
+
+- [Documentation site](https://ndegheselle.github.io/Joufflu/): the rendered docs.
+- [GitHub repository](https://github.com/ndegheselle/Joufflu/): source, samples and issues.
+- [Joufflu on NuGet](https://www.nuget.org/packages/Joufflu): core package (styles & theming).
+- [Joufflu.Inputs on NuGet](https://www.nuget.org/packages/Joufflu.Inputs): input controls.
+- [Joufflu.Navigation on NuGet](https://www.nuget.org/packages/Joufflu.Navigation): navigation & overlays.

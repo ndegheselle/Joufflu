@@ -8,8 +8,8 @@ nav_order: 1
 
 ## NumericUpDown
 
-Selects a whole number. Built on `FormatTextBox` with the numeric format, clear
-and increment/decrement buttons included.
+Selects a whole number. Built on `FormatTextBox` with the numeric format, plus
+clear and increment/decrement buttons.
 
 ```xml
 <inputs:NumericUpDown Value="{Binding NumericValue, Mode=TwoWay}" />
@@ -33,8 +33,8 @@ Selects a `TimeSpan` through a days/hours/minutes/seconds format.
 
 ## FormatTextBox
 
-The base input: a format string describes groups that are parsed into individual
-values and navigated with <kbd>Tab</kbd> / arrows.
+The base input: a format string describes groups, parsed into individual values
+and navigated with <kbd>Tab</kbd> / arrows.
 
 ```xml
 <format:FormatTextBox Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />

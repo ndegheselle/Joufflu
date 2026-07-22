@@ -8,8 +8,8 @@ nav_order: 4
 
 ## TextEditable
 
-Displays a value that can be turned into an editable text box on demand, useful
-outside of a form.
+Displays a value that turns into an editable text box on demand, for use outside
+a form.
 
 ```xml
 <inputs:TextEditable Text="{Binding EditableText, Mode=TwoWay}" />

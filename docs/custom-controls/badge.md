@@ -8,9 +8,8 @@ nav_order: 2
 
 ## Variants
 
-A pill themed from the semantic brushes. Pick a variant with the `Variant`
-property (`Default`, `Primary`, `Secondary`, `Success`, `Info`, `Warning`,
-`Danger`).
+A pill themed from the semantic brushes. Set `Variant` (`Default`, `Primary`,
+`Secondary`, `Success`, `Info`, `Warning`, `Danger`).
 
 ```xml
 <controls:Badge>Default</controls:Badge>

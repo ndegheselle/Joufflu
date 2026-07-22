@@ -8,8 +8,8 @@ nav_order: 4
 
 ## Toast types
 
-Toasts stack in the top-right corner, always above page content and overlays,
-and auto-dismiss after a few seconds (unless sticky). Show them from an injected
+Toasts stack in the top-right corner, always above page content and overlays, and
+auto-dismiss after a few seconds unless sticky. Show them from an injected
 `IToastService`.
 
 ```csharp
@@ -21,5 +21,5 @@ toasts.Error("Failed.");
 toasts.Show(new ToastOptions { Message = "Sticky", Duration = TimeSpan.Zero });
 ```
 
-A `Duration` of `TimeSpan.Zero` makes a toast sticky — it stays until the user
+A `Duration` of `TimeSpan.Zero` makes a toast sticky: it stays until the user
 closes it.

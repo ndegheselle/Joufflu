@@ -8,13 +8,13 @@ nav_order: 1
 
 ## Collapsible side menu
 
-The collapsible side menu plugged into its own `Navigator`. Use the chevron to
-collapse it to an icons-only rail. A `NavigationGroup` displays like an item but
-expands to reveal children, and groups can nest.
+The collapsible side menu plugged into its own `Navigator`. The chevron collapses
+it to an icons-only rail. A `NavigationGroup` displays like an item but expands to
+reveal children, and groups can nest.
 
-When collapsed, each item and group hides its label and instead surfaces it as a
-right-placed [tooltip](../toolkit/tooltip.html) on hover, so the icons-only rail
-stays discoverable.
+When collapsed, each item and group hides its label and surfaces it as a
+right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
+rail discoverable.
 
 ```xml
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}"

@@ -8,7 +8,7 @@ nav_order: 5
 
 ## FilePicker
 
-Selects a file through the system dialog and exposes the chosen path with a clear
+Selects a file through the system dialog and exposes the chosen path, with a clear
 button.
 
 ```xml

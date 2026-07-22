@@ -8,8 +8,8 @@ nav_order: 2
 
 ## Search
 
-A text box with a built-in delay before it raises `SearchChanged`, to limit calls
-to an API or database. <kbd>Escape</kbd> clears it.
+A text box that debounces before raising `SearchChanged`, to limit calls to an
+API or database. <kbd>Escape</kbd> clears it.
 
 ```xml
 <inputs:Search />
@@ -21,8 +21,8 @@ to an API or database. <kbd>Escape</kbd> clears it.
 
 ## ComboBoxSearch
 
-An editable combo box that filters its items as you type. Accepts a
-`FilterMemberPath` that acts like `DisplayMemberPath` for the filter.
+An editable combo box that filters its items as you type. `FilterMemberPath` acts
+like `DisplayMemberPath` for the filter.
 
 ```xml
 <inputs:ComboBoxSearch ItemsSource="{Binding Countries}"

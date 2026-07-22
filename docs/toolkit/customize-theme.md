@@ -6,10 +6,10 @@ nav_order: 5
 
 # Customize theme
 
-The gallery's theme customizer lets you tweak colours and dimensions and watch
-the whole gallery update live. You can start from a **preset theme**, then copy
-or save the generated resource dictionary and merge it into your app **after**
-the Joufflu resources to apply it.
+The gallery's theme customizer tweaks colours and dimensions with the whole
+gallery updating live. Start from a **preset theme**, then copy or save the
+generated resource dictionary and merge it into your app **after** the Joufflu
+resources to apply it.
 
 The design system is exposed as resource keys you override in a dictionary:
 
