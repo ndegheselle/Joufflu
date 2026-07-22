@@ -45,5 +45,5 @@ edge.
 
 {: .note }
 > Setting `Tooltip.Content` to `null` removes the tooltip, so it composes with
-> triggers — the [navigation menu](../navigation/navigation-menu.html) attaches a
+> triggers — the [navigation menu](../navigation/navigation-menu.md) attaches a
 > right-placed tooltip to each item only while the menu is collapsed.

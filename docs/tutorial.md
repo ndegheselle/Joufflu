@@ -13,7 +13,7 @@ matches the wiring the **`Joufflu.Samples`** gallery uses.
 {: .note }
 > Assumes the packages are installed and `App.xaml` merges the Joufflu resource
 > dictionaries, with `ThemeManager.Instance.Initialize()` called at startup. See
-> [Getting started]({{ site.baseurl }}/#getting-started) first if not.
+> [Getting started](index.md#getting-started) first if not.
 
 The snippets use these namespaces:
 
@@ -169,7 +169,7 @@ protected override void OnStartup(StartupEventArgs e)
 > Each item's `Target` is passed to `TargetResolver`, which returns the page. Add
 > more items with the Step 4 recipe. A `NavigationGroup` expands to reveal
 > children instead of navigating; a `NavigationTitle` is a section label. See
-> [Navigation menu]({{ site.baseurl }}/navigation/navigation-menu/) for the full
+> [Navigation menu](navigation/navigation-menu.md) for the full
 > markup.
 
 ## Step 4 — An example page
@@ -327,9 +327,9 @@ the shared `OverlayService`, awaits its result, and confirms with the shared
 
 ## Where to go next
 
-- [Navigation menu]({{ site.baseurl }}/navigation/navigation-menu/) — groups,
+- [Navigation menu](navigation/navigation-menu.md) — groups,
   nesting, the collapsible rail and the menu `Header`.
-- [Overlays]({{ site.baseurl }}/navigation/overlays/) — overlay options and
+- [Overlays](navigation/overlays.md) — overlay options and
   stacking.
-- [Toasts]({{ site.baseurl }}/custom-controls/toasts/) — toast types and sticky
+- [Toasts](custom-controls/toasts.md) — toast types and sticky
   toasts.

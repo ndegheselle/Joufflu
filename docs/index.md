@@ -30,18 +30,18 @@ can paste into your views.
 > The gallery's **Natives** group — WPF's built-in controls restyled to match the
 > design system (text boxes, combo boxes, data grid, …) — is mostly undocumented
 > here; only natives with named style variants are (see
-> [Native controls]({{ site.baseurl }}/natives/)). Otherwise these pages cover the
+> [Native controls](natives/index.md)). Otherwise these pages cover the
 > custom controls the library adds.
 
 ## Sections
 
 | Section | What's inside |
 |---|---|
-| [Native controls]({{ site.baseurl }}/natives/) | Buttons (solid, soft & outline variants) |
-| [Inputs]({{ site.baseurl }}/inputs/) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
-| [Navigation]({{ site.baseurl }}/navigation/) | `NavigationMenu`, overlays (modal dialogs) |
-| [Custom controls]({{ site.baseurl }}/custom-controls/) | `FontIcon`, `Badge`, `Spinner`, toasts |
-| [Toolkit]({{ site.baseurl }}/toolkit/) | Sizing, spacing, tooltips, theme customization, application shell |
+| [Native controls](natives/index.md) | Buttons (solid, soft & outline variants) |
+| [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
+| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs) |
+| [Custom controls](custom-controls/index.md) | `FontIcon`, `Badge`, `Spinner`, toasts |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, tooltips, theme customization, application shell |
 
 ## Getting started
 
@@ -77,7 +77,7 @@ can paste into your views.
 
 4. Use the controls as shown in the pages above.
 
-New to the library? The [Tutorial]({{ site.baseurl }}/tutorial/) builds a full
+New to the library? The [Tutorial](tutorial.md) builds a full
 navigable app shell — side menu, pages, modals and toasts — from scratch.
 
 To explore everything interactively, run the **`Joufflu.Samples`** project.

@@ -13,7 +13,7 @@ it to an icons-only rail. A `NavigationGroup` displays like an item but expands 
 reveal children, and groups can nest.
 
 When collapsed, each item and group hides its label and surfaces it as a
-right-placed [tooltip](../toolkit/tooltip.html) on hover, keeping the icons-only
+right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
 rail discoverable.
 
 ```xml
