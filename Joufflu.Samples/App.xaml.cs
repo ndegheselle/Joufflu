@@ -19,6 +19,13 @@ namespace Joufflu.Samples
             Current.DispatcherUnhandledException += CurrentOnDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
+            // Register a custom theme so it can be selected alongside the built-in System/Light/Dark.
+            // Register before Initialize() so a persisted "Ocean" selection is restored on launch.
+            ThemeManager.Instance.Register(
+                "Ocean",
+                new Uri("pack://application:,,,/Joufflu.Samples;component/Themes/Ocean.xaml"),
+                isDark: true);
+
             // Restore the persisted theme (or follow the system) and insert its dictionary before any window is shown.
             ThemeManager.Instance.Initialize();
 

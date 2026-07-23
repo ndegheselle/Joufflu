@@ -39,7 +39,7 @@ Joufflu ships as three NuGet packages that build on each other: `Joufflu` (core 
 - [Sizing](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/sizing.md): `ControlProperties.Size` and `IsSquare` attached properties.
 - [Spacing](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
 - [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
-- [Theme](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark) and binding a theme switcher.
+- [Theme](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
 - [Customize theme](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/customize-theme.md): the live theme editor, presets and override resource keys.
 - [Application shell](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/application-shell.md): `ThemedWindow`, title-bar-over-content, and `NavigationContainer`.
 
