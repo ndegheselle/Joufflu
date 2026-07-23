@@ -27,27 +27,34 @@
             <c:CodeExample
                 Title="Theme switcher"
                 Code="{Binding SwitcherCode}"
-                Description="A drop-in control bound to ThemeManager. Pick a mode and the whole gallery re-themes live; the choice is remembered across launches.">
+                Description="A drop-in control bound to ThemeManager. Pick a theme by name and the whole gallery re-themes live; the choice is remembered across launches. 'Ocean' is a custom theme this app registered at startup — it sits alongside the built-ins.">
                 <StackPanel joufflu:Spacing.Gap="4">
 
-                    <RadioButton IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter={x:Static themes:ThemeMode.System}, Mode=TwoWay}" ToolTip="Follow the system theme">
+                    <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=System, Mode=TwoWay}" ToolTip="Follow the system theme">
                         <StackPanel joufflu:Spacing.Gap="6,0" Orientation="Horizontal">
                             <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Monitor}" />
                             <TextBlock VerticalAlignment="Center" Text="System" />
                         </StackPanel>
                     </RadioButton>
 
-                    <RadioButton IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter={x:Static themes:ThemeMode.Light}, Mode=TwoWay}" ToolTip="Use the light theme">
+                    <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=Light, Mode=TwoWay}" ToolTip="Use the light theme">
                         <StackPanel joufflu:Spacing.Gap="6,0" Orientation="Horizontal">
                             <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Sun}" />
                             <TextBlock VerticalAlignment="Center" Text="Light" />
                         </StackPanel>
                     </RadioButton>
 
-                    <RadioButton IsChecked="{Binding Mode, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter={x:Static themes:ThemeMode.Dark}, Mode=TwoWay}" ToolTip="Use the dark theme">
+                    <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=Dark, Mode=TwoWay}" ToolTip="Use the dark theme">
                         <StackPanel joufflu:Spacing.Gap="6,0" Orientation="Horizontal">
                             <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Moon}" />
                             <TextBlock VerticalAlignment="Center" Text="Dark" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=Ocean, Mode=TwoWay}" ToolTip="Use the custom Ocean theme">
+                        <StackPanel joufflu:Spacing.Gap="6,0" Orientation="Horizontal">
+                            <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Palette}" />
+                            <TextBlock VerticalAlignment="Center" Text="Ocean (custom)" />
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>

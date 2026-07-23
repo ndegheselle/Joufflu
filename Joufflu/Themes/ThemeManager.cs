@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -7,30 +8,33 @@ using Microsoft.Win32;
 
 namespace Joufflu.Themes;
 
-/// <summary>The theme a consumer can ask for.</summary>
-public enum ThemeMode
-{
-    /// <summary>Follow the Windows apps theme and track it while the app runs.</summary>
-    System,
-    Light,
-    Dark,
-}
-
 /// <summary>
 /// Applies and tracks the active Joufflu colour theme application-wide.
 /// <para>
-/// The theme is a single <see cref="ResourceDictionary"/> (Light or Dark) kept at the front of
+/// A theme is a single <see cref="ResourceDictionary"/> kept at the front of
 /// <see cref="Application"/>.<c>Resources.MergedDictionaries</c>. Switching swaps that one dictionary;
 /// because every control references colours through <c>DynamicResource</c>, the whole UI re-themes live.
 /// </para>
 /// <para>
-/// In <see cref="ThemeMode.System"/> the manager reads the Windows "apps" theme and keeps following it
-/// (via <see cref="SystemEvents.UserPreferenceChanged"/>) until another mode is chosen. The selected
-/// <see cref="Mode"/> is persisted so it is restored on the next launch.
+/// Themes are selected by name. Three are always available: <see cref="Light"/> and <see cref="Dark"/>
+/// (Joufflu's built-in palettes) and <see cref="System"/>, which reads the Windows "apps" theme and keeps
+/// following it (via <see cref="SystemEvents.UserPreferenceChanged"/>) — resolving to Light or Dark — until
+/// another theme is chosen. Consumers register their own palettes with <see cref="Register(string, Uri, bool)"/>
+/// (or <see cref="Register(string, ResourceDictionary, bool)"/>); registered themes become selectable through
+/// <see cref="Theme"/> alongside the built-ins. The selected name is persisted so it is restored on the next launch.
 /// </para>
 /// </summary>
 public sealed class ThemeManager : ObservableObject
 {
+    /// <summary>Name of the built-in theme that follows the Windows apps theme (light/dark) live.</summary>
+    public const string System = "System";
+
+    /// <summary>Name of Joufflu's built-in light palette.</summary>
+    public const string Light = "Light";
+
+    /// <summary>Name of Joufflu's built-in dark palette.</summary>
+    public const string Dark = "Dark";
+
     private const string LightSource = "pack://application:,,,/Joufflu;component/Themes/Light.xaml";
     private const string DarkSource = "pack://application:,,,/Joufflu;component/Themes/Dark.xaml";
 
@@ -39,22 +43,68 @@ public sealed class ThemeManager : ObservableObject
 
     public static ThemeManager Instance { get; } = new();
 
+    /// <summary>A registered, ready-to-apply theme: a dictionary source and whether it reads as dark.</summary>
+    private sealed class Registration
+    {
+        private readonly Uri? _source;
+        private readonly ResourceDictionary? _dictionary;
+
+        public bool IsDark { get; }
+
+        public Registration(Uri source, bool isDark)
+        {
+            _source = source;
+            IsDark = isDark;
+        }
+
+        public Registration(ResourceDictionary dictionary, bool isDark)
+        {
+            _dictionary = dictionary;
+            IsDark = isDark;
+        }
+
+        /// <summary>
+        /// The dictionary to merge. A source-backed theme is rebuilt each time (cheap, avoids sharing a
+        /// single instance across swaps); an in-memory theme reuses the instance the consumer supplied.
+        /// </summary>
+        public ResourceDictionary CreateDictionary()
+            => _dictionary ?? new ResourceDictionary { Source = _source };
+    }
+
+    // Concrete themes keyed by name (Light, Dark, and any registered by the consumer). "System" is not
+    // stored here — it is a resolver that picks Light or Dark from the OS at apply-time.
+    private readonly Dictionary<string, Registration> _themes = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ObservableCollection<string> _names = new();
+
     private ResourceDictionary? _themeDictionary;
     private bool _initialized;
 
-    private ThemeManager() { }
-
-    private ThemeMode _mode = ThemeMode.System;
-    /// <summary>
-    /// The requested theme. Assigning applies it immediately (once <see cref="Initialize"/> has run)
-    /// and persists the choice.
-    /// </summary>
-    public ThemeMode Mode
+    private ThemeManager()
     {
-        get => _mode;
+        // Built-ins are always present so "System" can always resolve to one of them.
+        _themes[Light] = new Registration(new Uri(LightSource), isDark: false);
+        _themes[Dark] = new Registration(new Uri(DarkSource), isDark: true);
+        _names.Add(System);
+        _names.Add(Light);
+        _names.Add(Dark);
+        Themes = new ReadOnlyObservableCollection<string>(_names);
+    }
+
+    /// <summary>The selectable theme names, in registration order (System, Light, Dark, then any custom ones).</summary>
+    public ReadOnlyObservableCollection<string> Themes { get; }
+
+    private string _theme = System;
+    /// <summary>
+    /// The requested theme, by name. Assigning applies it immediately (once <see cref="Initialize"/> has run)
+    /// and persists the choice. Assigning a name that is not registered falls back to the system theme until
+    /// a theme with that name is registered.
+    /// </summary>
+    public string Theme
+    {
+        get => _theme;
         set
         {
-            if (!SetProperty(ref _mode, value))
+            if (!SetProperty(ref _theme, value))
                 return;
 
             Save(value);
@@ -63,12 +113,85 @@ public sealed class ThemeManager : ObservableObject
         }
     }
 
-    /// <summary>The theme actually on screen — <see cref="Mode"/> with <c>System</c> resolved to Light or Dark.</summary>
+    /// <summary>The theme actually on screen — <see cref="Theme"/> with <c>System</c> resolved to Light or Dark.</summary>
     public bool IsDark { get; private set; }
 
     /// <summary>
-    /// Loads the persisted <see cref="Mode"/>, inserts the theme dictionary and starts following the OS
-    /// theme. Call once, before the first window is shown (typically in <c>App.OnStartup</c>).
+    /// Registers (or replaces) a custom theme loaded from a resource-dictionary <paramref name="source"/>,
+    /// making it selectable by <paramref name="name"/> through <see cref="Theme"/>. Call before
+    /// <see cref="Initialize"/> so a persisted custom selection can be restored; registering the theme that is
+    /// currently selected re-applies it live.
+    /// </summary>
+    /// <param name="name">The selectable name. Reusing an existing name (including a built-in) replaces it.</param>
+    /// <param name="source">A pack/absolute <see cref="Uri"/> to the theme <see cref="ResourceDictionary"/>.</param>
+    /// <param name="isDark">Whether the theme reads as dark; surfaced through <see cref="IsDark"/> while selected.</param>
+    public void Register(string name, Uri source, bool isDark = false)
+        => Register(name, new Registration(source, isDark));
+
+    /// <summary>
+    /// Registers (or replaces) a custom theme from an in-memory <paramref name="dictionary"/>, making it
+    /// selectable by <paramref name="name"/> through <see cref="Theme"/>. Call before <see cref="Initialize"/>
+    /// so a persisted custom selection can be restored; registering the theme that is currently selected
+    /// re-applies it live.
+    /// </summary>
+    /// <param name="name">The selectable name. Reusing an existing name (including a built-in) replaces it.</param>
+    /// <param name="dictionary">The theme <see cref="ResourceDictionary"/> to merge when selected.</param>
+    /// <param name="isDark">Whether the theme reads as dark; surfaced through <see cref="IsDark"/> while selected.</param>
+    public void Register(string name, ResourceDictionary dictionary, bool isDark = false)
+        => Register(name, new Registration(dictionary, isDark));
+
+    private void Register(string name, Registration registration)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Theme name must not be empty.", nameof(name));
+        if (string.Equals(name, System, StringComparison.OrdinalIgnoreCase))
+            throw new ArgumentException($"'{System}' is reserved for the OS-following theme.", nameof(name));
+
+        bool isNew = !_themes.ContainsKey(name);
+        _themes[name] = registration;
+        if (isNew)
+            _names.Add(name);
+
+        // If this is the theme on screen (or the persisted-but-not-yet-registered selection), show it now.
+        if (_initialized && string.Equals(name, _theme, StringComparison.OrdinalIgnoreCase))
+            Apply();
+    }
+
+    /// <summary>
+    /// Removes a custom theme. The built-in <see cref="System"/>, <see cref="Light"/> and <see cref="Dark"/>
+    /// themes cannot be removed. Removing the selected theme falls back to the system theme.
+    /// </summary>
+    /// <returns><c>true</c> if a theme was removed.</returns>
+    public bool Unregister(string name)
+    {
+        if (string.Equals(name, System, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(name, Light, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(name, Dark, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (!_themes.Remove(name))
+            return false;
+
+        // Drop the name using the stored casing so the observable collection stays in sync.
+        for (int i = 0; i < _names.Count; i++)
+        {
+            if (string.Equals(_names[i], name, StringComparison.OrdinalIgnoreCase))
+            {
+                _names.RemoveAt(i);
+                break;
+            }
+        }
+
+        if (string.Equals(name, _theme, StringComparison.OrdinalIgnoreCase))
+            Theme = System;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Loads the persisted <see cref="Theme"/>, inserts the theme dictionary and starts following the OS
+    /// theme. Call once, before the first window is shown (typically in <c>App.OnStartup</c>). Register any
+    /// custom themes first so a persisted custom selection can be restored.
     /// </summary>
     public void Initialize()
     {
@@ -76,24 +199,19 @@ public sealed class ThemeManager : ObservableObject
             return;
         _initialized = true;
 
-        _mode = Load();
-        OnPropertyChanged(nameof(Mode));
+        _theme = Load();
+        OnPropertyChanged(nameof(Theme));
 
         SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
         Apply();
     }
 
-    /// <summary>Resolves the requested mode against the OS and swaps in the matching theme dictionary.</summary>
+    /// <summary>Resolves the requested theme against the OS and swaps in the matching theme dictionary.</summary>
     private void Apply()
     {
-        bool isDark = _mode switch
-        {
-            ThemeMode.Light => false,
-            ThemeMode.Dark => true,
-            _ => ShouldSystemUseDarkMode(),
-        };
+        Registration registration = Resolve(_theme);
 
-        var next = new ResourceDictionary { Source = new Uri(isDark ? DarkSource : LightSource) };
+        var next = registration.CreateDictionary();
 
         var merged = Application.Current.Resources.MergedDictionaries;
         if (_themeDictionary is not null)
@@ -112,14 +230,27 @@ public sealed class ThemeManager : ObservableObject
 
         _themeDictionary = next;
 
-        IsDark = isDark;
+        IsDark = registration.IsDark;
         OnPropertyChanged(nameof(IsDark));
+    }
+
+    /// <summary>
+    /// Maps a selected name to the concrete theme to show: <see cref="System"/> (or an unknown/not-yet-registered
+    /// name) resolves to Light or Dark from the OS; any registered name resolves to itself.
+    /// </summary>
+    private Registration Resolve(string name)
+    {
+        if (!string.Equals(name, System, StringComparison.OrdinalIgnoreCase)
+            && _themes.TryGetValue(name, out Registration? registration))
+            return registration;
+
+        return ShouldSystemUseDarkMode() ? _themes[Dark] : _themes[Light];
     }
 
     private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
     {
         // Only the "General" category carries the light/dark switch, and only System mode follows it.
-        if (e.Category != UserPreferenceCategory.General || _mode != ThemeMode.System)
+        if (e.Category != UserPreferenceCategory.General || !string.Equals(_theme, System, StringComparison.OrdinalIgnoreCase))
             return;
 
         // The event arrives off the UI thread; touch resources on the dispatcher.
@@ -130,7 +261,11 @@ public sealed class ThemeManager : ObservableObject
 
     private sealed class Settings
     {
-        public ThemeMode ThemeMode { get; set; }
+        /// <summary>The selected theme name.</summary>
+        public string? Theme { get; set; }
+
+        /// <summary>Legacy field: the pre-registry enum (0=System, 1=Light, 2=Dark). Read-only migration.</summary>
+        public int? ThemeMode { get; set; }
     }
 
     private static string SettingsPath => Path.Combine(
@@ -138,28 +273,41 @@ public sealed class ThemeManager : ObservableObject
         "joufflu",
         "settings.json");
 
-    private static ThemeMode Load()
+    private static string Load()
     {
         try
         {
             if (!File.Exists(SettingsPath))
-                return ThemeMode.System;
+                return System;
+
             var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(SettingsPath));
-            return settings?.ThemeMode ?? ThemeMode.System;
+            if (settings is null)
+                return System;
+
+            if (!string.IsNullOrWhiteSpace(settings.Theme))
+                return settings.Theme;
+
+            // Migrate the old enum-based setting (0=System, 1=Light, 2=Dark).
+            return settings.ThemeMode switch
+            {
+                1 => Light,
+                2 => Dark,
+                _ => System,
+            };
         }
         catch
         {
-            return ThemeMode.System;
+            return System;
         }
     }
 
-    private static void Save(ThemeMode mode)
+    private static void Save(string theme)
     {
         try
         {
             string path = SettingsPath;
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            File.WriteAllText(path, JsonSerializer.Serialize(new Settings { ThemeMode = mode }));
+            File.WriteAllText(path, JsonSerializer.Serialize(new Settings { Theme = theme }));
         }
         catch
         {
