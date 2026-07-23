@@ -1,7 +1,5 @@
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Text.Json;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
@@ -21,7 +19,12 @@ namespace Joufflu.Themes;
 /// following it (via <see cref="SystemEvents.UserPreferenceChanged"/>) — resolving to Light or Dark — until
 /// another theme is chosen. Consumers register their own palettes with <see cref="Register(string, Uri, bool)"/>
 /// (or <see cref="Register(string, ResourceDictionary, bool)"/>); registered themes become selectable through
-/// <see cref="Theme"/> alongside the built-ins. The selected name is persisted so it is restored on the next launch.
+/// <see cref="Theme"/> alongside the built-ins.
+/// </para>
+/// <para>
+/// The manager does not persist the selection — an app that wants the theme restored on the next launch saves
+/// <see cref="Theme"/> itself (it raises <see cref="ObservableObject.PropertyChanged"/> on every change) and
+/// assigns it back before <see cref="Initialize"/>.
 /// </para>
 /// </summary>
 public sealed class ThemeManager : ObservableObject
@@ -95,9 +98,9 @@ public sealed class ThemeManager : ObservableObject
 
     private string _theme = System;
     /// <summary>
-    /// The requested theme, by name. Assigning applies it immediately (once <see cref="Initialize"/> has run)
-    /// and persists the choice. Assigning a name that is not registered falls back to the system theme until
-    /// a theme with that name is registered.
+    /// The requested theme, by name. Assigning applies it immediately (once <see cref="Initialize"/> has run).
+    /// Assigning a name that is not registered falls back to the system theme until a theme with that name is
+    /// registered.
     /// </summary>
     public string Theme
     {
@@ -107,7 +110,6 @@ public sealed class ThemeManager : ObservableObject
             if (!SetProperty(ref _theme, value))
                 return;
 
-            Save(value);
             if (_initialized)
                 Apply();
         }
@@ -204,18 +206,15 @@ public sealed class ThemeManager : ObservableObject
     }
 
     /// <summary>
-    /// Loads the persisted <see cref="Theme"/>, inserts the theme dictionary and starts following the OS
-    /// theme. Call once, before the first window is shown (typically in <c>App.OnStartup</c>). Register any
-    /// custom themes first so a persisted custom selection can be restored.
+    /// Inserts the theme dictionary for the current <see cref="Theme"/> and starts following the OS theme.
+    /// Call once, before the first window is shown (typically in <c>App.OnStartup</c>). Register any custom
+    /// themes and assign a restored <see cref="Theme"/> first so the right theme is shown from the start.
     /// </summary>
     public void Initialize()
     {
         if (_initialized)
             return;
         _initialized = true;
-
-        _theme = Load();
-        OnPropertyChanged(nameof(Theme));
 
         SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
         Apply();
@@ -271,64 +270,4 @@ public sealed class ThemeManager : ObservableObject
         // The event arrives off the UI thread; touch resources on the dispatcher.
         Application.Current?.Dispatcher.Invoke(Apply);
     }
-
-    #region Persistence
-
-    private sealed class Settings
-    {
-        /// <summary>The selected theme name.</summary>
-        public string? Theme { get; set; }
-
-        /// <summary>Legacy field: the pre-registry enum (0=System, 1=Light, 2=Dark). Read-only migration.</summary>
-        public int? ThemeMode { get; set; }
-    }
-
-    private static string SettingsPath => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "joufflu",
-        "settings.json");
-
-    private static string Load()
-    {
-        try
-        {
-            if (!File.Exists(SettingsPath))
-                return System;
-
-            var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(SettingsPath));
-            if (settings is null)
-                return System;
-
-            if (!string.IsNullOrWhiteSpace(settings.Theme))
-                return settings.Theme;
-
-            // Migrate the old enum-based setting (0=System, 1=Light, 2=Dark).
-            return settings.ThemeMode switch
-            {
-                1 => Light,
-                2 => Dark,
-                _ => System,
-            };
-        }
-        catch
-        {
-            return System;
-        }
-    }
-
-    private static void Save(string theme)
-    {
-        try
-        {
-            string path = SettingsPath;
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            File.WriteAllText(path, JsonSerializer.Serialize(new Settings { Theme = theme }));
-        }
-        catch
-        {
-            // Persistence is best-effort; a failure to save must not break theming.
-        }
-    }
-
-    #endregion
 }

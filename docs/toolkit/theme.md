@@ -39,8 +39,7 @@ ThemeManager.Instance.Initialize();
 
 ## ThemeManager
 
-Owns the active theme. Set `Theme` (a name) from anywhere; the choice is persisted (to
-`%AppData%\joufflu\settings.json`) and restored on the next launch.
+Owns the active theme. Set `Theme` (a name) from anywhere and the UI re-themes live:
 
 ```csharp
 using Joufflu.Themes;
@@ -54,6 +53,9 @@ bool isDark = ThemeManager.Instance.IsDark;         // the theme actually on scr
 `System` theme the manager reads the Windows apps theme and keeps following it, so the UI tracks
 the OS light/dark switch automatically.
 
+The manager does **not** persist the selection — that is left to the app, since each app stores its
+settings differently (see [Persisting the theme](#persisting-the-theme)).
+
 ## Registering a custom theme
 
 A custom theme is just a resource dictionary with the same keys as `Light.xaml` / `Dark.xaml`
@@ -62,7 +64,7 @@ A custom theme is just a resource dictionary with the same keys as `Light.xaml` 
 in the `Themes` list next to the built-ins:
 
 ```csharp
-// Register BEFORE Initialize() so a persisted custom selection is restored on launch.
+// Register BEFORE Initialize() so a restored custom selection can be applied on launch.
 ThemeManager.Instance.Register(
     "Ocean",
     new Uri("pack://application:,,,/MyApp;component/Themes/Ocean.xaml"),
@@ -76,7 +78,36 @@ ThemeManager.Instance.Theme = "Ocean";
 
 Reusing an existing name replaces that theme; `Unregister(name)` removes a custom one (the built-ins
 cannot be removed). Registering the currently-selected theme re-applies it live — handy when the
-persisted selection is a custom theme registered after `Initialize()`.
+restored selection is a custom theme registered after `Initialize()`.
+
+## Persisting the theme
+
+`ThemeManager` does not save the selected theme — each app owns its settings and usually wants to
+fold the theme into the same store as its other preferences. Making the choice survive a restart is
+two small steps:
+
+1. **Restore** the saved name before `Initialize()`, so the right theme is shown from the first frame.
+2. **Save** on every change: `ThemeManager` is an `ObservableObject`, so subscribe to `PropertyChanged`
+   and write the name whenever `Theme` changes.
+
+```csharp
+// App.xaml.cs — OnStartup, after registering custom themes and before Initialize().
+string? saved = LoadThemeSetting();                 // your own settings store
+if (!string.IsNullOrWhiteSpace(saved))
+    ThemeManager.Instance.Theme = saved;
+
+ThemeManager.Instance.PropertyChanged += (_, e) =>
+{
+    if (e.PropertyName == nameof(ThemeManager.Theme))
+        SaveThemeSetting(ThemeManager.Instance.Theme);
+};
+
+ThemeManager.Instance.Initialize();
+```
+
+`LoadThemeSetting`/`SaveThemeSetting` are whatever your app already uses (a JSON file, the registry,
+`Settings.settings`, …). The sample app persists a small JSON file under `%AppData%` — see its
+`App.xaml.cs` for the full working example.
 
 ## Building a theme switcher
 
