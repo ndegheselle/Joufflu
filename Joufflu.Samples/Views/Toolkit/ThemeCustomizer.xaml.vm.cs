@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Joufflu.Themes;
 using Microsoft.Win32;
 using JBrushes = Joufflu.Brushes;
 using JColors = Joufflu.Colors;
@@ -129,8 +130,8 @@ public class ThemeCustomizerViewModel : ObservableObject
     public ObservableCollection<ThemeColorGroup> ColorGroups { get; } = new();
     public ObservableCollection<ThemeDimensionGroup> DimensionGroups { get; } = new();
 
-    /// <summary>Selectable preset palettes shown as cards at the top of the editor.</summary>
-    public IReadOnlyList<ThemePreset> Presets { get; } = ThemePresets.All;
+    /// <summary>Selectable preset palettes, sourced from the themes registered with <see cref="ThemeManager"/>.</summary>
+    public IReadOnlyList<ThemePreset> Presets { get; }
 
     private ThemePreset? _selectedPreset;
     /// <summary>The currently selected preset; assigning a non-null value applies its palette.</summary>
@@ -159,6 +160,9 @@ public class ThemeCustomizerViewModel : ObservableObject
     {
         BuildColorGroups();
         BuildDimensionGroups();
+
+        // Built after the colour groups so _allColors tells us which keys to read from each theme.
+        Presets = BuildPresets();
 
         ResetCommand = new RelayCommand(Reset);
         CopyCommand = new RelayCommand(Copy);
@@ -258,6 +262,34 @@ public class ThemeCustomizerViewModel : ObservableObject
             Dim("Small", "ControlFontSizeSm", 9, 22),
             Dim("Medium", "ControlFontSizeMd", 10, 24),
             Dim("Large", "ControlFontSizeLg", 11, 28)));
+    }
+
+    /// <summary>
+    /// Builds a preset per concrete theme registered with <see cref="ThemeManager"/> (<c>System</c> is
+    /// skipped — it is a resolver, not a palette). Each preset's colours are read straight from the
+    /// theme's dictionary so the list never drifts from what the app can actually apply.
+    /// </summary>
+    private IReadOnlyList<ThemePreset> BuildPresets()
+    {
+        var presets = new List<ThemePreset>();
+        foreach (string name in ThemeManager.Instance.Themes)
+        {
+            ResourceDictionary? dictionary = ThemeManager.Instance.GetDictionary(name);
+            if (dictionary is null)
+                continue;
+
+            var colors = new Dictionary<string, Color>();
+            foreach (var entry in _allColors)
+            {
+                if (dictionary[entry.Key] is Color color)
+                    colors[entry.ResourceName] = color;
+            }
+
+            // Only offer themes that define the whole editable palette — ThemePreset needs every key.
+            if (colors.Count == _allColors.Count)
+                presets.Add(new ThemePreset(name, colors));
+        }
+        return presets;
     }
 
     #endregion

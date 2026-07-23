@@ -189,6 +189,21 @@ public sealed class ThemeManager : ObservableObject
     }
 
     /// <summary>
+    /// Builds the resource dictionary for a concrete registered theme (its colours, brushes, …) so its
+    /// palette can be inspected without selecting it. Returns <c>null</c> for <see cref="System"/> (a
+    /// resolver, not a concrete theme) or an unknown name.
+    /// </summary>
+    public ResourceDictionary? GetDictionary(string name)
+    {
+        if (string.Equals(name, System, StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        return _themes.TryGetValue(name, out Registration? registration)
+            ? registration.CreateDictionary()
+            : null;
+    }
+
+    /// <summary>
     /// Loads the persisted <see cref="Theme"/>, inserts the theme dictionary and starts following the OS
     /// theme. Call once, before the first window is shown (typically in <c>App.OnStartup</c>). Register any
     /// custom themes first so a persisted custom selection can be restored.
