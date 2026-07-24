@@ -17,14 +17,10 @@
     PlaceTitleBarOverContent="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <controls:ThemedWindow.Resources>
-        <converters:TopThicknessConverter x:Key="TopThickness" />
-    </controls:ThemedWindow.Resources>
     <DockPanel>
         <nav:NavigationMenu
             DockPanel.Dock="Left"
             Navigator="{Binding Navigator}"
-            Padding="{Binding TitleBarActualHeight, RelativeSource={RelativeSource AncestorType={x:Type controls:ThemedWindow}}, Converter={StaticResource TopThickness}}"
             TargetResolver="{Binding ResolveTarget}">
             <nav:NavigationMenu.Header>
                 <StackPanel
@@ -343,7 +339,6 @@
         <nav:NavigationContainer
             Navigator="{Binding Navigator}"
             Overlays="{Binding Overlays}"
-            Padding="{Binding TitleBarActualHeight, RelativeSource={RelativeSource AncestorType={x:Type controls:ThemedWindow}}, Converter={StaticResource TopThickness}}"
             Toasts="{Binding Toasts}" />
     </DockPanel>
 </controls:ThemedWindow>
