@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -8,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Joufflu.Inputs.Controls
 {
@@ -43,7 +43,7 @@ namespace Joufflu.Inputs.Controls
             nameof(SelectedItems),
             typeof(IList),
             typeof(ComboBoxTags),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((ComboBoxTags)o).OnSelectedItemsChanged()));
+            new FrameworkPropertyMetadata(null, (o, e) => ((ComboBoxTags)o).OnSelectedItemsChanged()));
 
         public IList SelectedItems
         {
