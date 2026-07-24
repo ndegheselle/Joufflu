@@ -337,6 +337,7 @@
         </nav:NavigationMenu>
 
         <nav:NavigationContainer
+            Margin="0,30,0,0"
             Navigator="{Binding Navigator}"
             Overlays="{Binding Overlays}"
             Toasts="{Binding Toasts}" />

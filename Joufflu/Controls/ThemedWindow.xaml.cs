@@ -34,13 +34,6 @@ public class ThemedWindow : Window
 
     protected HwndInterop? HwndInterop { get; private set; }
 
-    // Kept so the AddValueChanged subscription in HandleTitleBarActualHeightChanged
-    // can be removed on Closed (AddValueChanged otherwise roots the title bar and this
-    // window in a process-wide static table for the app's lifetime).
-    private DependencyPropertyDescriptor? _titleBarHeightDescriptor;
-    private Border? _titleBar;
-    private EventHandler? _titleBarHeightChangedHandler;
-
     public FrameworkElement? DragMoveThumb { get; protected set; }
 
     public FrameworkElement? IconPresenter { get; protected set; }
@@ -69,15 +62,6 @@ public class ThemedWindow : Window
     {
         get => (ImageSource?)GetValue(IconSourceProperty);
         set => SetValue(IconSourceProperty, value);
-    }
-
-    /// <summary>
-    /// Gets the title bar actual height.
-    /// </summary>
-    public double TitleBarActualHeight
-    {
-        get => (double)GetValue(TitleBarActualHeightProperty);
-        private set => SetValue(TitleBarActualHeightPropertyKey, value);
     }
 
     /// <summary>
@@ -160,10 +144,6 @@ public class ThemedWindow : Window
     public static readonly DependencyProperty IconVisibilityProperty = DependencyProperty.Register("IconVisibility", typeof(Visibility), typeof(ThemedWindow), new PropertyMetadata(Visibility.Visible));
 
     protected internal static readonly DependencyProperty IconSourceProperty = DependencyProperty.Register("IconSource", typeof(ImageSource), typeof(ThemedWindow), new PropertyMetadata(null));
-
-    protected internal static readonly DependencyPropertyKey TitleBarActualHeightPropertyKey = DependencyProperty.RegisterReadOnly("TitleBarActualHeight", typeof(double), typeof(ThemedWindow), new PropertyMetadata(0.0d));
-
-    protected internal static readonly DependencyProperty TitleBarActualHeightProperty = TitleBarActualHeightPropertyKey.DependencyProperty;
 
     public static readonly DependencyProperty TitleBarContentProperty = DependencyProperty.Register("TitleBarContent", typeof(object), typeof(ThemedWindow), new PropertyMetadata(null));
 
@@ -521,36 +501,5 @@ public class ThemedWindow : Window
         {
             SizeToContent = SizeToContent.Manual;
         }
-    }
-
-    private void HandleTitleBarActualHeightChanged()
-    {
-        // Detach any previous subscription first: OnApplyTemplate may run again and
-        // AddValueChanged would otherwise leak the old title bar (and this window).
-        DetachTitleBarActualHeightChanged();
-
-        if (!(GetTemplateChild("TitleBar") is Border titleBar))
-            return;
-
-        _titleBar = titleBar;
-        _titleBarHeightDescriptor = DependencyPropertyDescriptor.FromProperty(ActualHeightProperty, typeof(Border));
-        _titleBarHeightChangedHandler = (sender, e) =>
-        {
-            TitleBarActualHeight = PlaceTitleBarOverContent
-                ? titleBar.ActualHeight
-                : 0.0d;
-        };
-
-        _titleBarHeightDescriptor.AddValueChanged(titleBar, _titleBarHeightChangedHandler);
-    }
-
-    private void DetachTitleBarActualHeightChanged()
-    {
-        if (_titleBarHeightDescriptor is not null && _titleBar is not null && _titleBarHeightChangedHandler is not null)
-            _titleBarHeightDescriptor.RemoveValueChanged(_titleBar, _titleBarHeightChangedHandler);
-
-        _titleBarHeightDescriptor = null;
-        _titleBar = null;
-        _titleBarHeightChangedHandler = null;
     }
 }
