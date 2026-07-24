@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu", "Joufflu\Joufflu.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu.Navigation", "Joufflu.Navigation\Joufflu.Navigation.csproj", "{198FAAA5-141A-46EC-99A0-24C1727CFEDA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{67003579-0269-450D-887A-3F1F2577CAA3}"
+	ProjectSection(SolutionItems) = preProject
+		changelog.md = changelog.md
+		readme.md = readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

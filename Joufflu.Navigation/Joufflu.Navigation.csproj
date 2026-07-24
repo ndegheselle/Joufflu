@@ -12,7 +12,16 @@
     <Description>WPF navigation for Joufflu: a navigation menu, a view-model-first page container, and awaitable modal overlays.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <Version>0.1.1</Version>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
