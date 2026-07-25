@@ -17,6 +17,10 @@
     PlaceTitleBarOverContent="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <controls:ThemedWindow.Resources>
+        <!--  Offsets the content below the title bar drawn over it (PlaceTitleBarOverContent).  -->
+        <Thickness x:Key="ContentTitleBarMargin" Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
+    </controls:ThemedWindow.Resources>
     <DockPanel>
         <nav:NavigationMenu
             DockPanel.Dock="Left"
@@ -337,7 +341,7 @@
         </nav:NavigationMenu>
 
         <nav:NavigationContainer
-            Margin="0,30,0,0"
+            Margin="{StaticResource ContentTitleBarMargin}"
             Navigator="{Binding Navigator}"
             Overlays="{Binding Overlays}"
             Toasts="{Binding Toasts}" />

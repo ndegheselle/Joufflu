@@ -11,6 +11,8 @@ public static class Dimensions
     public static ComponentResourceKey Spacing => new(typeof(Dimensions), "Spacing");
     public static ComponentResourceKey SpacingThickness => new(typeof(Dimensions), "SpacingThickness");
 
+    public static ComponentResourceKey TitleBarHeight => new(typeof(Dimensions), "TitleBarHeight");
+
     public static ComponentResourceKey ControlHeightXs => new(typeof(Dimensions), "ControlHeightXs");
     public static ComponentResourceKey ControlHeightSm => new(typeof(Dimensions), "ControlHeightSm");
     public static ComponentResourceKey ControlHeightMd => new(typeof(Dimensions), "ControlHeightMd");
