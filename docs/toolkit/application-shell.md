@@ -60,51 +60,39 @@ covered by it. A side-panel collapse button becomes unclickable; a page's
 vertical scrollbar runs behind the caption buttons.
 
 **How.** Reserve a strip of empty space at the top of your content equal to the
-bar's height. The window exposes its measured height as the read-only
-`TitleBarActualHeight` property, which is **0 unless `PlaceTitleBarOverContent` is
-on** — so the same binding adds no gap when you switch back to a stacked title
-bar. The offset is automatic and optional.
-
-Convert that height to a top-only `Thickness` with `TopThicknessConverter`
-(`0, height, 0, 0`) and bind it to the `Padding` of the panels that reach the top:
+bar's height. That height is a fixed value shared through the `Dimensions.TitleBarHeight`
+resource, so build a top-only `Thickness` from it and set it as the `Margin` of the
+panel that reaches the top:
 
 ```xml
 <controls:ThemedWindow ...
-    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     PlaceTitleBarOverContent="True">
 
     <controls:ThemedWindow.Resources>
-        <converters:TopThicknessConverter x:Key="TopThickness" />
+        <!-- Offsets the content below the title bar drawn over it. -->
+        <Thickness x:Key="ContentTitleBarMargin"
+                   Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
     </controls:ThemedWindow.Resources>
 
     <DockPanel>
-        <!-- The menu insets its whole column, so the collapse button drops below the bar
-             while the panel background still fills to the very top. -->
-        <nav:NavigationMenu DockPanel.Dock="Left"
-            Padding="{Binding TitleBarActualHeight,
-                              RelativeSource={RelativeSource AncestorType={x:Type controls:ThemedWindow}},
-                              Converter={StaticResource TopThickness}}"
-            ... />
+        <nav:NavigationMenu DockPanel.Dock="Left" ... />
 
-        <!-- The container insets only the page (and its scrollbar); overlays and toasts stay full-bleed. -->
+        <!-- The container drops below the bar; overlays and toasts stay full-bleed. -->
         <nav:NavigationContainer
-            Padding="{Binding TitleBarActualHeight,
-                              RelativeSource={RelativeSource AncestorType={x:Type controls:ThemedWindow}},
-                              Converter={StaticResource TopThickness}}"
+            Margin="{StaticResource ContentTitleBarMargin}"
             ... />
     </DockPanel>
 </controls:ThemedWindow>
 ```
 
-Using `Padding` (not `Margin`) keeps each panel's background edge-to-edge under
-the transparent bar; only the inner content is pushed down. The `Joufflu.Samples`
-gallery window uses this setup.
+The `Joufflu.Samples` gallery window uses this setup. Because the height is a shared
+resource, the offset always matches the title bar even if that height changes.
 
 {: .note }
-> `NavigationMenu` and `NavigationContainer` honour `Padding` for this purpose:
-> the menu insets its entire column (header and collapse button included), while
-> the container insets the hosted page only — overlays and toasts stay full-bleed
-> so modal backdrops still cover the whole window.
+> Offset only the panels whose top strip holds interactive content — a hosted page
+> and its scrollbar. The `NavigationContainer` insets the page while leaving overlays
+> and toasts full-bleed, so modal backdrops still cover the whole window.
 
 ## NavigationContainer
 

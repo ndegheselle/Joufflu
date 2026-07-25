@@ -27,6 +27,9 @@
                Right="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
                />
 
+    <!-- Height of the window title bar -->
+    <system:Double x:Key="{x:Static joufflu:Dimensions.TitleBarHeight}">30</system:Double>
+
     <!-- Vertical size of single line controls -->
     <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightXs}">24</system:Double>
     <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightSm}">28</system:Double>

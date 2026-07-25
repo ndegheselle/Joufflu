@@ -252,7 +252,6 @@ public class ThemedWindow : Window
             InitCloseButton(CloseButton);
 
         UpdateLayoutForSizeToContent();
-        HandleTitleBarActualHeightChanged();
     }
 
     private void OnThemedWindowClosed(object? sender, EventArgs e)
@@ -265,8 +264,6 @@ public class ThemedWindow : Window
             HwndInterop.Dispose();
             HwndInterop = null;
         }
-
-        DetachTitleBarActualHeightChanged();
     }
 
     /// <summary>
