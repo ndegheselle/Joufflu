@@ -17,6 +17,12 @@ These pages mirror the controls in the **`Joufflu.Samples`** gallery app — sam
 titles, descriptions and code snippets. Each control page lists example markup you
 can paste into your views.
 
+{: .note }
+> **Using an LLM agent?** Point it at the machine-readable
+> [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt)
+> index — a single file linking every page's raw Markdown source. Use that raw URL rather
+> than the rendered site, which can return `403` to automated fetchers.
+
 ## Highlights
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
