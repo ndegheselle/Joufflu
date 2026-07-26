@@ -25,6 +25,12 @@ live between Light and Dark — no restart, no flicker.
 
 📖 **Full documentation:** <https://ndegheselle.github.io/Joufflu/>
 
+🤖 **For LLM agents:** a machine-readable [`llms.txt`](https://llmstxt.org/) index of the
+docs is available at
+<https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt> — it links every
+page's raw Markdown source. (Prefer this raw URL over the rendered site, which can return
+`403` to automated fetchers.)
+
 ## What's inside
 
 | Section | Contents |
