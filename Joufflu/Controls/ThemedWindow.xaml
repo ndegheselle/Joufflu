@@ -75,7 +75,7 @@
                                 <Border
                                     x:Name="TitleBar"
                                     Grid.Row="0"
-                                    Height="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
+                                    Height="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
                                     Background="{TemplateBinding TitleBarBackground}"
                                     KeyboardNavigation.DirectionalNavigation="None"
                                     KeyboardNavigation.TabNavigation="None"
