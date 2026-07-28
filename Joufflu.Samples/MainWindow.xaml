@@ -350,6 +350,12 @@
                     </nav:NavigationItem.Icon>
                     Overlays
                 </nav:NavigationItem>
+                <nav:NavigationItem Target="navigation/paging">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.BookOpen}" />
+                    </nav:NavigationItem.Icon>
+                    Paging
+                </nav:NavigationItem>
             </nav:NavigationGroup>
         </nav:NavigationMenu>
 

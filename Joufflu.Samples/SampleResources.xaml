@@ -5,6 +5,7 @@
     xmlns:customDisplay="clr-namespace:Joufflu.Samples.Views.Controls.DataDisplay"
     xmlns:customFeedback="clr-namespace:Joufflu.Samples.Views.Controls.Feedback"
     xmlns:customNav="clr-namespace:Joufflu.Samples.Views.Navigation"
+    xmlns:customNavViews="clr-namespace:Joufflu.Samples.Views.Navigation.Views"
     xmlns:inputs="clr-namespace:Joufflu.Samples.Views.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nativeActions="clr-namespace:Joufflu.Samples.Views.Natives.Actions"
@@ -153,6 +154,16 @@
     <DataTemplate DataType="{x:Type customNav:OverlaySamplesViewModel}">
         <customNav:OverlaySamples />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type customNavViews:ConfirmViewModel}">
+        <customNavViews:ConfirmView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type customNavViews:DeleteConfirmViewModel}">
+        <customNavViews:DeleteConfirmView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type customNavViews:SampleFormViewModel}">
+        <customNavViews:SampleFormView />
+    </DataTemplate>
+
 
     <!--  Inputs (Joufflu.Inputs library)  -->
     <DataTemplate DataType="{x:Type inputs:NumericInputsSamplesViewModel}">
@@ -189,17 +200,6 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type toolkit:ThemeCustomizerViewModel}">
         <toolkit:ThemeCustomizer />
-    </DataTemplate>
-
-    <!--  Overlay content (shown inside overlays, not in the menu)  -->
-    <DataTemplate DataType="{x:Type vm:ConfirmViewModel}">
-        <customNav:ConfirmView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:DeleteConfirmViewModel}">
-        <customNav:DeleteConfirmView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:SampleFormViewModel}">
-        <customNav:SampleFormView />
     </DataTemplate>
 
 </ResourceDictionary>
