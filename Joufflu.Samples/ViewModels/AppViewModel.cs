@@ -83,7 +83,7 @@ public class AppViewModel : ObservableObject
             // Navigation (Joufflu.Navigation library)
             ["navigation/menu"] = new NavigationMenuSamplesViewModel(),
             ["navigation/overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
-            ["navigation/paging"] = new OverlaySamplesViewModel(Overlays, Toasts),
+            ["navigation/paging"] = new PagingSamplesViewModel(),
 
             // Custom controls
             ["controls/font-icon"] = new FontIconSamplesViewModel(),

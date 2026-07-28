@@ -30,8 +30,7 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel>
-                                <TextBlock Style="{StaticResource H2}"
-                                    Text="{TemplateBinding Title}" />
+                                <TextBlock Style="{StaticResource H2}" Text="{TemplateBinding Title}" />
                                 <TextBlock
                                     x:Name="Desc"
                                     Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
@@ -39,9 +38,7 @@
                                     TextWrapping="Wrap" />
                             </StackPanel>
 
-                            <Border
-                                Grid.Row="1"
-                                Style="{StaticResource CardSecondary}">
+                            <Border Grid.Row="1" Style="{StaticResource CardSecondary}">
                                 <ContentPresenter />
                             </Border>
 
@@ -50,14 +47,14 @@
                                 Grid.Row="2"
                                 Style="{StaticResource CardSecondary}">
                                 <TextBox
-                                    MaxHeight="320"
                                     Height="Auto"
+                                    MaxHeight="320"
                                     VerticalAlignment="Stretch"
-                                    HorizontalScrollBarVisibility="Auto"
                                     Background="Transparent"
                                     BorderThickness="0"
                                     FontFamily="Consolas, Cascadia Mono, monospace"
                                     Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                    HorizontalScrollBarVisibility="Auto"
                                     IsReadOnly="True"
                                     Text="{TemplateBinding Code}"
                                     TextWrapping="NoWrap" />
@@ -154,16 +151,18 @@
     <DataTemplate DataType="{x:Type customNav:OverlaySamplesViewModel}">
         <customNav:OverlaySamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type customNavViews:ConfirmViewModel}">
+    <DataTemplate DataType="{x:Type customNav:PagingSamplesViewModel}">
+        <customNav:PagingSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type customNav:ConfirmViewModel}">
         <customNavViews:ConfirmView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type customNavViews:DeleteConfirmViewModel}">
+    <DataTemplate DataType="{x:Type customNav:DeleteConfirmViewModel}">
         <customNavViews:DeleteConfirmView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type customNavViews:SampleFormViewModel}">
+    <DataTemplate DataType="{x:Type customNav:SampleFormViewModel}">
         <customNavViews:SampleFormView />
     </DataTemplate>
-
 
     <!--  Inputs (Joufflu.Inputs library)  -->
     <DataTemplate DataType="{x:Type inputs:NumericInputsSamplesViewModel}">
