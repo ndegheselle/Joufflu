@@ -5,13 +5,13 @@ namespace Joufflu;
 
 public enum ControlSize { xs, sm, md, lg }
 
-public static class ControlProperties
+public static class Sizing
 {
     public static readonly DependencyProperty SizeProperty =
         DependencyProperty.RegisterAttached(
             "Size",
             typeof(ControlSize),
-            typeof(ControlProperties),
+            typeof(Sizing),
             new FrameworkPropertyMetadata(ControlSize.md, FrameworkPropertyMetadataOptions.Inherits));
 
     public static ControlSize GetSize(DependencyObject obj) => (ControlSize)obj.GetValue(SizeProperty);
@@ -21,7 +21,7 @@ public static class ControlProperties
         DependencyProperty.RegisterAttached(
             "IsSquare",
             typeof(bool),
-            typeof(ControlProperties),
+            typeof(Sizing),
             new FrameworkPropertyMetadata(false));
 
     public static bool GetIsSquare(DependencyObject obj) => (bool)obj.GetValue(IsSquareProperty);

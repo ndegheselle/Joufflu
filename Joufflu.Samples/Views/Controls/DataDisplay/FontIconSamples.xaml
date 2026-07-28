@@ -16,7 +16,7 @@
             <c:CodeExample
                 Title="Glyphs"
                 Code="{Binding Code}"
-                Description="A Lucide icon-font glyph. Foreground uses the design-system brushes and the size follows the inherited ControlProperties.Size.">
+                Description="A Lucide icon-font glyph. Foreground uses the design-system brushes and the size follows the inherited Sizing.Size.">
                 <StackPanel joufflu:Spacing.Gap="16">
                     <WrapPanel joufflu:Spacing.Gap="12,0">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
@@ -27,17 +27,17 @@
                     </WrapPanel>
 
                     <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="12,0">
-                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="xs" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="sm" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="md" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon VerticalAlignment="Center" joufflu:ControlProperties.Size="lg" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:Sizing.Size="xs" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:Sizing.Size="sm" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:Sizing.Size="md" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon VerticalAlignment="Center" joufflu:Sizing.Size="lg" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="12,0">
-                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon joufflu:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon joufflu:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon joufflu:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                        <fonts:FontIcon joufflu:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
                     </StackPanel>
                 </StackPanel>
             </c:CodeExample>

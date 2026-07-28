@@ -270,10 +270,10 @@
                         <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Sizes" />
                             <WrapPanel VerticalAlignment="Center" joufflu:Spacing.Gap="8,8">
-                                <Button joufflu:ControlProperties.Size="xs" Style="{StaticResource Primary}">Extra small</Button>
-                                <Button joufflu:ControlProperties.Size="sm" Style="{StaticResource Primary}">Small</Button>
-                                <Button joufflu:ControlProperties.Size="md" Style="{StaticResource Primary}">Medium</Button>
-                                <Button joufflu:ControlProperties.Size="lg" Style="{StaticResource Primary}">Large</Button>
+                                <Button joufflu:Sizing.Size="xs" Style="{StaticResource Primary}">Extra small</Button>
+                                <Button joufflu:Sizing.Size="sm" Style="{StaticResource Primary}">Small</Button>
+                                <Button joufflu:Sizing.Size="md" Style="{StaticResource Primary}">Medium</Button>
+                                <Button joufflu:Sizing.Size="lg" Style="{StaticResource Primary}">Large</Button>
                             </WrapPanel>
                         </StackPanel>
                     </Border>
@@ -324,7 +324,7 @@
                                     </Border>
                                     <WrapPanel joufflu:Spacing.Gap="8,8">
                                         <controls:Badge>Default</controls:Badge>
-                                        <controls:Badge joufflu:ControlProperties.Size="xs">Small</controls:Badge>
+                                        <controls:Badge joufflu:Sizing.Size="xs">Small</controls:Badge>
                                     </WrapPanel>
                                 </StackPanel>
                             </Border>

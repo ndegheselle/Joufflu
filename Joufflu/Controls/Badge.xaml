@@ -61,15 +61,15 @@
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
             </Trigger>
 
-            <Trigger Property="joufflu:ControlProperties.Size" Value="xs">
+            <Trigger Property="joufflu:Sizing.Size" Value="xs">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
                 <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingXs}}" />
             </Trigger>
-            <Trigger Property="joufflu:ControlProperties.Size" Value="sm">
+            <Trigger Property="joufflu:Sizing.Size" Value="sm">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
                 <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingSm}}" />
             </Trigger>
-            <Trigger Property="joufflu:ControlProperties.Size" Value="lg">
+            <Trigger Property="joufflu:Sizing.Size" Value="lg">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
                 <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingLg}}" />
             </Trigger>

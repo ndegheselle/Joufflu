@@ -5,7 +5,7 @@ using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
 using Joufflu.Samples.ViewModels;
 
-namespace Joufflu.Samples.Views.Controls.Navigation;
+namespace Joufflu.Samples.Views.Navigation;
 
 public class OverlaySamplesViewModel : ObservableObject
 {

@@ -12,16 +12,16 @@
             <c:CodeExample
                 Title="Loading indicator"
                 Code="{Binding Code}"
-                Description="An indeterminate loading indicator. Color comes from Foreground, diameter from ControlProperties.Size.">
+                Description="An indeterminate loading indicator. Color comes from Foreground, diameter from Sizing.Size.">
                 <StackPanel
                     VerticalAlignment="Center"
                     joufflu:Spacing.Gap="16,0"
                     Orientation="Horizontal">
-                    <controls:Spinner joufflu:ControlProperties.Size="xs" />
-                    <controls:Spinner joufflu:ControlProperties.Size="sm" />
-                    <controls:Spinner joufflu:ControlProperties.Size="md" />
-                    <controls:Spinner joufflu:ControlProperties.Size="lg" />
-                    <controls:Spinner joufflu:ControlProperties.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                    <controls:Spinner joufflu:Sizing.Size="xs" />
+                    <controls:Spinner joufflu:Sizing.Size="sm" />
+                    <controls:Spinner joufflu:Sizing.Size="md" />
+                    <controls:Spinner joufflu:Sizing.Size="lg" />
+                    <controls:Spinner joufflu:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                 </StackPanel>
             </c:CodeExample>
         </StackPanel>

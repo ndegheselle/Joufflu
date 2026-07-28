@@ -35,11 +35,11 @@
                 Title="Sizes"
                 
                 Code="{Binding SizesCode}"
-                Description="Sized through the inherited ControlProperties.Size.">
+                Description="Sized through the inherited Sizing.Size.">
                 <StackPanel joufflu:Spacing.Gap="4">
-                    <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:ControlProperties.Size="sm" />
+                    <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:Sizing.Size="sm" />
                     <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" />
-                    <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:ControlProperties.Size="lg" />
+                    <ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" joufflu:Sizing.Size="lg" />
                 </StackPanel>
             </c:CodeExample>
         </StackPanel>

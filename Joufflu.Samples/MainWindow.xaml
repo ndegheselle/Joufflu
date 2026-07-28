@@ -219,60 +219,6 @@
                 </nav:NavigationItem>
             </nav:NavigationGroup>
 
-            <!--  Inputs (Joufflu.Inputs library)  -->
-            <nav:NavigationTitle Title="Inputs" />
-            <nav:NavigationItem Target="inputs/numeric">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
-                </nav:NavigationItem.Icon>
-                Numeric inputs
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="inputs/search">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListFilter}" />
-                </nav:NavigationItem.Icon>
-                Search &amp; combo
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="inputs/combo-box-tags">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tags}" />
-                </nav:NavigationItem.Icon>
-                Combo box tags
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="inputs/text-editable">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
-                </nav:NavigationItem.Icon>
-                Text editable
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="inputs/file-picker">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
-                </nav:NavigationItem.Icon>
-                File picker
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="inputs/color-picker">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
-                </nav:NavigationItem.Icon>
-                Color picker
-            </nav:NavigationItem>
-
-            <!--  Navigation (Joufflu.Navigation library)  -->
-            <nav:NavigationTitle Title="Navigation" />
-            <nav:NavigationItem Target="navigation/menu">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
-                </nav:NavigationItem.Icon>
-                Navigation menu
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="navigation/overlays">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SquareStack}" />
-                </nav:NavigationItem.Icon>
-                Overlays
-            </nav:NavigationItem>
-
             <!--  Custom controls  -->
             <nav:NavigationTitle Title="Custom controls" />
             <nav:NavigationItem Target="controls/font-icon">
@@ -293,6 +239,12 @@
                 </nav:NavigationItem.Icon>
                 Spinner
             </nav:NavigationItem>
+            <nav:NavigationItem Target="controls/tooltip">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
+                </nav:NavigationItem.Icon>
+                Tooltip
+            </nav:NavigationItem>
             <nav:NavigationItem Target="controls/toasts">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
@@ -302,6 +254,12 @@
 
             <!--  Toolkit  -->
             <nav:NavigationTitle Title="Toolkit" />
+            <nav:NavigationItem Target="toolkit/application-shell">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
+                </nav:NavigationItem.Icon>
+                Application shell
+            </nav:NavigationItem>
             <nav:NavigationItem Target="toolkit/sizing">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scaling}" />
@@ -314,18 +272,7 @@
                 </nav:NavigationItem.Icon>
                 Spacing
             </nav:NavigationItem>
-            <nav:NavigationItem Target="toolkit/tooltip">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
-                </nav:NavigationItem.Icon>
-                Tooltip
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="toolkit/application-shell">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
-                </nav:NavigationItem.Icon>
-                Application shell
-            </nav:NavigationItem>
+
             <nav:NavigationItem Target="toolkit/theme">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SunMoon}" />
@@ -338,6 +285,72 @@
                 </nav:NavigationItem.Icon>
                 Customize theme
             </nav:NavigationItem>
+
+            <nav:NavigationTitle Title="Joufflu controls" />
+
+            <!--  Inputs (Joufflu.Inputs library)  -->
+            <nav:NavigationGroup Header="Inputs">
+                <nav:NavigationGroup.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FormInput}" />
+                </nav:NavigationGroup.Icon>
+
+                <nav:NavigationItem Target="inputs/numeric">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
+                    </nav:NavigationItem.Icon>
+                    Numeric inputs
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="inputs/search">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListFilter}" />
+                    </nav:NavigationItem.Icon>
+                    Search &amp; combo
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="inputs/combo-box-tags">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tags}" />
+                    </nav:NavigationItem.Icon>
+                    Combo box tags
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="inputs/text-editable">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
+                    </nav:NavigationItem.Icon>
+                    Text editable
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="inputs/file-picker">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
+                    </nav:NavigationItem.Icon>
+                    File picker
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="inputs/color-picker">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
+                    </nav:NavigationItem.Icon>
+                    Color picker
+                </nav:NavigationItem>
+            </nav:NavigationGroup>
+
+            <!--  Navigation (Joufflu.Navigation library)  -->
+            <nav:NavigationGroup Header="Navigation">
+                <nav:NavigationGroup.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Compass}" />
+                </nav:NavigationGroup.Icon>
+
+                <nav:NavigationItem Target="navigation/menu">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
+                    </nav:NavigationItem.Icon>
+                    Navigation menu
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="navigation/overlays">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SquareStack}" />
+                    </nav:NavigationItem.Icon>
+                    Overlays
+                </nav:NavigationItem>
+            </nav:NavigationGroup>
         </nav:NavigationMenu>
 
         <nav:NavigationContainer

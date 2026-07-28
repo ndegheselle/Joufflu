@@ -24,7 +24,7 @@
                             <!--  Clear button  -->
                             <Button
                                 VerticalAlignment="Center"
-                                joufflu:ControlProperties.IsSquare="True"
+                                joufflu:Sizing.IsSquare="True"
                                 Command="{Binding ClearCommand}">
                                 <Button.Style>
                                     <Style BasedOn="{StaticResource Ghost}" TargetType="{x:Type Button}">
@@ -38,7 +38,7 @@
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
                             <Button
-                                joufflu:ControlProperties.IsSquare="True"
+                                joufflu:Sizing.IsSquare="True"
                                 Command="{Binding SelectCommand}"
                                 Style="{DynamicResource Ghost}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />

@@ -1,5 +1,5 @@
 <UserControl
-    x:Class="Joufflu.Samples.Views.Controls.Navigation.NavigationMenuSamples"
+    x:Class="Joufflu.Samples.Views.Navigation.NavigationMenuSamples"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"

@@ -4,7 +4,7 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:customDisplay="clr-namespace:Joufflu.Samples.Views.Controls.DataDisplay"
     xmlns:customFeedback="clr-namespace:Joufflu.Samples.Views.Controls.Feedback"
-    xmlns:customNav="clr-namespace:Joufflu.Samples.Views.Controls.Navigation"
+    xmlns:customNav="clr-namespace:Joufflu.Samples.Views.Navigation"
     xmlns:inputs="clr-namespace:Joufflu.Samples.Views.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nativeActions="clr-namespace:Joufflu.Samples.Views.Natives.Actions"

@@ -14,21 +14,21 @@
                 Text="Sizing" />
 
             <c:CodeExample
-                Title="ControlProperties.Size"
+                Title="Sizing.Size"
                 Code="{Binding SizeCode}"
                 Description="The inherited Size attached property (xs / sm / md / lg) scales height, font size and padding. Because it inherits, setting it on a panel sizes every child.">
                 <StackPanel joufflu:Spacing.Gap="12">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" joufflu:Spacing.Gap="8,0">
-                        <Button joufflu:ControlProperties.Size="xs" VerticalAlignment="Center">xs</Button>
-                        <Button joufflu:ControlProperties.Size="sm" VerticalAlignment="Center">sm</Button>
-                        <Button joufflu:ControlProperties.Size="md" VerticalAlignment="Center">md</Button>
-                        <Button joufflu:ControlProperties.Size="lg" VerticalAlignment="Center">lg</Button>
+                        <Button joufflu:Sizing.Size="xs" VerticalAlignment="Center">xs</Button>
+                        <Button joufflu:Sizing.Size="sm" VerticalAlignment="Center">sm</Button>
+                        <Button joufflu:Sizing.Size="md" VerticalAlignment="Center">md</Button>
+                        <Button joufflu:Sizing.Size="lg" VerticalAlignment="Center">lg</Button>
                     </StackPanel>
 
                     <StackPanel
                         Width="240"
                         HorizontalAlignment="Left"
-                        joufflu:ControlProperties.Size="lg"
+                        joufflu:Sizing.Size="lg"
                         joufflu:Spacing.Gap="4">
                         <TextBox Text="Inherited lg" />
                         <ComboBox SelectedIndex="0">
@@ -40,17 +40,17 @@
             </c:CodeExample>
 
             <c:CodeExample
-                Title="ControlProperties.IsSquare"
+                Title="Sizing.IsSquare"
                 Code="{Binding SquareCode}"
                 Description="IsSquare forces equal width and height — ideal for single-icon buttons.">
                 <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8,0">
-                    <Button joufflu:ControlProperties.IsSquare="True" joufflu:ControlProperties.Size="sm">
+                    <Button joufflu:Sizing.IsSquare="True" joufflu:Sizing.Size="sm">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
                     </Button>
-                    <Button joufflu:ControlProperties.IsSquare="True" joufflu:ControlProperties.Size="md">
+                    <Button joufflu:Sizing.IsSquare="True" joufflu:Sizing.Size="md">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
                     </Button>
-                    <Button joufflu:ControlProperties.IsSquare="True" joufflu:ControlProperties.Size="lg">
+                    <Button joufflu:Sizing.IsSquare="True" joufflu:Sizing.Size="lg">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
                     </Button>
                 </StackPanel>

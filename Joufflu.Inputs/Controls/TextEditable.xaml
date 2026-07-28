@@ -53,8 +53,8 @@
                             </TextBlock>
                             <Button
                                 Grid.Column="1"
-                                joufflu:ControlProperties.IsSquare="True"
-                                joufflu:ControlProperties.Size="xs"
+                                joufflu:Sizing.IsSquare="True"
+                                joufflu:Sizing.Size="xs"
                                 Command="{Binding EditCommand}"
                                 Style="{DynamicResource Ghost}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
@@ -81,15 +81,15 @@
 
                             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                 <Button
-                                    joufflu:ControlProperties.IsSquare="True"
-                                    joufflu:ControlProperties.Size="xs"
+                                    joufflu:Sizing.IsSquare="True"
+                                    joufflu:Sizing.Size="xs"
                                     Command="{Binding CancelCommand}"
                                     Style="{DynamicResource Ghost}">
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                 </Button>
                                 <Button
-                                    joufflu:ControlProperties.IsSquare="True"
-                                    joufflu:ControlProperties.Size="xs"
+                                    joufflu:Sizing.IsSquare="True"
+                                    joufflu:Sizing.Size="xs"
                                     Command="{Binding ValidateCommand}"
                                     Style="{DynamicResource Ghost}">
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Check}" />

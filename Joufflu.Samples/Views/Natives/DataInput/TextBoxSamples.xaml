@@ -21,11 +21,11 @@
             <c:CodeExample
                 Title="Sizes"
                 Code="{Binding SizesCode}"
-                Description="Height, font size and padding follow the inherited ControlProperties.Size.">
+                Description="Height, font size and padding follow the inherited Sizing.Size.">
                 <StackPanel joufflu:Spacing.Gap="4">
-                    <TextBox joufflu:ControlProperties.Size="sm" Text="Small" />
+                    <TextBox joufflu:Sizing.Size="sm" Text="Small" />
                     <TextBox Text="Medium" />
-                    <TextBox joufflu:ControlProperties.Size="lg" Text="Large" />
+                    <TextBox joufflu:Sizing.Size="lg" Text="Large" />
                 </StackPanel>
             </c:CodeExample>
 

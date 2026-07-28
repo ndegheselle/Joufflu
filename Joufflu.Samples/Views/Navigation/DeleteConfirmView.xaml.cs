@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace Joufflu.Samples.Views.Controls.Navigation;
+namespace Joufflu.Samples.Views.Navigation;
 
 public partial class DeleteConfirmView : UserControl
 {

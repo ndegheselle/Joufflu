@@ -36,7 +36,7 @@
                     <ToggleButton Style="{StaticResource IconToggleButton}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
                     </ToggleButton>
-                    <ToggleButton joufflu:ControlProperties.IsSquare="True" Style="{StaticResource TogglePrimary}">
+                    <ToggleButton joufflu:Sizing.IsSquare="True" Style="{StaticResource TogglePrimary}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
                     </ToggleButton>
                 </StackPanel>
@@ -45,12 +45,12 @@
             <c:CodeExample
                 Title="Sizes"
                 Code="{Binding SizesCode}"
-                Description="Toggle buttons scale through the inherited ControlProperties.Size attached property.">
+                Description="Toggle buttons scale through the inherited Sizing.Size attached property.">
                 <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8,0">
-                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="xs">XS</ToggleButton>
-                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="sm">SM</ToggleButton>
-                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="md">MD</ToggleButton>
-                    <ToggleButton VerticalAlignment="Center" joufflu:ControlProperties.Size="lg">LG</ToggleButton>
+                    <ToggleButton VerticalAlignment="Center" joufflu:Sizing.Size="xs">XS</ToggleButton>
+                    <ToggleButton VerticalAlignment="Center" joufflu:Sizing.Size="sm">SM</ToggleButton>
+                    <ToggleButton VerticalAlignment="Center" joufflu:Sizing.Size="md">MD</ToggleButton>
+                    <ToggleButton VerticalAlignment="Center" joufflu:Sizing.Size="lg">LG</ToggleButton>
                 </StackPanel>
             </c:CodeExample>
         </StackPanel>

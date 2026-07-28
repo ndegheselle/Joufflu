@@ -6,5 +6,5 @@ public class SpinnerSamplesViewModel : ObservableObject
 {
     public string Code =>
         "<controls:Spinner />\n" +
-        "<controls:Spinner joufflu:ControlProperties.Size=\"lg\" />";
+        "<controls:Spinner joufflu:Sizing.Size=\"lg\" />";
 }

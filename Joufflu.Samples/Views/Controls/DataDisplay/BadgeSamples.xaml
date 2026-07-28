@@ -27,12 +27,12 @@
             <c:CodeExample
                 Title="Sizes"
                 Code="{Binding SizesCode}"
-                Description="Sized through the inherited ControlProperties.Size attached property.">
+                Description="Sized through the inherited Sizing.Size attached property.">
                 <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                    <controls:Badge joufflu:ControlProperties.Size="xs" Variant="Primary">xs</controls:Badge>
-                    <controls:Badge joufflu:ControlProperties.Size="sm" Variant="Primary">sm</controls:Badge>
-                    <controls:Badge joufflu:ControlProperties.Size="md" Variant="Primary">md</controls:Badge>
-                    <controls:Badge joufflu:ControlProperties.Size="lg" Variant="Primary">lg</controls:Badge>
+                    <controls:Badge joufflu:Sizing.Size="xs" Variant="Primary">xs</controls:Badge>
+                    <controls:Badge joufflu:Sizing.Size="sm" Variant="Primary">sm</controls:Badge>
+                    <controls:Badge joufflu:Sizing.Size="md" Variant="Primary">md</controls:Badge>
+                    <controls:Badge joufflu:Sizing.Size="lg" Variant="Primary">lg</controls:Badge>
                 </StackPanel>
             </c:CodeExample>
         </StackPanel>

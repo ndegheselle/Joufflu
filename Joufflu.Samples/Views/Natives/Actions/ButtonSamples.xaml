@@ -59,13 +59,13 @@
                 Code="{Binding IconCode}"
                 Description="IsSquare makes a button as wide as it is tall — ideal for a single icon.">
                 <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                    <Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Primary}">
+                    <Button joufflu:Sizing.IsSquare="True" Style="{StaticResource Primary}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
                     </Button>
-                    <Button joufflu:ControlProperties.IsSquare="True">
+                    <Button joufflu:Sizing.IsSquare="True">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
                     </Button>
-                    <Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Danger}">
+                    <Button joufflu:Sizing.IsSquare="True" Style="{StaticResource Danger}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
                     </Button>
                 </StackPanel>
@@ -74,12 +74,12 @@
             <c:CodeExample
                 Title="Sizes"
                 Code="{Binding SizesCode}"
-                Description="The inherited ControlProperties.Size attached property scales height, font size and padding.">
+                Description="The inherited Sizing.Size attached property scales height, font size and padding.">
                 <StackPanel joufflu:Spacing.Gap="8,0" Orientation="Horizontal">
-                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="xs">XS</Button>
-                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="sm">SM</Button>
-                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="md">MD</Button>
-                    <Button VerticalAlignment="Center" joufflu:ControlProperties.Size="lg">LG</Button>
+                    <Button VerticalAlignment="Center" joufflu:Sizing.Size="xs">XS</Button>
+                    <Button VerticalAlignment="Center" joufflu:Sizing.Size="sm">SM</Button>
+                    <Button VerticalAlignment="Center" joufflu:Sizing.Size="md">MD</Button>
+                    <Button VerticalAlignment="Center" joufflu:Sizing.Size="lg">LG</Button>
                 </StackPanel>
             </c:CodeExample>
         </StackPanel>

@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Joufflu.Navigation;
 
-namespace Joufflu.Samples.Views.Controls.Navigation;
+namespace Joufflu.Samples.Views.Navigation;
 
 public class NavigationMenuSamplesViewModel : ObservableObject
 {

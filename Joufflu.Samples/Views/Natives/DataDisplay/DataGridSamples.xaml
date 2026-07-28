@@ -32,10 +32,10 @@
             <c:CodeExample
                 Title="Compact (xs) grid"
                 Code="{Binding CompactCode}"
-                Description="The inherited ControlProperties.Size attached property scales the padding of headers and cells, and the font size of cells.">
+                Description="The inherited Sizing.Size attached property scales the padding of headers and cells, and the font size of cells.">
                 <DataGrid
                     Height="220"
-                    joufflu:ControlProperties.Size="xs"
+                    joufflu:Sizing.Size="xs"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False"
                     ItemsSource="{Binding People}">

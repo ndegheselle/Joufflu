@@ -6,7 +6,7 @@ namespace Joufflu.Controls;
 /// <summary>
 /// An indeterminate, continuously spinning loading indicator. Its color comes from
 /// <see cref="Control.Foreground"/> (accent by default) and its diameter from
-/// <see cref="ControlProperties.Size"/>.
+/// <see cref="Sizing.Size"/>.
 /// </summary>
 public class Spinner : Control
 {

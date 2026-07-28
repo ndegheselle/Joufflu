@@ -78,7 +78,7 @@
                             <Button
                                 x:Name="ClearButton"
                                 Grid.Column="1"
-                                joufflu:ControlProperties.IsSquare="True"
+                                joufflu:Sizing.IsSquare="True"
                                 Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                 Focusable="False"
                                 Style="{StaticResource Ghost}">

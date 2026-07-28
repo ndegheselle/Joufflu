@@ -4,7 +4,6 @@ using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
 using Joufflu.Samples.Views.Controls.DataDisplay;
 using Joufflu.Samples.Views.Controls.Feedback;
-using Joufflu.Samples.Views.Controls.Navigation;
 using Joufflu.Samples.Views.Inputs;
 using Joufflu.Samples.Views.Natives.Actions;
 using Joufflu.Samples.Views.Natives.DataDisplay;
@@ -12,6 +11,7 @@ using Joufflu.Samples.Views.Natives.DataInput;
 using Joufflu.Samples.Views.Natives.Feedback;
 using Joufflu.Samples.Views.Natives.Layout;
 using Joufflu.Samples.Views.Natives.Navigation;
+using Joufflu.Samples.Views.Navigation;
 using Joufflu.Samples.Views.Toolkit;
 
 namespace Joufflu.Samples.ViewModels;
@@ -89,11 +89,11 @@ public class AppViewModel : ObservableObject
             ["controls/badge"] = new BadgeSamplesViewModel(),
             ["controls/spinner"] = new SpinnerSamplesViewModel(),
             ["controls/toasts"] = new ToastSamplesViewModel(Toasts),
+            ["controls/tooltip"] = new TooltipSamplesViewModel(),
 
             // Toolkit
             ["toolkit/sizing"] = new SizingSamplesViewModel(),
             ["toolkit/spacing"] = new SpacingSamplesViewModel(),
-            ["toolkit/tooltip"] = new TooltipSamplesViewModel(),
             ["toolkit/theme"] = new ThemeSamplesViewModel(),
             ["toolkit/customize-theme"] = new ThemeCustomizerViewModel(),
             ["toolkit/application-shell"] = new ShellSamples(),

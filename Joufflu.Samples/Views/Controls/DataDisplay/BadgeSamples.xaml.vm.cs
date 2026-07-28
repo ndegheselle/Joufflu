@@ -11,6 +11,6 @@ public class BadgeSamplesViewModel : ObservableObject
         "<controls:Badge Variant=\"Danger\">3</controls:Badge>";
 
     public string SizesCode =>
-        "<controls:Badge Variant=\"Primary\" joufflu:ControlProperties.Size=\"xs\">xs</controls:Badge>\n" +
-        "<controls:Badge Variant=\"Primary\" joufflu:ControlProperties.Size=\"lg\">lg</controls:Badge>";
+        "<controls:Badge Variant=\"Primary\" joufflu:Sizing.Size=\"xs\">xs</controls:Badge>\n" +
+        "<controls:Badge Variant=\"Primary\" joufflu:Sizing.Size=\"lg\">lg</controls:Badge>";
 }
