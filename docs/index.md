@@ -28,7 +28,7 @@ can paste into your views.
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text.
-- 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
+- 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
@@ -45,7 +45,7 @@ can paste into your views.
 |---|---|
 | [Native controls](natives/index.md) | Buttons (solid, soft & outline variants) |
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
-| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs) |
+| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
 | [Custom controls](custom-controls/index.md) | `FontIcon`, `Badge`, `Spinner`, toasts |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, tooltips, theme customization, application shell |
 

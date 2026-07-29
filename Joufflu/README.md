@@ -24,7 +24,7 @@ live between Light and Dark — no restart, no flicker.
 This is the **core package**. Two optional packages build on it:
 
 - [`Joufflu.Inputs`](https://www.nuget.org/packages/Joufflu.Inputs) — input controls.
-- [`Joufflu.Navigation`](https://www.nuget.org/packages/Joufflu.Navigation) — navigation & overlays.
+- [`Joufflu.Navigation`](https://www.nuget.org/packages/Joufflu.Navigation) — navigation, overlays & paging.
 
 ## Getting started
 

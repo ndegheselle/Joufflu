@@ -18,8 +18,32 @@
             <c:CodeExample
                 Title="Paging"
                 Code="{Binding Code}"
-                Description="Overlays are modal content shown above the page. They have a title bar with a close cross, a content area and an optional action bar. Multiple overlays stack.">
-                <nav:Paging />
+                Description="Page selector for a set of Total items. It exposes PageNumber and Capacity (items per page), and the range currently displayed. Pages are elided with a separator when there are more than seven of them.">
+                <nav:Paging Total="123" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Paged data grid"
+                Code="{Binding DataGridCode}"
+                Description="Paging only tells you which slice to display, it never touches the data itself. Bind Total to the number of items in the whole set, then bind PageNumber and Capacity two way so the view model is notified of every change and can load the matching slice. The control also raises a PagingChange event with the new page number and capacity for non MVVM code.">
+                <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                    <DataGrid
+                        Height="260"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding PageItems}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="60" Binding="{Binding Id}" Header="Id" />
+                            <DataGridTextColumn Width="*" Binding="{Binding Name}" Header="Name" />
+                            <DataGridTextColumn Width="*" Binding="{Binding City}" Header="City" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <nav:Paging
+                        Capacity="{Binding Capacity, Mode=TwoWay}"
+                        PageNumber="{Binding PageNumber, Mode=TwoWay}"
+                        Total="{Binding Total}" />
+                </StackPanel>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

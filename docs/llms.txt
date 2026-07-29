@@ -26,6 +26,7 @@ Joufflu ships as three NuGet packages that build on each other: `Joufflu` (core 
 
 - [Navigation menu](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/navigation-menu.md): collapsible side menu driven by a `Navigator`, with groups, nesting and a `TargetResolver`.
 - [Overlays](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/overlays.md): stacking modal overlays, `OverlayOptions`, and awaiting a result from `Show`.
+- [Paging](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, and the `PagingChange` event.
 
 ## Custom controls (`Joufflu`)
 

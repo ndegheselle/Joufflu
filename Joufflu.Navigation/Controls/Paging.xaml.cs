@@ -1,12 +1,30 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Joufflu.Navigation.Controls
 {
+    public partial class PagingSelectionItem : ObservableObject
+    {
+        public bool IsActive { get; set; }
+        public int Target { get; set; }
+
+        public PagingSelectionItem(int target, int actualPage)
+        {
+            Target = target;
+            IsActive = Target == actualPage;
+        }
+    }
+
+    public partial class PagingSelectionSeparator : PagingSelectionItem
+    {
+        public PagingSelectionSeparator() : base(-1, 0) { }
+    }
+
     public partial class Paging : Control, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -47,6 +65,7 @@ namespace Joufflu.Navigation.Controls
         public int Capacity { get { return (int)GetValue(CapacityProperty); } set { SetValue(CapacityProperty, value); } }
 
         public List<int> AvailableCapacities { get; set; } = new List<int>() { 5, 10, 25, 50, 100, 200 };
+        public ObservableCollection<PagingSelectionItem> AvailablePages { get; set; } = [];
 
         public int PageMax
         {
@@ -77,20 +96,10 @@ namespace Joufflu.Navigation.Controls
         {
         }
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            _inputPage = GetTemplateChild("PART_InputPage") as TextBox;
-            if (_inputPage != null)
-            {
-                _inputPage.PreviewTextInput += TextBox_PreviewTextInput;
-                _inputPage.KeyDown += TextBox_OnKeyDown;
-            }
-        }
-
         #region Change Events
         private void OnTotalChanged()
         {
+            UpdateAvailablesPages();
             NotifyPropertyChanged(nameof(PageMax));
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
@@ -105,6 +114,7 @@ namespace Joufflu.Navigation.Controls
             if (value < 1)
                 value = 1;
 
+            UpdateAvailablesPages();
             SetValue(PageNumberProperty, value);
 
             PagingChange?.Invoke(PageNumber, Capacity);
@@ -119,7 +129,6 @@ namespace Joufflu.Navigation.Controls
                 PageNumber = PageMax;
 
             PagingChange?.Invoke(PageNumber, Capacity);
-            NotifyPropertyChanged();
             NotifyPropertyChanged(nameof(PageMax));
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
@@ -130,45 +139,50 @@ namespace Joufflu.Navigation.Controls
         {
             PreviousCommand.NotifyCanExecuteChanged();
             NextCommand.NotifyCanExecuteChanged();
-            FirstCommand.NotifyCanExecuteChanged();
-            LastCommand.NotifyCanExecuteChanged();
         }
         #endregion
 
+        private void UpdateAvailablesPages()
+        {
+            AvailablePages.Clear();
+
+            // Few enough pages -> show them all
+            if (PageMax < 8)
+            {
+                for (int i = 0; i < Math.Min(PageMax, 7); i++)
+                    AvailablePages.Add(new PagingSelectionItem(i + 1, PageNumber));
+                return;
+            }
+
+            int middlePage = Math.Clamp(PageNumber, 4, PageMax - 3);
+            AvailablePages.Add(new PagingSelectionItem(1, PageNumber));
+
+            AvailablePages.Add(PageNumber > 3 ? new PagingSelectionSeparator() : new PagingSelectionItem(2, PageNumber));
+
+            AvailablePages.Add(new PagingSelectionItem(middlePage - 1, PageNumber));
+            AvailablePages.Add(new PagingSelectionItem(middlePage, PageNumber));
+            AvailablePages.Add(new PagingSelectionItem(middlePage + 1, PageNumber));
+
+            AvailablePages.Add(PageNumber < PageMax - 3 ? new PagingSelectionSeparator() : new PagingSelectionItem(PageMax - 1, PageNumber));
+
+            AvailablePages.Add(new PagingSelectionItem(PageMax, PageNumber));
+        }
+
         #region Commands
+        [RelayCommand()]
+        private void GotTo(int pageNumber)
+        {
+            PageNumber = pageNumber;
+        }
+
         [RelayCommand(CanExecute = nameof(CanGoBack))]
         private void Previous() { PageNumber -= 1; }
 
         [RelayCommand(CanExecute = nameof(CanGoForward))]
         private void Next() { PageNumber += 1; }
 
-        [RelayCommand(CanExecute = nameof(CanGoBack))]
-        private void First() { PageNumber = 1; }
-
-        [RelayCommand(CanExecute = nameof(CanGoForward))]
-        private void Last() { PageNumber = PageMax; }
-
         private bool CanGoBack() => PageNumber > 1;
         private bool CanGoForward() => PageNumber < PageMax;
-        #endregion
-
-        #region UI Events
-        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (_inputPage == null) return;
-            if (PageMax > 1 && int.TryParse(_inputPage.Text, out int number))
-            {
-                int clamped = Math.Clamp(number, 1, PageMax);
-                if (PageNumber != clamped)
-                    PageNumber = clamped;
-            }
-        }
-
-        private void TextBox_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-                Keyboard.ClearFocus();
-        }
         #endregion
     }
 }

@@ -16,18 +16,71 @@
                 <ControlTemplate TargetType="{x:Type local:Paging}">
                     <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
                             <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel joufflu:Spacing.Gap="2" Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center">Per page</TextBlock>
-                            <ComboBox
-                                ItemsSource="{Binding AvailableCapacities}"
-                                SelectedIndex="0"
-                                SelectedItem="{Binding Capacity}" />
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+                            <Button
+                                joufflu:Sizing.IsSquare="True"
+                                Command="{Binding PreviousCommand}"
+                                Style="{StaticResource Ghost}">
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronLeft}" />
+                            </Button>
+
+                            <ItemsControl ItemsSource="{Binding AvailablePages}">
+                                <ItemsControl.Style>
+                                    <Style TargetType="ItemsControl">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding AvailablePages.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ItemsControl.Style>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.Resources>
+                                    <DataTemplate DataType="{x:Type local:PagingSelectionSeparator}">
+                                        <Button
+                                            Margin="2,0,0,0"
+                                            joufflu:Sizing.IsSquare="True"
+                                            BorderBrush="Transparent"
+                                            IsEnabled="False"
+                                            Content="..." />
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type local:PagingSelectionItem}">
+                                        <ToggleButton
+                                            IsChecked="{Binding IsActive}"
+                                            Command="{Binding GotToCommand, RelativeSource={RelativeSource AncestorType={x:Type local:Paging}}}"
+                                            CommandParameter="{Binding Target}"
+                                            Margin="2,0,0,0"
+                                            joufflu:Sizing.IsSquare="True"
+                                            Content="{Binding Target}" />
+                                    </DataTemplate>
+                                </ItemsControl.Resources>
+                            </ItemsControl>
+
+                            <Button
+                                Margin="2,0,0,0"
+                                joufflu:Sizing.IsSquare="True"
+                                Command="{Binding NextCommand}"
+                                Style="{StaticResource Ghost}">
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronRight}" />
+                            </Button>
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            joufflu:Spacing.Gap="8"
+                            Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center">
                                 <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
+                                    <Style BasedOn="{StaticResource Muted}" TargetType="TextBlock">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Total}" Value="-1">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -36,74 +89,18 @@
                                     </Style>
                                 </TextBlock.Style>
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="Per page {1} {2}-{3} of {4}">
-                                        <Binding Path="Capacity" />
+                                    <MultiBinding StringFormat="{}{0}-{1} of {2}">
                                         <Binding Path="IntervalMin" />
                                         <Binding Path="IntervalMax" />
                                         <Binding Path="Total" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                        </StackPanel>
-
-                        <StackPanel
-                            Grid.Column="1"
-                            HorizontalAlignment="Right"
-                            joufflu:Spacing.Gap="2"
-                            Orientation="Horizontal">
-                            <Button joufflu:Sizing.IsSquare="True" Command="{Binding FirstCommand}">
-                                <Button.Style>
-                                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Total}" Value="-1">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.SkipBack}" />
-                            </Button>
-                            <Button joufflu:Sizing.IsSquare="True" Command="{Binding PreviousCommand}">
-                                <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.ChevronLeft}" />
-                            </Button>
-
-                            <TextBox
-                                x:Name="PART_InputPage"
-                                MinWidth="26"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                Text="{Binding PageNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                            <TextBlock VerticalAlignment="Center" Text="{Binding PageMax, StringFormat='/ {0}'}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Total}" Value="-1">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding PageMax}" Value="{x:Static s:Int32.MaxValue}">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-
-                            <Button joufflu:Sizing.IsSquare="True" Command="{Binding NextCommand}">
-                                <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.ChevronRight}" />
-                            </Button>
-                            <Button joufflu:Sizing.IsSquare="True" Command="{Binding LastCommand}">
-                                <Button.Style>
-                                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Total}" Value="-1">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <fonts:FontIcon FontSize="10" Text="{x:Static fonts:LucideFontIcons.SkipForward}" />
-                            </Button>
+                            <ComboBox
+                                ItemStringFormat="{}{0} / page"
+                                ItemsSource="{Binding AvailableCapacities}"
+                                SelectedIndex="0"
+                                SelectedItem="{Binding Capacity}" />
                         </StackPanel>
                     </Grid>
                 </ControlTemplate>

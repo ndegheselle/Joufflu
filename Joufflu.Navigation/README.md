@@ -3,7 +3,7 @@
 **Navigation and modal overlays for [Joufflu](https://www.nuget.org/packages/Joufflu).**
 
 A small, view-model-first navigation layer that follows the Joufflu design system:
-a navigation menu, a page container, and awaitable modal dialogs.
+a navigation menu, a page container, awaitable modal dialogs and a paging selector.
 
 [![Joufflu.Navigation on NuGet](https://img.shields.io/nuget/v/Joufflu.Navigation?label=Joufflu.Navigation&logo=nuget)](https://www.nuget.org/packages/Joufflu.Navigation)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/ndegheselle/Joufflu/blob/main/LICENSE)
@@ -15,6 +15,7 @@ a navigation menu, a page container, and awaitable modal dialogs.
 | `NavigationMenu` | A themed navigation menu for moving between sections. |
 | `NavigationContainer` | A view-model-first page container that hosts the current page. |
 | Modal overlays | Awaitable modal dialogs driven by a `Navigator`, so you can `await` a dialog and get its result. |
+| `Paging` | A page selector for large sets of data — `Total`, `PageNumber` and `Capacity` (items per page), plus the displayed range. |
 
 ## Getting started
 
@@ -45,6 +46,16 @@ ThemeManager.Instance.Initialize();
 
 Then wire up a `Navigator`, host a `NavigationContainer` in your window, and drive
 navigation and modal overlays from your view models.
+
+To page a list or a `DataGrid`, bind `Paging` two way and load the matching slice
+when the view model is notified:
+
+```xml
+<nav:Paging
+    Total="{Binding Total}"
+    PageNumber="{Binding PageNumber, Mode=TwoWay}"
+    Capacity="{Binding Capacity, Mode=TwoWay}" />
+```
 
 ## Documentation
 
