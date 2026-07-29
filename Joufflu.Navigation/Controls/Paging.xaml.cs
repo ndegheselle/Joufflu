@@ -24,7 +24,7 @@ namespace Joufflu.Navigation.Controls
                 nameof(Total),
                 typeof(int),
                 typeof(Paging),
-                new PropertyMetadata(0, (o, value) => ((Paging)o).OnTotalChanged()));
+                new PropertyMetadata(-1, (o, value) => ((Paging)o).OnTotalChanged()));
 
         public static readonly DependencyProperty PageNumberProperty =
             DependencyProperty.Register(
