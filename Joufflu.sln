@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "�
 		readme.md = readme.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu.FileExplorer", "Joufflu.FileExplorer\Joufflu.FileExplorer.csproj", "{7B2E5694-DA54-4172-90C6-F12D0FCE7A91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{198FAAA5-141A-46EC-99A0-24C1727CFEDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{198FAAA5-141A-46EC-99A0-24C1727CFEDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{198FAAA5-141A-46EC-99A0-24C1727CFEDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B2E5694-DA54-4172-90C6-F12D0FCE7A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2E5694-DA54-4172-90C6-F12D0FCE7A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2E5694-DA54-4172-90C6-F12D0FCE7A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2E5694-DA54-4172-90C6-F12D0FCE7A91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{998F1558-7217-41EC-A8D2-A96C5338DBA4} = {DB72DC5E-D46F-42BB-A6CB-F75A8F74F7AB}
 		{198FAAA5-141A-46EC-99A0-24C1727CFEDA} = {DB72DC5E-D46F-42BB-A6CB-F75A8F74F7AB}
+		{7B2E5694-DA54-4172-90C6-F12D0FCE7A91} = {DB72DC5E-D46F-42BB-A6CB-F75A8F74F7AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0C9F7DF-8AFE-4B1A-BC6C-D18AA5E6D2DC}
