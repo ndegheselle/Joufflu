@@ -1,7 +1,7 @@
 ---
 title: Theme
 parent: Toolkit
-nav_order: 4
+nav_order: 3
 ---
 
 # Theme

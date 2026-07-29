@@ -18,8 +18,8 @@ live between Light and Dark — no restart, no flicker.
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
 - 🪟 **Custom-chrome window & natives** — a themed application shell (`ThemedWindow`) plus restyled built-in WPF controls (buttons, text boxes, combo boxes, data grid, …) that match out of the box.
-- 🧩 **Custom controls** — `FontIcon`, `Badge`, `Spinner`, `Toasts`.
-- 🧰 **Toolkit** — sizing and spacing attached properties, an improved tooltip, `ThemeManager` and live theme customization.
+- 🧩 **Custom controls** — `FontIcon`, `Badge`, `Spinner`, `Toasts`, an improved tooltip.
+- 🧰 **Toolkit** — sizing and spacing attached properties, `ThemeManager` and live theme customization.
 
 This is the **core package**. Two optional packages build on it:
 

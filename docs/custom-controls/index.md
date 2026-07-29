@@ -12,6 +12,7 @@ Custom controls built on the design system.
 - **Badge** — a themed pill in the semantic colours.
 - **Spinner** — an indeterminate loading indicator.
 - **Toasts** — transient notifications shown from a service.
+- **Tooltip** — the `Tooltip.Content` and `Tooltip.Placement` attached properties for themed tooltips on any element.
 
 `FontIcon` lives in the fonts namespace and the others in the controls namespace:
 

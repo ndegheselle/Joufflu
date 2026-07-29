@@ -34,12 +34,12 @@ Joufflu ships as three NuGet packages that build on each other: `Joufflu` (core 
 - [Badge](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/badge.md): themed pill in the semantic colours, sized via `ControlProperties.Size`.
 - [Spinner](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/spinner.md): indeterminate loading indicator.
 - [Toasts](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/toasts.md): transient notifications from `IToastService`, including sticky toasts.
+- [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
 
 ## Toolkit (`Joufflu`)
 
 - [Sizing](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/sizing.md): `ControlProperties.Size` and `IsSquare` attached properties.
 - [Spacing](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
-- [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
 - [Theme](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
 - [Customize theme](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/customize-theme.md): the live theme editor, presets and override resource keys.
 - [Application shell](https://github.com/ndegheselle/Joufflu/blob/main/docs/toolkit/application-shell.md): `ThemedWindow`, title-bar-over-content, and `NavigationContainer`.

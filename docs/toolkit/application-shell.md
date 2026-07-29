@@ -1,7 +1,7 @@
 ---
 title: Application shell
 parent: Toolkit
-nav_order: 6
+nav_order: 5
 ---
 
 # Application shell

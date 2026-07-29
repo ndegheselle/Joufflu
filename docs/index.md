@@ -46,8 +46,8 @@ can paste into your views.
 | [Native controls](natives/index.md) | Buttons (solid, soft & outline variants) |
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
-| [Custom controls](custom-controls/index.md) | `FontIcon`, `Badge`, `Spinner`, toasts |
-| [Toolkit](toolkit/index.md) | Sizing, spacing, tooltips, theme customization, application shell |
+| [Custom controls](custom-controls/index.md) | `FontIcon`, `Badge`, `Spinner`, toasts, tooltips |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, theme customization, application shell |
 
 ## Getting started
 

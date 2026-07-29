@@ -1,7 +1,7 @@
 ---
 title: Tooltip
-parent: Toolkit
-nav_order: 3
+parent: Custom controls
+nav_order: 5
 ---
 
 # Tooltip
