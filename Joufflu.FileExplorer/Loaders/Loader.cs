@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Controls.Primitives;
 
 namespace Joufflu.FileExplorer.Loaders;
 
@@ -15,13 +14,22 @@ public interface IExplorerFolder : IExplorerNode
     public ObservableCollection<IExplorerNode> Children { get; }
 }
 
+/// <summary>
+/// Node backed by a file system path.
+/// Nodes implementing it are handled by the default templates and commands of the explorer controls.
+/// </summary>
+public interface IExplorerPathNode : IExplorerNode
+{
+    public string Path { get; }
+}
+
 public interface IExplorerLoader
 {
     public IExplorerFolder Root { get; }
     public void Load();
 }
 
-public class ExplorerFile : IExplorerNode
+public class ExplorerFile : IExplorerPathNode
 {
     public string Path { get; set; }
     public string Name { get; set; }
@@ -33,7 +41,7 @@ public class ExplorerFile : IExplorerNode
     }
 }
 
-public class ExplorerFolder : IExplorerFolder
+public class ExplorerFolder : IExplorerFolder, IExplorerPathNode
 {
     public string Path { get; set; }
     public string Name { get; set; } = "";
@@ -57,25 +65,22 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
     /// </summary>
     private readonly int _depth;
 
-    public IExplorerFolder Root { get; private set; }
+    private IExplorerFolder _root;
+
+    public IExplorerFolder Root { get => _root; private set => SetProperty(ref _root, value); }
 
     public DirectoryLoader(string rootDirectoryPath, int depth = 2)
     {
         _rootDirectoryPath = rootDirectoryPath;
         _depth = depth;
+        _root = new ExplorerFolder(rootDirectoryPath);
     }
 
     public void Load()
     {
-        var dirInfo = new DirectoryInfo(_rootDirectoryPath);
-        foreach (var entry in dirInfo.EnumerateFileSystemInfos())
-        {
-            if (entry is FileInfo fi)
-
-                Console.WriteLine($"File: {fi.FullName}, {fi.Length} bytes");
-            else if (entry is DirectoryInfo di)
-                Console.WriteLine($"Dir: {di.FullName}");
-        }
+        ExplorerFolder root = new ExplorerFolder(_rootDirectoryPath);
+        LoadChildren(root, _depth);
+        Root = root;
     }
 
     private void LoadChildren(ExplorerFolder folder, int depth)
@@ -92,7 +97,7 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
                 ExplorerFolder subFolder = new ExplorerFolder(di.FullName);
                 folder.Children.Add(subFolder);
                 if (depth > 0)
-                    LoadChildren();
+                    LoadChildren(subFolder, depth - 1);
             }
         }
     }

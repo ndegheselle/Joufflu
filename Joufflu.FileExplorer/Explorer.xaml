@@ -1,0 +1,189 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters"
+    xmlns:explorer="clr-namespace:Joufflu.FileExplorer"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:loaders="clr-namespace:Joufflu.FileExplorer.Loaders">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/ListBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  Icons of the file system, replace this resource to use your own icons source  -->
+    <converters:SystemIconConverter x:Key="{x:Static explorer:ExplorerResources.SystemIconConverter}" />
+
+    <!--  ============================ Nodes ============================  -->
+    <!--
+        Content of a file node. Reusable in a custom template :
+        <ContentPresenter ContentTemplate="{DynamicResource {x:Static explorer:ExplorerResources.FileTemplate}}" />
+    -->
+    <DataTemplate x:Key="{x:Static explorer:ExplorerResources.FileTemplate}">
+        <StackPanel Orientation="Horizontal">
+            <Grid
+                Width="16"
+                Height="16"
+                Margin="0,0,8,0"
+                VerticalAlignment="Center">
+                <!--  Nodes that are not on the file system have no windows icon  -->
+                <fonts:FontIcon
+                    x:Name="FallbackIcon"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Text="{x:Static fonts:LucideFontIcons.File}"
+                    Visibility="Collapsed" />
+                <Image Source="{Binding Converter={StaticResource {x:Static explorer:ExplorerResources.SystemIconConverter}}}" />
+            </Grid>
+
+            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+        </StackPanel>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Converter={StaticResource {x:Static explorer:ExplorerResources.SystemIconConverter}}}" Value="{x:Null}">
+                <Setter TargetName="FallbackIcon" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <!--  Content of a folder node  -->
+    <DataTemplate x:Key="{x:Static explorer:ExplorerResources.FolderTemplate}">
+        <StackPanel Orientation="Horizontal">
+            <Grid
+                Width="16"
+                Height="16"
+                Margin="0,0,8,0"
+                VerticalAlignment="Center">
+                <fonts:FontIcon
+                    x:Name="FallbackIcon"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Text="{x:Static fonts:LucideFontIcons.Folder}"
+                    Visibility="Collapsed" />
+                <Image Source="{Binding Converter={StaticResource {x:Static explorer:ExplorerResources.SystemIconConverter}}}" />
+            </Grid>
+
+            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+        </StackPanel>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Converter={StaticResource {x:Static explorer:ExplorerResources.SystemIconConverter}}}" Value="{x:Null}">
+                <Setter TargetName="FallbackIcon" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <!--
+        Templates used for the default nodes. Custom nodes are displayed the same way, by declaring a
+        template for their type (a HierarchicalDataTemplate for the ones that have children).
+    -->
+    <DataTemplate DataType="{x:Type loaders:ExplorerFile}">
+        <ContentPresenter Content="{Binding}" ContentTemplate="{DynamicResource {x:Static explorer:ExplorerResources.FileTemplate}}" />
+    </DataTemplate>
+
+    <HierarchicalDataTemplate DataType="{x:Type loaders:ExplorerFolder}" ItemsSource="{Binding Children}">
+        <ContentPresenter Content="{Binding}" ContentTemplate="{DynamicResource {x:Static explorer:ExplorerResources.FolderTemplate}}" />
+    </HierarchicalDataTemplate>
+
+    <!--  ============================ Context menus ============================  -->
+    <!--
+        Default menus, the commands are handled by the explorer control the menu was opened from.
+        They can be reused as a base for a custom menu :
+        <ContextMenu ...>
+            <MenuItem Header="My action" Command="{Binding MyCommand}" />
+            <Separator />
+            <MenuItem Header="Copy" Command="{x:Static explorer:ExplorerCommands.Copy}" />
+        </ContextMenu>
+    -->
+    <ContextMenu x:Key="{x:Static explorer:ExplorerResources.FileContextMenu}">
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Open}" Header="Open">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ExternalLink}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Cut}" Header="Cut">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scissors}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Copy}" Header="Copy">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Copy}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Delete}" Header="Delete">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+
+    <ContextMenu x:Key="{x:Static explorer:ExplorerResources.FolderContextMenu}">
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Open}" Header="Open">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderOpen}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Cut}" Header="Cut">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scissors}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Copy}" Header="Copy">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Copy}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Paste}" Header="Paste">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardPaste}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.NewFolder}" Header="New folder">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderPlus}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Delete}" Header="Delete">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+
+    <!--  Menu shown when more than one node is selected  -->
+    <ContextMenu x:Key="{x:Static explorer:ExplorerResources.SelectionContextMenu}">
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Cut}" Header="Cut">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scissors}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Copy}" Header="Copy">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Copy}" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Command="{x:Static explorer:ExplorerCommands.Delete}" Header="Delete">
+            <MenuItem.Icon>
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+
+    <!--  ============================ Controls ============================  -->
+    <Style TargetType="{x:Type explorer:ListExplorer}" BasedOn="{StaticResource {x:Type ListBox}}">
+        <Setter Property="SelectionMode" Value="Extended" />
+    </Style>
+
+    <Style TargetType="{x:Type explorer:TreeExplorer}" BasedOn="{StaticResource {x:Type TreeView}}" />
+
+</ResourceDictionary>
