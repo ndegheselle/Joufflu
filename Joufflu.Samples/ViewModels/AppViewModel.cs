@@ -4,6 +4,7 @@ using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
 using Joufflu.Samples.Views.Controls.DataDisplay;
 using Joufflu.Samples.Views.Controls.Feedback;
+using Joufflu.Samples.Views.FileExplorer;
 using Joufflu.Samples.Views.Inputs;
 using Joufflu.Samples.Views.Natives.Actions;
 using Joufflu.Samples.Views.Natives.DataDisplay;
@@ -84,6 +85,9 @@ public class AppViewModel : ObservableObject
             ["navigation/menu"] = new NavigationMenuSamplesViewModel(),
             ["navigation/overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
             ["navigation/paging"] = new PagingSamplesViewModel(),
+
+            // File explorer (Joufflu.FileExplorer library)
+            ["file-explorer/explorer"] = new FileExplorerSamplesViewModel(),
 
             // Custom controls
             ["controls/font-icon"] = new FontIconSamplesViewModel(),

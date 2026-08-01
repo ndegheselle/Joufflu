@@ -6,6 +6,7 @@
     xmlns:customFeedback="clr-namespace:Joufflu.Samples.Views.Controls.Feedback"
     xmlns:customNav="clr-namespace:Joufflu.Samples.Views.Navigation"
     xmlns:customNavViews="clr-namespace:Joufflu.Samples.Views.Navigation.Views"
+    xmlns:fileExplorer="clr-namespace:Joufflu.Samples.Views.FileExplorer"
     xmlns:inputs="clr-namespace:Joufflu.Samples.Views.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nativeActions="clr-namespace:Joufflu.Samples.Views.Natives.Actions"
@@ -199,6 +200,11 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type toolkit:ThemeCustomizerViewModel}">
         <toolkit:ThemeCustomizer />
+    </DataTemplate>
+
+    <!--  File explorer  -->
+    <DataTemplate DataType="{x:Type fileExplorer:FileExplorerSamplesViewModel}">
+        <fileExplorer:FileExplorerSamples />
     </DataTemplate>
 
 </ResourceDictionary>

@@ -357,6 +357,20 @@
                     Paging
                 </nav:NavigationItem>
             </nav:NavigationGroup>
+
+            <!--  File explorer (Joufflu.FileExplorer library)  -->
+            <nav:NavigationGroup Header="File explorer">
+                <nav:NavigationGroup.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderTree}" />
+                </nav:NavigationGroup.Icon>
+
+                <nav:NavigationItem Target="file-explorer/explorer">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
+                    </nav:NavigationItem.Icon>
+                    Explorer
+                </nav:NavigationItem>
+            </nav:NavigationGroup>
         </nav:NavigationMenu>
 
         <nav:NavigationContainer

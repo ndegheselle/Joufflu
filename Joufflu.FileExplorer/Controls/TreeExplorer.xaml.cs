@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Joufflu.FileExplorer
+namespace Joufflu.FileExplorer.Controls
 {
-    internal class Explorer
+    internal class TreeExplorer
     {
     }
 }

@@ -34,9 +34,18 @@
                         IsReadOnly="True"
                         ItemsSource="{Binding PageItems}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="60" Binding="{Binding Id}" Header="Id" />
-                            <DataGridTextColumn Width="*" Binding="{Binding Name}" Header="Name" />
-                            <DataGridTextColumn Width="*" Binding="{Binding City}" Header="City" />
+                            <DataGridTextColumn
+                                Width="60"
+                                Binding="{Binding Id}"
+                                Header="Id" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Name}"
+                                Header="Name" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding City}"
+                                Header="City" />
                         </DataGrid.Columns>
                     </DataGrid>
                     <nav:Paging

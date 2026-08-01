@@ -1,0 +1,25 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.FileExplorer.FileExplorerSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Samples.Views.FileExplorer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:FileExplorerSamplesViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="File explorer" />
+
+            <c:CodeExample
+                Title="ColorPicker"
+                Code="{Binding ColorPickerCode}"
+                Description="Edits a colour through an editable hex value and a popup with a saturation square, hue and alpha sliders.">
+                <fileExplorer:ListExplorer ItemsSource="{Binding Loader.Root.Children}" />
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

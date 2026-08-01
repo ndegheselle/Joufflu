@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Resources.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Resources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Resources.xaml" />
                 <ResourceDictionary Source="SampleResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
