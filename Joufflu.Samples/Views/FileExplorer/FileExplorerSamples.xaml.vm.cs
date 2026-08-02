@@ -9,7 +9,7 @@ public class FileExplorerSamplesViewModel : ObservableObject
 {
     public IExplorerLoader Loader { get; private set; }
     public string ExplorerListCode =>
-        "<fileExplorer:ExplorerList />";
+        "<fileExplorer:ExplorerList ItemsSource=\"{Binding Loader.Current.Children}\" />";
 
     public FileExplorerSamplesViewModel()
     {

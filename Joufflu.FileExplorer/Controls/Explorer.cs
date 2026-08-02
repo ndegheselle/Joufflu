@@ -46,6 +46,11 @@ namespace Joufflu.FileExplorer.Controls
             ModifiedAt = di.LastWriteTime;
             this.loader = loader;
         }
+
+        /// <summary>
+        /// Browse into this folder, it becomes the loader <see cref="IExplorerLoader.Current"/>.
+        /// </summary>
+        public void Open() => loader.Open(this);
     }
 
     internal class Explorer

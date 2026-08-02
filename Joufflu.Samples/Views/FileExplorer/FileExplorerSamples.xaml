@@ -15,10 +15,10 @@
             <TextBlock Style="{StaticResource H1}" Text="File explorer" />
 
             <c:CodeExample
-                Title="ColorPicker"
-                Code="{Binding ColorPickerCode}"
-                Description="Edits a colour through an editable hex value and a popup with a saturation square, hue and alpha sliders.">
-                <fileExplorer:ExplorerList ItemsSource="{Binding Loader.Root.Children}" />
+                Title="ExplorerList"
+                Code="{Binding ExplorerListCode}"
+                Description="Lists the childrens of the folder currently browsed by the loader, double clicking a folder opens it.">
+                <fileExplorer:ExplorerList ItemsSource="{Binding Loader.Current.Children}" />
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

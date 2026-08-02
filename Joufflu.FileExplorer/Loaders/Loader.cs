@@ -8,7 +8,12 @@ namespace Joufflu.FileExplorer.Loaders;
 public interface IExplorerLoader
 {
     public IExplorerFolder? Root { get; }
+    /// <summary>
+    /// Folder currently browsed, the one an explorer displays the childrens of.
+    /// </summary>
     public IExplorerFolder? Current { get; }
+
+    public IExplorerFolder Load();
 }
 
 
@@ -23,8 +28,12 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
     /// </summary>
     private readonly int _depth;
 
-    public IExplorerFolder? Root { get; private set; }
-    public IExplorerFolder? Current { get; private set; }
+    private IExplorerFolder? _root;
+    private IExplorerFolder? _current;
+
+    public IExplorerFolder? Root { get => _root; private set => SetProperty(ref _root, value); }
+    /// <inheritdoc/>
+    public IExplorerFolder? Current { get => _current; private set => SetProperty(ref _current, value); }
 
     public DirectoryLoader(string rootDirectoryPath, int depth = 1)
     {
@@ -41,6 +50,9 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
         return root;
     }
 
+    /// <summary>
+    /// Reload the childrens of a folder and make it the new <see cref="Current"/>.
+    /// </summary>
     public void Open(ExplorerFolder folder)
     {
         LoadChildren(folder, _depth);
@@ -49,6 +61,7 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
 
     private void LoadChildren(ExplorerFolder folder, int depth)
     {
+        folder.Children.Clear();
         var dirInfo = new DirectoryInfo(folder.Path);
         foreach (var entry in dirInfo.EnumerateFileSystemInfos())
         {
