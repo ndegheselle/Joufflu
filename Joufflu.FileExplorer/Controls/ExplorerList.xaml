@@ -28,7 +28,7 @@
                 <ControlTemplate TargetType="{x:Type local:ExplorerList}">
                     <ListView
                         x:Name="PART_ListView"
-                        ItemsSource="{TemplateBinding ItemsSource}"
+                        ItemsSource="{TemplateBinding ItemsView}"
                         SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                         Style="{StaticResource {x:Type ListView}}">
                         <ListView.View>

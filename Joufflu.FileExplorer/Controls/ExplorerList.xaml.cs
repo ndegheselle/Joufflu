@@ -1,6 +1,8 @@
 using System.Collections;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Joufflu.FileExplorer.Controls
@@ -27,13 +29,59 @@ namespace Joufflu.FileExplorer.Controls
             nameof(ItemsSource),
             typeof(IEnumerable),
             typeof(ExplorerList),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, OnItemsSourceChanged));
 
         /// <summary>Nodes displayed by the list, usually the children of a folder.</summary>
         public IEnumerable? ItemsSource
         {
             get => (IEnumerable?)GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
+        }
+
+        private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((ExplorerList)d).ItemsView = CreateView(e.NewValue as IEnumerable);
+        }
+
+        /// <summary>
+        /// Wrap the source in a dedicated sorted view, so that two lists bound to the same
+        /// collection don't share the singleton DefaultView (and its sorting).
+        /// </summary>
+        private static ICollectionView? CreateView(IEnumerable? source)
+        {
+            if (source == null)
+                return null;
+
+            ICollectionView view = source as ICollectionView
+                ?? (source is IList list
+                    ? new ListCollectionView(list)
+                    : new CollectionViewSource { Source = source }.View);
+
+            // Only a ListCollectionView can sort through a comparer, any other view is left as is.
+            if (view is ListCollectionView sortable)
+                sortable.CustomSort = ExplorerNodeComparer.Default;
+
+            return view;
+        }
+        #endregion
+
+        #region ItemsView
+        private static readonly DependencyPropertyKey ItemsViewPropertyKey = DependencyProperty.RegisterReadOnly(
+            nameof(ItemsView),
+            typeof(ICollectionView),
+            typeof(ExplorerList),
+            new PropertyMetadata(null));
+
+        public static readonly DependencyProperty ItemsViewProperty = ItemsViewPropertyKey.DependencyProperty;
+
+        /// <summary>
+        /// View of <see cref="ItemsSource"/> displayed by the templated list, sorted by
+        /// <see cref="ExplorerNodeComparer"/> : folders first, then names in natural order.
+        /// </summary>
+        public ICollectionView? ItemsView
+        {
+            get => (ICollectionView?)GetValue(ItemsViewProperty);
+            private set => SetValue(ItemsViewPropertyKey, value);
         }
         #endregion
 
