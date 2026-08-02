@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Joufflu.FileExplorer.Controls
 {
-    internal class TreeExplorer
+    internal class ExplorerTree
     {
     }
 }

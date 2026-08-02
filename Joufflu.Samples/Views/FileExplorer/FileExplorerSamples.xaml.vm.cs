@@ -8,8 +8,8 @@ namespace Joufflu.Samples.Views.FileExplorer;
 public class FileExplorerSamplesViewModel : ObservableObject
 {
     public IExplorerLoader Loader { get; private set; }
-    public string ListExplorerCode =>
-        "<fileExplorer:ListExplorer />";
+    public string ExplorerListCode =>
+        "<fileExplorer:ExplorerList />";
 
     public FileExplorerSamplesViewModel()
     {
