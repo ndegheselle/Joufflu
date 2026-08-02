@@ -22,19 +22,29 @@
         </StackPanel>
     </DataTemplate>
 
-    <Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="{x:Type local:ExplorerList}">
-        <Setter Property="View">
+    <Style TargetType="{x:Type local:ExplorerList}">
+        <Setter Property="Template">
             <Setter.Value>
-                <GridView>
-                    <GridViewColumn Header="Name">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ContentPresenter Content="{Binding}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding ModifiedAt}" Header="Modified at" />
-                </GridView>
+                <ControlTemplate TargetType="{x:Type local:ExplorerList}">
+                    <ListView
+                        x:Name="PART_ListView"
+                        ItemsSource="{TemplateBinding ItemsSource}"
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        Style="{StaticResource {x:Type ListView}}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ContentPresenter Content="{Binding}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding ModifiedAt}" Header="Modified at" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
