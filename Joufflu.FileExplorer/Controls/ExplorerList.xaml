@@ -22,7 +22,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="{x:Type local:ListExplorer}">
+    <Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="{x:Type local:ExplorerList}">
         <Setter Property="View">
             <Setter.Value>
                 <GridView>

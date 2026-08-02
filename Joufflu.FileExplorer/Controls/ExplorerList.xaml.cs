@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace Joufflu.FileExplorer.Controls
 {
-    public class ListExplorer : ListView
+    public class ExplorerList : ListView
     {
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
         {
