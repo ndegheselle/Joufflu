@@ -13,6 +13,6 @@ public class FileExplorerSamplesViewModel : ObservableObject
     public FileExplorerSamplesViewModel()
     {
         Loader = new DirectoryLoader(Directory.GetCurrentDirectory());
-        Loader.Load();
+        Loader.OpenRoot();
     }
 }

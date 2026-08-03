@@ -1,7 +1,6 @@
-﻿using Joufflu.FileExplorer.Loaders;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Shapes;
+using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.FileExplorer.Controls
 {
@@ -10,18 +9,21 @@ namespace Joufflu.FileExplorer.Controls
         public string Name { get; }
         public DateTime ModifiedAt { get; }
     }
-    public interface IExplorerFolder : IExplorerNode
+    public interface IExplorerDirectory : IExplorerNode
     {
         public ObservableCollection<IExplorerNode> Children { get; }
     }
 
-    public class ExplorerFile : IExplorerNode
+    public interface IExplorerFile : IExplorerNode
+    { }
+
+    public class PhysicalFile : IExplorerFile
     {
         public string Path { get; set; }
         public string Name { get; set; }
         public DateTime ModifiedAt { get; set; }
 
-        public ExplorerFile(FileInfo fi)
+        public PhysicalFile(FileInfo fi)
         {
             Path = fi.FullName;
             Name = fi.Name;
@@ -29,7 +31,7 @@ namespace Joufflu.FileExplorer.Controls
         }
     }
 
-    public class ExplorerFolder : IExplorerFolder
+    public class PhysicalDirectory : IExplorerDirectory
     {
         private readonly DirectoryLoader loader;
 
@@ -39,7 +41,7 @@ namespace Joufflu.FileExplorer.Controls
 
         public ObservableCollection<IExplorerNode> Children { get; private set; } = [];
 
-        public ExplorerFolder(DirectoryInfo di, DirectoryLoader loader)
+        public PhysicalDirectory(DirectoryInfo di, DirectoryLoader loader)
         {
             Path = di.FullName;
             Name = di.Name;
