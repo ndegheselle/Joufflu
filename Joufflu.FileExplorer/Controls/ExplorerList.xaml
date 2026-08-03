@@ -23,13 +23,7 @@
                 <ControlTemplate TargetType="{x:Type local:ExplorerList}">
                     <ListView
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        ItemsSource="{TemplateBinding ItemsSource}">
-                        <ListView.ItemContainerStyle>
-                            
-                        </ListView.ItemContainerStyle>
-                        <ListView.InputBindings>
-                            <MouseBinding Command="{TemplateBinding Loader.}" Gesture="LeftDoubleClick" />
-                        </ListView.InputBindings>
+                        ItemsSource="{Binding Loader.Current.Children}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Name">

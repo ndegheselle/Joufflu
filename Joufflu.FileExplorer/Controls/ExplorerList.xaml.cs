@@ -1,8 +1,7 @@
-using Joufflu.FileExplorer.Loaders;
-using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.FileExplorer.Controls
 {
@@ -30,6 +29,11 @@ namespace Joufflu.FileExplorer.Controls
         {
             get => (IExplorerLoader?)GetValue(LoaderProperty);
             set => SetValue(LoaderProperty, value);
+        }
+
+        public void RowDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

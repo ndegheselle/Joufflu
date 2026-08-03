@@ -1,7 +1,6 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.FileExplorer.Controls;
-using Joufflu.FileExplorer.Loaders;
 using System.IO;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 

@@ -1,7 +1,7 @@
 
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Joufflu.FileExplorer.Controls;
-using System.IO;
 
 namespace Joufflu.FileExplorer.Loaders;
 
@@ -9,6 +9,8 @@ public interface IExplorerLoader
 {
     public IExplorerFolder? Root { get; }
     public IExplorerFolder? Current { get; }
+
+    public void Load();
 }
 
 
@@ -32,13 +34,12 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
         _depth = depth;
     }
 
-    public IExplorerFolder Load()
+    public void Load()
     {
         ExplorerFolder root = new ExplorerFolder(new DirectoryInfo(_rootDirectoryPath), this);
         LoadChildren(root, _depth);
         Root = root;
         Current = root;
-        return root;
     }
 
     public void Open(ExplorerFolder folder)
