@@ -18,7 +18,14 @@
                 Title="ColorPicker"
                 Code="{Binding ColorPickerCode}"
                 Description="Edits a colour through an editable hex value and a popup with a saturation square, hue and alpha sliders.">
-                <fileExplorer:ExplorerList Loader="{Binding Loader}" />
+                <fileExplorer:ExplorerList Loader="{Binding Loader}">
+                    <fileExplorer:ExplorerList.Resources>
+                        <DataTemplate></DataTemplate>
+                    </fileExplorer:ExplorerList.Resources>
+                    <fileExplorer:ExplorerList.ContextMenus>
+                        <DataTemplate></DataTemplate>
+                    </fileExplorer:ExplorerList.ContextMenus>
+                </fileExplfileExplorer:ExplorerListorer:ExplorerList>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

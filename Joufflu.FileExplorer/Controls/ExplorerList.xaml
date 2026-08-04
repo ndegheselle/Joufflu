@@ -4,6 +4,11 @@
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/ExplorerContextMenu.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <DataTemplate DataType="{x:Type local:PhysicalFile}">
         <StackPanel joufflu:Spacing.Gap="4" Orientation="Horizontal">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />

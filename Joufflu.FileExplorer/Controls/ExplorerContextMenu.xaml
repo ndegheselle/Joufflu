@@ -1,0 +1,46 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d">
+    <DataTemplate x:Key="{local:ContextMenuTemplateKey local:PhysicalDirectory}">
+        <ContextMenu d:DataContext="{d:DesignInstance Type=local:ExplorerMenuContext}">
+            <MenuItem
+                Command="{Binding Loader.OpenCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Open" />
+            <Separator />
+            <MenuItem
+                Command="{Binding Loader.RenameCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Rename" />
+            <MenuItem
+                Command="{Binding Loader.DeleteCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Delete" />
+        </ContextMenu>
+    </DataTemplate>
+    <DataTemplate x:Key="{local:ContextMenuTemplateKey local:PhysicalFile}">
+        <ContextMenu d:DataContext="{d:DesignInstance Type=local:ExplorerMenuContext}">
+            <MenuItem
+                Command="{Binding Loader.RenameCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Rename" />
+            <MenuItem
+                Command="{Binding Loader.DeleteCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Delete" />
+        </ContextMenu>
+    </DataTemplate>
+    <DataTemplate x:Key="{local:ContextMenuTemplateKey sys:Object, Scope=Multiple}">
+        <ContextMenu d:DataContext="{d:DesignInstance Type=local:ExplorerMenuContext}">
+            <MenuItem
+                Command="{Binding Loader.DeleteCommand}"
+                CommandParameter="{Binding Nodes}"
+                Header="Delete" />
+        </ContextMenu>
+    </DataTemplate>
+</ResourceDictionary>
