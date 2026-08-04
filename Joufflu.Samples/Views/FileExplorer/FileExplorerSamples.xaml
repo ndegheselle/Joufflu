@@ -15,10 +15,17 @@
             <TextBlock Style="{StaticResource H1}" Text="File explorer" />
 
             <c:CodeExample
-                Title="ColorPicker"
-                Code="{Binding ColorPickerCode}"
-                Description="Edits a colour through an editable hex value and a popup with a saturation square, hue and alpha sliders.">
-                <fileExplorer:ExplorerList Loader="{Binding Loader}" />
+                Title="ExplorerList"
+                Code="{Binding ExplorerListCode}"
+                Description="Lists the nodes of the opened folder, directories first then by natural name order. Double click a folder to open it, right click a node for its menu.">
+                <fileExplorer:ExplorerList Height="300" Loader="{Binding Loader}" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="ExplorerTree"
+                Code="{Binding ExplorerTreeCode}"
+                Description="Shows the loaded folders and files as a hierarchy, each level sorted on its own so it stays independent from the list.">
+                <fileExplorer:ExplorerTree Height="300" Loader="{Binding Loader}" />
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
