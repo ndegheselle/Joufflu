@@ -7,11 +7,6 @@ using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.FileExplorer.Controls
 {
-    /* TODO :
-     * Could be simplified by inheriting a ListView directly
-     * Move the sort view creation to the view model ?
-     */
-
     /// <summary>
     /// Lists the nodes of the opened folder in a <see cref="ListView"/>, opening a folder on double click.
     /// </summary>

@@ -6,8 +6,8 @@ using System.Windows.Data;
 namespace Joufflu.FileExplorer.Controls
 {
     /// <summary>
-    /// Shows the loaded folders and files as a hierarchy in a <see cref="TreeView"/>, opening a folder on double
-    /// click.
+    /// Shows the loaded folders and files as a hierarchy in a <see cref="TreeView"/>. Selecting a folder opens it, a
+    /// double click only expands or collapses it.
     /// </summary>
     public class ExplorerTree : ExplorerNodesControl
     {
@@ -30,21 +30,46 @@ namespace Joufflu.FileExplorer.Controls
 
         public override void OnApplyTemplate()
         {
-            // Expanded bubbles, so a single handler on the host covers every level.
-            ItemsHost?.RemoveHandler(TreeViewItem.ExpandedEvent, (RoutedEventHandler)OnItemExpanded);
+            // EventSetter cannot target a handler outside the code-behind of the XAML that declares the style, so
+            // the Expanded event of every TreeViewItem is instead caught here as it bubbles up through the TreeView.
+            if (ItemsHost is TreeView oldTree)
+            {
+                oldTree.RemoveHandler(TreeViewItem.ExpandedEvent, (RoutedEventHandler)OnTreeExpanded);
+                oldTree.SelectedItemChanged -= OnTreeSelectedItemChanged;
+            }
 
             base.OnApplyTemplate();
 
-            ItemsHost?.AddHandler(TreeViewItem.ExpandedEvent, (RoutedEventHandler)OnItemExpanded);
+            if (ItemsHost is TreeView newTree)
+            {
+                newTree.AddHandler(TreeViewItem.ExpandedEvent, (RoutedEventHandler)OnTreeExpanded);
+                newTree.SelectedItemChanged += OnTreeSelectedItemChanged;
+            }
         }
 
         /// <summary>
-        /// Loads the children of an expanded folder. The loader goes one level deeper than what it is asked for, so
-        /// expanding a folder is what gives its own sub folders their expander.
+        /// Expands or collapses a double clicked folder. Opening it is the job of the selection, which a click already
+        /// did.
         /// </summary>
-        private void OnItemExpanded(object sender, RoutedEventArgs e)
+        protected override bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
         {
-            if ((e.OriginalSource as FrameworkElement)?.DataContext is IExplorerDirectory directory)
+            if (node is not IExplorerDirectory || container is not TreeViewItem item)
+                return false;
+
+            item.IsExpanded = true;
+            return true;
+        }
+
+        private void OnTreeExpanded(object sender, RoutedEventArgs e)
+        {
+            var tvi = (TreeViewItem)e.OriginalSource;
+            tvi.IsSelected = true;
+            e.Handled = true;
+        }
+
+        private void OnTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e.NewValue is IExplorerDirectory directory)
                 Loader?.Open(directory);
         }
     }

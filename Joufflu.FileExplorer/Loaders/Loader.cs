@@ -21,7 +21,17 @@ public interface IExplorerLoader
     public ICommand? DeleteCommand { get; }
 
     public void OpenRoot();
+
+    /// <summary>
+    /// Loads the children of a directory and makes it the <see cref="Current"/> one.
+    /// </summary>
     public void Open(IExplorerDirectory directory);
+
+    /// <summary>
+    /// Loads the children of a directory without navigating to it, for a control showing a hierarchy it only needs
+    /// the content of.
+    /// </summary>
+    public void Load(IExplorerDirectory directory);
 }
 
 
@@ -58,7 +68,7 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
     public void OpenRoot()
     {
         PhysicalDirectory root = new PhysicalDirectory(new DirectoryInfo(_rootDirectoryPath), this);
-        OpenPhysicalDirectory(root, _depth);
+        LoadPhysicalDirectory(root, _depth);
         Root = root;
         Current = root;
     }
@@ -67,12 +77,18 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
     {
         if (directory is PhysicalDirectory physicalDirectory)
         {
-            OpenPhysicalDirectory(physicalDirectory, _depth);
+            LoadPhysicalDirectory(physicalDirectory, _depth);
             Current = directory;
         }
     }
 
-    private void OpenPhysicalDirectory(PhysicalDirectory directory, int depth)
+    public void Load(IExplorerDirectory directory)
+    {
+        if (directory is PhysicalDirectory physicalDirectory)
+            LoadPhysicalDirectory(physicalDirectory, _depth);
+    }
+
+    private void LoadPhysicalDirectory(PhysicalDirectory directory, int depth)
     {
         directory.Children.Clear();
         var dirInfo = new DirectoryInfo(directory.Path);
@@ -87,7 +103,7 @@ public class DirectoryLoader : ObservableObject, IExplorerLoader
                 PhysicalDirectory subDirectory = new PhysicalDirectory(di, this);
                 directory.Children.Add(subDirectory);
                 if (depth > 0)
-                    OpenPhysicalDirectory(subDirectory, depth - 1);
+                    LoadPhysicalDirectory(subDirectory, depth - 1);
             }
         }
     }
