@@ -62,7 +62,7 @@
                                                         Height="28"
                                                         Command="{Binding RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
                                                         CommandParameter="{Binding}"
-                                                        Style="{StaticResource Ghost}">
+                                                        Style="{StaticResource GhostButton}">
                                                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                                     </Button>
                                                 </StackPanel>

@@ -1,0 +1,11 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:joufflu="clr-namespace:Joufflu">
+    <Style
+        x:Key="DangerMenuItem"
+        BasedOn="{StaticResource {x:Type MenuItem}}"
+        TargetType="{x:Type MenuItem}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+    </Style>
+</ResourceDictionary>

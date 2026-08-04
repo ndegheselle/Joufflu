@@ -16,13 +16,13 @@ matching content colour.
 
 ```xml
 <Button>Default</Button>
-<Button Style="{StaticResource Primary}">Primary</Button>
-<Button Style="{StaticResource Secondary}">Secondary</Button>
-<Button Style="{StaticResource Ghost}">Ghost</Button>
-<Button Style="{StaticResource Success}">Success</Button>
-<Button Style="{StaticResource Danger}">Danger</Button>
-<Button Style="{StaticResource Info}">Info</Button>
-<Button Style="{StaticResource Warning}">Warning</Button>
+<Button Style="{StaticResource PrimaryButton}">Primary</Button>
+<Button Style="{StaticResource SecondaryButton}">Secondary</Button>
+<Button Style="{StaticResource GhostButton}">Ghost</Button>
+<Button Style="{StaticResource SuccessButton}">Success</Button>
+<Button Style="{StaticResource DangerButton}">Danger</Button>
+<Button Style="{StaticResource InfoButton}">Info</Button>
+<Button Style="{StaticResource WarningButton}">Warning</Button>
 ```
 
 ## Soft
@@ -33,12 +33,12 @@ for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
 both Light and Dark and follows any custom theme.
 
 ```xml
-<Button Style="{StaticResource SoftPrimary}">Primary</Button>
-<Button Style="{StaticResource SoftSecondary}">Secondary</Button>
-<Button Style="{StaticResource SoftSuccess}">Success</Button>
-<Button Style="{StaticResource SoftInfo}">Info</Button>
-<Button Style="{StaticResource SoftWarning}">Warning</Button>
-<Button Style="{StaticResource SoftDanger}">Danger</Button>
+<Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
+<Button Style="{StaticResource SoftSecondaryButton}">Secondary</Button>
+<Button Style="{StaticResource SoftSuccessButton}">Success</Button>
+<Button Style="{StaticResource SoftInfoButton}">Info</Button>
+<Button Style="{StaticResource SoftWarningButton}">Warning</Button>
+<Button Style="{StaticResource SoftDangerButton}">Danger</Button>
 ```
 
 {: .note }
@@ -53,12 +53,12 @@ A coloured border and text over a transparent fill; hovering fills it with the
 soft tint.
 
 ```xml
-<Button Style="{StaticResource OutlinePrimary}">Primary</Button>
-<Button Style="{StaticResource OutlineSecondary}">Secondary</Button>
-<Button Style="{StaticResource OutlineSuccess}">Success</Button>
-<Button Style="{StaticResource OutlineInfo}">Info</Button>
-<Button Style="{StaticResource OutlineWarning}">Warning</Button>
-<Button Style="{StaticResource OutlineDanger}">Danger</Button>
+<Button Style="{StaticResource OutlinePrimaryButton}">Primary</Button>
+<Button Style="{StaticResource OutlineSecondaryButton}">Secondary</Button>
+<Button Style="{StaticResource OutlineSuccessButton}">Success</Button>
+<Button Style="{StaticResource OutlineInfoButton}">Info</Button>
+<Button Style="{StaticResource OutlineWarningButton}">Warning</Button>
+<Button Style="{StaticResource OutlineDangerButton}">Danger</Button>
 ```
 
 ## Icon buttons
@@ -67,7 +67,7 @@ soft tint.
 any variant.
 
 ```xml
-<Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource Primary}">
+<Button joufflu:ControlProperties.IsSquare="True" Style="{StaticResource PrimaryButton}">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
 </Button>
 ```

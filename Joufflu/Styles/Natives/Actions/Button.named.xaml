@@ -70,7 +70,7 @@
         Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
 
     <Style
-        x:Key="Ghost"
+        x:Key="GhostButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
@@ -78,7 +78,7 @@
     </Style>
 
     <Style
-        x:Key="Primary"
+        x:Key="PrimaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
@@ -92,7 +92,7 @@
     </Style>
 
     <Style
-        x:Key="Secondary"
+        x:Key="SecondaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
@@ -106,7 +106,7 @@
     </Style>
 
     <Style
-        x:Key="Success"
+        x:Key="SuccessButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
@@ -120,7 +120,7 @@
     </Style>
 
     <Style
-        x:Key="Info"
+        x:Key="InfoButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" />
@@ -134,7 +134,7 @@
     </Style>
 
     <Style
-        x:Key="Warning"
+        x:Key="WarningButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" />
@@ -148,7 +148,7 @@
     </Style>
 
     <Style
-        x:Key="Danger"
+        x:Key="DangerButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
@@ -164,7 +164,7 @@
     <!--  ============================ Soft ============================  -->
     <!--  Tinted background with the semantic hue as text; the border stays off.  -->
     <Style
-        x:Key="SoftPrimary"
+        x:Key="SoftPrimaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
@@ -178,7 +178,7 @@
     </Style>
 
     <Style
-        x:Key="SoftSecondary"
+        x:Key="SoftSecondaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
@@ -192,7 +192,7 @@
     </Style>
 
     <Style
-        x:Key="SoftSuccess"
+        x:Key="SoftSuccessButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
@@ -206,7 +206,7 @@
     </Style>
 
     <Style
-        x:Key="SoftInfo"
+        x:Key="SoftInfoButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
@@ -220,7 +220,7 @@
     </Style>
 
     <Style
-        x:Key="SoftWarning"
+        x:Key="SoftWarningButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
@@ -234,7 +234,7 @@
     </Style>
 
     <Style
-        x:Key="SoftDanger"
+        x:Key="SoftDangerButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
@@ -250,7 +250,7 @@
     <!--  ============================ Outline ============================  -->
     <!--  Coloured border and text over a transparent fill; hover fills with the soft tint.  -->
     <Style
-        x:Key="OutlinePrimary"
+        x:Key="OutlinePrimaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
@@ -265,7 +265,7 @@
     </Style>
 
     <Style
-        x:Key="OutlineSecondary"
+        x:Key="OutlineSecondaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
@@ -280,7 +280,7 @@
     </Style>
 
     <Style
-        x:Key="OutlineSuccess"
+        x:Key="OutlineSuccessButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
@@ -295,7 +295,7 @@
     </Style>
 
     <Style
-        x:Key="OutlineInfo"
+        x:Key="OutlineInfoButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
@@ -310,7 +310,7 @@
     </Style>
 
     <Style
-        x:Key="OutlineWarning"
+        x:Key="OutlineWarningButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
@@ -325,7 +325,7 @@
     </Style>
 
     <Style
-        x:Key="OutlineDanger"
+        x:Key="OutlineDangerButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />

@@ -5,19 +5,33 @@ namespace Joufflu.FileExplorer.Controls
 {
     public enum MenuScope { Single, Multiple }
 
-    public sealed class ContextMenuTemplateKey : MarkupExtension, IEquatable<ContextMenuTemplateKey>
+    /// <summary>
+    /// Resource key of the context menu template of a data type.
+    /// Inherits <see cref="TypeExtension"/> because the XAML compiler only accepts String, TypeExtension and
+    /// StaticExtension as x:Key markup extensions.
+    /// </summary>
+    public sealed class ContextMenuTemplateKey : TypeExtension, IEquatable<ContextMenuTemplateKey>
     {
-        public ContextMenuTemplateKey(Type dataType) => DataType = dataType;
+        public ContextMenuTemplateKey() { }
 
-        [ConstructorArgument("dataType")]
-        public Type DataType { get; set; }
+        public ContextMenuTemplateKey(Type dataType) : base(dataType) { }
+
+        public ContextMenuTemplateKey(string typeName) : base(typeName) { }
+
+        public Type DataType => Type;
 
         public MenuScope Scope { get; set; } = MenuScope.Single;
-        public override object ProvideValue(IServiceProvider sp) => this;
 
-        public bool Equals(ContextMenuTemplateKey? o) => o is not null && o.DataType == DataType;
+        public override object ProvideValue(IServiceProvider sp)
+        {
+            // Resolves the type name declared in XAML
+            Type ??= (Type)base.ProvideValue(sp);
+            return this;
+        }
+
+        public bool Equals(ContextMenuTemplateKey? o) => o is not null && o.Type == Type && o.Scope == Scope;
         public override bool Equals(object? o) => Equals(o as ContextMenuTemplateKey);
-        public override int GetHashCode() => DataType?.GetHashCode() ?? 0;
+        public override int GetHashCode() => HashCode.Combine(Type, Scope);
     }
 
     /// <summary>

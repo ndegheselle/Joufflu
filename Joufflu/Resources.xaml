@@ -38,6 +38,7 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/Hyperlink.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/Menu.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/MenuItem.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/MenuItem.named.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/TabControl.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/ToolBar.xaml" />
 

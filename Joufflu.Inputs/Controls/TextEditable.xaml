@@ -56,7 +56,7 @@
                                 joufflu:Sizing.IsSquare="True"
                                 joufflu:Sizing.Size="xs"
                                 Command="{Binding EditCommand}"
-                                Style="{DynamicResource Ghost}">
+                                Style="{DynamicResource GhostButton}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
                             </Button>
                         </Grid>
@@ -84,14 +84,14 @@
                                     joufflu:Sizing.IsSquare="True"
                                     joufflu:Sizing.Size="xs"
                                     Command="{Binding CancelCommand}"
-                                    Style="{DynamicResource Ghost}">
+                                    Style="{DynamicResource GhostButton}">
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                 </Button>
                                 <Button
                                     joufflu:Sizing.IsSquare="True"
                                     joufflu:Sizing.Size="xs"
                                     Command="{Binding ValidateCommand}"
-                                    Style="{DynamicResource Ghost}">
+                                    Style="{DynamicResource GhostButton}">
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Check}" />
                                 </Button>
                             </StackPanel>

@@ -216,7 +216,7 @@ Its view:
         <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8">
             <Button Command="{Binding SayHelloCommand}" Content="Say hello" />
             <Button Command="{Binding DeleteCommand}" Content="Delete…"
-                    Style="{StaticResource Danger}" />
+                    Style="{StaticResource DangerButton}" />
         </StackPanel>
     </StackPanel>
 </UserControl>
@@ -296,9 +296,9 @@ Its view (add a matching `DataTemplate` as in Step 2):
         <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
         <StackPanel Margin="0,16,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
             <Button Command="{Binding CancelCommand}" Content="Cancel"
-                    Style="{StaticResource Secondary}" />
+                    Style="{StaticResource SecondaryButton}" />
             <Button Margin="8,0,0,0" Command="{Binding DeleteCommand}" Content="Delete"
-                    Style="{StaticResource Danger}" />
+                    Style="{StaticResource DangerButton}" />
         </StackPanel>
     </StackPanel>
 </UserControl>

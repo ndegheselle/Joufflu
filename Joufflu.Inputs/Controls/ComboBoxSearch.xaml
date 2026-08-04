@@ -81,7 +81,7 @@
                                 joufflu:Sizing.IsSquare="True"
                                 Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                 Focusable="False"
-                                Style="{StaticResource Ghost}">
+                                Style="{StaticResource GhostButton}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
 

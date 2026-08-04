@@ -16,12 +16,12 @@
             <Button
                 Command="{Binding CancelCommand}"
                 Content="Cancel"
-                Style="{StaticResource Secondary}" />
+                Style="{StaticResource SecondaryButton}" />
             <Button
                 Margin="8,0,0,0"
                 Command="{Binding SaveCommand}"
                 Content="Save"
-                Style="{StaticResource Primary}" />
+                Style="{StaticResource PrimaryButton}" />
         </StackPanel>
     </StackPanel>
 </UserControl>

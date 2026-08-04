@@ -19,7 +19,7 @@
                 <ControlTemplate TargetType="{x:Type nav:NavigationItem}">
                     <Button
                         x:Name="ItemButton"
-                        Style="{DynamicResource Ghost}"
+                        Style="{DynamicResource GhostButton}"
                         Height="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
                         HorizontalContentAlignment="Stretch"
                         Command="{Binding SelectCommand, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}"
@@ -76,7 +76,7 @@
                         <Button
                             x:Name="HeaderButton"
                         HorizontalContentAlignment="Stretch"
-                        Style="{DynamicResource Ghost}"
+                        Style="{DynamicResource GhostButton}"
                             Command="{Binding ToggleCommand, RelativeSource={RelativeSource TemplatedParent}}">
                             <Grid>
                                 <Grid.ColumnDefinitions>

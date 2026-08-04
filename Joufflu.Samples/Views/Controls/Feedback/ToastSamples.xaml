@@ -16,19 +16,19 @@
                     <Button
                         Command="{Binding InfoCommand}"
                         Content="Info"
-                        Style="{StaticResource Info}" />
+                        Style="{StaticResource InfoButton}" />
                     <Button
                         Command="{Binding SuccessCommand}"
                         Content="Success"
-                        Style="{StaticResource Success}" />
+                        Style="{StaticResource SuccessButton}" />
                     <Button
                         Command="{Binding WarningCommand}"
                         Content="Warning"
-                        Style="{StaticResource Warning}" />
+                        Style="{StaticResource WarningButton}" />
                     <Button
                         Command="{Binding ErrorCommand}"
                         Content="Error"
-                        Style="{StaticResource Danger}" />
+                        Style="{StaticResource DangerButton}" />
                     <Button Command="{Binding StickyCommand}" Content="Sticky" />
                     <Button Command="{Binding StackCommand}" Content="Stack ×3" />
                 </WrapPanel>

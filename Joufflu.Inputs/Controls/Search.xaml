@@ -51,7 +51,7 @@
                             HorizontalAlignment="Right"
                             joufflu:Sizing.IsSquare="True"
                             Command="{Binding ClearSearchCommand}"
-                            Style="{StaticResource Ghost}">
+                            Style="{StaticResource GhostButton}">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                         </Button>
                     </Grid>

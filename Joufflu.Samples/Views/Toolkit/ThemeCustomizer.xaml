@@ -89,9 +89,9 @@
                         joufflu:Spacing.Gap="8,0"
                         DockPanel.Dock="Top"
                         Orientation="Horizontal">
-                        <Button Command="{Binding CopyCommand}" Style="{StaticResource Primary}">Copy XAML</Button>
-                        <Button Command="{Binding SaveCommand}" Style="{StaticResource Secondary}">Save .xaml…</Button>
-                        <Button Command="{Binding ResetCommand}" Style="{StaticResource Ghost}">Reset</Button>
+                        <Button Command="{Binding CopyCommand}" Style="{StaticResource PrimaryButton}">Copy XAML</Button>
+                        <Button Command="{Binding SaveCommand}" Style="{StaticResource SecondaryButton}">Save .xaml…</Button>
+                        <Button Command="{Binding ResetCommand}" Style="{StaticResource GhostButton}">Reset</Button>
                     </StackPanel>
 
                     <ScrollViewer Margin="0,12,0,0" VerticalScrollBarVisibility="Auto">
@@ -255,11 +255,11 @@
                             <TextBlock Style="{StaticResource H3}" Text="Buttons" />
                             <WrapPanel joufflu:Spacing.Gap="8,8">
                                 <Button>Default</Button>
-                                <Button Style="{StaticResource Primary}">Primary</Button>
-                                <Button Style="{StaticResource Secondary}">Secondary</Button>
-                                <Button Style="{StaticResource Success}">Success</Button>
-                                <Button Style="{StaticResource Danger}">Danger</Button>
-                                <Button Style="{StaticResource Ghost}">Ghost</Button>
+                                <Button Style="{StaticResource PrimaryButton}">Primary</Button>
+                                <Button Style="{StaticResource SecondaryButton}">Secondary</Button>
+                                <Button Style="{StaticResource SuccessButton}">Success</Button>
+                                <Button Style="{StaticResource DangerButton}">Danger</Button>
+                                <Button Style="{StaticResource GhostButton}">Ghost</Button>
                                 <Button IsEnabled="False">Disabled</Button>
                             </WrapPanel>
                         </StackPanel>
@@ -270,10 +270,10 @@
                         <StackPanel joufflu:Spacing.Gap="0,10">
                             <TextBlock Style="{StaticResource H3}" Text="Sizes" />
                             <WrapPanel VerticalAlignment="Center" joufflu:Spacing.Gap="8,8">
-                                <Button joufflu:Sizing.Size="xs" Style="{StaticResource Primary}">Extra small</Button>
-                                <Button joufflu:Sizing.Size="sm" Style="{StaticResource Primary}">Small</Button>
-                                <Button joufflu:Sizing.Size="md" Style="{StaticResource Primary}">Medium</Button>
-                                <Button joufflu:Sizing.Size="lg" Style="{StaticResource Primary}">Large</Button>
+                                <Button joufflu:Sizing.Size="xs" Style="{StaticResource PrimaryButton}">Extra small</Button>
+                                <Button joufflu:Sizing.Size="sm" Style="{StaticResource PrimaryButton}">Small</Button>
+                                <Button joufflu:Sizing.Size="md" Style="{StaticResource PrimaryButton}">Medium</Button>
+                                <Button joufflu:Sizing.Size="lg" Style="{StaticResource PrimaryButton}">Large</Button>
                             </WrapPanel>
                         </StackPanel>
                     </Border>

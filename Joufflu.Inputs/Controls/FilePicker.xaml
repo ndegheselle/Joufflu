@@ -27,7 +27,7 @@
                                 joufflu:Sizing.IsSquare="True"
                                 Command="{Binding ClearCommand}">
                                 <Button.Style>
-                                    <Style BasedOn="{StaticResource Ghost}" TargetType="{x:Type Button}">
+                                    <Style BasedOn="{StaticResource GhostButton}" TargetType="{x:Type Button}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding FilePath}" Value="">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -40,7 +40,7 @@
                             <Button
                                 joufflu:Sizing.IsSquare="True"
                                 Command="{Binding SelectCommand}"
-                                Style="{DynamicResource Ghost}">
+                                Style="{DynamicResource GhostButton}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
                             </Button>
                         </StackPanel>

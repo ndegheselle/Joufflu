@@ -11,12 +11,12 @@
             <Button
                 Command="{Binding CancelCommand}"
                 Content="Cancel"
-                Style="{StaticResource Secondary}" />
+                Style="{StaticResource SecondaryButton}" />
             <Button
                 Margin="8,0,0,0"
                 Command="{Binding DeleteCommand}"
                 Content="Delete"
-                Style="{StaticResource Danger}" />
+                Style="{StaticResource DangerButton}" />
         </StackPanel>
     </StackPanel>
 </UserControl>

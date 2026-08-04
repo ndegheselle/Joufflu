@@ -6,27 +6,27 @@ public class ButtonSamplesViewModel : ObservableObject
 {
     public string VariantsCode =>
         "<Button>Default</Button>\n" +
-        "<Button Style=\"{StaticResource Primary}\">Primary</Button>\n" +
-        "<Button Style=\"{StaticResource Secondary}\">Secondary</Button>\n" +
-        "<Button Style=\"{StaticResource Ghost}\">Ghost</Button>\n" +
-        "<Button Style=\"{StaticResource Success}\">Success</Button>\n" +
-        "<Button Style=\"{StaticResource Danger}\">Danger</Button>";
+        "<Button Style=\"{StaticResource PrimaryButton}\">Primary</Button>\n" +
+        "<Button Style=\"{StaticResource SecondaryButton}\">Secondary</Button>\n" +
+        "<Button Style=\"{StaticResource GhostButton}\">Ghost</Button>\n" +
+        "<Button Style=\"{StaticResource SuccessButton}\">Success</Button>\n" +
+        "<Button Style=\"{StaticResource DangerButton}\">Danger</Button>";
 
     public string SoftCode =>
         "<!-- Tinted background, semantic hue as text -->\n" +
-        "<Button Style=\"{StaticResource SoftPrimary}\">Primary</Button>\n" +
-        "<Button Style=\"{StaticResource SoftSuccess}\">Success</Button>\n" +
-        "<Button Style=\"{StaticResource SoftInfo}\">Info</Button>\n" +
-        "<Button Style=\"{StaticResource SoftWarning}\">Warning</Button>\n" +
-        "<Button Style=\"{StaticResource SoftDanger}\">Danger</Button>";
+        "<Button Style=\"{StaticResource SoftPrimaryButton}\">Primary</Button>\n" +
+        "<Button Style=\"{StaticResource SoftSuccessButton}\">Success</Button>\n" +
+        "<Button Style=\"{StaticResource SoftInfoButton}\">Info</Button>\n" +
+        "<Button Style=\"{StaticResource SoftWarningButton}\">Warning</Button>\n" +
+        "<Button Style=\"{StaticResource SoftDangerButton}\">Danger</Button>";
 
     public string OutlineCode =>
         "<!-- Coloured border and text, transparent fill -->\n" +
-        "<Button Style=\"{StaticResource OutlinePrimary}\">Primary</Button>\n" +
-        "<Button Style=\"{StaticResource OutlineSuccess}\">Success</Button>\n" +
-        "<Button Style=\"{StaticResource OutlineInfo}\">Info</Button>\n" +
-        "<Button Style=\"{StaticResource OutlineWarning}\">Warning</Button>\n" +
-        "<Button Style=\"{StaticResource OutlineDanger}\">Danger</Button>";
+        "<Button Style=\"{StaticResource OutlinePrimaryButton}\">Primary</Button>\n" +
+        "<Button Style=\"{StaticResource OutlineSuccessButton}\">Success</Button>\n" +
+        "<Button Style=\"{StaticResource OutlineInfoButton}\">Info</Button>\n" +
+        "<Button Style=\"{StaticResource OutlineWarningButton}\">Warning</Button>\n" +
+        "<Button Style=\"{StaticResource OutlineDangerButton}\">Danger</Button>";
 
     public string IconCode =>
         "<Button joufflu:Sizing.IsSquare=\"True\">\n" +

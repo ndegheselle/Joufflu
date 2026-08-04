@@ -23,49 +23,6 @@
     </DataTemplate>
 
     <Style TargetType="{x:Type local:ExplorerList}">
-        <Setter Property="DirectoryContextMenu">
-            <Setter.Value>
-                <ContextMenu>
-                    <MenuItem
-                        Command="{Binding Loader.OpenCommand}"
-                        CommandParameter="{Binding Node}"
-                        Header="Open" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding Loader.RenameCommand}"
-                        CommandParameter="{Binding Node}"
-                        Header="Rename" />
-                    <MenuItem
-                        Command="{Binding Loader.DeleteCommand}"
-                        CommandParameter="{Binding Node}"
-                        Header="Delete" />
-                </ContextMenu>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="FileContextMenu">
-            <Setter.Value>
-                <ContextMenu>
-                    <MenuItem
-                        Command="{Binding Loader.RenameCommand}"
-                        CommandParameter="{Binding Node}"
-                        Header="Rename" />
-                    <MenuItem
-                        Command="{Binding Loader.DeleteCommand}"
-                        CommandParameter="{Binding Node}"
-                        Header="Delete" />
-                </ContextMenu>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="SelectionContextMenu">
-            <Setter.Value>
-                <ContextMenu>
-                    <MenuItem
-                        Command="{Binding Loader.DeleteCommand}"
-                        CommandParameter="{Binding Nodes}"
-                        Header="Delete" />
-                </ContextMenu>
-            </Setter.Value>
-        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ExplorerList}">
