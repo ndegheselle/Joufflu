@@ -2,7 +2,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using Joufflu.FileExplorer.Controls;
-using Joufflu.Helpers;
+using Joufflu.FileExplorer.Helpers;
 
 namespace Joufflu.FileExplorer.Converters
 {
