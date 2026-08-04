@@ -18,14 +18,11 @@ namespace Joufflu.FileExplorer.Controls
                 new FrameworkPropertyMetadata(typeof(ExplorerTree)));
         }
 
-        protected override IEnumerable<IExplorerNode> SelectedNodes
+        protected override IEnumerable<IExplorerNode> GetSelectedNodes()
         {
-            get
-            {
-                // A TreeView only ever has one selected item.
-                if ((ItemsHost as TreeView)?.SelectedItem is IExplorerNode node)
-                    yield return node;
-            }
+            // A TreeView only ever has one selected item.
+            if ((ItemsHost as TreeView)?.SelectedItem is IExplorerNode node)
+                yield return node;
         }
 
         public override void OnApplyTemplate()
@@ -69,6 +66,8 @@ namespace Joufflu.FileExplorer.Controls
 
         private void OnTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            UpdateSelectedNodes();
+
             if (e.NewValue is IExplorerDirectory directory)
                 Loader?.Open(directory);
         }

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -7,7 +7,15 @@ using System.Windows.Media.Imaging;
 
 namespace Joufflu.Helpers
 {
-    public class SystemIcons
+    /// <summary>
+    /// Icons the Windows shell associates with a folder or a file type.
+    /// </summary>
+    /// <remarks>
+    /// The shell is never given access to the file itself (SHGFI_USEFILEATTRIBUTES), so no disk is hit and the path
+    /// doesn't even have to exist : only its extension matters. The counterpart is that the files carrying their own
+    /// icon (an executable, a shortcut, an image) get the generic icon of their type.
+    /// </remarks>
+    public static class SystemIcons
     {
         public static class Interop
         {
@@ -96,43 +104,94 @@ namespace Joufflu.Helpers
         }
 
         /// <summary>
-        /// Récupération de l'icone d'un fichier ou dossier
+        /// Icons read so far, keyed by folder or extension and size. The failures are cached too, so that a type the
+        /// shell has no icon for isn't asked for again. Every icon is frozen, hence shareable by any number of
+        /// bindings.
         /// </summary>
-        /// <param name="strPath">Chemin du fichier dont ont veut l'icone</param>
-        /// <param name="bSmall">Taille de l'iconne</param>
-        /// <returns>Une ImageSource contenant l'icone ou null si le fichier n'existe pas</returns>
-        public static ImageSource? GetIcon(string strPath, bool bSmall)
-        {
-            Interop.FileAttribute fileAttribute;
+        private static readonly Dictionary<string, ImageSource?> _cache = [];
+        private static readonly object _cacheLock = new();
 
-            // Cas de fichiers temporaires créer et supprimé immédiatement
-            if (!File.Exists(strPath) && !Directory.Exists(strPath))
+        /// <summary>
+        /// Icon of a folder or of the type of a file, null when the shell has none.
+        /// </summary>
+        /// <param name="path">
+        /// Path of the file or folder. It doesn't have to exist : for a file only its extension is read, for a folder
+        /// nothing at all.
+        /// </param>
+        /// <param name="isDirectory">
+        /// Whether the path is a folder. Given by the caller rather than read from the disk, so that the icon of a
+        /// node that has no file behind it can be asked for too.
+        /// </param>
+        /// <param name="isSmall">True for the 16x16 icon, false for the 32x32 one.</param>
+        public static ImageSource? GetIcon(string path, bool isDirectory, bool isSmall)
+        {
+            if (string.IsNullOrEmpty(path))
                 return null;
 
-            if (File.GetAttributes(strPath).HasFlag(FileAttributes.Directory))
-                fileAttribute = Interop.FileAttribute.FILE_ATTRIBUTE_DIRECTORY;
-            else
-                fileAttribute = Interop.FileAttribute.FILE_ATTRIBUTE_NORMAL;
+            // Everything sharing a type shares an icon, so the cache is keyed by type and not by path.
+            string type = isDirectory ? "<folder>" : Path.GetExtension(path).ToLowerInvariant();
+            string key = $"{type}|{isSmall}";
+            lock (_cacheLock)
+            {
+                if (_cache.TryGetValue(key, out ImageSource? cached))
+                    return cached;
+            }
+
+            ImageSource? icon = ReadIcon(path, isDirectory, isSmall);
+            lock (_cacheLock)
+            {
+                _cache[key] = icon;
+            }
+
+            return icon;
+        }
+
+        /// <summary>
+        /// Empties the cache, for the rare case where the icons of the system changed while the application runs.
+        /// </summary>
+        public static void ClearCache()
+        {
+            lock (_cacheLock)
+            {
+                _cache.Clear();
+            }
+        }
+
+        private static ImageSource? ReadIcon(string path, bool isDirectory, bool isSmall)
+        {
+            Interop.FileAttribute attribute = isDirectory
+                ? Interop.FileAttribute.FILE_ATTRIBUTE_DIRECTORY
+                : Interop.FileAttribute.FILE_ATTRIBUTE_NORMAL;
+            Interop.SHGFI flags = Interop.SHGFI.Icon |
+                Interop.SHGFI.UseFileAttributes |
+                (isSmall ? Interop.SHGFI.SmallIcon : Interop.SHGFI.LargeIcon);
 
             Interop.SHFILEINFO info = new Interop.SHFILEINFO(true);
             int cbFileInfo = Marshal.SizeOf(info);
-            Interop.SHGFI flags;
-            if (bSmall)
-                flags = Interop.SHGFI.Icon | Interop.SHGFI.SmallIcon | Interop.SHGFI.UseFileAttributes;
-            else
-                flags = Interop.SHGFI.Icon | Interop.SHGFI.LargeIcon | Interop.SHGFI.UseFileAttributes;
+            Interop.SHGetFileInfo(path, (int)attribute, out info, (uint)cbFileInfo, flags);
 
-            Interop.SHGetFileInfo(strPath, (int)fileAttribute, out info, (uint)cbFileInfo, flags);
+            if (info.hIcon == IntPtr.Zero)
+                return null;
 
-            IntPtr iconHandle = info.hIcon;
-            //if (IntPtr.Zero == iconHandle) // not needed, always return icon (blank)
-            //  return DefaultImgSrc;
-            ImageSource img = Imaging.CreateBitmapSourceFromHIcon(
-                        iconHandle,
-                        Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions());
-            Interop.DestroyIcon(iconHandle);
-            return img;
+            try
+            {
+                ImageSource icon = Imaging.CreateBitmapSourceFromHIcon(
+                    info.hIcon,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
+                // Frozen : the icon is cached and reused, and can then be read from any thread.
+                icon.Freeze();
+                return icon;
+            }
+            catch (COMException)
+            {
+                return null;
+            }
+            finally
+            {
+                // The handle belongs to the caller of SHGetFileInfo.
+                Interop.DestroyIcon(info.hIcon);
+            }
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Joufflu.FileExplorer.Controls
         /// </summary>
         public ICollectionView? ItemsView => (ICollectionView?)GetValue(ItemsViewProperty);
 
-        protected override IEnumerable<IExplorerNode> SelectedNodes
+        protected override IEnumerable<IExplorerNode> GetSelectedNodes()
             => (ItemsHost as ListView)?.SelectedItems.OfType<IExplorerNode>() ?? [];
 
         public ExplorerList()
@@ -75,6 +75,19 @@ namespace Joufflu.FileExplorer.Controls
                     Source = this
                 });
         }
+
+        public override void OnApplyTemplate()
+        {
+            if (ItemsHost is ListView oldList)
+                oldList.SelectionChanged -= OnListSelectionChanged;
+
+            base.OnApplyTemplate();
+
+            if (ItemsHost is ListView newList)
+                newList.SelectionChanged += OnListSelectionChanged;
+        }
+
+        private void OnListSelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateSelectedNodes();
 
         private static void OnNodesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
             => ((ExplorerList)d).UpdateItemsView(e.NewValue as IList);

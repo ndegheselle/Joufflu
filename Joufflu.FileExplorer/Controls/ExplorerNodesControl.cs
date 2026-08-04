@@ -8,12 +8,12 @@ namespace Joufflu.FileExplorer.Controls
 {
     /// <summary>
     /// Behaviour shared by the controls displaying explorer nodes (<see cref="ExplorerList"/>,
-    /// <see cref="ExplorerTree"/>) : the loader, opening a directory on double click and the context menu of a node.
-    /// A derived control only provides the <see cref="ItemsControl"/> template part displaying the nodes and its
-    /// selection.
+    /// <see cref="ExplorerTree"/>) : opening a directory on double click, the context menu of a node and its
+    /// selection. A derived control only provides the <see cref="ItemsControl"/> template part displaying the nodes
+    /// and reads its selection.
     /// </summary>
     [TemplatePart(Name = PartItemsHost, Type = typeof(ItemsControl))]
-    public abstract class ExplorerNodesControl : Control
+    public abstract class ExplorerNodesControl : ExplorerControl
     {
         protected const string PartItemsHost = "PART_ItemsHost";
 
@@ -24,18 +24,15 @@ namespace Joufflu.FileExplorer.Controls
         private readonly ContextMenu _contextMenu = new();
 
         #region Dependency Property
-        public static readonly DependencyProperty LoaderProperty = DependencyProperty.Register(
-            nameof(Loader),
-            typeof(IExplorerLoader),
+        private static readonly DependencyPropertyKey SelectedNodesPropertyKey = DependencyProperty.RegisterReadOnly(
+            nameof(SelectedNodes),
+            typeof(IReadOnlyList<IExplorerNode>),
             typeof(ExplorerNodesControl),
-            new PropertyMetadata(null));
-        #endregion
+            new PropertyMetadata(Array.Empty<IExplorerNode>()));
 
-        public IExplorerLoader? Loader
-        {
-            get => (IExplorerLoader?)GetValue(LoaderProperty);
-            set => SetValue(LoaderProperty, value);
-        }
+        public static readonly DependencyProperty SelectedNodesProperty
+            = SelectedNodesPropertyKey.DependencyProperty;
+        #endregion
 
         /// <summary>
         /// Control displaying the nodes, taken from the <see cref="PartItemsHost"/> template part.
@@ -43,9 +40,22 @@ namespace Joufflu.FileExplorer.Controls
         protected ItemsControl? ItemsHost { get; private set; }
 
         /// <summary>
-        /// Nodes selected in <see cref="ItemsHost"/>, empty when nothing is selected.
+        /// Nodes selected in <see cref="ItemsHost"/>, empty when nothing is selected. Bindable, so that a status bar
+        /// can show how many of them there are.
         /// </summary>
-        protected abstract IEnumerable<IExplorerNode> SelectedNodes { get; }
+        public IReadOnlyList<IExplorerNode> SelectedNodes
+            => (IReadOnlyList<IExplorerNode>)GetValue(SelectedNodesProperty);
+
+        /// <summary>
+        /// Reads the selection of <see cref="ItemsHost"/>, which only a derived control knows how to reach.
+        /// </summary>
+        protected abstract IEnumerable<IExplorerNode> GetSelectedNodes();
+
+        /// <summary>
+        /// Publishes the selection of <see cref="ItemsHost"/> in <see cref="SelectedNodes"/>. A derived control calls
+        /// it whenever its host reports a selection change.
+        /// </summary>
+        protected void UpdateSelectedNodes() => SetValue(SelectedNodesPropertyKey, GetSelectedNodes().ToArray());
 
         public override void OnApplyTemplate()
         {
@@ -73,6 +83,8 @@ namespace Joufflu.FileExplorer.Controls
                 ItemsHost.ContextMenu = _contextMenu;
                 _contextMenu.PlacementTarget = ItemsHost;
             }
+
+            UpdateSelectedNodes();
         }
 
         #region UI events
@@ -155,7 +167,7 @@ namespace Joufflu.FileExplorer.Controls
         /// </summary>
         private List<IExplorerNode> GetMenuNodes(IExplorerNode node)
         {
-            var nodes = SelectedNodes.ToList();
+            var nodes = GetSelectedNodes().ToList();
             if (!nodes.Remove(node))
                 return [node];
 
