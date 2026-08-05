@@ -2,7 +2,7 @@
 
 > WPF inputs and reusable controls for .NET, built on a small design system of themed brushes, dimensions, sizing and spacing helpers. Every control reads its colours through `DynamicResource`, so the whole UI re-themes live between Light and Dark with no restart.
 
-Joufflu ships as three NuGet packages that build on each other: `Joufflu` (core styles, theming, custom controls, and restyled native WPF controls), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
+Joufflu ships as four NuGet packages that build on each other: `Joufflu` (core styles, theming, `FontIcon`, and restyled native WPF controls), `Joufflu.Feedback` (badges, spinner, toasts and tooltips), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
 
 ## Start here
 
@@ -28,13 +28,13 @@ Joufflu ships as three NuGet packages that build on each other: `Joufflu` (core 
 - [Overlays](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/overlays.md): stacking modal overlays, `OverlayOptions`, and awaiting a result from `Show`.
 - [Paging](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, and the `PagingChange` event.
 
-## Custom controls (`Joufflu`)
+## Custom controls (`Joufflu`, `Joufflu.Feedback`)
 
-- [Font icon](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/font-icon.md): `FontIcon`, a Lucide icon-font glyph.
-- [Badge](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/badge.md): themed pill in the semantic colours, sized via `ControlProperties.Size`.
-- [Spinner](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/spinner.md): indeterminate loading indicator.
-- [Toasts](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/toasts.md): transient notifications from `IToastService`, including sticky toasts.
-- [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
+- [Font icon](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/font-icon.md): `FontIcon`, a Lucide icon-font glyph (core `Joufflu` package).
+- [Badge](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/badge.md): themed pill in the semantic colours, sized via `ControlProperties.Size` (`Joufflu.Feedback`).
+- [Spinner](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/spinner.md): indeterminate loading indicator (`Joufflu.Feedback`).
+- [Toasts](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/toasts.md): transient notifications from `IToastService`, including sticky toasts (`Joufflu.Feedback`).
+- [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element (`Joufflu.Feedback`).
 
 ## Toolkit (`Joufflu`)
 
@@ -49,5 +49,6 @@ Joufflu ships as three NuGet packages that build on each other: `Joufflu` (core 
 - [Documentation site](https://ndegheselle.github.io/Joufflu/): the rendered docs.
 - [GitHub repository](https://github.com/ndegheselle/Joufflu/): source, samples and issues.
 - [Joufflu on NuGet](https://www.nuget.org/packages/Joufflu): core package (styles & theming).
+- [Joufflu.Feedback on NuGet](https://www.nuget.org/packages/Joufflu.Feedback): badges, spinner, toasts & tooltips.
 - [Joufflu.Inputs on NuGet](https://www.nuget.org/packages/Joufflu.Inputs): input controls.
 - [Joufflu.Navigation on NuGet](https://www.nuget.org/packages/Joufflu.Navigation): navigation & overlays.

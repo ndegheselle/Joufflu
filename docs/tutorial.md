@@ -47,7 +47,7 @@ the same instances. It also keeps a registry mapping each menu item's text
 
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.Controls;
+using Joufflu.Feedback.Controls;
 using Joufflu.Navigation;
 
 public class ShellViewModel : ObservableObject

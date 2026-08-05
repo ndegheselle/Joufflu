@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Assets.Fonts;
 
-namespace Joufflu.Controls;
+namespace Joufflu.Feedback.Controls;
 
 public enum ToastType
 {

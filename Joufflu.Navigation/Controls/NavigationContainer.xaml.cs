@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using Joufflu.Controls;
+using Joufflu.Feedback.Controls;
 
 namespace Joufflu.Navigation.Controls;
 

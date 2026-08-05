@@ -12,6 +12,6 @@ An indeterminate loading indicator. Colour comes from `Foreground`, diameter fro
 `ControlProperties.Size`.
 
 ```xml
-<controls:Spinner />
-<controls:Spinner joufflu:ControlProperties.Size="lg" />
+<feedback:Spinner />
+<feedback:Spinner joufflu:ControlProperties.Size="lg" />
 ```

@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Joufflu.Controls;
+using Joufflu.Feedback.Controls;
 using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
 

@@ -5,12 +5,12 @@ namespace Joufflu.Samples.Views.Controls.DataDisplay;
 public class BadgeSamplesViewModel : ObservableObject
 {
     public string VariantsCode =>
-        "<controls:Badge>Default</controls:Badge>\n" +
-        "<controls:Badge Variant=\"Primary\">Primary</controls:Badge>\n" +
-        "<controls:Badge Variant=\"Success\">Active</controls:Badge>\n" +
-        "<controls:Badge Variant=\"Danger\">3</controls:Badge>";
+        "<feedback:Badge>Default</feedback:Badge>\n" +
+        "<feedback:Badge Variant=\"Primary\">Primary</feedback:Badge>\n" +
+        "<feedback:Badge Variant=\"Success\">Active</feedback:Badge>\n" +
+        "<feedback:Badge Variant=\"Danger\">3</feedback:Badge>";
 
     public string SizesCode =>
-        "<controls:Badge Variant=\"Primary\" joufflu:Sizing.Size=\"xs\">xs</controls:Badge>\n" +
-        "<controls:Badge Variant=\"Primary\" joufflu:Sizing.Size=\"lg\">lg</controls:Badge>";
+        "<feedback:Badge Variant=\"Primary\" joufflu:Sizing.Size=\"xs\">xs</feedback:Badge>\n" +
+        "<feedback:Badge Variant=\"Primary\" joufflu:Sizing.Size=\"lg\">lg</feedback:Badge>";
 }

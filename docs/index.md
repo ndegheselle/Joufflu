@@ -46,16 +46,18 @@ can paste into your views.
 | [Native controls](natives/index.md) | Buttons (solid, soft & outline variants) |
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
-| [Custom controls](custom-controls/index.md) | `FontIcon`, `Badge`, `Spinner`, toasts, tooltips |
+| [Custom controls](custom-controls/index.md) | `FontIcon` (`Joufflu`); `Badge`, `Spinner`, toasts, tooltips (`Joufflu.Feedback`) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, theme customization, application shell |
 
 ## Getting started
 
 1. Add the packages you need. `Joufflu` is the core (styles & theming);
-   `Joufflu.Inputs` and `Joufflu.Navigation` are optional and both build on it:
+   `Joufflu.Feedback`, `Joufflu.Inputs` and `Joufflu.Navigation` are optional and
+   all build on it:
 
    ```sh
    dotnet add package Joufflu
+   dotnet add package Joufflu.Feedback    # optional: badges, spinner, toasts, tooltips
    dotnet add package Joufflu.Inputs      # optional: input controls
    dotnet add package Joufflu.Navigation  # optional: navigation & overlays
    ```

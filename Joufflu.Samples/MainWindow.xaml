@@ -55,6 +55,12 @@
                 </nav:NavigationItem.Icon>
                 Typography
             </nav:NavigationItem>
+            <nav:NavigationItem Target="controls/font-icon">
+                <nav:NavigationItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Sparkles}" />
+                </nav:NavigationItem.Icon>
+                Font icon
+            </nav:NavigationItem>
             <nav:NavigationItem Target="natives/card">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Square}" />
@@ -219,39 +225,6 @@
                 </nav:NavigationItem>
             </nav:NavigationGroup>
 
-            <!--  Custom controls  -->
-            <nav:NavigationTitle Title="Custom controls" />
-            <nav:NavigationItem Target="controls/font-icon">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Sparkles}" />
-                </nav:NavigationItem.Icon>
-                Font icon
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="controls/badge">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Badge}" />
-                </nav:NavigationItem.Icon>
-                Badge
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="controls/spinner">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Circle}" />
-                </nav:NavigationItem.Icon>
-                Spinner
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="controls/tooltip">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
-                </nav:NavigationItem.Icon>
-                Tooltip
-            </nav:NavigationItem>
-            <nav:NavigationItem Target="controls/toasts">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
-                </nav:NavigationItem.Icon>
-                Toasts
-            </nav:NavigationItem>
-
             <!--  Toolkit  -->
             <nav:NavigationTitle Title="Toolkit" />
             <nav:NavigationItem Target="toolkit/application-shell">
@@ -287,6 +260,38 @@
             </nav:NavigationItem>
 
             <nav:NavigationTitle Title="Joufflu controls" />
+
+            <!--  Feedback (Joufflu.Feedback library)  -->
+            <nav:NavigationGroup Header="Feedback">
+                <nav:NavigationGroup.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Megaphone}" />
+                </nav:NavigationGroup.Icon>
+
+                <nav:NavigationItem Target="controls/badge">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Badge}" />
+                    </nav:NavigationItem.Icon>
+                    Badge
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="controls/spinner">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Circle}" />
+                    </nav:NavigationItem.Icon>
+                    Spinner
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="controls/tooltip">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
+                    </nav:NavigationItem.Icon>
+                    Tooltip
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="controls/toasts">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+                    </nav:NavigationItem.Icon>
+                    Toasts
+                </nav:NavigationItem>
+            </nav:NavigationGroup>
 
             <!--  Inputs (Joufflu.Inputs library)  -->
             <nav:NavigationGroup Header="Inputs">

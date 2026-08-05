@@ -8,6 +8,7 @@ control reads its colours through `DynamicResource`, so the whole UI re-themes
 live between Light and Dark — no restart, no flicker.
 
 [![Joufflu on NuGet](https://img.shields.io/nuget/v/Joufflu?label=Joufflu&logo=nuget)](https://www.nuget.org/packages/Joufflu)
+[![Joufflu.Feedback on NuGet](https://img.shields.io/nuget/v/Joufflu.Feedback?label=Joufflu.Feedback&logo=nuget)](https://www.nuget.org/packages/Joufflu.Feedback)
 [![Joufflu.Inputs on NuGet](https://img.shields.io/nuget/v/Joufflu.Inputs?label=Joufflu.Inputs&logo=nuget)](https://www.nuget.org/packages/Joufflu.Inputs)
 [![Joufflu.Navigation on NuGet](https://img.shields.io/nuget/v/Joufflu.Navigation?label=Joufflu.Navigation&logo=nuget)](https://www.nuget.org/packages/Joufflu.Navigation)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
@@ -37,7 +38,8 @@ page's raw Markdown source. (Prefer this raw URL over the rendered site, which c
 |---|---|
 | **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `NavigationContainer` and modal overlays driven by a `Navigator` |
-| **Custom controls** (`Joufflu`) | `FontIcon`, `Badge`, `Spinner`, `Toasts`, improved tooltip |
+| **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts`, improved tooltip |
+| **Custom controls** (`Joufflu`) | `FontIcon` |
 | **Toolkit** (`Joufflu`) | Sizing and spacing attached properties, `ThemeManager`, live theme customization, and the application shell (`ThemedWindow`) |
 
 The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
@@ -47,10 +49,12 @@ data grid, …) restyled to match the design system — come along with the core
 ## Getting started
 
 1. Add the packages you need. `Joufflu` is the core (styles & theming);
-   `Joufflu.Inputs` and `Joufflu.Navigation` are optional and both build on it:
+   `Joufflu.Feedback`, `Joufflu.Inputs` and `Joufflu.Navigation` are optional and
+   all build on it:
 
    ```sh
    dotnet add package Joufflu
+   dotnet add package Joufflu.Feedback    # optional: badges, spinner, toasts, tooltips
    dotnet add package Joufflu.Inputs      # optional: input controls
    dotnet add package Joufflu.Navigation  # optional: navigation & overlays
    ```

@@ -10,10 +10,11 @@ nav_order: 4
 
 Toasts stack in the top-right corner, always above page content and overlays, and
 auto-dismiss after a few seconds unless sticky. Show them from an injected
-`IToastService`.
+`IToastService` (in `Joufflu.Feedback.Controls`, from the
+[`Joufflu.Feedback`](https://www.nuget.org/packages/Joufflu.Feedback) package).
 
 ```csharp
-// Inject IToastService
+// using Joufflu.Feedback.Controls; — inject IToastService
 toasts.Info("A neutral message.", "Heads up");
 toasts.Success("Saved.");
 toasts.Warning("Careful.");

@@ -6,10 +6,7 @@
 
         <!--  == Joufflu controls ==  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/Badge.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/ThemedWindow.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/Spinner.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Controls/Toast.xaml" />
 
         <!--  == Natives ==  -->
         <!--  Actions  -->

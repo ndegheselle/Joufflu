@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace Joufflu.Controls;
+namespace Joufflu.Feedback.Controls;
 
 /// <summary>Side of the target element a tooltip is placed on.</summary>
 public enum TooltipPlacement { Top, Bottom, Left, Right }

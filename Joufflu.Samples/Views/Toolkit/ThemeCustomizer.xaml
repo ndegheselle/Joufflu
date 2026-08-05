@@ -2,7 +2,7 @@
     x:Class="Joufflu.Samples.Views.Toolkit.ThemeCustomizer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+    xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
@@ -323,8 +323,8 @@
                                         <TextBlock Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="Selected surface (Background 200)" />
                                     </Border>
                                     <WrapPanel joufflu:Spacing.Gap="8,8">
-                                        <controls:Badge>Default</controls:Badge>
-                                        <controls:Badge joufflu:Sizing.Size="xs">Small</controls:Badge>
+                                        <feedback:Badge>Default</feedback:Badge>
+                                        <feedback:Badge joufflu:Sizing.Size="xs">Small</feedback:Badge>
                                     </WrapPanel>
                                 </StackPanel>
                             </Border>

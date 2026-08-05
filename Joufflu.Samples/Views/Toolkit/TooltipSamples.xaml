@@ -5,7 +5,7 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    xmlns:jontrols="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+    xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
     >
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
@@ -18,20 +18,20 @@
                 <WrapPanel joufflu:Spacing.Gap="8,8">
                     <Button
                         Content="Top"
-                        jontrols:Tooltip.Content="Placed above"
-                        jontrols:Tooltip.Placement="Top" />
+                        feedback:Tooltip.Content="Placed above"
+                        feedback:Tooltip.Placement="Top" />
                     <Button
                         Content="Bottom"
-                        jontrols:Tooltip.Content="Placed below"
-                        jontrols:Tooltip.Placement="Bottom" />
+                        feedback:Tooltip.Content="Placed below"
+                        feedback:Tooltip.Placement="Bottom" />
                     <Button
                         Content="Left"
-                        jontrols:Tooltip.Content="Placed left"
-                        jontrols:Tooltip.Placement="Left" />
+                        feedback:Tooltip.Content="Placed left"
+                        feedback:Tooltip.Placement="Left" />
                     <Button
                         Content="Right"
-                        jontrols:Tooltip.Content="Placed right"
-                        jontrols:Tooltip.Placement="Right" />
+                        feedback:Tooltip.Content="Placed right"
+                        feedback:Tooltip.Placement="Right" />
                 </WrapPanel>
             </c:CodeExample>
 
@@ -40,13 +40,13 @@
                 Code="{Binding ContentCode}"
                 Description="Tooltip.Content is an object, so it accepts arbitrary XAML — not just text.">
                 <WrapPanel joufflu:Spacing.Gap="8,8">
-                    <Button Content="Rich tooltip" jontrols:Tooltip.Placement="Bottom">
-                        <jontrols:Tooltip.Content>
+                    <Button Content="Rich tooltip" feedback:Tooltip.Placement="Bottom">
+                        <feedback:Tooltip.Content>
                             <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
                                 <TextBlock Text="Arbitrary content, icons included." />
                             </StackPanel>
-                        </jontrols:Tooltip.Content>
+                        </feedback:Tooltip.Content>
                     </Button>
                 </WrapPanel>
             </c:CodeExample>

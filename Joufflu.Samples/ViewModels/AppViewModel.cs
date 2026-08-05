@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.Controls;
+using Joufflu.Feedback.Controls;
 using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
 using Joufflu.Samples.Views.Controls.DataDisplay;
