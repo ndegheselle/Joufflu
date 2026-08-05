@@ -1,6 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters"
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
 
     <ResourceDictionary.MergedDictionaries>
@@ -25,6 +26,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn DisplayMemberBinding="{Binding ModifiedAt}" Header="Modified at" />
+                                <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Converter={x:Static converters:FileSizeConverter.Default}}" />
                             </GridView>
                         </ListView.View>
                     </ListView>

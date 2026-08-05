@@ -1,6 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:data="clr-namespace:Joufflu.FileExplorer.Data"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
@@ -9,20 +10,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <!--  Directory of the breadcrumb, reopened by a click, followed by the separator leading to the next one.  -->
-    <DataTemplate x:Key="ExplorerBreadcrumbItemTemplate">
-        <StackPanel Orientation="Horizontal">
-            <Button
-                Command="{Binding Loader.OpenCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerControlBar}}}"
-                CommandParameter="{Binding}"
-                Content="{Binding Name}"
-                Style="{StaticResource GhostButton}" />
-            <fonts:FontIcon
-                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                Text="{x:Static fonts:LucideFontIcons.ChevronRight}" />
-        </StackPanel>
-    </DataTemplate>
 
     <Style TargetType="{x:Type local:ExplorerControlBar}">
         <Setter Property="Template">
@@ -67,9 +54,29 @@
                             Grid.Column="1"
                             HorizontalScrollBarVisibility="Auto"
                             VerticalScrollBarVisibility="Disabled">
-                            <ItemsControl
-                                ItemTemplate="{StaticResource ExplorerBreadcrumbItemTemplate}"
-                                ItemsSource="{Binding Loader.CurrentPath}">
+                            <ItemsControl ItemsSource="{Binding Loader.CurrentPath}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type data:IExplorerDirectory}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="{x:Static fonts:LucideFontIcons.ChevronRight}">
+                                                <fonts:FontIcon.Style>
+                                                    <Style BasedOn="{StaticResource {x:Type fonts:FontIcon}}" TargetType="{x:Type fonts:FontIcon}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Parent}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </fonts:FontIcon.Style>
+                                            </fonts:FontIcon>
+                                            <Button
+                                                Command="{Binding Loader.OpenCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerControlBar}}}"
+                                                CommandParameter="{Binding}"
+                                                Content="{Binding Name}"
+                                                Style="{StaticResource GhostButton}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />

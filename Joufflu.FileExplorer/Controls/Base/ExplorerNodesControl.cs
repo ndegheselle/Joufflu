@@ -8,6 +8,27 @@ using Joufflu.FileExplorer.Loaders;
 namespace Joufflu.FileExplorer.Controls.Base;
 
 /// <summary>
+/// Kinds of node a control displays, combinable so a control can show files, directories or both.
+/// </summary>
+[Flags]
+public enum ExplorerNodeKinds
+{
+    None = 0,
+    Files = 1,
+    Directories = 2,
+    All = Files | Directories
+}
+
+public static class ExplorerNodeKindsExtensions
+{
+    /// <summary>Whether <paramref name="node"/> is one of the kinds in <paramref name="kinds"/>.</summary>
+    public static bool Includes(this ExplorerNodeKinds kinds, IExplorerNode node)
+        => node is IExplorerDirectory
+            ? kinds.HasFlag(ExplorerNodeKinds.Directories)
+            : kinds.HasFlag(ExplorerNodeKinds.Files);
+}
+
+/// <summary>
 /// Base of the explorer controls : the loader whose content they display and through which they navigate. Several
 /// controls share the same loader, so they all show the same opened directory.
 /// </summary>
@@ -54,7 +75,29 @@ public abstract class ExplorerNodesControl : ExplorerControl
 
     public static readonly DependencyProperty SelectedNodesProperty
         = SelectedNodesPropertyKey.DependencyProperty;
+
+    public static readonly DependencyProperty VisibleNodesProperty = DependencyProperty.Register(
+        nameof(VisibleNodes),
+        typeof(ExplorerNodeKinds),
+        typeof(ExplorerNodesControl),
+        new FrameworkPropertyMetadata(ExplorerNodeKinds.All, OnVisibleNodesChanged));
     #endregion
+
+    /// <summary>
+    /// Kinds of node the control shows, <see cref="ExplorerNodeKinds.All"/> by default. Set it to
+    /// <see cref="ExplorerNodeKinds.Directories"/> or <see cref="ExplorerNodeKinds.Files"/> to display only one.
+    /// </summary>
+    public ExplorerNodeKinds VisibleNodes
+    {
+        get => (ExplorerNodeKinds)GetValue(VisibleNodesProperty);
+        set => SetValue(VisibleNodesProperty, value);
+    }
+
+    private static void OnVisibleNodesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        => ((ExplorerNodesControl)d).OnVisibleNodesChanged();
+
+    /// <summary>Re-applies <see cref="VisibleNodes"/> when it changes ; a derived control overrides it as needed.</summary>
+    protected virtual void OnVisibleNodesChanged() { }
 
     /// <summary>
     /// Control displaying the nodes, taken from the <see cref="PartItemsHost"/> template part.

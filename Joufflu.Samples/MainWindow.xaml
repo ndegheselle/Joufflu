@@ -375,6 +375,18 @@
                     </nav:NavigationItem.Icon>
                     Explorer
                 </nav:NavigationItem>
+                <nav:NavigationItem Target="file-explorer/list">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />
+                    </nav:NavigationItem.Icon>
+                    List
+                </nav:NavigationItem>
+                <nav:NavigationItem Target="file-explorer/tree">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListTree}" />
+                    </nav:NavigationItem.Icon>
+                    Tree
+                </nav:NavigationItem>
             </nav:NavigationGroup>
         </nav:NavigationMenu>
 

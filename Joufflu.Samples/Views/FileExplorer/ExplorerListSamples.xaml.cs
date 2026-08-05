@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
-public partial class FileExplorerSamples : UserControl
+public partial class ExplorerListSamples : UserControl
 {
-    public FileExplorerSamples()
+    public ExplorerListSamples()
     {
         InitializeComponent();
     }

@@ -97,15 +97,22 @@ namespace Joufflu.FileExplorer.Controls
         private static void OnSortComparerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
             => ((ExplorerList)d).ApplySort();
 
+        /// <summary>Re-runs the <see cref="ExplorerNodesControl.VisibleNodes"/> filter on the current view.</summary>
+        protected override void OnVisibleNodesChanged() => (ItemsView as ListCollectionView)?.Refresh();
+
         /// <summary>
-        /// Builds the view of the newly opened folder, already sorted by <see cref="SortComparer"/>.
+        /// Builds the view of the newly opened folder, sorted by <see cref="SortComparer"/> and filtered to
+        /// <see cref="ExplorerNodesControl.VisibleNodes"/>.
         /// </summary>
         private void UpdateItemsView(IList? nodes)
         {
             SetValue(
                 ItemsViewPropertyKey,
-                nodes == null ? null : new ListCollectionView(nodes) { CustomSort = SortComparer });
+                nodes == null ? null : new ListCollectionView(nodes) { CustomSort = SortComparer, Filter = FilterNode });
         }
+
+        /// <summary>Keeps only the nodes whose kind is in <see cref="ExplorerNodesControl.VisibleNodes"/>.</summary>
+        private bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
 
         /// <summary>
         /// Re-sorts the displayed nodes, by default directories first then by natural name order.

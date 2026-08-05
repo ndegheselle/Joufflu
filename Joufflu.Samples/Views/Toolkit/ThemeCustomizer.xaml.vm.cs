@@ -93,6 +93,67 @@ public class ThemeDimensionEntry : ObservableObject
     public void SetValueSilently(double value) => SetProperty(ref _value, Math.Round(value), nameof(Value));
 }
 
+/// <summary>A single editable control padding, split into independent horizontal and vertical amounts.</summary>
+public class ThemePaddingEntry : ObservableObject
+{
+    private readonly Action<ThemePaddingEntry> _onChanged;
+
+    public string Label { get; }
+
+    /// <summary>Identifier used to route the value to the right resource key (e.g. <c>ControlPaddingMd</c>).</summary>
+    public string ResourceName { get; }
+
+    public double Minimum { get; }
+
+    public double Maximum { get; }
+
+    public string Unit { get; }
+
+    private double _horizontal;
+    /// <summary>Left/Right padding, in DIPs.</summary>
+    public double Horizontal
+    {
+        get => _horizontal;
+        set
+        {
+            double snapped = Math.Round(value);
+            if (SetProperty(ref _horizontal, snapped))
+                _onChanged(this);
+        }
+    }
+
+    private double _vertical;
+    /// <summary>Top/Bottom padding, in DIPs.</summary>
+    public double Vertical
+    {
+        get => _vertical;
+        set
+        {
+            double snapped = Math.Round(value);
+            if (SetProperty(ref _vertical, snapped))
+                _onChanged(this);
+        }
+    }
+
+    public ThemePaddingEntry(string label, string resourceName, double min, double max, double horizontal, double vertical, Action<ThemePaddingEntry> onChanged, string unit = "px")
+    {
+        Label = label;
+        ResourceName = resourceName;
+        Minimum = min;
+        Maximum = max;
+        _horizontal = horizontal;
+        _vertical = vertical;
+        _onChanged = onChanged;
+        Unit = unit;
+    }
+
+    public void SetValuesSilently(double horizontal, double vertical)
+    {
+        SetProperty(ref _horizontal, Math.Round(horizontal), nameof(Horizontal));
+        SetProperty(ref _vertical, Math.Round(vertical), nameof(Vertical));
+    }
+}
+
 public class ThemeColorGroup
 {
     public string Header { get; }
@@ -115,6 +176,17 @@ public class ThemeDimensionGroup
     }
 }
 
+public class ThemePaddingGroup
+{
+    public string Header { get; }
+    public ObservableCollection<ThemePaddingEntry> Paddings { get; }
+    public ThemePaddingGroup(string header, ObservableCollection<ThemePaddingEntry> paddings)
+    {
+        Header = header;
+        Paddings = paddings;
+    }
+}
+
 /// <summary>
 /// Drives the "Customize theme" page: edits live colour/dimension resources application-wide
 /// (so the whole gallery becomes the preview) and emits a drop-in ResourceDictionary.
@@ -126,9 +198,11 @@ public class ThemeCustomizerViewModel : ObservableObject
 
     private readonly List<ThemeColorEntry> _allColors = new();
     private readonly List<ThemeDimensionEntry> _allDimensions = new();
+    private readonly List<ThemePaddingEntry> _allPaddings = new();
 
     public ObservableCollection<ThemeColorGroup> ColorGroups { get; } = new();
     public ObservableCollection<ThemeDimensionGroup> DimensionGroups { get; } = new();
+    public ObservableCollection<ThemePaddingGroup> PaddingGroups { get; } = new();
 
     /// <summary>Selectable preset palettes, sourced from the themes registered with <see cref="ThemeManager"/>.</summary>
     public IReadOnlyList<ThemePreset> Presets { get; }
@@ -160,6 +234,7 @@ public class ThemeCustomizerViewModel : ObservableObject
     {
         BuildColorGroups();
         BuildDimensionGroups();
+        BuildPaddingGroups();
 
         // Built after the colour groups so _allColors tells us which keys to read from each theme.
         Presets = BuildPresets();
@@ -264,6 +339,27 @@ public class ThemeCustomizerViewModel : ObservableObject
             Dim("Large", "ControlFontSizeLg", 11, 28)));
     }
 
+    private void BuildPaddingGroups()
+    {
+        ThemePaddingEntry Pad(string label, string name)
+        {
+            Thickness t = ReadThickness(PaddingKey(name));
+            // ControlPadding thicknesses are symmetric (Left==Right, Top==Bottom), so one slider drives each axis.
+            var entry = new ThemePaddingEntry(label, name, 0, 32, t.Left, t.Top, OnPaddingChanged);
+            _allPaddings.Add(entry);
+            return entry;
+        }
+
+        var paddings = new ObservableCollection<ThemePaddingEntry>
+        {
+            Pad("Extra small", "ControlPaddingXs"),
+            Pad("Small", "ControlPaddingSm"),
+            Pad("Medium", "ControlPaddingMd"),
+            Pad("Large", "ControlPaddingLg"),
+        };
+        PaddingGroups.Add(new ThemePaddingGroup("Control padding", paddings));
+    }
+
     /// <summary>
     /// Builds a preset per concrete theme registered with <see cref="ThemeManager"/> (<c>System</c> is
     /// skipped — it is a resolver, not a palette). Each preset's colours are read straight from the
@@ -344,6 +440,18 @@ public class ThemeCustomizerViewModel : ObservableObject
         RegenerateXaml();
     }
 
+    private void OnPaddingChanged(ThemePaddingEntry entry)
+    {
+        if (_suppress)
+            return;
+        ApplyPadding(entry);
+        RegenerateXaml();
+    }
+
+    private void ApplyPadding(ThemePaddingEntry entry)
+        => Application.Current.Resources[PaddingKey(entry.ResourceName)]
+            = new Thickness(entry.Horizontal, entry.Vertical, entry.Horizontal, entry.Vertical);
+
     private void ApplyDimension(ThemeDimensionEntry entry)
     {
         var res = Application.Current.Resources;
@@ -389,12 +497,19 @@ public class ThemeCustomizerViewModel : ObservableObject
             }
             foreach (var key in AllDimensionKeys())
                 res.Remove(key);
+            foreach (var pad in _allPaddings)
+                res.Remove(PaddingKey(pad.ResourceName));
 
             // …then re-seed the editors from those restored values.
             foreach (var color in _allColors)
                 color.SetColorSilently(ReadColor(color.Key));
             foreach (var dim in _allDimensions)
                 dim.SetValueSilently(ReadDouble(DimensionKey(dim.ResourceName)));
+            foreach (var pad in _allPaddings)
+            {
+                Thickness t = ReadThickness(PaddingKey(pad.ResourceName));
+                pad.SetValuesSilently(t.Left, t.Top);
+            }
         }
         finally
         {
@@ -442,6 +557,9 @@ public class ThemeCustomizerViewModel : ObservableObject
     private static double ReadDouble(ComponentResourceKey key)
         => Application.Current.TryFindResource(key) is double value ? value : 0d;
 
+    private static Thickness ReadThickness(ComponentResourceKey key)
+        => Application.Current.TryFindResource(key) is Thickness value ? value : new Thickness(0);
+
     /// <summary>The brush key derived from a colour's accessor name (e.g. <c>PrimaryColor</c> → <c>PrimaryBrush</c>).</summary>
     private static ComponentResourceKey BrushKey(string colorName)
         => new(typeof(JBrushes), colorName.Replace("Color", "Brush"));
@@ -460,6 +578,15 @@ public class ThemeCustomizerViewModel : ObservableObject
         "ControlFontSizeMd" => JDimensions.ControlFontSizeMd,
         "ControlFontSizeLg" => JDimensions.ControlFontSizeLg,
         _ => throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown dimension"),
+    };
+
+    private static ComponentResourceKey PaddingKey(string name) => name switch
+    {
+        "ControlPaddingXs" => JDimensions.ControlPaddingXs,
+        "ControlPaddingSm" => JDimensions.ControlPaddingSm,
+        "ControlPaddingMd" => JDimensions.ControlPaddingMd,
+        "ControlPaddingLg" => JDimensions.ControlPaddingLg,
+        _ => throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown padding"),
     };
 
     private IEnumerable<ComponentResourceKey> AllDimensionKeys()
@@ -543,25 +670,10 @@ public class ThemeCustomizerViewModel : ObservableObject
             sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.{name}}}\">{Num(DimValue(name))}</system:Double>");
         sb.AppendLine();
 
-        // Paddings are not editable here, but emit their current values so the file is complete.
         sb.AppendLine("    <!--  Control paddings  -->");
-        foreach (var name in new[] { "ControlPaddingXs", "ControlPaddingSm", "ControlPaddingMd", "ControlPaddingLg" })
-            sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{name}}}\">{PaddingValue(name)}</Thickness>");
+        foreach (var pad in _allPaddings)
+            sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{pad.ResourceName}}}\">{Num(pad.Horizontal)},{Num(pad.Vertical)}</Thickness>");
         sb.AppendLine();
-    }
-
-    private static string PaddingValue(string name)
-    {
-        ComponentResourceKey key = name switch
-        {
-            "ControlPaddingXs" => JDimensions.ControlPaddingXs,
-            "ControlPaddingSm" => JDimensions.ControlPaddingSm,
-            "ControlPaddingMd" => JDimensions.ControlPaddingMd,
-            _ => JDimensions.ControlPaddingLg,
-        };
-        if (Application.Current.TryFindResource(key) is Thickness t)
-            return $"{Num(t.Left)},{Num(t.Top)},{Num(t.Right)},{Num(t.Bottom)}";
-        return "0";
     }
 
     private static string ToHex(Color color) => $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";

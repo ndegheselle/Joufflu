@@ -1,0 +1,45 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.FileExplorer.ExplorerListSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Samples.Views.FileExplorer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:ExplorerListSamplesViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="List" />
+
+            <c:CodeExample
+                Title="ExplorerList"
+                Code="{Binding ExplorerListCode}"
+                Description="Lists the nodes of the opened folder, directories first then by natural name order, with each file's size. Double click a folder to open it, right click a node for its menu.">
+                <fileExplorer:ExplorerList Height="300" Loader="{Binding Loader}" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Filtering the nodes"
+                Code="{Binding ExplorerListFilterCode}"
+                Description="VisibleNodes chooses the kinds of node shown : All by default, or Files / Directories to keep only one. Here the list keeps only the files.">
+                <fileExplorer:ExplorerList
+                    Height="300"
+                    Loader="{Binding Loader}"
+                    VisibleNodes="Files" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="ExplorerControlBar"
+                Code="{Binding ExplorerControlBarCode}"
+                Description="Navigates the loader : back and forward through the visited folders, up to the parent one, and a breadcrumb of the path leading to the opened folder. It drives the same loader the lists on this page observe, so navigating with it moves them too.">
+                <StackPanel joufflu:Spacing.Gap="4">
+                    <fileExplorer:ExplorerControlBar Loader="{Binding Loader}" />
+                    <fileExplorer:ExplorerList Height="200" Loader="{Binding Loader}" />
+                </StackPanel>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -4,32 +4,13 @@ using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
-public class FileExplorerSamplesViewModel : ObservableObject
+public class ExplorerSamplesViewModel : ObservableObject
 {
-    /// <summary>
-    /// Loader shared by the samples showing a single control, so that navigating in one of them moves the others.
-    /// </summary>
+    /// <summary>Loader of the complete explorer, keeping a navigation and history of its own.</summary>
     public IExplorerLoader Loader { get; private set; }
 
-    /// <summary>
-    /// Loader of the complete explorer, its own so that it keeps a navigation and a history of its own.
-    /// </summary>
-    public IExplorerLoader ExplorerLoader { get; private set; }
-
-    public string ExplorerListCode =>
-        "<fileExplorer:ExplorerList Loader=\"{Binding Loader}\" />";
-
-    public string ExplorerTreeCode =>
-        "<fileExplorer:ExplorerTree Loader=\"{Binding Loader}\" />";
-
-    public string ExplorerControlBarCode =>
-        """
-        <fileExplorer:ExplorerControlBar Loader="{Binding Loader}" />
-        <fileExplorer:ExplorerList Loader="{Binding Loader}" />
-        """;
-
     public string ExplorerCode =>
-        "<fileExplorer:Explorer Loader=\"{Binding ExplorerLoader}\" />";
+        "<fileExplorer:Explorer Loader=\"{Binding Loader}\" />";
 
     public string CustomNodeTemplateCode =>
         """
@@ -53,12 +34,9 @@ public class FileExplorerSamplesViewModel : ObservableObject
         </fileExplorer:ExplorerList>
         """;
 
-    public FileExplorerSamplesViewModel()
+    public ExplorerSamplesViewModel()
     {
         Loader = new DirectoryLoader(Directory.GetCurrentDirectory());
         Loader.OpenRoot();
-
-        ExplorerLoader = new DirectoryLoader(Directory.GetCurrentDirectory());
-        ExplorerLoader.OpenRoot();
     }
 }

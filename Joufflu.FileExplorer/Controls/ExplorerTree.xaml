@@ -13,15 +13,27 @@
                 <ControlTemplate TargetType="{x:Type local:ExplorerTree}">
                     <TreeView
                         x:Name="PART_ItemsHost"
-                        DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        ItemsSource="{Binding Loader.Root, Converter={x:Static local:ExplorerChildrenConverter.Default}}">
+                        DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                        <TreeView.ItemsSource>
+                            <!--  The loaded root, keeping only the kinds of node the tree shows.  -->
+                            <MultiBinding Converter="{x:Static local:ExplorerChildrenConverter.Default}">
+                                <Binding Path="Loader.Root" />
+                                <Binding Path="VisibleNodes" />
+                            </MultiBinding>
+                        </TreeView.ItemsSource>
                         <TreeView.ItemTemplate>
                             <!--
                                 No DataType : the header presenter has to resolve the implicit template of the node
                                 type, which this template would shadow. The same template drives every level, so the
-                                converter gives each node its own sorted view of its children.
+                                converter gives each node its own sorted, filtered view of its children.
                             -->
-                            <HierarchicalDataTemplate ItemsSource="{Binding Converter={x:Static local:ExplorerChildrenConverter.Default}}">
+                            <HierarchicalDataTemplate>
+                                <HierarchicalDataTemplate.ItemsSource>
+                                    <MultiBinding Converter="{x:Static local:ExplorerChildrenConverter.Default}">
+                                        <Binding />
+                                        <Binding Path="VisibleNodes" RelativeSource="{RelativeSource AncestorType={x:Type local:ExplorerTree}}" />
+                                    </MultiBinding>
+                                </HierarchicalDataTemplate.ItemsSource>
                                 <ContentPresenter Content="{Binding}" />
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>

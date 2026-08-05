@@ -1,0 +1,35 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.FileExplorer.ExplorerTreeSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Samples.Views.FileExplorer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:ExplorerTreeSamplesViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Tree" />
+
+            <c:CodeExample
+                Title="ExplorerTree"
+                Code="{Binding ExplorerTreeCode}"
+                Description="Shows the loaded hierarchy, each level sorted on its own so it stays independent from the list. A tree shows only folders by default.">
+                <fileExplorer:ExplorerTree Height="300" Loader="{Binding Loader}" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Showing files too"
+                Code="{Binding ExplorerTreeFilesCode}"
+                Description="VisibleNodes chooses the kinds of node a control shows : Directories (the tree default), Files, or All. Set it to All to list the files alongside the folders.">
+                <fileExplorer:ExplorerTree
+                    Height="300"
+                    Loader="{Binding Loader}"
+                    VisibleNodes="All" />
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
