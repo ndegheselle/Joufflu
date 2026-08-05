@@ -120,7 +120,6 @@ public class HwndInteropSizeChangedEventArgs : EventArgs
 
         /// <summary>
         /// The window has been minimized.
-
         /// </summary>
         Minimized = 1,
 

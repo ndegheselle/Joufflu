@@ -123,7 +123,6 @@
         /// <summary>
         /// What to do with the string input of the user
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="input"></param>
         /// <returns>Got a valid value</returns>
         public abstract bool OnInput(string input);

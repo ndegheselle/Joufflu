@@ -5,6 +5,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Controls;
+using Joufflu.FileExplorer.Data;
 
 namespace Joufflu.FileExplorer.Loaders;
 

@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/ExplorerNode.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/Base/ExplorerNode.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:ExplorerTree}">

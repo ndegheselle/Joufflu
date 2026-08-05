@@ -17,7 +17,7 @@ public enum BadgeVariant
 
 /// <summary>
 /// A small pill that labels or counts something, themed from the design system's
-/// semantic brushes and sized through <see cref="Sizing.Size"/>.
+/// semantic brushes and sized through <see cref="Sizing.SizeProperty"/>.
 /// </summary>
 public class Badge : ContentControl
 {

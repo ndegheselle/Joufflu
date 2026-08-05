@@ -1,4 +1,5 @@
 using System.Windows;
+using Joufflu.FileExplorer.Controls.Base;
 
 namespace Joufflu.FileExplorer.Controls
 {

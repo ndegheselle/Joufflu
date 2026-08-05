@@ -14,7 +14,7 @@ internal class ScreenInterop
     public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out] MONITORINFOEX info);
 
     [DllImport("user32.dll", ExactSpelling = true)]
-    public static extern bool EnumDisplayMonitors(HandleRef hdc, COMRECT rcClip, MonitorEnumProc lpfnEnum, IntPtr dwData);
+    public static extern bool EnumDisplayMonitors(HandleRef hdc, COMRECT? rcClip, MonitorEnumProc lpfnEnum, IntPtr dwData);
 
     [DllImport("user32.dll", ExactSpelling = true)]
     public static extern IntPtr MonitorFromWindow(HandleRef handle, int flags);

@@ -6,6 +6,7 @@
     xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters;assembly=Joufflu.FileExplorer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
+    xmlns:data="clr-namespace:Joufflu.FileExplorer.Data;assembly=Joufflu.FileExplorer"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Samples.Views.FileExplorer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -62,10 +63,10 @@
                                 <TextBlock Text="{Binding Name}" />
                             </StackPanel>
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type fileExplorer:PhysicalFile}">
+                        <DataTemplate DataType="{x:Type data:PhysicalFile}">
                             <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource NodeWithSystemIcon}" />
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type fileExplorer:PhysicalDirectory}">
+                        <DataTemplate DataType="{x:Type data:PhysicalDirectory}">
                             <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource NodeWithSystemIcon}" />
                         </DataTemplate>
                     </fileExplorer:ExplorerList.Resources>

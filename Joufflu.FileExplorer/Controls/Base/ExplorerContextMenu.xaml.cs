@@ -1,7 +1,8 @@
+using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Loaders;
 using System.Windows.Markup;
 
-namespace Joufflu.FileExplorer.Controls
+namespace Joufflu.FileExplorer.Controls.Base
 {
     public enum MenuScope { Single, Multiple }
 

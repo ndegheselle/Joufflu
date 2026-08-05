@@ -1,7 +1,8 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using Joufflu.FileExplorer.Controls;
 
-namespace Joufflu.FileExplorer.Controls
+namespace Joufflu.FileExplorer.Data
 {
     public interface IExplorerNode
     {

@@ -34,8 +34,6 @@ namespace Joufflu.Navigation.Controls
         public delegate void HandlePagingChange(int pageNumber, int capacity);
         public event HandlePagingChange? PagingChange;
 
-        private TextBox? _inputPage;
-
         #region DependencyProperties
         public static readonly DependencyProperty TotalProperty =
             DependencyProperty.Register(
