@@ -1,7 +1,7 @@
 ---
 title: Tooltip
-parent: Custom controls
-nav_order: 5
+parent: Feedback
+nav_order: 4
 ---
 
 # Tooltip

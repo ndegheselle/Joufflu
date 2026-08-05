@@ -46,7 +46,7 @@ can paste into your views.
 | [Native controls](natives/index.md) | Buttons (solid, soft & outline variants) |
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
-| [Custom controls](custom-controls/index.md) | `FontIcon` (`Joufflu`); `Badge`, `Spinner`, toasts, tooltips (`Joufflu.Feedback`) |
+| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts, tooltips (`Joufflu.Feedback`) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, theme customization, application shell |
 
 ## Getting started

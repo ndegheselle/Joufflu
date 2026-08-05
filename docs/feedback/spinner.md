@@ -1,7 +1,7 @@
 ---
 title: Spinner
-parent: Custom controls
-nav_order: 3
+parent: Feedback
+nav_order: 2
 ---
 
 # Spinner

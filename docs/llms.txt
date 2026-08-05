@@ -2,7 +2,7 @@
 
 > WPF inputs and reusable controls for .NET, built on a small design system of themed brushes, dimensions, sizing and spacing helpers. Every control reads its colours through `DynamicResource`, so the whole UI re-themes live between Light and Dark with no restart.
 
-Joufflu ships as four NuGet packages that build on each other: `Joufflu` (core styles, theming, `FontIcon`, and restyled native WPF controls), `Joufflu.Feedback` (badges, spinner, toasts and tooltips), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
+Joufflu ships as four NuGet packages that build on each other: `Joufflu` (core styles, theming, and restyled native WPF controls), `Joufflu.Feedback` (badges, spinner, toasts and tooltips), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
 
 ## Start here
 
@@ -28,13 +28,12 @@ Joufflu ships as four NuGet packages that build on each other: `Joufflu` (core s
 - [Overlays](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/overlays.md): stacking modal overlays, `OverlayOptions`, and awaiting a result from `Show`.
 - [Paging](https://github.com/ndegheselle/Joufflu/blob/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, and the `PagingChange` event.
 
-## Custom controls (`Joufflu`, `Joufflu.Feedback`)
+## Feedback (`Joufflu.Feedback`)
 
-- [Font icon](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/font-icon.md): `FontIcon`, a Lucide icon-font glyph (core `Joufflu` package).
-- [Badge](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/badge.md): themed pill in the semantic colours, sized via `ControlProperties.Size` (`Joufflu.Feedback`).
-- [Spinner](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/spinner.md): indeterminate loading indicator (`Joufflu.Feedback`).
-- [Toasts](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/toasts.md): transient notifications from `IToastService`, including sticky toasts (`Joufflu.Feedback`).
-- [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/custom-controls/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element (`Joufflu.Feedback`).
+- [Badge](https://github.com/ndegheselle/Joufflu/blob/main/docs/feedback/badge.md): themed pill in the semantic colours, sized via `ControlProperties.Size`.
+- [Spinner](https://github.com/ndegheselle/Joufflu/blob/main/docs/feedback/spinner.md): indeterminate loading indicator.
+- [Toasts](https://github.com/ndegheselle/Joufflu/blob/main/docs/feedback/toasts.md): transient notifications from `IToastService`, including sticky toasts.
+- [Tooltip](https://github.com/ndegheselle/Joufflu/blob/main/docs/feedback/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
 
 ## Toolkit (`Joufflu`)
 

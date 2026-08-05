@@ -39,7 +39,6 @@ page's raw Markdown source. (Prefer this raw URL over the rendered site, which c
 | **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `NavigationContainer` and modal overlays driven by a `Navigator` |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts`, improved tooltip |
-| **Custom controls** (`Joufflu`) | `FontIcon` |
 | **Toolkit** (`Joufflu`) | Sizing and spacing attached properties, `ThemeManager`, live theme customization, and the application shell (`ThemedWindow`) |
 
 The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,

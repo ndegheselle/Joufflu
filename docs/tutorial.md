@@ -331,5 +331,5 @@ the shared `OverlayService`, awaits its result, and confirms with the shared
   nesting, the collapsible rail and the menu `Header`.
 - [Overlays](navigation/overlays.md) — overlay options and
   stacking.
-- [Toasts](custom-controls/toasts.md) — toast types and sticky
+- [Toasts](feedback/toasts.md) — toast types and sticky
   toasts.

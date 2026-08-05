@@ -1,7 +1,7 @@
 ---
 title: Badge
-parent: Custom controls
-nav_order: 2
+parent: Feedback
+nav_order: 1
 ---
 
 # Badge
