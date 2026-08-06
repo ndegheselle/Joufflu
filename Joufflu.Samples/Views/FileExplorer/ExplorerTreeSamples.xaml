@@ -18,7 +18,7 @@
                 Title="ExplorerTree"
                 Code="{Binding ExplorerTreeCode}"
                 Description="Shows the loaded hierarchy, each level sorted on its own so it stays independent from the list. A tree shows only folders by default.">
-                <fileExplorer:ExplorerTree Height="300" Loader="{Binding Loader}" />
+                <fileExplorer:ExplorerTree Height="300" Session="{Binding Session}" />
             </c:CodeExample>
 
             <c:CodeExample
@@ -27,7 +27,7 @@
                 Description="VisibleNodes chooses the kinds of node a control shows : Directories (the tree default), Files, or All. Set it to All to list the files alongside the folders.">
                 <fileExplorer:ExplorerTree
                     Height="300"
-                    Loader="{Binding Loader}"
+                    Session="{Binding Session}"
                     VisibleNodes="All" />
             </c:CodeExample>
         </StackPanel>

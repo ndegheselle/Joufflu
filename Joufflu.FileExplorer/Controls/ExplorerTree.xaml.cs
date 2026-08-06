@@ -67,6 +67,12 @@ namespace Joufflu.FileExplorer.Controls
         private void OnTreeExpanded(object sender, RoutedEventArgs e)
         {
             var tvi = (TreeViewItem)e.OriginalSource;
+
+            // A level still empty has not been read yet, which happens when the source prefetches nothing. A source
+            // that does prefetch never gets here : an empty folder shows no expander, so it cannot be expanded.
+            if (tvi.DataContext is IExplorerDirectory { Children.Count: 0 } directory)
+                _ = Session?.LoadAsync(directory);
+
             tvi.IsSelected = true;
             e.Handled = true;
         }
@@ -76,7 +82,7 @@ namespace Joufflu.FileExplorer.Controls
             UpdateSelectedNodes();
 
             if (e.NewValue is IExplorerDirectory directory)
-                Loader?.Open(directory);
+                _ = Session?.OpenAsync(directory);
         }
     }
 

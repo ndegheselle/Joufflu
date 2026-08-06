@@ -1,10 +1,24 @@
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Loaders;
+using Joufflu.FileExplorer.Sources;
 using System.Windows.Markup;
 
 namespace Joufflu.FileExplorer.Controls.Base
 {
-    public enum MenuScope { Single, Multiple }
+    /// <summary>
+    /// What a context menu was opened on, which decides the menu shown.
+    /// </summary>
+    public enum MenuScope
+    {
+        /// <summary>A single node.</summary>
+        Single,
+        /// <summary>Several selected nodes.</summary>
+        Multiple,
+        /// <summary>
+        /// The empty space of the control, the menu then acting on the opened directory : where "New folder" and
+        /// "Paste" belong, neither of them having a node to act on.
+        /// </summary>
+        Background
+    }
 
     /// <summary>
     /// Resource key of the context menu template of a data type.
@@ -36,27 +50,49 @@ namespace Joufflu.FileExplorer.Controls.Base
     }
 
     /// <summary>
-    /// Data context of the context menus of an <see cref="ExplorerList"/>, gives access to the commands of the
-    /// loader and to the nodes the menu was opened on.
+    /// Data context of the context menus of the explorer controls : the session and its commands, the nodes the menu
+    /// was opened on, and the control itself for the commands it owns.
     /// </summary>
     public class ExplorerMenuContext
     {
-        public IExplorerLoader? Loader { get; }
+        public ExplorerMenuContext(
+            ExplorerNodesControl owner,
+            IReadOnlyList<IExplorerNode> nodes,
+            IExplorerDirectory? directory)
+        {
+            Owner = owner;
+            Nodes = nodes;
+            Directory = directory;
+        }
 
         /// <summary>
-        /// Every selected node, the menu was opened on the first one.
+        /// Control the menu was opened on.
+        /// </summary>
+        /// <remarks>
+        /// A context menu is not in the visual tree of the control that owns it, so a RelativeSource cannot reach it :
+        /// the commands needing the interface rather than the session, renaming and creating a folder, are bound
+        /// through here.
+        /// </remarks>
+        public ExplorerNodesControl Owner { get; }
+
+        public ExplorerSession? Session => Owner.Session;
+
+        /// <summary>
+        /// Every selected node, the menu was opened on the first one. Empty for a
+        /// <see cref="MenuScope.Background"/> menu.
         /// </summary>
         public IReadOnlyList<IExplorerNode> Nodes { get; }
 
         /// <summary>
-        /// Node the menu was opened on, null when multiple nodes are selected.
+        /// Node the menu was opened on, null when several nodes are selected or when the menu was opened on the empty
+        /// space of the control.
         /// </summary>
         public IExplorerNode? Node => Nodes.Count == 1 ? Nodes[0] : null;
 
-        public ExplorerMenuContext(IExplorerLoader? loader, IReadOnlyList<IExplorerNode> nodes)
-        {
-            Loader = loader;
-            Nodes = nodes;
-        }
+        /// <summary>
+        /// Directory the menu acts in : the clicked node when it is one, its parent otherwise, and the opened
+        /// directory when the click was on the empty space. Target of "New folder" and "Paste".
+        /// </summary>
+        public IExplorerDirectory? Directory { get; }
     }
 }

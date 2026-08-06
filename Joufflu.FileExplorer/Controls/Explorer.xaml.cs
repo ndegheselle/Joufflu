@@ -9,7 +9,7 @@ namespace Joufflu.FileExplorer.Controls
     /// its nodes and the selected ones.
     /// </summary>
     /// <remarks>
-    /// Every part shares the <see cref="ExplorerControl.Loader"/> of the explorer, which is what keeps them in sync :
+    /// Every part shares the <see cref="ExplorerControl.Session"/> of the explorer, which is what keeps them in sync :
     /// selecting a directory in the tree, double clicking one in the list or using the bar all open it for the others.
     /// </remarks>
     [TemplatePart(Name = PartControlBar, Type = typeof(ExplorerControlBar))]

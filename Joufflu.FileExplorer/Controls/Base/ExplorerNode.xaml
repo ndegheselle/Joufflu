@@ -7,19 +7,26 @@
 
     <!--
         Node visuals and context menus shared by every control displaying explorer nodes. The templates are implicit
-        (keyed by DataType) so that a consumer can template its own IExplorerNode implementations the same way.
+        (keyed by DataType) so that a consumer can template its own node types the same way.
+
+        Beware of the two lookup rules, which are opposites :
+        - these visuals are resolved by WPF, whose implicit DataTemplate lookup walks the runtime type and its base
+          CLASSES, never its interfaces. They are therefore keyed on the ExplorerNode / ExplorerDirectory base
+          classes, so every node deriving from them (PhysicalFile, PhysicalDirectory, a consumer node) gets one.
+        - the context menus of ExplorerContextMenu.xaml are resolved by the library, which does consider interfaces,
+          and are keyed on IExplorerNode / IExplorerDirectory / IPhysicalExplorerNode.
     -->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/Base/ExplorerContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <DataTemplate DataType="{x:Type data:PhysicalFile}">
+    <DataTemplate DataType="{x:Type data:ExplorerNode}">
         <StackPanel joufflu:Spacing.Gap="4" Orientation="Horizontal">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
             <TextBlock Text="{Binding Name}" />
         </StackPanel>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type data:PhysicalDirectory}">
+    <DataTemplate DataType="{x:Type data:ExplorerDirectory}">
         <StackPanel joufflu:Spacing.Gap="4" Orientation="Horizontal">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
             <TextBlock Text="{Binding Name}" />

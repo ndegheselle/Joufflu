@@ -29,7 +29,7 @@ namespace Joufflu.FileExplorer.Converters
         {
             return value switch
             {
-                IExplorerNode node => SystemIcons.GetIcon(GetPath(node), node is IExplorerDirectory, IsSmall),
+                IExplorerNode node => SystemIcons.GetIcon(node.Path, node is IExplorerDirectory, IsSmall),
                 // A path alone, for a breadcrumb or a picker showing a file it only knows the path of.
                 string path => SystemIcons.GetIcon(path, Directory.Exists(path), IsSmall),
                 _ => null
@@ -38,16 +38,5 @@ namespace Joufflu.FileExplorer.Converters
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
             => throw new NotSupportedException();
-
-        /// <summary>
-        /// Path the shell identifies the type of a node with. A node that isn't a physical one falls back on its name,
-        /// which is enough : the icon of a file only depends on its extension.
-        /// </summary>
-        private static string GetPath(IExplorerNode node) => node switch
-        {
-            PhysicalFile file => file.Path,
-            PhysicalDirectory directory => directory.Path,
-            _ => node.Name
-        };
     }
 }
