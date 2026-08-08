@@ -11,7 +11,7 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/ExplorerTree.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <!--  Hides the count of selected nodes while there is no selection, and the error while there is none.  -->
+    <!--  Hides the count of selected nodes while there is no selection.  -->
     <converters:VisibilityConverter x:Key="ExplorerSelectionVisibilityConverter" />
 
     <Style TargetType="{x:Type local:Explorer}">
@@ -25,7 +25,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <local:ExplorerControlBar x:Name="PART_ControlBar" Session="{Binding Session}" />
+                        <local:ExplorerControlBar x:Name="PART_ControlBar" Loader="{Binding Loader}" />
 
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -34,7 +34,7 @@
                                 <ColumnDefinition Width="*" MinWidth="120" />
                             </Grid.ColumnDefinitions>
 
-                            <local:ExplorerTree x:Name="PART_Tree" Session="{Binding Session}" />
+                            <local:ExplorerTree x:Name="PART_Tree" Loader="{Binding Loader}" />
                             <!--  Transparent : the tree and the list have borders of their own already.  -->
                             <GridSplitter
                                 Grid.Column="1"
@@ -44,30 +44,18 @@
                             <local:ExplorerList
                                 x:Name="PART_List"
                                 Grid.Column="2"
-                                Session="{Binding Session}" />
+                                Loader="{Binding Loader}" />
                         </Grid>
 
                         <StatusBar Grid.Row="2" FontSize="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}">
                             <StatusBarItem>
-                                <TextBlock Text="{Binding Session.Current.Children.Count, StringFormat={}{0} items}" />
+                                <TextBlock Text="{Binding Loader.Current.Children.Count, StringFormat={}{0} items}" />
                             </StatusBarItem>
-                            <StatusBarItem
-                                Visibility="{Binding SelectedNodes.Count, ElementName=PART_List, Converter={StaticResource ExplorerSelectionVisibilityConverter}}">
-                                <TextBlock Text="{Binding SelectedNodes.Count, ElementName=PART_List, StringFormat={}{0} selected}" />
-                            </StatusBarItem>
-                            <!--
-                                Last item of the docked panel of the status bar, so it takes the remaining width. The
-                                message of a failed operation is shown here rather than in a dialog : an explorer whose
-                                folder could not be read stays usable, the next successful operation clearing it.
-                            -->
+                            <!--  Last item of the docked panel of the status bar, so it takes the remaining width.  -->
                             <StatusBarItem
                                 HorizontalContentAlignment="Right"
-                                Visibility="{Binding Session.LastError, Converter={StaticResource ExplorerSelectionVisibilityConverter}}">
-                                <TextBlock
-                                    Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
-                                    Text="{Binding Session.LastError}"
-                                    TextTrimming="CharacterEllipsis"
-                                    ToolTip="{Binding Session.LastError}" />
+                                Visibility="{Binding SelectedNodes.Count, ElementName=PART_List, Converter={StaticResource ExplorerSelectionVisibilityConverter}}">
+                                <TextBlock Text="{Binding SelectedNodes.Count, ElementName=PART_List, StringFormat={}{0} selected}" />
                             </StatusBarItem>
                         </StatusBar>
                     </Grid>

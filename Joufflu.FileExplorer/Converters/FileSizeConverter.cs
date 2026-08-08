@@ -6,13 +6,9 @@ using Joufflu.FileExplorer.Data;
 namespace Joufflu.FileExplorer.Converters
 {
     /// <summary>
-    /// Human readable size of an <see cref="IExplorerNode"/> (or of a size in bytes, or of a <see cref="FileInfo"/>).
-    /// Directories and nodes without a size convert to null, so their cell stays empty.
+    /// Human readable size of a file <see cref="IExplorerNode"/> (or of a <see cref="FileInfo"/> or a path given as a
+    /// string). Directories and nodes without a size on disk convert to null, so their cell stays empty.
     /// </summary>
-    /// <remarks>
-    /// The size of a node is read when the node is built, so this never touches the disk : a converter is evaluated on
-    /// every layout pass of the cell that uses it.
-    /// </remarks>
     public class FileSizeConverter : IValueConverter
     {
         /// <summary>Shared instance, for the templates that have no resource dictionary of their own.</summary>
@@ -20,16 +16,18 @@ namespace Joufflu.FileExplorer.Converters
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            long? size = value switch
+            FileInfo? info = value switch
             {
-                IExplorerNode node => node.Size,
-                long bytes => bytes,
-                int bytes => bytes,
-                FileInfo info => info.Exists ? info.Length : null,
+                FileInfo fileInfo => fileInfo,
+                PhysicalFile file => new FileInfo(file.Path),
+                string path => new FileInfo(path),
                 _ => null
             };
 
-            return size == null ? null : Format(size.Value);
+            if (info == null || !info.Exists)
+                return null;
+
+            return Format(info.Length);
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

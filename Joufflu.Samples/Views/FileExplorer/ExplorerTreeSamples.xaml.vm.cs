@@ -1,23 +1,23 @@
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
 public class ExplorerTreeSamplesViewModel : ObservableObject
 {
-    /// <summary>Session driving the tree, with a navigation and history of its own.</summary>
-    public ExplorerSession Session { get; private set; }
+    /// <summary>Loader driving the tree, with a navigation and history of its own.</summary>
+    public IExplorerLoader Loader { get; private set; }
 
     public string ExplorerTreeCode =>
-        "<fileExplorer:ExplorerTree Session=\"{Binding Session}\" />";
+        "<fileExplorer:ExplorerTree Loader=\"{Binding Loader}\" />";
 
     public string ExplorerTreeFilesCode =>
-        "<fileExplorer:ExplorerTree Session=\"{Binding Session}\" VisibleNodes=\"All\" />";
+        "<fileExplorer:ExplorerTree Loader=\"{Binding Loader}\" VisibleNodes=\"All\" />";
 
     public ExplorerTreeSamplesViewModel()
     {
-        Session = new ExplorerSession(new PhysicalExplorerSource(Directory.GetCurrentDirectory()));
-        _ = Session.OpenRootAsync();
+        Loader = new DirectoryLoader(Directory.GetCurrentDirectory());
+        Loader.OpenRoot();
     }
 }

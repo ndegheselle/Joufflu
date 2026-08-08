@@ -1,13 +1,11 @@
 using System.Collections;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.FileExplorer.Controls
 {
@@ -37,14 +35,6 @@ namespace Joufflu.FileExplorer.Controls
             new PropertyMetadata(null));
 
         public static readonly DependencyProperty ItemsViewProperty = ItemsViewPropertyKey.DependencyProperty;
-
-        private static readonly DependencyPropertyKey ExtraColumnsPropertyKey = DependencyProperty.RegisterReadOnly(
-            nameof(ExtraColumns),
-            typeof(ObservableCollection<GridViewColumn>),
-            typeof(ExplorerList),
-            new PropertyMetadata(null));
-
-        public static readonly DependencyProperty ExtraColumnsProperty = ExtraColumnsPropertyKey.DependencyProperty;
 
         /// <summary>
         /// Children of the opened folder, bound in the constructor so <see cref="ItemsView"/> follows the navigation.
@@ -78,30 +68,11 @@ namespace Joufflu.FileExplorer.Controls
         protected override IEnumerable<IExplorerNode> GetSelectedNodes()
             => (ItemsHost as ListView)?.SelectedItems.OfType<IExplorerNode>() ?? [];
 
-        /// <summary>
-        /// Columns appended to the ones of the template, for the extra properties of a node type of its own :
-        /// <c>&lt;GridViewColumn Header="Review" DisplayMemberBinding="{Binding Review}" /&gt;</c>. That saves
-        /// retemplating the whole list to show one more value.
-        /// </summary>
-        public ObservableCollection<GridViewColumn> ExtraColumns
-            => (ObservableCollection<GridViewColumn>)GetValue(ExtraColumnsProperty);
-
-        /// <summary>
-        /// Columns appended to the <see cref="GridView"/> so far, so they can be taken back out.
-        /// </summary>
-        private readonly List<GridViewColumn> _appendedColumns = [];
-
         public ExplorerList()
         {
-            // Created per instance and not as the default of the property : a mutable collection given as metadata
-            // would be the same one for every ExplorerList of the application.
-            var extraColumns = new ObservableCollection<GridViewColumn>();
-            extraColumns.CollectionChanged += OnExtraColumnsChanged;
-            SetValue(ExtraColumnsPropertyKey, extraColumns);
-
             SetBinding(
                 NodesProperty,
-                new Binding($"{nameof(Session)}.{nameof(ExplorerSession.Current)}.{nameof(IExplorerDirectory.Children)}")
+                new Binding($"{nameof(Loader)}.{nameof(IExplorerLoader.Current)}.{nameof(IExplorerDirectory.Children)}")
                 {
                     Source = this
                 });
@@ -116,41 +87,9 @@ namespace Joufflu.FileExplorer.Controls
 
             if (ItemsHost is ListView newList)
                 newList.SelectionChanged += OnListSelectionChanged;
-
-            ApplyExtraColumns();
-        }
-
-        private void OnExtraColumnsChanged(object? sender, NotifyCollectionChangedEventArgs e) => ApplyExtraColumns();
-
-        /// <summary>
-        /// Puts <see cref="ExtraColumns"/> after the columns of the template.
-        /// </summary>
-        /// <remarks>
-        /// <see cref="GridView.Columns"/> is read only but not fixed, so appending to it works. The columns added
-        /// before are taken out first, the collection having possibly changed.
-        /// </remarks>
-        private void ApplyExtraColumns()
-        {
-            if (ItemsHost is not ListView { View: GridView grid })
-                return;
-
-            foreach (var column in _appendedColumns)
-                grid.Columns.Remove(column);
-            _appendedColumns.Clear();
-
-            foreach (var column in ExtraColumns)
-            {
-                grid.Columns.Add(column);
-                _appendedColumns.Add(column);
-            }
         }
 
         private void OnListSelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateSelectedNodes();
-
-        /// <summary>
-        /// Brings a node into view, so that its name editor has a container to be placed over.
-        /// </summary>
-        protected override void ScrollToNode(IExplorerNode node) => (ItemsHost as ListView)?.ScrollIntoView(node);
 
         private static void OnNodesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
             => ((ExplorerList)d).UpdateItemsView(e.NewValue as IList);

@@ -387,12 +387,6 @@
                     </nav:NavigationItem.Icon>
                     Tree
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="file-explorer/sources">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Database}" />
-                    </nav:NavigationItem.Icon>
-                    Sources
-                </nav:NavigationItem>
             </nav:NavigationGroup>
         </nav:NavigationMenu>
 

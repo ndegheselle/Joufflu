@@ -18,7 +18,7 @@
                 Title="ExplorerList"
                 Code="{Binding ExplorerListCode}"
                 Description="Lists the nodes of the opened folder, directories first then by natural name order, with each file's size. Double click a folder to open it, right click a node for its menu.">
-                <fileExplorer:ExplorerList Height="300" Session="{Binding Session}" />
+                <fileExplorer:ExplorerList Height="300" Loader="{Binding Loader}" />
             </c:CodeExample>
 
             <c:CodeExample
@@ -27,29 +27,18 @@
                 Description="VisibleNodes chooses the kinds of node shown : All by default, or Files / Directories to keep only one. Here the list keeps only the files.">
                 <fileExplorer:ExplorerList
                     Height="300"
-                    Session="{Binding Session}"
+                    Loader="{Binding Loader}"
                     VisibleNodes="Files" />
             </c:CodeExample>
 
             <c:CodeExample
                 Title="ExplorerControlBar"
                 Code="{Binding ExplorerControlBarCode}"
-                Description="Navigates the session : back and forward through the visited folders, up to the parent one, a refresh, and a breadcrumb of the path leading to the opened folder. It drives the same session the lists on this page observe, so navigating with it moves them too. A thin progress bar shows while a folder is being read.">
+                Description="Navigates the loader : back and forward through the visited folders, up to the parent one, and a breadcrumb of the path leading to the opened folder. It drives the same loader the lists on this page observe, so navigating with it moves them too.">
                 <StackPanel joufflu:Spacing.Gap="4">
-                    <fileExplorer:ExplorerControlBar Session="{Binding Session}" />
-                    <fileExplorer:ExplorerList Height="200" Session="{Binding Session}" />
+                    <fileExplorer:ExplorerControlBar Loader="{Binding Loader}" />
+                    <fileExplorer:ExplorerList Height="200" Loader="{Binding Loader}" />
                 </StackPanel>
-            </c:CodeExample>
-
-            <c:CodeExample
-                Title="Extra columns"
-                Code="{Binding ExtraColumnsCode}"
-                Description="ExtraColumns appends columns after the ones of the template, which saves retemplating the whole list to show one more value. Any property of the node type can be bound ; here the logical path, which every node has.">
-                <fileExplorer:ExplorerList Height="200" Session="{Binding Session}">
-                    <fileExplorer:ExplorerList.ExtraColumns>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path}" Header="Path" />
-                    </fileExplorer:ExplorerList.ExtraColumns>
-                </fileExplorer:ExplorerList>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

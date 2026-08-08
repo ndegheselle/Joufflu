@@ -19,15 +19,15 @@
             <c:CodeExample
                 Title="Explorer"
                 Code="{Binding ExplorerCode}"
-                Description="Everything together : the control bar, the tree of the loaded hierarchy next to the list of the opened folder, and a status bar counting its items and the selected ones. A session holds where the user is, a source holds where the nodes come from.">
-                <fileExplorer:Explorer Height="400" Session="{Binding Session}" />
+                Description="Everything together : the control bar, the tree of the loaded hierarchy next to the list of the opened folder, and a status bar counting its items and the selected ones.">
+                <fileExplorer:Explorer Height="400" Loader="{Binding Loader}" />
             </c:CodeExample>
 
             <c:CodeExample
                 Title="Custom node template"
                 Code="{Binding CustomNodeTemplateCode}"
                 Description="The node visuals are implicit templates keyed by node type : redeclaring one in the resources of a control replaces it there only. Here ExplorerIconConverter trades the font icons for the icons the system associates with each file type.">
-                <fileExplorer:Explorer Height="400" Session="{Binding Session}">
+                <fileExplorer:Explorer Height="400" Loader="{Binding Loader}">
                     <fileExplorer:Explorer.Resources>
                         <!--  Files and folders share it : the converter tells them apart on its own.  -->
                         <DataTemplate x:Key="NodeWithSystemIcon">
@@ -39,33 +39,14 @@
                                 <TextBlock Text="{Binding Name}" />
                             </StackPanel>
                         </DataTemplate>
-                        <!--
-                            One entry is enough : the implicit template lookup walks base CLASSES, and every node of a
-                            physical source derives from ExplorerNode. Keying it on IExplorerNode would not work, that
-                            lookup never considering interfaces.
-                        -->
-                        <DataTemplate DataType="{x:Type data:ExplorerNode}">
+                        <DataTemplate DataType="{x:Type data:PhysicalFile}">
                             <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource NodeWithSystemIcon}" />
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type data:ExplorerDirectory}">
+                        <DataTemplate DataType="{x:Type data:PhysicalDirectory}">
                             <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource NodeWithSystemIcon}" />
                         </DataTemplate>
                     </fileExplorer:Explorer.Resources>
                 </fileExplorer:Explorer>
-            </c:CodeExample>
-
-            <c:CodeExample
-                Title="Drag and drop"
-                Code="{Binding DragAndDropCode}"
-                Description="Drag between the two explorers, out to the Windows file explorer, and in from it. Ctrl forces a copy and Shift a move ; inside one explorer a drag moves, between two it copies. A folder cannot be dropped into itself or into one of its own descendants, and the hovered folder is outlined.">
-                <Grid joufflu:Spacing.Gap="8" Height="360">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <fileExplorer:Explorer Session="{Binding Session}" />
-                    <fileExplorer:Explorer Grid.Column="1" Session="{Binding OtherSession}" />
-                </Grid>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

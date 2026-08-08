@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.Loaders;
 
 namespace Joufflu.FileExplorer.Controls.Base;
 
@@ -29,43 +29,42 @@ public static class ExplorerNodeKindsExtensions
 }
 
 /// <summary>
-/// Base of the explorer controls : the session whose content they display and through which they navigate. Several
-/// controls sharing the same session all show the same opened directory.
+/// Base of the explorer controls : the loader whose content they display and through which they navigate. Several
+/// controls share the same loader, so they all show the same opened directory.
 /// </summary>
 public abstract class ExplorerControl : Control
 {
     #region Dependency Property
-    public static readonly DependencyProperty SessionProperty = DependencyProperty.Register(
-        nameof(Session),
-        typeof(ExplorerSession),
+    public static readonly DependencyProperty LoaderProperty = DependencyProperty.Register(
+        nameof(Loader),
+        typeof(IExplorerLoader),
         typeof(ExplorerControl),
         new PropertyMetadata(null));
     #endregion
 
-    public ExplorerSession? Session
+    public IExplorerLoader? Loader
     {
-        get => (ExplorerSession?)GetValue(SessionProperty);
-        set => SetValue(SessionProperty, value);
+        get => (IExplorerLoader?)GetValue(LoaderProperty);
+        set => SetValue(LoaderProperty, value);
     }
 }
 
 /// <summary>
 /// Behaviour shared by the controls displaying explorer nodes (<see cref="ExplorerList"/>,
-/// <see cref="ExplorerTree"/>) : the selection, activating a node, the keyboard shortcuts, the context menu, renaming
-/// and drag and drop. A derived control only provides the <see cref="ItemsControl"/> template part displaying the
-/// nodes and reads its selection.
+/// <see cref="ExplorerTree"/>) : opening a directory on double click, the context menu of a node and its
+/// selection. A derived control only provides the <see cref="ItemsControl"/> template part displaying the nodes
+/// and reads its selection.
 /// </summary>
-/// <remarks>
-/// Split across several files by concern : the context menu, the name editor and drag and drop each have their own.
-/// They are parts of this class rather than collaborators because each of them needs the template parts, the session
-/// and the hit testing of the control, which would all have to be handed over.
-/// </remarks>
 [TemplatePart(Name = PartItemsHost, Type = typeof(ItemsControl))]
-[TemplatePart(Name = PartRenameEditor, Type = typeof(System.Windows.Controls.Primitives.Popup))]
-[TemplatePart(Name = PartRenameEditorBox, Type = typeof(TextBox))]
-public abstract partial class ExplorerNodesControl : ExplorerControl
+public abstract class ExplorerNodesControl : ExplorerControl
 {
     protected const string PartItemsHost = "PART_ItemsHost";
+
+    /// <summary>
+    /// Single menu instance filled on opening : WPF captures the <see cref="FrameworkElement.ContextMenu"/> value
+    /// before raising <see cref="FrameworkElement.ContextMenuOpening"/>, so the instance can't be replaced there.
+    /// </summary>
+    private readonly ContextMenu _contextMenu = new();
 
     #region Dependency Property
     private static readonly DependencyPropertyKey SelectedNodesPropertyKey = DependencyProperty.RegisterReadOnly(
@@ -83,30 +82,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         typeof(ExplorerNodesControl),
         new FrameworkPropertyMetadata(ExplorerNodeKinds.All, OnVisibleNodesChanged));
     #endregion
-
-    #region Routed Event
-    /// <summary>
-    /// Raised when the user activates a node : a double click, or Enter on the selection. Handle it to take over, a
-    /// directory being opened and a file handed to its application otherwise.
-    /// </summary>
-    public static readonly RoutedEvent NodeActivatedEvent = EventManager.RegisterRoutedEvent(
-        nameof(NodeActivated),
-        RoutingStrategy.Bubble,
-        typeof(EventHandler<ExplorerNodeEventArgs>),
-        typeof(ExplorerNodesControl));
-
-    public event EventHandler<ExplorerNodeEventArgs> NodeActivated
-    {
-        add => AddHandler(NodeActivatedEvent, value);
-        remove => RemoveHandler(NodeActivatedEvent, value);
-    }
-    #endregion
-
-    static ExplorerNodesControl()
-    {
-        // The controls take drops by default ; a consumer opts out with AllowDrop="False".
-        AllowDropProperty.OverrideMetadata(typeof(ExplorerNodesControl), new FrameworkPropertyMetadata(true));
-    }
 
     /// <summary>
     /// Kinds of node the control shows, <see cref="ExplorerNodeKinds.All"/> by default. Set it to
@@ -156,12 +131,11 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
             ItemsHost.RemoveHandler(
                 MouseLeftButtonDownEvent,
                 (MouseButtonEventHandler)OnItemsHostMouseLeftButtonDown);
-            DetachContextMenu(ItemsHost);
-            DetachDragDrop(ItemsHost);
+            ItemsHost.ContextMenuOpening -= OnItemsHostContextMenuOpening;
+            ItemsHost.ContextMenu = null;
         }
 
         ItemsHost = GetTemplateChild(PartItemsHost) as ItemsControl;
-        ApplyEditorTemplateParts();
 
         if (ItemsHost != null)
         {
@@ -170,8 +144,9 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
                 MouseLeftButtonDownEvent,
                 (MouseButtonEventHandler)OnItemsHostMouseLeftButtonDown,
                 true);
-            AttachContextMenu(ItemsHost);
-            AttachDragDrop(ItemsHost);
+            ItemsHost.ContextMenuOpening += OnItemsHostContextMenuOpening;
+            ItemsHost.ContextMenu = _contextMenu;
+            _contextMenu.PlacementTarget = ItemsHost;
         }
 
         UpdateSelectedNodes();
@@ -197,94 +172,97 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         e.Handled = OnNodeDoubleClick(node, container);
     }
 
-    protected override void OnKeyDown(KeyEventArgs e)
+    private void OnItemsHostContextMenuOpening(object sender, ContextMenuEventArgs e)
     {
-        base.OnKeyDown(e);
+        _contextMenu.Items.Clear();
+        _contextMenu.DataContext = null;
 
-        // While a name is being edited the box owns the keyboard.
-        if (e.Handled || Session == null || EditingNode != null)
-            return;
-
-        var nodes = SelectedNodes;
-        bool isControl = Keyboard.Modifiers == ModifierKeys.Control;
-
-        switch (e.Key)
+        var node = GetNodeAt(e.OriginalSource as DependencyObject);
+        if (node == null)
         {
-            case Key.F2 when nodes.Count == 1:
-                BeginRename(nodes[0]);
-                e.Handled = true;
-                break;
-            case Key.Delete when Keyboard.Modifiers == ModifierKeys.Shift:
-                e.Handled = TryExecute(Session.DeletePermanentlyCommand, nodes);
-                break;
-            case Key.Delete:
-                e.Handled = TryExecute(Session.DeleteCommand, nodes);
-                break;
-            case Key.C when isControl:
-                e.Handled = TryExecute(Session.CopyCommand, nodes);
-                break;
-            case Key.X when isControl:
-                e.Handled = TryExecute(Session.CutCommand, nodes);
-                break;
-            case Key.V when isControl:
-                Session.RefreshClipboardState();
-                e.Handled = TryExecute(Session.PasteCommand, Session.Current);
-                break;
-            case Key.Enter when nodes.Count == 1:
-                OnNodeActivated(nodes[0]);
-                e.Handled = true;
-                break;
-            case Key.Back:
-                e.Handled = TryExecute(Session.OpenParentCommand, null);
-                break;
-            case Key.F5:
-                e.Handled = TryExecute(Session.RefreshCommand, null);
-                break;
+            e.Handled = true;
+            return;
         }
-    }
 
-    /// <summary>
-    /// Runs a command when it can, and reports whether it did so the key can be marked handled. CanExecute is asked
-    /// first because a command refusing its parameter throws rather than answering false.
-    /// </summary>
-    private static bool TryExecute(ICommand command, object? parameter)
-    {
-        if (!command.CanExecute(parameter))
-            return false;
+        var nodes = GetMenuNodes(node);
+        var template = FindContextMenuTemplate(
+            node.GetType(),
+            nodes.Count > 1 ? MenuScope.Multiple : MenuScope.Single);
 
-        command.Execute(parameter);
-        return true;
+        if (template?.LoadContent() is not ContextMenu menu)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        MoveItems(menu, _contextMenu);
+        _contextMenu.DataContext = new ExplorerMenuContext(Loader, nodes);
     }
     #endregion
 
     /// <summary>
-    /// Reacts to a double click on a node, activating it by default. Returns whether the double click has been
+    /// Reacts to a double click on a node, opening a folder by default. Returns whether the double click has been
     /// handled.
     /// </summary>
     /// <param name="container">Item container displaying <paramref name="node"/>.</param>
     protected virtual bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
     {
-        OnNodeActivated(node);
+        if (node is not IExplorerDirectory directory)
+            return false;
+
+        Loader?.Open(directory);
         return true;
     }
 
     /// <summary>
-    /// Raises <see cref="NodeActivated"/> and, unless a handler took over, opens a directory or hands a file to the
-    /// application it is associated with.
+    /// Moves the items of the menu loaded from a template to the persistent menu.
     /// </summary>
-    protected virtual void OnNodeActivated(IExplorerNode node)
+    private static void MoveItems(ContextMenu source, ContextMenu destination)
     {
-        var args = new ExplorerNodeEventArgs(NodeActivatedEvent, node) { Source = this };
-        RaiseEvent(args);
+        while (source.Items.Count > 0)
+        {
+            var item = source.Items[0];
+            source.Items.RemoveAt(0);
+            destination.Items.Add(item);
+        }
+    }
 
-        if (args.Handled || Session == null)
-            return;
+    /// <summary>
+    /// Selected nodes with the one the menu was opened on first, or only that node when it isn't selected.
+    /// </summary>
+    private List<IExplorerNode> GetMenuNodes(IExplorerNode node)
+    {
+        var nodes = GetSelectedNodes().ToList();
+        if (!nodes.Remove(node))
+            return [node];
 
-        if (node is IExplorerDirectory directory)
-            // Not awaited : the session reports its own failures through ExplorerSession.LastError.
-            _ = Session.OpenAsync(directory);
-        else
-            Session.OpenWithDefaultApplication(node);
+        nodes.Insert(0, node);
+        return nodes;
+    }
+
+    /// <summary>
+    /// Searches the context menu template of a node type, from the most specific type to <see cref="object"/>.
+    /// </summary>
+    private DataTemplate? FindContextMenuTemplate(Type nodeType, MenuScope scope)
+    {
+        foreach (var type in GetTypeCandidates(nodeType))
+        {
+            if (TryFindResource(new ContextMenuTemplateKey(type) { Scope = scope }) is DataTemplate template)
+                return template;
+        }
+
+        return null;
+    }
+
+    private static IEnumerable<Type> GetTypeCandidates(Type nodeType)
+    {
+        for (Type? type = nodeType; type != null && type != typeof(object); type = type.BaseType)
+            yield return type;
+
+        foreach (var interfaceType in nodeType.GetInterfaces())
+            yield return interfaceType;
+
+        yield return typeof(object);
     }
 
     /// <summary>

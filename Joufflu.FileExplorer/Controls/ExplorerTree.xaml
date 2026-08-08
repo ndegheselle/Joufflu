@@ -11,12 +11,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ExplorerTree}">
-                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                    <TreeView x:Name="PART_ItemsHost">
+                    <TreeView
+                        x:Name="PART_ItemsHost"
+                        DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <TreeView.ItemsSource>
                             <!--  The loaded root, keeping only the kinds of node the tree shows.  -->
                             <MultiBinding Converter="{x:Static local:ExplorerChildrenConverter.Default}">
-                                <Binding Path="Session.Root" />
+                                <Binding Path="Loader.Root" />
                                 <Binding Path="VisibleNodes" />
                             </MultiBinding>
                         </TreeView.ItemsSource>
@@ -37,16 +38,6 @@
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
-
-                        <!--  Placed over the item being renamed. Omitting it simply disables renaming.  -->
-                        <Popup
-                            x:Name="PART_RenameEditor"
-                            AllowsTransparency="True"
-                            Placement="Relative"
-                            StaysOpen="False">
-                            <TextBox x:Name="PART_RenameEditorBox" />
-                        </Popup>
-                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
