@@ -1,6 +1,6 @@
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.FileExplorer.Loaders;
+using Joufflu.FileExplorer.Sources;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
@@ -10,7 +10,7 @@ public class ExplorerListSamplesViewModel : ObservableObject
     /// Loader shared by every sample on this page, so the control bar navigates the same
     /// loader the lists observe and they all move together.
     /// </summary>
-    public IExplorerLoader Loader { get; private set; }
+    public IExplorerSource Loader { get; private set; }
 
     public string ExplorerListCode =>
         "<fileExplorer:ExplorerList Loader=\"{Binding Loader}\" />";

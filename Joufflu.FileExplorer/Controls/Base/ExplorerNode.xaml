@@ -13,13 +13,13 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/Base/ExplorerContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <DataTemplate DataType="{x:Type data:PhysicalFile}">
+    <DataTemplate DataType="{x:Type data:FileSystemFile}">
         <StackPanel joufflu:Spacing.Gap="4" Orientation="Horizontal">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
             <TextBlock Text="{Binding Name}" />
         </StackPanel>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type data:PhysicalDirectory}">
+    <DataTemplate DataType="{x:Type data:FileSystemDirectory}">
         <StackPanel joufflu:Spacing.Gap="4" Orientation="Horizontal">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
             <TextBlock Text="{Binding Name}" />

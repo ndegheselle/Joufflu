@@ -7,9 +7,9 @@ using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Controls;
 using Joufflu.FileExplorer.Data;
 
-namespace Joufflu.FileExplorer.Loaders;
+namespace Joufflu.FileExplorer.Sources;
 
-public interface IExplorerLoader : INotifyPropertyChanged
+public interface IExplorerSource : INotifyPropertyChanged
 {
     public IExplorerDirectory? Root { get; }
     public IExplorerDirectory? Current { get; }
@@ -27,15 +27,6 @@ public interface IExplorerLoader : INotifyPropertyChanged
     public ICommand? OpenCommand { get; }
     public ICommand? RenameCommand { get; }
     public ICommand? DeleteCommand { get; }
-
-    /// <summary>
-    /// Navigation commands of the <see cref="ExplorerControlBar"/>, taking no parameter. Each one is disabled when
-    /// the navigation it does isn't possible : at the root for <see cref="OpenParentCommand"/>, at an end of the
-    /// history for the two others.
-    /// </summary>
-    public ICommand OpenParentCommand { get; }
-    public ICommand GoBackCommand { get; }
-    public ICommand GoForwardCommand { get; }
 
     public void OpenRoot();
 
@@ -55,68 +46,33 @@ public interface IExplorerLoader : INotifyPropertyChanged
 /// Navigation shared by the loaders : the opened directory, the path leading to it and the history of the visited
 /// ones. A derived loader only provides its root and how the children of a directory are read.
 /// </summary>
-public abstract class ExplorerLoader : ObservableObject, IExplorerLoader
+public abstract partial class ExplorerLoader : ObservableObject, IExplorerSource
 {
-    /// <summary>
-    /// Directories opened so far in navigation order, <see cref="_historyIndex"/> pointing at the current one.
-    /// </summary>
-    private readonly List<IExplorerDirectory> _history = [];
-    private int _historyIndex = -1;
-    /// <summary>
-    /// True while the history is being replayed, so that the navigation it does isn't recorded in it.
-    /// </summary>
-    private bool _isReplayingHistory;
-
     private readonly RelayCommand _openParentCommand;
-    private readonly RelayCommand _goBackCommand;
-    private readonly RelayCommand _goForwardCommand;
 
-    private IExplorerDirectory? _root;
-    public IExplorerDirectory? Root { get => _root; private set => SetProperty(ref _root, value); }
+    [ObservableProperty]
+    private IExplorerDirectory? root;
+    [ObservableProperty]
+    private IExplorerDirectory? current;
 
-    private IExplorerDirectory? _current;
-    public IExplorerDirectory? Current { get => _current; private set => SetProperty(ref _current, value); }
-
-    private IReadOnlyList<IExplorerDirectory> _currentPath = [];
-    public IReadOnlyList<IExplorerDirectory> CurrentPath
-    {
-        get => _currentPath;
-        private set => SetProperty(ref _currentPath, value);
-    }
-
-    public ICommand? OpenCommand { get; }
-    // TODO : not supported yet, the menu items using them stay disabled
-    public virtual ICommand? RenameCommand => null;
-    public virtual ICommand? DeleteCommand => null;
+    [ObservableProperty]
+    private IReadOnlyList<IExplorerDirectory> currentPath = [];
 
     public ICommand OpenParentCommand => _openParentCommand;
-    public ICommand GoBackCommand => _goBackCommand;
-    public ICommand GoForwardCommand => _goForwardCommand;
 
     protected ExplorerLoader()
     {
-        OpenCommand = new RelayCommand<IExplorerNode>(
-            node => Open((IExplorerDirectory)node!),
-            node => node is IExplorerDirectory);
         _openParentCommand = new RelayCommand(() => Open(Current!.Parent!), () => Current?.Parent != null);
-        _goBackCommand = new RelayCommand(() => GoTo(_historyIndex - 1), () => _historyIndex > 0);
-        _goForwardCommand = new RelayCommand(
-            () => GoTo(_historyIndex + 1),
-            () => _historyIndex >= 0 && _historyIndex < _history.Count - 1);
     }
 
     public void OpenRoot()
     {
-        _history.Clear();
-        _historyIndex = -1;
-
         Root = CreateRoot();
         if (Root != null)
             Open(Root);
-        else
-            UpdateNavigation();
     }
 
+    [RelayCommand(CanExecute = nameof(CanOpen))]
     public void Open(IExplorerDirectory directory)
     {
         if (!LoadChildren(directory))
@@ -124,10 +80,8 @@ public abstract class ExplorerLoader : ObservableObject, IExplorerLoader
 
         Current = directory;
         CurrentPath = BuildPath(directory);
-        if (!_isReplayingHistory)
-            Record(directory);
-        UpdateNavigation();
     }
+    public bool CanOpen(IExplorerNode node) => node is IExplorerDirectory directory;
 
     public void Load(IExplorerDirectory directory) => LoadChildren(directory);
 
@@ -142,48 +96,6 @@ public abstract class ExplorerLoader : ObservableObject, IExplorerLoader
     /// itself, and leaves a foreign one alone instead of opening it.
     /// </summary>
     protected abstract bool LoadChildren(IExplorerDirectory directory);
-
-    /// <summary>
-    /// Records a navigation. Navigating after a few <see cref="GoBackCommand"/> drops the directories that were
-    /// ahead, the way a browser does.
-    /// </summary>
-    private void Record(IExplorerDirectory directory)
-    {
-        // Reopening the current directory is a refresh, not a navigation.
-        if (_historyIndex >= 0 && _history[_historyIndex] == directory)
-            return;
-
-        _history.RemoveRange(_historyIndex + 1, _history.Count - _historyIndex - 1);
-        _history.Add(directory);
-        _historyIndex = _history.Count - 1;
-    }
-
-    /// <summary>
-    /// Opens the directory at an index of the history, leaving the history itself untouched.
-    /// </summary>
-    private void GoTo(int index)
-    {
-        if (index < 0 || index >= _history.Count)
-            return;
-
-        _historyIndex = index;
-        _isReplayingHistory = true;
-        try
-        {
-            Open(_history[index]);
-        }
-        finally
-        {
-            _isReplayingHistory = false;
-        }
-    }
-
-    private void UpdateNavigation()
-    {
-        _openParentCommand.NotifyCanExecuteChanged();
-        _goBackCommand.NotifyCanExecuteChanged();
-        _goForwardCommand.NotifyCanExecuteChanged();
-    }
 
     /// <summary>
     /// Directories from the topmost parent of a directory down to itself, itself last.
@@ -215,18 +127,18 @@ public class DirectoryLoader : ExplorerLoader
     }
 
     protected override IExplorerDirectory CreateRoot()
-        => new PhysicalDirectory(new DirectoryInfo(_rootDirectoryPath), null);
+        => new FileSystemDirectory(new DirectoryInfo(_rootDirectoryPath), null);
 
     protected override bool LoadChildren(IExplorerDirectory directory)
     {
-        if (directory is not PhysicalDirectory physicalDirectory)
+        if (directory is not FileSystemDirectory physicalDirectory)
             return false;
 
         LoadPhysicalDirectory(physicalDirectory, _depth);
         return true;
     }
 
-    private static void LoadPhysicalDirectory(PhysicalDirectory directory, int depth)
+    private static void LoadPhysicalDirectory(FileSystemDirectory directory, int depth)
     {
         directory.Children.Clear();
         var dirInfo = new DirectoryInfo(directory.Path);
@@ -234,11 +146,11 @@ public class DirectoryLoader : ExplorerLoader
         {
             if (entry is FileInfo fi)
             {
-                directory.Children.Add(new PhysicalFile(fi, directory));
+                directory.Children.Add(new FileSystemFile(fi, directory));
             }
             else if (entry is DirectoryInfo di)
             {
-                PhysicalDirectory subDirectory = new PhysicalDirectory(di, directory);
+                FileSystemDirectory subDirectory = new FileSystemDirectory(di, directory);
                 directory.Children.Add(subDirectory);
                 if (depth > 0)
                     LoadPhysicalDirectory(subDirectory, depth - 1);

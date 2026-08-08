@@ -45,8 +45,8 @@ namespace Joufflu.FileExplorer.Converters
         /// </summary>
         private static string GetPath(IExplorerNode node) => node switch
         {
-            PhysicalFile file => file.Path,
-            PhysicalDirectory directory => directory.Path,
+            FileSystemFile file => file.Path,
+            FileSystemDirectory directory => directory.Path,
             _ => node.Name
         };
     }

@@ -24,14 +24,14 @@ namespace Joufflu.FileExplorer.Data
     public interface IExplorerFile : IExplorerNode
     { }
 
-    public class PhysicalFile : IExplorerFile
+    public class FileSystemFile : IExplorerFile
     {
         public string Path { get; set; }
         public string Name { get; set; }
         public DateTime ModifiedAt { get; set; }
         public IExplorerDirectory? Parent { get; }
 
-        public PhysicalFile(FileInfo fi, IExplorerDirectory? parent)
+        public FileSystemFile(FileInfo fi, IExplorerDirectory? parent)
         {
             Path = fi.FullName;
             Name = fi.Name;
@@ -40,7 +40,7 @@ namespace Joufflu.FileExplorer.Data
         }
     }
 
-    public class PhysicalDirectory : IExplorerDirectory
+    public class FileSystemDirectory : IExplorerDirectory
     {
         public string Path { get; set; }
         public string Name { get; set; } = "";
@@ -49,7 +49,7 @@ namespace Joufflu.FileExplorer.Data
 
         public ObservableCollection<IExplorerNode> Children { get; private set; } = [];
 
-        public PhysicalDirectory(DirectoryInfo di, IExplorerDirectory? parent)
+        public FileSystemDirectory(DirectoryInfo di, IExplorerDirectory? parent)
         {
             Path = di.FullName;
             Name = di.Name;

@@ -12,7 +12,7 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/MenuItem.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <DataTemplate x:Key="{base:ContextMenuTemplateKey data:PhysicalDirectory}">
+    <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemDirectory}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
                 Command="{Binding Loader.OpenCommand}"
@@ -42,7 +42,7 @@
             </MenuItem>
         </ContextMenu>
     </DataTemplate>
-    <DataTemplate x:Key="{base:ContextMenuTemplateKey data:PhysicalFile}">
+    <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemFile}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
                 Command="{Binding Loader.RenameCommand}"

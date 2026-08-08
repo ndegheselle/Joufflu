@@ -1,5 +1,5 @@
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Loaders;
+using Joufflu.FileExplorer.Sources;
 using System.Windows.Markup;
 
 namespace Joufflu.FileExplorer.Controls.Base
@@ -41,7 +41,7 @@ namespace Joufflu.FileExplorer.Controls.Base
     /// </summary>
     public class ExplorerMenuContext
     {
-        public IExplorerLoader? Loader { get; }
+        public IExplorerSource? Loader { get; }
 
         /// <summary>
         /// Every selected node, the menu was opened on the first one.
@@ -53,7 +53,7 @@ namespace Joufflu.FileExplorer.Controls.Base
         /// </summary>
         public IExplorerNode? Node => Nodes.Count == 1 ? Nodes[0] : null;
 
-        public ExplorerMenuContext(IExplorerLoader? loader, IReadOnlyList<IExplorerNode> nodes)
+        public ExplorerMenuContext(IExplorerSource? loader, IReadOnlyList<IExplorerNode> nodes)
         {
             Loader = loader;
             Nodes = nodes;

@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Loaders;
+using Joufflu.FileExplorer.Sources;
 
 namespace Joufflu.FileExplorer.Controls.Base;
 
@@ -37,14 +37,14 @@ public abstract class ExplorerControl : Control
     #region Dependency Property
     public static readonly DependencyProperty LoaderProperty = DependencyProperty.Register(
         nameof(Loader),
-        typeof(IExplorerLoader),
+        typeof(IExplorerSource),
         typeof(ExplorerControl),
         new PropertyMetadata(null));
     #endregion
 
-    public IExplorerLoader? Loader
+    public IExplorerSource? Loader
     {
-        get => (IExplorerLoader?)GetValue(LoaderProperty);
+        get => (IExplorerSource?)GetValue(LoaderProperty);
         set => SetValue(LoaderProperty, value);
     }
 }

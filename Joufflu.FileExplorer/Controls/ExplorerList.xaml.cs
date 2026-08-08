@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Loaders;
+using Joufflu.FileExplorer.Sources;
 
 namespace Joufflu.FileExplorer.Controls
 {
@@ -72,7 +72,7 @@ namespace Joufflu.FileExplorer.Controls
         {
             SetBinding(
                 NodesProperty,
-                new Binding($"{nameof(Loader)}.{nameof(IExplorerLoader.Current)}.{nameof(IExplorerDirectory.Children)}")
+                new Binding($"{nameof(Loader)}.{nameof(IExplorerSource.Current)}.{nameof(IExplorerDirectory.Children)}")
                 {
                     Source = this
                 });

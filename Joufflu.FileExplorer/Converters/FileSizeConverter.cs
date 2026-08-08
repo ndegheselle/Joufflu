@@ -19,7 +19,7 @@ namespace Joufflu.FileExplorer.Converters
             FileInfo? info = value switch
             {
                 FileInfo fileInfo => fileInfo,
-                PhysicalFile file => new FileInfo(file.Path),
+                FileSystemFile file => new FileInfo(file.Path),
                 string path => new FileInfo(path),
                 _ => null
             };
