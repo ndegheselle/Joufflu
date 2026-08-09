@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Joufflu.Feedback\Joufflu.Feedback.csproj" />
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
   </ItemGroup>
 

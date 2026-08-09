@@ -1,126 +1,104 @@
+using Joufflu.FileExplorer.Controls.Base;
+using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Sources;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Joufflu.FileExplorer.Controls.Base;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
 
-namespace Joufflu.FileExplorer.Controls
+namespace Joufflu.FileExplorer.Controls;
+
+/// <summary>
+/// Lists the nodes of the opened folder in a <see cref="ListView"/>, opening a folder on double click.
+/// </summary>
+public class ExplorerList : Control
 {
+    private readonly IComparer comparer = ExplorerNodeComparer.Default;
+
+    #region Dependency Properties
+
+    public static readonly DependencyProperty SourceProperty =
+        DependencyProperty.Register(
+            nameof(Source), typeof(IExplorerSource), typeof(ExplorerList),
+            new PropertyMetadata(null,
+                (d, e) => ((ExplorerList)d).OnSourceChanged(e.OldValue as IExplorerSource,
+                    e.NewValue as IExplorerSource)));
+
+    public static readonly DependencyProperty VisibleNodesProperty = DependencyProperty.Register(
+        nameof(VisibleNodes),
+        typeof(ExplorerNodeKinds),
+        typeof(ExplorerNodesControl),
+        new FrameworkPropertyMetadata(ExplorerNodeKinds.All, (d, e) => ((ExplorerList)d).OnVisibleNodesChanged()));
+
+    #endregion
+
     /// <summary>
-    /// Lists the nodes of the opened folder in a <see cref="ListView"/>, opening a folder on double click.
+    /// Source of the explorer
     /// </summary>
-    public class ExplorerList : ExplorerNodesControl
+    public IExplorerSource Source
     {
-        static ExplorerList()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(ExplorerList),
-                new FrameworkPropertyMetadata(typeof(ExplorerList)));
-        }
+        get => (IExplorerSource)GetValue(SourceProperty);
+        set => SetValue(SourceProperty, value);
+    }
 
-        #region Dependency Property
-        public static readonly DependencyProperty SortComparerProperty = DependencyProperty.Register(
-            nameof(SortComparer),
-            typeof(IComparer),
+    /// <summary>
+    /// Kinds of node the control shows, <see cref="ExplorerNodeKinds.All"/> by default. Set it to
+    /// <see cref="ExplorerNodeKinds.Directories"/> or <see cref="ExplorerNodeKinds.Files"/> to display only one.
+    /// </summary>
+    public ExplorerNodeKinds VisibleNodes
+    {
+        get => (ExplorerNodeKinds)GetValue(VisibleNodesProperty);
+        set => SetValue(VisibleNodesProperty, value);
+    }
+
+    public ICollectionView? View { get; private set; }
+
+    static ExplorerList()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
             typeof(ExplorerList),
-            new PropertyMetadata(ExplorerNodeComparer.Default, OnSortComparerChanged));
+            new FrameworkPropertyMetadata(typeof(ExplorerList)));
+    }
 
-        private static readonly DependencyPropertyKey ItemsViewPropertyKey = DependencyProperty.RegisterReadOnly(
-            nameof(ItemsView),
-            typeof(ICollectionView),
-            typeof(ExplorerList),
-            new PropertyMetadata(null));
+    #region On dependency property changed
 
-        public static readonly DependencyProperty ItemsViewProperty = ItemsViewPropertyKey.DependencyProperty;
-
-        /// <summary>
-        /// Children of the opened folder, bound in the constructor so <see cref="ItemsView"/> follows the navigation.
-        /// </summary>
-        private static readonly DependencyProperty NodesProperty = DependencyProperty.Register(
-            "Nodes",
-            typeof(IList),
-            typeof(ExplorerList),
-            new PropertyMetadata(null, OnNodesChanged));
-        #endregion
-
-        /// <summary>
-        /// Comparer applied to <see cref="ItemsView"/>, <see cref="ExplorerNodeComparer.Default"/> by default.
-        /// Replacing it re-sorts in place without rebuilding the view, which is the seam for a sort driven by a
-        /// column header and a direction. A null comparer leaves the nodes in their loading order.
-        /// </summary>
-        public IComparer? SortComparer
+    private void OnSourceChanged(IExplorerSource? previous, IExplorerSource? source)
+    {
+        ICollectionView? CreateView()
         {
-            get => (IComparer?)GetValue(SortComparerProperty);
-            set => SetValue(SortComparerProperty, value);
+            return source?.Current == null
+                ? null
+                : new ListCollectionView(source.Current.Children) { CustomSort = comparer, Filter = FilterNode };
         }
 
-        /// <summary>
-        /// Sorted view of the opened folder, owned by this control. The same
-        /// <see cref="IExplorerDirectory.Children"/> can be displayed by several controls at once (the tree and the
-        /// list together), so the shared default view is not used : its sort, selection and current item would be
-        /// shared too.
-        /// </summary>
-        public ICollectionView? ItemsView => (ICollectionView?)GetValue(ItemsViewProperty);
-
-        protected override IEnumerable<IExplorerNode> GetSelectedNodes()
-            => (ItemsHost as ListView)?.SelectedItems.OfType<IExplorerNode>() ?? [];
-
-        public ExplorerList()
+        void OnSourcePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            SetBinding(
-                NodesProperty,
-                new Binding($"{nameof(Loader)}.{nameof(IExplorerSource.Current)}.{nameof(IExplorerDirectory.Children)}")
-                {
-                    Source = this
-                });
+            if (e.PropertyName == nameof(IExplorerSource.Current))
+                View = CreateView();
         }
 
-        public override void OnApplyTemplate()
+        // Update view and track then source change
+        if (previous != null)
+            previous.PropertyChanged -= OnSourcePropertyChanged;
+        if (source != null)
         {
-            if (ItemsHost is ListView oldList)
-                oldList.SelectionChanged -= OnListSelectionChanged;
-
-            base.OnApplyTemplate();
-
-            if (ItemsHost is ListView newList)
-                newList.SelectionChanged += OnListSelectionChanged;
-        }
-
-        private void OnListSelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateSelectedNodes();
-
-        private static void OnNodesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            => ((ExplorerList)d).UpdateItemsView(e.NewValue as IList);
-
-        private static void OnSortComparerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            => ((ExplorerList)d).ApplySort();
-
-        /// <summary>Re-runs the <see cref="ExplorerNodesControl.VisibleNodes"/> filter on the current view.</summary>
-        protected override void OnVisibleNodesChanged() => (ItemsView as ListCollectionView)?.Refresh();
-
-        /// <summary>
-        /// Builds the view of the newly opened folder, sorted by <see cref="SortComparer"/> and filtered to
-        /// <see cref="ExplorerNodesControl.VisibleNodes"/>.
-        /// </summary>
-        private void UpdateItemsView(IList? nodes)
-        {
-            SetValue(
-                ItemsViewPropertyKey,
-                nodes == null ? null : new ListCollectionView(nodes) { CustomSort = SortComparer, Filter = FilterNode });
-        }
-
-        /// <summary>Keeps only the nodes whose kind is in <see cref="ExplorerNodesControl.VisibleNodes"/>.</summary>
-        private bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
-
-        /// <summary>
-        /// Re-sorts the displayed nodes, by default directories first then by natural name order.
-        /// </summary>
-        private void ApplySort()
-        {
-            if (ItemsView is ListCollectionView view)
-                view.CustomSort = SortComparer;
+            source.PropertyChanged += OnSourcePropertyChanged;
+            View = CreateView();
         }
     }
+
+    private void OnVisibleNodesChanged()
+    {
+        View?.Refresh();
+    }
+
+    #endregion
+
+    // TODO : CONTEXT MENU on nodes and outside
+    // TODO : SELECTION Handle selection changed on listview to buble event
+    // TODO : OPEN Handle double click on nodes
+
+    /// <summary>Keeps only the nodes whose kind is in <see cref="ExplorerNodesControl.VisibleNodes"/>.</summary>
+    private bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
 }

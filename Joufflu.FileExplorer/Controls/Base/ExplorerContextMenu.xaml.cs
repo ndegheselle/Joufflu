@@ -4,7 +4,7 @@ using System.Windows.Markup;
 
 namespace Joufflu.FileExplorer.Controls.Base
 {
-    public enum MenuScope { Single, Multiple }
+    public enum MenuScope { Single, Multiple, None }
 
     /// <summary>
     /// Resource key of the context menu template of a data type.

@@ -6,6 +6,7 @@ namespace Joufflu.FileExplorer.Data
 {
     public interface IExplorerNode
     {
+        public string Path { get; set; }
         public string Name { get; }
         public DateTime ModifiedAt { get; }
 
@@ -19,6 +20,10 @@ namespace Joufflu.FileExplorer.Data
     public interface IExplorerDirectory : IExplorerNode
     {
         public ObservableCollection<IExplorerNode> Children { get; }
+        /// <summary>
+        /// All the parent of the current directory (including this one)
+        /// </summary>
+        public IReadOnlyList<IExplorerDirectory> DirectoryTree { get; }
     }
 
     public interface IExplorerFile : IExplorerNode
@@ -45,7 +50,10 @@ namespace Joufflu.FileExplorer.Data
         public string Path { get; set; }
         public string Name { get; set; } = "";
         public DateTime ModifiedAt { get; set; }
+
         public IExplorerDirectory? Parent { get; }
+        public IReadOnlyList<IExplorerDirectory> DirectoryTree => Parent == null ? [] : [..Parent.DirectoryTree, this];
+
 
         public ObservableCollection<IExplorerNode> Children { get; private set; } = [];
 

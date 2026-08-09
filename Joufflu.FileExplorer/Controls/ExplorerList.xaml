@@ -15,7 +15,7 @@
                     <ListView
                         x:Name="PART_ItemsHost"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        ItemsSource="{Binding ItemsView}">
+                        ItemsSource="{Binding View}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Name">
