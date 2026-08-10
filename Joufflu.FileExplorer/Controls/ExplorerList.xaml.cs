@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Joufflu.FileExplorer.Controls;
 
@@ -14,8 +16,6 @@ namespace Joufflu.FileExplorer.Controls;
 /// </summary>
 public class ExplorerList : Control
 {
-    private readonly IComparer comparer = ExplorerNodeComparer.Default;
-
     #region Dependency Properties
 
     public static readonly DependencyProperty SourceProperty =
@@ -54,11 +54,29 @@ public class ExplorerList : Control
 
     public ICollectionView? View { get; private set; }
 
+    protected const string PartItemsHost = "PART_ItemsHost";
+    protected ListView? ItemsHost { get; private set; }
+    private readonly IComparer comparer = ExplorerNodeComparer.Default;
+
     static ExplorerList()
     {
         DefaultStyleKeyProperty.OverrideMetadata(
             typeof(ExplorerList),
             new FrameworkPropertyMetadata(typeof(ExplorerList)));
+    }
+
+    public ExplorerList()
+    {
+        // Default context menu to fix the first right click
+        this.ContextMenu = new ContextMenu();
+        ContextMenuOpening += ExplorerList_ContextMenuOpening;
+        MouseDoubleClick += ExplorerList_MouseDoubleClick;
+    }
+
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        ItemsHost = GetTemplateChild(PartItemsHost) as ListView;
     }
 
     #region On dependency property changed
@@ -95,10 +113,47 @@ public class ExplorerList : Control
 
     #endregion
 
+    #region UI events
+    private void ExplorerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        var source = e.OriginalSource as DependencyObject;
+        var stopAt = sender as DependencyObject;
+
+        var context = FindDataContext<IExplorerNode>(source, stopAt);
+        if (context != null)
+        {
+            e.Handled = true;
+        }
+    }
+
+    private void ExplorerList_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+
+    }
+    #endregion
+
     // TODO : CONTEXT MENU on nodes and outside
     // TODO : SELECTION Handle selection changed on listview to buble event
     // TODO : OPEN Handle double click on nodes
 
     /// <summary>Keeps only the nodes whose kind is in <see cref="ExplorerNodesControl.VisibleNodes"/>.</summary>
     private bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
+
+    private static T? FindDataContext<T>(DependencyObject? start, DependencyObject? stop) where T : class
+    {
+        var current = start;
+
+        while (current != null)
+        {
+            if (current is FrameworkElement fe && fe.DataContext is T match)
+                return match;
+
+            if (current == stop)
+                break;
+
+            current = VisualTreeHelper.GetParent(current)
+                      ?? LogicalTreeHelper.GetParent(current); // fallback for non-visual elements
+        }
+        return null;
+    }
 }
