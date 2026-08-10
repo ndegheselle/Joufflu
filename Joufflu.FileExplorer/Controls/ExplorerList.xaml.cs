@@ -1,13 +1,13 @@
-using Joufflu.FileExplorer.Controls.Base;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
+using Joufflu.FileExplorer.Controls.Base;
+using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Sources;
+using Joufflu.Helpers;
 
 namespace Joufflu.FileExplorer.Controls;
 
@@ -28,8 +28,15 @@ public class ExplorerList : Control
     public static readonly DependencyProperty VisibleNodesProperty = DependencyProperty.Register(
         nameof(VisibleNodes),
         typeof(ExplorerNodeKinds),
-        typeof(ExplorerNodesControl),
+        typeof(ExplorerList),
         new FrameworkPropertyMetadata(ExplorerNodeKinds.All, (d, e) => ((ExplorerList)d).OnVisibleNodesChanged()));
+
+    public static readonly DependencyPropertyKey ViewPropertyKey = DependencyProperty.RegisterReadOnly(
+        nameof(View),
+        typeof(ICollectionView),
+        typeof(ExplorerList),
+        new FrameworkPropertyMetadata(null));
+    public static readonly DependencyProperty ViewProperty = ViewPropertyKey.DependencyProperty;
 
     #endregion
 
@@ -52,7 +59,11 @@ public class ExplorerList : Control
         set => SetValue(VisibleNodesProperty, value);
     }
 
-    public ICollectionView? View { get; private set; }
+    public ICollectionView? View
+    {
+        get => (ICollectionView?)GetValue(ViewProperty);
+        private set => SetValue(ViewPropertyKey, value);
+    }
 
     protected const string PartItemsHost = "PART_ItemsHost";
     protected ListView? ItemsHost { get; private set; }
@@ -116,19 +127,72 @@ public class ExplorerList : Control
     #region UI events
     private void ExplorerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        var source = e.OriginalSource as DependencyObject;
-        var stopAt = sender as DependencyObject;
+        var selected = ItemsHost?.SelectedItem as IExplorerNode;
+        if (selected == null)
+            return;
 
-        var context = FindDataContext<IExplorerNode>(source, stopAt);
-        if (context != null)
-        {
-            e.Handled = true;
-        }
+        e.Handled = true;
     }
 
     private void ExplorerList_ContextMenuOpening(object sender, ContextMenuEventArgs e)
     {
+        // Ignore listview columns header
+        if (ItemsHost == null || MoreVisualTreeHelper.FindParent<GridViewColumnHeader>(e.OriginalSource as DependencyObject) != null)
+        {
+            e.Handled = true;
+            return;
+        }
 
+        IExplorerNode? selected = ItemsHost.SelectedItem as IExplorerNode;
+        // If outside of a row open on the current folder
+        if (MoreVisualTreeHelper.FindParent<ListViewItem>(e.OriginalSource as DependencyObject) == null)
+            selected = Source.Current;
+
+        if (selected == null)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        var element = (FrameworkElement)sender;
+        var template = FindContextMenuTemplate(
+            selected.GetType(),
+            ItemsHost.SelectedItems.Count > 1 ? MenuScope.Multiple : MenuScope.Single);
+
+        if (template?.LoadContent() is not ContextMenu menu)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        element.ContextMenu = menu;
+    }
+    #endregion
+
+    #region Context menu
+    /// <summary>
+    /// Searches the context menu template of a node type, from the most specific type to <see cref="object"/>.
+    /// </summary>
+    private DataTemplate? FindContextMenuTemplate(Type nodeType, MenuScope scope)
+    {
+        foreach (var type in GetTypeCandidates(nodeType))
+        {
+            if (TryFindResource(new ContextMenuTemplateKey(type) { Scope = scope }) is DataTemplate template)
+                return template;
+        }
+
+        return null;
+    }
+
+    private static IEnumerable<Type> GetTypeCandidates(Type nodeType)
+    {
+        for (Type? type = nodeType; type != null && type != typeof(object); type = type.BaseType)
+            yield return type;
+
+        foreach (var interfaceType in nodeType.GetInterfaces())
+            yield return interfaceType;
+
+        yield return typeof(object);
     }
     #endregion
 
@@ -138,22 +202,4 @@ public class ExplorerList : Control
 
     /// <summary>Keeps only the nodes whose kind is in <see cref="ExplorerNodesControl.VisibleNodes"/>.</summary>
     private bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
-
-    private static T? FindDataContext<T>(DependencyObject? start, DependencyObject? stop) where T : class
-    {
-        var current = start;
-
-        while (current != null)
-        {
-            if (current is FrameworkElement fe && fe.DataContext is T match)
-                return match;
-
-            if (current == stop)
-                break;
-
-            current = VisualTreeHelper.GetParent(current)
-                      ?? LogicalTreeHelper.GetParent(current); // fallback for non-visual elements
-        }
-        return null;
-    }
 }

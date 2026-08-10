@@ -5,8 +5,9 @@ namespace Joufflu.Helpers
 {
     public static class MoreVisualTreeHelper
     {
-        public static T? FindParent<T>(DependencyObject child) where T : DependencyObject
+        public static T? FindParent<T>(DependencyObject? child) where T : DependencyObject
         {
+            if (child == null) return null;
             DependencyObject parentObject = VisualTreeHelper.GetParent(child);
 
             if (parentObject == null) return null;

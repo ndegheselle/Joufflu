@@ -19,6 +19,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Explorer}">
                     <Grid joufflu:Spacing.Gap="4" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                        <!--
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -35,7 +36,6 @@
                             </Grid.ColumnDefinitions>
 
                             <local:ExplorerTree x:Name="PART_Tree" Loader="{Binding Loader}" />
-                            <!--  Transparent : the tree and the list have borders of their own already.  -->
                             <GridSplitter
                                 Grid.Column="1"
                                 Width="4"
@@ -51,13 +51,13 @@
                             <StatusBarItem>
                                 <TextBlock Text="{Binding Loader.Current.Children.Count, StringFormat={}{0} items}" />
                             </StatusBarItem>
-                            <!--  Last item of the docked panel of the status bar, so it takes the remaining width.  -->
                             <StatusBarItem
                                 HorizontalContentAlignment="Right"
                                 Visibility="{Binding SelectedNodes.Count, ElementName=PART_List, Converter={StaticResource ExplorerSelectionVisibilityConverter}}">
                                 <TextBlock Text="{Binding SelectedNodes.Count, ElementName=PART_List, StringFormat={}{0} selected}" />
                             </StatusBarItem>
                         </StatusBar>
+                    -->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

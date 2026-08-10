@@ -1,4 +1,3 @@
-using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Joufflu.FileExplorer.Sources;
 
@@ -36,7 +35,5 @@ public class ExplorerSamplesViewModel : ObservableObject
 
     public ExplorerSamplesViewModel()
     {
-        Loader = new DirectoryLoader(Directory.GetCurrentDirectory());
-        Loader.OpenRoot();
     }
 }

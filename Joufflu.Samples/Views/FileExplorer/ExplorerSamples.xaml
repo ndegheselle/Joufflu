@@ -16,6 +16,7 @@
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Explorer" />
 
+            <!--
             <c:CodeExample
                 Title="Explorer"
                 Code="{Binding ExplorerCode}"
@@ -29,7 +30,6 @@
                 Description="The node visuals are implicit templates keyed by node type : redeclaring one in the resources of a control replaces it there only. Here ExplorerIconConverter trades the font icons for the icons the system associates with each file type.">
                 <fileExplorer:Explorer Height="400" Loader="{Binding Loader}">
                     <fileExplorer:Explorer.Resources>
-                        <!--  Files and folders share it : the converter tells them apart on its own.  -->
                         <DataTemplate x:Key="NodeWithSystemIcon">
                             <StackPanel joufflu:Spacing.Gap="4" Orientation="Horizontal">
                                 <Image
@@ -48,6 +48,7 @@
                     </fileExplorer:Explorer.Resources>
                 </fileExplorer:Explorer>
             </c:CodeExample>
+            -->
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -14,6 +14,7 @@
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Tree" />
 
+            <!--
             <c:CodeExample
                 Title="ExplorerTree"
                 Code="{Binding ExplorerTreeCode}"
@@ -30,6 +31,7 @@
                     Loader="{Binding Loader}"
                     VisibleNodes="All" />
             </c:CodeExample>
+            -->
         </StackPanel>
     </ScrollViewer>
 </UserControl>

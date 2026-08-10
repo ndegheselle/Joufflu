@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.IO;
+using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback.Controls;
 using Joufflu.FileExplorer.Data;
-using System.IO;
-using System.Windows;
 
 namespace Joufflu.FileExplorer.Sources
 {
@@ -17,7 +17,8 @@ namespace Joufflu.FileExplorer.Sources
         [ObservableProperty]
         private IExplorerDirectory? current;
 
-        public FileSystemSource(string rootDirectoryPath, IToastService? toasts) {
+        public FileSystemSource(string rootDirectoryPath, IToastService? toasts)
+        {
             this.rootDirectoryPath = rootDirectoryPath;
             this.toasts = toasts;
         }
@@ -80,7 +81,7 @@ namespace Joufflu.FileExplorer.Sources
         /// Open a file (for exemple a preview). Current implementation is empty.
         /// </summary>
         protected virtual Task OpenFile(IExplorerFile file)
-        {  return Task.CompletedTask; }
+        { return Task.CompletedTask; }
 
         #endregion
 
@@ -96,7 +97,7 @@ namespace Joufflu.FileExplorer.Sources
 
         // XXX : how to know if copy or cut ?
         [RelayCommand]
-        public Task Past(IExplorerDirectory target, IEnumerable<IExplorerNode> nodes)
+        public Task Past(IExplorerDirectory target)
         { throw new NotImplementedException(); }
 
         #endregion
@@ -105,7 +106,7 @@ namespace Joufflu.FileExplorer.Sources
 
         [RelayCommand]
         public void CopyPath(IExplorerNode node)
-        { 
+        {
             Clipboard.SetText(node.Path);
             toasts?.Info("Path copied to clipboard.");
         }

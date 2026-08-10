@@ -18,7 +18,7 @@
                 Title="ExplorerList"
                 Code="{Binding ExplorerListCode}"
                 Description="Lists the nodes of the opened folder, directories first then by natural name order, with each file's size. Double click a folder to open it, right click a node for its menu.">
-                <fileExplorer:ExplorerList Height="300" Loader="{Binding Loader}" />
+                <fileExplorer:ExplorerList Height="300" Source="{Binding Source}" />
             </c:CodeExample>
 
             <c:CodeExample
@@ -27,18 +27,8 @@
                 Description="VisibleNodes chooses the kinds of node shown : All by default, or Files / Directories to keep only one. Here the list keeps only the files.">
                 <fileExplorer:ExplorerList
                     Height="300"
-                    Loader="{Binding Loader}"
+                    Source="{Binding Source}"
                     VisibleNodes="Files" />
-            </c:CodeExample>
-
-            <c:CodeExample
-                Title="ExplorerControlBar"
-                Code="{Binding ExplorerControlBarCode}"
-                Description="Navigates the loader : back and forward through the visited folders, up to the parent one, and a breadcrumb of the path leading to the opened folder. It drives the same loader the lists on this page observe, so navigating with it moves them too.">
-                <StackPanel joufflu:Spacing.Gap="4">
-                    <fileExplorer:ExplorerControlBar Loader="{Binding Loader}" />
-                    <fileExplorer:ExplorerList Height="200" Loader="{Binding Loader}" />
-                </StackPanel>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
