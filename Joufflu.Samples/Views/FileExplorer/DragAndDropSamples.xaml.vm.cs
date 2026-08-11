@@ -50,7 +50,7 @@ public partial class DragAndDropSamplesViewModel : ObservableObject
                 <Style TargetType="Border">
                     <Setter Property="Background" Value="Transparent" />
                     <Style.Triggers>
-                        <Trigger Property="dnd:Drop.IsDropTarget" Value="True">
+                        <Trigger Property="dnd:Drop.IsHovering" Value="True">
                             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
                         </Trigger>
                     </Style.Triggers>

@@ -9,7 +9,7 @@
 
     <Style x:Key="{x:Type fonts:FontIcon}" TargetType="{x:Type fonts:FontIcon}">
         <Setter Property="FontFamily" Value="{StaticResource LucideIconFamily}" />
-        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -17,13 +17,16 @@
         <Style.Triggers>
             <!--  Honors the inherited Sizing.Size (md keeps the default size).  -->
             <Trigger Property="joufflu:Sizing.Size" Value="xs">
-                <Setter Property="FontSize" Value="10" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
             </Trigger>
             <Trigger Property="joufflu:Sizing.Size" Value="sm">
-                <Setter Property="FontSize" Value="11" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
             </Trigger>
             <Trigger Property="joufflu:Sizing.Size" Value="lg">
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
+            </Trigger>
+            <Trigger Property="joufflu:Sizing.Size" Value="xl">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXl}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

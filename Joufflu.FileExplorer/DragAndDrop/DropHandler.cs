@@ -1,7 +1,6 @@
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Joufflu.Helpers;
 
 namespace Joufflu.FileExplorer.DragAndDrop;
 
@@ -60,27 +59,26 @@ public record DropContext
 /// </summary>
 /// <remarks>
 /// Override <see cref="CanDrop"/> to refuse a drop and <see cref="ApplyDrop"/> to apply its consequences. Set
-/// <see cref="HoverContainerType"/> to <c>typeof(ListViewItem)</c> to highlight a row rather than the whole list, see
+/// <see cref="HoverContainerType"/> to <c>typeof(ListViewItem)</c> to also highlight the row under the cursor, see
 /// <see cref="Drop.IsHoveringProperty"/>.
 /// </remarks>
-public abstract partial class DropHandler : ObservableObject
+public abstract partial class DropHandler : DragDropHandler
 {
     #region Properties
 
     /// <summary>
-    /// Type of the container highlighted while the cursor passes over it, a row of a list for example. The element the
-    /// handler is attached to is highlighted when it is null.
+    /// Type of the container also highlighted while the cursor passes over it, a row of a list for example. Only the
+    /// element the handler is attached to is highlighted when it is null.
     /// </summary>
     public Type? HoverContainerType { get; set; }
 
     /// <summary>
     /// True while a drop this handler accepts hovers the element. Bindable, and mirrored on the element by
-    /// <see cref="Drop.IsDropTargetProperty"/>.
+    /// <see cref="Drop.IsHoveringProperty"/>.
     /// </summary>
     [ObservableProperty]
     private bool isDropTarget;
 
-    private FrameworkElement? _element;
     private DependencyObject? _hoveredContainer;
 
     /// <summary>
@@ -94,21 +92,27 @@ public abstract partial class DropHandler : ObservableObject
 
     #region Attachment
 
-    /// <summary>
-    /// Called by <see cref="Drop"/> when the handler is bound to an element.
-    /// </summary>
-    internal void Attach(FrameworkElement element) { _element = element; }
-
-    /// <summary>
-    /// Called by <see cref="Drop"/> when the handler is unbound from an element.
-    /// </summary>
-    internal void Detach(FrameworkElement element)
+    /// <inheritdoc/>
+    protected override void Subscribe(FrameworkElement element)
     {
-        if (_element != element)
-            return;
+        element.AllowDrop = true;
+        element.DragEnter += HandleDragEnter;
+        element.DragOver += HandleDragOver;
+        element.DragLeave += HandleDragLeave;
+        element.Drop += HandleDrop;
+    }
+
+    /// <inheritdoc/>
+    protected override void Unsubscribe(FrameworkElement element)
+    {
+        element.DragEnter -= HandleDragEnter;
+        element.DragOver -= HandleDragOver;
+        element.DragLeave -= HandleDragLeave;
+        element.Drop -= HandleDrop;
 
         ClearHover();
-        _element = null;
+        Drop.SetIsHovering(element, false);
+        element.AllowDrop = false;
     }
 
     #endregion
@@ -142,7 +146,6 @@ public abstract partial class DropHandler : ObservableObject
         e.Effects = GetEffect(context, e.AllowedEffects);
         e.Handled = true;
 
-        IsDropTarget = true;
         SetHover(GetHoverContainer(e.OriginalSource as DependencyObject));
         OnPassingOver(context with { Effect = e.Effects });
     }
@@ -189,7 +192,7 @@ public abstract partial class DropHandler : ObservableObject
             FilePaths = DragDropData.GetFilePaths(e.Data),
             TargetElement = target,
             TargetData = target?.DataContext,
-            Position = _element != null ? e.GetPosition(_element) : default,
+            Position = Element != null ? e.GetPosition(Element) : default,
             KeyStates = e.KeyStates
         };
     }
@@ -198,12 +201,20 @@ public abstract partial class DropHandler : ObservableObject
 
     #region Hover
 
+    /// <summary>
+    /// Highlights the element the handler is attached to, and the container under the cursor when
+    /// <see cref="HoverContainerType"/> asks for one.
+    /// </summary>
     private void SetHover(DependencyObject? container)
     {
+        IsDropTarget = true;
+
         if (_hoveredContainer == container)
             return;
 
-        ClearHover();
+        if (_hoveredContainer != null)
+            Drop.SetIsHovering(_hoveredContainer, false);
+
         _hoveredContainer = container;
         if (_hoveredContainer != null)
             Drop.SetIsHovering(_hoveredContainer, true);
@@ -221,30 +232,22 @@ public abstract partial class DropHandler : ObservableObject
     }
 
     /// <summary>
-    /// Walks up from the element under the cursor to the container to highlight, see
+    /// Mirrors the state of the handler on the element it is attached to, so a style can react to it.
+    /// </summary>
+    partial void OnIsDropTargetChanged(bool value)
+    {
+        if (Element != null)
+            Drop.SetIsHovering(Element, value);
+    }
+
+    /// <summary>
+    /// Walks up from the element under the cursor to the container to also highlight, see
     /// <see cref="HoverContainerType"/>.
     /// </summary>
     protected virtual DependencyObject? GetHoverContainer(DependencyObject? origin)
-    {
-        if (HoverContainerType == null)
-            return _element;
-
-        for (DependencyObject? current = origin; current != null; current = GetParent(current))
-        {
-            if (HoverContainerType.IsInstanceOfType(current))
-                return current;
-        }
-
-        return null;
-    }
-
-    private static DependencyObject? GetParent(DependencyObject element)
-    {
-        // ContentElement and FrameworkContentElement are not in the visual tree
-        return element is Visual or System.Windows.Media.Media3D.Visual3D
-            ? VisualTreeHelper.GetParent(element)
-            : LogicalTreeHelper.GetParent(element);
-    }
+        => HoverContainerType == null
+            ? null
+            : MoreVisualTreeHelper.FindSelfOrParent(origin, HoverContainerType);
 
     #endregion
 

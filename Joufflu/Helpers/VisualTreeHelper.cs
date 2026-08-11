@@ -1,10 +1,34 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace Joufflu.Helpers
 {
     public static class MoreVisualTreeHelper
     {
+        /// <summary>
+        /// Parent of <paramref name="element"/> in the visual tree, falling back to the logical one for the elements
+        /// that aren't part of it (the inline content of a text, ...).
+        /// </summary>
+        public static DependencyObject? GetParent(DependencyObject element)
+            => element is Visual or Visual3D
+                ? VisualTreeHelper.GetParent(element)
+                : LogicalTreeHelper.GetParent(element);
+
+        /// <summary>
+        /// First element of <paramref name="type"/> at or above <paramref name="origin"/>, null when there is none.
+        /// </summary>
+        public static DependencyObject? FindSelfOrParent(DependencyObject? origin, Type type)
+        {
+            for (DependencyObject? current = origin; current != null; current = GetParent(current))
+            {
+                if (type.IsInstanceOfType(current))
+                    return current;
+            }
+
+            return null;
+        }
+
         public static T? FindParent<T>(DependencyObject? child) where T : DependencyObject
         {
             if (child == null) return null;

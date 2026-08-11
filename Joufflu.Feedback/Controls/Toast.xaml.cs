@@ -1,9 +1,12 @@
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Assets.Fonts;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace Joufflu.Feedback.Controls;
 
@@ -54,16 +57,11 @@ public class ToastInstance : ObservableObject
     private readonly ToastService _service;
     private readonly DispatcherTimer? _timer;
 
-    public ToastType Type { get; }
-
-    public string Title { get; }
-
-    public string Message { get; }
-
-    public bool HasTitle => !string.IsNullOrEmpty(Title);
+    public ToastOptions Options { get; }
+    public bool HasTitle => !string.IsNullOrEmpty(Options.Title);
 
     /// <summary>Lucide glyph representing the toast type.</summary>
-    public string Icon => Type switch
+    public string Icon => Options.Type switch
     {
         ToastType.Success => LucideFontIcons.BadgeCheck,
         ToastType.Warning => LucideFontIcons.BadgeAlert,
@@ -76,15 +74,13 @@ public class ToastInstance : ObservableObject
     public ToastInstance(ToastOptions options, ToastService service)
     {
         _service = service;
-        Type = options.Type;
-        Title = options.Title;
-        Message = options.Message;
+        Options = options;
 
         CloseCommand = new RelayCommand(() => _service.Close(this));
 
-        if (options.Duration > TimeSpan.Zero)
+        if (Options.Duration > TimeSpan.Zero)
         {
-            _timer = new DispatcherTimer { Interval = options.Duration };
+            _timer = new DispatcherTimer { Interval = Options.Duration };
             _timer.Tick += OnTick;
             _timer.Start();
         }
@@ -138,5 +134,43 @@ public class ToastService : ObservableObject, IToastService
     {
         toast.StopTimer();
         Toasts.Remove(toast);
+    }
+}
+
+public static class ToastProgress
+{
+    public static readonly DependencyProperty DurationProperty =
+        DependencyProperty.RegisterAttached(
+            "Duration",
+            typeof(TimeSpan),
+            typeof(ToastProgress),
+            new PropertyMetadata(TimeSpan.Zero, OnDurationChanged));
+
+    public static void SetDuration(DependencyObject d, TimeSpan value) => d.SetValue(DurationProperty, value);
+    public static TimeSpan GetDuration(DependencyObject d) => (TimeSpan)d.GetValue(DurationProperty);
+
+    private static void OnDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is not ProgressBar bar) return;
+
+        var duration = (TimeSpan)e.NewValue;
+
+        // No auto-dismiss => no countdown animation; keep the bar full/hidden as you prefer
+        if (duration <= TimeSpan.Zero)
+        {
+            bar.BeginAnimation(ProgressBar.ValueProperty, null);
+            bar.Value = bar.Maximum;
+            return;
+        }
+
+        var animation = new DoubleAnimation
+        {
+            From = 0,
+            To = bar.Maximum,
+            Duration = new Duration(duration),
+            FillBehavior = FillBehavior.HoldEnd
+        };
+
+        bar.BeginAnimation(ProgressBar.ValueProperty, animation);
     }
 }

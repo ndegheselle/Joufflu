@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Sources;
+using Joufflu.Helpers;
 
 namespace Joufflu.FileExplorer.Controls.Base;
 
@@ -285,7 +285,7 @@ public abstract class ExplorerNodesControl : ExplorerControl
             return null;
 
         for (DependencyObject? element = source; element != null && element != ItemsHost;
-            element = GetParent(element))
+            element = MoreVisualTreeHelper.GetParent(element))
         {
             if (element is FrameworkElement { DataContext: IExplorerNode } container
                 && ItemsControl.ItemsControlFromItemContainer(element) != null)
@@ -294,11 +294,4 @@ public abstract class ExplorerNodesControl : ExplorerControl
 
         return null;
     }
-
-    /// <summary>
-    /// Parent of <paramref name="element"/> in the visual tree, falling back to the logical one for the elements
-    /// that aren't part of it (the inline content of a text, ...).
-    /// </summary>
-    private static DependencyObject? GetParent(DependencyObject element)
-        => element is Visual ? VisualTreeHelper.GetParent(element) : LogicalTreeHelper.GetParent(element);
 }

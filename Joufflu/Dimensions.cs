@@ -22,6 +22,7 @@ public static class Dimensions
     public static ComponentResourceKey ControlFontSizeSm => new(typeof(Dimensions), "ControlFontSizeSm");
     public static ComponentResourceKey ControlFontSizeMd => new(typeof(Dimensions), "ControlFontSizeMd");
     public static ComponentResourceKey ControlFontSizeLg => new(typeof(Dimensions), "ControlFontSizeLg");
+    public static ComponentResourceKey ControlFontSizeXl => new(typeof(Dimensions), "ControlFontSizeXl");
 
     public static ComponentResourceKey ControlPaddingXs => new(typeof(Dimensions), "ControlPaddingXs");
     public static ComponentResourceKey ControlPaddingSm => new(typeof(Dimensions), "ControlPaddingSm");

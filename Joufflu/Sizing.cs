@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace Joufflu;
 
-public enum ControlSize { xs, sm, md, lg }
+public enum ControlSize { xs, sm, md, lg, xl }
 
 public static class Sizing
 {

@@ -16,7 +16,7 @@ namespace Joufflu.FileExplorer.DragAndDrop;
 /// dragged, <see cref="CanDrag"/> to refuse a drag, and set <see cref="AdornerTemplate"/> to show the dragged object
 /// under the cursor.
 /// </remarks>
-public partial class DragHandler : ObservableObject
+public partial class DragHandler : DragDropHandler
 {
     #region Properties
 
@@ -44,7 +44,6 @@ public partial class DragHandler : ObservableObject
     [ObservableProperty]
     private bool isDragging;
 
-    private FrameworkElement? _element;
     private Point _clickPosition;
     private Point _position;
     private bool _hasValidClick;
@@ -55,21 +54,48 @@ public partial class DragHandler : ObservableObject
 
     #region Attachment
 
-    /// <summary>
-    /// Called by <see cref="Drag"/> when the handler is bound to an element.
-    /// </summary>
-    internal void Attach(FrameworkElement element) { _element = element; }
-
-    /// <summary>
-    /// Called by <see cref="Drag"/> when the handler is unbound from an element.
-    /// </summary>
-    internal void Detach(FrameworkElement element)
+    /// <inheritdoc/>
+    protected override void Subscribe(FrameworkElement element)
     {
-        if (_element != element)
-            return;
+        // handledEventsToo is required : the items of a selector (ListBoxItem, ListViewItem, TreeViewItem, ...) mark
+        // the mouse down as handled to select themselves, so it never reaches the element as a plain subscription
+        element.AddHandler(
+            Mouse.MouseDownEvent,
+            new MouseButtonEventHandler(HandleMouseDown),
+            handledEventsToo: true);
+        element.AddHandler(
+            Mouse.MouseMoveEvent,
+            new MouseEventHandler(HandleMouseMove),
+            handledEventsToo: true);
+        element.GiveFeedback += HandleGiveFeedback;
+        element.QueryContinueDrag += HandleQueryContinueDrag;
+
+        // The template is declared in XAML next to the element, not on the view model
+        if (Drag.GetAdornerTemplate(element) is { } template)
+            AdornerTemplate = template;
+
+        Drag.SetIsDragSource(element, IsDragging);
+    }
+
+    /// <inheritdoc/>
+    protected override void Unsubscribe(FrameworkElement element)
+    {
+        element.RemoveHandler(Mouse.MouseDownEvent, new MouseButtonEventHandler(HandleMouseDown));
+        element.RemoveHandler(Mouse.MouseMoveEvent, new MouseEventHandler(HandleMouseMove));
+        element.GiveFeedback -= HandleGiveFeedback;
+        element.QueryContinueDrag -= HandleQueryContinueDrag;
 
         HideAdorner();
-        _element = null;
+        Drag.SetIsDragSource(element, false);
+    }
+
+    /// <summary>
+    /// Mirrors the state of the handler on the dragged element, so a style can react to it.
+    /// </summary>
+    partial void OnIsDraggingChanged(bool value)
+    {
+        if (Element != null)
+            Drag.SetIsDragSource(Element, value);
     }
 
     #endregion
@@ -82,10 +108,10 @@ public partial class DragHandler : ObservableObject
     public virtual void HandleMouseDown(object sender, MouseButtonEventArgs e)
     {
         // A double click is not a drag, and nothing can be dragged before the element is laid out
-        _hasValidClick = e.LeftButton == MouseButtonState.Pressed && e.ClickCount == 1 && _element?.IsLoaded == true;
+        _hasValidClick = e.LeftButton == MouseButtonState.Pressed && e.ClickCount == 1 && Element?.IsLoaded == true;
 
         if (_hasValidClick)
-            _clickPosition = e.GetPosition(_element);
+            _clickPosition = e.GetPosition(Element);
     }
 
     /// <summary>
@@ -93,7 +119,7 @@ public partial class DragHandler : ObservableObject
     /// </summary>
     public virtual void HandleMouseMove(object sender, MouseEventArgs e)
     {
-        if (!_hasValidClick || _element == null)
+        if (!_hasValidClick || Element == null)
             return;
 
         // The button may have been released outside of the element, without a MouseUp
@@ -103,7 +129,7 @@ public partial class DragHandler : ObservableObject
             return;
         }
 
-        _position = e.GetPosition(_element);
+        _position = e.GetPosition(Element);
         if (UseMinimumDistance && !HasExceededMinimumDistance(_position))
             return;
 
@@ -197,26 +223,19 @@ public partial class DragHandler : ObservableObject
     /// </summary>
     private void MoveAdornerToCursor()
     {
-        if (_adorner == null || _element?.IsLoaded != true || PresentationSource.FromVisual(_element) == null)
+        if (_adorner == null || Element?.IsLoaded != true || PresentationSource.FromVisual(Element) == null)
             return;
 
-        if (!GetCursorPos(out NativePoint cursor))
+        if (!GetCursorPos(out System.Drawing.Point cursor))
             return;
 
-        _position = _element.PointFromScreen(new Point(cursor.X, cursor.Y));
+        _position = Element.PointFromScreen(new Point(cursor.X, cursor.Y));
         _adorner.UpdatePosition(_position);
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct NativePoint
-    {
-        public int X;
-        public int Y;
     }
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetCursorPos(out NativePoint point);
+    private static extern bool GetCursorPos(out System.Drawing.Point point);
 
     #endregion
 
@@ -226,26 +245,26 @@ public partial class DragHandler : ObservableObject
     {
         HideAdorner();
 
-        if (_element == null)
+        if (Element == null)
             return;
 
         FrameworkElement? content = CreateAdornerContent(data);
-        AdornerLayer? layer = AdornerLayer.GetAdornerLayer(_element);
+        AdornerLayer? layer = AdornerLayer.GetAdornerLayer(Element);
         // The element may not be under an AdornerDecorator, a Window template provides one but a standalone element
         // may not
         if (content == null || layer == null)
             return;
 
-        _adorner = new DragAdorner(_element, content, _position);
+        _adorner = new DragAdorner(Element, content, _position);
         layer.Add(_adorner);
     }
 
     private void HideAdorner()
     {
-        if (_adorner == null || _element == null)
+        if (_adorner == null || Element == null)
             return;
 
-        AdornerLayer.GetAdornerLayer(_element)?.Remove(_adorner);
+        AdornerLayer.GetAdornerLayer(Element)?.Remove(_adorner);
         _adorner = null;
     }
 

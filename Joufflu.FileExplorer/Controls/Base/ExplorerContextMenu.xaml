@@ -40,6 +40,14 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderOpenDot}" />
                 </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                Command="{Binding Source.CopyPathCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Copy path">
+                <MenuItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Copy}" />
+                </MenuItem.Icon>
+            </MenuItem>
             <Separator />
             <MenuItem
                 Command="{Binding Source.CopyCommand}"
@@ -106,6 +114,14 @@
                 Header="Open in explorer">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderOpenDot}" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Command="{Binding Source.CopyPathCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Copy path">
+                <MenuItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Copy}" />
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />

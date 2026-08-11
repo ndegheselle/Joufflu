@@ -1,9 +1,10 @@
-﻿using System.IO;
-using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback.Controls;
 using Joufflu.FileExplorer.Data;
+using System.IO;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Joufflu.FileExplorer.Sources
 {
@@ -16,6 +17,19 @@ namespace Joufflu.FileExplorer.Sources
         private IExplorerDirectory? root;
         [ObservableProperty]
         private IExplorerDirectory? current;
+
+        ICommand IExplorerSource.RenameCommand => RenameCommand;
+        ICommand IExplorerSource.RemoveCommand => RemoveCommand;
+        ICommand IExplorerSource.CreateDirectoryCommand => CreateDirectoryCommand;
+
+        ICommand IExplorerSource.OpenCommand => OpenCommand;
+        ICommand IExplorerSource.OpenInExplorerCommand => OpenInExplorerCommand;
+        ICommand IExplorerSource.CopyPathCommand => CopyPathCommand;
+        ICommand IExplorerSource.OpenWithDefaultCommand => OpenWithDefaultCommand;
+
+        ICommand IExplorerSource.CopyCommand => CopyCommand;
+        ICommand IExplorerSource.CutCommand => CutCommand;
+        ICommand IExplorerSource.PasteCommand => PasteCommand;
 
         public FileSystemSource(string rootDirectoryPath, IToastService? toasts)
         {
@@ -47,7 +61,7 @@ namespace Joufflu.FileExplorer.Sources
         { throw new NotImplementedException(); }
 
         [RelayCommand]
-        public void OpenWithDefaultSoftware(IExplorerFile file)
+        public void OpenWithDefault(IExplorerFile file)
         { throw new NotImplementedException(); }
 
         /// <summary>
@@ -97,7 +111,7 @@ namespace Joufflu.FileExplorer.Sources
 
         // XXX : how to know if copy or cut ?
         [RelayCommand]
-        public Task Past(IExplorerDirectory target)
+        public Task Paste(IExplorerDirectory target)
         { throw new NotImplementedException(); }
 
         #endregion
@@ -115,6 +129,13 @@ namespace Joufflu.FileExplorer.Sources
         public void Rename(IExplorerNode node)
         { throw new NotImplementedException(); }
 
+        [RelayCommand]
+        public Task Remove(IEnumerable<IExplorerNode> nodes)
+        { throw new NotImplementedException(); }
+
+        [RelayCommand]
+        public void CreateDirectory(IExplorerDirectory parent)
+        { throw new NotImplementedException(); }
         #endregion
     }
 }

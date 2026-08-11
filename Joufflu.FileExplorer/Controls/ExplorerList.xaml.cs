@@ -1,13 +1,14 @@
+using Joufflu.FileExplorer.Controls.Base;
+using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Sources;
+using Joufflu.Helpers;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Joufflu.FileExplorer.Controls.Base;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
-using Joufflu.Helpers;
 
 namespace Joufflu.FileExplorer.Controls;
 
@@ -143,23 +144,23 @@ public class ExplorerList : Control
             return;
         }
 
-        IExplorerNode? selected = ItemsHost.SelectedItem as IExplorerNode;
+        IExplorerNode? target = ItemsHost.SelectedItem as IExplorerNode;
+        IReadOnlyList<IExplorerNode> nodes = ItemsHost.SelectedItems.Cast<IExplorerNode>().ToList();
         MenuScope scope = ItemsHost.SelectedItems.Count > 1 ? MenuScope.Multiple : MenuScope.Single;
         // If outside of a row open on the current folder
         if (MoreVisualTreeHelper.FindParent<ListViewItem>(e.OriginalSource as DependencyObject) == null)
         {
-            selected = Source.Current;
+            target = Source.Current;
             scope = MenuScope.None;
         }
 
-        if (selected == null)
+        if (target == null)
         {
             e.Handled = true;
             return;
         }
 
-        var element = (FrameworkElement)sender;
-        var template = FindContextMenuTemplate(selected.GetType(), scope);
+        var template = FindContextMenuTemplate(target.GetType(), scope);
 
         if (template?.LoadContent() is not ContextMenu menu)
         {
@@ -167,6 +168,8 @@ public class ExplorerList : Control
             return;
         }
 
+        var element = (FrameworkElement)sender;
+        menu.DataContext = new ExplorerMenuContext(Source, nodes);
         element.ContextMenu = menu;
     }
     #endregion

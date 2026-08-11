@@ -56,7 +56,7 @@
             <c:CodeExample
                 Title="Receiving files from the Windows explorer"
                 Code="{Binding FileDropCode}"
-                Description="A drop handler reads the dropped paths from DropContext.FilePaths, and the border reacts to the read only Drop.IsDropTarget while a drop it accepts hovers it. Drop some files from the Windows explorer here.">
+                Description="A drop handler reads the dropped paths from DropContext.FilePaths, and the border reacts to the read only Drop.IsHovering while a drop it accepts hovers it. Drop some files from the Windows explorer here.">
                 <Border MinHeight="120" dnd:Drop.Handler="{Binding FileDropHandler}">
                     <!--  Every value the trigger changes has to come from the style, a local value would win over it  -->
                     <Border.Style>
@@ -67,7 +67,7 @@
                             <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
                             <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
                             <Style.Triggers>
-                                <Trigger Property="dnd:Drop.IsDropTarget" Value="True">
+                                <Trigger Property="dnd:Drop.IsHovering" Value="True">
                                     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
                                     <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" />
                                 </Trigger>

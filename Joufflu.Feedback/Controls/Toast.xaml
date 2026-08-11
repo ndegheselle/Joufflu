@@ -13,77 +13,79 @@
             x:Name="Card"
             MinWidth="280"
             MaxWidth="380"
-            Margin="0,0,0,8"
+            Margin="0,0,0,4"
             Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
             BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
             CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-                <Border
-                    x:Name="Accent"
-                    Grid.Column="0"
-                    Width="4"
-                    Background="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
-                    CornerRadius="8,0,0,8" />
-
-                <fonts:FontIcon
-                    x:Name="Icon"
-                    Grid.Column="1"
-                    Margin="12,0,0,0"
-                    VerticalAlignment="Center"
-                    FontSize="18"
+                <ProgressBar
+                    x:Name="Progress"
+                    Grid.ColumnSpan="4"
+                    Height="4"
+                    local:ToastProgress.Duration="{Binding Options.Duration}"
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
-                    Text="{Binding Icon}" />
+                    Maximum="100"
+                    Minimum="0" />
 
-                <StackPanel
-                    Grid.Column="2"
-                    Margin="10"
-                    VerticalAlignment="Center">
-                    <TextBlock
-                        FontWeight="Bold"
-                        Text="{Binding Title}"
-                        TextWrapping="Wrap"
-                        Visibility="{Binding HasTitle, Converter={StaticResource BoolToVis}}" />
-                    <TextBlock
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                        Text="{Binding Message}"
-                        TextWrapping="Wrap" />
-                </StackPanel>
+                <Grid
+                    Grid.Row="1"
+                    Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
+                    joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <fonts:FontIcon
+                        x:Name="Icon"
+                        VerticalAlignment="Center"
+                        joufflu:Sizing.Size="xl"
+                        Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
+                        Text="{Binding Icon}" />
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock
+                            FontWeight="Bold"
+                            Text="{Binding Options.Title}"
+                            TextWrapping="Wrap"
+                            Visibility="{Binding HasTitle, Converter={StaticResource BoolToVis}}" />
+                        <TextBlock
+                            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                            Text="{Binding Options.Message}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
 
                 <Button
-                    Grid.Column="3"
-                    Width="24"
-                    Height="24"
-                    Margin="0,4,4,0"
-                    Padding="0"
+                    Grid.Row="1"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Command="{Binding CloseCommand}">
-                    <fonts:FontIcon FontSize="14" Text="{x:Static fonts:LucideFontIcons.x}" />
+                    joufflu:Sizing.IsSquare="True"
+                    joufflu:Sizing.Size="sm"
+                    Command="{Binding CloseCommand}"
+                    Style="{StaticResource GhostButton}">
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                 </Button>
             </Grid>
         </Border>
 
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Type}" Value="Success">
-                <Setter TargetName="Accent" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
+            <DataTrigger Binding="{Binding Options.Type}" Value="Success">
                 <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
+                <Setter TargetName="Progress" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Type}" Value="Warning">
-                <Setter TargetName="Accent" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
+            <DataTrigger Binding="{Binding Options.Type}" Value="Warning">
                 <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
+                <Setter TargetName="Progress" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Type}" Value="Danger">
-                <Setter TargetName="Accent" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+            <DataTrigger Binding="{Binding Options.Type}" Value="Danger">
                 <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                <Setter TargetName="Progress" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

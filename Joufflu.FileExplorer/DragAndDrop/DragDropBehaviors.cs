@@ -1,8 +1,50 @@
-using System.ComponentModel;
 using System.Windows;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Joufflu.FileExplorer.DragAndDrop;
+
+/// <summary>
+/// Common part of <see cref="DragHandler"/> and <see cref="DropHandler"/> : the single element the handler drives,
+/// and its subscription to the events of that element.
+/// </summary>
+public abstract class DragDropHandler : ObservableObject
+{
+    /// <summary>
+    /// Element the handler is bound to, null while it is not bound.
+    /// </summary>
+    protected FrameworkElement? Element { get; private set; }
+
+    /// <summary>
+    /// Called by <see cref="Drag"/> and <see cref="Drop"/> when the handler is bound to an element.
+    /// </summary>
+    internal void Attach(FrameworkElement element)
+    {
+        Element = element;
+        Subscribe(element);
+    }
+
+    /// <summary>
+    /// Called by <see cref="Drag"/> and <see cref="Drop"/> when the handler is unbound from an element.
+    /// </summary>
+    internal void Detach(FrameworkElement element)
+    {
+        if (Element != element)
+            return;
+
+        Unsubscribe(element);
+        Element = null;
+    }
+
+    /// <summary>
+    /// Subscribes to the events the handler needs, and pushes its state on the element.
+    /// </summary>
+    protected abstract void Subscribe(FrameworkElement element);
+
+    /// <summary>
+    /// Undoes <see cref="Subscribe"/>, which is what keeps a rebind from firing the drag or the drop twice.
+    /// </summary>
+    protected abstract void Unsubscribe(FrameworkElement element);
+}
 
 /// <summary>
 /// Attaches a <see cref="DragHandler"/> to an element : <c>dnd:Drag.Handler="{Binding DragHandler}"</c>, instead of
@@ -32,50 +74,8 @@ public static class Drag
         if (d is not FrameworkElement element)
             return;
 
-        // Unsubscribing is what keeps a rebind from firing the drag twice
-        if (e.OldValue is DragHandler previous)
-        {
-            element.RemoveHandler(Mouse.MouseDownEvent, new MouseButtonEventHandler(previous.HandleMouseDown));
-            element.RemoveHandler(Mouse.MouseMoveEvent, new MouseEventHandler(previous.HandleMouseMove));
-            element.GiveFeedback -= previous.HandleGiveFeedback;
-            element.QueryContinueDrag -= previous.HandleQueryContinueDrag;
-            previous.PropertyChanged -= GetStateWatcher(element);
-            SetStateWatcher(element, null);
-            SetIsDragSource(element, false);
-            previous.Detach(element);
-        }
-
-        if (e.NewValue is not DragHandler handler)
-            return;
-
-        handler.Attach(element);
-        // The template is declared in XAML next to the element, not on the view model
-        if (GetAdornerTemplate(element) is { } template)
-            handler.AdornerTemplate = template;
-
-        // handledEventsToo is required : the items of a selector (ListBoxItem, ListViewItem, TreeViewItem, ...) mark
-        // the mouse down as handled to select themselves, so it never reaches the element as a plain subscription
-        element.AddHandler(
-            Mouse.MouseDownEvent,
-            new MouseButtonEventHandler(handler.HandleMouseDown),
-            handledEventsToo: true);
-        element.AddHandler(
-            Mouse.MouseMoveEvent,
-            new MouseEventHandler(handler.HandleMouseMove),
-            handledEventsToo: true);
-        element.GiveFeedback += handler.HandleGiveFeedback;
-        element.QueryContinueDrag += handler.HandleQueryContinueDrag;
-
-        // Mirror the state of the handler on the element, so a style can react to it
-        void OnHandlerPropertyChanged(object? sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName == nameof(DragHandler.IsDragging))
-                SetIsDragSource(element, handler.IsDragging);
-        }
-
-        SetStateWatcher(element, OnHandlerPropertyChanged);
-        handler.PropertyChanged += OnHandlerPropertyChanged;
-        SetIsDragSource(element, handler.IsDragging);
+        (e.OldValue as DragHandler)?.Detach(element);
+        (e.NewValue as DragHandler)?.Attach(element);
     }
 
     #endregion
@@ -125,27 +125,8 @@ public static class Drag
     /// <inheritdoc cref="IsDragSourceProperty"/>
     public static bool GetIsDragSource(DependencyObject obj) => (bool)obj.GetValue(IsDragSourceProperty);
 
-    private static void SetIsDragSource(DependencyObject obj, bool value) =>
+    internal static void SetIsDragSource(DependencyObject obj, bool value) =>
         obj.SetValue(IsDragSourcePropertyKey, value);
-
-    #endregion
-
-    #region State watcher
-
-    /// <summary>
-    /// Keeps the subscription to the handler, so it can be removed when the handler changes.
-    /// </summary>
-    private static readonly DependencyProperty StateWatcherProperty = DependencyProperty.RegisterAttached(
-        "StateWatcher",
-        typeof(PropertyChangedEventHandler),
-        typeof(Drag),
-        new PropertyMetadata(null));
-
-    private static PropertyChangedEventHandler? GetStateWatcher(DependencyObject obj) =>
-        (PropertyChangedEventHandler?)obj.GetValue(StateWatcherProperty);
-
-    private static void SetStateWatcher(DependencyObject obj, PropertyChangedEventHandler? value) =>
-        obj.SetValue(StateWatcherProperty, value);
 
     #endregion
 }
@@ -178,42 +159,8 @@ public static class Drop
         if (d is not FrameworkElement element)
             return;
 
-        // Unsubscribing is what keeps a rebind from applying the drop twice
-        if (e.OldValue is DropHandler previous)
-        {
-            element.DragEnter -= previous.HandleDragEnter;
-            element.DragOver -= previous.HandleDragOver;
-            element.DragLeave -= previous.HandleDragLeave;
-            element.Drop -= previous.HandleDrop;
-            previous.PropertyChanged -= GetStateWatcher(element);
-            SetStateWatcher(element, null);
-            SetIsDropTarget(element, false);
-            previous.Detach(element);
-        }
-
-        if (e.NewValue is not DropHandler handler)
-        {
-            element.AllowDrop = false;
-            return;
-        }
-
-        handler.Attach(element);
-        element.AllowDrop = true;
-        element.DragEnter += handler.HandleDragEnter;
-        element.DragOver += handler.HandleDragOver;
-        element.DragLeave += handler.HandleDragLeave;
-        element.Drop += handler.HandleDrop;
-
-        // Mirror the state of the handler on the element, so a style can react to it
-        void OnHandlerPropertyChanged(object? sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName == nameof(DropHandler.IsDropTarget))
-                SetIsDropTarget(element, handler.IsDropTarget);
-        }
-
-        SetStateWatcher(element, OnHandlerPropertyChanged);
-        handler.PropertyChanged += OnHandlerPropertyChanged;
-        SetIsDropTarget(element, handler.IsDropTarget);
+        (e.OldValue as DropHandler)?.Detach(element);
+        (e.NewValue as DropHandler)?.Attach(element);
     }
 
     #endregion
@@ -228,9 +175,10 @@ public static class Drop
             new FrameworkPropertyMetadata(false));
 
     /// <summary>
-    /// True while a drop that would be accepted hovers this container, see
-    /// <see cref="DropHandler.HoverContainerType"/>. Read only, meant to be used in a style trigger to highlight the
-    /// destination.
+    /// True while a drop the handler accepts hovers the element : set on the element the handler is attached to, and
+    /// on the container under the cursor when <see cref="DropHandler.HoverContainerType"/> asks for one. Read only,
+    /// meant to be used in a style trigger to highlight the destination, the whole list and the row under the cursor
+    /// being highlightable at the same time.
     /// </summary>
     public static readonly DependencyProperty IsHoveringProperty = IsHoveringPropertyKey.DependencyProperty;
 
@@ -239,48 +187,6 @@ public static class Drop
 
     internal static void SetIsHovering(DependencyObject obj, bool value) =>
         obj.SetValue(IsHoveringPropertyKey, value);
-
-    #endregion
-
-    #region IsDropTarget
-
-    private static readonly DependencyPropertyKey IsDropTargetPropertyKey =
-        DependencyProperty.RegisterAttachedReadOnly(
-            "IsDropTarget",
-            typeof(bool),
-            typeof(Drop),
-            new FrameworkPropertyMetadata(false));
-
-    /// <summary>
-    /// True while a drop the element accepts is hovering it. Read only, meant to be used in a style trigger to show
-    /// the element can receive the drop.
-    /// </summary>
-    public static readonly DependencyProperty IsDropTargetProperty = IsDropTargetPropertyKey.DependencyProperty;
-
-    /// <inheritdoc cref="IsDropTargetProperty"/>
-    public static bool GetIsDropTarget(DependencyObject obj) => (bool)obj.GetValue(IsDropTargetProperty);
-
-    private static void SetIsDropTarget(DependencyObject obj, bool value) =>
-        obj.SetValue(IsDropTargetPropertyKey, value);
-
-    #endregion
-
-    #region State watcher
-
-    /// <summary>
-    /// Keeps the subscription to the handler, so it can be removed when the handler changes.
-    /// </summary>
-    private static readonly DependencyProperty StateWatcherProperty = DependencyProperty.RegisterAttached(
-        "StateWatcher",
-        typeof(PropertyChangedEventHandler),
-        typeof(Drop),
-        new PropertyMetadata(null));
-
-    private static PropertyChangedEventHandler? GetStateWatcher(DependencyObject obj) =>
-        (PropertyChangedEventHandler?)obj.GetValue(StateWatcherProperty);
-
-    private static void SetStateWatcher(DependencyObject obj, PropertyChangedEventHandler? value) =>
-        obj.SetValue(StateWatcherProperty, value);
 
     #endregion
 }
