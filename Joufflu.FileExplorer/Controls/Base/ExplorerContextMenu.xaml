@@ -15,7 +15,7 @@
     <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemDirectory}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
-                Command="{Binding Loader.RenameCommand}"
+                Command="{Binding Source.RenameCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Rename"
                 InputGestureText="F2">
@@ -25,33 +25,44 @@
             </MenuItem>
             <Separator />
             <MenuItem
-                Command="{Binding Loader.OpenCommand}"
+                Command="{Binding Source.OpenCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Open">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderOpen}" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Open in explorer">
+            <MenuItem
+                Command="{Binding Source.OpenInExplorerCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Open in explorer">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderOpenDot}" />
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
-            <MenuItem Header="Copy" InputGestureText="Ctrl+C">
+            <MenuItem
+                Command="{Binding Source.CopyCommand}"
+                CommandParameter="{Binding Nodes}"
+                Header="Copy"
+                InputGestureText="Ctrl+C">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardCopy}" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Cut" InputGestureText="Ctrl+X">
+            <MenuItem
+                Command="{Binding Source.CutCommand}"
+                CommandParameter="{Binding Nodes}"
+                Header="Cut"
+                InputGestureText="Ctrl+X">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardX}" />
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
             <MenuItem
-                Command="{Binding Loader.DeleteCommand}"
-                CommandParameter="{Binding Node}"
+                Command="{Binding Source.RemoveCommand}"
+                CommandParameter="{Binding Nodes}"
                 Header="Delete"
                 InputGestureText="Suppr"
                 Style="{StaticResource DangerMenuItem}">
@@ -64,7 +75,7 @@
     <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemFile}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
-                Command="{Binding Loader.RenameCommand}"
+                Command="{Binding Source.RenameCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Rename"
                 InputGestureText="F2">
@@ -73,36 +84,53 @@
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
-            <MenuItem Header="Open">
+            <MenuItem
+                Command="{Binding Source.OpenCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Open">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FileSearch}" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Open with default software">
+            <MenuItem
+                Command="{Binding Source.OpenWithDefaultCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Open with default software">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FileScan}" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Open in explorer">
+            <MenuItem
+                Command="{Binding Source.OpenInExplorerCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Open in explorer">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderOpenDot}" />
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
-            <MenuItem Header="Copy" InputGestureText="Ctrl+C">
+            <MenuItem
+                Command="{Binding Source.CopyCommand}"
+                CommandParameter="{Binding Nodes}"
+                Header="Copy"
+                InputGestureText="Ctrl+C">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardCopy}" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Cut" InputGestureText="Ctrl+X">
+            <MenuItem
+                Command="{Binding Source.CutCommand}"
+                CommandParameter="{Binding Nodes}"
+                Header="Cut"
+                InputGestureText="Ctrl+X">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardX}" />
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
             <MenuItem
-                Command="{Binding Loader.DeleteCommand}"
-                CommandParameter="{Binding Node}"
+                Command="{Binding Source.RemoveCommand}"
+                CommandParameter="{Binding Nodes}"
                 Header="Delete"
                 InputGestureText="Suppr"
                 Style="{StaticResource DangerMenuItem}">
@@ -114,19 +142,27 @@
     </DataTemplate>
     <DataTemplate x:Key="{base:ContextMenuTemplateKey sys:Object, Scope=Multiple}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
-            <MenuItem Header="Copy" InputGestureText="Ctrl+C">
+            <MenuItem
+                Command="{Binding Source.CopyCommand}"
+                CommandParameter="{Binding Nodes}"
+                Header="Copy"
+                InputGestureText="Ctrl+C">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardCopy}" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Cut" InputGestureText="Ctrl+X">
+            <MenuItem
+                Command="{Binding Source.CutCommand}"
+                CommandParameter="{Binding Nodes}"
+                Header="Cut"
+                InputGestureText="Ctrl+X">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardX}" />
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
             <MenuItem
-                Command="{Binding Loader.DeleteCommand}"
+                Command="{Binding Source.RemoveCommand}"
                 CommandParameter="{Binding Nodes}"
                 Header="Delete"
                 InputGestureText="Suppr"
@@ -139,13 +175,17 @@
     </DataTemplate>
     <DataTemplate x:Key="{base:ContextMenuTemplateKey sys:Object, Scope=None}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
-            <MenuItem Header="New folder">
+            <MenuItem
+                Command="{Binding Source.CreateDirectoryCommand}"
+                CommandParameter="{Binding Node}"
+                Header="New directory">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderPlus}" />
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem
-                CommandParameter="{Binding Nodes}"
+                Command="{Binding Source.PasteCommand}"
+                CommandParameter="{Binding Node}"
                 Header="Past"
                 InputGestureText="Ctrl+V">
                 <MenuItem.Icon>
