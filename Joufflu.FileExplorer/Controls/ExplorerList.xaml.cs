@@ -144,9 +144,13 @@ public class ExplorerList : Control
         }
 
         IExplorerNode? selected = ItemsHost.SelectedItem as IExplorerNode;
+        MenuScope scope = ItemsHost.SelectedItems.Count > 1 ? MenuScope.Multiple : MenuScope.Single;
         // If outside of a row open on the current folder
         if (MoreVisualTreeHelper.FindParent<ListViewItem>(e.OriginalSource as DependencyObject) == null)
+        {
             selected = Source.Current;
+            scope = MenuScope.None;
+        }
 
         if (selected == null)
         {
@@ -155,9 +159,7 @@ public class ExplorerList : Control
         }
 
         var element = (FrameworkElement)sender;
-        var template = FindContextMenuTemplate(
-            selected.GetType(),
-            ItemsHost.SelectedItems.Count > 1 ? MenuScope.Multiple : MenuScope.Single);
+        var template = FindContextMenuTemplate(selected.GetType(), scope);
 
         if (template?.LoadContent() is not ContextMenu menu)
         {
