@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Joufflu.Samples.Views.Controls.DataDisplay;
+namespace Joufflu.Samples.Views.Feedback;
 
 public class BadgeSamplesViewModel : ObservableObject
 {

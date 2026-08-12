@@ -31,7 +31,8 @@
                     local:ToastProgress.Duration="{Binding Options.Duration}"
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
                     Maximum="100"
-                    Minimum="0" />
+                    Minimum="0"
+                    Value="100" />
 
                 <Grid
                     Grid.Row="1"

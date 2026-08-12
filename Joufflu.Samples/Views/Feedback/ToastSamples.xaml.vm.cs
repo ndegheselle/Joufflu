@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback.Controls;
 
-namespace Joufflu.Samples.Views.Controls.Feedback;
+namespace Joufflu.Samples.Views.Feedback;
 
 public class ToastSamplesViewModel : ObservableObject
 {

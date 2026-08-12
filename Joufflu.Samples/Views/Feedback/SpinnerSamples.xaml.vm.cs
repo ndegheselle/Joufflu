@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Joufflu.Samples.Views.Controls.Feedback;
+namespace Joufflu.Samples.Views.Feedback;
 
 public class SpinnerSamplesViewModel : ObservableObject
 {

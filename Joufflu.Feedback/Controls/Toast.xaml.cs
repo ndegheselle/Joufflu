@@ -155,7 +155,6 @@ public static class ToastProgress
 
         var duration = (TimeSpan)e.NewValue;
 
-        // No auto-dismiss => no countdown animation; keep the bar full/hidden as you prefer
         if (duration <= TimeSpan.Zero)
         {
             bar.BeginAnimation(ProgressBar.ValueProperty, null);

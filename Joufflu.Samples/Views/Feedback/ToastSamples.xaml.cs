@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace Joufflu.Samples.Views.Controls.Feedback;
+namespace Joufflu.Samples.Views.Feedback;
 
 public partial class ToastSamples : UserControl
 {
