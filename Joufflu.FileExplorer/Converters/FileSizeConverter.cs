@@ -1,7 +1,8 @@
+using Joufflu.FileExplorer.Data;
 using System.Globalization;
 using System.IO;
+using System.Windows;
 using System.Windows.Data;
-using Joufflu.FileExplorer.Data;
 
 namespace Joufflu.FileExplorer.Converters
 {
@@ -16,18 +17,11 @@ namespace Joufflu.FileExplorer.Converters
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            FileInfo? info = value switch
-            {
-                FileInfo fileInfo => fileInfo,
-                FileSystemFile file => new FileInfo(file.Path),
-                string path => new FileInfo(path),
-                _ => null
-            };
+            long? size = value as long?;
+            if (size == null)
+                return DependencyProperty.UnsetValue;
 
-            if (info == null || !info.Exists)
-                return null;
-
-            return Format(info.Length);
+            return Format((long)size);
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

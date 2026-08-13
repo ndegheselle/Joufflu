@@ -5,10 +5,8 @@ using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Helpers;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using VbIO = Microsoft.VisualBasic.FileIO;
 
 namespace Joufflu.FileExplorer.Sources
 {
@@ -16,9 +14,10 @@ namespace Joufflu.FileExplorer.Sources
     /// The files and the directories under a directory of this machine.
     /// </summary>
     /// <remarks>
-    /// Copying, moving and deleting are handed over to the shell (through
-    /// <see cref="Microsoft.VisualBasic.FileIO.FileSystem"/>), so they come with the progress window, the "replace or
-    /// skip" prompt and the recycle bin of the Windows explorer rather than with an implementation of our own.
+    /// Copying, moving and deleting are handed over to the shell (through <see cref="ShellFileOperation"/>), so they
+    /// come with the progress window, the "replace or skip" prompt and the recycle bin of the Windows explorer rather
+    /// than with an implementation of our own. A whole selection is handed over in one call, which is what keeps the
+    /// windows of the shell to one for the batch.
     /// </remarks>
     public partial class FileSystemSource : ObservableObject, IExplorerSource
     {
@@ -185,58 +184,36 @@ namespace Joufflu.FileExplorer.Sources
         public async Task Transfer(IReadOnlyList<string> paths, IExplorerDirectory target, bool isMove)
         {
             string targetPath = target.Path;
-            List<string> sources = [.. paths.Where(path => CanTransfer(path, targetPath))];
+            List<string> sources = [];
+            List<string> destinations = [];
+
+            foreach (string source in paths.Where(path => CanTransfer(path, targetPath)))
+            {
+                string name = Path.GetFileName(Path.TrimEndingDirectorySeparator(source));
+                string destination = Path.Combine(targetPath, name);
+
+                if (PathsEqual(source, destination))
+                {
+                    // Cut and pasted where it already is : nothing to do, where the shell would report that the
+                    // source and the destination are the same.
+                    if (isMove)
+                        continue;
+
+                    // Pasted next to itself : the shell refuses to copy a node onto itself, so the copy is named
+                    // "File - Copy.ext" the way Windows does.
+                    destination = Path.Combine(targetPath, GetCopyName(targetPath, name, destinations));
+                }
+
+                sources.Add(source);
+                destinations.Add(destination);
+            }
+
             if (sources.Count == 0)
                 return;
 
             try
             {
-                foreach (string source in sources)
-                {
-                    bool isDirectory = Directory.Exists(source);
-                    string name = Path.GetFileName(Path.TrimEndingDirectorySeparator(source));
-                    string destination = Path.Combine(targetPath, name);
-
-                    if (isMove)
-                    {
-                        // Cut and pasted where it already is : nothing to do, where the shell would report
-                        // that the source and the destination are the same.
-                        if (PathsEqual(source, destination))
-                            continue;
-
-                        if (isDirectory)
-                            VbIO.FileSystem.MoveDirectory(
-                                source,
-                                destination,
-                                VbIO.UIOption.AllDialogs,
-                                VbIO.UICancelOption.DoNothing);
-                        else
-                            VbIO.FileSystem.MoveFile(
-                                source,
-                                destination,
-                                VbIO.UIOption.AllDialogs,
-                                VbIO.UICancelOption.DoNothing);
-                        continue;
-                    }
-
-                    // Pasted next to itself : the shell refuses to copy a node onto itself, so the copy is
-                    // named "File - Copy.ext" the way Windows does.
-                    if (PathsEqual(source, destination))
-                        destination = Path.Combine(targetPath, GetCopyName(targetPath, name));
-
-                    if (isDirectory)
-                        VbIO.FileSystem.CopyDirectory(
-                            source,
-                            destination,
-                            VbIO.UIOption.AllDialogs,
-                            VbIO.UICancelOption.DoNothing);
-                    else
-                        VbIO.FileSystem.CopyFile(
-                            source,
-                            destination,
-                            VbIO.UIOption.AllDialogs,
-                            VbIO.UICancelOption.DoNothing);
-                }
+                ShellFileOperation.Transfer(sources, destinations, isMove);
             }
             catch (Exception exception)
             {
@@ -295,25 +272,7 @@ namespace Joufflu.FileExplorer.Sources
         [RelayCommand]
         public void Rename(IExplorerNode node)
         {
-            string? newName = NameRequested?.Invoke(node);
-            if (string.IsNullOrWhiteSpace(newName) || newName == node.Name)
-                return;
-
-            try
-            {
-                // A name and not a path : both refuse to move the node while renaming it.
-                if (node is IExplorerDirectory)
-                    VbIO.FileSystem.RenameDirectory(node.Path, newName);
-                else
-                    VbIO.FileSystem.RenameFile(node.Path, newName);
-            }
-            catch (Exception exception)
-            {
-                toasts?.Error(exception.Message);
-                return;
-            }
-
-            Refresh([node.Parent]);
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -329,21 +288,7 @@ namespace Joufflu.FileExplorer.Sources
 
             try
             {
-                foreach (IExplorerNode node in removed)
-                {
-                    if (node is IExplorerDirectory)
-                        VbIO.FileSystem.DeleteDirectory(
-                            node.Path,
-                            VbIO.UIOption.AllDialogs,
-                            VbIO.RecycleOption.SendToRecycleBin,
-                            VbIO.UICancelOption.DoNothing);
-                    else
-                        VbIO.FileSystem.DeleteFile(
-                            node.Path,
-                            VbIO.UIOption.AllDialogs,
-                            VbIO.RecycleOption.SendToRecycleBin,
-                            VbIO.UICancelOption.DoNothing);
-                }
+                ShellFileOperation.Delete([.. removed.Select(node => node.Path)]);
             }
             catch (Exception exception)
             {
@@ -434,7 +379,11 @@ namespace Joufflu.FileExplorer.Sources
         /// "File - Copy.ext", then "File - Copy (2).ext" while the name is taken, the way Windows names a copy made
         /// next to its source.
         /// </summary>
-        private static string GetCopyName(string directoryPath, string name)
+        /// <param name="taken">
+        /// Destinations of the same batch, none of which exists yet : the whole batch is named before the shell
+        /// creates any of it, so a name already given to another copy has to be skipped as well.
+        /// </param>
+        private static string GetCopyName(string directoryPath, string name, IReadOnlyList<string> taken)
         {
             string bareName = Path.GetFileNameWithoutExtension(name);
             string extension = Path.GetExtension(name);
@@ -443,7 +392,8 @@ namespace Joufflu.FileExplorer.Sources
             {
                 string number = index > 1 ? $" ({index})" : "";
                 string candidate = $"{bareName} - Copy{number}{extension}";
-                if (!Exists(Path.Combine(directoryPath, candidate)))
+                string candidatePath = Path.Combine(directoryPath, candidate);
+                if (!Exists(candidatePath) && !taken.Any(other => PathsEqual(other, candidatePath)))
                     return candidate;
             }
 

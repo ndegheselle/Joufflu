@@ -26,7 +26,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn DisplayMemberBinding="{Binding ModifiedAt, StringFormat={}{0:yy/MM/dd HH:mm}}" Header="Modified at" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Converter={x:Static converters:FileSizeConverter.Default}}" Header="Size" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Size, Converter={x:Static converters:FileSizeConverter.Default}}" Header="Size" />
                             </GridView>
                         </ListView.View>
                     </ListView>

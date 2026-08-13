@@ -336,7 +336,9 @@ public class ThemeCustomizerViewModel : ObservableObject
             Dim("Extra small", "ControlFontSizeXs", 8, 20),
             Dim("Small", "ControlFontSizeSm", 9, 22),
             Dim("Medium", "ControlFontSizeMd", 10, 24),
-            Dim("Large", "ControlFontSizeLg", 11, 28)));
+            Dim("Large", "ControlFontSizeLg", 11, 28),
+            Dim("Extra large", "ControlFontSizeXl", 16,48)));
+        
     }
 
     private void BuildPaddingGroups()
@@ -577,6 +579,7 @@ public class ThemeCustomizerViewModel : ObservableObject
         "ControlFontSizeSm" => JDimensions.ControlFontSizeSm,
         "ControlFontSizeMd" => JDimensions.ControlFontSizeMd,
         "ControlFontSizeLg" => JDimensions.ControlFontSizeLg,
+        "ControlFontSizeXl" => JDimensions.ControlFontSizeXl,
         _ => throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown dimension"),
     };
 

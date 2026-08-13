@@ -27,7 +27,9 @@ namespace Joufflu.FileExplorer.Data
     }
 
     public interface IExplorerFile : IExplorerNode
-    { }
+    {
+        public long Size { get; }
+    }
 
     public class FileSystemFile : IExplorerFile
     {
@@ -35,12 +37,14 @@ namespace Joufflu.FileExplorer.Data
         public string Name { get; set; }
         public DateTime ModifiedAt { get; set; }
         public IExplorerDirectory? Parent { get; }
+        public long Size { get; set; }
 
         public FileSystemFile(FileInfo fi, IExplorerDirectory? parent)
         {
             Path = fi.FullName;
             Name = fi.Name;
             ModifiedAt = fi.LastWriteTime;
+            Size = fi.Length;
             Parent = parent;
         }
     }
