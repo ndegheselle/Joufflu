@@ -3,7 +3,6 @@ using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Sources;
 using Joufflu.Helpers;
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -132,6 +131,7 @@ public class ExplorerList : Control
         if (selected == null)
             return;
 
+        Source.Open(selected);
         e.Handled = true;
     }
 

@@ -32,9 +32,7 @@ namespace Joufflu.FileExplorer.Helpers
             if (paths.Count == 0)
                 return false;
 
-            StringCollection files = new StringCollection();
-            foreach (string path in paths)
-                files.Add(path);
+            StringCollection files = [.. paths];
 
             DataObject data = new DataObject();
             data.SetFileDropList(files);

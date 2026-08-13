@@ -85,16 +85,14 @@ namespace Joufflu.FileExplorer.Sources
         [RelayCommand]
         public void OpenInExplorer(IExplorerNode node)
         {
-            // "/select," so that a directory is shown inside its parent instead of being opened, the way the "Show in
-            // folder" of Windows does. The path is quoted because it may hold spaces.
+            // "/select," so that a directory is shown inside its parent instead of being opened.
             StartProcess(new ProcessStartInfo("explorer.exe", $"/select,\"{node.Path}\"") { UseShellExecute = true });
         }
 
         [RelayCommand]
         public void OpenWithDefault(IExplorerFile file)
         {
-            // UseShellExecute is what resolves the application associated with the file, without it only an
-            // executable would run.
+            // UseShellExecute resolves the application associated with the file
             StartProcess(new ProcessStartInfo(file.Path) { UseShellExecute = true });
         }
 
@@ -134,10 +132,13 @@ namespace Joufflu.FileExplorer.Sources
         }
 
         /// <summary>
-        /// Open a file (for exemple a preview). Current implementation is empty.
+        /// Open the file with the default programm.
         /// </summary>
         protected virtual Task OpenFile(IExplorerFile file)
-        { return Task.CompletedTask; }
+        {
+            OpenWithDefault(file);
+            return Task.CompletedTask;
+        }
 
         #endregion
 
@@ -157,21 +158,20 @@ namespace Joufflu.FileExplorer.Sources
         /// <see cref="ExplorerClipboard"/> : the file explorer of Windows writes it there as well, so a cut made in
         /// one is pasted as a move in the other.
         /// </remarks>
-        [RelayCommand]
-        public async Task Paste(IExplorerDirectory? target)
+        [RelayCommand(CanExecute = nameof(CanPaste))]
+        public async Task Paste(IExplorerDirectory target)
         {
-            target ??= Current;
-            if (target == null)
-                return;
-
             IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out bool isMove);
             if (paths.Count == 0)
-            {
-                toasts?.Warning("The clipboard holds no file to paste.");
                 return;
-            }
 
             await Transfer(paths, target, isMove);
+        }
+
+        public bool CanPaste(IExplorerDirectory target)
+        {
+            IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out bool isMove);
+            return paths.Count > 0;
         }
 
         /// <summary>
@@ -191,56 +191,52 @@ namespace Joufflu.FileExplorer.Sources
 
             try
             {
-                await RunWithDialogs(
-                    () =>
+                foreach (string source in sources)
+                {
+                    bool isDirectory = Directory.Exists(source);
+                    string name = Path.GetFileName(Path.TrimEndingDirectorySeparator(source));
+                    string destination = Path.Combine(targetPath, name);
+
+                    if (isMove)
                     {
-                        foreach (string source in sources)
-                        {
-                            bool isDirectory = Directory.Exists(source);
-                            string name = Path.GetFileName(Path.TrimEndingDirectorySeparator(source));
-                            string destination = Path.Combine(targetPath, name);
+                        // Cut and pasted where it already is : nothing to do, where the shell would report
+                        // that the source and the destination are the same.
+                        if (PathsEqual(source, destination))
+                            continue;
 
-                            if (isMove)
-                            {
-                                // Cut and pasted where it already is : nothing to do, where the shell would report
-                                // that the source and the destination are the same.
-                                if (PathsEqual(source, destination))
-                                    continue;
+                        if (isDirectory)
+                            VbIO.FileSystem.MoveDirectory(
+                                source,
+                                destination,
+                                VbIO.UIOption.AllDialogs,
+                                VbIO.UICancelOption.DoNothing);
+                        else
+                            VbIO.FileSystem.MoveFile(
+                                source,
+                                destination,
+                                VbIO.UIOption.AllDialogs,
+                                VbIO.UICancelOption.DoNothing);
+                        continue;
+                    }
 
-                                if (isDirectory)
-                                    VbIO.FileSystem.MoveDirectory(
-                                        source,
-                                        destination,
-                                        VbIO.UIOption.AllDialogs,
-                                        VbIO.UICancelOption.DoNothing);
-                                else
-                                    VbIO.FileSystem.MoveFile(
-                                        source,
-                                        destination,
-                                        VbIO.UIOption.AllDialogs,
-                                        VbIO.UICancelOption.DoNothing);
-                                continue;
-                            }
+                    // Pasted next to itself : the shell refuses to copy a node onto itself, so the copy is
+                    // named "File - Copy.ext" the way Windows does.
+                    if (PathsEqual(source, destination))
+                        destination = Path.Combine(targetPath, GetCopyName(targetPath, name));
 
-                            // Pasted next to itself : the shell refuses to copy a node onto itself, so the copy is
-                            // named "File - Copy.ext" the way Windows does.
-                            if (PathsEqual(source, destination))
-                                destination = Path.Combine(targetPath, GetCopyName(targetPath, name));
-
-                            if (isDirectory)
-                                VbIO.FileSystem.CopyDirectory(
-                                    source,
-                                    destination,
-                                    VbIO.UIOption.AllDialogs,
-                                    VbIO.UICancelOption.DoNothing);
-                            else
-                                VbIO.FileSystem.CopyFile(
-                                    source,
-                                    destination,
-                                    VbIO.UIOption.AllDialogs,
-                                    VbIO.UICancelOption.DoNothing);
-                        }
-                    });
+                    if (isDirectory)
+                        VbIO.FileSystem.CopyDirectory(
+                            source,
+                            destination,
+                            VbIO.UIOption.AllDialogs,
+                            VbIO.UICancelOption.DoNothing);
+                    else
+                        VbIO.FileSystem.CopyFile(
+                            source,
+                            destination,
+                            VbIO.UIOption.AllDialogs,
+                            VbIO.UICancelOption.DoNothing);
+                }
             }
             catch (Exception exception)
             {
@@ -333,25 +329,21 @@ namespace Joufflu.FileExplorer.Sources
 
             try
             {
-                await RunWithDialogs(
-                    () =>
-                    {
-                        foreach (IExplorerNode node in removed)
-                        {
-                            if (node is IExplorerDirectory)
-                                VbIO.FileSystem.DeleteDirectory(
-                                    node.Path,
-                                    VbIO.UIOption.AllDialogs,
-                                    VbIO.RecycleOption.SendToRecycleBin,
-                                    VbIO.UICancelOption.DoNothing);
-                            else
-                                VbIO.FileSystem.DeleteFile(
-                                    node.Path,
-                                    VbIO.UIOption.AllDialogs,
-                                    VbIO.RecycleOption.SendToRecycleBin,
-                                    VbIO.UICancelOption.DoNothing);
-                        }
-                    });
+                foreach (IExplorerNode node in removed)
+                {
+                    if (node is IExplorerDirectory)
+                        VbIO.FileSystem.DeleteDirectory(
+                            node.Path,
+                            VbIO.UIOption.AllDialogs,
+                            VbIO.RecycleOption.SendToRecycleBin,
+                            VbIO.UICancelOption.DoNothing);
+                    else
+                        VbIO.FileSystem.DeleteFile(
+                            node.Path,
+                            VbIO.UIOption.AllDialogs,
+                            VbIO.RecycleOption.SendToRecycleBin,
+                            VbIO.UICancelOption.DoNothing);
+                }
             }
             catch (Exception exception)
             {
@@ -436,35 +428,6 @@ namespace Joufflu.FileExplorer.Sources
             {
                 toasts?.Error(exception.Message);
             }
-        }
-
-        /// <summary>
-        /// Run a shell operation on a thread of its own : its dialogs need an STA apartment, and the UI thread has to
-        /// stay free while a long copy is running.
-        /// </summary>
-        private static Task RunWithDialogs(Action operation)
-        {
-            TaskCompletionSource completion = new TaskCompletionSource();
-
-            Thread thread = new Thread(
-                () =>
-                {
-                    try
-                    {
-                        operation();
-                        completion.SetResult();
-                    }
-                    catch (Exception exception)
-                    {
-                        completion.SetException(exception);
-                    }
-                })
-            { IsBackground = true };
-
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-
-            return completion.Task;
         }
 
         /// <summary>

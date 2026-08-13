@@ -59,6 +59,15 @@
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                Command="{Binding Source.PasteCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Past"
+                InputGestureText="Ctrl+V">
+                <MenuItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardPaste}" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
                 Command="{Binding Source.CutCommand}"
                 CommandParameter="{Binding Nodes}"
                 Header="Cut"
