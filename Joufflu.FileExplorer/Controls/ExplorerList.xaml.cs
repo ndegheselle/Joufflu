@@ -127,6 +127,10 @@ public class ExplorerList : Control
     #region UI events
     private void ExplorerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
+        // A double click inside the name being renamed selects a word, it doesn't open the node.
+        if (IsInRenameBox(e.OriginalSource))
+            return;
+
         var selected = ItemsHost?.SelectedItem as IExplorerNode;
         if (selected == null)
             return;
@@ -134,6 +138,9 @@ public class ExplorerList : Control
         Source.Open(selected);
         e.Handled = true;
     }
+
+    private static bool IsInRenameBox(object source)
+        => MoreVisualTreeHelper.FindSelfOrParent(source as DependencyObject, typeof(TextBox)) != null;
 
     private void ExplorerList_ContextMenuOpening(object sender, ContextMenuEventArgs e)
     {
@@ -169,7 +176,7 @@ public class ExplorerList : Control
         }
 
         var element = (FrameworkElement)sender;
-        menu.DataContext = new ExplorerMenuContext(Source, nodes);
+        menu.DataContext = new ExplorerMenuContext(Source, scope == MenuScope.None ? [target]: nodes);
         element.ContextMenu = menu;
     }
     #endregion

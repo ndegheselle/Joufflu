@@ -209,6 +209,14 @@
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                Command="{Binding Source.OpenInExplorerCommand}"
+                CommandParameter="{Binding Node}"
+                Header="Open in explorer">
+                <MenuItem.Icon>
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderOpenDot}" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
                 Command="{Binding Source.PasteCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Past"

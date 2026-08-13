@@ -1,12 +1,28 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base"
     xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters"
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/Base/ExplorerNode.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <!--
+        Name of the node being renamed, displayed in its cell in place of its visual. Validating runs the rename of the
+        source, which ends it, so the cell goes back to the visual of the node on its own.
+    -->
+    <DataTemplate x:Key="ExplorerRenameTemplate">
+        <TextBox
+            base:ExplorerRename.Command="{Binding Source.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerList}}}"
+            MinWidth="80"
+            Padding="2,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="{Binding Name, Mode=OneWay}" />
+        <!--  OneWay : the name is only written back once the rename is validated, and by the source.  -->
+    </DataTemplate>
 
     <Style TargetType="{x:Type local:ExplorerList}">
         <Setter Property="Template">
@@ -21,7 +37,23 @@
                                 <GridViewColumn Header="Name">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <ContentPresenter Content="{Binding}" />
+                                            <!--
+                                                No ContentTemplate : the implicit template of the node type is
+                                                resolved, the trigger replacing it with the editable name while the
+                                                node is the one being renamed.
+                                            -->
+                                            <ContentPresenter x:Name="Presenter" Content="{Binding}" />
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Value="True">
+                                                    <DataTrigger.Binding>
+                                                        <MultiBinding Converter="{x:Static converters:IsRenamedConverter.Default}">
+                                                            <Binding />
+                                                            <Binding Path="Source.RenamedNode" RelativeSource="{RelativeSource AncestorType={x:Type local:ExplorerList}}" />
+                                                        </MultiBinding>
+                                                    </DataTrigger.Binding>
+                                                    <Setter TargetName="Presenter" Property="ContentTemplate" Value="{StaticResource ExplorerRenameTemplate}" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

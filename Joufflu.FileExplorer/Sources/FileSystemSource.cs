@@ -27,6 +27,9 @@ namespace Joufflu.FileExplorer.Sources
         /// </summary>
         private const int LoadDepth = 2;
 
+        /// <summary>Characters a name is refused for, as the Windows explorer lists them.</summary>
+        private const string InvalidNameCharacters = @"\ / : * ? "" < > |";
+
         private readonly string rootDirectoryPath;
         private readonly IToastService? toasts;
 
@@ -36,12 +39,13 @@ namespace Joufflu.FileExplorer.Sources
         private IExplorerDirectory? current;
 
         /// <summary>
-        /// Asked for the new name of a node when it is renamed, the source having no UI of its own : a consumer sets
-        /// it to its own prompt (an overlay, an inline edition in the list, ...). Returning null, an empty name or
-        /// the current one cancels the rename, which is also what happens while nothing is set.
+        /// Node being renamed, the source having no UI of its own : a control displaying it turns its name into an
+        /// editable one and gives the typed name back through <see cref="RenameCommand"/>.
         /// </summary>
-        public Func<IExplorerNode, string?>? NameRequested { get; set; }
+        [ObservableProperty]
+        private IExplorerNode? renamedNode;
 
+        ICommand IExplorerSource.RenamingCommand => RenamingCommand;
         ICommand IExplorerSource.RenameCommand => RenameCommand;
         ICommand IExplorerSource.RemoveCommand => RemoveCommand;
         ICommand IExplorerSource.CreateDirectoryCommand => CreateDirectoryCommand;
@@ -62,6 +66,10 @@ namespace Joufflu.FileExplorer.Sources
         }
 
         #region Open
+
+        /// <summary>Navigating away gives up the rename in progress, its node not being displayed anymore.</summary>
+        partial void OnCurrentChanged(IExplorerDirectory? value) => RenamedNode = null;
+
         public Task Open()
         {
             Root = new FileSystemDirectory(new DirectoryInfo(rootDirectoryPath), null);
@@ -267,12 +275,48 @@ namespace Joufflu.FileExplorer.Sources
         }
 
         /// <summary>
-        /// Rename a node, with the name given by <see cref="NameRequested"/>.
+        /// Start the rename of a node : the controls displaying it turn its name into an editable one, until
+        /// <see cref="Rename"/> ends it. Null gives up the rename in progress.
         /// </summary>
         [RelayCommand]
-        public void Rename(IExplorerNode node)
+        public void Renaming(IExplorerNode? node) => RenamedNode = node;
+
+        /// <summary>
+        /// End the rename in progress, giving <see cref="RenamedNode"/> the name that has been typed. A null, an empty
+        /// or an unchanged name only gives it up.
+        /// </summary>
+        [RelayCommand]
+        public void Rename(string? name)
         {
-            throw new NotImplementedException();
+            IExplorerNode? node = RenamedNode;
+            RenamedNode = null;
+
+            name = name?.Trim();
+            if (node == null || string.IsNullOrEmpty(name) || name == node.Name)
+                return;
+
+            // Checked here, where the shell only reports a refusal as a code of its own.
+            if (name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                toasts?.Error($"A name cannot contain any of the following characters : {InvalidNameCharacters}");
+                return;
+            }
+
+            try
+            {
+                // Moved onto its new path, the rename going through the shell as the other operations do : a name
+                // already taken displays the same prompt as in the Windows explorer.
+                ShellFileOperation.Transfer(
+                    [node.Path],
+                    [Path.Combine(Path.GetDirectoryName(node.Path) ?? "", name)],
+                    isMove: true);
+            }
+            catch (Exception exception)
+            {
+                toasts?.Error(exception.Message);
+            }
+
+            Refresh([node.Parent]);
         }
 
         /// <summary>
