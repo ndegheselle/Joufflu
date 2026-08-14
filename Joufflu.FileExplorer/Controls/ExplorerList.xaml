@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base"
     xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
 
     <ResourceDictionary.MergedDictionaries>
@@ -15,11 +16,11 @@
     -->
     <DataTemplate x:Key="ExplorerRenameTemplate">
         <TextBox
-            base:ExplorerRename.Command="{Binding Source.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerList}}}"
             MinWidth="80"
-            Padding="2,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
+            base:ExplorerRename.Command="{Binding Source.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerList}}}"
+            joufflu:Sizing.Size="xs"
             Text="{Binding Name, Mode=OneWay}" />
         <!--  OneWay : the name is only written back once the rename is validated, and by the source.  -->
     </DataTemplate>
@@ -30,8 +31,14 @@
                 <ControlTemplate TargetType="{x:Type local:ExplorerList}">
                     <ListView
                         x:Name="PART_ItemsHost"
+                        Padding="0"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                         ItemsSource="{Binding View}">
+                        <ListView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="{x:Type ListViewItem}">
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Name">
@@ -48,7 +55,7 @@
                                                     <DataTrigger.Binding>
                                                         <MultiBinding Converter="{x:Static converters:IsRenamedConverter.Default}">
                                                             <Binding />
-                                                            <Binding Path="Source.RenamedNode" RelativeSource="{RelativeSource AncestorType={x:Type local:ExplorerList}}" />
+                                                            <Binding Path="RenamedNode" RelativeSource="{RelativeSource AncestorType={x:Type local:ExplorerList}}" />
                                                         </MultiBinding>
                                                     </DataTrigger.Binding>
                                                     <Setter TargetName="Presenter" Property="ContentTemplate" Value="{StaticResource ExplorerRenameTemplate}" />

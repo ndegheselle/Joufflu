@@ -15,7 +15,7 @@
     <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemDirectory}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
-                Command="{Binding Source.RenamingCommand}"
+                Command="{Binding Ui.RenamingCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Rename"
                 InputGestureText="F2">
@@ -92,7 +92,7 @@
     <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemFile}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
-                Command="{Binding Source.RenamingCommand}"
+                Command="{Binding Ui.RenamingCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Rename"
                 InputGestureText="F2">

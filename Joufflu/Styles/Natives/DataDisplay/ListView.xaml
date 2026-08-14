@@ -37,7 +37,7 @@
 
                         <DockPanel Margin="{TemplateBinding Padding}">
                             <!--  Header row background band (top corners rounded to match the ListView border)  -->
-                            <Border DockPanel.Dock="Top" Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}">
+                            <Border Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" DockPanel.Dock="Top">
                                 <Border.CornerRadius>
                                     <CornerRadius
                                         BottomLeft="0"
@@ -151,6 +151,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.ControlPaddingMd}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">

@@ -38,14 +38,6 @@ namespace Joufflu.FileExplorer.Sources
         [ObservableProperty]
         private IExplorerDirectory? current;
 
-        /// <summary>
-        /// Node being renamed, the source having no UI of its own : a control displaying it turns its name into an
-        /// editable one and gives the typed name back through <see cref="RenameCommand"/>.
-        /// </summary>
-        [ObservableProperty]
-        private IExplorerNode? renamedNode;
-
-        ICommand IExplorerSource.RenamingCommand => RenamingCommand;
         ICommand IExplorerSource.RenameCommand => RenameCommand;
         ICommand IExplorerSource.RemoveCommand => RemoveCommand;
         ICommand IExplorerSource.CreateDirectoryCommand => CreateDirectoryCommand;
@@ -66,9 +58,6 @@ namespace Joufflu.FileExplorer.Sources
         }
 
         #region Open
-
-        /// <summary>Navigating away gives up the rename in progress, its node not being displayed anymore.</summary>
-        partial void OnCurrentChanged(IExplorerDirectory? value) => RenamedNode = null;
 
         public Task Open()
         {
@@ -274,25 +263,11 @@ namespace Joufflu.FileExplorer.Sources
             toasts?.Info("Path copied to clipboard.");
         }
 
-        /// <summary>
-        /// Start the rename of a node : the controls displaying it turn its name into an editable one, until
-        /// <see cref="Rename"/> ends it. Null gives up the rename in progress.
-        /// </summary>
         [RelayCommand]
-        public void Renaming(IExplorerNode? node) => RenamedNode = node;
-
-        /// <summary>
-        /// End the rename in progress, giving <see cref="RenamedNode"/> the name that has been typed. A null, an empty
-        /// or an unchanged name only gives it up.
-        /// </summary>
-        [RelayCommand]
-        public void Rename(string? name)
+        public void Rename(ExplorerNodeRename rename)
         {
-            IExplorerNode? node = RenamedNode;
-            RenamedNode = null;
-
-            name = name?.Trim();
-            if (node == null || string.IsNullOrEmpty(name) || name == node.Name)
+            string name = rename.Name.Trim();
+            if (string.IsNullOrEmpty(name) || name == rename.Node.Name)
                 return;
 
             // Checked here, where the shell only reports a refusal as a code of its own.
@@ -307,8 +282,8 @@ namespace Joufflu.FileExplorer.Sources
                 // Moved onto its new path, the rename going through the shell as the other operations do : a name
                 // already taken displays the same prompt as in the Windows explorer.
                 ShellFileOperation.Transfer(
-                    [node.Path],
-                    [Path.Combine(Path.GetDirectoryName(node.Path) ?? "", name)],
+                    [rename.Node.Path],
+                    [Path.Combine(Path.GetDirectoryName(rename.Node.Path) ?? "", name)],
                     isMove: true);
             }
             catch (Exception exception)
@@ -316,7 +291,7 @@ namespace Joufflu.FileExplorer.Sources
                 toasts?.Error(exception.Message);
             }
 
-            Refresh([node.Parent]);
+            Refresh([rename.Node.Parent]);
         }
 
         /// <summary>

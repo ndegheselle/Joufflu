@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using System.Windows.Markup;
 using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Sources;
@@ -35,13 +36,20 @@ namespace Joufflu.FileExplorer.Controls.Base
         public override int GetHashCode() => HashCode.Combine(Type, Scope);
     }
 
+    public interface IExplorerUi
+    {
+        public IExplorerNode? RenamedNode { get; }
+        public ICommand RenamingCommand { get; }
+    }
+
     /// <summary>
     /// Data context of the context menus of an <see cref="ExplorerList"/>, gives access to the commands of the
     /// loader and to the nodes the menu was opened on.
     /// </summary>
     public class ExplorerMenuContext
     {
-        public IExplorerSource? Source { get; }
+        public IExplorerSource Source { get; }
+        public IExplorerUi Ui { get; }
 
         /// <summary>
         /// Every selected node, the menu was opened on the first one.
@@ -53,8 +61,9 @@ namespace Joufflu.FileExplorer.Controls.Base
         /// </summary>
         public IExplorerNode? Node => Nodes.Count == 1 ? Nodes[0] : null;
 
-        public ExplorerMenuContext(IExplorerSource? source, IReadOnlyList<IExplorerNode> nodes)
+        public ExplorerMenuContext(IExplorerSource source, IExplorerUi ui, IReadOnlyList<IExplorerNode> nodes)
         {
+            Ui = ui;
             Source = source;
             Nodes = nodes;
         }

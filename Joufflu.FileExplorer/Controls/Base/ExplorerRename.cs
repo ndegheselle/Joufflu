@@ -1,11 +1,11 @@
+using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Sources;
+using Joufflu.Helpers;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
-using Joufflu.Helpers;
 
 namespace Joufflu.FileExplorer.Controls.Base
 {
@@ -89,6 +89,10 @@ namespace Joufflu.FileExplorer.Controls.Base
 
         private static void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
+
+            var oldDc = (e.OldFocus as FrameworkElement)?.DataContext;
+            var newDc = (e.NewFocus as FrameworkElement)?.DataContext;
+
             var box = (TextBox)sender;
             End(box, box.Text);
         }
@@ -96,8 +100,13 @@ namespace Joufflu.FileExplorer.Controls.Base
         /// <summary>
         /// Ends the edition, <paramref name="name"/> being null when it has been given up.
         /// </summary>
-        private static void End(TextBox box, string? name)
+        private static void End(TextBox box, string name)
         {
+            IExplorerNode? node = box.DataContext as IExplorerNode;
+
+            if (node == null)
+                return;
+
             ICommand? command = GetCommand(box);
 
             // Detached first : the command makes the box disappear, which moves the focus and would end the edition a
@@ -105,8 +114,9 @@ namespace Joufflu.FileExplorer.Controls.Base
             Detach(box);
             RestoreFocus(box);
 
-            if (command?.CanExecute(name) == true)
-                command.Execute(name);
+            ExplorerNodeRename rename = new ExplorerNodeRename(node, name);
+            if (command?.CanExecute(rename) == true)
+                command.Execute(rename);
         }
 
         private static void Detach(TextBox box)

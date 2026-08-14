@@ -196,7 +196,7 @@ public abstract class ExplorerNodesControl : ExplorerControl
         }
 
         MoveItems(menu, _contextMenu);
-        _contextMenu.DataContext = new ExplorerMenuContext(Loader, nodes);
+        _contextMenu.DataContext = new ExplorerMenuContext(Loader, null, nodes);
     }
     #endregion
 

@@ -1,3 +1,5 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Sources;
@@ -14,7 +16,8 @@ namespace Joufflu.FileExplorer.Controls;
 /// <summary>
 /// Lists the nodes of the opened folder in a <see cref="ListView"/>, opening a folder on double click.
 /// </summary>
-public class ExplorerList : Control
+[ObservableObject]
+public partial class ExplorerList : Control, IExplorerUi
 {
     #region Dependency Properties
 
@@ -67,6 +70,11 @@ public class ExplorerList : Control
 
     protected const string PartItemsHost = "PART_ItemsHost";
     protected ListView? ItemsHost { get; private set; }
+
+    [ObservableProperty]
+    private IExplorerNode? renamedNode;
+    public ICommand RenamingCommand => new RelayCommand<IExplorerNode>((node) => RenamedNode = node);
+
     private readonly IComparer comparer = ExplorerNodeComparer.Default;
 
     static ExplorerList()
@@ -98,7 +106,7 @@ public class ExplorerList : Control
         {
             return source?.Current == null
                 ? null
-                : new ListCollectionView(source.Current.Children) { CustomSort = comparer, Filter = FilterNode };
+                : new ListCollectionView(source.Current.Children) { CustomSort = comparer, Filter = FilterNode, IsLiveSorting = false, IsLiveFiltering = false };
         }
 
         void OnSourcePropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -176,7 +184,7 @@ public class ExplorerList : Control
         }
 
         var element = (FrameworkElement)sender;
-        menu.DataContext = new ExplorerMenuContext(Source, scope == MenuScope.None ? [target]: nodes);
+        menu.DataContext = new ExplorerMenuContext(Source, this, scope == MenuScope.None ? [target]: nodes);
         element.ContextMenu = menu;
     }
     #endregion
@@ -207,10 +215,6 @@ public class ExplorerList : Control
         yield return typeof(object);
     }
     #endregion
-
-    // TODO : CONTEXT MENU on nodes and outside
-    // TODO : SELECTION Handle selection changed on listview to buble event
-    // TODO : OPEN Handle double click on nodes
 
     /// <summary>Keeps only the nodes whose kind is in <see cref="ExplorerNodesControl.VisibleNodes"/>.</summary>
     private bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
