@@ -10,6 +10,10 @@ public interface IExplorerSource : INotifyPropertyChanged
     IExplorerDirectory? Root { get; }
     IExplorerDirectory? Current { get; }
 
+    /// <summary>
+    /// Renames a node, the parameter being the <see cref="ExplorerNodeRename"/> to apply. An empty or an unchanged
+    /// name does nothing.
+    /// </summary>
     ICommand RenameCommand { get; }
     ICommand RemoveCommand { get; }
     ICommand CreateDirectoryCommand { get; }
@@ -34,5 +38,12 @@ public interface IExplorerSource : INotifyPropertyChanged
     Task Open(IExplorerNode node);
 }
 
-
+/// <summary>
+/// Rename of a node, handed over to <see cref="IExplorerSource.RenameCommand"/> : the node and the name it is given.
+/// </summary>
+/// <remarks>
+/// The node is carried along with the name, the source keeping no state about an edition in progress : which node is
+/// being renamed is the business of the control the name is typed in, see
+/// <see cref="Controls.Base.IExplorerUi.RenamedNode"/>.
+/// </remarks>
 public record ExplorerNodeRename(IExplorerNode Node, string Name);

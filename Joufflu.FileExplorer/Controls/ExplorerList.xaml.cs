@@ -71,9 +71,15 @@ public partial class ExplorerList : Control, IExplorerUi
     protected const string PartItemsHost = "PART_ItemsHost";
     protected ListView? ItemsHost { get; private set; }
 
+    /// <summary>
+    /// Node whose name is being edited in the list, null while none is. Held by the control and not by its
+    /// <see cref="Source"/> : the edition belongs to the list it was started in, so another control displaying the
+    /// same node doesn't open a box of its own.
+    /// </summary>
     [ObservableProperty]
     private IExplorerNode? renamedNode;
-    public ICommand RenamingCommand => new RelayCommand<IExplorerNode>((node) => RenamedNode = node);
+
+    ICommand IExplorerUi.RenamingCommand => RenamingCommand;
 
     private readonly IComparer comparer = ExplorerNodeComparer.Default;
 
@@ -111,9 +117,16 @@ public partial class ExplorerList : Control, IExplorerUi
 
         void OnSourcePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IExplorerSource.Current))
-                View = CreateView();
+            if (e.PropertyName != nameof(IExplorerSource.Current))
+                return;
+
+            // Navigating away gives up the edition in progress, its node not being displayed anymore.
+            RenamedNode = null;
+            View = CreateView();
         }
+
+        // The nodes of the previous source are gone, so is any edition of one of them.
+        RenamedNode = null;
 
         // Update view and track then source change
         if (previous != null)
@@ -128,6 +141,35 @@ public partial class ExplorerList : Control, IExplorerUi
     private void OnVisibleNodesChanged()
     {
         View?.Refresh();
+    }
+
+    #endregion
+
+    #region Rename
+
+    /// <summary>
+    /// Starts the edition of the name of a node, null giving up the one in progress : the cell of that node displays
+    /// an editable name until <see cref="Rename"/> ends it.
+    /// </summary>
+    [RelayCommand]
+    private void Renaming(IExplorerNode? node) => RenamedNode = node;
+
+    /// <summary>
+    /// Ends the edition, <paramref name="rename"/> being null when it has been given up : the list closes its
+    /// editable name in either case, and only hands a validated one over to the <see cref="Source"/>.
+    /// </summary>
+    [RelayCommand]
+    private void Rename(ExplorerNodeRename? rename)
+    {
+        // Closed first : the source reloads the renamed directory, and the node of the edition is gone by then.
+        RenamedNode = null;
+
+        if (rename == null)
+            return;
+
+        ICommand? command = Source?.RenameCommand;
+        if (command?.CanExecute(rename) == true)
+            command.Execute(rename);
     }
 
     #endregion

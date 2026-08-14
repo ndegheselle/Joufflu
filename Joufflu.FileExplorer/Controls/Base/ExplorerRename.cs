@@ -21,8 +21,9 @@ namespace Joufflu.FileExplorer.Controls.Base
     public static class ExplorerRename
     {
         /// <summary>
-        /// Command ending the edition, <see cref="IExplorerSource.RenameCommand"/> in practice : run with the typed
-        /// name, or with null when the edition has been given up. Setting it is what wires the behaviour.
+        /// Command ending the edition, that of the control displaying the box in practice : run with the
+        /// <see cref="ExplorerNodeRename"/> of the typed name, or with null when the edition has been given up.
+        /// Setting it is what wires the behaviour.
         /// </summary>
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
             "Command",
@@ -74,10 +75,10 @@ namespace Joufflu.FileExplorer.Controls.Base
             switch (e.Key)
             {
                 case Key.Enter:
-                    End(box, box.Text);
+                    End(box, validate: true);
                     break;
                 case Key.Escape:
-                    End(box, null);
+                    End(box, validate: false);
                     break;
                 default:
                     return;
@@ -88,25 +89,15 @@ namespace Joufflu.FileExplorer.Controls.Base
         }
 
         private static void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-
-            var oldDc = (e.OldFocus as FrameworkElement)?.DataContext;
-            var newDc = (e.NewFocus as FrameworkElement)?.DataContext;
-
-            var box = (TextBox)sender;
-            End(box, box.Text);
-        }
+            // The focus leaving the box validates what has been typed, as the Windows explorer does.
+            => End((TextBox)sender, validate: true);
 
         /// <summary>
-        /// Ends the edition, <paramref name="name"/> being null when it has been given up.
+        /// Ends the edition : the command is run with the typed name when <paramref name="validate"/> is true, and
+        /// with null when the edition has been given up.
         /// </summary>
-        private static void End(TextBox box, string name)
+        private static void End(TextBox box, bool validate)
         {
-            IExplorerNode? node = box.DataContext as IExplorerNode;
-
-            if (node == null)
-                return;
-
             ICommand? command = GetCommand(box);
 
             // Detached first : the command makes the box disappear, which moves the focus and would end the edition a
@@ -114,7 +105,10 @@ namespace Joufflu.FileExplorer.Controls.Base
             Detach(box);
             RestoreFocus(box);
 
-            ExplorerNodeRename rename = new ExplorerNodeRename(node, name);
+            ExplorerNodeRename? rename = validate && box.DataContext is IExplorerNode node
+                ? new ExplorerNodeRename(node, box.Text)
+                : null;
+
             if (command?.CanExecute(rename) == true)
                 command.Execute(rename);
         }

@@ -11,15 +11,15 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--
-        Name of the node being renamed, displayed in its cell in place of its visual. Validating runs the rename of the
-        source, which ends it, so the cell goes back to the visual of the node on its own.
+        Name of the node being renamed, displayed in its cell in place of its visual. Validating or giving up runs the
+        rename of the list, which ends the edition, so the cell goes back to the visual of the node on its own.
     -->
     <DataTemplate x:Key="ExplorerRenameTemplate">
         <TextBox
             MinWidth="80"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            base:ExplorerRename.Command="{Binding Source.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerList}}}"
+            base:ExplorerRename.Command="{Binding RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerList}}}"
             joufflu:Sizing.Size="xs"
             Text="{Binding Name, Mode=OneWay}" />
         <!--  OneWay : the name is only written back once the rename is validated, and by the source.  -->

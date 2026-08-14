@@ -263,6 +263,10 @@ namespace Joufflu.FileExplorer.Sources
             toasts?.Info("Path copied to clipboard.");
         }
 
+        /// <summary>
+        /// Give a node the name it has been renamed to. An empty or an unchanged name does nothing, the edition having
+        /// been given up.
+        /// </summary>
         [RelayCommand]
         public void Rename(ExplorerNodeRename rename)
         {

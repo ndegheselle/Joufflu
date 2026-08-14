@@ -196,6 +196,7 @@ public abstract class ExplorerNodesControl : ExplorerControl
         }
 
         MoveItems(menu, _contextMenu);
+        // No IExplorerUi : the template of a tree item has no editable name, so the rename is left disabled here.
         _contextMenu.DataContext = new ExplorerMenuContext(Loader, null, nodes);
     }
     #endregion
