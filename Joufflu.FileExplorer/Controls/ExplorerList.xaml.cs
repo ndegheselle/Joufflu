@@ -105,6 +105,8 @@ public partial class ExplorerList : Control, IExplorerUi
         if (ItemsHost != null)
         {
             ItemsHost.Drop -= ItemsHost_Drop;
+            ItemsHost.MouseMove -= ItemsHost_MouseMove;
+            ItemsHost.PreviewMouseLeftButtonDown -= ItemsHost_PreviewMouseLeftButtonDown;
         }
 
         ItemsHost = GetTemplateChild(PartItemsHost) as ListView;
@@ -112,6 +114,8 @@ public partial class ExplorerList : Control, IExplorerUi
         if (ItemsHost != null)
         {
             ItemsHost.Drop += ItemsHost_Drop;
+            ItemsHost.MouseMove += ItemsHost_MouseMove;
+            ItemsHost.PreviewMouseLeftButtonDown += ItemsHost_PreviewMouseLeftButtonDown;
         }
     }
 
@@ -216,7 +220,7 @@ public partial class ExplorerList : Control, IExplorerUi
         IReadOnlyList<IExplorerNode> nodes = ItemsHost.SelectedItems.Cast<IExplorerNode>().ToList();
         MenuScope scope = ItemsHost.SelectedItems.Count > 1 ? MenuScope.Multiple : MenuScope.Single;
         // If outside of a row open on the current folder
-        if (MoreVisualTreeHelper.FindParent<ListViewItem>(e.OriginalSource as DependencyObject) == null)
+        if (IsOutsideRow(e))
         {
             target = Source.Current;
             scope = MenuScope.None;
@@ -240,6 +244,8 @@ public partial class ExplorerList : Control, IExplorerUi
         menu.DataContext = new ExplorerMenuContext(Source, this, scope == MenuScope.None ? [target]: nodes);
         element.ContextMenu = menu;
     }
+
+    private bool IsOutsideRow(RoutedEventArgs e) => MoreVisualTreeHelper.FindParent<ListViewItem>(e.OriginalSource as DependencyObject) == null;
     #endregion
 
     #region Context menu
@@ -270,6 +276,12 @@ public partial class ExplorerList : Control, IExplorerUi
     #endregion
 
     #region Drag and Drop
+    private void ItemsHost_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        _clickPosition = e.GetPosition(null);
+    }
+
+
     private void ItemsHost_Drop(object sender, DragEventArgs e)
     {
         if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
@@ -283,6 +295,30 @@ public partial class ExplorerList : Control, IExplorerUi
 
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
         Source.Transfer(files, target, isMove: false);
+    }
+
+    private void ItemsHost_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (e.LeftButton != MouseButtonState.Pressed)
+            return;
+
+        if (ItemsHost == null) return;
+        if (IsOutsideRow(e)) return;
+
+        Point position = e.GetPosition(null);
+        if (!HasExceededMinimumDistance(position)) return;
+
+        var nodes = ItemsHost.SelectedItems.Cast<IExplorerNode>();
+
+        DataObject data = new DataObject(DataFormats.FileDrop, nodes.Select(x => x.Path).ToArray());
+        DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
+    }
+
+    private Point _clickPosition;
+    private bool HasExceededMinimumDistance(Point position)
+    {
+        return Math.Abs(position.X - _clickPosition.X) >= SystemParameters.MinimumHorizontalDragDistance ||
+            Math.Abs(position.Y - _clickPosition.Y) >= SystemParameters.MinimumVerticalDragDistance;
     }
     #endregion
 

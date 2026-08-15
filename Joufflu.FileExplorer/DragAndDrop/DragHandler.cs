@@ -216,22 +216,6 @@ public partial class DragHandler : DragDropHandler
     protected virtual void OnDragFinished()
     { }
 
-    /// <summary>
-    /// Moves the adorner under the cursor. <see cref="Mouse.GetPosition"/> is not usable here, it stays on the
-    /// position the drag started from while <see cref="System.Windows.DragDrop.DoDragDrop"/> blocks, so the position
-    /// is read from the system.
-    /// </summary>
-    private void MoveAdornerToCursor()
-    {
-        if (_adorner == null || Element?.IsLoaded != true || PresentationSource.FromVisual(Element) == null)
-            return;
-
-        if (!GetCursorPos(out System.Drawing.Point cursor))
-            return;
-
-        _position = Element.PointFromScreen(new Point(cursor.X, cursor.Y));
-        _adorner.UpdatePosition(_position);
-    }
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -268,6 +252,22 @@ public partial class DragHandler : DragDropHandler
         _adorner = null;
     }
 
+    /// <summary>
+    /// Moves the adorner under the cursor. <see cref="Mouse.GetPosition"/> is not usable here, it stays on the
+    /// position the drag started from while <see cref="System.Windows.DragDrop.DoDragDrop"/> blocks, so the position
+    /// is read from the system.
+    /// </summary>
+    private void MoveAdornerToCursor()
+    {
+        if (_adorner == null || Element?.IsLoaded != true || PresentationSource.FromVisual(Element) == null)
+            return;
+
+        if (!GetCursorPos(out System.Drawing.Point cursor))
+            return;
+
+        _position = Element.PointFromScreen(new Point(cursor.X, cursor.Y));
+        _adorner.UpdatePosition(_position);
+    }
     #endregion
 
     #region Overridables
