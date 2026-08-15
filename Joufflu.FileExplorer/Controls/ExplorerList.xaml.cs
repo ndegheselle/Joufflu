@@ -101,7 +101,18 @@ public partial class ExplorerList : Control, IExplorerUi
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
+
+        if (ItemsHost != null)
+        {
+            ItemsHost.Drop -= ItemsHost_Drop;
+        }
+
         ItemsHost = GetTemplateChild(PartItemsHost) as ListView;
+
+        if (ItemsHost != null)
+        {
+            ItemsHost.Drop += ItemsHost_Drop;
+        }
     }
 
     #region On dependency property changed
@@ -255,6 +266,23 @@ public partial class ExplorerList : Control, IExplorerUi
             yield return interfaceType;
 
         yield return typeof(object);
+    }
+    #endregion
+
+    #region Drag and Drop
+    private void ItemsHost_Drop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
+            return;
+
+        var element = e.OriginalSource as FrameworkElement;
+        IExplorerDirectory? target = element?.DataContext as IExplorerDirectory ?? Source.Current;
+
+        if (target == null)
+            return;
+
+        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        Source.Transfer(files, target, isMove: false);
     }
     #endregion
 

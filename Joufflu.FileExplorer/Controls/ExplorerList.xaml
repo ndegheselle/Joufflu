@@ -32,6 +32,7 @@
                     <ListView
                         x:Name="PART_ItemsHost"
                         Padding="0"
+                        AllowDrop="True"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                         ItemsSource="{Binding View}">
                         <ListView.ItemContainerStyle>

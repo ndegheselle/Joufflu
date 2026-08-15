@@ -36,6 +36,8 @@ public interface IExplorerSource : INotifyPropertyChanged
     /// Open a node, if it's a directory loads the children of a directory and makes it the <see cref="Current"/> one.
     /// </summary>
     Task Open(IExplorerNode node);
+
+    Task Transfer(IReadOnlyList<string> paths, IExplorerDirectory target, bool isMove);
 }
 
 /// <summary>
