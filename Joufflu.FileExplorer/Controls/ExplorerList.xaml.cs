@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.DragAndDrop;
 using Joufflu.FileExplorer.Sources;
 using Joufflu.Helpers;
 using System.Collections;
@@ -9,7 +10,9 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace Joufflu.FileExplorer.Controls;
 
@@ -319,6 +322,50 @@ public partial class ExplorerList : Control, IExplorerUi
     {
         return Math.Abs(position.X - _clickPosition.X) >= SystemParameters.MinimumHorizontalDragDistance ||
             Math.Abs(position.Y - _clickPosition.Y) >= SystemParameters.MinimumVerticalDragDistance;
+    }
+
+    private DragAdorner? _adorner;
+    private void ShowAdorner(object data)
+    {
+        HideAdorner();
+
+        if (ItemsHost == null)
+            return;
+
+        FrameworkElement? content = CreateAdornerContent(data);
+        AdornerLayer? layer = AdornerLayer.GetAdornerLayer(ItemsHost);
+
+        if (content == null || layer == null)
+            return;
+
+        _adorner = new DragAdorner(ItemsHost, content, _position);
+        layer.Add(_adorner);
+    }
+
+    private void HideAdorner()
+    {
+        if (_adorner == null || ItemsHost == null)
+            return;
+
+        AdornerLayer.GetAdornerLayer(ItemsHost)?.Remove(_adorner);
+        _adorner = null;
+    }
+
+    /// <summary>
+    /// Moves the adorner under the cursor. <see cref="Mouse.GetPosition"/> is not usable here, it stays on the
+    /// position the drag started from while <see cref="System.Windows.DragDrop.DoDragDrop"/> blocks, so the position
+    /// is read from the system.
+    /// </summary>
+    private void MoveAdornerToCursor()
+    {
+        if (_adorner == null || ItemsHost?.IsLoaded != true)
+            return;
+
+        if (!GetCursorPos(out System.Drawing.Point cursor))
+            return;
+
+        _position = ItemsHost.PointFromScreen(new Point(cursor.X, cursor.Y));
+        _adorner.UpdatePosition(_position);
     }
     #endregion
 
