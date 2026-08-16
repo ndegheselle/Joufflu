@@ -1,4 +1,6 @@
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using Joufflu.FileExplorer.Controls.Base;
 
 namespace Joufflu.FileExplorer.Controls
@@ -21,9 +23,43 @@ namespace Joufflu.FileExplorer.Controls
         private const string PartTree = "PART_Tree";
         private const string PartList = "PART_List";
 
+        /// <summary>
+        /// Columns handed over to the list of the explorer, see <see cref="ExplorerList.ExtraColumns"/> : they are
+        /// displayed after the ones of the list, and their cells are bound to the node of their row.
+        /// </summary>
+        public ObservableCollection<GridViewColumn> ExtraColumns { get; } = [];
+
+        private ExplorerList? list;
+
         static Explorer()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Explorer), new FrameworkPropertyMetadata(typeof(Explorer)));
+        }
+
+        public Explorer()
+        {
+            ExtraColumns.CollectionChanged += (_, _) => ApplyExtraColumns();
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            list = GetTemplateChild(PartList) as ExplorerList;
+            ApplyExtraColumns();
+        }
+
+        /// <summary>
+        /// Hands the <see cref="ExtraColumns"/> over to the list, which puts them back at the end of its own columns.
+        /// </summary>
+        private void ApplyExtraColumns()
+        {
+            if (list == null)
+                return;
+
+            list.ExtraColumns.Clear();
+            foreach (GridViewColumn column in ExtraColumns)
+                list.ExtraColumns.Add(column);
         }
     }
 }
