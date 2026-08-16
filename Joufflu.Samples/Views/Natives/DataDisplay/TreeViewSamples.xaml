@@ -7,9 +7,7 @@
     xmlns:local="clr-namespace:Joufflu.Samples.Views.Natives.DataDisplay">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Tree view" />
+            <TextBlock Style="{StaticResource H1}" Text="Tree view" />
 
             <c:CodeExample
                 Title="Hierarchy"

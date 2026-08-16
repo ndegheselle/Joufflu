@@ -78,7 +78,8 @@ public class ExplorerList : ExplorerNodesControl
         => (ItemsHost as ListView)?.SelectedItems.Cast<IExplorerNode>().ToList() ?? [];
 
     protected override FrameworkElement? GetContainerAt(DependencyObject? source)
-        => MoreVisualTreeHelper.FindParent<ListViewItem>(source);
+        // Self or parent : a click on the blank part of a row reports the row itself.
+        => MoreVisualTreeHelper.FindSelfOrParent(source, typeof(ListViewItem)) as ListViewItem;
 
     /// <summary>Ignore listview columns header</summary>
     protected override bool IsMenuIgnored(DependencyObject? source)

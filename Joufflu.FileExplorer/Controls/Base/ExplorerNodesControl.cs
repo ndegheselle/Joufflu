@@ -285,13 +285,22 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
             return;
         }
 
-        IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
-        IExplorerNode? target = nodes.FirstOrDefault();
-        MenuScope scope = nodes.Count > 1 ? MenuScope.Multiple : MenuScope.Single;
-        // If outside of a node open on the current folder
-        if (IsOutsideNode(e))
+        // The menu acts on the node it is opened on and not on the selection : a right click doesn't select, so the
+        // node under the pointer is rarely the selected one (a tree keeps its single root selected for instance).
+        IExplorerNode? target = GetContainerAt(e.OriginalSource as DependencyObject)?.DataContext as IExplorerNode;
+        IReadOnlyList<IExplorerNode> nodes;
+        MenuScope scope;
+
+        if (target != null)
         {
+            nodes = GetMenuNodes(target);
+            scope = nodes.Count > 1 ? MenuScope.Multiple : MenuScope.Single;
+        }
+        else
+        {
+            // Outside of any node : the menu of the opened folder itself.
             target = Source.Current;
+            nodes = target == null ? [] : [target];
             scope = MenuScope.None;
         }
 
@@ -310,14 +319,26 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         }
 
         var element = (FrameworkElement)sender;
-        menu.DataContext = new ExplorerMenuContext(Source, this, scope == MenuScope.None ? [target] : nodes);
+        menu.DataContext = new ExplorerMenuContext(Source, this, nodes);
         element.ContextMenu = menu;
     }
-
-    private bool IsOutsideNode(RoutedEventArgs e) => GetContainerAt(e.OriginalSource as DependencyObject) == null;
     #endregion
 
     #region Context menu
+    /// <summary>
+    /// Selected nodes with the one the menu was opened on first, or only that node when it isn't selected : a menu
+    /// opened on a node outside of the selection acts on that node alone, as the Windows explorer does.
+    /// </summary>
+    private IReadOnlyList<IExplorerNode> GetMenuNodes(IExplorerNode node)
+    {
+        var nodes = GetSelectedNodes().ToList();
+        if (!nodes.Remove(node))
+            return [node];
+
+        nodes.Insert(0, node);
+        return nodes;
+    }
+
     /// <summary>
     /// Searches the context menu template of a node type, from the most specific type to <see cref="object"/>.
     /// </summary>
@@ -375,7 +396,8 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
             return;
 
         if (ItemsHost == null) return;
-        if (IsOutsideNode(e)) return;
+        // Nothing to drag from outside of a node.
+        if (GetContainerAt(e.OriginalSource as DependencyObject) == null) return;
 
         Point position = e.GetPosition(null);
         if (!HasExceededMinimumDistance(position)) return;

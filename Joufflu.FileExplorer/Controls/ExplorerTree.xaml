@@ -15,6 +15,7 @@
                     <TreeView
                         x:Name="PART_ItemsHost"
                         AllowDrop="True"
+                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <TreeView.ItemsSource>
                             <!--  The loaded root, keeping only the kinds of node the tree shows.  -->

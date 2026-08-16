@@ -31,7 +31,8 @@ namespace Joufflu.FileExplorer.Controls
             => (ItemsHost as TreeView)?.SelectedItem is IExplorerNode node ? [node] : [];
 
         protected override FrameworkElement? GetContainerAt(DependencyObject? source)
-            => MoreVisualTreeHelper.FindParent<TreeViewItem>(source);
+            // Self or parent : a click on the blank part of an item reports the item itself.
+            => MoreVisualTreeHelper.FindSelfOrParent(source, typeof(TreeViewItem)) as TreeViewItem;
 
         public override void OnApplyTemplate()
         {

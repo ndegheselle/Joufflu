@@ -42,10 +42,10 @@
                             x:Name="Expander"
                             Grid.Row="0"
                             Grid.Column="0"
-                            Focusable="False"
-                            ClickMode="Press"
-                            IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                             Margin="8,0,8,0"
+                            ClickMode="Press"
+                            Focusable="False"
+                            IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                             RenderTransformOrigin="0.5,0.5">
                             <ToggleButton.Template>
                                 <ControlTemplate TargetType="ToggleButton">
@@ -65,10 +65,10 @@
                             x:Name="PART_Header"
                             Grid.Row="0"
                             Grid.Column="1"
-                            ContentSource="Header"
                             Margin="0,4,8,4"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="Center"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                            ContentSource="Header" />
 
                         <ItemsPresenter
                             x:Name="ItemsHost"
@@ -87,10 +87,10 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation
-                                            Storyboard.TargetProperty="Angle"
                                             Storyboard.TargetName="ExpanderRotateTransform"
-                                            Duration="00:00:0.2"
-                                            To="90" />
+                                            Storyboard.TargetProperty="Angle"
+                                            To="90"
+                                            Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -98,10 +98,10 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation
-                                            Storyboard.TargetProperty="Angle"
                                             Storyboard.TargetName="ExpanderRotateTransform"
-                                            Duration="00:00:0.2"
-                                            To="0" />
+                                            Storyboard.TargetProperty="Angle"
+                                            To="0"
+                                            Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -158,7 +158,8 @@
     <Style x:Key="{x:Type TreeView}" TargetType="TreeView">
         <Setter Property="ItemContainerStyle" Value="{StaticResource TreeViewItemStyle}" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Template">
@@ -168,8 +169,12 @@
                         Name="Border"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer Focusable="False" Margin="{TemplateBinding Padding}" Padding="0">
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                        <ScrollViewer
+                            Margin="{TemplateBinding Padding}"
+                            Padding="0"
+                            Focusable="False">
                             <ItemsPresenter />
                         </ScrollViewer>
                     </Border>
