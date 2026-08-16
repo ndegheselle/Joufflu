@@ -387,12 +387,6 @@
                     </nav:NavigationItem.Icon>
                     Tree
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="file-explorer/drag-drop">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Move}" />
-                    </nav:NavigationItem.Icon>
-                    Drag and drop
-                </nav:NavigationItem>
             </nav:NavigationGroup>
         </nav:NavigationMenu>
 

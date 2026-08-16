@@ -2,6 +2,7 @@ using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
 using Joufflu.Helpers;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,6 +35,27 @@ public class ExplorerList : ExplorerNodesControl
         private set => SetValue(ViewPropertyKey, value);
     }
 
+    /// <summary>
+    /// Columns displayed after the ones of the list (name, modification date, size), for the data a node type of your
+    /// own carries : the cells are bound to the node of their row, so a
+    /// <c>DisplayMemberBinding="{Binding Author}"</c> shows the Author of a custom <see cref="IExplorerNode"/>. A
+    /// column can be added or removed at any time, the list follows.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;fileExplorer:ExplorerList Source="{Binding Source}"&gt;
+    ///     &lt;fileExplorer:ExplorerList.ExtraColumns&gt;
+    ///         &lt;GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" /&gt;
+    ///     &lt;/fileExplorer:ExplorerList.ExtraColumns&gt;
+    /// &lt;/fileExplorer:ExplorerList&gt;
+    /// </code>
+    /// </example>
+    public ObservableCollection<GridViewColumn> ExtraColumns { get; } = [];
+
+    /// <summary>Columns of the template, kept ahead of the <see cref="ExtraColumns"/>.</summary>
+    private GridView? gridView;
+    private int templateColumnCount;
+
     private readonly IComparer comparer = ExplorerNodeComparer.Default;
 
     static ExplorerList()
@@ -41,6 +63,11 @@ public class ExplorerList : ExplorerNodesControl
         DefaultStyleKeyProperty.OverrideMetadata(
             typeof(ExplorerList),
             new FrameworkPropertyMetadata(typeof(ExplorerList)));
+    }
+
+    public ExplorerList()
+    {
+        ExtraColumns.CollectionChanged += (_, _) => ApplyExtraColumns();
     }
 
     /// <summary>
@@ -70,6 +97,26 @@ public class ExplorerList : ExplorerNodesControl
 
         if (ItemsHost is ListView newList)
             newList.SelectionChanged += OnListSelectionChanged;
+
+        // A template of its own for each control, so its columns can be added to without touching the other lists.
+        gridView = (ItemsHost as ListView)?.View as GridView;
+        templateColumnCount = gridView?.Columns.Count ?? 0;
+        ApplyExtraColumns();
+    }
+
+    /// <summary>
+    /// Puts the <see cref="ExtraColumns"/> back at the end of the columns of the template.
+    /// </summary>
+    private void ApplyExtraColumns()
+    {
+        if (gridView == null)
+            return;
+
+        while (gridView.Columns.Count > templateColumnCount)
+            gridView.Columns.RemoveAt(gridView.Columns.Count - 1);
+
+        foreach (var column in ExtraColumns)
+            gridView.Columns.Add(column);
     }
 
     private void OnListSelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateSelectedNodes();

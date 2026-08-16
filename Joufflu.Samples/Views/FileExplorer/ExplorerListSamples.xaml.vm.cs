@@ -16,6 +16,22 @@ public class ExplorerListSamplesViewModel : ObservableObject
     public string ExplorerListCode =>
         "<fileExplorer:ExplorerList Source=\"{Binding Source}\" />";
 
+    public string ExplorerListColumnsCode =>
+        """
+        <fileExplorer:ExplorerList Source="{Binding Source}">
+            <fileExplorer:ExplorerList.ExtraColumns>
+                <GridViewColumn Header="Full path" Width="260" DisplayMemberBinding="{Binding Path}" />
+                <GridViewColumn Header="In folder">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Parent.Name}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </fileExplorer:ExplorerList.ExtraColumns>
+        </fileExplorer:ExplorerList>
+        """;
+
     public string ExplorerListFilterCode =>
         "<fileExplorer:ExplorerList Source=\"{Binding Source}\" VisibleNodes=\"Files\" />";
 

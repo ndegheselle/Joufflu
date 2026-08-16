@@ -22,6 +22,29 @@
             </c:CodeExample>
 
             <c:CodeExample
+                Title="Extra columns"
+                Code="{Binding ExplorerListColumnsCode}"
+                Description="ExtraColumns adds columns after the ones of the list. Each cell is bound to the node of its row, so a node type of your own shows the data it carries : here the path every node has, and a cell template reading the parent folder.">
+                <fileExplorer:ExplorerList Height="300" Source="{Binding Source}">
+                    <fileExplorer:ExplorerList.ExtraColumns>
+                        <GridViewColumn
+                            Width="260"
+                            DisplayMemberBinding="{Binding Path}"
+                            Header="Full path" />
+                        <GridViewColumn Header="In folder">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                        Text="{Binding Parent.Name}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </fileExplorer:ExplorerList.ExtraColumns>
+                </fileExplorer:ExplorerList>
+            </c:CodeExample>
+
+            <c:CodeExample
                 Title="Filtering the nodes"
                 Code="{Binding ExplorerListFilterCode}"
                 Description="VisibleNodes chooses the kinds of node shown : All by default, or Files / Directories to keep only one. Here the list keeps only the files.">

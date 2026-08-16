@@ -90,7 +90,6 @@ public class AppViewModel : ObservableObject
             ["file-explorer/explorer"] = new ExplorerSamplesViewModel(Toasts),
             ["file-explorer/list"] = new ExplorerListSamplesViewModel(Toasts),
             ["file-explorer/tree"] = new ExplorerTreeSamplesViewModel(Toasts),
-            ["file-explorer/drag-drop"] = new DragAndDropSamplesViewModel(Toasts),
 
             // Custom controls
             ["controls/font-icon"] = new FontIconSamplesViewModel(),

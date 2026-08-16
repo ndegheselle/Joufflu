@@ -212,8 +212,5 @@
     <DataTemplate DataType="{x:Type fileExplorer:ExplorerTreeSamplesViewModel}">
         <fileExplorer:ExplorerTreeSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type fileExplorer:DragAndDropSamplesViewModel}">
-        <fileExplorer:DragAndDropSamples />
-    </DataTemplate>
 
 </ResourceDictionary>
