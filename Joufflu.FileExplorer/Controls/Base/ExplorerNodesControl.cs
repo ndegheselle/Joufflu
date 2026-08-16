@@ -31,23 +31,24 @@ public static class ExplorerNodeKindsExtensions
 }
 
 /// <summary>
-/// Behaviour shared by the controls displaying the nodes of a <see cref="Source"/> (<see cref="ExplorerList"/>,
-/// <see cref="ExplorerTree"/>) : the kinds of node shown, the edition of a name, the context menu of a node and the
-/// drag and drop of files. A derived control only provides the <see cref="ItemsControl"/> template part displaying
-/// the nodes, and tells how to read its selection and its item containers.
+/// Behaviour shared by the controls displaying the nodes of a <see cref="ExplorerControl.Source"/>
+/// (<see cref="ExplorerList"/>, <see cref="ExplorerTree"/>) : the kinds of node shown, the edition of a name, the
+/// context menu of a node and the drag and drop of files. A derived control only provides the
+/// <see cref="ItemsControl"/> template part displaying the nodes, and tells how to read its selection and its item
+/// containers.
 /// </summary>
 [ObservableObject]
 [TemplatePart(Name = PartItemsHost, Type = typeof(ItemsControl))]
-public abstract partial class ExplorerNodesControl : Control, IExplorerUi
+public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerUi
 {
     #region Dependency Properties
 
-    public static readonly DependencyProperty SourceProperty =
-        DependencyProperty.Register(
-            nameof(Source), typeof(IExplorerSource), typeof(ExplorerNodesControl),
-            new PropertyMetadata(null,
-                (d, e) => ((ExplorerNodesControl)d).OnSourceChanged(e.OldValue as IExplorerSource,
-                    e.NewValue as IExplorerSource)));
+    private static readonly DependencyPropertyKey SelectedNodesPropertyKey = DependencyProperty.RegisterReadOnly(
+        nameof(SelectedNodes),
+        typeof(IReadOnlyList<IExplorerNode>),
+        typeof(ExplorerNodesControl),
+        new PropertyMetadata(Array.Empty<IExplorerNode>()));
+    public static readonly DependencyProperty SelectedNodesProperty = SelectedNodesPropertyKey.DependencyProperty;
 
     public static readonly DependencyProperty VisibleNodesProperty = DependencyProperty.Register(
         nameof(VisibleNodes),
@@ -65,13 +66,11 @@ public abstract partial class ExplorerNodesControl : Control, IExplorerUi
     #endregion
 
     /// <summary>
-    /// Source of the explorer
+    /// Nodes selected in <see cref="ItemsHost"/>, empty when nothing is selected. Bindable, so that a status bar can
+    /// show how many of them there are.
     /// </summary>
-    public IExplorerSource Source
-    {
-        get => (IExplorerSource)GetValue(SourceProperty);
-        set => SetValue(SourceProperty, value);
-    }
+    public IReadOnlyList<IExplorerNode> SelectedNodes
+        => (IReadOnlyList<IExplorerNode>)GetValue(SelectedNodesProperty);
 
     /// <summary>
     /// Kinds of node the control shows, <see cref="ExplorerNodeKinds.All"/> by default. Set it to
@@ -145,15 +144,22 @@ public abstract partial class ExplorerNodesControl : Control, IExplorerUi
             ItemsHost.DragOver += ItemsHost_DragOver;
             ItemsHost.DragLeave += ItemsHost_DragLeave;
         }
+
+        UpdateSelectedNodes();
     }
 
     #region Derived control
 
     /// <summary>
-    /// Nodes selected in <see cref="ItemsHost"/>, empty when nothing is selected. Only a derived control knows how to
-    /// reach the selection of its host.
+    /// Reads the selection of <see cref="ItemsHost"/>, which only a derived control knows how to reach.
     /// </summary>
     protected abstract IReadOnlyList<IExplorerNode> GetSelectedNodes();
+
+    /// <summary>
+    /// Publishes the selection of <see cref="ItemsHost"/> in <see cref="SelectedNodes"/>. A derived control calls it
+    /// whenever its host reports a selection change.
+    /// </summary>
+    protected void UpdateSelectedNodes() => SetValue(SelectedNodesPropertyKey, GetSelectedNodes());
 
     /// <summary>
     /// Item container displaying a node, from an element inside of it, null when <paramref name="source"/> is outside
@@ -183,7 +189,7 @@ public abstract partial class ExplorerNodesControl : Control, IExplorerUi
     /// <summary>
     /// Tracks the directory opened by the source, the nodes displayed by the control coming from it.
     /// </summary>
-    private void OnSourceChanged(IExplorerSource? previous, IExplorerSource? source)
+    protected override void OnSourceChanged(IExplorerSource? previous, IExplorerSource? source)
     {
         void OnSourcePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {

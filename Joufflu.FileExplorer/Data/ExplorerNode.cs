@@ -56,7 +56,8 @@ namespace Joufflu.FileExplorer.Data
         public DateTime ModifiedAt { get; set; }
 
         public IExplorerDirectory? Parent { get; }
-        public IReadOnlyList<IExplorerDirectory> DirectoryTree => Parent == null ? [] : [..Parent.DirectoryTree, this];
+        // The root ends the walk up : it is the first directory of the path, and the breadcrumb starts on it.
+        public IReadOnlyList<IExplorerDirectory> DirectoryTree => Parent == null ? [this] : [..Parent.DirectoryTree, this];
 
 
         public ObservableCollection<IExplorerNode> Children { get; private set; } = [];

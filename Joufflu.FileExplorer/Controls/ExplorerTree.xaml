@@ -23,11 +23,6 @@
                                 <Binding Path="VisibleNodes" />
                             </MultiBinding>
                         </TreeView.ItemsSource>
-                        <TreeView.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="Padding" Value="0" />
-                            </Style>
-                        </TreeView.ItemContainerStyle>
                         <TreeView.ItemTemplate>
                             <!--
                                 No DataType : the header presenter has to resolve the implicit template of the node

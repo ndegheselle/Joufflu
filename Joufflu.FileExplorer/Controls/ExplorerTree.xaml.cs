@@ -74,6 +74,8 @@ namespace Joufflu.FileExplorer.Controls
 
         private void OnTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            UpdateSelectedNodes();
+
             if (e.NewValue is IExplorerDirectory directory)
                 Source?.Open(directory);
         }

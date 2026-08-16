@@ -369,6 +369,12 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderTree}" />
                 </nav:NavigationGroup.Icon>
 
+                <nav:NavigationItem Target="file-explorer/explorer">
+                    <nav:NavigationItem.Icon>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
+                    </nav:NavigationItem.Icon>
+                    Explorer
+                </nav:NavigationItem>
                 <nav:NavigationItem Target="file-explorer/list">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />

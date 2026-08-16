@@ -61,6 +61,19 @@ public class ExplorerList : ExplorerNodesControl
 
     protected override void OnVisibleNodesChanged() => View?.Refresh();
 
+    public override void OnApplyTemplate()
+    {
+        if (ItemsHost is ListView oldList)
+            oldList.SelectionChanged -= OnListSelectionChanged;
+
+        base.OnApplyTemplate();
+
+        if (ItemsHost is ListView newList)
+            newList.SelectionChanged += OnListSelectionChanged;
+    }
+
+    private void OnListSelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateSelectedNodes();
+
     protected override IReadOnlyList<IExplorerNode> GetSelectedNodes()
         => (ItemsHost as ListView)?.SelectedItems.Cast<IExplorerNode>().ToList() ?? [];
 

@@ -203,6 +203,9 @@
     </DataTemplate>
 
     <!--  File explorer  -->
+    <DataTemplate DataType="{x:Type fileExplorer:ExplorerSamplesViewModel}">
+        <fileExplorer:ExplorerSamples />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type fileExplorer:ExplorerListSamplesViewModel}">
         <fileExplorer:ExplorerListSamples />
     </DataTemplate>
