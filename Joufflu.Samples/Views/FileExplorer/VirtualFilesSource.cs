@@ -10,7 +10,11 @@ namespace Joufflu.Samples.Views.FileExplorer;
 /// A file of the application and not of the disk : it carries a path of a file that doesn't exist, so the explorer
 /// displays it and copies its path like any other node, along with a state of its own the disk knows nothing about.
 /// </summary>
-public class VirtualFile : ObservableObject, IExplorerFile
+/// <remarks>
+/// An <see cref="IExplorerNode"/> and not an <see cref="IExplorerFile"/> : nothing on the disk stands behind it, so
+/// it has no size, and the size column of the list stays empty on its row.
+/// </remarks>
+public class VirtualFile : ObservableObject, IExplorerNode
 {
     public string Path { get; set; }
 
@@ -23,9 +27,6 @@ public class VirtualFile : ObservableObject, IExplorerFile
     /// parent is reloaded, and the virtual file outlives that reload.
     /// </summary>
     public IExplorerDirectory? Parent { get; set; }
-
-    /// <summary>Nothing on the disk to measure.</summary>
-    public long Size => 0;
 
     /// <summary>
     /// State of the node, of the application only : displayed in a column of its own and toggled from the context
@@ -78,12 +79,13 @@ public class VirtualFilesSource : FileSystemSource
     }
 
     /// <summary>
-    /// Nothing to hand over to the shell : a virtual file is opened by the application itself.
+    /// Nothing to hand over to the shell for a virtual file : the application opens it itself, the nodes read from
+    /// the disk being left to the source it comes from.
     /// </summary>
-    protected override Task OpenFile(IExplorerFile file)
+    public override Task Open(IExplorerNode node)
     {
-        if (file is not VirtualFile virtualFile)
-            return base.OpenFile(file);
+        if (node is not VirtualFile virtualFile)
+            return base.Open(node);
 
         toasts?.Info($"{virtualFile.Path} is a virtual file, opened by the application.");
         return Task.CompletedTask;

@@ -41,13 +41,13 @@ public class ExplorerSamplesViewModel : ObservableObject
     public string VirtualNodesCode =>
         """
         // A node type of the application : it carries a path, and a state no file of the disk has.
-        public class VirtualFile : ObservableObject, IExplorerFile
+        // An IExplorerNode and not an IExplorerFile : it has no size, so the size column stays empty on its row.
+        public class VirtualFile : ObservableObject, IExplorerNode
         {
             public string Path { get; set; }
             public string Name { get; }
             public DateTime ModifiedAt { get; }
             public IExplorerDirectory? Parent { get; set; }
-            public long Size => 0;
 
             public bool IsPinned { get => isPinned; set => SetProperty(ref isPinned, value); }
             private bool isPinned;
@@ -71,7 +71,7 @@ public class ExplorerSamplesViewModel : ObservableObject
             }
 
             // Nothing to hand over to the shell : a virtual file is opened by the application itself.
-            protected override Task OpenFile(IExplorerFile file) { ... }
+            public override Task Open(IExplorerNode node) { ... }
         }
 
         <fileExplorer:Explorer Source="{Binding VirtualSource}">

@@ -65,8 +65,12 @@ namespace Joufflu.FileExplorer.Sources
             return Open(Root);
         }
 
+        /// <summary>
+        /// Open a node : a directory is loaded and made the <see cref="Current"/> one, a file is opened by the
+        /// system. A derived source overrides it for the node types of its own, the other ones being left to it.
+        /// </summary>
         [RelayCommand]
-        public async Task Open(IExplorerNode node)
+        public virtual async Task Open(IExplorerNode node)
         {
             if (node is IExplorerDirectory directory)
             {

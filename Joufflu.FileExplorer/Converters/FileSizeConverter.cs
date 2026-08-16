@@ -1,7 +1,6 @@
 using Joufflu.FileExplorer.Data;
 using System.Globalization;
 using System.IO;
-using System.Windows;
 using System.Windows.Data;
 
 namespace Joufflu.FileExplorer.Converters
@@ -15,13 +14,24 @@ namespace Joufflu.FileExplorer.Converters
         /// <summary>Shared instance, for the templates that have no resource dictionary of their own.</summary>
         public static readonly FileSizeConverter Default = new();
 
+        /// <summary>
+        /// The node itself is converted and not its size : a directory, or a node type of an application that carries
+        /// no size at all, has no Size property to bind to, where binding one would report an error of its own.
+        /// </summary>
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            long? size = value as long?;
-            if (size == null)
-                return DependencyProperty.UnsetValue;
+            long? size = value switch
+            {
+                IExplorerFile file => file.Size,
+                // Directories and the other nodes are sizeless, their cell stays empty.
+                IExplorerNode => null,
+                FileInfo info => info.Length,
+                string path => File.Exists(path) ? new FileInfo(path).Length : null,
+                long length => length,
+                _ => null
+            };
 
-            return Format((long)size);
+            return size == null ? null : Format(size.Value);
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

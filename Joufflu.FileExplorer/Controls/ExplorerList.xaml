@@ -27,7 +27,8 @@
                             <GridView>
                                 <GridViewColumn CellTemplate="{StaticResource ExplorerNodeTemplate}" Header="Name" />
                                 <GridViewColumn DisplayMemberBinding="{Binding ModifiedAt, StringFormat={}{0:yy/MM/dd HH:mm}}" Header="Modified at" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Size, Converter={x:Static converters:FileSizeConverter.Default}}" Header="Size" />
+                                <!--  The node itself : a directory, like any other sizeless node, has no Size to bind to.  -->
+                                <GridViewColumn DisplayMemberBinding="{Binding Converter={x:Static converters:FileSizeConverter.Default}}" Header="Size" />
                             </GridView>
                         </ListView.View>
                     </ListView>
