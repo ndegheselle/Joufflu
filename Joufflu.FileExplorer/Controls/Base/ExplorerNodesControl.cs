@@ -253,9 +253,73 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         if (rename == null)
             return;
 
-        ICommand? command = Source?.RenameCommand;
-        if (command?.CanExecute(rename) == true)
-            command.Execute(rename);
+        Execute(Source?.RenameCommand, rename);
+    }
+
+    #endregion
+
+    #region Keyboard shortcuts
+
+    /// <summary>
+    /// Runs the shortcuts of the node operations, the ones the context menu displays as its input gestures : F2
+    /// renames, Ctrl+C copies, Ctrl+X cuts, Ctrl+V pastes and Delete removes.
+    /// </summary>
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        base.OnKeyDown(e);
+
+        // An already handled key has been acted on by the host (the navigation keys of a list for instance), and the
+        // keys typed in a name being edited belong to that edition.
+        if (e.Handled || IsInRenameBox(e.OriginalSource))
+            return;
+
+        e.Handled = OnShortcut(e.Key, Keyboard.Modifiers);
+    }
+
+    /// <summary>
+    /// Runs the operation a shortcut stands for, and returns whether it did : a shortcut without anything to act on
+    /// (an empty selection, an unavailable command) is left to whatever else may handle it.
+    /// </summary>
+    private bool OnShortcut(Key key, ModifierKeys modifiers)
+    {
+        IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
+
+        if (modifiers == ModifierKeys.Control)
+        {
+            return key switch
+            {
+                Key.C => nodes.Count > 0 && Execute(Source.CopyCommand, nodes),
+                Key.X => nodes.Count > 0 && Execute(Source.CutCommand, nodes),
+                // Pasted into the opened directory and not into the selected one, as the Windows explorer does.
+                Key.V => Source.Current != null && Execute(Source.PasteCommand, Source.Current),
+                _ => false
+            };
+        }
+
+        if (modifiers != ModifierKeys.None)
+            return false;
+
+        switch (key)
+        {
+            // Only a lone node is renamed : the edition happens in place, where several ones would need a box each.
+            case Key.F2 when nodes.Count == 1:
+                Renaming(nodes[0]);
+                return true;
+            case Key.Delete when nodes.Count > 0:
+                return Execute(Source.RemoveCommand, nodes);
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>Runs a command when it is there and accepts the parameter, and returns whether it did.</summary>
+    private static bool Execute(ICommand? command, object? parameter)
+    {
+        if (command?.CanExecute(parameter) != true)
+            return false;
+
+        command.Execute(parameter);
+        return true;
     }
 
     #endregion
