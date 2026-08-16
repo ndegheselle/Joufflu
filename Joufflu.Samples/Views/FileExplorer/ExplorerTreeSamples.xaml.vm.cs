@@ -1,20 +1,24 @@
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Joufflu.Feedback.Controls;
 using Joufflu.FileExplorer.Sources;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
 public class ExplorerTreeSamplesViewModel : ObservableObject
 {
-    /// <summary>Loader driving the tree, with a navigation and history of its own.</summary>
-    public IExplorerSource Loader { get; private set; }
+    /// <summary>Source driving the tree, with a navigation and history of its own.</summary>
+    public IExplorerSource Source { get; private set; }
 
     public string ExplorerTreeCode =>
-        "<fileExplorer:ExplorerTree Loader=\"{Binding Loader}\" />";
+        "<fileExplorer:ExplorerTree Source=\"{Binding Source}\" />";
 
     public string ExplorerTreeFilesCode =>
-        "<fileExplorer:ExplorerTree Loader=\"{Binding Loader}\" VisibleNodes=\"All\" />";
+        "<fileExplorer:ExplorerTree Source=\"{Binding Source}\" VisibleNodes=\"All\" />";
 
-    public ExplorerTreeSamplesViewModel()
+    public ExplorerTreeSamplesViewModel(IToastService toasts)
     {
+        Source = new FileSystemSource(Directory.GetCurrentDirectory(), toasts);
+        Source.Open();
     }
 }

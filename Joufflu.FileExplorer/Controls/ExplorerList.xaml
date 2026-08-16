@@ -1,29 +1,13 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base"
     xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/Base/ExplorerNode.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/Base/ExplorerNodesControl.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <!--
-        Name of the node being renamed, displayed in its cell in place of its visual. Validating or giving up runs the
-        rename of the list, which ends the edition, so the cell goes back to the visual of the node on its own.
-    -->
-    <DataTemplate x:Key="ExplorerRenameTemplate">
-        <TextBox
-            MinWidth="80"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"
-            base:ExplorerRename.Command="{Binding RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerList}}}"
-            joufflu:Sizing.Size="xs"
-            Text="{Binding Name, Mode=OneWay}" />
-        <!--  OneWay : the name is only written back once the rename is validated, and by the source.  -->
-    </DataTemplate>
 
     <Style TargetType="{x:Type local:ExplorerList}">
         <Setter Property="Template">
@@ -41,29 +25,7 @@
                         </ListView.ItemContainerStyle>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Name">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <!--
-                                                No ContentTemplate : the implicit template of the node type is
-                                                resolved, the trigger replacing it with the editable name while the
-                                                node is the one being renamed.
-                                            -->
-                                            <ContentPresenter x:Name="Presenter" Content="{Binding}" />
-                                            <DataTemplate.Triggers>
-                                                <DataTrigger Value="True">
-                                                    <DataTrigger.Binding>
-                                                        <MultiBinding Converter="{x:Static converters:IsRenamedConverter.Default}">
-                                                            <Binding />
-                                                            <Binding Path="RenamedNode" RelativeSource="{RelativeSource AncestorType={x:Type local:ExplorerList}}" />
-                                                        </MultiBinding>
-                                                    </DataTrigger.Binding>
-                                                    <Setter TargetName="Presenter" Property="ContentTemplate" Value="{StaticResource ExplorerRenameTemplate}" />
-                                                </DataTrigger>
-                                            </DataTemplate.Triggers>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                <GridViewColumn CellTemplate="{StaticResource ExplorerNodeTemplate}" Header="Name" />
                                 <GridViewColumn DisplayMemberBinding="{Binding ModifiedAt, StringFormat={}{0:yy/MM/dd HH:mm}}" Header="Modified at" />
                                 <GridViewColumn DisplayMemberBinding="{Binding Size, Converter={x:Static converters:FileSizeConverter.Default}}" Header="Size" />
                             </GridView>

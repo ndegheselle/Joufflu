@@ -11,8 +11,8 @@ namespace Joufflu.FileExplorer.Data
         public DateTime ModifiedAt { get; }
 
         /// <summary>
-        /// Directory containing the node, null for the root of a loader. Walked up by the navigation to the parent
-        /// folder and by the breadcrumb of the <see cref="ExplorerControlBar"/>.
+        /// Directory containing the node, null for the root of a source. Walked up by the navigation to the parent
+        /// folder.
         /// </summary>
         public IExplorerDirectory? Parent { get; }
     }

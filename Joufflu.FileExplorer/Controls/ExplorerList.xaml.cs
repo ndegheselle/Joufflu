@@ -1,38 +1,20 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
 using Joufflu.Helpers;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace Joufflu.FileExplorer.Controls;
 
 /// <summary>
 /// Lists the nodes of the opened folder in a <see cref="ListView"/>, opening a folder on double click.
 /// </summary>
-[ObservableObject]
-public partial class ExplorerList : Control, IExplorerUi
+public class ExplorerList : ExplorerNodesControl
 {
     #region Dependency Properties
-
-    public static readonly DependencyProperty SourceProperty =
-        DependencyProperty.Register(
-            nameof(Source), typeof(IExplorerSource), typeof(ExplorerList),
-            new PropertyMetadata(null,
-                (d, e) => ((ExplorerList)d).OnSourceChanged(e.OldValue as IExplorerSource,
-                    e.NewValue as IExplorerSource)));
-
-    public static readonly DependencyProperty VisibleNodesProperty = DependencyProperty.Register(
-        nameof(VisibleNodes),
-        typeof(ExplorerNodeKinds),
-        typeof(ExplorerList),
-        new FrameworkPropertyMetadata(ExplorerNodeKinds.All, (d, e) => ((ExplorerList)d).OnVisibleNodesChanged()));
 
     public static readonly DependencyPropertyKey ViewPropertyKey = DependencyProperty.RegisterReadOnly(
         nameof(View),
@@ -41,59 +23,16 @@ public partial class ExplorerList : Control, IExplorerUi
         new FrameworkPropertyMetadata(null));
     public static readonly DependencyProperty ViewProperty = ViewPropertyKey.DependencyProperty;
 
-    public static readonly DependencyPropertyKey IsDragOverKey = DependencyProperty.RegisterReadOnly(
-        nameof(IsDragOver),
-        typeof(bool),
-        typeof(ExplorerList),
-        new FrameworkPropertyMetadata(false));
-    public static readonly DependencyProperty IsDragOverProperty = IsDragOverKey.DependencyProperty;
-
-
     #endregion
 
     /// <summary>
-    /// Source of the explorer
+    /// Nodes of the opened directory, sorted and filtered, as the list displays them.
     /// </summary>
-    public IExplorerSource Source
-    {
-        get => (IExplorerSource)GetValue(SourceProperty);
-        set => SetValue(SourceProperty, value);
-    }
-
-    /// <summary>
-    /// Kinds of node the control shows, <see cref="ExplorerNodeKinds.All"/> by default. Set it to
-    /// <see cref="ExplorerNodeKinds.Directories"/> or <see cref="ExplorerNodeKinds.Files"/> to display only one.
-    /// </summary>
-    public ExplorerNodeKinds VisibleNodes
-    {
-        get => (ExplorerNodeKinds)GetValue(VisibleNodesProperty);
-        set => SetValue(VisibleNodesProperty, value);
-    }
-
     public ICollectionView? View
     {
         get => (ICollectionView?)GetValue(ViewProperty);
         private set => SetValue(ViewPropertyKey, value);
     }
-
-    public bool IsDragOver
-    {
-        get => (bool)GetValue(IsDragOverProperty);
-        private set => SetValue(IsDragOverKey, value);
-    }
-
-    protected const string PartItemsHost = "PART_ItemsHost";
-    protected ListView? ItemsHost { get; private set; }
-
-    /// <summary>
-    /// Node whose name is being edited in the list, null while none is. Held by the control and not by its
-    /// <see cref="Source"/> : the edition belongs to the list it was started in, so another control displaying the
-    /// same node doesn't open a box of its own.
-    /// </summary>
-    [ObservableProperty]
-    private IExplorerNode? renamedNode;
-
-    ICommand IExplorerUi.RenamingCommand => RenamingCommand;
 
     private readonly IComparer comparer = ExplorerNodeComparer.Default;
 
@@ -104,291 +43,31 @@ public partial class ExplorerList : Control, IExplorerUi
             new FrameworkPropertyMetadata(typeof(ExplorerList)));
     }
 
-    public ExplorerList()
-    {
-        // Default context menu to fix the first right click
-        this.ContextMenu = new ContextMenu();
-        ContextMenuOpening += ExplorerList_ContextMenuOpening;
-        MouseDoubleClick += ExplorerList_MouseDoubleClick;
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-
-        if (ItemsHost != null)
-        {
-            ItemsHost.Drop -= ItemsHost_Drop;
-            ItemsHost.MouseMove -= ItemsHost_MouseMove;
-            ItemsHost.PreviewMouseLeftButtonDown -= ItemsHost_PreviewMouseLeftButtonDown;
-            ItemsHost.PreviewMouseLeftButtonUp -= ItemsHost_PreviewMouseLeftButtonUp;
-            ItemsHost.QueryContinueDrag -= ItemsHost_QueryContinueDrag;
-
-            ItemsHost.DragEnter -= ItemsHost_DragEnter;
-            ItemsHost.DragOver -= ItemsHost_DragOver;
-            ItemsHost.DragLeave -= ItemsHost_DragLeave;
-        }
-
-        ItemsHost = GetTemplateChild(PartItemsHost) as ListView;
-
-        if (ItemsHost != null)
-        {
-            ItemsHost.Drop += ItemsHost_Drop;
-            ItemsHost.MouseMove += ItemsHost_MouseMove;
-            ItemsHost.PreviewMouseLeftButtonDown += ItemsHost_PreviewMouseLeftButtonDown;
-            ItemsHost.PreviewMouseLeftButtonUp += ItemsHost_PreviewMouseLeftButtonUp;
-            ItemsHost.QueryContinueDrag += ItemsHost_QueryContinueDrag;
-
-            ItemsHost.DragEnter += ItemsHost_DragEnter;
-            ItemsHost.DragOver += ItemsHost_DragOver;
-            ItemsHost.DragLeave += ItemsHost_DragLeave;
-        }
-    }
-
-    #region On dependency property changed
-
-    private void OnSourceChanged(IExplorerSource? previous, IExplorerSource? source)
-    {
-        ICollectionView? CreateView()
-        {
-            return source?.Current == null
-                ? null
-                : new ListCollectionView(source.Current.Children) { CustomSort = comparer, Filter = FilterNode, IsLiveSorting = false, IsLiveFiltering = false };
-        }
-
-        void OnSourcePropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != nameof(IExplorerSource.Current))
-                return;
-
-            // Navigating away gives up the edition in progress, its node not being displayed anymore.
-            RenamedNode = null;
-            View = CreateView();
-        }
-
-        // The nodes of the previous source are gone, so is any edition of one of them.
-        RenamedNode = null;
-
-        // Update view and track then source change
-        if (previous != null)
-            previous.PropertyChanged -= OnSourcePropertyChanged;
-        if (source != null)
-        {
-            source.PropertyChanged += OnSourcePropertyChanged;
-            View = CreateView();
-        }
-    }
-
-    private void OnVisibleNodesChanged()
-    {
-        View?.Refresh();
-    }
-
-    #endregion
-
-    #region Rename
-
     /// <summary>
-    /// Starts the edition of the name of a node, null giving up the one in progress : the cell of that node displays
-    /// an editable name until <see cref="Rename"/> ends it.
+    /// A list only displays the nodes of the opened directory, each one of them in a row of its own.
     /// </summary>
-    [RelayCommand]
-    private void Renaming(IExplorerNode? node) => RenamedNode = node;
-
-    /// <summary>
-    /// Ends the edition, <paramref name="rename"/> being null when it has been given up : the list closes its
-    /// editable name in either case, and only hands a validated one over to the <see cref="Source"/>.
-    /// </summary>
-    [RelayCommand]
-    private void Rename(ExplorerNodeRename? rename)
+    protected override void OnCurrentChanged()
     {
-        // Closed first : the source reloads the renamed directory, and the node of the edition is gone by then.
-        RenamedNode = null;
-
-        if (rename == null)
-            return;
-
-        ICommand? command = Source?.RenameCommand;
-        if (command?.CanExecute(rename) == true)
-            command.Execute(rename);
+        View = Source?.Current == null
+            ? null
+            : new ListCollectionView(Source.Current.Children)
+            {
+                CustomSort = comparer,
+                Filter = FilterNode,
+                IsLiveSorting = false,
+                IsLiveFiltering = false
+            };
     }
 
-    #endregion
+    protected override void OnVisibleNodesChanged() => View?.Refresh();
 
-    #region UI events
-    private void ExplorerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-    {
-        // A double click inside the name being renamed selects a word, it doesn't open the node.
-        if (IsInRenameBox(e.OriginalSource))
-            return;
+    protected override IReadOnlyList<IExplorerNode> GetSelectedNodes()
+        => (ItemsHost as ListView)?.SelectedItems.Cast<IExplorerNode>().ToList() ?? [];
 
-        var selected = ItemsHost?.SelectedItem as IExplorerNode;
-        if (selected == null)
-            return;
+    protected override FrameworkElement? GetContainerAt(DependencyObject? source)
+        => MoreVisualTreeHelper.FindParent<ListViewItem>(source);
 
-        Source.Open(selected);
-        e.Handled = true;
-    }
-
-    private static bool IsInRenameBox(object source)
-        => MoreVisualTreeHelper.FindSelfOrParent(source as DependencyObject, typeof(TextBox)) != null;
-
-    private void ExplorerList_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-    {
-        // Ignore listview columns header
-        if (ItemsHost == null || MoreVisualTreeHelper.FindParent<GridViewColumnHeader>(e.OriginalSource as DependencyObject) != null)
-        {
-            e.Handled = true;
-            return;
-        }
-
-        IExplorerNode? target = ItemsHost.SelectedItem as IExplorerNode;
-        IReadOnlyList<IExplorerNode> nodes = ItemsHost.SelectedItems.Cast<IExplorerNode>().ToList();
-        MenuScope scope = ItemsHost.SelectedItems.Count > 1 ? MenuScope.Multiple : MenuScope.Single;
-        // If outside of a row open on the current folder
-        if (IsOutsideRow(e))
-        {
-            target = Source.Current;
-            scope = MenuScope.None;
-        }
-
-        if (target == null)
-        {
-            e.Handled = true;
-            return;
-        }
-
-        var template = FindContextMenuTemplate(target.GetType(), scope);
-
-        if (template?.LoadContent() is not ContextMenu menu)
-        {
-            e.Handled = true;
-            return;
-        }
-
-        var element = (FrameworkElement)sender;
-        menu.DataContext = new ExplorerMenuContext(Source, this, scope == MenuScope.None ? [target]: nodes);
-        element.ContextMenu = menu;
-    }
-
-    private bool IsOutsideRow(RoutedEventArgs e) => MoreVisualTreeHelper.FindParent<ListViewItem>(e.OriginalSource as DependencyObject) == null;
-    #endregion
-
-    #region Context menu
-    /// <summary>
-    /// Searches the context menu template of a node type, from the most specific type to <see cref="object"/>.
-    /// </summary>
-    private DataTemplate? FindContextMenuTemplate(Type nodeType, MenuScope scope)
-    {
-        foreach (var type in GetTypeCandidates(nodeType))
-        {
-            if (TryFindResource(new ContextMenuTemplateKey(type) { Scope = scope }) is DataTemplate template)
-                return template;
-        }
-
-        return null;
-    }
-
-    private static IEnumerable<Type> GetTypeCandidates(Type nodeType)
-    {
-        for (Type? type = nodeType; type != null && type != typeof(object); type = type.BaseType)
-            yield return type;
-
-        foreach (var interfaceType in nodeType.GetInterfaces())
-            yield return interfaceType;
-
-        yield return typeof(object);
-    }
-    #endregion
-
-    #region Drag and Drop
-    private void ItemsHost_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        _clickPosition = e.GetPosition(null);
-    }
-    private void ItemsHost_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        _isCanceled = false;
-    }
-
-    private void ItemsHost_Drop(object sender, DragEventArgs e)
-    {
-        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
-            return;
-
-        var element = e.OriginalSource as FrameworkElement;
-        IExplorerDirectory? target = element?.DataContext as IExplorerDirectory ?? Source.Current;
-
-        if (target == null)
-            return;
-
-        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-        Source.Transfer(files, target, isMove: false);
-    }
-
-    private void ItemsHost_MouseMove(object sender, MouseEventArgs e)
-    {
-        if (_isCanceled || e.LeftButton != MouseButtonState.Pressed)
-            return;
-
-        if (ItemsHost == null) return;
-        if (IsOutsideRow(e)) return;
-
-        Point position = e.GetPosition(null);
-        if (!HasExceededMinimumDistance(position)) return;
-
-        var nodes = ItemsHost.SelectedItems.Cast<IExplorerNode>();
-
-        DataObject data = new DataObject(DataFormats.FileDrop, nodes.Select(x => x.Path).ToArray());
-        DragDrop.DoDragDrop(ItemsHost, data, DragDropEffects.Copy | DragDropEffects.Move);
-    }
-
-    private void ItemsHost_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
-    {
-        if (e.EscapePressed)
-        {
-            _isCanceled = true;
-            e.Action = DragAction.Cancel;
-        }
-    }
-
-    private int _enterCount;
-    private void ItemsHost_DragEnter(object sender, DragEventArgs e)
-    {
-        _enterCount++;
-        ItemsHost_DragOver(sender, e);
-    }
-    private void ItemsHost_DragOver(object sender, DragEventArgs e)
-    {
-        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
-        {
-            e.Effects = DragDropEffects.None;
-            e.Handled = true;
-            IsDragOver = false;
-            return;
-        }
-
-        IsDragOver = true;
-    }
-    private void ItemsHost_DragLeave(object sender, DragEventArgs e)
-    {
-        _enterCount = Math.Max(0, _enterCount - 1);
-        if (_enterCount == 0)
-            IsDragOver = false;
-    }
-
-    /// <summary>
-    /// Prevent another drag to start after on the same click after one have been canceled.
-    /// </summary>
-    private bool _isCanceled = false;
-    private Point _clickPosition;
-    private bool HasExceededMinimumDistance(Point position)
-    {
-        return Math.Abs(position.X - _clickPosition.X) >= SystemParameters.MinimumHorizontalDragDistance ||
-            Math.Abs(position.Y - _clickPosition.Y) >= SystemParameters.MinimumVerticalDragDistance;
-    }
-    #endregion
-
-    /// <summary>Keeps only the nodes whose kind is in <see cref="ExplorerNodesControl.VisibleNodes"/>.</summary>
-    private bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
+    /// <summary>Ignore listview columns header</summary>
+    protected override bool IsMenuIgnored(DependencyObject? source)
+        => MoreVisualTreeHelper.FindParent<GridViewColumnHeader>(source) != null;
 }

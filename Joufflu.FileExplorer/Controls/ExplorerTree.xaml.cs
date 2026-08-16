@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
+using Joufflu.Helpers;
 
 namespace Joufflu.FileExplorer.Controls
 {
@@ -25,12 +26,12 @@ namespace Joufflu.FileExplorer.Controls
                 new FrameworkPropertyMetadata(ExplorerNodeKinds.Directories));
         }
 
-        protected override IEnumerable<IExplorerNode> GetSelectedNodes()
-        {
+        protected override IReadOnlyList<IExplorerNode> GetSelectedNodes()
             // A TreeView only ever has one selected item.
-            if ((ItemsHost as TreeView)?.SelectedItem is IExplorerNode node)
-                yield return node;
-        }
+            => (ItemsHost as TreeView)?.SelectedItem is IExplorerNode node ? [node] : [];
+
+        protected override FrameworkElement? GetContainerAt(DependencyObject? source)
+            => MoreVisualTreeHelper.FindParent<TreeViewItem>(source);
 
         public override void OnApplyTemplate()
         {
@@ -73,10 +74,8 @@ namespace Joufflu.FileExplorer.Controls
 
         private void OnTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            UpdateSelectedNodes();
-
             if (e.NewValue is IExplorerDirectory directory)
-                Loader?.Open(directory);
+                Source?.Open(directory);
         }
     }
 

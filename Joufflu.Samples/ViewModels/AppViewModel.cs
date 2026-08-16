@@ -87,9 +87,8 @@ public class AppViewModel : ObservableObject
             ["navigation/paging"] = new PagingSamplesViewModel(),
 
             // File explorer (Joufflu.FileExplorer library)
-            ["file-explorer/explorer"] = new ExplorerSamplesViewModel(),
             ["file-explorer/list"] = new ExplorerListSamplesViewModel(Toasts),
-            ["file-explorer/tree"] = new ExplorerTreeSamplesViewModel(),
+            ["file-explorer/tree"] = new ExplorerTreeSamplesViewModel(Toasts),
             ["file-explorer/drag-drop"] = new DragAndDropSamplesViewModel(Toasts),
 
             // Custom controls

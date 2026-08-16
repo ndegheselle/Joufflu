@@ -1,9 +1,11 @@
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Sources;
 using Joufflu.Helpers;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Joufflu.FileExplorer.Controls.Base;
 
@@ -29,59 +31,47 @@ public static class ExplorerNodeKindsExtensions
 }
 
 /// <summary>
-/// Base of the explorer controls : the loader whose content they display and through which they navigate. Several
-/// controls share the same loader, so they all show the same opened directory.
+/// Behaviour shared by the controls displaying the nodes of a <see cref="Source"/> (<see cref="ExplorerList"/>,
+/// <see cref="ExplorerTree"/>) : the kinds of node shown, the edition of a name, the context menu of a node and the
+/// drag and drop of files. A derived control only provides the <see cref="ItemsControl"/> template part displaying
+/// the nodes, and tells how to read its selection and its item containers.
 /// </summary>
-public abstract class ExplorerControl : Control
-{
-    #region Dependency Property
-    public static readonly DependencyProperty LoaderProperty = DependencyProperty.Register(
-        nameof(Loader),
-        typeof(IExplorerSource),
-        typeof(ExplorerControl),
-        new PropertyMetadata(null));
-    #endregion
-
-    public IExplorerSource? Loader
-    {
-        get => (IExplorerSource?)GetValue(LoaderProperty);
-        set => SetValue(LoaderProperty, value);
-    }
-}
-
-/// <summary>
-/// Behaviour shared by the controls displaying explorer nodes (<see cref="ExplorerList"/>,
-/// <see cref="ExplorerTree"/>) : opening a directory on double click, the context menu of a node and its
-/// selection. A derived control only provides the <see cref="ItemsControl"/> template part displaying the nodes
-/// and reads its selection.
-/// </summary>
+[ObservableObject]
 [TemplatePart(Name = PartItemsHost, Type = typeof(ItemsControl))]
-public abstract class ExplorerNodesControl : ExplorerControl
+public abstract partial class ExplorerNodesControl : Control, IExplorerUi
 {
-    protected const string PartItemsHost = "PART_ItemsHost";
+    #region Dependency Properties
 
-    /// <summary>
-    /// Single menu instance filled on opening : WPF captures the <see cref="FrameworkElement.ContextMenu"/> value
-    /// before raising <see cref="FrameworkElement.ContextMenuOpening"/>, so the instance can't be replaced there.
-    /// </summary>
-    private readonly ContextMenu _contextMenu = new();
-
-    #region Dependency Property
-    private static readonly DependencyPropertyKey SelectedNodesPropertyKey = DependencyProperty.RegisterReadOnly(
-        nameof(SelectedNodes),
-        typeof(IReadOnlyList<IExplorerNode>),
-        typeof(ExplorerNodesControl),
-        new PropertyMetadata(Array.Empty<IExplorerNode>()));
-
-    public static readonly DependencyProperty SelectedNodesProperty
-        = SelectedNodesPropertyKey.DependencyProperty;
+    public static readonly DependencyProperty SourceProperty =
+        DependencyProperty.Register(
+            nameof(Source), typeof(IExplorerSource), typeof(ExplorerNodesControl),
+            new PropertyMetadata(null,
+                (d, e) => ((ExplorerNodesControl)d).OnSourceChanged(e.OldValue as IExplorerSource,
+                    e.NewValue as IExplorerSource)));
 
     public static readonly DependencyProperty VisibleNodesProperty = DependencyProperty.Register(
         nameof(VisibleNodes),
         typeof(ExplorerNodeKinds),
         typeof(ExplorerNodesControl),
         new FrameworkPropertyMetadata(ExplorerNodeKinds.All, OnVisibleNodesChanged));
+
+    public static readonly DependencyPropertyKey IsDragOverKey = DependencyProperty.RegisterReadOnly(
+        nameof(IsDragOver),
+        typeof(bool),
+        typeof(ExplorerNodesControl),
+        new FrameworkPropertyMetadata(false));
+    public static readonly DependencyProperty IsDragOverProperty = IsDragOverKey.DependencyProperty;
+
     #endregion
+
+    /// <summary>
+    /// Source of the explorer
+    /// </summary>
+    public IExplorerSource Source
+    {
+        get => (IExplorerSource)GetValue(SourceProperty);
+        set => SetValue(SourceProperty, value);
+    }
 
     /// <summary>
     /// Kinds of node the control shows, <see cref="ExplorerNodeKinds.All"/> by default. Set it to
@@ -93,11 +83,13 @@ public abstract class ExplorerNodesControl : ExplorerControl
         set => SetValue(VisibleNodesProperty, value);
     }
 
-    private static void OnVisibleNodesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((ExplorerNodesControl)d).OnVisibleNodesChanged();
+    public bool IsDragOver
+    {
+        get => (bool)GetValue(IsDragOverProperty);
+        private set => SetValue(IsDragOverKey, value);
+    }
 
-    /// <summary>Re-applies <see cref="VisibleNodes"/> when it changes ; a derived control overrides it as needed.</summary>
-    protected virtual void OnVisibleNodesChanged() { }
+    protected const string PartItemsHost = "PART_ItemsHost";
 
     /// <summary>
     /// Control displaying the nodes, taken from the <see cref="PartItemsHost"/> template part.
@@ -105,22 +97,22 @@ public abstract class ExplorerNodesControl : ExplorerControl
     protected ItemsControl? ItemsHost { get; private set; }
 
     /// <summary>
-    /// Nodes selected in <see cref="ItemsHost"/>, empty when nothing is selected. Bindable, so that a status bar
-    /// can show how many of them there are.
+    /// Node whose name is being edited in the control, null while none is. Held by the control and not by its
+    /// <see cref="Source"/> : the edition belongs to the control it was started in, so another control displaying the
+    /// same node doesn't open a box of its own.
     /// </summary>
-    public IReadOnlyList<IExplorerNode> SelectedNodes
-        => (IReadOnlyList<IExplorerNode>)GetValue(SelectedNodesProperty);
+    [ObservableProperty]
+    private IExplorerNode? renamedNode;
 
-    /// <summary>
-    /// Reads the selection of <see cref="ItemsHost"/>, which only a derived control knows how to reach.
-    /// </summary>
-    protected abstract IEnumerable<IExplorerNode> GetSelectedNodes();
+    ICommand IExplorerUi.RenamingCommand => RenamingCommand;
 
-    /// <summary>
-    /// Publishes the selection of <see cref="ItemsHost"/> in <see cref="SelectedNodes"/>. A derived control calls
-    /// it whenever its host reports a selection change.
-    /// </summary>
-    protected void UpdateSelectedNodes() => SetValue(SelectedNodesPropertyKey, GetSelectedNodes().ToArray());
+    protected ExplorerNodesControl()
+    {
+        // Default context menu to fix the first right click
+        this.ContextMenu = new ContextMenu();
+        ContextMenuOpening += ExplorerNodesControl_ContextMenuOpening;
+        MouseDoubleClick += ExplorerNodesControl_MouseDoubleClick;
+    }
 
     public override void OnApplyTemplate()
     {
@@ -128,41 +120,145 @@ public abstract class ExplorerNodesControl : ExplorerControl
 
         if (ItemsHost != null)
         {
-            ItemsHost.RemoveHandler(
-                MouseLeftButtonDownEvent,
-                (MouseButtonEventHandler)OnItemsHostMouseLeftButtonDown);
-            ItemsHost.ContextMenuOpening -= OnItemsHostContextMenuOpening;
-            ItemsHost.ContextMenu = null;
+            ItemsHost.Drop -= ItemsHost_Drop;
+            ItemsHost.MouseMove -= ItemsHost_MouseMove;
+            ItemsHost.PreviewMouseLeftButtonDown -= ItemsHost_PreviewMouseLeftButtonDown;
+            ItemsHost.PreviewMouseLeftButtonUp -= ItemsHost_PreviewMouseLeftButtonUp;
+            ItemsHost.QueryContinueDrag -= ItemsHost_QueryContinueDrag;
+
+            ItemsHost.DragEnter -= ItemsHost_DragEnter;
+            ItemsHost.DragOver -= ItemsHost_DragOver;
+            ItemsHost.DragLeave -= ItemsHost_DragLeave;
         }
 
         ItemsHost = GetTemplateChild(PartItemsHost) as ItemsControl;
 
         if (ItemsHost != null)
         {
-            // An item container handles the click to select itself, hence handledEventsToo.
-            ItemsHost.AddHandler(
-                MouseLeftButtonDownEvent,
-                (MouseButtonEventHandler)OnItemsHostMouseLeftButtonDown,
-                true);
-            ItemsHost.ContextMenuOpening += OnItemsHostContextMenuOpening;
-            ItemsHost.ContextMenu = _contextMenu;
-            _contextMenu.PlacementTarget = ItemsHost;
-        }
+            ItemsHost.Drop += ItemsHost_Drop;
+            ItemsHost.MouseMove += ItemsHost_MouseMove;
+            ItemsHost.PreviewMouseLeftButtonDown += ItemsHost_PreviewMouseLeftButtonDown;
+            ItemsHost.PreviewMouseLeftButtonUp += ItemsHost_PreviewMouseLeftButtonUp;
+            ItemsHost.QueryContinueDrag += ItemsHost_QueryContinueDrag;
 
-        UpdateSelectedNodes();
+            ItemsHost.DragEnter += ItemsHost_DragEnter;
+            ItemsHost.DragOver += ItemsHost_DragOver;
+            ItemsHost.DragLeave += ItemsHost_DragLeave;
+        }
     }
 
-    #region UI events
+    #region Derived control
+
     /// <summary>
-    /// Detects a double click on a node.
+    /// Nodes selected in <see cref="ItemsHost"/>, empty when nothing is selected. Only a derived control knows how to
+    /// reach the selection of its host.
     /// </summary>
-    /// <remarks>
-    /// <see cref="Control.MouseDoubleClick"/> is not used : every <see cref="Control"/> of the route raises its
-    /// own, so a single double click would be reported once per ancestor container.
-    /// </remarks>
-    private void OnItemsHostMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    protected abstract IReadOnlyList<IExplorerNode> GetSelectedNodes();
+
+    /// <summary>
+    /// Item container displaying a node, from an element inside of it, null when <paramref name="source"/> is outside
+    /// of any of them.
+    /// </summary>
+    protected abstract FrameworkElement? GetContainerAt(DependencyObject? source);
+
+    /// <summary>
+    /// Whether an element opens no context menu at all, a column header of a list for instance.
+    /// </summary>
+    protected virtual bool IsMenuIgnored(DependencyObject? source) => false;
+
+    /// <summary>
+    /// Reacts to a double click on a node, opening it by default. Returns whether the double click has been handled.
+    /// </summary>
+    /// <param name="container">Item container displaying <paramref name="node"/>.</param>
+    protected virtual bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
     {
-        if (e.ClickCount != 2)
+        Source.Open(node);
+        return true;
+    }
+
+    #endregion
+
+    #region On dependency property changed
+
+    /// <summary>
+    /// Tracks the directory opened by the source, the nodes displayed by the control coming from it.
+    /// </summary>
+    private void OnSourceChanged(IExplorerSource? previous, IExplorerSource? source)
+    {
+        void OnSourcePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(IExplorerSource.Current))
+                return;
+
+            // Navigating away gives up the edition in progress, its node not being displayed anymore.
+            RenamedNode = null;
+            OnCurrentChanged();
+        }
+
+        // The nodes of the previous source are gone, so is any edition of one of them.
+        RenamedNode = null;
+
+        // Update the displayed nodes and track then source change
+        if (previous != null)
+            previous.PropertyChanged -= OnSourcePropertyChanged;
+        if (source != null)
+        {
+            source.PropertyChanged += OnSourcePropertyChanged;
+            OnCurrentChanged();
+        }
+    }
+
+    /// <summary>
+    /// The <see cref="Source"/>, or the directory it has opened, changed ; a derived control overrides it to rebuild
+    /// what it displays.
+    /// </summary>
+    protected virtual void OnCurrentChanged() { }
+
+    private static void OnVisibleNodesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        => ((ExplorerNodesControl)d).OnVisibleNodesChanged();
+
+    /// <summary>Re-applies <see cref="VisibleNodes"/> when it changes ; a derived control overrides it as needed.</summary>
+    protected virtual void OnVisibleNodesChanged() { }
+
+    /// <summary>Keeps only the nodes whose kind is in <see cref="VisibleNodes"/>.</summary>
+    protected bool FilterNode(object item) => item is IExplorerNode node && VisibleNodes.Includes(node);
+
+    #endregion
+
+    #region Rename
+
+    /// <summary>
+    /// Starts the edition of the name of a node, null giving up the one in progress : the control displays an editable
+    /// name in place of that node until <see cref="Rename"/> ends it.
+    /// </summary>
+    [RelayCommand]
+    private void Renaming(IExplorerNode? node) => RenamedNode = node;
+
+    /// <summary>
+    /// Ends the edition, <paramref name="rename"/> being null when it has been given up : the control closes its
+    /// editable name in either case, and only hands a validated one over to the <see cref="Source"/>.
+    /// </summary>
+    [RelayCommand]
+    private void Rename(ExplorerNodeRename? rename)
+    {
+        // Closed first : the source reloads the renamed directory, and the node of the edition is gone by then.
+        RenamedNode = null;
+
+        if (rename == null)
+            return;
+
+        ICommand? command = Source?.RenameCommand;
+        if (command?.CanExecute(rename) == true)
+            command.Execute(rename);
+    }
+
+    #endregion
+
+    #region UI events
+    private void ExplorerNodesControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        // A double click inside the name being renamed selects a word, it doesn't open the node.
+        if (IsInRenameBox(e.OriginalSource))
             return;
 
         var container = GetContainerAt(e.OriginalSource as DependencyObject);
@@ -172,22 +268,34 @@ public abstract class ExplorerNodesControl : ExplorerControl
         e.Handled = OnNodeDoubleClick(node, container);
     }
 
-    private void OnItemsHostContextMenuOpening(object sender, ContextMenuEventArgs e)
-    {
-        _contextMenu.Items.Clear();
-        _contextMenu.DataContext = null;
+    private static bool IsInRenameBox(object source)
+        => MoreVisualTreeHelper.FindSelfOrParent(source as DependencyObject, typeof(TextBox)) != null;
 
-        var node = GetNodeAt(e.OriginalSource as DependencyObject);
-        if (node == null)
+    private void ExplorerNodesControl_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        if (ItemsHost == null || IsMenuIgnored(e.OriginalSource as DependencyObject))
         {
             e.Handled = true;
             return;
         }
 
-        var nodes = GetMenuNodes(node);
-        var template = FindContextMenuTemplate(
-            node.GetType(),
-            nodes.Count > 1 ? MenuScope.Multiple : MenuScope.Single);
+        IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
+        IExplorerNode? target = nodes.FirstOrDefault();
+        MenuScope scope = nodes.Count > 1 ? MenuScope.Multiple : MenuScope.Single;
+        // If outside of a node open on the current folder
+        if (IsOutsideNode(e))
+        {
+            target = Source.Current;
+            scope = MenuScope.None;
+        }
+
+        if (target == null)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        var template = FindContextMenuTemplate(target.GetType(), scope);
 
         if (template?.LoadContent() is not ContextMenu menu)
         {
@@ -195,52 +303,15 @@ public abstract class ExplorerNodesControl : ExplorerControl
             return;
         }
 
-        MoveItems(menu, _contextMenu);
-        // No IExplorerUi : the template of a tree item has no editable name, so the rename is left disabled here.
-        _contextMenu.DataContext = new ExplorerMenuContext(Loader, null, nodes);
+        var element = (FrameworkElement)sender;
+        menu.DataContext = new ExplorerMenuContext(Source, this, scope == MenuScope.None ? [target] : nodes);
+        element.ContextMenu = menu;
     }
+
+    private bool IsOutsideNode(RoutedEventArgs e) => GetContainerAt(e.OriginalSource as DependencyObject) == null;
     #endregion
 
-    /// <summary>
-    /// Reacts to a double click on a node, opening a folder by default. Returns whether the double click has been
-    /// handled.
-    /// </summary>
-    /// <param name="container">Item container displaying <paramref name="node"/>.</param>
-    protected virtual bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
-    {
-        if (node is not IExplorerDirectory directory)
-            return false;
-
-        Loader?.Open(directory);
-        return true;
-    }
-
-    /// <summary>
-    /// Moves the items of the menu loaded from a template to the persistent menu.
-    /// </summary>
-    private static void MoveItems(ContextMenu source, ContextMenu destination)
-    {
-        while (source.Items.Count > 0)
-        {
-            var item = source.Items[0];
-            source.Items.RemoveAt(0);
-            destination.Items.Add(item);
-        }
-    }
-
-    /// <summary>
-    /// Selected nodes with the one the menu was opened on first, or only that node when it isn't selected.
-    /// </summary>
-    private List<IExplorerNode> GetMenuNodes(IExplorerNode node)
-    {
-        var nodes = GetSelectedNodes().ToList();
-        if (!nodes.Remove(node))
-            return [node];
-
-        nodes.Insert(0, node);
-        return nodes;
-    }
-
+    #region Context menu
     /// <summary>
     /// Searches the context menu template of a node type, from the most specific type to <see cref="object"/>.
     /// </summary>
@@ -265,34 +336,94 @@ public abstract class ExplorerNodesControl : ExplorerControl
 
         yield return typeof(object);
     }
+    #endregion
 
-    /// <summary>
-    /// Node displayed by the item container of <paramref name="source"/>, whatever its nesting level.
-    /// </summary>
-    private IExplorerNode? GetNodeAt(DependencyObject? source)
-        => GetContainerAt(source)?.DataContext as IExplorerNode;
-
-    /// <summary>
-    /// Item container displaying a node, from an element inside of it, whatever its nesting level.
-    /// </summary>
-    /// <remarks>
-    /// <see cref="ItemsControl.ContainerFromElement(ItemsControl, DependencyObject)"/> is not used : it only
-    /// recognizes the containers generated by <see cref="ItemsHost"/> itself, and in a hierarchy a container is
-    /// generated by its parent item, so a nested node would resolve to its top level ancestor.
-    /// </remarks>
-    private FrameworkElement? GetContainerAt(DependencyObject? source)
+    #region Drag and Drop
+    private void ItemsHost_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (ItemsHost == null)
-            return null;
+        _clickPosition = e.GetPosition(null);
+    }
+    private void ItemsHost_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        _isCanceled = false;
+    }
 
-        for (DependencyObject? element = source; element != null && element != ItemsHost;
-            element = MoreVisualTreeHelper.GetParent(element))
+    private void ItemsHost_Drop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
+            return;
+
+        var element = e.OriginalSource as FrameworkElement;
+        IExplorerDirectory? target = element?.DataContext as IExplorerDirectory ?? Source.Current;
+
+        if (target == null)
+            return;
+
+        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        Source.Transfer(files, target, isMove: false);
+    }
+
+    private void ItemsHost_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (_isCanceled || e.LeftButton != MouseButtonState.Pressed)
+            return;
+
+        if (ItemsHost == null) return;
+        if (IsOutsideNode(e)) return;
+
+        Point position = e.GetPosition(null);
+        if (!HasExceededMinimumDistance(position)) return;
+
+        IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
+        if (nodes.Count == 0) return;
+
+        DataObject data = new DataObject(DataFormats.FileDrop, nodes.Select(x => x.Path).ToArray());
+        DragDrop.DoDragDrop(ItemsHost, data, DragDropEffects.Copy | DragDropEffects.Move);
+    }
+
+    private void ItemsHost_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
+    {
+        if (e.EscapePressed)
         {
-            if (element is FrameworkElement { DataContext: IExplorerNode } container
-                && ItemsControl.ItemsControlFromItemContainer(element) != null)
-                return container;
+            _isCanceled = true;
+            e.Action = DragAction.Cancel;
+        }
+    }
+
+    private int _enterCount;
+    private void ItemsHost_DragEnter(object sender, DragEventArgs e)
+    {
+        _enterCount++;
+        ItemsHost_DragOver(sender, e);
+    }
+    private void ItemsHost_DragOver(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
+        {
+            e.Effects = DragDropEffects.None;
+            e.Handled = true;
+            IsDragOver = false;
+            return;
         }
 
-        return null;
+        IsDragOver = true;
     }
+    private void ItemsHost_DragLeave(object sender, DragEventArgs e)
+    {
+        _enterCount = Math.Max(0, _enterCount - 1);
+        if (_enterCount == 0)
+            IsDragOver = false;
+    }
+
+    /// <summary>
+    /// Prevent another drag to start after on the same click after one have been canceled.
+    /// </summary>
+    private bool _isCanceled = false;
+    private Point _clickPosition;
+    private bool HasExceededMinimumDistance(Point position)
+    {
+        return Math.Abs(position.X - _clickPosition.X) >= SystemParameters.MinimumHorizontalDragDistance ||
+            Math.Abs(position.Y - _clickPosition.Y) >= SystemParameters.MinimumVerticalDragDistance;
+    }
+    #endregion
 }

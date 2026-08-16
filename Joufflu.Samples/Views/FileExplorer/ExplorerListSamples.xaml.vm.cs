@@ -8,22 +8,16 @@ namespace Joufflu.Samples.Views.FileExplorer;
 public class ExplorerListSamplesViewModel : ObservableObject
 {
     /// <summary>
-    /// Loader shared by every sample on this page, so the control bar navigates the same
-    /// loader the lists observe and they all move together.
+    /// Source shared by every sample on this page, so the lists observe the same one and they all
+    /// move together.
     /// </summary>
     public IExplorerSource Source { get; private set; }
 
     public string ExplorerListCode =>
-        "<fileExplorer:ExplorerList Loader=\"{Binding Loader}\" />";
-
-    public string ExplorerControlBarCode =>
-        """
-        <fileExplorer:ExplorerControlBar Loader="{Binding Loader}" />
-        <fileExplorer:ExplorerList Loader="{Binding Loader}" />
-        """;
+        "<fileExplorer:ExplorerList Source=\"{Binding Source}\" />";
 
     public string ExplorerListFilterCode =>
-        "<fileExplorer:ExplorerList Loader=\"{Binding Loader}\" VisibleNodes=\"Files\" />";
+        "<fileExplorer:ExplorerList Source=\"{Binding Source}\" VisibleNodes=\"Files\" />";
 
     public ExplorerListSamplesViewModel(IToastService toats)
     {
