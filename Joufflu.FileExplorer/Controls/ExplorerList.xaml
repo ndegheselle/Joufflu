@@ -31,7 +31,6 @@
                 <ControlTemplate TargetType="{x:Type local:ExplorerList}">
                     <ListView
                         x:Name="PART_ItemsHost"
-                        Padding="0"
                         AllowDrop="True"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                         ItemsSource="{Binding View}">
@@ -70,6 +69,11 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDragOver" Value="True">
+                            <Setter TargetName="PART_ItemsHost" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

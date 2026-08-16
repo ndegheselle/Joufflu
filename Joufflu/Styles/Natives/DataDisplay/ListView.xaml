@@ -220,9 +220,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
-                    <ScrollViewer Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}">
-                        <ItemsPresenter />
-                    </ScrollViewer>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                        <ScrollViewer Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsGrouping" Value="True">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False" />

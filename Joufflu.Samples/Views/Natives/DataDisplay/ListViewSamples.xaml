@@ -5,12 +5,8 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel
-
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="List view" />
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="List view" />
 
             <c:CodeExample
                 Title="Grid view columns"
@@ -19,9 +15,18 @@
                 <ListView Height="200" ItemsSource="{Binding People}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="160" Header="Name" DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="140" Header="Role" DisplayMemberBinding="{Binding Role}" />
-                            <GridViewColumn Width="80" Header="Age" DisplayMemberBinding="{Binding Age}" />
+                            <GridViewColumn
+                                Width="160"
+                                DisplayMemberBinding="{Binding Name}"
+                                Header="Name" />
+                            <GridViewColumn
+                                Width="140"
+                                DisplayMemberBinding="{Binding Role}"
+                                Header="Role" />
+                            <GridViewColumn
+                                Width="80"
+                                DisplayMemberBinding="{Binding Age}"
+                                Header="Age" />
                         </GridView>
                     </ListView.View>
                 </ListView>

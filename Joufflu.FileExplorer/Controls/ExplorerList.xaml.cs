@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Controls.Base;
 using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.DragAndDrop;
 using Joufflu.FileExplorer.Sources;
 using Joufflu.Helpers;
 using System.Collections;
@@ -10,9 +9,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Xml.Linq;
 
 namespace Joufflu.FileExplorer.Controls;
 
@@ -44,6 +41,14 @@ public partial class ExplorerList : Control, IExplorerUi
         new FrameworkPropertyMetadata(null));
     public static readonly DependencyProperty ViewProperty = ViewPropertyKey.DependencyProperty;
 
+    public static readonly DependencyPropertyKey IsDragOverKey = DependencyProperty.RegisterReadOnly(
+        nameof(IsDragOver),
+        typeof(bool),
+        typeof(ExplorerList),
+        new FrameworkPropertyMetadata(false));
+    public static readonly DependencyProperty IsDragOverProperty = IsDragOverKey.DependencyProperty;
+
+
     #endregion
 
     /// <summary>
@@ -69,6 +74,12 @@ public partial class ExplorerList : Control, IExplorerUi
     {
         get => (ICollectionView?)GetValue(ViewProperty);
         private set => SetValue(ViewPropertyKey, value);
+    }
+
+    public bool IsDragOver
+    {
+        get => (bool)GetValue(IsDragOverProperty);
+        private set => SetValue(IsDragOverKey, value);
     }
 
     protected const string PartItemsHost = "PART_ItemsHost";
@@ -110,6 +121,12 @@ public partial class ExplorerList : Control, IExplorerUi
             ItemsHost.Drop -= ItemsHost_Drop;
             ItemsHost.MouseMove -= ItemsHost_MouseMove;
             ItemsHost.PreviewMouseLeftButtonDown -= ItemsHost_PreviewMouseLeftButtonDown;
+            ItemsHost.PreviewMouseLeftButtonUp -= ItemsHost_PreviewMouseLeftButtonUp;
+            ItemsHost.QueryContinueDrag -= ItemsHost_QueryContinueDrag;
+
+            ItemsHost.DragEnter -= ItemsHost_DragEnter;
+            ItemsHost.DragOver -= ItemsHost_DragOver;
+            ItemsHost.DragLeave -= ItemsHost_DragLeave;
         }
 
         ItemsHost = GetTemplateChild(PartItemsHost) as ListView;
@@ -119,6 +136,12 @@ public partial class ExplorerList : Control, IExplorerUi
             ItemsHost.Drop += ItemsHost_Drop;
             ItemsHost.MouseMove += ItemsHost_MouseMove;
             ItemsHost.PreviewMouseLeftButtonDown += ItemsHost_PreviewMouseLeftButtonDown;
+            ItemsHost.PreviewMouseLeftButtonUp += ItemsHost_PreviewMouseLeftButtonUp;
+            ItemsHost.QueryContinueDrag += ItemsHost_QueryContinueDrag;
+
+            ItemsHost.DragEnter += ItemsHost_DragEnter;
+            ItemsHost.DragOver += ItemsHost_DragOver;
+            ItemsHost.DragLeave += ItemsHost_DragLeave;
         }
     }
 
@@ -283,7 +306,10 @@ public partial class ExplorerList : Control, IExplorerUi
     {
         _clickPosition = e.GetPosition(null);
     }
-
+    private void ItemsHost_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        _isCanceled = false;
+    }
 
     private void ItemsHost_Drop(object sender, DragEventArgs e)
     {
@@ -302,7 +328,7 @@ public partial class ExplorerList : Control, IExplorerUi
 
     private void ItemsHost_MouseMove(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton != MouseButtonState.Pressed)
+        if (_isCanceled || e.LeftButton != MouseButtonState.Pressed)
             return;
 
         if (ItemsHost == null) return;
@@ -314,58 +340,52 @@ public partial class ExplorerList : Control, IExplorerUi
         var nodes = ItemsHost.SelectedItems.Cast<IExplorerNode>();
 
         DataObject data = new DataObject(DataFormats.FileDrop, nodes.Select(x => x.Path).ToArray());
-        DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
+        DragDrop.DoDragDrop(ItemsHost, data, DragDropEffects.Copy | DragDropEffects.Move);
     }
 
+    private void ItemsHost_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
+    {
+        if (e.EscapePressed)
+        {
+            _isCanceled = true;
+            e.Action = DragAction.Cancel;
+        }
+    }
+
+    private int _enterCount;
+    private void ItemsHost_DragEnter(object sender, DragEventArgs e)
+    {
+        _enterCount++;
+        ItemsHost_DragOver(sender, e);
+    }
+    private void ItemsHost_DragOver(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
+        {
+            e.Effects = DragDropEffects.None;
+            e.Handled = true;
+            IsDragOver = false;
+            return;
+        }
+
+        IsDragOver = true;
+    }
+    private void ItemsHost_DragLeave(object sender, DragEventArgs e)
+    {
+        _enterCount = Math.Max(0, _enterCount - 1);
+        if (_enterCount == 0)
+            IsDragOver = false;
+    }
+
+    /// <summary>
+    /// Prevent another drag to start after on the same click after one have been canceled.
+    /// </summary>
+    private bool _isCanceled = false;
     private Point _clickPosition;
     private bool HasExceededMinimumDistance(Point position)
     {
         return Math.Abs(position.X - _clickPosition.X) >= SystemParameters.MinimumHorizontalDragDistance ||
             Math.Abs(position.Y - _clickPosition.Y) >= SystemParameters.MinimumVerticalDragDistance;
-    }
-
-    private DragAdorner? _adorner;
-    private void ShowAdorner(object data)
-    {
-        HideAdorner();
-
-        if (ItemsHost == null)
-            return;
-
-        FrameworkElement? content = CreateAdornerContent(data);
-        AdornerLayer? layer = AdornerLayer.GetAdornerLayer(ItemsHost);
-
-        if (content == null || layer == null)
-            return;
-
-        _adorner = new DragAdorner(ItemsHost, content, _position);
-        layer.Add(_adorner);
-    }
-
-    private void HideAdorner()
-    {
-        if (_adorner == null || ItemsHost == null)
-            return;
-
-        AdornerLayer.GetAdornerLayer(ItemsHost)?.Remove(_adorner);
-        _adorner = null;
-    }
-
-    /// <summary>
-    /// Moves the adorner under the cursor. <see cref="Mouse.GetPosition"/> is not usable here, it stays on the
-    /// position the drag started from while <see cref="System.Windows.DragDrop.DoDragDrop"/> blocks, so the position
-    /// is read from the system.
-    /// </summary>
-    private void MoveAdornerToCursor()
-    {
-        if (_adorner == null || ItemsHost?.IsLoaded != true)
-            return;
-
-        if (!GetCursorPos(out System.Drawing.Point cursor))
-            return;
-
-        _position = ItemsHost.PointFromScreen(new Point(cursor.X, cursor.Y));
-        _adorner.UpdatePosition(_position);
     }
     #endregion
 
