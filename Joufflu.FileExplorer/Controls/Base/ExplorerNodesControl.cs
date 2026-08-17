@@ -247,13 +247,11 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     [RelayCommand]
     private void Rename(ExplorerNodeRename? rename)
     {
-        // Closed first : the source reloads the renamed directory, and the node of the edition is gone by then.
         RenamedNode = null;
-
         if (rename == null)
             return;
 
-        Execute(Source?.RenameCommand, rename);
+        Source?.RenameCommand.Execute(rename);
     }
 
     #endregion
@@ -273,55 +271,34 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         if (e.Handled || IsInRenameBox(e.OriginalSource))
             return;
 
-        e.Handled = OnShortcut(e.Key, Keyboard.Modifiers);
-    }
-
-    /// <summary>
-    /// Runs the operation a shortcut stands for, and returns whether it did : a shortcut without anything to act on
-    /// (an empty selection, an unavailable command) is left to whatever else may handle it.
-    /// </summary>
-    private bool OnShortcut(Key key, ModifierKeys modifiers)
-    {
+        // Shortcuts
         IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
 
-        if (modifiers == ModifierKeys.Control)
+        if (nodes.Count > 0)
         {
-            return key switch
-            {
-                Key.C => nodes.Count > 0 && Execute(Source.CopyCommand, nodes),
-                Key.X => nodes.Count > 0 && Execute(Source.CutCommand, nodes),
-                // Pasted into the opened directory and not into the selected one, as the Windows explorer does.
-                Key.V => Source.Current != null && Execute(Source.PasteCommand, Source.Current),
-                _ => false
-            };
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C){
+                Source.CopyCommand.Execute(nodes); 
+                e.Handled = true;
+            }
+            else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.X){
+                Source.CutCommand.Execute(nodes); 
+                e.Handled = true;
+            }
+            else if(e.Key == Key.Delete){
+                Source.RemoveCommand.Execute(nodes); 
+                e.Handled = true;
+            }
+            else if(e.Key == Key.F2){
+                Renaming(nodes.First()); 
+                e.Handled = true;
+            }
+
         }
-
-        if (modifiers != ModifierKeys.None)
-            return false;
-
-        switch (key)
-        {
-            // Only a lone node is renamed : the edition happens in place, where several ones would need a box each.
-            case Key.F2 when nodes.Count == 1:
-                Renaming(nodes[0]);
-                return true;
-            case Key.Delete when nodes.Count > 0:
-                return Execute(Source.RemoveCommand, nodes);
-            default:
-                return false;
+        else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V){
+            Source.PasteCommand.Execute(Source.Current); 
+            e.Handled = true;
         }
     }
-
-    /// <summary>Runs a command when it is there and accepts the parameter, and returns whether it did.</summary>
-    private static bool Execute(ICommand? command, object? parameter)
-    {
-        if (command?.CanExecute(parameter) != true)
-            return false;
-
-        command.Execute(parameter);
-        return true;
-    }
-
     #endregion
 
     #region UI events

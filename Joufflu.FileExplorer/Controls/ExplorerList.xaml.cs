@@ -38,18 +38,8 @@ public class ExplorerList : ExplorerNodesControl
     /// <summary>
     /// Columns displayed after the ones of the list (name, modification date, size), for the data a node type of your
     /// own carries : the cells are bound to the node of their row, so a
-    /// <c>DisplayMemberBinding="{Binding Author}"</c> shows the Author of a custom <see cref="IExplorerNode"/>. A
-    /// column can be added or removed at any time, the list follows.
+    /// <c>DisplayMemberBinding="{Binding Author}"</c> shows the Author of a custom <see cref="IExplorerNode"/>.
     /// </summary>
-    /// <example>
-    /// <code>
-    /// &lt;fileExplorer:ExplorerList Source="{Binding Source}"&gt;
-    ///     &lt;fileExplorer:ExplorerList.ExtraColumns&gt;
-    ///         &lt;GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" /&gt;
-    ///     &lt;/fileExplorer:ExplorerList.ExtraColumns&gt;
-    /// &lt;/fileExplorer:ExplorerList&gt;
-    /// </code>
-    /// </example>
     public ObservableCollection<GridViewColumn> ExtraColumns { get; } = [];
 
     /// <summary>Columns of the template, kept ahead of the <see cref="ExtraColumns"/>.</summary>
