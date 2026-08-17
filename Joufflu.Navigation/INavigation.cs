@@ -24,6 +24,7 @@ public interface INavigator
     object? CurrentPage { get; }
 
     void Navigate(object page);
+    void Navigate(Type page);
 
     event EventHandler<object?>? Navigated;
 }

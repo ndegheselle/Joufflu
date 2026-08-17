@@ -3,7 +3,6 @@ using Joufflu.Feedback.Controls;
 using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
 using Joufflu.Samples.Views.Feedback;
-using Joufflu.Samples.Views.Feedback;
 using Joufflu.Samples.Views.FileExplorer;
 using Joufflu.Samples.Views.Inputs;
 using Joufflu.Samples.Views.Natives.Actions;
@@ -32,9 +31,6 @@ public class AppViewModel : ObservableObject
 
     /// <summary>Pages keyed by the text target used on the menu's <c>NavigationItem</c>s.</summary>
     private readonly Dictionary<string, object> _pages;
-
-    /// <summary>Bound to <c>NavigationMenu.TargetResolver</c> so the menu can resolve its text targets.</summary>
-    public Func<string, object?> ResolveTarget { get; }
 
     public AppViewModel()
     {
@@ -108,8 +104,7 @@ public class AppViewModel : ObservableObject
 
         ResolveTarget = ResolvePage;
 
-        if (ResolvePage("natives/buttons") is { } home)
-            Navigator.Navigate(home);
+        Navigator.Navigate(ResolvePage("natives/buttons"));
     }
 
     /// <summary>Maps a menu item's text target to its page (view model), or null when unknown.</summary>

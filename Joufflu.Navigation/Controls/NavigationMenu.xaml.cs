@@ -30,6 +30,17 @@ public class NavigationTitle : ContentControl
 /// </summary>
 public class NavigationItem : ContentControl
 {
+    public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
+        nameof(Icon), typeof(object), typeof(NavigationItem), new PropertyMetadata(null));
+
+    public static readonly DependencyProperty TargetTypeProperty = DependencyProperty.Register(
+        nameof(TargetType), typeof(Type), typeof(NavigationItem), new PropertyMetadata(null));
+
+    private static readonly DependencyPropertyKey IsSelectedPropertyKey = DependencyProperty.RegisterReadOnly(
+        nameof(IsSelected), typeof(bool), typeof(NavigationItem), new PropertyMetadata(false));
+
+    public static readonly DependencyProperty IsSelectedProperty = IsSelectedPropertyKey.DependencyProperty;
+
     static NavigationItem()
     {
         DefaultStyleKeyProperty.OverrideMetadata(
@@ -44,29 +55,17 @@ public class NavigationItem : ContentControl
         set => SetValue(IconProperty, value);
     }
 
-    public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
-        nameof(Icon), typeof(object), typeof(NavigationItem), new PropertyMetadata(null));
-
-    /// <summary>Text key resolved to a page (view model) through <see cref="NavigationMenu.TargetResolver"/>.</summary>
-    public string? Target
+    public Type? TargetType
     {
-        get => (string?)GetValue(TargetProperty);
-        set => SetValue(TargetProperty, value);
+        get => (Type?)GetValue(TargetTypeProperty);
+        set => SetValue(TargetTypeProperty, value);
     }
-
-    public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(
-        nameof(Target), typeof(string), typeof(NavigationItem), new PropertyMetadata(null));
 
     public bool IsSelected
     {
         get => (bool)GetValue(IsSelectedProperty);
         internal set => SetValue(IsSelectedPropertyKey, value);
     }
-
-    private static readonly DependencyPropertyKey IsSelectedPropertyKey = DependencyProperty.RegisterReadOnly(
-        nameof(IsSelected), typeof(bool), typeof(NavigationItem), new PropertyMetadata(false));
-
-    public static readonly DependencyProperty IsSelectedProperty = IsSelectedPropertyKey.DependencyProperty;
 }
 
 /// <summary>
@@ -121,10 +120,17 @@ public class NavigationGroup : HeaderedItemsControl
 /// through a text <see cref="NavigationItem.Target"/>, mapped to the actual view model by
 /// <see cref="TargetResolver"/>. The menu can collapse to an icons-only rail.
 /// </summary>
-public class NavigationMenu : ItemsControl
+public partial class NavigationMenu : ItemsControl
 {
-    /// <summary>Pages resolved from each item's target, cached so selection stays stable.</summary>
-    private readonly Dictionary<NavigationItem, object?> _resolvedPages = new();
+    public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
+        nameof(Header), typeof(object), typeof(NavigationMenu), new PropertyMetadata(null));
+
+    public static readonly DependencyProperty IsCollapsedProperty = DependencyProperty.Register(
+        nameof(IsCollapsed), typeof(bool), typeof(NavigationMenu), new PropertyMetadata(false));
+
+    public static readonly DependencyProperty NavigatorProperty = DependencyProperty.Register(
+        nameof(Navigator), typeof(INavigator), typeof(NavigationMenu),
+        new PropertyMetadata(null, OnNavigatorChanged));
 
     static NavigationMenu()
     {
@@ -135,25 +141,11 @@ public class NavigationMenu : ItemsControl
 
     public NavigationMenu()
     {
-        SelectCommand = new RelayCommand<NavigationItem>(OnSelect);
         ToggleCollapseCommand = new RelayCommand(() => IsCollapsed = !IsCollapsed);
 
-        // Release the Navigator subscription while off the visual tree so a long-lived
-        // Navigator cannot keep a removed menu (and its subtree) alive.
-        Loaded += (_, _) =>
-        {
-            AttachNavigator(Navigator);
-            UpdateSelection(Navigator?.CurrentPage);
-        };
-        Unloaded += (_, _) => DetachNavigator(Navigator);
+        Loaded += (_, _) => Navigator?.Navigated += OnNavigated;
+        Unloaded += (_, _) => Navigator?.Navigated -= OnNavigated;
     }
-
-    // True while OnNavigated is subscribed to the current Navigator, so attach/detach
-    // stay idempotent across property changes and Loaded/Unloaded cycles.
-    private bool _navigatorSubscribed;
-
-    /// <summary>Selects (navigates to) the <see cref="NavigationItem"/> passed as parameter.</summary>
-    public ICommand SelectCommand { get; }
 
     /// <summary>
     /// Optional content shown at the top of the menu (typically a logo or title). Hidden when the
@@ -165,9 +157,6 @@ public class NavigationMenu : ItemsControl
         set => SetValue(HeaderProperty, value);
     }
 
-    public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
-        nameof(Header), typeof(object), typeof(NavigationMenu), new PropertyMetadata(null));
-
     /// <summary>Flips <see cref="IsCollapsed"/>.</summary>
     public ICommand ToggleCollapseCommand { get; }
 
@@ -177,89 +166,37 @@ public class NavigationMenu : ItemsControl
         set => SetValue(IsCollapsedProperty, value);
     }
 
-    public static readonly DependencyProperty IsCollapsedProperty = DependencyProperty.Register(
-        nameof(IsCollapsed), typeof(bool), typeof(NavigationMenu), new PropertyMetadata(false));
-
     public INavigator? Navigator
     {
         get => (INavigator?)GetValue(NavigatorProperty);
         set => SetValue(NavigatorProperty, value);
     }
 
-    public static readonly DependencyProperty NavigatorProperty = DependencyProperty.Register(
-        nameof(Navigator), typeof(INavigator), typeof(NavigationMenu),
-        new PropertyMetadata(null, OnNavigatorChanged));
-
-    /// <summary>
-    /// Turns an item's text <see cref="NavigationItem.Target"/> into the page (view model) to
-    /// navigate to. Usually bound to a method on the shell view model.
-    /// </summary>
-    public Func<string, object?>? TargetResolver
-    {
-        get => (Func<string, object?>?)GetValue(TargetResolverProperty);
-        set => SetValue(TargetResolverProperty, value);
-    }
-
-    public static readonly DependencyProperty TargetResolverProperty = DependencyProperty.Register(
-        nameof(TargetResolver), typeof(Func<string, object?>), typeof(NavigationMenu), new PropertyMetadata(null));
-
     private static void OnNavigatorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var menu = (NavigationMenu)d;
 
-        menu.DetachNavigator(e.OldValue as INavigator);
-
+        if (e.OldValue is INavigator oldNavigator)
+            oldNavigator.Navigated -= menu.OnNavigated;
         if (e.NewValue is INavigator newNavigator)
-        {
-            menu.AttachNavigator(newNavigator);
-            menu.UpdateSelection(newNavigator.CurrentPage);
-        }
+            newNavigator.Navigated += menu.OnNavigated;
     }
 
-    private void AttachNavigator(INavigator? navigator)
-    {
-        if (navigator is null || _navigatorSubscribed)
-            return;
-        navigator.Navigated += OnNavigated;
-        _navigatorSubscribed = true;
-    }
-
-    private void DetachNavigator(INavigator? navigator)
-    {
-        if (navigator is null || !_navigatorSubscribed)
-            return;
-        navigator.Navigated -= OnNavigated;
-        _navigatorSubscribed = false;
-    }
-
-    private void OnNavigated(object? sender, object? page) => UpdateSelection(page);
+    private void OnNavigated(object? sender, object? page) => UpdateSelection(Items, page);
 
     protected override void OnItemsChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         base.OnItemsChanged(e);
-        _resolvedPages.Clear();
-        UpdateSelection(Navigator?.CurrentPage);
+        UpdateSelection(Items, Navigator?.CurrentPage);
     }
 
-    private void OnSelect(NavigationItem? item)
+    [RelayCommand]
+    private void Select(NavigationItem? item)
     {
-        object? page = item == null ? null : ResolvePage(item);
-        if (page != null)
-            Navigator?.Navigate(page);
+        if (item?.TargetType == null)
+            return;
+        Navigator?.Navigate(item.TargetType);
     }
-
-    /// <summary>Resolves (and caches) the page a navigation item points at.</summary>
-    private object? ResolvePage(NavigationItem item)
-    {
-        if (_resolvedPages.TryGetValue(item, out object? cached))
-            return cached;
-
-        object? page = item.Target is { Length: > 0 } target ? TargetResolver?.Invoke(target) : null;
-        _resolvedPages[item] = page;
-        return page;
-    }
-
-    private void UpdateSelection(object? currentPage) => UpdateSelection(Items, currentPage);
 
     /// <summary>
     /// Walks the item tree, flagging the item that resolves to <paramref name="currentPage"/> and
@@ -273,7 +210,7 @@ public class NavigationMenu : ItemsControl
             switch (element)
             {
                 case NavigationItem item:
-                    item.IsSelected = currentPage != null && ReferenceEquals(ResolvePage(item), currentPage);
+                    item.IsSelected = item.TargetType == currentPage?.GetType();
                     containsSelection |= item.IsSelected;
                     break;
                 case NavigationGroup group when UpdateSelection(group.Items, currentPage):
