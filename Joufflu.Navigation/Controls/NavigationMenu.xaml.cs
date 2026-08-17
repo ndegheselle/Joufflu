@@ -10,7 +10,7 @@ namespace Joufflu.Navigation.Controls;
 /// A section title hosted by a <see cref="NavigationMenu"/>. Rendered as a label when the menu
 /// is expanded and as a simple separator line when it is collapsed.
 /// </summary>
-public class NavigationTitle : Control
+public class NavigationTitle : ContentControl
 {
     static NavigationTitle()
     {
@@ -21,17 +21,6 @@ public class NavigationTitle : Control
 
     public NavigationTitle()
     { }
-
-    public NavigationTitle(string title) => Title = title;
-
-    public string Title
-    {
-        get => (string)GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
-    }
-
-    public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-        nameof(Title), typeof(string), typeof(NavigationTitle), new PropertyMetadata(""));
 }
 
 /// <summary>

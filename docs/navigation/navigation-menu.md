@@ -19,7 +19,7 @@ rail discoverable.
 ```xml
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}"
                     TargetResolver="{Binding ResolveTarget}">
-    <nav:NavigationTitle Title="Demo" />
+    <nav:NavigationTitle>Demo</nav:NavigationTitle>
     <nav:NavigationItem Target="Home">
         <nav:NavigationItem.Icon>
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />

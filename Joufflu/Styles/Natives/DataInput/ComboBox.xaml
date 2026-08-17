@@ -10,8 +10,8 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}" />
-        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}" />
-        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />

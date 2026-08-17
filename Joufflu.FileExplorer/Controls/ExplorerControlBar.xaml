@@ -6,9 +6,9 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.FileExplorer.Controls">
 
-    <!--  Merged for the GhostButton style the buttons of the bar are based on.  -->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:ExplorerControlBar}">

@@ -2,14 +2,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:jontrols="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
+
     <!--  ============================ NavigationItem ============================  -->
     <Style TargetType="{x:Type nav:NavigationItem}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
@@ -19,11 +21,11 @@
                 <ControlTemplate TargetType="{x:Type nav:NavigationItem}">
                     <Button
                         x:Name="ItemButton"
-                        Style="{DynamicResource GhostButton}"
                         Height="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}"
                         HorizontalContentAlignment="Stretch"
                         Command="{Binding SelectCommand, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                        Style="{DynamicResource GhostButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -39,8 +41,7 @@
                                 x:Name="ContentPresenter"
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
-                                VerticalAlignment="Center">
-                            </ContentPresenter>
+                                VerticalAlignment="Center" />
                         </Grid>
                     </Button>
 
@@ -75,9 +76,9 @@
                     <StackPanel>
                         <Button
                             x:Name="HeaderButton"
-                        HorizontalContentAlignment="Stretch"
-                        Style="{DynamicResource GhostButton}"
-                            Command="{Binding ToggleCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                            HorizontalContentAlignment="Stretch"
+                            Command="{Binding ToggleCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                            Style="{DynamicResource GhostButton}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -147,11 +148,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationTitle}">
                     <Grid Margin="0,12,0,4">
-                        <TextBlock
-                            x:Name="TitleText"
-                            Style="{StaticResource Small}"
-                            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                            Text="{TemplateBinding Title}" />
+                        <ContentPresenter x:Name="TitleText" TextBlock.Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}">
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource Small}" TargetType="{x:Type TextBlock}" />
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+
                         <Border
                             x:Name="TitleLine"
                             Height="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
@@ -207,14 +209,12 @@
                                 <Button
                                     x:Name="CollapseButton"
                                     Grid.Column="1"
-                                    Style="{StaticResource GhostButton}"
-                                    joufflu:Sizing.IsSquare="True"
                                     Margin="8"
                                     HorizontalAlignment="Right"
-                                    Command="{Binding ToggleCollapseCommand, RelativeSource={RelativeSource TemplatedParent}}">
-                                    <fonts:FontIcon
-                                        x:Name="CollapseIcon"
-                                        Text="{x:Static fonts:LucideFontIcons.PanelLeftClose}" />
+                                    joufflu:Sizing.IsSquare="True"
+                                    Command="{Binding ToggleCollapseCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource GhostButton}">
+                                    <fonts:FontIcon x:Name="CollapseIcon" Text="{x:Static fonts:LucideFontIcons.PanelLeftClose}" />
                                 </Button>
                             </Grid>
 

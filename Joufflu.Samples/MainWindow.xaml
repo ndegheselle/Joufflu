@@ -41,7 +41,7 @@
 
             <!--  Featured native controls (kept at top level)  -->
 
-            <nav:NavigationTitle Title="Natives" />
+            <nav:NavigationTitle>Natives</nav:NavigationTitle>
 
             <nav:NavigationItem Target="natives/buttons">
                 <nav:NavigationItem.Icon>
@@ -74,7 +74,7 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Blocks}" />
                 </nav:NavigationGroup.Icon>
 
-                <nav:NavigationTitle Title="Actions" />
+                <nav:NavigationTitle>Actions</nav:NavigationTitle>
                 <nav:NavigationItem Target="natives/toggle-buttons">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ToggleLeft}" />
@@ -82,7 +82,7 @@
                     Toggle buttons
                 </nav:NavigationItem>
 
-                <nav:NavigationTitle Title="Data input" />
+                <nav:NavigationTitle>Data input</nav:NavigationTitle>
                 <nav:NavigationItem Target="natives/text-box">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.TextCursorInput}" />
@@ -132,7 +132,7 @@
                     List box
                 </nav:NavigationItem>
 
-                <nav:NavigationTitle Title="Data display" />
+                <nav:NavigationTitle>Data display</nav:NavigationTitle>
                 <nav:NavigationItem Target="natives/label">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tag}" />
@@ -158,7 +158,7 @@
                     Data grid
                 </nav:NavigationItem>
 
-                <nav:NavigationTitle Title="Feedback" />
+                <nav:NavigationTitle>Feedback</nav:NavigationTitle>
                 <nav:NavigationItem Target="natives/progress-bar">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Loader}" />
@@ -172,7 +172,7 @@
                     Status bar
                 </nav:NavigationItem>
 
-                <nav:NavigationTitle Title="Layout" />
+                <nav:NavigationTitle>Layout</nav:NavigationTitle>
                 <nav:NavigationItem Target="natives/group-box">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Component}" />
@@ -198,7 +198,7 @@
                     Grid splitter
                 </nav:NavigationItem>
 
-                <nav:NavigationTitle Title="Navigation" />
+                <nav:NavigationTitle>Navigation</nav:NavigationTitle>
                 <nav:NavigationItem Target="natives/menu">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Menu}" />
@@ -226,7 +226,7 @@
             </nav:NavigationGroup>
 
             <!--  Toolkit  -->
-            <nav:NavigationTitle Title="Toolkit" />
+            <nav:NavigationTitle>Toolkit</nav:NavigationTitle>
             <nav:NavigationItem Target="toolkit/application-shell">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
@@ -259,7 +259,7 @@
                 Customize theme
             </nav:NavigationItem>
 
-            <nav:NavigationTitle Title="Joufflu controls" />
+            <nav:NavigationTitle>Joufflu controls</nav:NavigationTitle>
 
             <!--  Feedback (Joufflu.Feedback library)  -->
             <nav:NavigationGroup Header="Feedback">

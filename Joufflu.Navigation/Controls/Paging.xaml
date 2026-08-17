@@ -8,6 +8,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:Paging}">
@@ -50,17 +51,17 @@
                                             Margin="2,0,0,0"
                                             joufflu:Sizing.IsSquare="True"
                                             BorderBrush="Transparent"
-                                            IsEnabled="False"
-                                            Content="..." />
+                                            Content="..."
+                                            IsEnabled="False" />
                                     </DataTemplate>
                                     <DataTemplate DataType="{x:Type local:PagingSelectionItem}">
                                         <ToggleButton
-                                            IsChecked="{Binding IsActive}"
-                                            Command="{Binding GotToCommand, RelativeSource={RelativeSource AncestorType={x:Type local:Paging}}}"
-                                            CommandParameter="{Binding Target}"
                                             Margin="2,0,0,0"
                                             joufflu:Sizing.IsSquare="True"
-                                            Content="{Binding Target}" />
+                                            Command="{Binding GotToCommand, RelativeSource={RelativeSource AncestorType={x:Type local:Paging}}}"
+                                            CommandParameter="{Binding Target}"
+                                            Content="{Binding Target}"
+                                            IsChecked="{Binding IsActive}" />
                                     </DataTemplate>
                                 </ItemsControl.Resources>
                             </ItemsControl>

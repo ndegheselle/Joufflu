@@ -4,6 +4,10 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Inputs.Controls">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <!--  Checkerboard shown behind translucent colours (alpha slider + swatches).  -->
     <DrawingBrush
         x:Key="ColorPickerCheckerBrush"

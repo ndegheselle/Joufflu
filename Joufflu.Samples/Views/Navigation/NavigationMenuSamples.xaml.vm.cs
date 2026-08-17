@@ -43,7 +43,7 @@ public class NavigationMenuSamplesViewModel : ObservableObject
         "            <TextBlock Text=\"Joufflu\" />\n" +
         "        </StackPanel>\n" +
         "    </nav:NavigationMenu.Header>\n" +
-        "    <nav:NavigationTitle Title=\"Demo\" />\n" +
+        "    <nav:NavigationTitle>Demo</nav:NavigationTitle>\n" +
         "    <nav:NavigationItem Target=\"Home\">\n" +
         "        <nav:NavigationItem.Icon>\n" +
         "            <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Home}\" />\n" +

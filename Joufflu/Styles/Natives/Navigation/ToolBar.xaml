@@ -4,6 +4,16 @@
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <!--  Merged for the base native styles the ToolBar item styles are based on.  -->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/CheckBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/RadioButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/TextBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/Menu.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <Style
         x:Key="{x:Static ToolBar.ButtonStyleKey}"
         BasedOn="{StaticResource {x:Type Button}}"

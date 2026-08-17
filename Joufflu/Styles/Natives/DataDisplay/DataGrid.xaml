@@ -5,6 +5,8 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+        <!--  Merged for the base Button style the select-all button is based on.  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
     <Style

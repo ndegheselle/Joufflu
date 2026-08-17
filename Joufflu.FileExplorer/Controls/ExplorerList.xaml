@@ -7,6 +7,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Controls/Base/ExplorerNodesControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/ListView.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:ExplorerList}">
