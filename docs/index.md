@@ -29,6 +29,7 @@ can paste into your views.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
+- 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
@@ -47,19 +48,21 @@ can paste into your views.
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
 | [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts, tooltips (`Joufflu.Feedback`) |
+| [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, theme customization, application shell |
 
 ## Getting started
 
 1. Add the packages you need. `Joufflu` is the core (styles & theming);
-   `Joufflu.Feedback`, `Joufflu.Inputs` and `Joufflu.Navigation` are optional and
-   all build on it:
+   `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Inputs` and
+   `Joufflu.Navigation` are optional and all build on it:
 
    ```sh
    dotnet add package Joufflu
-   dotnet add package Joufflu.Feedback    # optional: badges, spinner, toasts, tooltips
-   dotnet add package Joufflu.Inputs      # optional: input controls
-   dotnet add package Joufflu.Navigation  # optional: navigation & overlays
+   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts, tooltips
+   dotnet add package Joufflu.FileExplorer  # optional: file explorer (needs Joufflu.Feedback)
+   dotnet add package Joufflu.Inputs        # optional: input controls
+   dotnet add package Joufflu.Navigation    # optional: navigation & overlays
    ```
 
 2. Merge the control styles in `App.xaml` so the themed styles and the

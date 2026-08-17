@@ -1,0 +1,55 @@
+name: Publish Joufflu.FileExplorer
+
+on:
+  push:
+    tags: [ 'file-explorer-v*' ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # required for OIDC trusted publishing
+  contents: read
+
+jobs:
+  publish:
+    runs-on: windows-latest   # WPF / net10.0-windows requires a Windows runner
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Derive version from tag
+        id: version
+        shell: bash
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "value=${GITHUB_REF_NAME#file-explorer-v}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Restore
+        run: dotnet restore Joufflu.FileExplorer/Joufflu.FileExplorer.csproj
+
+      - name: Pack
+        shell: bash
+        run: |
+          if [ -n "${{ steps.version.outputs.value }}" ]; then
+            dotnet pack Joufflu.FileExplorer/Joufflu.FileExplorer.csproj -c Release --no-restore -p:Version=${{ steps.version.outputs.value }} -o artifacts
+          else
+            dotnet pack Joufflu.FileExplorer/Joufflu.FileExplorer.csproj -c Release --no-restore -o artifacts
+          fi
+
+      # OIDC token exchange: nuget.org validates the workflow against your
+      # trusted publishing policy and returns a temporary (1 hour) API key.
+      - name: NuGet login (OIDC -> temporary API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}   # your nuget.org profile name (not email)
+
+      - name: Push to NuGet.org
+        run: >
+          dotnet nuget push "artifacts/*.nupkg"
+          --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
+          --source https://api.nuget.org/v3/index.json
+          --skip-duplicate

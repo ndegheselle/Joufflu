@@ -97,7 +97,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
 
     /// <summary>
     /// Node whose name is being edited in the control, null while none is. Held by the control and not by its
-    /// <see cref="Source"/> : the edition belongs to the control it was started in, so another control displaying the
+    /// <see cref="ExplorerControl.Source"/> : the edition belongs to the control it was started in, so another control displaying the
     /// same node doesn't open a box of its own.
     /// </summary>
     [ObservableProperty]
@@ -175,6 +175,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     /// <summary>
     /// Reacts to a double click on a node, opening it by default. Returns whether the double click has been handled.
     /// </summary>
+    /// <param name="node">Node the double click happened on.</param>
     /// <param name="container">Item container displaying <paramref name="node"/>.</param>
     protected virtual bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
     {
@@ -215,7 +216,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     }
 
     /// <summary>
-    /// The <see cref="Source"/>, or the directory it has opened, changed ; a derived control overrides it to rebuild
+    /// The <see cref="ExplorerControl.Source"/>, or the directory it has opened, changed ; a derived control overrides it to rebuild
     /// what it displays.
     /// </summary>
     protected virtual void OnCurrentChanged() { }
@@ -242,7 +243,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
 
     /// <summary>
     /// Ends the edition, <paramref name="rename"/> being null when it has been given up : the control closes its
-    /// editable name in either case, and only hands a validated one over to the <see cref="Source"/>.
+    /// editable name in either case, and only hands a validated one over to the <see cref="ExplorerControl.Source"/>.
     /// </summary>
     [RelayCommand]
     private void Rename(ExplorerNodeRename? rename)

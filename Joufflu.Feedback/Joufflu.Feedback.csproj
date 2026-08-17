@@ -12,7 +12,7 @@
     <Description>WPF feedback controls for Joufflu: semantic badges, an indeterminate spinner, stackable toasts driven by a service, and themed attached-property tooltips.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <Version>0.1.2</Version>
+    <Version>0.2.0</Version>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

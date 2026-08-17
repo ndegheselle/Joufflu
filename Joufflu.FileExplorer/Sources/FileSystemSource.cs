@@ -406,6 +406,8 @@ namespace Joufflu.FileExplorer.Sources
         /// "File - Copy.ext", then "File - Copy (2).ext" while the name is taken, the way Windows names a copy made
         /// next to its source.
         /// </summary>
+        /// <param name="directoryPath">Directory the copy is made in.</param>
+        /// <param name="name">Name of the node being copied.</param>
         /// <param name="taken">
         /// Destinations of the same batch, none of which exists yet : the whole batch is named before the shell
         /// creates any of it, so a name already given to another copy has to be skipped as well.

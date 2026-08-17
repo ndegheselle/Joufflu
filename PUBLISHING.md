@@ -4,24 +4,26 @@ Simply push on the `docs` branch.
 
 # Publishing to NuGet.org
 
-The four packages — `Joufflu`, `Joufflu.Feedback`, `Joufflu.Inputs`, `Joufflu.Navigation` —
-are published by GitHub Actions using **Trusted Publishing** (OIDC). No API key is stored;
-each run exchanges a short-lived GitHub token for a temporary nuget.org key valid for 1 hour.
+The five packages — `Joufflu`, `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Inputs`,
+`Joufflu.Navigation` — are published by GitHub Actions using **Trusted Publishing** (OIDC).
+No API key is stored; each run exchanges a short-lived GitHub token for a temporary
+nuget.org key valid for 1 hour.
 
 One workflow per package, triggered by a tag:
 
-| Package             | Workflow file                     | Tag pattern     |
-| ------------------- | --------------------------------- | --------------- |
-| `Joufflu`           | `publish-joufflu.yml`             | `v*`            |
-| `Joufflu.Feedback`  | `publish-joufflu-feedback.yml`    | `feedback-v*`   |
-| `Joufflu.Inputs`    | `publish-joufflu-inputs.yml`      | `inputs-v*`     |
-| `Joufflu.Navigation`| `publish-joufflu-navigation.yml`  | `navigation-v*` |
+| Package               | Workflow file                       | Tag pattern         |
+| --------------------- | ----------------------------------- | ------------------- |
+| `Joufflu`             | `publish-joufflu.yml`               | `v*`                |
+| `Joufflu.Feedback`    | `publish-joufflu-feedback.yml`      | `feedback-v*`       |
+| `Joufflu.FileExplorer`| `publish-joufflu-file-explorer.yml` | `file-explorer-v*`  |
+| `Joufflu.Inputs`      | `publish-joufflu-inputs.yml`        | `inputs-v*`         |
+| `Joufflu.Navigation`  | `publish-joufflu-navigation.yml`    | `navigation-v*`     |
 
 ## One-time setup
 
 ### On nuget.org
 
-For **each** of the four packages, create a Trusted Publishing policy
+For **each** of the five packages, create a Trusted Publishing policy
 (username → **Trusted Publishing** → add policy):
 
 - **Repository owner:** `ndegheselle`
@@ -52,12 +54,13 @@ published package version (passed via `-p:Version`). Keep them in sync.
    git push origin v0.1.2
    ```
 
-   | Package              | Example tag        |
-   | -------------------- | ------------------ |
-   | `Joufflu`            | `v0.1.2`           |
-   | `Joufflu.Feedback`   | `feedback-v0.1.2`  |
-   | `Joufflu.Inputs`     | `inputs-v0.1.2`    |
-   | `Joufflu.Navigation` | `navigation-v0.1.2`|
+   | Package                | Example tag            |
+   | ---------------------- | ---------------------- |
+   | `Joufflu`              | `v0.1.2`               |
+   | `Joufflu.Feedback`     | `feedback-v0.1.2`      |
+   | `Joufflu.FileExplorer` | `file-explorer-v0.1.3` |
+   | `Joufflu.Inputs`       | `inputs-v0.1.2`        |
+   | `Joufflu.Navigation`   | `navigation-v0.1.2`    |
 
    From Visual Studio: Git → Manage Branches → right-click the commit →
    **New Tag…** → then expand **Tags** → right-click → **Push tag to remote**.
@@ -67,12 +70,12 @@ published package version (passed via `-p:Version`). Keep them in sync.
 
 ## Notes
 
-- **Release order for the dependents.** `Joufflu.Feedback`, `Joufflu.Inputs` and
-  `Joufflu.Navigation` depend on `Joufflu` at the `<Version>` in `Joufflu/Joufflu.csproj`
-  at build time (not their own tag), and `Joufflu.Navigation` additionally depends on
-  `Joufflu.Feedback`. When bumping the whole family, release `Joufflu` first, then
-  `Joufflu.Feedback`, so those versions exist on nuget.org before the packages that
-  depend on them.
+- **Release order for the dependents.** `Joufflu.Feedback`, `Joufflu.FileExplorer`,
+  `Joufflu.Inputs` and `Joufflu.Navigation` depend on `Joufflu` at the `<Version>` in
+  `Joufflu/Joufflu.csproj` at build time (not their own tag), and `Joufflu.Navigation` and
+  `Joufflu.FileExplorer` additionally depend on `Joufflu.Feedback`. When bumping the whole
+  family, release `Joufflu` first, then `Joufflu.Feedback`, so those versions exist on
+  nuget.org before the packages that depend on them.
 - **Versions are immutable.** A published `0.1.2` can't be replaced — unlist it and
   release `0.1.3`.
 - **Re-runs are safe.** `--skip-duplicate` means re-publishing an existing version
@@ -81,7 +84,8 @@ published package version (passed via `-p:Version`). Keep them in sync.
   triggered that way it uses the `<Version>` from the `.csproj` instead of a tag.
 - **Per-package README.** Each package ships its own `README.md`, located next to
   its `.csproj` (`Joufflu/README.md`, `Joufflu.Feedback/README.md`,
-  `Joufflu.Inputs/README.md`, `Joufflu.Navigation/README.md`) and packed via
+  `Joufflu.FileExplorer/README.md`, `Joufflu.Inputs/README.md`,
+  `Joufflu.Navigation/README.md`) and packed via
   `<PackageReadmeFile>`. This is what
   shows on the package's nuget.org page — edit the one next to the project, not the
   repo-root `readme.md` (which is the GitHub landing page). Use absolute `https://`
