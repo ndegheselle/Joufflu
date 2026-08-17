@@ -12,7 +12,7 @@
     <Description>WPF file explorer for Joufflu: a control bar with a breadcrumb, a folder tree and a file list sharing a source, with shell-backed copy / move / rename / delete, drag and drop, and templatable nodes of your own.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
