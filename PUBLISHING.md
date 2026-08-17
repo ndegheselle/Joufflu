@@ -76,6 +76,11 @@ published package version (passed via `-p:Version`). Keep them in sync.
   `Joufflu.FileExplorer` additionally depend on `Joufflu.Feedback`. When bumping the whole
   family, release `Joufflu` first, then `Joufflu.Feedback`, so those versions exist on
   nuget.org before the packages that depend on them.
+- **Push at most three tags at a time.** GitHub dispatches no `push` event when more than
+  three tags are pushed in one go, so the workflows silently don't run. Push them one by
+  one, or run the workflows by hand (see below).
+- **A tag run uses the workflow file of the tagged commit.** A fix to a workflow only
+  applies to the tags created after it — an existing tag has to be moved to pick it up.
 - **Versions are immutable.** A published `0.1.2` can't be replaced — unlist it and
   release `0.1.3`.
 - **Re-runs are safe.** `--skip-duplicate` means re-publishing an existing version

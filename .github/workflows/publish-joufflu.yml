@@ -38,6 +38,7 @@ jobs:
           else
             dotnet pack Joufflu/Joufflu.csproj -c Release --no-restore -o artifacts
           fi
+          ls -l artifacts
 
       # OIDC token exchange: nuget.org validates the workflow against your
       # trusted publishing policy and returns a temporary (1 hour) API key.
@@ -47,9 +48,16 @@ jobs:
         with:
           user: ${{ secrets.NUGET_USER }}   # your nuget.org profile name (not email)
 
+      # The glob is expanded by bash : passed as-is, NuGet doesn't resolve it on the runner.
       - name: Push to NuGet.org
-        run: >
-          dotnet nuget push "artifacts/*.nupkg"
-          --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
-          --source https://api.nuget.org/v3/index.json
-          --skip-duplicate
+        shell: bash
+        run: |
+          shopt -s nullglob
+          packages=(artifacts/*.nupkg)
+          if [ ${#packages[@]} -eq 0 ]; then
+            echo "No package found in artifacts/." >&2
+            exit 1
+          fi
+          for package in "${packages[@]}"; do
+            dotnet nuget push "$package" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          done
