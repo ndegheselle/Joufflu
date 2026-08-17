@@ -1,6 +1,11 @@
-# Version 0.1.3
+# Version 0.2.0
 
-- Add the `Joufflu.FileExplorer` package : `Explorer`, `ExplorerList`, `ExplorerTree` and `ExplorerControlBar` sharing an `IExplorerSource`, `FileSystemSource` handing the file operations over to the Windows shell, context menus and node visuals keyed on the node type, drag and drop and keyboard shortcuts
+- Add the `Joufflu.FileExplorer` package : `Explorer`, `ExplorerList`, `ExplorerTree` and `ExplorerControlBar` sharing an `IExplorerSource`, with node visuals and context menus keyed on the node type, drag and drop, keyboard shortcuts, and file operations handed over to the Windows shell
+- Add the `xl` control size and its `ControlFontSizeXl` dimension
+- Size `FontIcon` from the design system instead of a fixed value
+- Improve the toasts look, with a progress bar of their remaining duration
+- Restyle the native `ListView` and `TreeView` (rounded border, centered cell content)
+- Add `MoreVisualTreeHelper.FindSelfOrParent`, and a logical tree fallback to its parent lookup
 
 # Version 0.1.2
 
