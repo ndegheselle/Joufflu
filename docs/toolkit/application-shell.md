@@ -75,14 +75,16 @@ panel that reaches the top:
                    Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
     </controls:ThemedWindow.Resources>
 
-    <DockPanel>
-        <nav:NavigationMenu DockPanel.Dock="Left" ... />
+    <nav:OverlayContainer Overlays="{Binding Overlays}" Toasts="{Binding Toasts}">
+        <DockPanel>
+            <nav:NavigationMenu DockPanel.Dock="Left" ... />
 
-        <!-- The container drops below the bar; overlays and toasts stay full-bleed. -->
-        <nav:NavigationContainer
-            Margin="{StaticResource ContentTitleBarMargin}"
-            ... />
-    </DockPanel>
+            <!-- The page drops below the bar; overlays and toasts stay full-bleed. -->
+            <ContentControl
+                Margin="{StaticResource ContentTitleBarMargin}"
+                Content="{Binding Navigator.CurrentPage}" />
+        </DockPanel>
+    </nav:OverlayContainer>
 </controls:ThemedWindow>
 ```
 
@@ -91,16 +93,25 @@ resource, the offset always matches the title bar even if that height changes.
 
 {: .note }
 > Offset only the panels whose top strip holds interactive content — a hosted page
-> and its scrollbar. The `NavigationContainer` insets the page while leaving overlays
-> and toasts full-bleed, so modal backdrops still cover the whole window.
+> and its scrollbar. Offsetting the page alone leaves the `OverlayContainer` around
+> it full-bleed, so modal backdrops still cover the whole window.
 
-## NavigationContainer
+## OverlayContainer
 
-Hosts the current page and layers overlays and toasts above it. Pair it with a
-`NavigationMenu`, driving both from a shared `Navigator`.
+Wraps the whole application and layers the overlay stack and the toast stack above
+it. Because it encapsulates everything — side menu included — a full screen overlay
+covers the whole window.
 
 ```xml
-<nav:NavigationContainer Navigator="{Binding Navigator}"
-                         Overlays="{Binding Overlays}"
-                         Toasts="{Binding Toasts}" />
+<nav:OverlayContainer Overlays="{Binding Overlays}"
+                      Toasts="{Binding Toasts}">
+    <!-- the whole app: menu, page, status bar, ... -->
+</nav:OverlayContainer>
+```
+
+The current page needs no dedicated container: a plain `ContentControl` bound to
+the navigator renders it, the view resolved by an implicit `DataTemplate`.
+
+```xml
+<ContentControl Content="{Binding Navigator.CurrentPage}" />
 ```

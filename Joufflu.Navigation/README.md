@@ -13,7 +13,7 @@ a navigation menu, a page container, awaitable modal dialogs and a paging select
 | Piece | Purpose |
 |---|---|
 | `NavigationMenu` | A themed navigation menu for moving between sections. |
-| `NavigationContainer` | A view-model-first page container that hosts the current page. |
+| `OverlayContainer` | Wraps the whole app and layers modal overlays and toasts above it. |
 | Modal overlays | Awaitable modal dialogs driven by a `Navigator`, so you can `await` a dialog and get its result. |
 | `Paging` | A page selector for large sets of data — `Total`, `PageNumber` and `Capacity` (items per page), plus the displayed range. |
 
@@ -44,7 +44,8 @@ once at startup:
 ThemeManager.Instance.Initialize();
 ```
 
-Then wire up a `Navigator`, host a `NavigationContainer` in your window, and drive
+Then wire up a `Navigator`, render the current page with a `ContentControl` bound to
+`Navigator.CurrentPage`, wrap your window content in an `OverlayContainer`, and drive
 navigation and modal overlays from your view models.
 
 To page a list or a `DataGrid`, bind `Paging` two way and load the matching slice
