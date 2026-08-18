@@ -50,6 +50,7 @@ public class AppViewModel : ObservableObject
             new ListBoxSamplesViewModel(),
 
             new TypographySamplesViewModel(),
+            new FontIconSamplesViewModel(),
             new LabelSamples(),
             new ListViewSamplesViewModel(),
             new TreeViewSamplesViewModel(),
@@ -88,7 +89,6 @@ public class AppViewModel : ObservableObject
             new ExplorerTreeSamplesViewModel(Toasts),
 
             // Custom controls
-            new FontIconSamplesViewModel(),
             new BadgeSamplesViewModel(),
             new SpinnerSamplesViewModel(),
             new ToastSamplesViewModel(Toasts),

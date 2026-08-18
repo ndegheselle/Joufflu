@@ -64,7 +64,7 @@
                 </nav:NavigationItem.Icon>
                 Typography
             </nav:NavigationItem>
-            <nav:NavigationItem TargetType="{x:Type feedback:FontIconSamplesViewModel}">
+            <nav:NavigationItem TargetType="{x:Type dataDisplay:FontIconSamplesViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Sparkles}" />
                 </nav:NavigationItem.Icon>

@@ -18,6 +18,9 @@ public class OverlayOptions : ObservableObject
 
     /// <summary>Closes the overlay when the dimmed background behind it is clicked.</summary>
     public bool CloseOnClickAway { get; set; } = true;
+
+    /// <summary>Stretches the overlay to fill the whole surface instead of a centered, sized panel.</summary>
+    public bool FullScreen { get; set; } = false;
 }
 
 /// <summary>

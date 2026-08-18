@@ -20,6 +20,7 @@
                     <Button Command="{Binding OpenSimpleCommand}" Content="Simple" />
                     <Button Command="{Binding OpenConfirmCommand}" Content="Confirm (with actions)" Style="{StaticResource PrimaryButton}" />
                     <Button Command="{Binding OpenFormCommand}" Content="Form" />
+                    <Button Command="{Binding OpenFullScreenCommand}" Content="Full screen" />
                     <Button Command="{Binding OpenStackedCommand}" Content="Stacked (×2)" />
                 </WrapPanel>
             </c:CodeExample>

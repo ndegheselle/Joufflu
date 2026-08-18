@@ -123,6 +123,9 @@
     <DataTemplate DataType="{x:Type nativeDisplay:DataGridSamplesViewModel}">
         <nativeDisplay:DataGridSamples />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type nativeDisplay:FontIconSamplesViewModel}">
+        <nativeDisplay:FontIconSamples />
+    </DataTemplate>
 
     <!--  Natives / Feedback  -->
     <DataTemplate DataType="{x:Type nativeFeedback:ProgressBarSamplesViewModel}">
@@ -130,9 +133,6 @@
     </DataTemplate>
 
     <!--  Controls / Data display  -->
-    <DataTemplate DataType="{x:Type customDisplay:FontIconSamplesViewModel}">
-        <customDisplay:FontIconSamples />
-    </DataTemplate>
     <DataTemplate DataType="{x:Type customDisplay:BadgeSamplesViewModel}">
         <customDisplay:BadgeSamples />
     </DataTemplate>

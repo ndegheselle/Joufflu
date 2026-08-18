@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Joufflu.Samples.Views.Feedback;
+namespace Joufflu.Samples.Views.Natives.DataDisplay;
 
 public class FontIconSamplesViewModel : ObservableObject
 {

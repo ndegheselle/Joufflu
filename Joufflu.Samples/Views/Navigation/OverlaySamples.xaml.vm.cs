@@ -17,6 +17,8 @@ public class OverlaySamplesViewModel : ObservableObject
 
     public IRelayCommand OpenFormCommand { get; }
 
+    public IRelayCommand OpenFullScreenCommand { get; }
+
     public IRelayCommand OpenStackedCommand { get; }
 
     public OverlaySamplesViewModel(IOverlayService overlays, IToastService toasts)
@@ -27,6 +29,7 @@ public class OverlaySamplesViewModel : ObservableObject
         OpenSimpleCommand = new RelayCommand(OpenSimple);
         OpenConfirmCommand = new AsyncRelayCommand(OpenConfirmAsync);
         OpenFormCommand = new AsyncRelayCommand(OpenFormAsync);
+        OpenFullScreenCommand = new RelayCommand(OpenFullScreen);
         OpenStackedCommand = new RelayCommand(OpenStacked);
     }
 
@@ -56,6 +59,12 @@ public class OverlaySamplesViewModel : ObservableObject
         bool? result = await _overlays.Show(form, options);
         if (result == true)
             _toasts.Success($"Saved name: {form.Name}", "Profile");
+    }
+
+    private void OpenFullScreen()
+    {
+        var content = new ConfirmViewModel("This overlay fills the whole surface. Use the close cross to dismiss it.");
+        _overlays.Show(content, new OverlayOptions { Title = "Full screen overlay", FullScreen = true });
     }
 
     private void OpenStacked()

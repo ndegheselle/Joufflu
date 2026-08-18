@@ -15,6 +15,7 @@
             </Border>
 
             <Border
+                x:Name="Panel"
                 MinWidth="320"
                 MaxWidth="640"
                 MaxHeight="600"
@@ -77,6 +78,15 @@
             </MultiDataTrigger>
             <DataTrigger Binding="{Binding Options.ShowCloseButton}" Value="False">
                 <Setter TargetName="CloseButton" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Options.FullScreen}" Value="True">
+                <Setter TargetName="Panel" Property="MaxWidth" Value="Infinity" />
+                <Setter TargetName="Panel" Property="MaxHeight" Value="Infinity" />
+                <Setter TargetName="Panel" Property="Margin" Value="0" />
+                <Setter TargetName="Panel" Property="HorizontalAlignment" Value="Stretch" />
+                <Setter TargetName="Panel" Property="VerticalAlignment" Value="Stretch" />
+                <Setter TargetName="Panel" Property="BorderThickness" Value="0" />
+                <Setter TargetName="Panel" Property="CornerRadius" Value="0" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
