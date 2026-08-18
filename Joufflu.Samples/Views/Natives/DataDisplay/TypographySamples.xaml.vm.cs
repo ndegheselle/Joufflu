@@ -15,6 +15,7 @@ public class TypographySamplesViewModel : ObservableObject
     public string BodyCode =>
         "<TextBlock Style=\"{StaticResource Lead}\" Text=\"Lead paragraph\" />\n" +
         "<TextBlock Text=\"Default body text\" />\n" +
+        "<Separator />\n" +
         "<TextBlock Style=\"{StaticResource Muted}\" Text=\"Muted text\" />\n" +
         "<TextBlock Style=\"{StaticResource Small}\" Text=\"Small text\" />";
 }

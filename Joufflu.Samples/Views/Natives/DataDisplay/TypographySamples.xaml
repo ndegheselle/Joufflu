@@ -29,6 +29,7 @@
                 <StackPanel joufflu:Spacing.Gap="8">
                     <TextBlock Style="{StaticResource Lead}" Text="Lead — a larger, lighter introductory paragraph that sets up the content that follows." />
                     <TextBlock Text="Default — the standard body text size used across the app." />
+                    <Separator />
                     <TextBlock Style="{StaticResource Muted}" Text="Muted — secondary text, dimmed to sit quietly next to primary content." />
                     <TextBlock Style="{StaticResource Small}" Text="Small — fine print, captions and footnotes." />
                 </StackPanel>
