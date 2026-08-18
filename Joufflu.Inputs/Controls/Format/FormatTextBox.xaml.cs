@@ -13,6 +13,11 @@ namespace Joufflu.Inputs.Controls.Format
     [TemplatePart(Name = "PART_DownButton", Type = typeof(Button))]
     public class FormatTextBox : TextBox, INotifyPropertyChanged
     {
+        static FormatTextBox()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(FormatTextBox), new FrameworkPropertyMetadata(typeof(FormatTextBox)));
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
         { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }

@@ -5,6 +5,11 @@ namespace Joufflu.Inputs.Controls
 {
     public partial class NumericUpDown : SingleValueFormatTextBox<int>
     {
+        static NumericUpDown()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(NumericUpDown), new FrameworkPropertyMetadata(typeof(NumericUpDown)));
+        }
+
         public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register("Value", typeof(int), typeof(NumericUpDown), new FrameworkPropertyMetadata(default(int), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((NumericUpDown)o).OnValueChanged(e)
         ));

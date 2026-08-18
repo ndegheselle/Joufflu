@@ -5,6 +5,11 @@ namespace Joufflu.Inputs.Controls
 {
     public partial class TimeSpanPicker : SingleValueFormatTextBox<TimeSpan?>
     {
+        static TimeSpanPicker()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TimeSpanPicker), new FrameworkPropertyMetadata(typeof(TimeSpanPicker)));
+        }
+
         public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register(
             nameof(Value),

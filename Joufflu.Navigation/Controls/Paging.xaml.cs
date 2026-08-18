@@ -27,6 +27,13 @@ namespace Joufflu.Navigation.Controls
 
     public partial class Paging : Control, INotifyPropertyChanged
     {
+        static Paging()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(Paging),
+                new FrameworkPropertyMetadata(typeof(Paging)));
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string? name = null)
         { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }

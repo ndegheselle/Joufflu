@@ -16,6 +16,11 @@ namespace Joufflu.Inputs.Controls
     /// </summary>
     public partial class ComboBoxSearch : ComboBox, INotifyPropertyChanged
     {
+        static ComboBoxSearch()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxSearch), new FrameworkPropertyMetadata(typeof(ComboBoxSearch)));
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

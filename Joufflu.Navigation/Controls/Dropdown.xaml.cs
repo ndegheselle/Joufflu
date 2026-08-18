@@ -22,6 +22,13 @@ namespace Joufflu.Navigation.Controls
     [TemplatePart(Name = PART_Popup, Type = typeof(Popup))]
     public class Dropdown : ContentControl
     {
+        static Dropdown()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(Dropdown),
+                new FrameworkPropertyMetadata(typeof(Dropdown)));
+        }
+
         private const string PART_Popup = "PART_Popup";
 
         private Popup? _popup;

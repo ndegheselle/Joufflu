@@ -17,6 +17,11 @@ namespace Joufflu.Inputs.Controls
     /// </summary>
     public partial class Search : TextBox
     {
+        static Search()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Search), new FrameworkPropertyMetadata(typeof(Search)));
+        }
+
         public event Action<string>? SearchChanged;
 
         /// <summary>The debounced search text. Bind this (two-way) to a view model query property.</summary>

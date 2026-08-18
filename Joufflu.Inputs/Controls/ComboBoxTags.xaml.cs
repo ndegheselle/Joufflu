@@ -37,6 +37,11 @@ namespace Joufflu.Inputs.Controls
 
     public partial class ComboBoxTags : ComboBoxSearch
     {
+        static ComboBoxTags()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxTags), new FrameworkPropertyMetadata(typeof(ComboBoxTags)));
+        }
+
         #region Dependency Properties
         public static readonly DependencyProperty SelectedItemsProperty =
             DependencyProperty.Register(
