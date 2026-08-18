@@ -18,96 +18,95 @@ namespace Joufflu.Samples.ViewModels;
 
 /// <summary>
 /// Shell view model: owns the shared navigation services and the pages the side menu can reach.
-/// The menu items are declared in XAML and point at a page through a text target; this view model
-/// maps those targets to the actual pages via <see cref="ResolveTarget"/>.
+/// The menu items are declared in XAML and point at a page through its type; the
+/// <see cref="Navigator"/> turns that type into the page instance via <see cref="ResolvePage"/>.
 /// </summary>
 public class AppViewModel : ObservableObject
 {
-    public Navigator Navigator { get; } = new();
-
     public OverlayService Overlays { get; } = new();
 
     public ToastService Toasts { get; } = new();
 
-    /// <summary>Pages keyed by the text target used on the menu's <c>NavigationItem</c>s.</summary>
-    private readonly Dictionary<string, object> _pages;
+    /// <summary>Pages keyed by their own type, which is what the menu's <c>NavigationItem</c>s target.</summary>
+    private readonly Dictionary<Type, object> _pages;
+
+    public Navigator Navigator { get; }
 
     public AppViewModel()
     {
-        _pages = new()
+        _pages = new object[]
         {
             // Native controls
-            ["natives/buttons"] = new ButtonSamplesViewModel(),
-            ["natives/toggle-buttons"] = new ToggleButtonSamplesViewModel(),
+            new ButtonSamplesViewModel(),
+            new ToggleButtonSamplesViewModel(),
 
-            ["natives/text-box"] = new TextBoxSamplesViewModel(),
-            ["natives/combo-box"] = new ComboBoxSamplesViewModel(),
-            ["natives/check-box"] = new CheckBoxSamplesViewModel(),
-            ["natives/radio-button"] = new RadioButtonSamples(),
-            ["natives/slider"] = new SliderSamplesViewModel(),
-            ["natives/date-picker"] = new DatePickerSamplesViewModel(),
-            ["natives/calendar"] = new CalendarSamplesViewModel(),
-            ["natives/list-box"] = new ListBoxSamplesViewModel(),
+            new TextBoxSamplesViewModel(),
+            new ComboBoxSamplesViewModel(),
+            new CheckBoxSamplesViewModel(),
+            new RadioButtonSamples(),
+            new SliderSamplesViewModel(),
+            new DatePickerSamplesViewModel(),
+            new CalendarSamplesViewModel(),
+            new ListBoxSamplesViewModel(),
 
-            ["natives/typography"] = new TypographySamplesViewModel(),
-            ["natives/label"] = new LabelSamples(),
-            ["natives/list-view"] = new ListViewSamplesViewModel(),
-            ["natives/tree-view"] = new TreeViewSamplesViewModel(),
-            ["natives/data-grid"] = new DataGridSamplesViewModel(),
+            new TypographySamplesViewModel(),
+            new LabelSamples(),
+            new ListViewSamplesViewModel(),
+            new TreeViewSamplesViewModel(),
+            new DataGridSamplesViewModel(),
 
-            ["natives/progress-bar"] = new ProgressBarSamplesViewModel(),
-            ["natives/status-bar"] = new StatusBarSamples(),
+            new ProgressBarSamplesViewModel(),
+            new StatusBarSamples(),
 
-            ["natives/card"] = new CardSamples(),
-            ["natives/group-box"] = new GroupBoxSamples(),
-            ["natives/expander"] = new ExpanderSamples(),
-            ["natives/scroll-viewer"] = new ScrollViewerSamples(),
-            ["natives/grid-splitter"] = new GridSplitterSamples(),
+            new CardSamples(),
+            new GroupBoxSamples(),
+            new ExpanderSamples(),
+            new ScrollViewerSamples(),
+            new GridSplitterSamples(),
 
-            ["natives/menu"] = new MenuSamples(),
-            ["natives/tab-control"] = new TabControlSamples(),
-            ["natives/tool-bar"] = new ToolBarSamples(),
-            ["natives/hyperlink"] = new HyperlinkSamples(),
+            new MenuSamples(),
+            new TabControlSamples(),
+            new ToolBarSamples(),
+            new HyperlinkSamples(),
 
             // Inputs (Joufflu.Inputs library)
-            ["inputs/numeric"] = new NumericInputsSamplesViewModel(),
-            ["inputs/search"] = new SelectionInputsSamplesViewModel(),
-            ["inputs/combo-box-tags"] = new ComboBoxTagsSamplesViewModel(),
-            ["inputs/text-editable"] = new TextEditableSamplesViewModel(),
-            ["inputs/file-picker"] = new FilePickerSamplesViewModel(),
-            ["inputs/color-picker"] = new ColorPickerSamplesViewModel(),
+            new NumericInputsSamplesViewModel(),
+            new SelectionInputsSamplesViewModel(),
+            new ComboBoxTagsSamplesViewModel(),
+            new TextEditableSamplesViewModel(),
+            new FilePickerSamplesViewModel(),
+            new ColorPickerSamplesViewModel(),
 
             // Navigation (Joufflu.Navigation library)
-            ["navigation/menu"] = new NavigationMenuSamplesViewModel(),
-            ["navigation/overlays"] = new OverlaySamplesViewModel(Overlays, Toasts),
-            ["navigation/paging"] = new PagingSamplesViewModel(),
+            new NavigationMenuSamplesViewModel(),
+            new OverlaySamplesViewModel(Overlays, Toasts),
+            new PagingSamplesViewModel(),
 
             // File explorer (Joufflu.FileExplorer library)
-            ["file-explorer/explorer"] = new ExplorerSamplesViewModel(Toasts),
-            ["file-explorer/list"] = new ExplorerListSamplesViewModel(Toasts),
-            ["file-explorer/tree"] = new ExplorerTreeSamplesViewModel(Toasts),
+            new ExplorerSamplesViewModel(Toasts),
+            new ExplorerListSamplesViewModel(Toasts),
+            new ExplorerTreeSamplesViewModel(Toasts),
 
             // Custom controls
-            ["controls/font-icon"] = new FontIconSamplesViewModel(),
-            ["controls/badge"] = new BadgeSamplesViewModel(),
-            ["controls/spinner"] = new SpinnerSamplesViewModel(),
-            ["controls/toasts"] = new ToastSamplesViewModel(Toasts),
-            ["controls/tooltip"] = new TooltipSamplesViewModel(),
+            new FontIconSamplesViewModel(),
+            new BadgeSamplesViewModel(),
+            new SpinnerSamplesViewModel(),
+            new ToastSamplesViewModel(Toasts),
+            new TooltipSamplesViewModel(),
 
             // Toolkit
-            ["toolkit/sizing"] = new SizingSamplesViewModel(),
-            ["toolkit/spacing"] = new SpacingSamplesViewModel(),
-            ["toolkit/theme"] = new ThemeSamplesViewModel(),
-            ["toolkit/customize-theme"] = new ThemeCustomizerViewModel(),
-            ["toolkit/application-shell"] = new ShellSamples(),
-        };
+            new SizingSamplesViewModel(),
+            new SpacingSamplesViewModel(),
+            new ThemeSamplesViewModel(),
+            new ThemeCustomizerViewModel(),
+            new ShellSamples(),
+        }.ToDictionary(page => page.GetType());
 
-        ResolveTarget = ResolvePage;
+        Navigator = new Navigator(ResolvePage);
 
-        Navigator.Navigate(ResolvePage("natives/buttons"));
+        Navigator.Navigate(typeof(ButtonSamplesViewModel));
     }
 
-    /// <summary>Maps a menu item's text target to its page (view model), or null when unknown.</summary>
-    private object? ResolvePage(string target) =>
-        _pages.TryGetValue(target, out object? page) ? page : null;
+    /// <summary>Maps a menu item's target type to its page instance, or null when unknown.</summary>
+    private object? ResolvePage(Type target) => _pages.GetValueOrDefault(target);
 }

@@ -2,13 +2,24 @@
     x:Class="Joufflu.Samples.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:actions="clr-namespace:Joufflu.Samples.Views.Natives.Actions"
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
     xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dataDisplay="clr-namespace:Joufflu.Samples.Views.Natives.DataDisplay"
+    xmlns:dataInput="clr-namespace:Joufflu.Samples.Views.Natives.DataInput"
+    xmlns:feedback="clr-namespace:Joufflu.Samples.Views.Feedback"
+    xmlns:fileExplorer="clr-namespace:Joufflu.Samples.Views.FileExplorer"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:inputs="clr-namespace:Joufflu.Samples.Views.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:layout="clr-namespace:Joufflu.Samples.Views.Natives.Layout"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:nativeFeedback="clr-namespace:Joufflu.Samples.Views.Natives.Feedback"
+    xmlns:nativeNavigation="clr-namespace:Joufflu.Samples.Views.Natives.Navigation"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+    xmlns:navigation="clr-namespace:Joufflu.Samples.Views.Navigation"
+    xmlns:toolkit="clr-namespace:Joufflu.Samples.Views.Toolkit"
     xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels"
     Width="1100"
     Height="720"
@@ -22,10 +33,8 @@
         <Thickness x:Key="ContentTitleBarMargin" Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
     </controls:ThemedWindow.Resources>
     <DockPanel>
-        <nav:NavigationMenu
-            DockPanel.Dock="Left"
-            Navigator="{Binding Navigator}"
-            TargetResolver="{Binding ResolveTarget}">
+        <!--  Each item targets its page type; AppViewModel's navigator resolves it to the page instance.  -->
+        <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
             <nav:NavigationMenu.Header>
                 <StackPanel
                     VerticalAlignment="Center"
@@ -43,25 +52,25 @@
 
             <nav:NavigationTitle>Natives</nav:NavigationTitle>
 
-            <nav:NavigationItem Target="natives/buttons">
+            <nav:NavigationItem TargetType="{x:Type actions:ButtonSamplesViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />
                 </nav:NavigationItem.Icon>
                 Buttons
             </nav:NavigationItem>
-            <nav:NavigationItem Target="natives/typography">
+            <nav:NavigationItem TargetType="{x:Type dataDisplay:TypographySamplesViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Type}" />
                 </nav:NavigationItem.Icon>
                 Typography
             </nav:NavigationItem>
-            <nav:NavigationItem Target="controls/font-icon">
+            <nav:NavigationItem TargetType="{x:Type feedback:FontIconSamplesViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Sparkles}" />
                 </nav:NavigationItem.Icon>
                 Font icon
             </nav:NavigationItem>
-            <nav:NavigationItem Target="natives/card">
+            <nav:NavigationItem TargetType="{x:Type layout:CardSamples}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Square}" />
                 </nav:NavigationItem.Icon>
@@ -75,7 +84,7 @@
                 </nav:NavigationGroup.Icon>
 
                 <nav:NavigationTitle>Actions</nav:NavigationTitle>
-                <nav:NavigationItem Target="natives/toggle-buttons">
+                <nav:NavigationItem TargetType="{x:Type actions:ToggleButtonSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ToggleLeft}" />
                     </nav:NavigationItem.Icon>
@@ -83,49 +92,49 @@
                 </nav:NavigationItem>
 
                 <nav:NavigationTitle>Data input</nav:NavigationTitle>
-                <nav:NavigationItem Target="natives/text-box">
+                <nav:NavigationItem TargetType="{x:Type dataInput:TextBoxSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.TextCursorInput}" />
                     </nav:NavigationItem.Icon>
                     Text box
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/combo-box">
+                <nav:NavigationItem TargetType="{x:Type dataInput:ComboBoxSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.List}" />
                     </nav:NavigationItem.Icon>
                     Combo box
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/check-box">
+                <nav:NavigationItem TargetType="{x:Type dataInput:CheckBoxSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CheckSquare}" />
                     </nav:NavigationItem.Icon>
                     Check box
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/radio-button">
+                <nav:NavigationItem TargetType="{x:Type dataInput:RadioButtonSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CircleDot}" />
                     </nav:NavigationItem.Icon>
                     Radio button
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/slider">
+                <nav:NavigationItem TargetType="{x:Type dataInput:SliderSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SlidersHorizontal}" />
                     </nav:NavigationItem.Icon>
                     Slider
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/date-picker">
+                <nav:NavigationItem TargetType="{x:Type dataInput:DatePickerSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Calendar}" />
                     </nav:NavigationItem.Icon>
                     Date picker
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/calendar">
+                <nav:NavigationItem TargetType="{x:Type dataInput:CalendarSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CalendarDays}" />
                     </nav:NavigationItem.Icon>
                     Calendar
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/list-box">
+                <nav:NavigationItem TargetType="{x:Type dataInput:ListBoxSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />
                     </nav:NavigationItem.Icon>
@@ -133,25 +142,25 @@
                 </nav:NavigationItem>
 
                 <nav:NavigationTitle>Data display</nav:NavigationTitle>
-                <nav:NavigationItem Target="natives/label">
+                <nav:NavigationItem TargetType="{x:Type dataDisplay:LabelSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tag}" />
                     </nav:NavigationItem.Icon>
                     Label
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/list-view">
+                <nav:NavigationItem TargetType="{x:Type dataDisplay:ListViewSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table}" />
                     </nav:NavigationItem.Icon>
                     List view
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/tree-view">
+                <nav:NavigationItem TargetType="{x:Type dataDisplay:TreeViewSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Layers2}" />
                     </nav:NavigationItem.Icon>
                     Tree view
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/data-grid">
+                <nav:NavigationItem TargetType="{x:Type dataDisplay:DataGridSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table2}" />
                     </nav:NavigationItem.Icon>
@@ -159,13 +168,13 @@
                 </nav:NavigationItem>
 
                 <nav:NavigationTitle>Feedback</nav:NavigationTitle>
-                <nav:NavigationItem Target="natives/progress-bar">
+                <nav:NavigationItem TargetType="{x:Type nativeFeedback:ProgressBarSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Loader}" />
                     </nav:NavigationItem.Icon>
                     Progress bar
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/status-bar">
+                <nav:NavigationItem TargetType="{x:Type nativeFeedback:StatusBarSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelBottom}" />
                     </nav:NavigationItem.Icon>
@@ -173,25 +182,25 @@
                 </nav:NavigationItem>
 
                 <nav:NavigationTitle>Layout</nav:NavigationTitle>
-                <nav:NavigationItem Target="natives/group-box">
+                <nav:NavigationItem TargetType="{x:Type layout:GroupBoxSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Component}" />
                     </nav:NavigationItem.Icon>
                     Group box
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/expander">
+                <nav:NavigationItem TargetType="{x:Type layout:ExpanderSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelTop}" />
                     </nav:NavigationItem.Icon>
                     Expander
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/scroll-viewer">
+                <nav:NavigationItem TargetType="{x:Type layout:ScrollViewerSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Move}" />
                     </nav:NavigationItem.Icon>
                     Scroll viewer
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/grid-splitter">
+                <nav:NavigationItem TargetType="{x:Type layout:GridSplitterSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.StretchHorizontal}" />
                     </nav:NavigationItem.Icon>
@@ -199,25 +208,25 @@
                 </nav:NavigationItem>
 
                 <nav:NavigationTitle>Navigation</nav:NavigationTitle>
-                <nav:NavigationItem Target="natives/menu">
+                <nav:NavigationItem TargetType="{x:Type nativeNavigation:MenuSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Menu}" />
                     </nav:NavigationItem.Icon>
                     Menu
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/tab-control">
+                <nav:NavigationItem TargetType="{x:Type nativeNavigation:TabControlSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.GalleryHorizontal}" />
                     </nav:NavigationItem.Icon>
                     Tab control
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/tool-bar">
+                <nav:NavigationItem TargetType="{x:Type nativeNavigation:ToolBarSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Wrench}" />
                     </nav:NavigationItem.Icon>
                     Tool bar
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="natives/hyperlink">
+                <nav:NavigationItem TargetType="{x:Type nativeNavigation:HyperlinkSamples}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Link}" />
                     </nav:NavigationItem.Icon>
@@ -227,32 +236,32 @@
 
             <!--  Toolkit  -->
             <nav:NavigationTitle>Toolkit</nav:NavigationTitle>
-            <nav:NavigationItem Target="toolkit/application-shell">
+            <nav:NavigationItem TargetType="{x:Type toolkit:ShellSamples}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
                 </nav:NavigationItem.Icon>
                 Application shell
             </nav:NavigationItem>
-            <nav:NavigationItem Target="toolkit/sizing">
+            <nav:NavigationItem TargetType="{x:Type toolkit:SizingSamplesViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scaling}" />
                 </nav:NavigationItem.Icon>
                 Sizing
             </nav:NavigationItem>
-            <nav:NavigationItem Target="toolkit/spacing">
+            <nav:NavigationItem TargetType="{x:Type toolkit:SpacingSamplesViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Space}" />
                 </nav:NavigationItem.Icon>
                 Spacing
             </nav:NavigationItem>
 
-            <nav:NavigationItem Target="toolkit/theme">
+            <nav:NavigationItem TargetType="{x:Type toolkit:ThemeSamplesViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SunMoon}" />
                 </nav:NavigationItem.Icon>
                 Theme
             </nav:NavigationItem>
-            <nav:NavigationItem Target="toolkit/customize-theme">
+            <nav:NavigationItem TargetType="{x:Type toolkit:ThemeCustomizerViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
                 </nav:NavigationItem.Icon>
@@ -267,25 +276,25 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Megaphone}" />
                 </nav:NavigationGroup.Icon>
 
-                <nav:NavigationItem Target="controls/badge">
+                <nav:NavigationItem TargetType="{x:Type feedback:BadgeSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Badge}" />
                     </nav:NavigationItem.Icon>
                     Badge
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="controls/spinner">
+                <nav:NavigationItem TargetType="{x:Type feedback:SpinnerSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Circle}" />
                     </nav:NavigationItem.Icon>
                     Spinner
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="controls/tooltip">
+                <nav:NavigationItem TargetType="{x:Type toolkit:TooltipSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
                     </nav:NavigationItem.Icon>
                     Tooltip
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="controls/toasts">
+                <nav:NavigationItem TargetType="{x:Type feedback:ToastSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
                     </nav:NavigationItem.Icon>
@@ -299,37 +308,37 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FormInput}" />
                 </nav:NavigationGroup.Icon>
 
-                <nav:NavigationItem Target="inputs/numeric">
+                <nav:NavigationItem TargetType="{x:Type inputs:NumericInputsSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
                     </nav:NavigationItem.Icon>
                     Numeric inputs
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="inputs/search">
+                <nav:NavigationItem TargetType="{x:Type inputs:SelectionInputsSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListFilter}" />
                     </nav:NavigationItem.Icon>
                     Search &amp; combo
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="inputs/combo-box-tags">
+                <nav:NavigationItem TargetType="{x:Type inputs:ComboBoxTagsSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tags}" />
                     </nav:NavigationItem.Icon>
                     Combo box tags
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="inputs/text-editable">
+                <nav:NavigationItem TargetType="{x:Type inputs:TextEditableSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
                     </nav:NavigationItem.Icon>
                     Text editable
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="inputs/file-picker">
+                <nav:NavigationItem TargetType="{x:Type inputs:FilePickerSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
                     </nav:NavigationItem.Icon>
                     File picker
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="inputs/color-picker">
+                <nav:NavigationItem TargetType="{x:Type inputs:ColorPickerSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
                     </nav:NavigationItem.Icon>
@@ -343,19 +352,19 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Compass}" />
                 </nav:NavigationGroup.Icon>
 
-                <nav:NavigationItem Target="navigation/menu">
+                <nav:NavigationItem TargetType="{x:Type navigation:NavigationMenuSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
                     </nav:NavigationItem.Icon>
                     Navigation menu
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="navigation/overlays">
+                <nav:NavigationItem TargetType="{x:Type navigation:OverlaySamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SquareStack}" />
                     </nav:NavigationItem.Icon>
                     Overlays
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="navigation/paging">
+                <nav:NavigationItem TargetType="{x:Type navigation:PagingSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.BookOpen}" />
                     </nav:NavigationItem.Icon>
@@ -369,19 +378,19 @@
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderTree}" />
                 </nav:NavigationGroup.Icon>
 
-                <nav:NavigationItem Target="file-explorer/explorer">
+                <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
                     </nav:NavigationItem.Icon>
                     Explorer
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="file-explorer/list">
+                <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerListSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />
                     </nav:NavigationItem.Icon>
                     List
                 </nav:NavigationItem>
-                <nav:NavigationItem Target="file-explorer/tree">
+                <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerTreeSamplesViewModel}">
                     <nav:NavigationItem.Icon>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListTree}" />
                     </nav:NavigationItem.Icon>

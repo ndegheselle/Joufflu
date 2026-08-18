@@ -26,7 +26,7 @@ public class NavigationTitle : ContentControl
 /// <summary>
 /// A clickable entry hosted by a <see cref="NavigationMenu"/>. Its <see cref="ContentControl.Content"/>
 /// is the expanded content (title, badges, …); the <see cref="Icon"/> is shown when the menu is
-/// collapsed to an icons-only rail. Selecting it navigates to the page resolved from <see cref="Target"/>.
+/// collapsed to an icons-only rail. Selecting it navigates to the page resolved from <see cref="TargetType"/>.
 /// </summary>
 public class NavigationItem : ContentControl
 {
@@ -55,6 +55,10 @@ public class NavigationItem : ContentControl
         set => SetValue(IconProperty, value);
     }
 
+    /// <summary>
+    /// Type of the page (view model) this item navigates to. The <see cref="INavigator"/> turns it
+    /// into the actual page instance, and the item shows as selected while a page of that type is current.
+    /// </summary>
     public Type? TargetType
     {
         get => (Type?)GetValue(TargetTypeProperty);
@@ -116,9 +120,8 @@ public class NavigationGroup : HeaderedItemsControl
 /// <summary>
 /// Side menu that plugs into an <see cref="INavigator"/>. Its <see cref="NavigationItem"/>,
 /// <see cref="NavigationGroup"/> and <see cref="NavigationTitle"/> children are declared directly in
-/// XAML. Items point at a page
-/// through a text <see cref="NavigationItem.Target"/>, mapped to the actual view model by
-/// <see cref="TargetResolver"/>. The menu can collapse to an icons-only rail.
+/// XAML. Items point at a page through a <see cref="NavigationItem.TargetType"/>, which the
+/// <see cref="Navigator"/> maps to the actual view model. The menu can collapse to an icons-only rail.
 /// </summary>
 public partial class NavigationMenu : ItemsControl
 {
@@ -143,8 +146,10 @@ public partial class NavigationMenu : ItemsControl
     {
         ToggleCollapseCommand = new RelayCommand(() => IsCollapsed = !IsCollapsed);
 
-        Loaded += (_, _) => Navigator?.Navigated += OnNavigated;
-        Unloaded += (_, _) => Navigator?.Navigated -= OnNavigated;
+        // Release the Navigator subscription while off the visual tree so a long-lived Navigator
+        // cannot keep a removed menu (and its subtree) alive.
+        Loaded += (_, _) => Attach(Navigator);
+        Unloaded += (_, _) => Detach(Navigator);
     }
 
     /// <summary>
@@ -175,11 +180,28 @@ public partial class NavigationMenu : ItemsControl
     private static void OnNavigatorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var menu = (NavigationMenu)d;
+        menu.Detach(e.OldValue as INavigator);
+        menu.Attach(e.NewValue as INavigator);
+    }
 
-        if (e.OldValue is INavigator oldNavigator)
-            oldNavigator.Navigated -= menu.OnNavigated;
-        if (e.NewValue is INavigator newNavigator)
-            newNavigator.Navigated += menu.OnNavigated;
+    /// <summary>
+    /// Subscribes to <paramref name="navigator"/> and syncs the selection. Idempotent, so the
+    /// property change and the <c>Loaded</c> event can both call it without doubling the handler.
+    /// </summary>
+    private void Attach(INavigator? navigator)
+    {
+        if (navigator == null)
+            return;
+
+        navigator.Navigated -= OnNavigated;
+        navigator.Navigated += OnNavigated;
+        UpdateSelection(Items, navigator.CurrentPage);
+    }
+
+    private void Detach(INavigator? navigator)
+    {
+        if (navigator != null)
+            navigator.Navigated -= OnNavigated;
     }
 
     private void OnNavigated(object? sender, object? page) => UpdateSelection(Items, page);

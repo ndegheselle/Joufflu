@@ -21,8 +21,10 @@ public class NavigationContainer : Control
 
     public NavigationContainer()
     {
-        // Provide working defaults while still allowing a binding to override them.
-        SetCurrentValue(NavigatorProperty, new Navigator());
+        // Provide working defaults while still allowing a binding to override them. The default
+        // navigator resolves no type: navigating by type needs a navigator built by the shell view
+        // model with its own page registry.
+        SetCurrentValue(NavigatorProperty, new Navigator(_ => null));
         SetCurrentValue(OverlaysProperty, new OverlayService());
         SetCurrentValue(ToastsProperty, new ToastService());
     }

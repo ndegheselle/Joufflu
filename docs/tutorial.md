@@ -30,7 +30,7 @@ Three services drive everything, shared between the shell window and the pages:
 
 | Service | Role |
 |---|---|
-| `Navigator` | Holds the current page (a view model) and switches between pages. |
+| `Navigator` | Holds the current page (a view model) and switches between pages. Built with a resolver turning a page type into the page instance. |
 | `OverlayService` | Shows modal overlays on top of the current page. |
 | `ToastService` | Shows stacking, auto-dismissing notifications. |
 
@@ -42,8 +42,9 @@ drives the same `Navigator` from the side.
 ## Step 1 — The shared shell view model
 
 The shell view model owns the three services so the window and every page share
-the same instances. It also keeps a registry mapping each menu item's text
-`Target` to a page. It starts empty; the first page is added in Step 4.
+the same instances. It also keeps a registry of pages keyed by their own type,
+which is what the menu items target. It starts empty; the first page is added in
+Step 4.
 
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -54,21 +55,18 @@ public class ShellViewModel : ObservableObject
 {
     // Shared with the NavigationContainer and NavigationMenu in the shell window,
     // and injected into the pages that need them.
-    public Navigator Navigator { get; } = new();
+    public Navigator Navigator { get; }
     public OverlayService Overlays { get; } = new();
     public ToastService Toasts { get; } = new();
 
-    // Pages keyed by the text target used on the menu's NavigationItems.
-    // Filled in as we add pages (Step 4).
-    private readonly Dictionary<string, object> _pages = new();
-
-    // Bound to NavigationMenu.TargetResolver so the menu can turn a target
-    // string into the page to navigate to.
-    public Func<string, object?> ResolveTarget { get; }
+    // Pages keyed by their own type, which is what the menu's NavigationItems
+    // target. Filled in as we add pages (Step 4).
+    private readonly Dictionary<Type, object> _pages = new();
 
     public ShellViewModel()
     {
-        ResolveTarget = target => _pages.GetValueOrDefault(target);
+        // The navigator turns an item's target type into the page to display.
+        Navigator = new Navigator(target => _pages.GetValueOrDefault(target));
     }
 }
 ```
@@ -105,8 +103,8 @@ menu item navigates the container, and its overlays/toasts use the shared
 services.
 
 The `d:DataContext` line gives the XAML designer the runtime view-model type, so
-bindings like `{Binding Navigator}` and `{Binding ResolveTarget}` get IntelliSense
-and design-time validation. No runtime effect.
+bindings like `{Binding Navigator}` get IntelliSense and design-time validation.
+No runtime effect.
 
 ```xml
 <controls:ThemedWindow
@@ -125,12 +123,10 @@ and design-time validation. No runtime effect.
     d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
     mc:Ignorable="d">
     <DockPanel>
-        <nav:NavigationMenu
-            DockPanel.Dock="Left"
-            Navigator="{Binding Navigator}"
-            TargetResolver="{Binding ResolveTarget}">
+        <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
 
-            <nav:NavigationItem Target="home">
+            <!-- An item targets the type of the page it navigates to. -->
+            <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
                 <nav:NavigationItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
                 </nav:NavigationItem.Icon>
@@ -166,10 +162,10 @@ protected override void OnStartup(StartupEventArgs e)
 > too and you end up with two.
 
 {: .note }
-> Each item's `Target` is passed to `TargetResolver`, which returns the page. Add
-> more items with the Step 4 recipe. A `NavigationGroup` expands to reveal
-> children instead of navigating; a `NavigationTitle` is a section label. See
-> [Navigation menu](navigation/navigation-menu.md) for the full
+> Each item's `TargetType` is passed to the navigator's resolver, which returns
+> the page. Add more items with the Step 4 recipe. A `NavigationGroup` expands to
+> reveal children instead of navigating; a `NavigationTitle` is a section label.
+> See [Navigation menu](navigation/navigation-menu.md) for the full
 > markup.
 
 ## Step 4 — An example page
@@ -229,13 +225,13 @@ to it:
 ```csharp
 public ShellViewModel()
 {
-    // Register the page under the target used by its NavigationItem.
-    _pages["home"] = new HomeViewModel(Overlays, Toasts);
+    // Register the page under its own type, which is what its NavigationItem targets.
+    _pages[typeof(HomeViewModel)] = new HomeViewModel(Overlays, Toasts);
 
-    ResolveTarget = target => _pages.GetValueOrDefault(target);
+    Navigator = new Navigator(target => _pages.GetValueOrDefault(target));
 
     // Navigate to the default page so the window doesn't start empty.
-    Navigator.Navigate(_pages["home"]);
+    Navigator.Navigate(typeof(HomeViewModel));
 }
 ```
 
@@ -243,8 +239,8 @@ The recipe per page, repeated for each:
 
 1. Write its view model and view.
 2. Map them with a `DataTemplate` (Step 2).
-3. Register the view model under a target in `_pages` (above).
-4. Point a `NavigationItem` at that target (Step 3).
+3. Register the view model under its type in `_pages` (above).
+4. Point a `NavigationItem` at that type (Step 3).
 
 ## Step 5 — Modals and toasts from the page
 

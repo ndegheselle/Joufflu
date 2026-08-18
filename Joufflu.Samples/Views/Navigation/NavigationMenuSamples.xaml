@@ -5,7 +5,8 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation">
+    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+    xmlns:vm="clr-namespace:Joufflu.Samples.Views.Navigation">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Navigation menu" />
@@ -26,7 +27,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <nav:NavigationMenu Navigator="{Binding DemoNavigator}" TargetResolver="{Binding ResolveTarget}">
+                        <nav:NavigationMenu Navigator="{Binding DemoNavigator}">
                             <nav:NavigationMenu.Header>
                                 <StackPanel
                                     VerticalAlignment="Center"
@@ -40,7 +41,7 @@
                                 </StackPanel>
                             </nav:NavigationMenu.Header>
                             <nav:NavigationTitle>Demo</nav:NavigationTitle>
-                            <nav:NavigationItem Target="Home">
+                            <nav:NavigationItem TargetType="{x:Type vm:DemoHomePage}">
                                 <nav:NavigationItem.Icon>
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
                                 </nav:NavigationItem.Icon>
@@ -50,17 +51,17 @@
                                 <nav:NavigationGroup.Icon>
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
                                 </nav:NavigationGroup.Icon>
-                                <nav:NavigationItem Target="Submenu 1">Submenu 1</nav:NavigationItem>
-                                <nav:NavigationItem Target="Submenu 2">Submenu 2</nav:NavigationItem>
+                                <nav:NavigationItem TargetType="{x:Type vm:DemoSubmenu1Page}">Submenu 1</nav:NavigationItem>
+                                <nav:NavigationItem TargetType="{x:Type vm:DemoSubmenu2Page}">Submenu 2</nav:NavigationItem>
                                 <nav:NavigationGroup Header="Parent" IsExpanded="True">
                                     <nav:NavigationGroup.Icon>
                                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
                                     </nav:NavigationGroup.Icon>
-                                    <nav:NavigationItem Target="Nested submenu 1">Submenu 1</nav:NavigationItem>
-                                    <nav:NavigationItem Target="Nested submenu 2">Submenu 2</nav:NavigationItem>
+                                    <nav:NavigationItem TargetType="{x:Type vm:DemoNestedSubmenu1Page}">Submenu 1</nav:NavigationItem>
+                                    <nav:NavigationItem TargetType="{x:Type vm:DemoNestedSubmenu2Page}">Submenu 2</nav:NavigationItem>
                                 </nav:NavigationGroup>
                             </nav:NavigationGroup>
-                            <nav:NavigationItem Target="Settings">
+                            <nav:NavigationItem TargetType="{x:Type vm:DemoSettingsPage}">
                                 <nav:NavigationItem.Icon>
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
                                 </nav:NavigationItem.Icon>

@@ -23,8 +23,10 @@ public interface INavigator
 {
     object? CurrentPage { get; }
 
-    void Navigate(object page);
-    void Navigate(Type page);
+    void Navigate(object? page);
+
+    /// <summary>Navigates to the page the implementation resolves for <paramref name="type"/>.</summary>
+    void Navigate(Type? type);
 
     event EventHandler<object?>? Navigated;
 }
