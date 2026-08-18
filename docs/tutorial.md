@@ -19,6 +19,7 @@ The snippets use these namespaces:
 
 ```xml
 xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
 xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
 xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
@@ -37,8 +38,8 @@ Three services drive everything, shared between the shell window and the pages:
 Navigation is **view-model-first**: navigate to a *view model* and WPF resolves
 the matching *view* through an implicit `DataTemplate`. A plain `ContentControl`
 bound to `Navigator.CurrentPage` renders the current page; `NavigationMenu` drives
-the same `Navigator` from the side; `OverlayContainer` wraps the whole app and
-hosts the overlay and toast stacks above it.
+the same `Navigator` from the side; `OverlayContainer` and `ToastContainer` wrap
+the whole app and host the overlay and toast stacks above it.
 
 ## Step 1 — The shared shell view model
 
@@ -54,8 +55,8 @@ using Joufflu.Navigation;
 
 public class ShellViewModel : ObservableObject
 {
-    // Shared with the shell window's page container, NavigationMenu and
-    // OverlayContainer, and injected into the pages that need them.
+    // Shared with the shell window's page container, NavigationMenu and the
+    // overlay/toast containers, and injected into the pages that need them.
     public Navigator Navigator { get; }
     public OverlayService Overlays { get; } = new();
     public ToastService Toasts { get; } = new();
@@ -98,13 +99,14 @@ overlay view model too (Step 5).
 
 ## Step 3 — The shell window
 
-A `ThemedWindow` whose content is an `OverlayContainer` wrapping the side
-`NavigationMenu` and the page `ContentControl`. Bind everything to the shell view
-model's services so they stay in sync: selecting a menu item navigates the page,
-and the overlays/toasts use the shared services.
+A `ThemedWindow` whose content is a `ToastContainer` around an `OverlayContainer`,
+wrapping the side `NavigationMenu` and the page `ContentControl`. Bind everything to
+the shell view model's services so they stay in sync: selecting a menu item navigates
+the page, and the overlays/toasts use the shared services.
 
 Wrapping the *whole* app rather than the page area only is what lets a full screen
-overlay cover the entire window, side menu included.
+overlay cover the entire window, side menu included. Toasts wrap the overlays in
+turn, so they stay on top of them.
 
 The `d:DataContext` line gives the XAML designer the runtime view-model type, so
 bindings like `{Binding Navigator}` get IntelliSense and design-time validation.
@@ -126,24 +128,26 @@ No runtime effect.
     Height="640"
     d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
     mc:Ignorable="d">
-    <!-- Wraps the app and hosts the overlay + toast stacks above it. -->
-    <nav:OverlayContainer Overlays="{Binding Overlays}" Toasts="{Binding Toasts}">
-        <DockPanel>
-            <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
+    <!-- Each container wraps the app and stacks its own layer above it. -->
+    <feedback:ToastContainer Toasts="{Binding Toasts}">
+        <nav:OverlayContainer Overlays="{Binding Overlays}">
+            <DockPanel>
+                <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
 
-                <!-- An item targets the type of the page it navigates to. -->
-                <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
-                    </nav:NavigationItem.Icon>
-                    Home
-                </nav:NavigationItem>
-            </nav:NavigationMenu>
+                    <!-- An item targets the type of the page it navigates to. -->
+                    <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+                        </nav:NavigationItem.Icon>
+                        Home
+                    </nav:NavigationItem>
+                </nav:NavigationMenu>
 
-            <!-- Renders the current page, resolved by its implicit DataTemplate. -->
-            <ContentControl Content="{Binding Navigator.CurrentPage}" />
-        </DockPanel>
-    </nav:OverlayContainer>
+                <!-- Renders the current page, resolved by its implicit DataTemplate. -->
+                <ContentControl Content="{Binding Navigator.CurrentPage}" />
+            </DockPanel>
+        </nav:OverlayContainer>
+    </feedback:ToastContainer>
 </controls:ThemedWindow>
 ```
 

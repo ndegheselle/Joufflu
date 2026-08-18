@@ -48,7 +48,7 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 - [Spacing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
 - [Theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
 - [Customize theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/customize-theme.md): the live theme editor, presets and override resource keys.
-- [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/application-shell.md): `ThemedWindow`, title-bar-over-content, and `OverlayContainer`.
+- [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/application-shell.md): `ThemedWindow`, title-bar-over-content, and the `OverlayContainer` / `ToastContainer` wrappers.
 
 ## Optional
 

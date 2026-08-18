@@ -13,7 +13,7 @@ a navigation menu, a page container, awaitable modal dialogs and a paging select
 | Piece | Purpose |
 |---|---|
 | `NavigationMenu` | A themed navigation menu for moving between sections. |
-| `OverlayContainer` | Wraps the whole app and layers modal overlays and toasts above it. |
+| `OverlayContainer` | Wraps the whole app and layers the modal overlays above it. |
 | Modal overlays | Awaitable modal dialogs driven by a `Navigator`, so you can `await` a dialog and get its result. |
 | `Paging` | A page selector for large sets of data — `Total`, `PageNumber` and `Capacity` (items per page), plus the displayed range. |
 

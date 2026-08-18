@@ -14,7 +14,7 @@ UI.
 
 - 🏷️ **`Badge`** — a themed pill in the semantic colours, sized via `Sizing.Size`.
 - ⏳ **`Spinner`** — an indeterminate loading indicator.
-- 🔔 **Toasts** — stackable, auto-dismissing notifications shown from an injected `IToastService`.
+- 🔔 **Toasts** — stackable, auto-dismissing notifications shown from an injected `IToastService` and rendered by a `ToastContainer` wrapping your app.
 - 💬 **Tooltip** — the `Tooltip.Content` and `Tooltip.Placement` attached properties for themed tooltips on any element.
 
 This package builds on the core [`Joufflu`](https://www.nuget.org/packages/Joufflu)

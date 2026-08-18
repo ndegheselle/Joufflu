@@ -33,10 +33,13 @@ Overlays are rendered by the `OverlayContainer` bound to the same
 everything — side menu included:
 
 ```xml
-<nav:OverlayContainer Overlays="{Binding Overlays}" Toasts="{Binding Toasts}">
+<nav:OverlayContainer Overlays="{Binding Overlays}">
     <!-- the whole app -->
 </nav:OverlayContainer>
 ```
+
+Toasts have their own [`ToastContainer`](../feedback/toasts.md); wrap it around
+this one to keep them above the overlays.
 
 ## Full screen
 

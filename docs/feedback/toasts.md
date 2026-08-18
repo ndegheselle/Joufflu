@@ -24,3 +24,27 @@ toasts.Show(new ToastOptions { Message = "Sticky", Duration = TimeSpan.Zero });
 
 A `Duration` of `TimeSpan.Zero` makes a toast sticky: it stays until the user
 closes it.
+
+## Where toasts are hosted
+
+A `ToastContainer` bound to the same `ToastService` renders them. It wraps the
+content it sits above, so wrapping the whole window keeps the toasts on top of
+everything:
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}">
+    <!-- the whole app -->
+</feedback:ToastContainer>
+```
+
+When the app also uses an
+[`OverlayContainer`](../navigation/overlays.md#where-overlays-are-hosted), wrap it
+*inside* the `ToastContainer` so toasts stay above the modal overlays:
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}">
+    <nav:OverlayContainer Overlays="{Binding Overlays}">
+        <!-- the whole app -->
+    </nav:OverlayContainer>
+</feedback:ToastContainer>
+```

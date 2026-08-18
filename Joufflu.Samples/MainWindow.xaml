@@ -9,6 +9,7 @@
     xmlns:dataDisplay="clr-namespace:Joufflu.Samples.Views.Natives.DataDisplay"
     xmlns:dataInput="clr-namespace:Joufflu.Samples.Views.Natives.DataInput"
     xmlns:feedback="clr-namespace:Joufflu.Samples.Views.Feedback"
+    xmlns:feedbackControls="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
     xmlns:fileExplorer="clr-namespace:Joufflu.Samples.Views.FileExplorer"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:inputs="clr-namespace:Joufflu.Samples.Views.Inputs"
@@ -32,377 +33,380 @@
         <!--  Offsets the content below the title bar drawn over it (PlaceTitleBarOverContent).  -->
         <Thickness x:Key="ContentTitleBarMargin" Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
     </controls:ThemedWindow.Resources>
-    <!--  Wraps the whole app so overlays and toasts cover every part of it, side menu included.  -->
-    <nav:OverlayContainer Overlays="{Binding Overlays}" Toasts="{Binding Toasts}">
-        <DockPanel>
-            <!--  Each item targets its page type; AppViewModel's navigator resolves it to the page instance.  -->
-            <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
-                <nav:NavigationMenu.Header>
-                    <StackPanel
-                        VerticalAlignment="Center"
-                        joufflu:Spacing.Gap="8"
-                        Orientation="Horizontal">
-                        <fonts:FontIcon FontSize="20" Text="{x:Static fonts:LucideFontIcons.Rocket}" />
-                        <TextBlock
+    <!--  Toasts sit above everything, modal overlays included.  -->
+    <feedbackControls:ToastContainer Toasts="{Binding Toasts}">
+        <!--  Wraps the whole app so overlays cover every part of it, side menu included.  -->
+        <nav:OverlayContainer Overlays="{Binding Overlays}">
+            <DockPanel>
+                <!--  Each item targets its page type; AppViewModel's navigator resolves it to the page instance.  -->
+                <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
+                    <nav:NavigationMenu.Header>
+                        <StackPanel
                             VerticalAlignment="Center"
-                            FontWeight="SemiBold"
-                            Text="Joufflu" />
-                    </StackPanel>
-                </nav:NavigationMenu.Header>
+                            joufflu:Spacing.Gap="8"
+                            Orientation="Horizontal">
+                            <fonts:FontIcon FontSize="20" Text="{x:Static fonts:LucideFontIcons.Rocket}" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Text="Joufflu" />
+                        </StackPanel>
+                    </nav:NavigationMenu.Header>
 
-                <!--  Featured native controls (kept at top level)  -->
+                    <!--  Featured native controls (kept at top level)  -->
 
-                <nav:NavigationTitle>Natives</nav:NavigationTitle>
+                    <nav:NavigationTitle>Natives</nav:NavigationTitle>
 
-                <nav:NavigationItem TargetType="{x:Type actions:ButtonSamplesViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />
-                    </nav:NavigationItem.Icon>
-                    Buttons
-                </nav:NavigationItem>
-                <nav:NavigationItem TargetType="{x:Type dataDisplay:TypographySamplesViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Type}" />
-                    </nav:NavigationItem.Icon>
-                    Typography
-                </nav:NavigationItem>
-                <nav:NavigationItem TargetType="{x:Type dataDisplay:FontIconSamplesViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Sparkles}" />
-                    </nav:NavigationItem.Icon>
-                    Font icon
-                </nav:NavigationItem>
-                <nav:NavigationItem TargetType="{x:Type layout:CardSamples}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Square}" />
-                    </nav:NavigationItem.Icon>
-                    Card
-                </nav:NavigationItem>
-
-                <!--  All other native controls, grouped and closed by default  -->
-                <nav:NavigationGroup Header="Native controls">
-                    <nav:NavigationGroup.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Blocks}" />
-                    </nav:NavigationGroup.Icon>
-
-                    <nav:NavigationTitle>Actions</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type actions:ToggleButtonSamplesViewModel}">
+                    <nav:NavigationItem TargetType="{x:Type actions:ButtonSamplesViewModel}">
                         <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ToggleLeft}" />
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />
                         </nav:NavigationItem.Icon>
-                        Toggle buttons
+                        Buttons
+                    </nav:NavigationItem>
+                    <nav:NavigationItem TargetType="{x:Type dataDisplay:TypographySamplesViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Type}" />
+                        </nav:NavigationItem.Icon>
+                        Typography
+                    </nav:NavigationItem>
+                    <nav:NavigationItem TargetType="{x:Type dataDisplay:FontIconSamplesViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Sparkles}" />
+                        </nav:NavigationItem.Icon>
+                        Font icon
+                    </nav:NavigationItem>
+                    <nav:NavigationItem TargetType="{x:Type layout:CardSamples}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Square}" />
+                        </nav:NavigationItem.Icon>
+                        Card
                     </nav:NavigationItem>
 
-                    <nav:NavigationTitle>Data input</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:TextBoxSamplesViewModel}">
+                    <!--  All other native controls, grouped and closed by default  -->
+                    <nav:NavigationGroup Header="Native controls">
+                        <nav:NavigationGroup.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Blocks}" />
+                        </nav:NavigationGroup.Icon>
+
+                        <nav:NavigationTitle>Actions</nav:NavigationTitle>
+                        <nav:NavigationItem TargetType="{x:Type actions:ToggleButtonSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ToggleLeft}" />
+                            </nav:NavigationItem.Icon>
+                            Toggle buttons
+                        </nav:NavigationItem>
+
+                        <nav:NavigationTitle>Data input</nav:NavigationTitle>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:TextBoxSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.TextCursorInput}" />
+                            </nav:NavigationItem.Icon>
+                            Text box
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:ComboBoxSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.List}" />
+                            </nav:NavigationItem.Icon>
+                            Combo box
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:CheckBoxSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CheckSquare}" />
+                            </nav:NavigationItem.Icon>
+                            Check box
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:RadioButtonSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CircleDot}" />
+                            </nav:NavigationItem.Icon>
+                            Radio button
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:SliderSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SlidersHorizontal}" />
+                            </nav:NavigationItem.Icon>
+                            Slider
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:DatePickerSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Calendar}" />
+                            </nav:NavigationItem.Icon>
+                            Date picker
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:CalendarSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CalendarDays}" />
+                            </nav:NavigationItem.Icon>
+                            Calendar
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataInput:ListBoxSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />
+                            </nav:NavigationItem.Icon>
+                            List box
+                        </nav:NavigationItem>
+
+                        <nav:NavigationTitle>Data display</nav:NavigationTitle>
+                        <nav:NavigationItem TargetType="{x:Type dataDisplay:LabelSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tag}" />
+                            </nav:NavigationItem.Icon>
+                            Label
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataDisplay:ListViewSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table}" />
+                            </nav:NavigationItem.Icon>
+                            List view
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataDisplay:TreeViewSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Layers2}" />
+                            </nav:NavigationItem.Icon>
+                            Tree view
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataDisplay:DataGridSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table2}" />
+                            </nav:NavigationItem.Icon>
+                            Data grid
+                        </nav:NavigationItem>
+
+                        <nav:NavigationTitle>Feedback</nav:NavigationTitle>
+                        <nav:NavigationItem TargetType="{x:Type nativeFeedback:ProgressBarSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Loader}" />
+                            </nav:NavigationItem.Icon>
+                            Progress bar
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type nativeFeedback:StatusBarSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelBottom}" />
+                            </nav:NavigationItem.Icon>
+                            Status bar
+                        </nav:NavigationItem>
+
+                        <nav:NavigationTitle>Layout</nav:NavigationTitle>
+                        <nav:NavigationItem TargetType="{x:Type layout:GroupBoxSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Component}" />
+                            </nav:NavigationItem.Icon>
+                            Group box
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type layout:ExpanderSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelTop}" />
+                            </nav:NavigationItem.Icon>
+                            Expander
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type layout:ScrollViewerSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Move}" />
+                            </nav:NavigationItem.Icon>
+                            Scroll viewer
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type layout:GridSplitterSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.StretchHorizontal}" />
+                            </nav:NavigationItem.Icon>
+                            Grid splitter
+                        </nav:NavigationItem>
+
+                        <nav:NavigationTitle>Navigation</nav:NavigationTitle>
+                        <nav:NavigationItem TargetType="{x:Type nativeNavigation:MenuSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Menu}" />
+                            </nav:NavigationItem.Icon>
+                            Menu
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type nativeNavigation:TabControlSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.GalleryHorizontal}" />
+                            </nav:NavigationItem.Icon>
+                            Tab control
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type nativeNavigation:ToolBarSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Wrench}" />
+                            </nav:NavigationItem.Icon>
+                            Tool bar
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type nativeNavigation:HyperlinkSamples}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Link}" />
+                            </nav:NavigationItem.Icon>
+                            Hyperlink
+                        </nav:NavigationItem>
+                    </nav:NavigationGroup>
+
+                    <!--  Toolkit  -->
+                    <nav:NavigationTitle>Toolkit</nav:NavigationTitle>
+                    <nav:NavigationItem TargetType="{x:Type toolkit:ShellSamples}">
                         <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.TextCursorInput}" />
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
                         </nav:NavigationItem.Icon>
-                        Text box
+                        Application shell
                     </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:ComboBoxSamplesViewModel}">
+                    <nav:NavigationItem TargetType="{x:Type toolkit:SizingSamplesViewModel}">
                         <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.List}" />
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scaling}" />
                         </nav:NavigationItem.Icon>
-                        Combo box
+                        Sizing
                     </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:CheckBoxSamplesViewModel}">
+                    <nav:NavigationItem TargetType="{x:Type toolkit:SpacingSamplesViewModel}">
                         <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CheckSquare}" />
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Space}" />
                         </nav:NavigationItem.Icon>
-                        Check box
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:RadioButtonSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CircleDot}" />
-                        </nav:NavigationItem.Icon>
-                        Radio button
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:SliderSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SlidersHorizontal}" />
-                        </nav:NavigationItem.Icon>
-                        Slider
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:DatePickerSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Calendar}" />
-                        </nav:NavigationItem.Icon>
-                        Date picker
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:CalendarSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.CalendarDays}" />
-                        </nav:NavigationItem.Icon>
-                        Calendar
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataInput:ListBoxSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />
-                        </nav:NavigationItem.Icon>
-                        List box
+                        Spacing
                     </nav:NavigationItem>
 
-                    <nav:NavigationTitle>Data display</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type dataDisplay:LabelSamples}">
+                    <nav:NavigationItem TargetType="{x:Type toolkit:ThemeSamplesViewModel}">
                         <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tag}" />
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SunMoon}" />
                         </nav:NavigationItem.Icon>
-                        Label
+                        Theme
                     </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataDisplay:ListViewSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table}" />
-                        </nav:NavigationItem.Icon>
-                        List view
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataDisplay:TreeViewSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Layers2}" />
-                        </nav:NavigationItem.Icon>
-                        Tree view
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type dataDisplay:DataGridSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Table2}" />
-                        </nav:NavigationItem.Icon>
-                        Data grid
-                    </nav:NavigationItem>
-
-                    <nav:NavigationTitle>Feedback</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type nativeFeedback:ProgressBarSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Loader}" />
-                        </nav:NavigationItem.Icon>
-                        Progress bar
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type nativeFeedback:StatusBarSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelBottom}" />
-                        </nav:NavigationItem.Icon>
-                        Status bar
-                    </nav:NavigationItem>
-
-                    <nav:NavigationTitle>Layout</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type layout:GroupBoxSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Component}" />
-                        </nav:NavigationItem.Icon>
-                        Group box
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type layout:ExpanderSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelTop}" />
-                        </nav:NavigationItem.Icon>
-                        Expander
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type layout:ScrollViewerSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Move}" />
-                        </nav:NavigationItem.Icon>
-                        Scroll viewer
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type layout:GridSplitterSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.StretchHorizontal}" />
-                        </nav:NavigationItem.Icon>
-                        Grid splitter
-                    </nav:NavigationItem>
-
-                    <nav:NavigationTitle>Navigation</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type nativeNavigation:MenuSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Menu}" />
-                        </nav:NavigationItem.Icon>
-                        Menu
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type nativeNavigation:TabControlSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.GalleryHorizontal}" />
-                        </nav:NavigationItem.Icon>
-                        Tab control
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type nativeNavigation:ToolBarSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Wrench}" />
-                        </nav:NavigationItem.Icon>
-                        Tool bar
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type nativeNavigation:HyperlinkSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Link}" />
-                        </nav:NavigationItem.Icon>
-                        Hyperlink
-                    </nav:NavigationItem>
-                </nav:NavigationGroup>
-
-                <!--  Toolkit  -->
-                <nav:NavigationTitle>Toolkit</nav:NavigationTitle>
-                <nav:NavigationItem TargetType="{x:Type toolkit:ShellSamples}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
-                    </nav:NavigationItem.Icon>
-                    Application shell
-                </nav:NavigationItem>
-                <nav:NavigationItem TargetType="{x:Type toolkit:SizingSamplesViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scaling}" />
-                    </nav:NavigationItem.Icon>
-                    Sizing
-                </nav:NavigationItem>
-                <nav:NavigationItem TargetType="{x:Type toolkit:SpacingSamplesViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Space}" />
-                    </nav:NavigationItem.Icon>
-                    Spacing
-                </nav:NavigationItem>
-
-                <nav:NavigationItem TargetType="{x:Type toolkit:ThemeSamplesViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SunMoon}" />
-                    </nav:NavigationItem.Icon>
-                    Theme
-                </nav:NavigationItem>
-                <nav:NavigationItem TargetType="{x:Type toolkit:ThemeCustomizerViewModel}">
-                    <nav:NavigationItem.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
-                    </nav:NavigationItem.Icon>
-                    Customize theme
-                </nav:NavigationItem>
-
-                <nav:NavigationTitle>Joufflu controls</nav:NavigationTitle>
-
-                <!--  Feedback (Joufflu.Feedback library)  -->
-                <nav:NavigationGroup Header="Feedback">
-                    <nav:NavigationGroup.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Megaphone}" />
-                    </nav:NavigationGroup.Icon>
-
-                    <nav:NavigationItem TargetType="{x:Type feedback:BadgeSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Badge}" />
-                        </nav:NavigationItem.Icon>
-                        Badge
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type feedback:SpinnerSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Circle}" />
-                        </nav:NavigationItem.Icon>
-                        Spinner
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type toolkit:TooltipSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
-                        </nav:NavigationItem.Icon>
-                        Tooltip
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type feedback:ToastSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
-                        </nav:NavigationItem.Icon>
-                        Toasts
-                    </nav:NavigationItem>
-                </nav:NavigationGroup>
-
-                <!--  Inputs (Joufflu.Inputs library)  -->
-                <nav:NavigationGroup Header="Inputs">
-                    <nav:NavigationGroup.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FormInput}" />
-                    </nav:NavigationGroup.Icon>
-
-                    <nav:NavigationItem TargetType="{x:Type inputs:NumericInputsSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
-                        </nav:NavigationItem.Icon>
-                        Numeric inputs
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type inputs:SelectionInputsSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListFilter}" />
-                        </nav:NavigationItem.Icon>
-                        Search &amp; combo
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type inputs:ComboBoxTagsSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tags}" />
-                        </nav:NavigationItem.Icon>
-                        Combo box tags
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type inputs:TextEditableSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
-                        </nav:NavigationItem.Icon>
-                        Text editable
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type inputs:FilePickerSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
-                        </nav:NavigationItem.Icon>
-                        File picker
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type inputs:ColorPickerSamplesViewModel}">
+                    <nav:NavigationItem TargetType="{x:Type toolkit:ThemeCustomizerViewModel}">
                         <nav:NavigationItem.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
                         </nav:NavigationItem.Icon>
-                        Color picker
+                        Customize theme
                     </nav:NavigationItem>
-                </nav:NavigationGroup>
 
-                <!--  Navigation (Joufflu.Navigation library)  -->
-                <nav:NavigationGroup Header="Navigation">
-                    <nav:NavigationGroup.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Compass}" />
-                    </nav:NavigationGroup.Icon>
+                    <nav:NavigationTitle>Joufflu controls</nav:NavigationTitle>
 
-                    <nav:NavigationItem TargetType="{x:Type navigation:NavigationMenuSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
-                        </nav:NavigationItem.Icon>
-                        Navigation menu
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type navigation:OverlaySamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SquareStack}" />
-                        </nav:NavigationItem.Icon>
-                        Overlays
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type navigation:PagingSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.BookOpen}" />
-                        </nav:NavigationItem.Icon>
-                        Paging
-                    </nav:NavigationItem>
-                </nav:NavigationGroup>
+                    <!--  Feedback (Joufflu.Feedback library)  -->
+                    <nav:NavigationGroup Header="Feedback">
+                        <nav:NavigationGroup.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Megaphone}" />
+                        </nav:NavigationGroup.Icon>
 
-                <!--  File explorer (Joufflu.FileExplorer library)  -->
-                <nav:NavigationGroup Header="File explorer">
-                    <nav:NavigationGroup.Icon>
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderTree}" />
-                    </nav:NavigationGroup.Icon>
+                        <nav:NavigationItem TargetType="{x:Type feedback:BadgeSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Badge}" />
+                            </nav:NavigationItem.Icon>
+                            Badge
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type feedback:SpinnerSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Circle}" />
+                            </nav:NavigationItem.Icon>
+                            Spinner
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type toolkit:TooltipSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
+                            </nav:NavigationItem.Icon>
+                            Tooltip
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type feedback:ToastSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+                            </nav:NavigationItem.Icon>
+                            Toasts
+                        </nav:NavigationItem>
+                    </nav:NavigationGroup>
 
-                    <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
-                        </nav:NavigationItem.Icon>
-                        Explorer
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerListSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />
-                        </nav:NavigationItem.Icon>
-                        List
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerTreeSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListTree}" />
-                        </nav:NavigationItem.Icon>
-                        Tree
-                    </nav:NavigationItem>
-                </nav:NavigationGroup>
-            </nav:NavigationMenu>
+                    <!--  Inputs (Joufflu.Inputs library)  -->
+                    <nav:NavigationGroup Header="Inputs">
+                        <nav:NavigationGroup.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FormInput}" />
+                        </nav:NavigationGroup.Icon>
 
-            <!--  The current page: a plain ContentControl, the view resolved by implicit DataTemplates.  -->
-            <ContentControl Margin="{StaticResource ContentTitleBarMargin}" Content="{Binding Navigator.CurrentPage}" />
-        </DockPanel>
-    </nav:OverlayContainer>
+                        <nav:NavigationItem TargetType="{x:Type inputs:NumericInputsSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
+                            </nav:NavigationItem.Icon>
+                            Numeric inputs
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type inputs:SelectionInputsSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListFilter}" />
+                            </nav:NavigationItem.Icon>
+                            Search &amp; combo
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type inputs:ComboBoxTagsSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Tags}" />
+                            </nav:NavigationItem.Icon>
+                            Combo box tags
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type inputs:TextEditableSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
+                            </nav:NavigationItem.Icon>
+                            Text editable
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type inputs:FilePickerSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
+                            </nav:NavigationItem.Icon>
+                            File picker
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type inputs:ColorPickerSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
+                            </nav:NavigationItem.Icon>
+                            Color picker
+                        </nav:NavigationItem>
+                    </nav:NavigationGroup>
+
+                    <!--  Navigation (Joufflu.Navigation library)  -->
+                    <nav:NavigationGroup Header="Navigation">
+                        <nav:NavigationGroup.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Compass}" />
+                        </nav:NavigationGroup.Icon>
+
+                        <nav:NavigationItem TargetType="{x:Type navigation:NavigationMenuSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PanelLeft}" />
+                            </nav:NavigationItem.Icon>
+                            Navigation menu
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type navigation:OverlaySamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.SquareStack}" />
+                            </nav:NavigationItem.Icon>
+                            Overlays
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type navigation:PagingSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.BookOpen}" />
+                            </nav:NavigationItem.Icon>
+                            Paging
+                        </nav:NavigationItem>
+                    </nav:NavigationGroup>
+
+                    <!--  File explorer (Joufflu.FileExplorer library)  -->
+                    <nav:NavigationGroup Header="File explorer">
+                        <nav:NavigationGroup.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FolderTree}" />
+                        </nav:NavigationGroup.Icon>
+
+                        <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
+                            </nav:NavigationItem.Icon>
+                            Explorer
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerListSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.LayoutList}" />
+                            </nav:NavigationItem.Icon>
+                            List
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type fileExplorer:ExplorerTreeSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ListTree}" />
+                            </nav:NavigationItem.Icon>
+                            Tree
+                        </nav:NavigationItem>
+                    </nav:NavigationGroup>
+                </nav:NavigationMenu>
+
+                <!--  The current page: a plain ContentControl, the view resolved by implicit DataTemplates.  -->
+                <ContentControl Margin="{StaticResource ContentTitleBarMargin}" Content="{Binding Navigator.CurrentPage}" />
+            </DockPanel>
+        </nav:OverlayContainer>
+    </feedbackControls:ToastContainer>
 </controls:ThemedWindow>

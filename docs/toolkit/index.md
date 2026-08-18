@@ -13,10 +13,13 @@ themselves.
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.
 - **Theme** — `ThemeManager` for System/Light/Dark plus registering custom themes, and how to bind a theme switcher UI to it.
 - **Customize theme** — the live theme editor and preset themes.
-- **Application shell** — the window styles and navigation container.
+- **Application shell** — the window styles and the overlay/toast containers wrapping the app.
 
-Snippets use the `joufflu` XML namespace:
+Snippets use the `joufflu` XML namespace, plus `nav` and `feedback` for the
+application shell containers:
 
 ```xml
 xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
 ```

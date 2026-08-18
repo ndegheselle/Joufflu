@@ -36,12 +36,12 @@
             </c:CodeExample>
 
             <c:CodeExample
-                Title="OverlayContainer"
-                Description="OverlayContainer wraps the whole app and layers overlays and toasts above it, so a full screen overlay covers everything — side menu included. The current page needs no dedicated container: bind a ContentControl to the shared Navigator."
-                Code="&lt;nav:OverlayContainer Overlays=&quot;{Binding Overlays}&quot;&#x0a;                      Toasts=&quot;{Binding Toasts}&quot;&gt;&#x0a;    &lt;DockPanel&gt;&#x0a;        &lt;nav:NavigationMenu DockPanel.Dock=&quot;Left&quot; Navigator=&quot;{Binding Navigator}&quot; /&gt;&#x0a;        &lt;ContentControl Content=&quot;{Binding Navigator.CurrentPage}&quot; /&gt;&#x0a;    &lt;/DockPanel&gt;&#x0a;&lt;/nav:OverlayContainer&gt;">
+                Title="OverlayContainer and ToastContainer"
+                Description="Each container wraps the whole app and layers one thing above it: OverlayContainer (Joufflu.Navigation) the modal overlays, ToastContainer (Joufflu.Feedback) the toasts. Wrapping everything is what lets a full screen overlay cover the side menu too; nesting the overlays inside the toasts keeps the toasts on top. The current page needs no dedicated container: bind a ContentControl to the shared Navigator."
+                Code="&lt;feedback:ToastContainer Toasts=&quot;{Binding Toasts}&quot;&gt;&#x0a;    &lt;nav:OverlayContainer Overlays=&quot;{Binding Overlays}&quot;&gt;&#x0a;        &lt;DockPanel&gt;&#x0a;            &lt;nav:NavigationMenu DockPanel.Dock=&quot;Left&quot; Navigator=&quot;{Binding Navigator}&quot; /&gt;&#x0a;            &lt;ContentControl Content=&quot;{Binding Navigator.CurrentPage}&quot; /&gt;&#x0a;        &lt;/DockPanel&gt;&#x0a;    &lt;/nav:OverlayContainer&gt;&#x0a;&lt;/feedback:ToastContainer&gt;">
                 <TextBlock
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                    Text="This whole window is wrapped in an OverlayContainer; the right-hand area is a ContentControl bound to the navigator." />
+                    Text="This whole window is wrapped in both containers; the right-hand area is a ContentControl bound to the navigator." />
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

@@ -12,7 +12,7 @@ built on the design system.
 
 - **Badge** — a themed pill in the semantic colours.
 - **Spinner** — an indeterminate loading indicator.
-- **Toasts** — transient notifications shown from a service.
+- **Toasts** — transient notifications shown from a service, stacked by a `ToastContainer`.
 - **Tooltip** — the `Tooltip.Content` and `Tooltip.Placement` attached properties for themed tooltips on any element.
 
 Add the package (`dotnet add package Joufflu.Feedback`) and merge its
