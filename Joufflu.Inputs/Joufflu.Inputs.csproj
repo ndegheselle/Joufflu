@@ -12,7 +12,7 @@
     <Description>WPF input controls for Joufflu: numeric / decimal / timespan pickers, searchable and tag combo boxes, file and color pickers, and inline-editable text.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <Version>0.2.1</Version>
+    <Version>0.3.0</Version>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
