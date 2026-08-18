@@ -259,6 +259,12 @@
                         </nav:NavigationItem.Icon>
                         Spacing
                     </nav:NavigationItem>
+                    <nav:NavigationItem TargetType="{x:Type toolkit:TooltipSamplesViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
+                        </nav:NavigationItem.Icon>
+                        Tooltip
+                    </nav:NavigationItem>
 
                     <nav:NavigationItem TargetType="{x:Type toolkit:ThemeSamplesViewModel}">
                         <nav:NavigationItem.Icon>
@@ -292,12 +298,6 @@
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Circle}" />
                             </nav:NavigationItem.Icon>
                             Spinner
-                        </nav:NavigationItem>
-                        <nav:NavigationItem TargetType="{x:Type toolkit:TooltipSamplesViewModel}">
-                            <nav:NavigationItem.Icon>
-                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
-                            </nav:NavigationItem.Icon>
-                            Tooltip
                         </nav:NavigationItem>
                         <nav:NavigationItem TargetType="{x:Type feedback:ToastSamplesViewModel}">
                             <nav:NavigationItem.Icon>
