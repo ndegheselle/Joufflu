@@ -112,12 +112,12 @@ a full screen overlay covers the whole window.
 
 ## ToastContainer
 
-Stacks the toasts in the top-right corner of whatever it wraps
+Stacks the toasts in a corner of whatever it wraps — `Position` picks which one
 (`Joufflu.Feedback`, usable on its own without the navigation package). Wrap it
 *around* the `OverlayContainer` so toasts stay above the overlays too:
 
 ```xml
-<feedback:ToastContainer Toasts="{Binding Toasts}">
+<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
     <nav:OverlayContainer Overlays="{Binding Overlays}">
         <!-- the whole app -->
     </nav:OverlayContainer>

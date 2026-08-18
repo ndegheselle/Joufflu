@@ -8,7 +8,7 @@ nav_order: 3
 
 ## Toast types
 
-Toasts stack in the top-right corner, always above page content and overlays, and
+Toasts stack in a corner of the window, always above page content and overlays, and
 auto-dismiss after a few seconds unless sticky. Show them from an injected
 `IToastService` (in `Joufflu.Feedback.Controls`, from the
 [`Joufflu.Feedback`](https://www.nuget.org/packages/Joufflu.Feedback) package).
@@ -48,3 +48,18 @@ When the app also uses an
     </nav:OverlayContainer>
 </feedback:ToastContainer>
 ```
+
+## Position
+
+`Position` picks the corner the stack sits in: `TopRight` (the default), `TopLeft`,
+`BottomRight` or `BottomLeft`. The newest toast always sits closest to that corner,
+so the stack grows away from it.
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
+    <!-- the whole app -->
+</feedback:ToastContainer>
+```
+
+Bind it to change corners at runtime — the gallery's **Toasts** page does exactly
+that.

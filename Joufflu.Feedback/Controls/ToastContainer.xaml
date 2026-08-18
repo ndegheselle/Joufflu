@@ -8,6 +8,23 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Feedback;component/Controls/Toast.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!--
+        The newest toast is first in the collection, so a plain StackPanel puts it closest to a
+        top corner. Bottom corners dock the toasts upwards instead, keeping the newest one
+        closest to the corner there too.
+    -->
+    <ItemsPanelTemplate x:Key="ToastStackPanel">
+        <StackPanel />
+    </ItemsPanelTemplate>
+
+    <ItemsPanelTemplate x:Key="ToastStackPanelReversed">
+        <DockPanel LastChildFill="False" />
+    </ItemsPanelTemplate>
+
+    <Style x:Key="ToastStackItemReversed" TargetType="{x:Type ContentPresenter}">
+        <Setter Property="DockPanel.Dock" Value="Bottom" />
+    </Style>
+
     <!--  ============================ ToastContainer ============================  -->
     <Style TargetType="{x:Type local:ToastContainer}">
         <Setter Property="Template">
@@ -22,18 +39,31 @@
 
                         <!--  Toast stack (always on top)  -->
                         <ItemsControl
+                            x:Name="ToastStack"
                             Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             ItemTemplate="{StaticResource ToastTemplate}"
-                            ItemsSource="{Binding Toasts.Toasts, RelativeSource={RelativeSource TemplatedParent}}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                            ItemsPanel="{StaticResource ToastStackPanel}"
+                            ItemsSource="{Binding Toasts.Toasts, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Position" Value="TopLeft">
+                            <Setter TargetName="ToastStack" Property="HorizontalAlignment" Value="Left" />
+                        </Trigger>
+                        <Trigger Property="Position" Value="BottomLeft">
+                            <Setter TargetName="ToastStack" Property="HorizontalAlignment" Value="Left" />
+                            <Setter TargetName="ToastStack" Property="VerticalAlignment" Value="Bottom" />
+                            <Setter TargetName="ToastStack" Property="ItemsPanel" Value="{StaticResource ToastStackPanelReversed}" />
+                            <Setter TargetName="ToastStack" Property="ItemContainerStyle" Value="{StaticResource ToastStackItemReversed}" />
+                        </Trigger>
+                        <Trigger Property="Position" Value="BottomRight">
+                            <Setter TargetName="ToastStack" Property="VerticalAlignment" Value="Bottom" />
+                            <Setter TargetName="ToastStack" Property="ItemsPanel" Value="{StaticResource ToastStackPanelReversed}" />
+                            <Setter TargetName="ToastStack" Property="ItemContainerStyle" Value="{StaticResource ToastStackItemReversed}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

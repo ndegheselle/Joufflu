@@ -34,7 +34,7 @@
         <Thickness x:Key="ContentTitleBarMargin" Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
     </controls:ThemedWindow.Resources>
     <!--  Toasts sit above everything, modal overlays included.  -->
-    <feedbackControls:ToastContainer Toasts="{Binding Toasts}">
+    <feedbackControls:ToastContainer Position="{Binding ToastSamples.Position}" Toasts="{Binding Toasts}">
         <!--  Wraps the whole app so overlays cover every part of it, side menu included.  -->
         <nav:OverlayContainer Overlays="{Binding Overlays}">
             <DockPanel>
