@@ -43,8 +43,7 @@
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            FontSize="15"
-                            FontWeight="Bold"
+                            Style="{StaticResource H4}"
                             Text="{Binding Options.Title}" />
 
                         <Button

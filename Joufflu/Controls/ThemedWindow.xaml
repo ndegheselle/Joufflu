@@ -90,9 +90,6 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
                                         <Image
@@ -120,29 +117,33 @@
                                             VerticalAlignment="Stretch"
                                             Content="{Binding TitleBarContent, RelativeSource={RelativeSource TemplatedParent}}" />
 
-                                        <Button
-                                            x:Name="PART_MinimizeButton"
+                                        <StackPanel
                                             Grid.Column="2"
-                                            Foreground="{TemplateBinding TitleBarForeground}"
-                                            Style="{StaticResource WindowCaptionButtonStyle}">
-                                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Minus}" />
-                                        </Button>
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal"
+                                            Background="{TemplateBinding TitleBarBackground}">
 
-                                        <Button
-                                            x:Name="PART_MaximizeRestoreButton"
-                                            Grid.Column="3"
-                                            Foreground="{TemplateBinding TitleBarForeground}"
-                                            Style="{StaticResource WindowCaptionButtonStyle}">
-                                            <fonts:FontIcon x:Name="PART_MaximizeRestoreIcon" Text="{x:Static fonts:LucideFontIcons.Square}" />
-                                        </Button>
+                                            <Button
+                                                x:Name="PART_MinimizeButton"
+                                                Foreground="{TemplateBinding TitleBarForeground}"
+                                                Style="{StaticResource WindowCaptionButtonStyle}">
+                                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Minus}" />
+                                            </Button>
 
-                                        <Button
-                                            x:Name="PART_CloseButton"
-                                            Grid.Column="4"
-                                            Foreground="{TemplateBinding TitleBarForeground}"
-                                            Style="{StaticResource WindowCloseButtonStyle}">
-                                            <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
-                                        </Button>
+                                            <Button
+                                                x:Name="PART_MaximizeRestoreButton"
+                                                Foreground="{TemplateBinding TitleBarForeground}"
+                                                Style="{StaticResource WindowCaptionButtonStyle}">
+                                                <fonts:FontIcon x:Name="PART_MaximizeRestoreIcon" Text="{x:Static fonts:LucideFontIcons.Square}" />
+                                            </Button>
+
+                                            <Button
+                                                x:Name="PART_CloseButton"
+                                                Foreground="{TemplateBinding TitleBarForeground}"
+                                                Style="{StaticResource WindowCloseButtonStyle}">
+                                                <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                            </Button>
+                                        </StackPanel>
                                     </Grid>
                                 </Border>
 

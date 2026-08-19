@@ -6,24 +6,6 @@ using CommunityToolkit.Mvvm.Input;
 namespace Joufflu.Navigation.Controls;
 
 /// <summary>
-/// Options describing an overlay's chrome (title, close affordances).
-/// The overlay content is responsible for rendering its own action buttons.
-/// </summary>
-public class OverlayOptions : ObservableObject
-{
-    public string Title { get; set; } = "";
-
-    /// <summary>Shows the close cross in the title bar.</summary>
-    public bool ShowCloseButton { get; set; } = true;
-
-    /// <summary>Closes the overlay when the dimmed background behind it is clicked.</summary>
-    public bool CloseOnClickAway { get; set; } = true;
-
-    /// <summary>Stretches the overlay to fill the whole surface instead of a centered, sized panel.</summary>
-    public bool FullScreen { get; set; } = false;
-}
-
-/// <summary>
 /// A live overlay sitting on the <see cref="OverlayService"/> stack.
 /// </summary>
 public class OverlayInstance : ObservableObject

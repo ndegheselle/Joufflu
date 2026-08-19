@@ -422,6 +422,7 @@
                             <Border Style="{StaticResource CardSecondary}">
                                 <TextBox
                                     MaxHeight="360"
+                                    MinHeight="200"
                                     Background="Transparent"
                                     BorderThickness="0"
                                     FontFamily="Consolas, Cascadia Mono, monospace"
