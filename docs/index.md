@@ -47,7 +47,7 @@ can paste into your views.
 | [Native controls](natives/index.md) | Buttons (solid, soft & outline variants) |
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
 | [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
-| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts, tooltips (`Joufflu.Feedback`) |
+| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
 | [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, theme customization, application shell |
 
@@ -59,7 +59,7 @@ can paste into your views.
 
    ```sh
    dotnet add package Joufflu
-   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts, tooltips
+   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts
    dotnet add package Joufflu.FileExplorer  # optional: file explorer (needs Joufflu.Feedback)
    dotnet add package Joufflu.Inputs        # optional: input controls
    dotnet add package Joufflu.Navigation    # optional: navigation & overlays

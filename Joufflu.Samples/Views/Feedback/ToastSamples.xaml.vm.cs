@@ -9,6 +9,14 @@ public class ToastSamplesViewModel : ObservableObject
 {
     private readonly IToastService _toasts;
     private int _counter;
+    private ToastPosition _position = ToastPosition.TopRight;
+
+    /// <summary>Corner the shell's <c>ToastContainer</c> stacks its toasts in.</summary>
+    public ToastPosition Position
+    {
+        get => _position;
+        set => SetProperty(ref _position, value);
+    }
 
     public ICommand InfoCommand { get; }
 
@@ -43,6 +51,12 @@ public class ToastSamplesViewModel : ObservableObject
                 _toasts.Info($"Stacked toast #{++_counter}");
         });
     }
+
+    public string PositionCode =>
+        "<feedback:ToastContainer Toasts=\"{Binding Toasts}\"\n" +
+        "                         Position=\"BottomRight\">\n" +
+        "    <!-- the whole app -->\n" +
+        "</feedback:ToastContainer>";
 
     public string Code =>
         "// Inject IToastService\n" +

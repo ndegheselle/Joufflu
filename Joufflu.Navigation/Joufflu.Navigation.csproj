@@ -9,7 +9,7 @@
     <IsPackable>true</IsPackable>
     <PackageId>Joufflu.Navigation</PackageId>
     <Title>Joufflu.Navigation</Title>
-    <Description>WPF navigation for Joufflu: a navigation menu, a view-model-first page container, and awaitable modal overlays.</Description>
+    <Description>WPF navigation for Joufflu: a navigation menu, a view-model-first navigator, and awaitable modal overlays hosted by a container wrapping your app.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <Version>0.3.1</Version>
@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
-    <ProjectReference Include="..\Joufflu.Feedback\Joufflu.Feedback.csproj" />
   </ItemGroup>
 
   <ItemGroup>

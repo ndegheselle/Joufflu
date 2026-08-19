@@ -3,5 +3,6 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Feedback;component/Controls/Badge.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Feedback;component/Controls/Spinner.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Feedback;component/Controls/Toast.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Feedback;component/Controls/ToastContainer.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

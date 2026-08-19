@@ -18,11 +18,11 @@ live between Light and Dark — no restart, no flicker.
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
 - 🪟 **Custom-chrome window & natives** — a themed application shell (`ThemedWindow`) plus restyled built-in WPF controls (buttons, text boxes, combo boxes, data grid, …) that match out of the box.
-- 🧰 **Toolkit** — sizing and spacing attached properties, `ThemeManager` and live theme customization.
+- 🧰 **Toolkit** — sizing, spacing and tooltip attached properties, `ThemeManager` and live theme customization.
 
 This is the **core package**. Three optional packages build on it:
 
-- [`Joufflu.Feedback`](https://www.nuget.org/packages/Joufflu.Feedback) — badges, spinner, toasts & tooltips.
+- [`Joufflu.Feedback`](https://www.nuget.org/packages/Joufflu.Feedback) — badges, spinner & toasts.
 - [`Joufflu.Inputs`](https://www.nuget.org/packages/Joufflu.Inputs) — input controls.
 - [`Joufflu.Navigation`](https://www.nuget.org/packages/Joufflu.Navigation) — navigation, overlays & paging.
 

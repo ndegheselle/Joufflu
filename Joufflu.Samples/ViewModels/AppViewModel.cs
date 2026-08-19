@@ -32,8 +32,16 @@ public class AppViewModel : ObservableObject
 
     public Navigator Navigator { get; }
 
+    /// <summary>
+    /// Kept accessible so the window's <c>ToastContainer</c> can follow the corner its
+    /// position sample picks.
+    /// </summary>
+    public ToastSamplesViewModel ToastSamples { get; }
+
     public AppViewModel()
     {
+        ToastSamples = new ToastSamplesViewModel(Toasts);
+
         _pages = new object[]
         {
             // Native controls
@@ -91,7 +99,7 @@ public class AppViewModel : ObservableObject
             // Custom controls
             new BadgeSamplesViewModel(),
             new SpinnerSamplesViewModel(),
-            new ToastSamplesViewModel(Toasts),
+            ToastSamples,
             new TooltipSamplesViewModel(),
 
             // Toolkit

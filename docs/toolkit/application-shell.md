@@ -75,14 +75,18 @@ panel that reaches the top:
                    Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
     </controls:ThemedWindow.Resources>
 
-    <DockPanel>
-        <nav:NavigationMenu DockPanel.Dock="Left" ... />
+    <feedback:ToastContainer Toasts="{Binding Toasts}">
+        <nav:OverlayContainer Overlays="{Binding Overlays}">
+            <DockPanel>
+                <nav:NavigationMenu DockPanel.Dock="Left" ... />
 
-        <!-- The container drops below the bar; overlays and toasts stay full-bleed. -->
-        <nav:NavigationContainer
-            Margin="{StaticResource ContentTitleBarMargin}"
-            ... />
-    </DockPanel>
+                <!-- The page drops below the bar; overlays and toasts stay full-bleed. -->
+                <ContentControl
+                    Margin="{StaticResource ContentTitleBarMargin}"
+                    Content="{Binding Navigator.CurrentPage}" />
+            </DockPanel>
+        </nav:OverlayContainer>
+    </feedback:ToastContainer>
 </controls:ThemedWindow>
 ```
 
@@ -91,16 +95,40 @@ resource, the offset always matches the title bar even if that height changes.
 
 {: .note }
 > Offset only the panels whose top strip holds interactive content — a hosted page
-> and its scrollbar. The `NavigationContainer` insets the page while leaving overlays
-> and toasts full-bleed, so modal backdrops still cover the whole window.
+> and its scrollbar. Offsetting the page alone leaves the containers around it
+> full-bleed, so modal backdrops still cover the whole window.
 
-## NavigationContainer
+## OverlayContainer
 
-Hosts the current page and layers overlays and toasts above it. Pair it with a
-`NavigationMenu`, driving both from a shared `Navigator`.
+Wraps the whole application and layers the modal overlay stack above it
+(`Joufflu.Navigation`). Because it encapsulates everything — side menu included —
+a full screen overlay covers the whole window.
 
 ```xml
-<nav:NavigationContainer Navigator="{Binding Navigator}"
-                         Overlays="{Binding Overlays}"
-                         Toasts="{Binding Toasts}" />
+<nav:OverlayContainer Overlays="{Binding Overlays}">
+    <!-- the whole app: menu, page, status bar, ... -->
+</nav:OverlayContainer>
+```
+
+## ToastContainer
+
+Stacks the toasts in a corner of whatever it wraps — `Position` picks which one
+(`Joufflu.Feedback`, usable on its own without the navigation package). Wrap it
+*around* the `OverlayContainer` so toasts stay above the overlays too:
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
+    <nav:OverlayContainer Overlays="{Binding Overlays}">
+        <!-- the whole app -->
+    </nav:OverlayContainer>
+</feedback:ToastContainer>
+```
+
+## The current page
+
+The current page needs no dedicated container: a plain `ContentControl` bound to
+the navigator renders it, the view resolved by an implicit `DataTemplate`.
+
+```xml
+<ContentControl Content="{Binding Navigator.CurrentPage}" />
 ```
