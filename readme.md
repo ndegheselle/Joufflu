@@ -42,7 +42,7 @@ page's raw Markdown source. (Prefer this raw URL over the rendered site, which c
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `OverlayContainer` and modal overlays driven by a `Navigator` |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **File explorer** (`Joufflu.FileExplorer`) | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar` and their `IExplorerSource` |
-| **Toolkit** (`Joufflu`) | Sizing and spacing attached properties, `ThemeManager`, live theme customization, and the application shell (`ThemedWindow`) |
+| **Toolkit** (`Joufflu`) | Sizing, spacing and drop target attached properties, `ThemeManager`, live theme customization, and the application shell (`ThemedWindow`) |
 
 The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
 data grid, …) restyled to match the design system — come along with the core

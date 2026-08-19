@@ -25,7 +25,7 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 ## Navigation (`Joufflu.Navigation`)
 
 - [Navigation menu](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/navigation-menu.md): collapsible side menu driven by a `Navigator`, with groups, nesting and items targeting a page type.
-- [Overlays](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md): stacking modal overlays, `OverlayOptions`, and awaiting a result from `Show`.
+- [Overlays](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md): stacking modal overlays, `OverlayOptions`, awaiting a result from `Show`, and the standard confirmation from `Confirm`.
 - [Paging](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, and the `PagingChange` event.
 
 ## Feedback (`Joufflu.Feedback`)
@@ -45,6 +45,7 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 
 - [Sizing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/sizing.md): `ControlProperties.Size` and `IsSquare` attached properties.
 - [Spacing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
+- [Drop target](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/drop-target.md): `DropTarget.Command` turning any element into a drop target, the `CanExecute` filter, the `IsDragOver` highlight and the reported `Effect`.
 - [Theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
 - [Customize theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/customize-theme.md): the live theme editor, presets and override resource keys.
 - [Tooltip](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.

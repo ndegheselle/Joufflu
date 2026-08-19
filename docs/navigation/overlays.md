@@ -18,8 +18,8 @@ with.
 ```csharp
 // The overlay content owns its buttons and closes itself
 // via the service, e.g. overlays.CloseTop(true/false).
-var content = new DeleteConfirmViewModel(overlays, "Delete?");
-var options = new OverlayOptions { Title = "Please confirm" };
+var content = new SampleFormViewModel(overlays);
+var options = new OverlayOptions { Title = "Edit profile" };
 bool? result = await overlays.Show(content, options);
 ```
 
@@ -28,27 +28,28 @@ bool? result = await overlays.Show(content, options);
 
 ## Standard confirmation
 
-For the common "are you sure?" case, `Confirm` shows a built-in overlay — icon,
-message and a cancel/confirm pair — and returns the answer directly. Cancelling
-or dismissing the overlay returns `false`:
+For the common "are you sure?" case, `Confirm` shows a built-in overlay — a
+message and a cancel/confirm pair — without any content of your own:
 
 ```csharp
-bool confirmed = await overlays.Confirm("Send the report?", "Send report");
+bool? result = await overlays.Confirm("Delete the selected item? This action cannot be undone.", "Please confirm");
+if (result == true)
+    // confirmed
 ```
 
-`ConfirmationOptions` adds `Message`, `ConfirmText`, `CancelText` and `Type` on
-top of the `OverlayOptions` chrome. `Type` (`Info`, `Warning`, `Danger`) drives
-the icon and the confirm button style:
+The content behind it is `ConfirmationContent`, which is its own `OverlayOptions`.
+Build it yourself to change the button texts or the overlay chrome, and pass it as
+both the content and the options:
 
 ```csharp
-bool confirmed = await overlays.Confirm(new ConfirmationOptions
+var confirmation = new ConfirmationContent(overlays, "Delete the selected item?")
 {
-    Type = ConfirmationType.Danger,
     Title = "Delete item",
-    Message = "Delete the selected item? This action cannot be undone.",
     ConfirmText = "Delete",
     CloseOnClickAway = false
-});
+};
+
+bool? result = await overlays.Show(confirmation, confirmation);
 ```
 
 An empty `CancelText` hides the cancel button, which turns the overlay into an

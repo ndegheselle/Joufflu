@@ -78,9 +78,12 @@ public class OverlaySamplesViewModel : ObservableObject
     public string Code =>
         "// The overlay content owns its buttons and closes itself\n" +
         "// via the service, e.g. overlays.CloseTop(true/false).\n" +
-        "var content = new DeleteConfirmViewModel(overlays, \"Delete?\");\n" +
-        "var options = new OverlayOptions { Title = \"Please confirm\" };\n" +
-        "bool? result = await overlays.Show(content, options);";
+        "var content = new SampleFormViewModel(overlays);\n" +
+        "var options = new OverlayOptions { Title = \"Edit profile\" };\n" +
+        "bool? result = await overlays.Show(content, options);\n" +
+        "\n" +
+        "// Standard confirmation, no content of your own\n" +
+        "bool? confirmed = await overlays.Confirm(\"Delete the selected item?\", \"Please confirm\");";
 }
 
 /// <summary>Simple overlay content showing a message.</summary>

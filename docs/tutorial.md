@@ -329,6 +329,12 @@ The full loop: the menu navigates the `Navigator`, the page opens a modal throug
 the shared `OverlayService`, awaits its result, and confirms with the shared
 `ToastService`.
 
+{: .note }
+> A plain "are you sure?" needs none of this content: `_overlays.Confirm(message,
+> title)` shows the [standard confirmation overlay](navigation/overlays.md) and
+> returns the same `Task<bool?>`. Write your own content, as above, when the modal
+> shows more than a message.
+
 ## Where to go next
 
 - [Navigation menu](navigation/navigation-menu.md) — groups,
