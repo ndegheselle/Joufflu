@@ -38,14 +38,16 @@
                         <ContentPresenter Margin="{TemplateBinding Padding}" />
 
                         <!--  Toast stack (always on top)  -->
-                        <ItemsControl
-                            x:Name="ToastStack"
-                            Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            ItemTemplate="{StaticResource ToastTemplate}"
-                            ItemsPanel="{StaticResource ToastStackPanel}"
-                            ItemsSource="{Binding Toasts.Toasts, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <Border Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}">
+                            <ItemsControl
+                                x:Name="ToastStack"
+                                Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                ItemTemplate="{StaticResource ToastTemplate}"
+                                ItemsPanel="{StaticResource ToastStackPanel}"
+                                ItemsSource="{Binding Toasts.Toasts, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Border>
                     </Grid>
 
                     <ControlTemplate.Triggers>

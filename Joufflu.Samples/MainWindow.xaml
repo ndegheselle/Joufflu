@@ -29,10 +29,6 @@
     PlaceTitleBarOverContent="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <controls:ThemedWindow.Resources>
-        <!--  Offsets the content below the title bar drawn over it (PlaceTitleBarOverContent).  -->
-        <Thickness x:Key="ContentTitleBarMargin" Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
-    </controls:ThemedWindow.Resources>
     <!--  Toasts sit above everything, modal overlays included.  -->
     <feedbackControls:ToastContainer Position="{Binding ToastSamples.Position}" Toasts="{Binding Toasts}">
         <!--  Wraps the whole app so overlays cover every part of it, side menu included.  -->
@@ -405,7 +401,7 @@
                 </nav:NavigationMenu>
 
                 <!--  The current page: a plain ContentControl, the view resolved by implicit DataTemplates.  -->
-                <ContentControl Margin="{StaticResource ContentTitleBarMargin}" Content="{Binding Navigator.CurrentPage}" />
+                <ContentControl Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}" Content="{Binding Navigator.CurrentPage}" />
             </DockPanel>
         </nav:OverlayContainer>
     </feedbackControls:ToastContainer>

@@ -61,19 +61,12 @@ vertical scrollbar runs behind the caption buttons.
 
 **How.** Reserve a strip of empty space at the top of your content equal to the
 bar's height. That height is a fixed value shared through the `Dimensions.TitleBarHeight`
-resource, so build a top-only `Thickness` from it and set it as the `Margin` of the
-panel that reaches the top:
+and `Dimensions.TitleBarHeightOffset` that can be used like so :
 
 ```xml
 <controls:ThemedWindow ...
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     PlaceTitleBarOverContent="True">
-
-    <controls:ThemedWindow.Resources>
-        <!-- Offsets the content below the title bar drawn over it. -->
-        <Thickness x:Key="ContentTitleBarMargin"
-                   Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
-    </controls:ThemedWindow.Resources>
 
     <feedback:ToastContainer Toasts="{Binding Toasts}">
         <nav:OverlayContainer Overlays="{Binding Overlays}">
@@ -82,7 +75,7 @@ panel that reaches the top:
 
                 <!-- The page drops below the bar; overlays and toasts stay full-bleed. -->
                 <ContentControl
-                    Margin="{StaticResource ContentTitleBarMargin}"
+                    Margin="{StaticResource TitleBarHeightOffset}"
                     Content="{Binding Navigator.CurrentPage}" />
             </DockPanel>
         </nav:OverlayContainer>

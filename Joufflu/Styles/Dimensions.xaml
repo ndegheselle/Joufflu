@@ -30,6 +30,7 @@
 
     <!--  Height of the window title bar  -->
     <system:Double x:Key="{x:Static joufflu:Dimensions.TitleBarHeight}">30</system:Double>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.TitleBarHeightOffset}" Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
 
     <!--  Vertical size of single line controls  -->
     <system:Double x:Key="{x:Static joufflu:Dimensions.ControlHeightXs}">24</system:Double>

@@ -1,3 +1,9 @@
+# Version 0.4.0
+
+- Change the navigation to use types instead of string keys
+- Split `OverlayContainer` into separate overlay and `ToastContainer` containers
+- Move the tooltip into the `Joufflu` core package
+
 # Version 0.2.0
 
 - Add the `Joufflu.FileExplorer` package : `Explorer`, `ExplorerList`, `ExplorerTree` and `ExplorerControlBar` sharing an `IExplorerSource`, with node visuals and context menus keyed on the node type, drag and drop, keyboard shortcuts, and file operations handed over to the Windows shell
