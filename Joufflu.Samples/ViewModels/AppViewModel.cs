@@ -105,6 +105,7 @@ public class AppViewModel : ObservableObject
             // Toolkit
             new SizingSamplesViewModel(),
             new SpacingSamplesViewModel(),
+            new DropTargetSamplesViewModel(),
             new ThemeSamplesViewModel(),
             new ThemeCustomizerViewModel(),
             new ShellSamples(),

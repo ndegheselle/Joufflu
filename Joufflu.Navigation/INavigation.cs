@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Joufflu.Navigation.Controls;
 
 namespace Joufflu.Navigation;
@@ -20,7 +21,6 @@ public class OverlayOptions : ObservableObject
     /// <summary>Stretches the overlay to fill the whole surface instead of a centered, sized panel.</summary>
     public bool FullScreen { get; set; } = false;
 }
-
 
 /// <summary>
 /// Optional contract for a view model that wants to react to navigation lifecycle events.
@@ -61,6 +61,14 @@ public interface IOverlayService
     /// The result carries whatever the closing action provided (<see langword="null"/> when dismissed).
     /// </summary>
     Task<bool?> Show(object content, OverlayOptions? options = null);
+
+    /// <summary>
+    /// Show a confirmation overlay with a simple message.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="title"></param>
+    /// <returns></returns>
+    Task<bool?> Confirm(string message, string title = "");
 
     void Close(OverlayInstance overlay, bool? result = null);
 

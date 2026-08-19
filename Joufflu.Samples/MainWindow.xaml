@@ -261,6 +261,12 @@
                         </nav:NavigationItem.Icon>
                         Tooltip
                     </nav:NavigationItem>
+                    <nav:NavigationItem TargetType="{x:Type toolkit:DropTargetSamplesViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Upload}" />
+                        </nav:NavigationItem.Icon>
+                        Drop target
+                    </nav:NavigationItem>
 
                     <nav:NavigationItem TargetType="{x:Type toolkit:ThemeSamplesViewModel}">
                         <nav:NavigationItem.Icon>

@@ -26,6 +26,34 @@ bool? result = await overlays.Show(content, options);
 `OverlayOptions` exposes `Title`, `ShowCloseButton`, `CloseOnClickAway` (set
 `false` to force the user through the action buttons) and `FullScreen`.
 
+## Standard confirmation
+
+For the common "are you sure?" case, `Confirm` shows a built-in overlay — icon,
+message and a cancel/confirm pair — and returns the answer directly. Cancelling
+or dismissing the overlay returns `false`:
+
+```csharp
+bool confirmed = await overlays.Confirm("Send the report?", "Send report");
+```
+
+`ConfirmationOptions` adds `Message`, `ConfirmText`, `CancelText` and `Type` on
+top of the `OverlayOptions` chrome. `Type` (`Info`, `Warning`, `Danger`) drives
+the icon and the confirm button style:
+
+```csharp
+bool confirmed = await overlays.Confirm(new ConfirmationOptions
+{
+    Type = ConfirmationType.Danger,
+    Title = "Delete item",
+    Message = "Delete the selected item? This action cannot be undone.",
+    ConfirmText = "Delete",
+    CloseOnClickAway = false
+});
+```
+
+An empty `CancelText` hides the cancel button, which turns the overlay into an
+acknowledge-only message.
+
 ## Where overlays are hosted
 
 Overlays are rendered by the `OverlayContainer` bound to the same

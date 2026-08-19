@@ -41,10 +41,7 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenConfirmAsync()
     {
-        var content = new DeleteConfirmViewModel(_overlays, "Delete the selected item? This action cannot be undone.");
-        var options = new OverlayOptions { Title = "Please confirm", CloseOnClickAway = false };
-
-        bool? result = await _overlays.Show(content, options);
+        bool? result = await _overlays.Confirm("Delete the selected item? This action cannot be undone.", "Please confirm");
         if (result == true)
             _toasts.Success("Item deleted.", "Confirmed");
         else
@@ -92,29 +89,6 @@ public class ConfirmViewModel : ObservableObject
     public ConfirmViewModel(string message) => Message = message;
 
     public string Message { get; }
-}
-
-/// <summary>
-/// Overlay content that renders its own confirm/cancel buttons and closes the overlay itself.
-/// Shows how the caller now owns the action bar instead of <see cref="OverlayOptions"/>.
-/// </summary>
-public class DeleteConfirmViewModel : ObservableObject
-{
-    private readonly IOverlayService _overlays;
-
-    public DeleteConfirmViewModel(IOverlayService overlays, string message)
-    {
-        _overlays = overlays;
-        Message = message;
-        CancelCommand = new RelayCommand(() => _overlays.CloseTop(false));
-        DeleteCommand = new RelayCommand(() => _overlays.CloseTop(true));
-    }
-
-    public string Message { get; }
-
-    public IRelayCommand CancelCommand { get; }
-
-    public IRelayCommand DeleteCommand { get; }
 }
 
 /// <summary>Overlay content with an editable field, used by the form overlay demo.</summary>

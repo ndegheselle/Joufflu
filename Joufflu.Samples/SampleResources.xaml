@@ -158,9 +158,6 @@
     <DataTemplate DataType="{x:Type customNav:ConfirmViewModel}">
         <customNavViews:ConfirmView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type customNav:DeleteConfirmViewModel}">
-        <customNavViews:DeleteConfirmView />
-    </DataTemplate>
     <DataTemplate DataType="{x:Type customNav:SampleFormViewModel}">
         <customNavViews:SampleFormView />
     </DataTemplate>
@@ -194,6 +191,9 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type toolkit:TooltipSamplesViewModel}">
         <toolkit:TooltipSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type toolkit:DropTargetSamplesViewModel}">
+        <toolkit:DropTargetSamples />
     </DataTemplate>
     <DataTemplate DataType="{x:Type toolkit:ThemeSamplesViewModel}">
         <toolkit:ThemeSamples />

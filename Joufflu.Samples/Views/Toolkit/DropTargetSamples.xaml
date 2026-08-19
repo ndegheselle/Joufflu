@@ -1,0 +1,90 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Toolkit.DropTargetSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Drop target" />
+
+            <c:CodeExample
+                Title="DropTarget.Command"
+                Code="{Binding DropCode}"
+                Description="DropTarget.Command makes any element a drop target: AllowDrop and the four drag events are handled for you, and the command receives the dropped IDataObject. Its CanExecute is what decides the accepted data — here a drag holding nothing but .pdf files — so anything else keeps a no-drop cursor and never lights the zone up. DropTarget.IsDragOver is true while accepted data hovers, which is all a trigger needs to highlight the drop.">
+                <Grid joufflu:Spacing.Gap="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border
+                        Height="150"
+                        joufflu:DropTarget.Command="{Binding DropFilesCommand}"
+                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                        <!--  Background and BorderBrush are styled and not set here, so the trigger can override them.  -->
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <DrawingBrush
+                                            TileMode="Tile"
+                                            Viewport="0,0,8,8"
+                                            ViewportUnits="Absolute">
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <GeometryGroup>
+                                                                <RectangleGeometry Rect="0,0,50,50" />
+                                                                <RectangleGeometry Rect="50,50,50,50" />
+                                                            </GeometryGroup>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <!--  Only accepted data sets IsDragOver, so the highlight means "this will land".  -->
+                                    <Trigger Property="joufflu:DropTarget.IsDragOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+
+                        <StackPanel VerticalAlignment="Center" joufflu:Spacing.Gap="8">
+                            <fonts:FontIcon
+                                HorizontalAlignment="Center"
+                                joufflu:Sizing.Size="xl"
+                                Opacity="0.5"
+                                Text="{x:Static fonts:LucideFontIcons.Upload}" />
+                            <TextBlock HorizontalAlignment="Center" Text="Drop .pdf files here" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                Text="Any other file is refused: the cursor shows a no-drop sign and the zone stays plain."
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding DroppedFiles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel joufflu:Spacing.Gap="4" Orientation="Horizontal">
+                                    <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" Text="{x:Static fonts:LucideFontIcons.FileCheck}" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

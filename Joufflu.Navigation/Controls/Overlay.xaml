@@ -7,8 +7,10 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!--  ==================== Overlay ====================  -->
     <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type nav:OverlayInstance}">
         <Grid>
             <Border Background="#000000" Opacity="0.5">
@@ -86,6 +88,42 @@
                 <Setter TargetName="Panel" Property="VerticalAlignment" Value="Stretch" />
                 <Setter TargetName="Panel" Property="BorderThickness" Value="0" />
                 <Setter TargetName="Panel" Property="CornerRadius" Value="0" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <!--  ==================== Confirmation ====================  -->
+    <!--  Implicit template: the standard content shown by IOverlayService.Confirm().  -->
+    <DataTemplate DataType="{x:Type nav:ConfirmationContent}">
+        <Grid joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+
+            <StackPanel
+                Grid.Row="1"
+                HorizontalAlignment="Right"
+                joufflu:Spacing.Gap="8,0"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="CancelButton"
+                    Command="{Binding CancelCommand}"
+                    Content="{Binding CancelText}"
+                    Style="{StaticResource SecondaryButton}" />
+                <Button
+                    x:Name="ConfirmButton"
+                    Command="{Binding ConfirmCommand}"
+                    Content="{Binding ConfirmText}"
+                    Style="{StaticResource PrimaryButton}" />
+            </StackPanel>
+        </Grid>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding CancelText}" Value="">
+                <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

@@ -5,12 +5,8 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel
-
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock
-                Style="{StaticResource H1}"
-                Text="Overlay" />
+        <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Overlay" />
 
             <c:CodeExample
                 Title="Modal overlays"
@@ -18,7 +14,10 @@
                 Description="Overlays are modal content shown above the page. They have a title bar with a close cross, a content area and an optional action bar. Multiple overlays stack.">
                 <WrapPanel joufflu:Spacing.Gap="8,8">
                     <Button Command="{Binding OpenSimpleCommand}" Content="Simple" />
-                    <Button Command="{Binding OpenConfirmCommand}" Content="Confirm (with actions)" Style="{StaticResource PrimaryButton}" />
+                    <Button
+                        Command="{Binding OpenConfirmCommand}"
+                        Content="Confirm"
+                        Style="{StaticResource PrimaryButton}" />
                     <Button Command="{Binding OpenFormCommand}" Content="Form" />
                     <Button Command="{Binding OpenFullScreenCommand}" Content="Full screen" />
                     <Button Command="{Binding OpenStackedCommand}" Content="Stacked (×2)" />
