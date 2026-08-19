@@ -54,6 +54,13 @@
                         Total="{Binding Total}" />
                 </StackPanel>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Paging without total"
+                Code="{Binding Code}"
+                Description="You can also use pagination even if you don't know the total number of items.">
+                <nav:Paging />
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

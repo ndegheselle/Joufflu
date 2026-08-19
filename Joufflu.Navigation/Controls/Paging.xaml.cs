@@ -76,8 +76,9 @@ namespace Joufflu.Navigation.Controls
         {
             get
             {
+                // If there is no total we set the max page to the current
                 if (Total <= 0)
-                    return int.MaxValue;
+                    return PageNumber + 1;
                 int max = (int)Math.Ceiling(Total / (double)Capacity);
                 return Math.Max(1, max);
             }
