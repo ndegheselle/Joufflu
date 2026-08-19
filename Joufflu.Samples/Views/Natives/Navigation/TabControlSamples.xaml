@@ -17,6 +17,11 @@
                 Description="Switch between panels of content with a tab header row."
                 Code="&lt;TabControl&gt;&#x0a;    &lt;TabItem Header=&quot;First&quot;&gt;...&lt;/TabItem&gt;&#x0a;    &lt;TabItem Header=&quot;Second&quot;&gt;...&lt;/TabItem&gt;&#x0a;&lt;/TabControl&gt;">
                 <TabControl Height="160">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>Prout</TextBlock>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
                     <TabItem Header="First">
                         <TextBlock Text="First tab content" />
                     </TabItem>

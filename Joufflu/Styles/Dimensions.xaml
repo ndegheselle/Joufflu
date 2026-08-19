@@ -11,6 +11,8 @@
         Left="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
         Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
         Top="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
+    <!--  Single edge variant, for panels that only separate themselves from the content beside them  -->
+    <Thickness x:Key="{x:Static joufflu:Dimensions.BorderThicknessRight}" Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
 
     <system:Double x:Key="{x:Static joufflu:Dimensions.Radius}">4</system:Double>
     <CornerRadius

@@ -179,11 +179,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness">
-            <Setter.Value>
-                <Thickness Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThicknessRight}}" />
         <Setter Property="Width" Value="220" />
         <Setter Property="Template">
             <Setter.Value>
