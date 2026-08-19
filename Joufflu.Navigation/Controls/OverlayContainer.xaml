@@ -9,7 +9,6 @@
 
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
-    <!--  ============================ OverlayContainer ============================  -->
     <Style TargetType="{x:Type nav:OverlayContainer}">
         <Setter Property="Template">
             <Setter.Value>
@@ -37,5 +36,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

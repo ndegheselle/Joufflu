@@ -2,7 +2,7 @@
     x:Class="Joufflu.Samples.Views.Navigation.Views.DeleteConfirmView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel MinWidth="320" Margin="0,4,0,8">
+    <StackPanel MinWidth="320">
         <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
         <StackPanel
             Margin="0,16,0,0"

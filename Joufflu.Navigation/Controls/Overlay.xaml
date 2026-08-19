@@ -5,7 +5,10 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls">
 
-    <!--  ============================ Overlay ============================  -->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type nav:OverlayInstance}">
         <Grid>
             <Border Background="#000000" Opacity="0.5">
@@ -26,13 +29,13 @@
                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                 BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                <Grid>
+                <Grid Margin="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid x:Name="Header" Margin="16,12,8,8">
+                    <Grid x:Name="Header">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -47,19 +50,16 @@
                         <Button
                             x:Name="CloseButton"
                             Grid.Column="1"
-                            Width="28"
-                            Height="28"
                             Padding="0"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Command="{Binding CloseCommand}">
+                            joufflu:Sizing.IsSquare="True"
+                            Command="{Binding CloseCommand}"
+                            Style="{StaticResource GhostButton}">
                             <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
                         </Button>
                     </Grid>
 
                     <ScrollViewer
                         Grid.Row="1"
-                        Margin="16,0"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Auto">
                         <ContentPresenter Content="{Binding Content}" />
