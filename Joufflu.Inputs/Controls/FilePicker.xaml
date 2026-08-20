@@ -22,12 +22,9 @@
 
                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                             <!--  Clear button  -->
-                            <Button
-                                VerticalAlignment="Center"
-                                joufflu:Sizing.IsSquare="True"
-                                Command="{Binding ClearCommand}">
+                            <Button joufflu:Sizing.IsSquare="True" Command="{Binding ClearCommand}">
                                 <Button.Style>
-                                    <Style BasedOn="{StaticResource GhostButton}" TargetType="{x:Type Button}">
+                                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding FilePath}" Value="">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -38,9 +35,9 @@
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
                             <Button
+                                Margin="-1"
                                 joufflu:Sizing.IsSquare="True"
-                                Command="{Binding SelectCommand}"
-                                Style="{DynamicResource GhostButton}">
+                                Command="{Binding SelectCommand}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
                             </Button>
                         </StackPanel>

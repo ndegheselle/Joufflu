@@ -11,11 +11,11 @@ themselves.
 
 - **Sizing** — the `ControlProperties.Size` and `IsSquare` attached properties.
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.
+- **Tooltip** — the `Tooltip.Content` and `Tooltip.Placement` attached properties for themed tooltips on any element.
 - **Drop target** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target.
 - **Theme** — `ThemeManager` for System/Light/Dark plus registering custom themes, and how to bind a theme switcher UI to it.
 - **Customize theme** — the live theme editor and preset themes.
-- **Tooltip** — the `Tooltip.Content` and `Tooltip.Placement` attached properties for themed tooltips on any element.
-- **Application shell** — the window styles and the overlay/toast containers wrapping the app.
+- **Application shell** — the window styles, the `FullContainer` page host and the overlay/toast containers wrapping the app.
 
 Snippets use the `joufflu` XML namespace, plus `nav` and `feedback` for the
 application shell containers:

@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
-    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
@@ -33,6 +34,32 @@
                 <TextBlock
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                     Text="You are looking at a ThemedWindow right now." />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="AllowContentOverTitleBar"
+                Description="Set AllowContentOverTitleBar to draw content beneath a transparent title bar instead of below it, so a full height side panel reaches the top of the window. The bar keeps its drag surface across the whole width, so it covers anything in that top strip: reserve a matching gap with the shared Dimensions.TitleBarHeightOffset. Pair it with IconVisibility and TitleVisibility to clear the top left corner for the panel's own header."
+                Code="&lt;controls:ThemedWindow ...&#x0a;    AllowContentOverTitleBar=&quot;True&quot;&#x0a;    IconVisibility=&quot;Collapsed&quot;&gt;&#x0a;&#x0a;    &lt;DockPanel&gt;&#x0a;        &lt;nav:NavigationMenu DockPanel.Dock=&quot;Left&quot; ... /&gt;&#x0a;&#x0a;        &lt;!-- The page drops below the bar, the menu stays full height --&gt;&#x0a;        &lt;ContentControl&#x0a;            Margin=&quot;{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}&quot;&#x0a;            Content=&quot;{Binding Navigator.CurrentPage}&quot; /&gt;&#x0a;    &lt;/DockPanel&gt;&#x0a;&lt;/controls:ThemedWindow&gt;">
+                <TextBlock
+                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                    Text="This gallery uses it: the side menu reaches the very top of the window, while this page is offset below the title bar."
+                    TextWrapping="Wrap" />
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="FullContainer"
+                Description="FullContainer (Joufflu.Navigation) applies that placement for you: the page header sits in the title bar strip and the content scrolls below it, with no offset to wire up by hand. Header is templated as an H1 by default; set HeaderTemplate for anything else."
+                Code="&lt;nav:FullContainer Header=&quot;Profile&quot;&gt;&#x0a;    &lt;!-- the page content, scrolled below the title bar --&gt;&#x0a;&lt;/nav:FullContainer&gt;">
+                <Border
+                    Height="160"
+                    Style="{StaticResource CardSecondary}">
+                    <nav:FullContainer Header="Profile">
+                        <TextBlock
+                            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                            Text="The header sits in the title bar strip, this content scrolls below it."
+                            TextWrapping="Wrap" />
+                    </nav:FullContainer>
+                </Border>
             </c:CodeExample>
 
             <c:CodeExample

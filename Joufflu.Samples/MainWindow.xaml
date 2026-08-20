@@ -237,12 +237,6 @@
 
                     <!--  Toolkit  -->
                     <nav:NavigationTitle>Toolkit</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type toolkit:ShellSamples}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
-                        </nav:NavigationItem.Icon>
-                        Application shell
-                    </nav:NavigationItem>
                     <nav:NavigationItem TargetType="{x:Type toolkit:SizingSamplesViewModel}">
                         <nav:NavigationItem.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Scaling}" />
@@ -279,6 +273,12 @@
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
                         </nav:NavigationItem.Icon>
                         Customize theme
+                    </nav:NavigationItem>
+                    <nav:NavigationItem TargetType="{x:Type toolkit:ShellSamples}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
+                        </nav:NavigationItem.Icon>
+                        Application shell
                     </nav:NavigationItem>
 
                     <nav:NavigationTitle>Joufflu controls</nav:NavigationTitle>
@@ -376,6 +376,12 @@
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.BookOpen}" />
                             </nav:NavigationItem.Icon>
                             Paging
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type navigation:DropdownSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
+                            </nav:NavigationItem.Icon>
+                            Dropdown
                         </nav:NavigationItem>
                     </nav:NavigationGroup>
 

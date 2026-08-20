@@ -6,9 +6,16 @@ has_children: true
 
 # Navigation
 
-Navigation building blocks from `Joufflu.Navigation`: a collapsible side menu
-driven by a `Navigator`, modal overlays shown above the current page, and a page
-selector for browsing large sets of data.
+Navigation building blocks from `Joufflu.Navigation`:
+
+- **Navigation menu** — a collapsible side menu driven by a `Navigator`.
+- **Overlays** — modal dialogs stacked above the current page, plus a standard confirmation.
+- **Paging** — a page selector for browsing large sets of data.
+- **Dropdown** — a toggle button opening a popup of any content.
+
+The package also ships `FullContainer`, a page host that puts its header in the
+window's title bar strip — see
+[Application shell](../toolkit/application-shell.md#fullcontainer).
 
 The snippets use the `nav` XML namespace, plus `vm` for your own view models:
 

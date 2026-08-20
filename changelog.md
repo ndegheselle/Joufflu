@@ -1,9 +1,8 @@
 # WIP
 
-- Add EnumConfirmationType on confirmation
-- Add a FullWindowContainer to simplify content placement then using AllowContentOverTitleBar
-- Add a standard confirm overlay
-- Paging usage without a know total
+- Add a standard confirm overlay, `IOverlayService.Confirm`, with an `EnumConfirmationType` colouring its confirm button
+- Add a `FullContainer` to simplify content placement when using `AllowContentOverTitleBar`
+- Support `Paging` without a known total
 
 # Version 0.4.0
 

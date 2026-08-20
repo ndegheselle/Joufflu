@@ -1,7 +1,7 @@
 ---
 title: Application shell
 parent: Toolkit
-nav_order: 6
+nav_order: 7
 ---
 
 # Application shell
@@ -34,13 +34,13 @@ buttons.
 
 ### Title bar over content
 
-Set `PlaceTitleBarOverContent="True"` to draw content beneath a transparent title
+Set `AllowContentOverTitleBar="True"` to draw content beneath a transparent title
 bar instead of below it. A full-height side panel's background then reaches the
 top of the window, while the caption buttons keep floating top-right:
 
 ```xml
 <controls:ThemedWindow ...
-    PlaceTitleBarOverContent="True"
+    AllowContentOverTitleBar="True"
     IconVisibility="Collapsed">
     ...
 </controls:ThemedWindow>
@@ -66,7 +66,7 @@ and `Dimensions.TitleBarHeightOffset` that can be used like so :
 ```xml
 <controls:ThemedWindow ...
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    PlaceTitleBarOverContent="True">
+    AllowContentOverTitleBar="True">
 
     <feedback:ToastContainer Toasts="{Binding Toasts}">
         <nav:OverlayContainer Overlays="{Binding Overlays}">
@@ -75,7 +75,7 @@ and `Dimensions.TitleBarHeightOffset` that can be used like so :
 
                 <!-- The page drops below the bar; overlays and toasts stay full-bleed. -->
                 <ContentControl
-                    Margin="{StaticResource TitleBarHeightOffset}"
+                    Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"
                     Content="{Binding Navigator.CurrentPage}" />
             </DockPanel>
         </nav:OverlayContainer>
@@ -90,6 +90,21 @@ resource, the offset always matches the title bar even if that height changes.
 > Offset only the panels whose top strip holds interactive content — a hosted page
 > and its scrollbar. Offsetting the page alone leaves the containers around it
 > full-bleed, so modal backdrops still cover the whole window.
+
+#### FullContainer
+
+`FullContainer` (`Joufflu.Navigation`) does that placement for you: it puts a page's
+header in the title bar strip and scrolls the content below it, so you no longer
+apply the offset by hand.
+
+```xml
+<nav:FullContainer Header="Profile">
+    <!-- the page content, scrolled below the title bar -->
+</nav:FullContainer>
+```
+
+`Header` is templated as an `H1` by default; set `HeaderTemplate` for anything else
+(a title plus a toolbar, for instance).
 
 ## OverlayContainer
 

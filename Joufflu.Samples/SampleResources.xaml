@@ -155,6 +155,9 @@
     <DataTemplate DataType="{x:Type customNav:PagingSamplesViewModel}">
         <customNav:PagingSamples />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type customNav:DropdownSamplesViewModel}">
+        <customNav:DropdownSamples />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type customNav:ConfirmViewModel}">
         <customNavViews:ConfirmView />
     </DataTemplate>

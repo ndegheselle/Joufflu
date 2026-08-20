@@ -12,6 +12,9 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 ## Native controls
 
 - [Buttons](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/buttons.md): default button plus named styles — solid, soft and outline variants, icon (`IsSquare`) buttons, and `ControlProperties.Size`.
+- [Icons](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/icons.md): `FontIcon` and the Lucide glyph set.
+- [Card](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/card.md): the `Card` and `CardSecondary` named `Border` styles.
+- [Typography](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/typography.md): the named text styles (`H1`, `H2`, ...).
 
 ## Inputs (`Joufflu.Inputs`)
 
@@ -25,8 +28,9 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 ## Navigation (`Joufflu.Navigation`)
 
 - [Navigation menu](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/navigation-menu.md): collapsible side menu driven by a `Navigator`, with groups, nesting and items targeting a page type.
-- [Overlays](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md): stacking modal overlays, `OverlayOptions`, awaiting a result from `Show`, and the standard confirmation from `Confirm`.
-- [Paging](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, and the `PagingChange` event.
+- [Overlays](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md): the `OverlayContainer` host, stacking modal overlays, `OverlayOptions`, awaiting a result from `Show`, and the standard confirmation from `Confirm` with `EnumConfirmationType`.
+- [Paging](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, usage without a known total, and the `PagingChange` event.
+- [Dropdown](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/dropdown.md): `Dropdown`, a toggle button opening a popup of any content, with corner placement.
 
 ## Feedback (`Joufflu.Feedback`)
 
@@ -49,7 +53,7 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 - [Theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
 - [Customize theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/customize-theme.md): the live theme editor, presets and override resource keys.
 - [Tooltip](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
-- [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/application-shell.md): `ThemedWindow`, title-bar-over-content, and the `OverlayContainer` / `ToastContainer` wrappers.
+- [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/application-shell.md): `ThemedWindow`, `AllowContentOverTitleBar` and the `FullContainer` page host, plus the `OverlayContainer` / `ToastContainer` wrappers.
 
 ## Optional
 

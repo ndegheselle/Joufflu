@@ -56,9 +56,9 @@
             </c:CodeExample>
 
             <c:CodeExample
-                Title="Paging without total"
-                Code="{Binding Code}"
-                Description="You can also use pagination even if you don't know the total number of items.">
+                Title="Paging without a known total"
+                Code="{Binding NoTotalCode}"
+                Description="Leave Total at its -1 default when the size of the set is unknown (a cursor based API, a stream). The range label is hidden and the page list grows one page ahead of the current one, so the user can always move forward. Set Total as soon as you know it and the control switches back to a bounded list.">
                 <nav:Paging />
             </c:CodeExample>
         </StackPanel>

@@ -90,6 +90,7 @@ public class AppViewModel : ObservableObject
             new NavigationMenuSamplesViewModel(),
             new OverlaySamplesViewModel(Overlays, Toasts),
             new PagingSamplesViewModel(),
+            new DropdownSamplesViewModel(),
 
             // File explorer (Joufflu.FileExplorer library)
             new ExplorerSamplesViewModel(Toasts),
