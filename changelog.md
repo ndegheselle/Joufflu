@@ -1,3 +1,10 @@
+# WIP
+
+- Add EnumConfirmationType on confirmation
+- Add a FullWindowContainer to simplify content placement then using AllowContentOverTitleBar
+- Add a standard confirm overlay
+- Paging usage without a know total
+
 # Version 0.4.0
 
 - Change the navigation to use types instead of string keys
@@ -22,7 +29,7 @@
 - Add tooltip
 - Add soft and outline button styles
 - Improve theme manager custom themes handling
-- Improve `ThemedWindow` handling of `PlaceTitleBarOverContent`
+- Improve `ThemedWindow` handling of `AllowContentOverTitleBar`
 
 # Version 0.1.0
 

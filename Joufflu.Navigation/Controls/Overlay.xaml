@@ -3,7 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls">
+    xmlns:nav="clr-namespace:Joufflu.Navigation"
+    xmlns:controls="clr-namespace:Joufflu.Navigation.Controls"
+    >
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
@@ -11,13 +13,31 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--  ==================== Overlay ====================  -->
-    <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type nav:OverlayInstance}">
-        <Grid>
-            <Border Background="#000000" Opacity="0.5">
-                <Border.InputBindings>
-                    <MouseBinding Command="{Binding ClickAwayCommand}" MouseAction="LeftClick" />
-                </Border.InputBindings>
-            </Border>
+    <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type controls:OverlayInstance}">
+        <Grid Background="{x:Null}">
+            <Grid Background="{x:Null}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <!--
+                    HACK : allow the user to still drag the window then an overlay is opened then ThemedWindow.AllowContentOverTitleBar is used.
+                    Should not be there then using
+                -->
+                <Border
+                    Height="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
+                    Background="#000000"
+                    IsHitTestVisible="False"
+                    Opacity="0.5" />
+                <Border
+                    Grid.Row="1"
+                    Background="#000000"
+                    Opacity="0.5">
+                    <Border.InputBindings>
+                        <MouseBinding Command="{Binding ClickAwayCommand}" MouseAction="LeftClick" />
+                    </Border.InputBindings>
+                </Border>
+            </Grid>
 
             <Border
                 x:Name="Panel"
@@ -94,7 +114,7 @@
 
     <!--  ==================== Confirmation ====================  -->
     <!--  Implicit template: the standard content shown by IOverlayService.Confirm().  -->
-    <DataTemplate DataType="{x:Type nav:ConfirmationContent}">
+    <DataTemplate DataType="{x:Type controls:ConfirmationContent}">
         <Grid joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -106,26 +126,42 @@
             <StackPanel
                 Grid.Row="1"
                 HorizontalAlignment="Right"
-                joufflu:Spacing.Gap="8,0"
+                joufflu:Spacing.Gap="8"
                 Orientation="Horizontal">
                 <Button
                     x:Name="CancelButton"
                     Command="{Binding CancelCommand}"
-                    Content="{Binding CancelText}"
-                    Style="{StaticResource SecondaryButton}" />
+                    Style="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
+                        <TextBlock Margin="4,0,0,0" Text="Cancel" />
+                    </StackPanel>
+                </Button>
                 <Button
                     x:Name="ConfirmButton"
                     Command="{Binding ConfirmCommand}"
-                    Content="{Binding ConfirmText}"
-                    Style="{StaticResource PrimaryButton}" />
+                    Style="{StaticResource PrimaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Check}" />
+                        <TextBlock Margin="4,0,0,0" Text="Confirm" />
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Grid>
 
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding CancelText}" Value="">
-                <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed" />
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Info}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource InfoButton}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Danger}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource DangerButton}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Warning}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource WarningButton}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Success}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource SuccessButton}" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-
 </ResourceDictionary>

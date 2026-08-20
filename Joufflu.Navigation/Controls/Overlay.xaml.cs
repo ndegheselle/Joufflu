@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Joufflu.Assets.Fonts;
 
 namespace Joufflu.Navigation.Controls;
 
@@ -45,16 +44,15 @@ public class OverlayInstance : ObservableObject
 public class ConfirmationContent : OverlayOptions
 {
     public string Message { get; set; } = "";
-
-    public string ConfirmText { get; set; } = "Ok";
-    public string CancelText { get; set; } = "Cancel";
+    public EnumConfirmationType Type { get; set; }
 
     public IRelayCommand CancelCommand { get; }
     public IRelayCommand ConfirmCommand { get; }
 
-    public ConfirmationContent(IOverlayService overlays, string message)
+    public ConfirmationContent(IOverlayService overlays, string message, EnumConfirmationType type)
     {
         Message = message;
+        Type = type;
         CancelCommand = new RelayCommand(() => overlays.CloseTop(false));
         ConfirmCommand = new RelayCommand(() => overlays.CloseTop(true));
     }
@@ -83,9 +81,9 @@ public class OverlayService : ObservableObject, IOverlayService
         return instance.Completion.Task;
     }
 
-    public Task<bool?> Confirm(string message, string title = "")
+    public Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral)
     {
-        return Show(new ConfirmationContent(this, message), new OverlayOptions() { Title = title });
+        return Show(new ConfirmationContent(this, message, type), new OverlayOptions() { Title = title });
     }
 
     public void Close(OverlayInstance overlay, bool? result = null)

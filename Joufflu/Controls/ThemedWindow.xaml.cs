@@ -1,5 +1,3 @@
-using Joufflu.Helpers;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -10,6 +8,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Joufflu.Helpers;
 using Brush = System.Windows.Media.Brush;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
@@ -131,12 +130,12 @@ public class ThemedWindow : Window
     }
 
     /// <summary>
-    /// Controls whether the title bar should be drawn over the window content instead of being stacked on top of it.
+    /// Controls whether the content can overflow over the title bar.
     /// </summary>
-    public bool PlaceTitleBarOverContent
+    public bool AllowContentOverTitleBar
     {
-        get => (bool)GetValue(PlaceTitleBarOverContentProperty);
-        set => SetValue(PlaceTitleBarOverContentProperty, value);
+        get => (bool)GetValue(AllowContentOverTitleBarProperty);
+        set => SetValue(AllowContentOverTitleBarProperty, value);
     }
     #endregion
 
@@ -161,7 +160,7 @@ public class ThemedWindow : Window
 
     public static readonly DependencyProperty ShrinkTitleBarWhenMaximizedProperty = DependencyProperty.Register("ShrinkTitleBarWhenMaximized", typeof(bool), typeof(ThemedWindow), new PropertyMetadata(true));
 
-    public static readonly DependencyProperty PlaceTitleBarOverContentProperty = DependencyProperty.Register("PlaceTitleBarOverContent", typeof(bool), typeof(ThemedWindow), new PropertyMetadata(false));
+    public static readonly DependencyProperty AllowContentOverTitleBarProperty = DependencyProperty.Register("AllowContentOverTitleBar", typeof(bool), typeof(ThemedWindow), new PropertyMetadata(false));
 
     #endregion
 

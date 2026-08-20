@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Joufflu.Navigation.Controls;
 
 namespace Joufflu.Navigation;
@@ -20,6 +19,15 @@ public class OverlayOptions : ObservableObject
 
     /// <summary>Stretches the overlay to fill the whole surface instead of a centered, sized panel.</summary>
     public bool FullScreen { get; set; } = false;
+}
+
+public enum EnumConfirmationType
+{
+    Neutral,
+    Info,
+    Success,
+    Warning,
+    Danger
 }
 
 /// <summary>
@@ -67,8 +75,9 @@ public interface IOverlayService
     /// </summary>
     /// <param name="message"></param>
     /// <param name="title"></param>
+    /// <param name="type"></param>
     /// <returns></returns>
-    Task<bool?> Confirm(string message, string title = "");
+    Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral);
 
     void Close(OverlayInstance overlay, bool? result = null);
 

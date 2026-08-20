@@ -197,7 +197,7 @@
                             <Setter TargetName="TitleBar" Property="Visibility" Value="Collapsed" />
                         </Trigger>
 
-                        <Trigger Property="PlaceTitleBarOverContent" Value="True">
+                        <Trigger Property="AllowContentOverTitleBar" Value="True">
                             <Setter TargetName="WindowContent" Property="Grid.Row" Value="0" />
                             <Setter TargetName="WindowContent" Property="Grid.RowSpan" Value="2" />
                             <Setter Property="TitleBarBackground" Value="Transparent" />

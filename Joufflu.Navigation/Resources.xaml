@@ -5,5 +5,6 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/NavigationMenu.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/Dropdown.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/Paging.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Navigation;component/Controls/FullContainer.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

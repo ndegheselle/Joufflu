@@ -26,7 +26,7 @@
     Height="720"
     d:DataContext="{d:DesignInstance Type=vm:AppViewModel}"
     IconVisibility="Collapsed"
-    PlaceTitleBarOverContent="True"
+    AllowContentOverTitleBar="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <!--  Toasts sit above everything, modal overlays included.  -->

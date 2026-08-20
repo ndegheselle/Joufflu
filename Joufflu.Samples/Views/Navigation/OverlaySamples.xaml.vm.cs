@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback.Controls;
 using Joufflu.Navigation;
-using Joufflu.Navigation.Controls;
 
 namespace Joufflu.Samples.Views.Navigation;
 
@@ -41,7 +40,7 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenConfirmAsync()
     {
-        bool? result = await _overlays.Confirm("Delete the selected item? This action cannot be undone.", "Please confirm");
+        bool? result = await _overlays.Confirm("Delete the selected item? This action cannot be undone.", "Please confirm", EnumConfirmationType.Danger);
         if (result == true)
             _toasts.Success("Item deleted.", "Confirmed");
         else
