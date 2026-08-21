@@ -1,6 +1,7 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:extensions="clr-namespace:Joufflu.Extensions"
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <ResourceDictionary.MergedDictionaries>
@@ -235,14 +236,9 @@
                             Grid.Row="0"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
+                            extensions:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+                            extensions:Derive.Corners="Top"
                             Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}">
-                            <Border.CornerRadius>
-                                <CornerRadius
-                                    BottomLeft="0"
-                                    BottomRight="0"
-                                    TopLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
-                                    TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}" />
-                            </Border.CornerRadius>
                         </Border>
 
                         <DataGridColumnHeadersPresenter

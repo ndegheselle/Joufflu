@@ -1,6 +1,7 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:extensions="clr-namespace:Joufflu.Extensions"
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <ResourceDictionary.MergedDictionaries>
@@ -16,19 +17,15 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
                     <Grid x:Name="OuterGrid">
+                        <!--  Open at the bottom, where the tab meets the selected page.  -->
                         <Border
                             x:Name="Border"
+                            extensions:Derive.BorderSides="Left,Top,Right"
+                            extensions:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+                            extensions:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+                            extensions:Derive.Corners="Top"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}">
-                            <Border.BorderThickness>
-                                <Thickness
-                                    Left="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
-                                    Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
-                                    Top="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
-                            </Border.BorderThickness>
-                            <Border.CornerRadius>
-                                <CornerRadius TopLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}" TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}" />
-                            </Border.CornerRadius>
                             <ContentPresenter
                                 x:Name="ContentSite"
                                 Margin="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}"
@@ -92,16 +89,12 @@
                             Grid.Row="1"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
+                            extensions:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+                            extensions:Derive.Corners="TopRight,BottomRight,BottomLeft"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             KeyboardNavigation.DirectionalNavigation="Contained"
                             KeyboardNavigation.TabIndex="2"
                             KeyboardNavigation.TabNavigation="Local">
-                            <Border.CornerRadius>
-                                <CornerRadius
-                                    BottomLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
-                                    BottomRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
-                                    TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}" />
-                            </Border.CornerRadius>
                             <ContentPresenter
                                 x:Name="PART_SelectedContentHost"
                                 Margin="{TemplateBinding Padding}"

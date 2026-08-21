@@ -6,6 +6,8 @@
 - Support `Paging` without a known total
 - Move `Dropdown` from `Joufflu.Navigation` to `Joufflu.Inputs` (namespace `Joufflu.Inputs.Controls`)
 - Remove the `Dimensions.BorderThicknessRight` key, now owned by `NavigationMenu` which was its only user
+- Add the `Derive.BorderThickness` and `Derive.CornerRadius` attached properties, deriving per-side thicknesses and per-corner radii from a scalar dimension so they follow a runtime theme change
+- Derive the partial borders and radii of `NavigationMenu`, `TabControl`, `GroupBox`, `DataGrid` and `ListView` through `Derive`, dropping the `NavigationMenuBorderThickness` key
 
 # Version 0.4.0
 

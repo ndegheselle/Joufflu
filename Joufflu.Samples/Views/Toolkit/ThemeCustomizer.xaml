@@ -134,7 +134,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" joufflu:Spacing.Gap="0,12">
+    <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -150,7 +150,7 @@
         </StackPanel>
 
         <!--  Editor | Preview  -->
-        <Grid Grid.Row="1" joufflu:Spacing.Gap="12,0">
+        <Grid Grid.Row="1" joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="440" />
                 <ColumnDefinition Width="*" />
@@ -169,9 +169,9 @@
                     </StackPanel>
 
                     <ScrollViewer Margin="0,12,0,0" VerticalScrollBarVisibility="Auto">
-                        <StackPanel joufflu:Spacing.Gap="0,16">
+                        <StackPanel joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                             <!--  Preset themes  -->
-                            <StackPanel joufflu:Spacing.Gap="0,10">
+                            <StackPanel joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                                 <TextBlock Style="{StaticResource H2}" Text="Preset themes" />
                                 <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
@@ -211,7 +211,7 @@
                             </StackPanel>
 
                             <!--  Colours  -->
-                            <StackPanel joufflu:Spacing.Gap="0,10">
+                            <StackPanel joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                                 <TextBlock Style="{StaticResource H2}" Text="Colours" />
                                 <ItemsControl ItemsSource="{Binding ColorGroups}">
                                     <ItemsControl.ItemTemplate>
@@ -256,7 +256,7 @@
 
             <!--  Preview  -->
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel joufflu:Spacing.Gap="0,12">
+                <StackPanel joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
 
                     <!--  Semantic swatches  -->
                     <Border Style="{StaticResource Card}">
