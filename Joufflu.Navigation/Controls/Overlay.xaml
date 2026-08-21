@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:extensions="clr-namespace:Joufflu.Extensions;assembly=Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation"
     xmlns:controls="clr-namespace:Joufflu.Navigation.Controls"
     >
@@ -22,7 +23,7 @@
                 </Grid.RowDefinitions>
                 <!--
                     HACK : allow the user to still drag the window then an overlay is opened then ThemedWindow.AllowContentOverTitleBar is used.
-                    Should not be there then using
+                    Should not be there then AllowContentOverTitleBar is not set.
                 -->
                 <Border
                     Height="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
@@ -51,7 +52,7 @@
                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                 BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                <Grid Margin="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -64,6 +65,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock
+                            Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
                             VerticalAlignment="Center"
                             Style="{StaticResource H4}"
                             Text="{Binding Options.Title}" />
@@ -71,15 +73,17 @@
                         <Button
                             x:Name="CloseButton"
                             Grid.Column="1"
-                            Padding="0"
+                            VerticalAlignment="Top"
                             joufflu:Sizing.IsSquare="True"
                             Command="{Binding CloseCommand}"
                             Style="{StaticResource GhostButton}">
-                            <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                         </Button>
                     </Grid>
 
                     <ScrollViewer
+                        extensions:Derive.Margin="{x:Static joufflu:Dimensions.Spacing}"
+                        extensions:Derive.MarginSides="Left,Right,Bottom"
                         Grid.Row="1"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Auto">

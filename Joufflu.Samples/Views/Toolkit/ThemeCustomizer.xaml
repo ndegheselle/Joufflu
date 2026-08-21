@@ -12,6 +12,8 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
         <!--  One editable colour row: swatch/hex editor + label  -->
         <DataTemplate x:Key="ColorRowTemplate" DataType="{x:Type vm:ThemeColorEntry}">
             <Grid Margin="0,3" joufflu:Spacing.Gap="10,0">
@@ -59,79 +61,108 @@
             </Grid>
         </DataTemplate>
 
-        <!--  One editable padding row: label + independent horizontal/vertical sliders  -->
-        <DataTemplate x:Key="PaddingRowTemplate" DataType="{x:Type vm:ThemePaddingEntry}">
-            <Grid Margin="0,3" joufflu:Spacing.Gap="10,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Grid.Column="0"
-                    VerticalAlignment="Center"
-                    Text="{Binding Label}" />
-                <StackPanel Grid.Column="1" joufflu:Spacing.Gap="0,4">
-                    <!--  Horizontal  -->
-                    <Grid joufflu:Spacing.Gap="10,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Grid.Column="0"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                            Text="H" />
-                        <Slider
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            IsSnapToTickEnabled="True"
-                            Maximum="{Binding Maximum}"
-                            Minimum="{Binding Minimum}"
-                            TickFrequency="1"
-                            Value="{Binding Horizontal, Mode=TwoWay}" />
-                        <TextBlock
-                            Grid.Column="2"
-                            MinWidth="52"
-                            VerticalAlignment="Center"
-                            TextAlignment="Right">
-                            <Run Text="{Binding Horizontal, StringFormat=0}" />
-                            <Run Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="{Binding Unit, Mode=OneWay}" />
-                        </TextBlock>
-                    </Grid>
-                    <!--  Vertical  -->
-                    <Grid joufflu:Spacing.Gap="10,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Grid.Column="0"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                            Text="V" />
-                        <Slider
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            IsSnapToTickEnabled="True"
-                            Maximum="{Binding Maximum}"
-                            Minimum="{Binding Minimum}"
-                            TickFrequency="1"
-                            Value="{Binding Vertical, Mode=TwoWay}" />
-                        <TextBlock
-                            Grid.Column="2"
-                            MinWidth="52"
-                            VerticalAlignment="Center"
-                            TextAlignment="Right">
-                            <Run Text="{Binding Vertical, StringFormat=0}" />
-                            <Run Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="{Binding Unit, Mode=OneWay}" />
-                        </TextBlock>
-                    </Grid>
-                </StackPanel>
-            </Grid>
+        <!--  One size family: a base slider (two for paddings) + the value derived for each size  -->
+        <DataTemplate x:Key="ScaleRowTemplate" DataType="{x:Type vm:ThemeScaleEntry}">
+            <StackPanel Margin="0,3" joufflu:Spacing.Gap="0,6">
+                <TextBlock Style="{StaticResource H4}" Text="{Binding Label}" />
+                <!--  Base value(s), the sliders every size is derived from  -->
+                <Grid joufflu:Spacing.Gap="10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Text="{Binding BaseLabel, StringFormat=Base ({0})}" />
+                    <StackPanel Grid.Column="1" joufflu:Spacing.Gap="0,4">
+                        <Grid joufflu:Spacing.Gap="10,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="28" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                Text="{Binding AxisLabel}" />
+                            <Slider
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                IsSnapToTickEnabled="True"
+                                Maximum="{Binding Maximum}"
+                                Minimum="{Binding Minimum}"
+                                TickFrequency="1"
+                                Value="{Binding Base, Mode=TwoWay}" />
+                            <TextBlock
+                                Grid.Column="2"
+                                MinWidth="52"
+                                VerticalAlignment="Center"
+                                TextAlignment="Right">
+                                <Run Text="{Binding Base, StringFormat=0}" />
+                                <Run Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="{Binding Unit, Mode=OneWay}" />
+                            </TextBlock>
+                        </Grid>
+                        <ContentControl Visibility="{Binding HasVertical, Converter={StaticResource BoolToVis}}">
+                            <Grid joufflu:Spacing.Gap="10,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="28" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                    Text="V" />
+                                <Slider
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="{Binding Maximum}"
+                                    Minimum="{Binding Minimum}"
+                                    TickFrequency="1"
+                                    Value="{Binding VerticalBase, Mode=TwoWay}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    MinWidth="52"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Right">
+                                    <Run Text="{Binding VerticalBase, StringFormat=0}" />
+                                    <Run Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="{Binding Unit, Mode=OneWay}" />
+                                </TextBlock>
+                            </Grid>
+                        </ContentControl>
+                    </StackPanel>
+                </Grid>
+
+                <!--  Derived values, one per size  -->
+                <ItemsControl Margin="120,0,0,0" ItemsSource="{Binding Steps}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:ThemeScaleStep}">
+                            <Grid joufflu:Spacing.Gap="10,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="28" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                    Text="{Binding Label}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Display, Mode=OneWay}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
+                                    Text="{Binding Ratio, StringFormat=×{0}}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
         </DataTemplate>
+
     </UserControl.Resources>
 
     <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" joufflu:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
@@ -238,15 +269,12 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <ItemsControl ItemsSource="{Binding PaddingGroups}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type vm:ThemePaddingGroup}">
-                                            <StackPanel Margin="0,0,0,10">
-                                                <TextBlock Style="{StaticResource H4}" Text="{Binding Header}" />
-                                                <ItemsControl ItemTemplate="{StaticResource PaddingRowTemplate}" ItemsSource="{Binding Paddings}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
+                                <ItemsControl ItemTemplate="{StaticResource ScaleRowTemplate}" ItemsSource="{Binding Scales}">
+                                    <ItemsControl.ItemContainerStyle>
+                                        <Style TargetType="ContentPresenter">
+                                            <Setter Property="Margin" Value="0,0,0,10" />
+                                        </Style>
+                                    </ItemsControl.ItemContainerStyle>
                                 </ItemsControl>
                             </StackPanel>
                         </StackPanel>
@@ -267,7 +295,7 @@
                                     Width="120"
                                     Height="56"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}"
-                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <TextBlock
                                         Margin="8"
                                         VerticalAlignment="Bottom"
@@ -278,7 +306,7 @@
                                     Width="120"
                                     Height="56"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}"
-                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <TextBlock
                                         Margin="8"
                                         VerticalAlignment="Bottom"
@@ -289,7 +317,7 @@
                                     Width="120"
                                     Height="56"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}"
-                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <TextBlock
                                         Margin="8"
                                         VerticalAlignment="Bottom"
@@ -300,7 +328,7 @@
                                     Width="120"
                                     Height="56"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
-                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <TextBlock
                                         Margin="8"
                                         VerticalAlignment="Bottom"
@@ -311,7 +339,7 @@
                                     Width="120"
                                     Height="56"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}"
-                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <TextBlock
                                         Margin="8"
                                         VerticalAlignment="Bottom"
@@ -322,7 +350,7 @@
                                     Width="120"
                                     Height="56"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
-                                    CornerRadius="{StaticResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <TextBlock
                                         Margin="8"
                                         VerticalAlignment="Bottom"

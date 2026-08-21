@@ -93,15 +93,74 @@ public class ThemeDimensionEntry : ObservableObject
     public void SetValueSilently(double value) => SetProperty(ref _value, Math.Round(value), nameof(Value));
 }
 
-/// <summary>A single editable control padding, split into independent horizontal and vertical amounts.</summary>
-public class ThemePaddingEntry : ObservableObject
+/// <summary>
+/// One size step of a <see cref="ThemeScaleEntry"/>: the resource it feeds and the ratio its value
+/// is derived at from the scale's base value.
+/// </summary>
+public class ThemeScaleStep : ObservableObject
 {
-    private readonly Action<ThemePaddingEntry> _onChanged;
-
+    /// <summary>Size suffix shown to the user, e.g. <c>xs</c>.</summary>
     public string Label { get; }
 
-    /// <summary>Identifier used to route the value to the right resource key (e.g. <c>ControlPaddingMd</c>).</summary>
+    /// <summary>Identifier used to route the derived value to its resource key.</summary>
     public string ResourceName { get; }
+
+    /// <summary>Multiplier applied to the scale's base value, <c>1</c> for the step the base is read from.</summary>
+    public double Ratio { get; }
+
+    private double _value;
+    /// <summary>The derived value (horizontal amount for a padding scale), in DIPs.</summary>
+    public double Value
+    {
+        get => _value;
+        private set => SetProperty(ref _value, value);
+    }
+
+    private double _vertical;
+    /// <summary>The derived vertical amount; padding scales only.</summary>
+    public double Vertical
+    {
+        get => _vertical;
+        private set => SetProperty(ref _vertical, value);
+    }
+
+    private string _display = "";
+    /// <summary>The exact derived value, formatted for the preview next to the slider.</summary>
+    public string Display
+    {
+        get => _display;
+        private set => SetProperty(ref _display, value);
+    }
+
+    public ThemeScaleStep(string label, string resourceName, double ratio)
+    {
+        Label = label;
+        ResourceName = resourceName;
+        Ratio = ratio;
+    }
+
+    /// <summary>Derives this step from <paramref name="value"/> (and <paramref name="vertical"/> when paired).</summary>
+    internal void Derive(double value, double? vertical, string unit)
+    {
+        Value = Math.Round(value * Ratio);
+        Vertical = vertical is null ? 0 : Math.Round(vertical.Value * Ratio);
+        Display = vertical is null ? $"{Num(Value)} {unit}" : $"{Num(Value)},{Num(Vertical)} {unit}";
+    }
+
+    private static string Num(double value)
+        => value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
+}
+
+/// <summary>
+/// A family of dimensions (control height, font size, control padding…) driven by a single base
+/// value: every size step is derived from it by a fixed ratio, so one slider — two for the paddings,
+/// one per axis — replaces one slider per size.
+/// </summary>
+public class ThemeScaleEntry : ObservableObject
+{
+    private readonly Action<ThemeScaleEntry> _onChanged;
+
+    public string Label { get; }
 
     public double Minimum { get; }
 
@@ -109,48 +168,90 @@ public class ThemePaddingEntry : ObservableObject
 
     public string Unit { get; }
 
-    private double _horizontal;
-    /// <summary>Left/Right padding, in DIPs.</summary>
-    public double Horizontal
+    /// <summary>Steps derived from the base value, smallest first.</summary>
+    public ObservableCollection<ThemeScaleStep> Steps { get; }
+
+    /// <summary>True when the scale drives two axes (a padding), so a second slider is shown.</summary>
+    public bool HasVertical => _verticalBase is not null;
+
+    /// <summary>Axis marker shown next to the base slider, empty for a single-axis scale.</summary>
+    public string AxisLabel => HasVertical ? "H" : "";
+
+    /// <summary>Label of the base slider — the size step the base value is the exact value of.</summary>
+    public string BaseLabel { get; }
+
+    private double _base;
+    /// <summary>The value every step is derived from (the <c>md</c> step's own value).</summary>
+    public double Base
     {
-        get => _horizontal;
+        get => _base;
         set
         {
-            double snapped = Math.Round(value);
-            if (SetProperty(ref _horizontal, snapped))
-                _onChanged(this);
+            if (SetProperty(ref _base, Math.Round(value)))
+                Refresh();
         }
     }
 
-    private double _vertical;
-    /// <summary>Top/Bottom padding, in DIPs.</summary>
-    public double Vertical
+    private double? _verticalBase;
+    /// <summary>The vertical base value; padding scales only.</summary>
+    public double VerticalBase
     {
-        get => _vertical;
+        get => _verticalBase ?? 0;
         set
         {
-            double snapped = Math.Round(value);
-            if (SetProperty(ref _vertical, snapped))
-                _onChanged(this);
+            if (_verticalBase is null || Math.Round(value) == _verticalBase)
+                return;
+            _verticalBase = Math.Round(value);
+            OnPropertyChanged();
+            Refresh();
         }
     }
 
-    public ThemePaddingEntry(string label, string resourceName, double min, double max, double horizontal, double vertical, Action<ThemePaddingEntry> onChanged, string unit = "px")
+    public ThemeScaleEntry(
+        string label,
+        string baseLabel,
+        double min,
+        double max,
+        double @base,
+        double? verticalBase,
+        Action<ThemeScaleEntry> onChanged,
+        string unit,
+        params ThemeScaleStep[] steps)
     {
         Label = label;
-        ResourceName = resourceName;
+        BaseLabel = baseLabel;
         Minimum = min;
         Maximum = max;
-        _horizontal = horizontal;
-        _vertical = vertical;
+        _base = Math.Round(@base);
+        _verticalBase = verticalBase is null ? null : Math.Round(verticalBase.Value);
         _onChanged = onChanged;
         Unit = unit;
+        Steps = new ObservableCollection<ThemeScaleStep>(steps);
+        DeriveSteps();
     }
 
-    public void SetValuesSilently(double horizontal, double vertical)
+    /// <summary>Re-seeds the base values without pushing them back into the live resources.</summary>
+    public void SetBaseSilently(double @base, double? verticalBase = null)
     {
-        SetProperty(ref _horizontal, Math.Round(horizontal), nameof(Horizontal));
-        SetProperty(ref _vertical, Math.Round(vertical), nameof(Vertical));
+        SetProperty(ref _base, Math.Round(@base), nameof(Base));
+        if (_verticalBase is not null && verticalBase is not null)
+        {
+            _verticalBase = Math.Round(verticalBase.Value);
+            OnPropertyChanged(nameof(VerticalBase));
+        }
+        DeriveSteps();
+    }
+
+    private void Refresh()
+    {
+        DeriveSteps();
+        _onChanged(this);
+    }
+
+    private void DeriveSteps()
+    {
+        foreach (var step in Steps)
+            step.Derive(_base, _verticalBase, Unit);
     }
 }
 
@@ -176,17 +277,6 @@ public class ThemeDimensionGroup
     }
 }
 
-public class ThemePaddingGroup
-{
-    public string Header { get; }
-    public ObservableCollection<ThemePaddingEntry> Paddings { get; }
-    public ThemePaddingGroup(string header, ObservableCollection<ThemePaddingEntry> paddings)
-    {
-        Header = header;
-        Paddings = paddings;
-    }
-}
-
 /// <summary>
 /// Drives the "Customize theme" page: edits live colour/dimension resources application-wide
 /// (so the whole gallery becomes the preview) and emits a drop-in ResourceDictionary.
@@ -198,11 +288,12 @@ public class ThemeCustomizerViewModel : ObservableObject
 
     private readonly List<ThemeColorEntry> _allColors = new();
     private readonly List<ThemeDimensionEntry> _allDimensions = new();
-    private readonly List<ThemePaddingEntry> _allPaddings = new();
+    private readonly List<ThemeScaleEntry> _allScales = new();
 
     public ObservableCollection<ThemeColorGroup> ColorGroups { get; } = new();
     public ObservableCollection<ThemeDimensionGroup> DimensionGroups { get; } = new();
-    public ObservableCollection<ThemePaddingGroup> PaddingGroups { get; } = new();
+    /// <summary>Size families driven by a single base value (control height, font size, control padding).</summary>
+    public ObservableCollection<ThemeScaleEntry> Scales { get; } = new();
 
     /// <summary>Selectable preset palettes, sourced from the themes registered with <see cref="ThemeManager"/>.</summary>
     public IReadOnlyList<ThemePreset> Presets { get; }
@@ -234,7 +325,7 @@ public class ThemeCustomizerViewModel : ObservableObject
     {
         BuildColorGroups();
         BuildDimensionGroups();
-        BuildPaddingGroups();
+        BuildScales();
 
         // Built after the colour groups so _allColors tells us which keys to read from each theme.
         Presets = BuildPresets();
@@ -325,41 +416,42 @@ public class ThemeCustomizerViewModel : ObservableObject
             Dim("Corner radius", "Radius", 0, 24),
             Dim("Border thickness", "Thickness", 0, 4),
             Dim("Spacing", "Spacing", 0, 32)));
-
-        DimensionGroups.Add(Group("Control height",
-            Dim("Extra small", "ControlHeightXs", 16, 40),
-            Dim("Small", "ControlHeightSm", 20, 44),
-            Dim("Medium", "ControlHeightMd", 24, 52),
-            Dim("Large", "ControlHeightLg", 28, 64)));
-
-        DimensionGroups.Add(Group("Font size",
-            Dim("Extra small", "ControlFontSizeXs", 8, 20),
-            Dim("Small", "ControlFontSizeSm", 9, 22),
-            Dim("Medium", "ControlFontSizeMd", 10, 24),
-            Dim("Large", "ControlFontSizeLg", 11, 28),
-            Dim("Extra large", "ControlFontSizeXl", 16,48)));
-        
     }
 
-    private void BuildPaddingGroups()
+    /// <summary>
+    /// Declares the size families. Each is driven by its <c>md</c> value; the other steps keep a fixed
+    /// ratio to it, chosen so the shipped defaults come out exactly at the shipped base.
+    /// Height and padding stop at <c>lg</c> — the toolkit defines no <c>xl</c> key for them.
+    /// </summary>
+    private void BuildScales()
     {
-        ThemePaddingEntry Pad(string label, string name)
+        void Scale(string label, string baseLabel, double min, double max, double @base, double? verticalBase, string unit, params ThemeScaleStep[] steps)
         {
-            Thickness t = ReadThickness(PaddingKey(name));
-            // ControlPadding thicknesses are symmetric (Left==Right, Top==Bottom), so one slider drives each axis.
-            var entry = new ThemePaddingEntry(label, name, 0, 32, t.Left, t.Top, OnPaddingChanged);
-            _allPaddings.Add(entry);
-            return entry;
+            var entry = new ThemeScaleEntry(label, baseLabel, min, max, @base, verticalBase, OnScaleChanged, unit, steps);
+            Scales.Add(entry);
+            _allScales.Add(entry);
         }
 
-        var paddings = new ObservableCollection<ThemePaddingEntry>
-        {
-            Pad("Extra small", "ControlPaddingXs"),
-            Pad("Small", "ControlPaddingSm"),
-            Pad("Medium", "ControlPaddingMd"),
-            Pad("Large", "ControlPaddingLg"),
-        };
-        PaddingGroups.Add(new ThemePaddingGroup("Control padding", paddings));
+        Scale("Control height", "md", 16, 72, ReadDouble(JDimensions.ControlHeightMd), null, "px",
+            new ThemeScaleStep("xs", "ControlHeightXs", 0.75),
+            new ThemeScaleStep("sm", "ControlHeightSm", 0.875),
+            new ThemeScaleStep("md", "ControlHeightMd", 1),
+            new ThemeScaleStep("lg", "ControlHeightLg", 1.25));
+
+        Scale("Font size", "md", 8, 32, ReadDouble(JDimensions.ControlFontSizeMd), null, "px",
+            new ThemeScaleStep("xs", "ControlFontSizeXs", 0.85),
+            new ThemeScaleStep("sm", "ControlFontSizeSm", 0.92),
+            new ThemeScaleStep("md", "ControlFontSizeMd", 1),
+            new ThemeScaleStep("lg", "ControlFontSizeLg", 1.23),
+            new ThemeScaleStep("xl", "ControlFontSizeXl", 1.85));
+
+        // ControlPadding thicknesses are symmetric (Left==Right, Top==Bottom), so one base per axis.
+        Thickness padding = ReadThickness(JDimensions.ControlPaddingMd);
+        Scale("Control padding", "md", 0, 40, padding.Left, padding.Top, "px",
+            new ThemeScaleStep("xs", "ControlPaddingXs", 0.5),
+            new ThemeScaleStep("sm", "ControlPaddingSm", 0.75),
+            new ThemeScaleStep("md", "ControlPaddingMd", 1),
+            new ThemeScaleStep("lg", "ControlPaddingLg", 1.5));
     }
 
     /// <summary>
@@ -442,17 +534,26 @@ public class ThemeCustomizerViewModel : ObservableObject
         RegenerateXaml();
     }
 
-    private void OnPaddingChanged(ThemePaddingEntry entry)
+    private void OnScaleChanged(ThemeScaleEntry entry)
     {
         if (_suppress)
             return;
-        ApplyPadding(entry);
+        ApplyScale(entry);
         RegenerateXaml();
     }
 
-    private void ApplyPadding(ThemePaddingEntry entry)
-        => Application.Current.Resources[PaddingKey(entry.ResourceName)]
-            = new Thickness(entry.Horizontal, entry.Vertical, entry.Horizontal, entry.Vertical);
+    /// <summary>Pushes every derived step of a scale to its live resource.</summary>
+    private static void ApplyScale(ThemeScaleEntry entry)
+    {
+        var res = Application.Current.Resources;
+        foreach (var step in entry.Steps)
+        {
+            if (entry.HasVertical)
+                res[PaddingKey(step.ResourceName)] = new Thickness(step.Value, step.Vertical, step.Value, step.Vertical);
+            else
+                res[DimensionKey(step.ResourceName)] = step.Value;
+        }
+    }
 
     private void ApplyDimension(ThemeDimensionEntry entry)
     {
@@ -499,18 +600,27 @@ public class ThemeCustomizerViewModel : ObservableObject
             }
             foreach (var key in AllDimensionKeys())
                 res.Remove(key);
-            foreach (var pad in _allPaddings)
-                res.Remove(PaddingKey(pad.ResourceName));
+            foreach (var step in _allScales.SelectMany(scale => scale.Steps))
+                res.Remove(ScaleKey(step.ResourceName));
 
             // …then re-seed the editors from those restored values.
             foreach (var color in _allColors)
                 color.SetColorSilently(ReadColor(color.Key));
             foreach (var dim in _allDimensions)
                 dim.SetValueSilently(ReadDouble(DimensionKey(dim.ResourceName)));
-            foreach (var pad in _allPaddings)
+            foreach (var scale in _allScales)
             {
-                Thickness t = ReadThickness(PaddingKey(pad.ResourceName));
-                pad.SetValuesSilently(t.Left, t.Top);
+                // Re-seed from the restored md step, the one the base value is read from.
+                string mdName = scale.Steps.First(step => step.Ratio == 1).ResourceName;
+                if (scale.HasVertical)
+                {
+                    Thickness t = ReadThickness(PaddingKey(mdName));
+                    scale.SetBaseSilently(t.Left, t.Top);
+                }
+                else
+                {
+                    scale.SetBaseSilently(ReadDouble(DimensionKey(mdName)));
+                }
             }
         }
         finally
@@ -592,6 +702,10 @@ public class ThemeCustomizerViewModel : ObservableObject
         _ => throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown padding"),
     };
 
+    /// <summary>The key of a scale step, whichever kind of resource it feeds.</summary>
+    private static ComponentResourceKey ScaleKey(string name)
+        => name.StartsWith("ControlPadding", StringComparison.Ordinal) ? PaddingKey(name) : DimensionKey(name);
+
     private IEnumerable<ComponentResourceKey> AllDimensionKeys()
     {
         yield return JDimensions.Radius;
@@ -663,20 +777,18 @@ public class ThemeCustomizerViewModel : ObservableObject
         sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.SpacingThickness}}\">{Num(spacing)}</Thickness>");
         sb.AppendLine();
 
-        sb.AppendLine("    <!--  Control heights  -->");
-        foreach (var name in new[] { "ControlHeightXs", "ControlHeightSm", "ControlHeightMd", "ControlHeightLg" })
-            sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.{name}}}\">{Num(DimValue(name))}</system:Double>");
-        sb.AppendLine();
-
-        sb.AppendLine("    <!--  Font sizes  -->");
-        foreach (var name in new[] { "ControlFontSizeXs", "ControlFontSizeSm", "ControlFontSizeMd", "ControlFontSizeLg" })
-            sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.{name}}}\">{Num(DimValue(name))}</system:Double>");
-        sb.AppendLine();
-
-        sb.AppendLine("    <!--  Control paddings  -->");
-        foreach (var pad in _allPaddings)
-            sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{pad.ResourceName}}}\">{Num(pad.Horizontal)},{Num(pad.Vertical)}</Thickness>");
-        sb.AppendLine();
+        // Every size step is emitted with its derived value, so the dictionary stays a drop-in.
+        foreach (var scale in _allScales)
+        {
+            sb.AppendLine($"    <!--  {scale.Label}  -->");
+            foreach (var step in scale.Steps)
+            {
+                sb.AppendLine(scale.HasVertical
+                    ? $"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{step.ResourceName}}}\">{Num(step.Value)},{Num(step.Vertical)}</Thickness>"
+                    : $"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.{step.ResourceName}}}\">{Num(step.Value)}</system:Double>");
+            }
+            sb.AppendLine();
+        }
     }
 
     private static string ToHex(Color color) => $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";

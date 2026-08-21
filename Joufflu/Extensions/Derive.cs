@@ -38,7 +38,7 @@ public enum Corners
 }
 
 /// <summary>
-/// Builds a <see cref="Thickness"/> or a <see cref="CornerRadius"/> from a single scalar resource,
+/// Builds a border thickness, a margin or a <see cref="CornerRadius"/> from a single scalar resource,
 /// keeping only the requested sides or corners.
 /// <para>
 /// A <c>&lt;Thickness&gt;</c> declared in a <see cref="ResourceDictionary"/> is baked at parse time:
@@ -113,7 +113,7 @@ public static class Derive
         if (source == null)
             return;
 
-        Thickness value = Mask(ToThickness(source), GetBorderSides(element));
+        Thickness value = Mask(ToThickness(source, "BorderThickness"), GetBorderSides(element));
         element.SetCurrentValue(ResolveBorderThickness(element), value);
     }
 
@@ -194,6 +194,64 @@ public static class Derive
 
     #endregion
 
+    #region Margin
+
+    /// <summary>
+    /// Resource key of the scalar (a <see cref="double"/>) or <see cref="Thickness"/> the margin is
+    /// derived from.
+    /// </summary>
+    public static readonly DependencyProperty MarginProperty = DependencyProperty.RegisterAttached(
+        "Margin",
+        typeof(object),
+        typeof(Derive),
+        new PropertyMetadata(null, OnMarginKeyChanged));
+
+    /// <summary>
+    /// Sides kept from the derived margin. Defaults to <see cref="ThicknessSides.All"/>.
+    /// </summary>
+    public static readonly DependencyProperty MarginSidesProperty = DependencyProperty.RegisterAttached(
+        "MarginSides",
+        typeof(ThicknessSides),
+        typeof(Derive),
+        new PropertyMetadata(ThicknessSides.All, OnMarginMaskChanged));
+
+    /// <summary>
+    /// Holds the live value of the resource pointed at by <see cref="MarginProperty"/>.
+    /// </summary>
+    private static readonly DependencyProperty MarginSourceProperty = DependencyProperty.RegisterAttached(
+        "MarginSource",
+        typeof(object),
+        typeof(Derive),
+        new PropertyMetadata(null, OnMarginMaskChanged));
+
+    public static object? GetMargin(DependencyObject element) => element.GetValue(MarginProperty);
+
+    public static void SetMargin(DependencyObject element, object? value) => element.SetValue(MarginProperty, value);
+
+    public static ThicknessSides GetMarginSides(DependencyObject element)
+        => (ThicknessSides)element.GetValue(MarginSidesProperty);
+
+    public static void SetMarginSides(DependencyObject element, ThicknessSides value)
+        => element.SetValue(MarginSidesProperty, value);
+
+    private static void OnMarginKeyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        => Track(d, MarginSourceProperty, e.NewValue);
+
+    private static void OnMarginMaskChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is not FrameworkElement element)
+            return;
+
+        object? source = element.GetValue(MarginSourceProperty);
+        if (source == null)
+            return;
+
+        Thickness value = Mask(ToThickness(source, "Margin"), GetMarginSides(element));
+        element.SetCurrentValue(FrameworkElement.MarginProperty, value);
+    }
+
+    #endregion
+
     #region Resolution
 
     /// <summary>
@@ -211,12 +269,12 @@ public static class Derive
             element.SetResourceReference(source, key);
     }
 
-    private static Thickness ToThickness(object source) => source switch
+    private static Thickness ToThickness(object source, string property) => source switch
     {
         Thickness thickness => thickness,
         IConvertible convertible => new Thickness(convertible.ToDouble(null)),
         _ => throw new InvalidOperationException(
-            $"Derive.BorderThickness expects a Thickness or a numeric resource, got {source.GetType().Name}.")
+            $"Derive.{property} expects a Thickness or a numeric resource, got {source.GetType().Name}.")
     };
 
     private static CornerRadius ToCornerRadius(object source) => source switch

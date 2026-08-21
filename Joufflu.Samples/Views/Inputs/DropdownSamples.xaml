@@ -52,7 +52,7 @@
                 Title="Button style"
                 Code="{Binding StyleCode}"
                 Description="ButtonStyle restyles the toggle button — any ToggleButton style — and Header takes arbitrary content, an icon included. PopupStyle does the same for the hosting Popup.">
-                <inputs:Dropdown ButtonStyle="{StaticResource IconToggleButton}" PopupPlacement="BottomRight">
+                <inputs:Dropdown ButtonStyle="{StaticResource IconToggleButton}" PopupPlacement="BottomRight" joufflu:Sizing.IsSquare="True">
                     <inputs:Dropdown.Header>
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />
                     </inputs:Dropdown.Header>
