@@ -1,10 +1,10 @@
 ---
-title: Drop target
+title: Drag and drop
 parent: Toolkit
 nav_order: 4
 ---
 
-# Drop target
+# Drag and drop
 
 ## DropTarget.Command
 
@@ -77,3 +77,65 @@ effect for is rejected, so a `Move` target only accepts drags that can be moved.
 <Border joufflu:DropTarget.Command="{Binding MoveCommand}"
         joufflu:DropTarget.Effect="Move" />
 ```
+
+## DragSource.Data
+
+`DragSource.Data` is the counterpart of `DropTarget.Command`: it makes **any** element
+a drag source, carrying that data to the drop targets. The mouse events are handled
+for you, and the drag only starts once the pointer moved past the system drag
+threshold, so clicks keep working — a draggable button is still clickable.
+
+The data is given to the targets as is when it already is an `IDataObject`, and
+wrapped in a `DataObject` otherwise: a `string` arrives as text, a view model under
+its own type.
+
+```xml
+<!-- The mouse events are handled by the behavior: the drag starts past the system threshold -->
+<Border joufflu:DragSource.Data="{Binding}"
+        joufflu:DragSource.AllowedEffects="Move">
+    <TextBlock Text="{Binding}" />
+</Border>
+```
+
+```csharp
+// The target reads what the source carried, wrapped in a DataObject
+private static string? GetTag(IDataObject? data) => data?.GetData(DataFormats.UnicodeText) as string;
+```
+
+## DragSource.AllowedEffects
+
+`AllowedEffects` is what the source lets the targets answer with — `Copy` by default.
+A target asking for anything else is refused, so `AllowedEffects` and
+`DropTarget.Effect` must agree for the drop to happen.
+
+```xml
+<!-- Both agree on Move: the item leaves the source -->
+<Border joufflu:DragSource.Data="{Binding}" joufflu:DragSource.AllowedEffects="Move" />
+<Border joufflu:DropTarget.Command="{Binding TakeCommand}" joufflu:DropTarget.Effect="Move" />
+```
+
+## DragSource.IsDragging
+
+`IsDragging` is `true` for the whole duration of the drag, which is all a trigger
+needs to fade the original out while it travels. It inherits, so template and content
+children see it too.
+
+```xml
+<Border joufflu:DragSource.Data="{Binding}">
+    <Border.Style>
+        <Style TargetType="Border">
+            <Style.Triggers>
+                <!-- True for the whole drag: the original fades out while it travels -->
+                <Trigger Property="joufflu:DragSource.IsDragging" Value="True">
+                    <Setter Property="Opacity" Value="0.4" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Border.Style>
+    <TextBlock Text="{Binding}" />
+</Border>
+```
+
+{: .note }
+> The drag is a blocking call: nothing else happens on the element until the drop
+> lands or the drag is cancelled.

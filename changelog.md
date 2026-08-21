@@ -2,6 +2,7 @@
 
 - Add a standard confirm overlay, `IOverlayService.Confirm`, with an `EnumConfirmationType` colouring its confirm button
 - Add `DropTarget.Command`, turning any element into a drop target
+- Add `DragSource.Data`, turning any element into a drag source, with `DragSource.AllowedEffects` and `DragSource.IsDragging`
 - Add a `FullContainer` to simplify content placement when using `AllowContentOverTitleBar`
 - Support `Paging` without a known total
 - Move `Dropdown` from `Joufflu.Navigation` to `Joufflu.Inputs` (namespace `Joufflu.Inputs.Controls`)

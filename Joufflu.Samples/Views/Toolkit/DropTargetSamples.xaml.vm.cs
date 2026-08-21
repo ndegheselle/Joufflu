@@ -20,6 +20,7 @@ public class DropTargetSamplesViewModel : ObservableObject
     public DropTargetSamplesViewModel()
     {
         DropFilesCommand = new RelayCommand<IDataObject>(DropFiles, CanDropFiles);
+        TakeTagCommand = new RelayCommand<IDataObject>(TakeTag, CanTakeTag);
     }
 
     // Called on every mouse move of the drag, so it only looks at the paths and never at the files.
@@ -40,6 +41,31 @@ public class DropTargetSamplesViewModel : ObservableObject
     private static string[]? GetFiles(IDataObject? data) => data?.GetData(DataFormats.FileDrop) as string[];
 
     private static bool IsPdf(string path) => Path.GetExtension(path).Equals(".pdf", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>Tags left to drag, each one its own drag source.</summary>
+    public ObservableCollection<string> AvailableTags { get; } = ["Design", "Toolkit", "Samples"];
+
+    /// <summary>Tags the drop target took away from <see cref="AvailableTags"/>.</summary>
+    public ObservableCollection<string> TakenTags { get; } = [];
+
+    /// <summary>Takes a dragged tag, and refuses anything that isn't one of them.</summary>
+    public IRelayCommand TakeTagCommand { get; }
+
+    // Only the tags of this sample : a text selection dragged from elsewhere isn't one of them, and
+    // a tag already taken isn't available anymore.
+    private bool CanTakeTag(IDataObject? data) => GetTag(data) is string tag && AvailableTags.Contains(tag);
+
+    private void TakeTag(IDataObject? data)
+    {
+        if (GetTag(data) is not string tag)
+            return;
+
+        AvailableTags.Remove(tag);
+        TakenTags.Add(tag);
+    }
+
+    /// <summary>The dragged tag, or <c>null</c> for data that isn't text at all.</summary>
+    private static string? GetTag(IDataObject? data) => data?.GetData(DataFormats.UnicodeText) as string;
 
     public string DropCode =>
         """
@@ -73,5 +99,33 @@ public class DropTargetSamplesViewModel : ObservableObject
 
         // Same IDataObject, once the drop landed
         private static void DropFiles(IDataObject? data) { ... }
+        """;
+
+    public string DragCode =>
+        """
+        <!-- The mouse events are handled by the behavior: the drag starts past the system threshold -->
+        <Border joufflu:DragSource.Data="{Binding}"
+                joufflu:DragSource.AllowedEffects="Move">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <!-- True for the whole drag: the original fades out while it travels -->
+                        <Trigger Property="joufflu:DragSource.IsDragging" Value="True">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <TextBlock Text="{Binding}" />
+        </Border>
+
+        <!-- AllowedEffects and Effect must agree, here on Move, for the drop to happen -->
+        <Border joufflu:DropTarget.Command="{Binding TakeTagCommand}"
+                joufflu:DropTarget.Effect="Move" />
+
+        // Data that isn't an IDataObject is wrapped in a DataObject, so a string arrives as text
+        private static string? GetTag(IDataObject? data) => data?.GetData(DataFormats.UnicodeText) as string;
+
+        private bool CanTakeTag(IDataObject? data) => GetTag(data) is string tag && AvailableTags.Contains(tag);
         """;
 }

@@ -1,4 +1,4 @@
-<controls:ThemedWindow
+﻿<controls:ThemedWindow
     x:Class="Joufflu.Samples.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -259,7 +259,7 @@
                         <nav:NavigationItem.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Upload}" />
                         </nav:NavigationItem.Icon>
-                        Drop target
+                        Drag and drop
                     </nav:NavigationItem>
 
                     <nav:NavigationItem TargetType="{x:Type toolkit:ThemeSamplesViewModel}">
