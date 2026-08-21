@@ -80,45 +80,45 @@
                         Opacity="0.6"
                         Type="Array" />
 
-                    <inputs:Dropdown
+                    <ToggleButton
                         Name="EditSchemaButton"
                         Grid.Column="2"
                         HorizontalAlignment="Right"
                         BorderThickness="0"
                         ToolTip="Change type">
-                        <inputs:Dropdown.Header>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
-                        </inputs:Dropdown.Header>
-                        <StackPanel Width="80">
-                            <Button
-                                Command="{Binding ChangeSchemaCommand}"
-                                CommandParameter="{x:Static schema:EnumDataType.String}"
-                                Style="{StaticResource ItemButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Quote}" />
-                                    <TextBlock Margin="4,0,0,0">value</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button
-                                Command="{Binding ChangeSchemaCommand}"
-                                CommandParameter="{x:Static schema:EnumDataType.Array}"
-                                Style="{StaticResource ItemButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Brackets}" />
-                                    <TextBlock Margin="4,0,0,0">array</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button
-                                Command="{Binding ChangeSchemaCommand}"
-                                CommandParameter="{x:Static schema:EnumDataType.Object}"
-                                Style="{StaticResource ItemButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Braces}" />
-                                    <TextBlock Margin="4,0,0,0">object</TextBlock>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </inputs:Dropdown>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
+                        <inputs:Dropdown.Popup>
+                            <StackPanel Width="80">
+                                <Button
+                                    Command="{Binding ChangeSchemaCommand}"
+                                    CommandParameter="{x:Static schema:EnumDataType.String}"
+                                    Style="{StaticResource ItemButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Quote}" />
+                                        <TextBlock Margin="4,0,0,0">value</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Command="{Binding ChangeSchemaCommand}"
+                                    CommandParameter="{x:Static schema:EnumDataType.Array}"
+                                    Style="{StaticResource ItemButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Brackets}" />
+                                        <TextBlock Margin="4,0,0,0">array</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Command="{Binding ChangeSchemaCommand}"
+                                    CommandParameter="{x:Static schema:EnumDataType.Object}"
+                                    Style="{StaticResource ItemButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Braces}" />
+                                        <TextBlock Margin="4,0,0,0">object</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </inputs:Dropdown.Popup>
+                    </ToggleButton>
                 </Grid>
 
                 <DataTemplate.Triggers>
@@ -148,45 +148,45 @@
                         Opacity="0.6"
                         Type="Object" />
 
-                    <inputs:Dropdown
+                    <ToggleButton
                         Name="EditSchemaButton"
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         BorderThickness="0"
                         ToolTip="Add property">
-                        <inputs:Dropdown.Header>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
-                        </inputs:Dropdown.Header>
-                        <StackPanel Width="80">
-                            <Button
-                                Command="{Binding CreatePropertyCommand}"
-                                CommandParameter="{x:Static schema:EnumDataType.String}"
-                                Style="{StaticResource ItemButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Quote}" />
-                                    <TextBlock Margin="4,0,0,0">value</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button
-                                Command="{Binding CreatePropertyCommand}"
-                                CommandParameter="{x:Static schema:EnumDataType.Array}"
-                                Style="{StaticResource ItemButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Brackets}" />
-                                    <TextBlock Margin="4,0,0,0">array</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button
-                                Command="{Binding CreatePropertyCommand}"
-                                CommandParameter="{x:Static schema:EnumDataType.Object}"
-                                Style="{StaticResource ItemButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Braces}" />
-                                    <TextBlock Margin="4,0,0,0">object</TextBlock>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </inputs:Dropdown>
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
+                        <inputs:Dropdown.Popup>
+                            <StackPanel Width="80">
+                                <Button
+                                    Command="{Binding CreatePropertyCommand}"
+                                    CommandParameter="{x:Static schema:EnumDataType.String}"
+                                    Style="{StaticResource ItemButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Quote}" />
+                                        <TextBlock Margin="4,0,0,0">value</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Command="{Binding CreatePropertyCommand}"
+                                    CommandParameter="{x:Static schema:EnumDataType.Array}"
+                                    Style="{StaticResource ItemButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Brackets}" />
+                                        <TextBlock Margin="4,0,0,0">array</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Command="{Binding CreatePropertyCommand}"
+                                    CommandParameter="{x:Static schema:EnumDataType.Object}"
+                                    Style="{StaticResource ItemButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Braces}" />
+                                        <TextBlock Margin="4,0,0,0">object</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </inputs:Dropdown.Popup>
+                    </ToggleButton>
                 </Grid>
 
                 <DataTemplate.Triggers>

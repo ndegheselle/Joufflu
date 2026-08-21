@@ -5,24 +5,45 @@ namespace Joufflu.Samples.Views.Inputs;
 public class DropdownSamplesViewModel : ObservableObject
 {
     public string Code =>
-        "<inputs:Dropdown Header=\"Actions\">\n" +
-        "    <StackPanel joufflu:Spacing.Gap=\"4\">\n" +
-        "        <Button Content=\"Rename\" Style=\"{StaticResource GhostButton}\" />\n" +
-        "        <Button Content=\"Duplicate\" Style=\"{StaticResource GhostButton}\" />\n" +
-        "    </StackPanel>\n" +
-        "</inputs:Dropdown>";
+        "<ToggleButton Content=\"Actions\">\n" +
+        "    <inputs:Dropdown.Popup>\n" +
+        "        <StackPanel joufflu:Spacing.Gap=\"4\">\n" +
+        "            <Button Content=\"Rename\" Style=\"{StaticResource GhostButton}\" />\n" +
+        "            <Button Content=\"Duplicate\" Style=\"{StaticResource GhostButton}\" />\n" +
+        "        </StackPanel>\n" +
+        "    </inputs:Dropdown.Popup>\n" +
+        "</ToggleButton>";
 
     public string PlacementCode =>
         "<!-- BottomLeft (default), BottomRight, TopLeft, TopRight -->\n" +
-        "<inputs:Dropdown Header=\"Filter\" PopupPlacement=\"BottomRight\">\n" +
-        "    <TextBlock Text=\"Opens down, right aligned.\" />\n" +
-        "</inputs:Dropdown>";
+        "<ToggleButton Content=\"Filter\" inputs:Dropdown.Placement=\"BottomRight\">\n" +
+        "    <inputs:Dropdown.Popup>\n" +
+        "        <TextBlock Text=\"Opens down, right aligned.\" />\n" +
+        "    </inputs:Dropdown.Popup>\n" +
+        "</ToggleButton>";
 
     public string StyleCode =>
-        "<inputs:Dropdown ButtonStyle=\"{StaticResource IconToggleButton}\" PopupPlacement=\"BottomRight\">\n" +
-        "    <inputs:Dropdown.Header>\n" +
-        "        <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.EllipsisVertical}\" />\n" +
-        "    </inputs:Dropdown.Header>\n" +
-        "    <TextBlock Text=\"An icon only dropdown.\" />\n" +
-        "</inputs:Dropdown>";
+        "<ToggleButton\n" +
+        "    inputs:Dropdown.Placement=\"BottomRight\"\n" +
+        "    joufflu:Sizing.IsSquare=\"True\"\n" +
+        "    joufflu:Sizing.Size=\"lg\">\n" +
+        "    <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.EllipsisVertical}\" />\n" +
+        "    <inputs:Dropdown.Popup>\n" +
+        "        <TextBlock Text=\"An icon only dropdown.\" />\n" +
+        "    </inputs:Dropdown.Popup>\n" +
+        "</ToggleButton>";
+
+    public string PopupStyleCode =>
+        "<ToggleButton Content=\"Padded\">\n" +
+        "    <inputs:Dropdown.PopupStyle>\n" +
+        "        <Style\n" +
+        "            TargetType=\"{x:Type inputs:DropdownPopupHost}\"\n" +
+        "            BasedOn=\"{StaticResource {x:Type inputs:DropdownPopupHost}}\">\n" +
+        "            <Setter Property=\"Padding\" Value=\"12,8\" />\n" +
+        "        </Style>\n" +
+        "    </inputs:Dropdown.PopupStyle>\n" +
+        "    <inputs:Dropdown.Popup>\n" +
+        "        <TextBlock Text=\"Content padded away from the border.\" />\n" +
+        "    </inputs:Dropdown.Popup>\n" +
+        "</ToggleButton>";
 }

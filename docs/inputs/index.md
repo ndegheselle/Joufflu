@@ -18,7 +18,7 @@ inputs.
 - **File picker** — pick a file through the system dialog.
 - **Color picker** — pick a colour with a saturation square, hue and alpha
   sliders.
-- **Dropdown** — a toggle button opening a popup of any content.
+- **Dropdown** — attached properties opening a popup of any content off a `ToggleButton`.
 
 All snippets assume the `inputs` and `joufflu` XML namespaces:
 

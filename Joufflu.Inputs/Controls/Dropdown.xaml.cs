@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 
 namespace Joufflu.Inputs.Controls
 {
@@ -19,117 +20,230 @@ namespace Joufflu.Inputs.Controls
         TopRight
     }
 
-    [TemplatePart(Name = PART_Popup, Type = typeof(Popup))]
-    public class Dropdown : ContentControl
+    /// <summary>
+    /// Chrome hosting the dropdown content inside the popup. Only meant to be created by
+    /// <see cref="Dropdown"/>; its default style lives in <c>Dropdown.xaml</c>.
+    /// </summary>
+    public class DropdownPopupHost : ContentControl
     {
-        static Dropdown()
+        static DropdownPopupHost()
         {
             DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(Dropdown),
-                new FrameworkPropertyMetadata(typeof(Dropdown)));
+                typeof(DropdownPopupHost),
+                new FrameworkPropertyMetadata(typeof(DropdownPopupHost)));
         }
+    }
 
-        private const string PART_Popup = "PART_Popup";
-
-        private Popup? _popup;
-
-        #region Dependency Properties
-        public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
-            nameof(Header),
+    /// <summary>
+    /// Turns any <see cref="ToggleButton"/> into a dropdown: the button stays yours (its own
+    /// <see cref="FrameworkElement.Style"/>, <c>Sizing.IsSquare</c>, content, triggers and bindings)
+    /// and <see cref="PopupProperty"/> hangs a themed popup off it, open while the button is checked.
+    /// <example>
+    /// <code>
+    /// &lt;ToggleButton Content="Actions" inputs:Dropdown.Placement="BottomRight"&gt;
+    ///     &lt;inputs:Dropdown.Popup&gt;
+    ///         &lt;TextBlock Text="Anything." /&gt;
+    ///     &lt;/inputs:Dropdown.Popup&gt;
+    /// &lt;/ToggleButton&gt;
+    /// </code>
+    /// </example>
+    /// </summary>
+    public static class Dropdown
+    {
+        #region Popup
+        /// <summary>Content shown in the popup. Setting it is what turns the button into a dropdown.</summary>
+        public static readonly DependencyProperty PopupProperty = DependencyProperty.RegisterAttached(
+            "Popup",
             typeof(object),
             typeof(Dropdown),
-            new FrameworkPropertyMetadata(null));
+            new FrameworkPropertyMetadata(null, OnPopupChanged));
 
-        public static readonly DependencyProperty ButtonStyleProperty = DependencyProperty.Register(
-            nameof(ButtonStyle),
-            typeof(Style),
-            typeof(Dropdown),
-            new FrameworkPropertyMetadata(null));
+        public static object? GetPopup(DependencyObject element) { return element.GetValue(PopupProperty); }
 
-        public static readonly DependencyProperty PopupStyleProperty = DependencyProperty.Register(
-            nameof(PopupStyle),
-            typeof(Style),
-            typeof(Dropdown),
-            new FrameworkPropertyMetadata(null));
-
-        public static readonly DependencyProperty PopupPlacementProperty = DependencyProperty.Register(
-            nameof(PopupPlacement),
-            typeof(DropdownPlacement),
-            typeof(Dropdown),
-            new FrameworkPropertyMetadata(DropdownPlacement.BottomLeft));
-
-        public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.Register(
-            nameof(HorizontalOffset),
-            typeof(double),
-            typeof(Dropdown),
-            new FrameworkPropertyMetadata(0d));
-
-        public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.Register(
-            nameof(VerticalOffset),
-            typeof(double),
-            typeof(Dropdown),
-            new FrameworkPropertyMetadata(0d));
+        public static void SetPopup(DependencyObject element, object? value) { element.SetValue(PopupProperty, value); }
         #endregion
 
-        public object Header
-        {
-            get { return (object)GetValue(HeaderProperty); }
-            set { SetValue(HeaderProperty, value); }
-        }
-
-        /// <summary>Style applied to the toggle button that opens the dropdown.</summary>
-        public Style ButtonStyle
-        {
-            get { return (Style)GetValue(ButtonStyleProperty); }
-            set { SetValue(ButtonStyleProperty, value); }
-        }
-
-        /// <summary>Style applied to the <see cref="Popup"/> that hosts the content.</summary>
-        public Style PopupStyle
-        {
-            get { return (Style)GetValue(PopupStyleProperty); }
-            set { SetValue(PopupStyleProperty, value); }
-        }
-
+        #region Placement
         /// <summary>Corner alignment of the popup relative to the toggle button.</summary>
-        public DropdownPlacement PopupPlacement
+        public static readonly DependencyProperty PlacementProperty = DependencyProperty.RegisterAttached(
+            "Placement",
+            typeof(DropdownPlacement),
+            typeof(Dropdown),
+            new FrameworkPropertyMetadata(DropdownPlacement.BottomLeft, OnPlacementChanged));
+
+        public static DropdownPlacement GetPlacement(DependencyObject element)
         {
-            get { return (DropdownPlacement)GetValue(PopupPlacementProperty); }
-            set { SetValue(PopupPlacementProperty, value); }
+            return (DropdownPlacement)element.GetValue(PlacementProperty);
         }
 
-        /// <summary>Extra horizontal offset applied on top of <see cref="PopupPlacement"/>.</summary>
-        public double HorizontalOffset
+        public static void SetPlacement(DependencyObject element, DropdownPlacement value)
         {
-            get { return (double)GetValue(HorizontalOffsetProperty); }
-            set { SetValue(HorizontalOffsetProperty, value); }
+            element.SetValue(PlacementProperty, value);
+        }
+        #endregion
+
+        #region Offsets
+        /// <summary>Extra horizontal offset applied on top of <see cref="PlacementProperty"/>.</summary>
+        public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.RegisterAttached(
+            "HorizontalOffset",
+            typeof(double),
+            typeof(Dropdown),
+            new FrameworkPropertyMetadata(0d));
+
+        public static double GetHorizontalOffset(DependencyObject element)
+        {
+            return (double)element.GetValue(HorizontalOffsetProperty);
         }
 
-        /// <summary>Extra vertical offset applied on top of <see cref="PopupPlacement"/>.</summary>
-        public double VerticalOffset
+        public static void SetHorizontalOffset(DependencyObject element, double value)
         {
-            get { return (double)GetValue(VerticalOffsetProperty); }
-            set { SetValue(VerticalOffsetProperty, value); }
+            element.SetValue(HorizontalOffsetProperty, value);
         }
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
+        /// <summary>Extra vertical offset applied on top of <see cref="PlacementProperty"/>.</summary>
+        public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.RegisterAttached(
+            "VerticalOffset",
+            typeof(double),
+            typeof(Dropdown),
+            new FrameworkPropertyMetadata(0d));
 
-            _popup = GetTemplateChild(PART_Popup) as Popup;
-            if (_popup != null)
+        public static double GetVerticalOffset(DependencyObject element)
+        {
+            return (double)element.GetValue(VerticalOffsetProperty);
+        }
+
+        public static void SetVerticalOffset(DependencyObject element, double value)
+        {
+            element.SetValue(VerticalOffsetProperty, value);
+        }
+        #endregion
+
+        #region PopupStyle
+        /// <summary>
+        /// Style of the <see cref="DropdownPopupHost"/> drawing the popup chrome — its
+        /// <see cref="Control.Padding"/>, background, border and corner radius. A
+        /// <see cref="System.Windows.Controls.Primitives.Popup"/> is only a positioning primitive and has
+        /// nothing worth styling, so this targets the chrome instead. Base it on the default style to
+        /// keep the theme:
+        /// <example>
+        /// <code>
+        /// &lt;Style TargetType="inputs:DropdownPopupHost" BasedOn="{StaticResource {x:Type inputs:DropdownPopupHost}}"&gt;
+        ///     &lt;Setter Property="Padding" Value="8" /&gt;
+        /// &lt;/Style&gt;
+        /// </code>
+        /// </example>
+        /// </summary>
+        public static readonly DependencyProperty PopupStyleProperty = DependencyProperty.RegisterAttached(
+            "PopupStyle",
+            typeof(Style),
+            typeof(Dropdown),
+            new FrameworkPropertyMetadata(null, OnPopupStyleChanged));
+
+        public static Style? GetPopupStyle(DependencyObject element)
+        {
+            return (Style?)element.GetValue(PopupStyleProperty);
+        }
+
+        public static void SetPopupStyle(DependencyObject element, Style? value)
+        {
+            element.SetValue(PopupStyleProperty, value);
+        }
+        #endregion
+
+        /// <summary>The popup created for a button, kept alive by the button itself.</summary>
+        private static readonly DependencyProperty PopupInstanceProperty = DependencyProperty.RegisterAttached(
+            "PopupInstance",
+            typeof(Popup),
+            typeof(Dropdown),
+            new PropertyMetadata(null));
+
+        private static void OnPopupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not ToggleButton button)
+                return;
+
+            // Re-setting the content must not leave the previous popup hanging around.
+            if (button.GetValue(PopupInstanceProperty) is Popup previous)
             {
-                _popup.Placement = PlacementMode.Custom;
-                _popup.CustomPopupPlacementCallback = PlacePopup;
+                previous.IsOpen = false;
+                BindingOperations.ClearAllBindings(previous);
+                previous.Child = null;
+                previous.PlacementTarget = null;
+                previous.CustomPopupPlacementCallback = null;
+                button.SetValue(PopupInstanceProperty, null);
+            }
+
+            if (e.NewValue == null)
+                return;
+
+            var host = new DropdownPopupHost { Content = e.NewValue };
+            // A Popup sits outside the button logical tree, so nothing flows down to it on its own.
+            host.SetBinding(FrameworkElement.DataContextProperty, Bind(button, FrameworkElement.DataContextProperty));
+            host.SetBinding(Sizing.SizeProperty, Bind(button, Sizing.SizeProperty));
+            ApplyPopupStyle(host, GetPopupStyle(button));
+
+            var popup = new Popup
+            {
+                Child = host,
+                PlacementTarget = button,
+                Placement = PlacementMode.Custom,
+                StaysOpen = false
+            };
+            popup.CustomPopupPlacementCallback = (popupSize, targetSize, offset)
+                => PlacePopup(button, popupSize, targetSize, offset);
+
+            // Two way so a dismissal (StaysOpen=False) unchecks the button.
+            popup.SetBinding(
+                Popup.IsOpenProperty,
+                new Binding(nameof(ToggleButton.IsChecked)) { Source = button, Mode = BindingMode.TwoWay });
+            popup.SetBinding(Popup.HorizontalOffsetProperty, Bind(button, HorizontalOffsetProperty));
+            popup.SetBinding(Popup.VerticalOffsetProperty, Bind(button, VerticalOffsetProperty));
+
+            button.SetValue(PopupInstanceProperty, popup);
+        }
+
+        private static void OnPopupStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d.GetValue(PopupInstanceProperty) is Popup { Child: DropdownPopupHost host })
+                ApplyPopupStyle(host, (Style?)e.NewValue);
+        }
+
+        private static void ApplyPopupStyle(DropdownPopupHost host, Style? style)
+        {
+            // A local null would shadow the implicit style and strip the chrome, so clear instead.
+            if (style == null)
+                host.ClearValue(FrameworkElement.StyleProperty);
+            else
+                host.Style = style;
+        }
+
+        private static void OnPlacementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // PlacePopup reads Placement live, the callback only needs to be re-run.
+            if (d.GetValue(PopupInstanceProperty) is Popup popup && popup.IsOpen)
+            {
+                popup.IsOpen = false;
+                popup.IsOpen = true;
             }
         }
 
-        private CustomPopupPlacement[] PlacePopup(Size popupSize, Size targetSize, Point offset)
+        private static Binding Bind(DependencyObject source, DependencyProperty property)
         {
-            double x = PopupPlacement is DropdownPlacement.BottomRight or DropdownPlacement.TopRight
+            return new Binding { Source = source, Path = new PropertyPath(property), Mode = BindingMode.OneWay };
+        }
+
+        private static CustomPopupPlacement[] PlacePopup(
+            ToggleButton button,
+            Size popupSize,
+            Size targetSize,
+            Point offset)
+        {
+            DropdownPlacement placement = GetPlacement(button);
+
+            double x = placement is DropdownPlacement.BottomRight or DropdownPlacement.TopRight
                 ? targetSize.Width - popupSize.Width
                 : 0;
-            double y = PopupPlacement is DropdownPlacement.TopLeft or DropdownPlacement.TopRight
+            double y = placement is DropdownPlacement.TopLeft or DropdownPlacement.TopRight
                 ? -popupSize.Height
                 : targetSize.Height;
 

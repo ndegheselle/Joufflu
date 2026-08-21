@@ -5,6 +5,7 @@
 - Add a `FullContainer` to simplify content placement when using `AllowContentOverTitleBar`
 - Support `Paging` without a known total
 - Move `Dropdown` from `Joufflu.Navigation` to `Joufflu.Inputs` (namespace `Joufflu.Inputs.Controls`)
+- Turn `Dropdown` from a wrapper control into attached properties (`Dropdown.Popup`, `Dropdown.Placement`, `Dropdown.PopupStyle`, offsets) set on a `ToggleButton` you own, so the button accepts any `ToggleButton` style and attached property — `Sizing.IsSquare` included — with nothing to forward. Replaces `Header`, `ButtonStyle` and `PopupPlacement`. `Dropdown.PopupStyle` now styles the `DropdownPopupHost` drawing the popup chrome, so its padding, background, border and radius are reachable — a `Popup` itself has none of those
 - Remove the `Dimensions.BorderThicknessRight` key, now owned by `NavigationMenu` which was its only user
 - Add the `Derive.BorderThickness` and `Derive.CornerRadius` attached properties, deriving per-side thicknesses and per-corner radii from a scalar dimension so they follow a runtime theme change
 - Derive the partial borders and radii of `NavigationMenu`, `TabControl`, `GroupBox`, `DataGrid` and `ListView` through `Derive`, dropping the `NavigationMenuBorderThickness` key

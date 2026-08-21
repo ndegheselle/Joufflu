@@ -22,7 +22,7 @@ re-theme live between Light and Dark along with the rest of your UI.
 | `TextEditable` | Label that turns into an inline editor on click. |
 | `FilePicker` | Pick a file or folder. |
 | `ColorPicker` | Pick a colour. |
-| `Dropdown` | Toggle button opening a popup of any content. |
+| `Dropdown` | Attached properties opening a popup of any content off a `ToggleButton`. |
 
 ## Getting started
 
