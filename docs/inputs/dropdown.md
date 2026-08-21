@@ -30,6 +30,7 @@ so its `Style`, its content, its triggers and every attached property
 | `Dropdown.Popup` | `object` | `null` | Content shown in the popup. Setting it is what turns the button into a dropdown. |
 | `Dropdown.Placement` | `DropdownPlacement` | `BottomLeft` | Corner of the popup anchored to the matching corner of the button: `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight`. |
 | `Dropdown.HorizontalOffset` / `Dropdown.VerticalOffset` | `double` | `0` | Extra offset applied on top of the placement. |
+| `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
 | `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, background, border, corner radius. |
 
 `BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight` open it
@@ -54,6 +55,30 @@ An icon-only dropdown is just an icon-only toggle button:
     </inputs:Dropdown.Popup>
 </ToggleButton>
 ```
+
+## Closing on click
+
+By default the popup stays open until you click outside it. For a menu of commands
+that is rarely what you want, so `Dropdown.CloseOnClick` dismisses it as soon as a
+button inside is clicked:
+
+```xml
+<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
+    <inputs:Dropdown.Popup>
+        <StackPanel joufflu:Spacing.Gap="4">
+            <Button Content="Rename" Style="{StaticResource GhostButton}" />
+            <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
+        </StackPanel>
+    </inputs:Dropdown.Popup>
+</ToggleButton>
+```
+
+It listens for `ButtonBase.Click`, not for any mouse click, so a `TextBox`, a
+`Slider` or a `ComboBox` in the popup stays usable. The flip side is that a
+`CheckBox`, a `RadioButton` or a nested `ToggleButton` is a `ButtonBase` too and
+will close it — leave `CloseOnClick` off for a popup built out of those.
+
+The command still runs: the click is not handled, it only unchecks the button.
 
 ## Popup chrome
 
@@ -82,6 +107,29 @@ default style to keep the theme:
 Padding defaults to `0`, so content sits flush against the border unless you ask
 otherwise.
 
-A `Popup` also lives outside the button's logical tree, so nothing would normally
-flow into it: `DataContext`, `Foreground` and `Sizing.Size` are restored on the host
-for you.
+## Bindings inside the popup
+
+A `Popup` lives outside the button's logical tree, so nothing would normally flow
+into it. `DataContext`, `Foreground` and `Sizing.Size` are restored on the host for
+you, so ordinary command and value bindings need nothing special:
+
+```xml
+<ToggleButton Content="Actions">
+    <inputs:Dropdown.Popup>
+        <Button Command="{Binding RenameCommand}" Content="Rename" />
+    </inputs:Dropdown.Popup>
+</ToggleButton>
+```
+
+What cannot cross the boundary is anything that walks *out* of the popup — a
+`RelativeSource` ancestor lookup or an `ElementName`, both of which stop at the
+popup's own `PopupRoot`. Bind through `DropdownPopupHost.PlacementTarget` instead;
+the host is a plain ancestor inside the popup, so that lookup stays in one tree:
+
+```xml
+<Button Command="{Binding PlacementTarget.DataContext.SaveCommand,
+    RelativeSource={RelativeSource AncestorType={x:Type inputs:DropdownPopupHost}}}" />
+```
+
+`PlacementTarget` is the `ToggleButton` itself, so the same route reaches its
+properties — `IsChecked`, a `Tag`, an inherited value — not just its `DataContext`.

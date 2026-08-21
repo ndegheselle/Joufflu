@@ -5,7 +5,7 @@ namespace Joufflu.Samples.Views.Inputs;
 public class DropdownSamplesViewModel : ObservableObject
 {
     public string Code =>
-        "<ToggleButton Content=\"Actions\">\n" +
+        "<ToggleButton Content=\"Actions\" inputs:Dropdown.CloseOnClick=\"True\">\n" +
         "    <inputs:Dropdown.Popup>\n" +
         "        <StackPanel joufflu:Spacing.Gap=\"4\">\n" +
         "            <Button Content=\"Rename\" Style=\"{StaticResource GhostButton}\" />\n" +

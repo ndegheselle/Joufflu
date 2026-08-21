@@ -18,8 +18,8 @@
             <c:CodeExample
                 Title="Dropdown"
                 Code="{Binding Code}"
-                Description="Dropdown.Popup hangs a themed popup off any ToggleButton, open while the button is checked. The button stays a plain ToggleButton, so its style, content and attached properties are yours.">
-                <ToggleButton Content="Actions">
+                Description="Dropdown.Popup hangs a themed popup off any ToggleButton, open while the button is checked. The button stays a plain ToggleButton, so its style, content and attached properties are yours. Dropdown.CloseOnClick dismisses the popup when a button inside it is clicked, the way picking a command from a menu does.">
+                <ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
                     <inputs:Dropdown.Popup>
                         <StackPanel joufflu:Spacing.Gap="4">
                             <Button Content="Rename" Style="{StaticResource GhostButton}" />

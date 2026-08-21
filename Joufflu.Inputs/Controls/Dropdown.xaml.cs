@@ -32,6 +32,35 @@ namespace Joufflu.Inputs.Controls
                 typeof(DropdownPopupHost),
                 new FrameworkPropertyMetadata(typeof(DropdownPopupHost)));
         }
+
+        /// <summary>
+        /// The toggle button the popup hangs off. The popup tree is rooted in its own <c>PopupRoot</c>,
+        /// so a <see cref="System.Windows.Data.RelativeSource"/> ancestor lookup or an
+        /// <c>ElementName</c> cannot reach out of it; bind through this instead. The host is a plain
+        /// ancestor inside the popup, so the lookup below stays within one tree.
+        /// <example>
+        /// <code>
+        /// &lt;Button Command="{Binding PlacementTarget.DataContext.SaveCommand,
+        ///     RelativeSource={RelativeSource AncestorType={x:Type inputs:DropdownPopupHost}}}" /&gt;
+        /// </code>
+        /// </example>
+        /// <para>
+        /// The plain <c>{Binding SaveCommand}</c> form already works: <see cref="FrameworkElement.DataContext"/>
+        /// is relayed from the button. This is for everything a <c>DataContext</c> cannot carry.
+        /// </para>
+        /// </summary>
+        public static readonly DependencyProperty PlacementTargetProperty = DependencyProperty.Register(
+            nameof(PlacementTarget),
+            typeof(UIElement),
+            typeof(DropdownPopupHost),
+            new FrameworkPropertyMetadata(null));
+
+        /// <inheritdoc cref="PlacementTargetProperty"/>
+        public UIElement? PlacementTarget
+        {
+            get { return (UIElement?)GetValue(PlacementTargetProperty); }
+            set { SetValue(PlacementTargetProperty, value); }
+        }
     }
 
     /// <summary>
@@ -150,6 +179,35 @@ namespace Joufflu.Inputs.Controls
         }
         #endregion
 
+        #region CloseOnClick
+        /// <summary>
+        /// Closes the popup when a button inside it is clicked, the way picking a command from a menu
+        /// dismisses it. Defaults to <c>false</c>, the popup then staying open until a click outside.
+        /// <para>
+        /// This tracks <see cref="ButtonBase.ClickEvent"/> rather than any mouse click, so a
+        /// <see cref="TextBox"/> or a <see cref="Slider"/> in the popup stays usable. A
+        /// <see cref="CheckBox"/> or a nested <see cref="ToggleButton"/> is a
+        /// <see cref="ButtonBase"/> too and does close it — keep those out of a popup that needs
+        /// this on.
+        /// </para>
+        /// </summary>
+        public static readonly DependencyProperty CloseOnClickProperty = DependencyProperty.RegisterAttached(
+            "CloseOnClick",
+            typeof(bool),
+            typeof(Dropdown),
+            new FrameworkPropertyMetadata(false));
+
+        public static bool GetCloseOnClick(DependencyObject element)
+        {
+            return (bool)element.GetValue(CloseOnClickProperty);
+        }
+
+        public static void SetCloseOnClick(DependencyObject element, bool value)
+        {
+            element.SetValue(CloseOnClickProperty, value);
+        }
+        #endregion
+
         /// <summary>The popup created for a button, kept alive by the button itself.</summary>
         private static readonly DependencyProperty PopupInstanceProperty = DependencyProperty.RegisterAttached(
             "PopupInstance",
@@ -176,11 +234,20 @@ namespace Joufflu.Inputs.Controls
             if (e.NewValue == null)
                 return;
 
-            var host = new DropdownPopupHost { Content = e.NewValue };
+            var host = new DropdownPopupHost { Content = e.NewValue, PlacementTarget = button };
             // A Popup sits outside the button logical tree, so nothing flows down to it on its own.
             host.SetBinding(FrameworkElement.DataContextProperty, Bind(button, FrameworkElement.DataContextProperty));
             host.SetBinding(Sizing.SizeProperty, Bind(button, Sizing.SizeProperty));
             ApplyPopupStyle(host, GetPopupStyle(button));
+
+            // Read CloseOnClick when the click happens, so flipping it later needs no rewiring.
+            host.AddHandler(
+                ButtonBase.ClickEvent,
+                new RoutedEventHandler((_, _) =>
+                {
+                    if (GetCloseOnClick(button))
+                        button.IsChecked = false;
+                }));
 
             var popup = new Popup
             {
