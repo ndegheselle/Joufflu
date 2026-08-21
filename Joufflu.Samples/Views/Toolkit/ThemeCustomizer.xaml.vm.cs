@@ -469,7 +469,6 @@ public class ThemeCustomizerViewModel : ObservableObject
             case "Thickness":
                 res[JDimensions.Thickness] = v;
                 res[JDimensions.BorderThickness] = new Thickness(v);
-                res[JDimensions.BorderThicknessRight] = new Thickness(0, 0, v, 0);
                 break;
             case "Spacing":
                 res[JDimensions.Spacing] = v;
@@ -599,7 +598,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         yield return JDimensions.CornerRadius;
         yield return JDimensions.Thickness;
         yield return JDimensions.BorderThickness;
-        yield return JDimensions.BorderThicknessRight;
         yield return JDimensions.Spacing;
         yield return JDimensions.SpacingThickness;
         foreach (var dim in _allDimensions)
@@ -657,7 +655,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         sb.AppendLine("    <!--  Dimensions  -->");
         sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.Thickness}}\">{Num(thickness)}</system:Double>");
         sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.BorderThickness}}\">{Num(thickness)}</Thickness>");
-        sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.BorderThicknessRight}}\">0,0,{Num(thickness)},0</Thickness>");
         sb.AppendLine();
         sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.Radius}}\">{Num(radius)}</system:Double>");
         sb.AppendLine($"    <CornerRadius x:Key=\"{{x:Static joufflu:Dimensions.CornerRadius}}\">{Num(radius)}</CornerRadius>");

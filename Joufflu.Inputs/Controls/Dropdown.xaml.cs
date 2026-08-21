@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace Joufflu.Navigation.Controls
+namespace Joufflu.Inputs.Controls
 {
     /// <summary>
     /// Corner of the popup that is anchored to the matching corner of the toggle button.

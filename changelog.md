@@ -1,8 +1,11 @@
-# WIP
+# Version 0.5.0
 
 - Add a standard confirm overlay, `IOverlayService.Confirm`, with an `EnumConfirmationType` colouring its confirm button
+- Add `DropTarget.Command`, turning any element into a drop target
 - Add a `FullContainer` to simplify content placement when using `AllowContentOverTitleBar`
 - Support `Paging` without a known total
+- Move `Dropdown` from `Joufflu.Navigation` to `Joufflu.Inputs` (namespace `Joufflu.Inputs.Controls`)
+- Remove the `Dimensions.BorderThicknessRight` key, now owned by `NavigationMenu` which was its only user
 
 # Version 0.4.0
 

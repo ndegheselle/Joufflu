@@ -11,6 +11,9 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!--  Right edge only: the menu just separates itself from the content beside it.  -->
+    <Thickness x:Key="NavigationMenuBorderThickness" Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
+
     <!--  ============================ NavigationItem ============================  -->
     <Style TargetType="{x:Type nav:NavigationItem}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
@@ -179,7 +182,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThicknessRight}}" />
+        <Setter Property="BorderThickness" Value="{StaticResource NavigationMenuBorderThickness}" />
         <Setter Property="Width" Value="220" />
         <Setter Property="Template">
             <Setter.Value>

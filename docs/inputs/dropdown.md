@@ -1,7 +1,7 @@
 ---
 title: Dropdown
-parent: Navigation
-nav_order: 4
+parent: Inputs
+nav_order: 7
 ---
 
 # Dropdown
@@ -11,12 +11,12 @@ commands, a filter panel, a colour list. `Header` is the button, the control's
 content is the popup.
 
 ```xml
-<nav:Dropdown Header="Actions">
+<inputs:Dropdown Header="Actions">
     <StackPanel joufflu:Spacing.Gap="4">
         <Button Content="Rename" Style="{StaticResource GhostButton}" />
         <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
     </StackPanel>
-</nav:Dropdown>
+</inputs:Dropdown>
 ```
 
 | Property | Type | Default | Purpose |
@@ -31,7 +31,7 @@ content is the popup.
 upward — useful for a dropdown sitting near the bottom of the window.
 
 ```xml
-<nav:Dropdown Header="Filter" PopupPlacement="BottomRight">
+<inputs:Dropdown Header="Filter" PopupPlacement="BottomRight">
     ...
-</nav:Dropdown>
+</inputs:Dropdown>
 ```

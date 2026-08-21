@@ -24,13 +24,13 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 - [Text editable](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/text-editable.md): `TextEditable`, a value that becomes an editable text box on demand.
 - [File picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/file-picker.md): `FilePicker`, selects a file through the system dialog.
 - [Color picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/color-picker.md): `ColorPicker` with hex field and a saturation/hue/alpha popup.
+- [Dropdown](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/dropdown.md): `Dropdown`, a toggle button opening a popup of any content, with corner placement.
 
 ## Navigation (`Joufflu.Navigation`)
 
 - [Navigation menu](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/navigation-menu.md): collapsible side menu driven by a `Navigator`, with groups, nesting and items targeting a page type.
 - [Overlays](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md): the `OverlayContainer` host, stacking modal overlays, `OverlayOptions`, awaiting a result from `Show`, and the standard confirmation from `Confirm` with `EnumConfirmationType`.
 - [Paging](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, usage without a known total, and the `PagingChange` event.
-- [Dropdown](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/dropdown.md): `Dropdown`, a toggle button opening a popup of any content, with corner placement.
 
 ## Feedback (`Joufflu.Feedback`)
 

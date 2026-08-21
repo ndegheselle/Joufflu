@@ -85,12 +85,12 @@ public class AppViewModel : ObservableObject
             new TextEditableSamplesViewModel(),
             new FilePickerSamplesViewModel(),
             new ColorPickerSamplesViewModel(),
+            new DropdownSamplesViewModel(),
 
             // Navigation (Joufflu.Navigation library)
             new NavigationMenuSamplesViewModel(),
             new OverlaySamplesViewModel(Overlays, Toasts),
             new PagingSamplesViewModel(),
-            new DropdownSamplesViewModel(),
 
             // File explorer (Joufflu.FileExplorer library)
             new ExplorerSamplesViewModel(Toasts),

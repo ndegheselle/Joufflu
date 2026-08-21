@@ -351,6 +351,12 @@
                             </nav:NavigationItem.Icon>
                             Color picker
                         </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type inputs:DropdownSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
+                            </nav:NavigationItem.Icon>
+                            Dropdown
+                        </nav:NavigationItem>
                     </nav:NavigationGroup>
 
                     <!--  Navigation (Joufflu.Navigation library)  -->
@@ -376,12 +382,6 @@
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.BookOpen}" />
                             </nav:NavigationItem.Icon>
                             Paging
-                        </nav:NavigationItem>
-                        <nav:NavigationItem TargetType="{x:Type navigation:DropdownSamplesViewModel}">
-                            <nav:NavigationItem.Icon>
-                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
-                            </nav:NavigationItem.Icon>
-                            Dropdown
                         </nav:NavigationItem>
                     </nav:NavigationGroup>
 

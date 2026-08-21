@@ -20,7 +20,7 @@ live between Light and Dark — no restart, no flicker.
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
-- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text.
+- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
@@ -38,7 +38,7 @@ page's raw Markdown source. (Prefer this raw URL over the rendered site, which c
 
 | Section | Contents |
 |---|---|
-| **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
+| **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `OverlayContainer` and modal overlays driven by a `Navigator` |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **File explorer** (`Joufflu.FileExplorer`) | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar` and their `IExplorerSource` |

@@ -11,7 +11,6 @@ Navigation building blocks from `Joufflu.Navigation`:
 - **Navigation menu** — a collapsible side menu driven by a `Navigator`.
 - **Overlays** — modal dialogs stacked above the current page, plus a standard confirmation.
 - **Paging** — a page selector for browsing large sets of data.
-- **Dropdown** — a toggle button opening a popup of any content.
 
 The package also ships `FullContainer`, a page host that puts its header in the
 window's title bar strip — see

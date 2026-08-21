@@ -9,7 +9,6 @@ public static class Dimensions
     public static ComponentResourceKey Thickness => new(typeof(Dimensions), "Thickness");
 
     public static ComponentResourceKey BorderThickness => new(typeof(Dimensions), "BorderThickness");
-    public static ComponentResourceKey BorderThicknessRight => new(typeof(Dimensions), "BorderThicknessRight");
 
     public static ComponentResourceKey Spacing => new(typeof(Dimensions), "Spacing");
     public static ComponentResourceKey SpacingThickness => new(typeof(Dimensions), "SpacingThickness");

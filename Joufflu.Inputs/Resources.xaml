@@ -10,5 +10,6 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Controls/TextEditable.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Controls/Search.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Controls/ColorPicker.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Controls/Dropdown.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
