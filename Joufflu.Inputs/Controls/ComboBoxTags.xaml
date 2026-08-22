@@ -34,6 +34,7 @@
                         <WrapPanel VerticalAlignment="Center">
                             <ItemsControl
                                 x:Name="TagsPresenter"
+                                Margin="2"
                                 ItemsSource="{Binding InternalSelectedItems, RelativeSource={RelativeSource TemplatedParent}}"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ItemsControl.ItemsPanel>
@@ -43,9 +44,10 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <ContentControl Height="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}">
+                                        <!--  Xs height + 2px tag margin + 2px presenter margin = ControlHeightMd on a single row  -->
+                                        <ContentControl Height="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightSm}}">
                                             <Border
-                                                Margin="2,2,0,2"
+                                                Margin="1"
                                                 Background="{Binding BorderBrush, ElementName=Border}"
                                                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                                 <StackPanel Orientation="Horizontal">
