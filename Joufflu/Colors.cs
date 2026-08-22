@@ -15,6 +15,9 @@ public static class Colors
     public static ComponentResourceKey BorderColor => new ComponentResourceKey(typeof(Colors), "BorderColor");
     public static ComponentResourceKey Border100Color => new ComponentResourceKey(typeof(Colors), "Border100Color");
 
+    // State
+    public static ComponentResourceKey DisabledOpacity => new ComponentResourceKey(typeof(Colors), "DisabledOpacity");
+
     // Primary
     public static ComponentResourceKey PrimaryColor => new ComponentResourceKey(typeof(Colors), "PrimaryColor");
     public static ComponentResourceKey Primary100Color => new ComponentResourceKey(typeof(Colors), "Primary100Color");

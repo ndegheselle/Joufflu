@@ -9,6 +9,8 @@ namespace Joufflu.Converters
     /// </summary>
     public class BooleanConverter : IValueConverter
     {
+        public static BooleanConverter Default = new BooleanConverter();
+
         /// <param name="value"></param>
         /// <param name="targetType"></param>
         /// <param name="parameter">bool, indicate wheter the result should be true or false</param>
