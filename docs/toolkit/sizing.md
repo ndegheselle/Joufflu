@@ -24,6 +24,13 @@ font size and padding. Since it inherits, setting it on a panel sizes every chil
 </StackPanel>
 ```
 
+Other controls honor the same attached property — `TreeView` scales its expander,
+indentation and text together:
+
+```xml
+<TreeView joufflu:Sizing.Size="lg" ItemsSource="{Binding Tree}" />
+```
+
 ## ControlProperties.IsSquare
 
 `IsSquare` forces equal width and height, for single-icon buttons.

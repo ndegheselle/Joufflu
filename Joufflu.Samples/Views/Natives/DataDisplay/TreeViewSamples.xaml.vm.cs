@@ -36,4 +36,10 @@ public class TreeViewSamplesViewModel : ObservableObject
         "        </HierarchicalDataTemplate>\n" +
         "    </TreeView.ItemTemplate>\n" +
         "</TreeView>";
+
+    public string SizesCode =>
+        "<TreeView joufflu:Sizing.Size=\"xs\" ItemsSource=\"{Binding Tree}\" />\n" +
+        "<TreeView joufflu:Sizing.Size=\"sm\" ItemsSource=\"{Binding Tree}\" />\n" +
+        "<TreeView ItemsSource=\"{Binding Tree}\" /> <!-- md, the default -->\n" +
+        "<TreeView joufflu:Sizing.Size=\"lg\" ItemsSource=\"{Binding Tree}\" />";
 }

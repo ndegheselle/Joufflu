@@ -30,24 +30,22 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                            <!--  VerticalAlignment=Center keeps a single row centered within MinHeight; the panel still grows and wraps to a new line when tags fill the row  -->
-                            <WrapPanel VerticalAlignment="Center">
-                                <ItemsControl
-                                    x:Name="TagsPresenter"
-                                    Padding="0"
-                                    BorderThickness="0"
-                                    ItemsSource="{Binding InternalSelectedItems, RelativeSource={RelativeSource TemplatedParent}}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
+                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                        <WrapPanel VerticalAlignment="Center">
+                            <ItemsControl
+                                x:Name="TagsPresenter"
+                                ItemsSource="{Binding InternalSelectedItems, RelativeSource={RelativeSource TemplatedParent}}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Height="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}">
                                             <Border
-                                                Margin="1"
+                                                Margin="2,2,0,2"
                                                 Background="{Binding BorderBrush, ElementName=Border}"
                                                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                                 <StackPanel Orientation="Horizontal">
@@ -60,8 +58,8 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
                                                     <Button
-                                                        Width="28"
-                                                        Height="28"
+                                                        joufflu:Sizing.IsSquare="True"
+                                                        joufflu:Sizing.Size="xs"
                                                         Command="{Binding RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
                                                         CommandParameter="{Binding}"
                                                         Style="{StaticResource GhostButton}">
@@ -69,47 +67,48 @@
                                                     </Button>
                                                 </StackPanel>
                                             </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                        </ContentControl>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
-                                <Grid
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center">
-                                    <TextBox
-                                        x:Name="PART_EditableTextBox"
-                                        Height="auto"
-                                        MinWidth="50"
-                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        Background="{TemplateBinding Background}"
-                                        Focusable="True"
-                                        Foreground="{TemplateBinding Foreground}"
-                                        IsReadOnly="{TemplateBinding IsReadOnly}"
-                                        Visibility="Hidden">
-                                        <TextBox.Template>
-                                            <ControlTemplate TargetType="TextBox">
-                                                <ScrollViewer
-                                                    Name="PART_ContentHost"
-                                                    Focusable="False"
-                                                    HorizontalScrollBarVisibility="Hidden"
-                                                    Template="{StaticResource TextBoxScrollViewerTemplate}"
-                                                    VerticalScrollBarVisibility="Hidden" />
-                                            </ControlTemplate>
-                                        </TextBox.Template>
-                                    </TextBox>
+                            <Grid
+                                x:Name="SearchContainer"
+                                Margin="4"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center">
+                                <TextBox
+                                    x:Name="PART_EditableTextBox"
+                                    Height="auto"
+                                    MinWidth="50"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Background="{TemplateBinding Background}"
+                                    Focusable="True"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    IsReadOnly="{TemplateBinding IsReadOnly}"
+                                    Visibility="Hidden">
+                                    <TextBox.Template>
+                                        <ControlTemplate TargetType="TextBox">
+                                            <ScrollViewer
+                                                Name="PART_ContentHost"
+                                                Focusable="False"
+                                                HorizontalScrollBarVisibility="Hidden"
+                                                Template="{StaticResource TextBoxScrollViewerTemplate}"
+                                                VerticalScrollBarVisibility="Hidden" />
+                                        </ControlTemplate>
+                                    </TextBox.Template>
+                                </TextBox>
 
 
-                                    <TextBlock
-                                        x:Name="PlaceholderText"
-                                        IsHitTestVisible="False"
-                                        Opacity="0.5"
-                                        Text="Search ..."
-                                        Visibility="Collapsed" />
-                                </Grid>
-                            </WrapPanel>
-                        </Border>
+                                <TextBlock
+                                    x:Name="PlaceholderText"
+                                    IsHitTestVisible="False"
+                                    Opacity="0.5"
+                                    Text="Search ..."
+                                    Visibility="Collapsed" />
+                            </Grid>
+                        </WrapPanel>
 
                         <ToggleButton
                             x:Name="ToggleButton"
@@ -147,6 +146,10 @@
                         </Popup>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <!--  No tag : the search area carries the control Padding, otherwise the tags provide the spacing  -->
+                        <DataTrigger Binding="{Binding InternalSelectedItems.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
+                            <Setter TargetName="SearchContainer" Property="Margin" Value="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </DataTrigger>
                         <!--  Show the placeholder only while empty and unfocused (Text is "" initially, null after blur)  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

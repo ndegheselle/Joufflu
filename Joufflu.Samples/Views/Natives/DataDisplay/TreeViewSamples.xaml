@@ -25,6 +25,51 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Sizes"
+                Code="{Binding SizesCode}"
+                Description="The inherited Sizing.Size attached property scales the expander, indentation and text together.">
+                <StackPanel joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" Orientation="Horizontal">
+                    <TreeView
+                        Height="140"
+                        joufflu:Sizing.Size="xs"
+                        ItemsSource="{Binding Tree}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:TreeNode}" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <TreeView
+                        Height="140"
+                        joufflu:Sizing.Size="sm"
+                        ItemsSource="{Binding Tree}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:TreeNode}" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <TreeView Height="140" ItemsSource="{Binding Tree}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:TreeNode}" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <TreeView
+                        Height="140"
+                        joufflu:Sizing.Size="lg"
+                        ItemsSource="{Binding Tree}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:TreeNode}" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </StackPanel>
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
