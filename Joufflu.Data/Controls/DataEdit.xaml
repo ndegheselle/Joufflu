@@ -56,10 +56,26 @@
                     </Button>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type jodels:DataValue}">
-                    <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
+                    <Grid VerticalAlignment="Center" toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
                         <jata:DataIcon Type="{Binding Type}" />
-                        <TextBlock Text="{Binding Key}" />
-                    </StackPanel>
+                        <TextBlock
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Text="{Binding Key}" />
+                        <TextBox Grid.Column="2" toolkit:Sizing.Size="sm" />
+                        <Button
+                            Grid.Column="3"
+                            toolkit:Sizing.IsSquare="True"
+                            toolkit:Sizing.Size="sm">
+                            Ta
+                        </Button>
+                    </Grid>
                 </DataTemplate>
             </TreeView.Resources>
         </TreeView>

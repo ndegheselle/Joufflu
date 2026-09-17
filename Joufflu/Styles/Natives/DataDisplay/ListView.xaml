@@ -180,22 +180,29 @@
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
 
+            <!--
+                Selection is a tint, not a fill: the foreground stays put so that anything hosted in
+                a cell (buttons, icons, inputs) keeps its own colours. A style setter on a child
+                always beats the Foreground inherited from this row, so a contrasting selected
+                foreground could never reach them anyway.
+            -->
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftBrush}}" />
             </Trigger>
+
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftStrongBrush}}" />
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
 
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
             </Trigger>
-
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsEnabled" Value="False" />
-                    <Condition Property="IsSelected" Value="True" />
-                </MultiTrigger.Conditions>
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
-            </MultiTrigger>
 
             <!--  Size variants (md is the default, no trigger needed)  -->
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
