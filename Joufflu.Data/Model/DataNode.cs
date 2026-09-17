@@ -83,11 +83,49 @@ public partial class DataObject : DataNode
     }
 }
 
-public class DataValue : DataNode
+/// <summary>One choice of a closed list: the value that is filled in, under the name it is read by.</summary>
+public record DataEnumOption(string Name, object? Value);
+
+public partial class DataValue : DataNode
 {
-    public object? Value { get; set; }
+    /// <summary>What has been filled in, in the CLR type the schema's editor works in.</summary>
+    [ObservableProperty]
+    private object? _value;
+
+    /// <summary>
+    /// The choices a closed list offers, empty when the schema is not an enumeration. The names
+    /// come from the schema's <c>x-enumNames</c> when it carries them, and fall back to the value
+    /// itself so a list without names still reads.
+    /// </summary>
+    public IReadOnlyList<DataEnumOption> Options { get; }
+
     public DataValue(string? name, JsonSchema schema) : base(name, schema)
     {
+        Options = OptionsOf(schema);
+
+        // The numeric editors hold a non-nullable value, so a number starts at zero rather than
+        // showing a zero this node does not hold. A closed list is left unpicked instead: zero is
+        // not necessarily one of its values.
+        if (schema.IsEnumeration)
+            return;
+        if (schema.Type.HasFlag(JsonObjectType.Integer))
+            Value = 0;
+        else if (schema.Type.HasFlag(JsonObjectType.Number))
+            Value = 0m;
+    }
+
+    /// <summary>
+    /// The choices [schema] offers. <c>x-enumNames</c> is optional and pairs with the values by
+    /// position, so a name is only taken where there is one to take.
+    /// </summary>
+    private static IReadOnlyList<DataEnumOption> OptionsOf(JsonSchema schema)
+    {
+        if (!schema.IsEnumeration)
+            return [];
+
+        string[] names = [.. schema.EnumerationNames];
+        return [.. schema.Enumeration.Select((value, index) =>
+            new DataEnumOption(index < names.Length ? names[index] : $"{value}", value))];
     }
 }
 

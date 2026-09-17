@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:jata="clr-namespace:Joufflu.Data.Controls"
     xmlns:jodels="clr-namespace:Joufflu.Data.Model"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
@@ -17,6 +18,57 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!--
+                One editor per shape a DataValue can take. They are picked by
+                DataValueEditorSelector below, and they all edit the same DataValue.Value; the
+                size comes from the hosting ContentControl, since Sizing.Size is inherited.
+            -->
+            <DataTemplate x:Key="StringEditor">
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="IntegerEditor">
+                <inputs:NumericUpDown Value="{Binding Value}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="NumberEditor">
+                <inputs:DecimalUpDown Value="{Binding Value}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="BooleanEditor">
+                <CheckBox
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    IsChecked="{Binding Value}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="EnumerationEditor">
+                <ComboBox
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding Options}"
+                    SelectedValue="{Binding Value}"
+                    SelectedValuePath="Value" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="DateEditor">
+                <DatePicker SelectedDate="{Binding Value}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="TimeEditor">
+                <inputs:TimeSpanPicker Value="{Binding Value}" />
+            </DataTemplate>
+
+            <jata:DataValueTemplateSelector
+                x:Key="DataValueEditorSelector"
+                BooleanTemplate="{StaticResource BooleanEditor}"
+                DateTemplate="{StaticResource DateEditor}"
+                EnumerationTemplate="{StaticResource EnumerationEditor}"
+                FallbackTemplate="{StaticResource StringEditor}"
+                IntegerTemplate="{StaticResource IntegerEditor}"
+                NumberTemplate="{StaticResource NumberEditor}"
+                StringTemplate="{StaticResource StringEditor}"
+                TimeTemplate="{StaticResource TimeEditor}" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -59,8 +111,8 @@
                     <Grid VerticalAlignment="Center" toolkit:Spacing.Gap="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
                         <jata:DataIcon Type="{Binding Type}" />
@@ -68,7 +120,12 @@
                             Grid.Column="1"
                             VerticalAlignment="Center"
                             Text="{Binding Key}" />
-                        <TextBox Grid.Column="2" toolkit:Sizing.Size="sm" />
+                        <ContentControl
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            toolkit:Sizing.Size="sm"
+                            Content="{Binding}"
+                            ContentTemplateSelector="{StaticResource DataValueEditorSelector}" />
                         <Button
                             Grid.Column="3"
                             toolkit:Sizing.IsSquare="True"
