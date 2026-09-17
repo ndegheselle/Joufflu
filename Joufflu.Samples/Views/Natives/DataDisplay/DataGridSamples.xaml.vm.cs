@@ -1,5 +1,5 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Joufflu.Samples.Views.Natives.DataDisplay;
 
@@ -29,5 +29,15 @@ public class DataGridSamplesViewModel : ObservableObject
         "        <DataGridTextColumn Header=\"Name\" Binding=\"{Binding Name}\" />\n" +
         "        <DataGridTextColumn Header=\"Role\" Binding=\"{Binding Role}\" />\n" +
         "    </DataGrid.Columns>\n" +
+        "</DataGrid>";
+
+    public string RowDetailsCode =>
+        "<DataGrid ItemsSource=\"{Binding People}\" AutoGenerateColumns=\"False\"\n" +
+        "          RowDetailsVisibilityMode=\"VisibleWhenSelected\">\n" +
+        "    <DataGrid.RowDetailsTemplate>\n" +
+        "        <DataTemplate>\n" +
+        "            <TextBlock Text=\"{Binding Role}\" />\n" +
+        "        </DataTemplate>\n" +
+        "    </DataGrid.RowDetailsTemplate>\n" +
         "</DataGrid>";
 }
