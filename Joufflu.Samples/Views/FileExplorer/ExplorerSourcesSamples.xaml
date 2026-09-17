@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base;assembly=Joufflu.FileExplorer"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
-    xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
@@ -49,7 +48,18 @@
                 Description="A source hands over the nodes it wants : VirtualFilesSource adds a notes.md of its own in every directory, associated to a path no file of the disk stands behind. A node type of the application is templated like the others : its visual and its context menu are keyed on its type, and an extra column shows the state it carries, toggled from that menu (right click a notes.md).">
                 <fileExplorer:Explorer Height="400" Source="{Binding VirtualSource}">
                     <fileExplorer:Explorer.Resources>
-                        <conv:TypeConverter x:Key="NodeTypeConverter" />
+                        <!--  Cells of the extra column : the box only exists on the rows carrying the state.  -->
+                        <DataTemplate x:Key="PinnedCell">
+                            <CheckBox
+                                Focusable="False"
+                                IsChecked="{Binding IsPinned, Mode=OneWay}"
+                                IsHitTestVisible="False" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="EmptyCell" />
+                        <local:PinnedCellTemplateSelector
+                            x:Key="PinnedCellSelector"
+                            EmptyTemplate="{StaticResource EmptyCell}"
+                            PinnedTemplate="{StaticResource PinnedCell}" />
 
                         <!--  Visual of the virtual nodes, implicit as the ones of the node types of the library are.  -->
                         <DataTemplate DataType="{x:Type local:VirtualFile}">
@@ -95,28 +105,8 @@
                         </DataTemplate>
                     </fileExplorer:Explorer.Resources>
                     <fileExplorer:Explorer.ExtraColumns>
-                        <GridViewColumn Header="Pinned">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <!--  The column is shared by every row, so the box only shows on the nodes carrying the state.  -->
-                                    <CheckBox
-                                        Focusable="False"
-                                        IsChecked="{Binding IsPinned, Mode=OneWay}"
-                                        IsHitTestVisible="False">
-                                        <CheckBox.Style>
-                                            <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="{x:Type CheckBox}">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Converter={StaticResource NodeTypeConverter}}" Value="{x:Type local:VirtualFile}">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </CheckBox.Style>
-                                    </CheckBox>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        <!--  The column is shared by every row : its template is chosen by node type, so IsPinned is only bound where it exists.  -->
+                        <GridViewColumn CellTemplateSelector="{StaticResource PinnedCellSelector}" Header="Pinned" />
                     </fileExplorer:Explorer.ExtraColumns>
                 </fileExplorer:Explorer>
             </c:CodeExample>
