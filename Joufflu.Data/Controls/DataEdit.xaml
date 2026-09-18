@@ -59,6 +59,50 @@
                 <inputs:TimeSpanPicker Value="{Binding Value}" />
             </DataTemplate>
 
+            <!--
+                Manual mode: the value is picked from a closed list instead of being filled in, so
+                a field can be forced to nothing or to one of the host's entries (a reference, say)
+                whatever its own type calls for.
+            -->
+            <jata:DataManualValuesConverter x:Key="ManualValuesConverter" />
+
+            <DataTemplate x:Key="ManualEditor">
+                <!--
+                    The entries are searched by typing, since a host's catalog of references is
+                    not something to scroll through. DisplayMemberPath is left unset on purpose:
+                    it and ItemTemplate cannot both be set, and the search falls back to the
+                    entry's ToString, which is its display name.
+                -->
+                <inputs:ComboBoxSearch SelectedItem="{Binding ManualEntry}">
+                    <inputs:ComboBoxSearch.ItemsSource>
+                        <MultiBinding Converter="{StaticResource ManualValuesConverter}">
+                            <Binding />
+                            <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
+                        </MultiBinding>
+                    </inputs:ComboBoxSearch.ItemsSource>
+                    <inputs:ComboBoxSearch.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
+                                <jata:DataIcon Type="{Binding Type}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </inputs:ComboBoxSearch.ItemTemplate>
+                </inputs:ComboBoxSearch>
+            </DataTemplate>
+
+            <!--
+                ContentTemplate wins over ContentTemplateSelector, so setting it on IsManual swaps
+                the schema's editor out for the manual list and clearing it brings the editor back.
+            -->
+            <Style x:Key="DataValueEditorHost" TargetType="ContentControl">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsManual}" Value="True">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ManualEditor}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <jata:DataValueTemplateSelector
                 x:Key="DataValueEditorSelector"
                 BooleanTemplate="{StaticResource BooleanEditor}"
@@ -125,13 +169,17 @@
                             VerticalAlignment="Center"
                             toolkit:Sizing.Size="sm"
                             Content="{Binding}"
-                            ContentTemplateSelector="{StaticResource DataValueEditorSelector}" />
-                        <Button
+                            ContentTemplateSelector="{StaticResource DataValueEditorSelector}"
+                            Style="{StaticResource DataValueEditorHost}" />
+                        <ToggleButton
                             Grid.Column="3"
                             toolkit:Sizing.IsSquare="True"
-                            toolkit:Sizing.Size="sm">
-                            Ta
-                        </Button>
+                            toolkit:Sizing.Size="sm"
+                            toolkit:Tooltip.Content="Force the value"
+                            IsChecked="{Binding IsManual}"
+                            Style="{StaticResource ToggleGhost}">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Variable}" />
+                        </ToggleButton>
                     </Grid>
                 </DataTemplate>
             </TreeView.Resources>

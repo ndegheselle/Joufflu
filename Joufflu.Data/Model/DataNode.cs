@@ -93,6 +93,26 @@ public partial class DataValue : DataNode
     private object? _value;
 
     /// <summary>
+    /// Whether the value is forced from the manual list rather than filled in through the editor
+    /// the schema calls for.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isManual;
+
+    /// <summary>
+    /// The entry picked while in manual mode. Picking one forces <see cref="Value"/>, which stays
+    /// the single thing a host reads: leaving manual mode keeps whatever was forced.
+    /// </summary>
+    [ObservableProperty]
+    private DataManualValue? _manualEntry;
+
+    partial void OnManualEntryChanged(DataManualValue? value)
+    {
+        if (value is not null)
+            Value = value.Value;
+    }
+
+    /// <summary>
     /// The choices a closed list offers, empty when the schema is not an enumeration. The names
     /// come from the schema's <c>x-enumNames</c> when it carries them, and fall back to the value
     /// itself so a list without names still reads.

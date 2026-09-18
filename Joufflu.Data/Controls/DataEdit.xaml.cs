@@ -2,8 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Data.Model;
 using NJsonSchema;
+using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
+// System.Windows carries a DataObject of its own; the tree's node is the one meant here.
+using DataObject = Joufflu.Data.Model.DataObject;
 
 namespace Joufflu.Data.Controls;
 
@@ -41,6 +43,22 @@ public partial class DataEdit : UserControl
 {
     [ObservableProperty]
     private DataObject? _node;
+
+    public static readonly DependencyProperty ManualValuesProperty = DependencyProperty.Register(
+        nameof(ManualValues),
+        typeof(IEnumerable<DataManualValue>),
+        typeof(DataEdit),
+        new PropertyMetadata(null));
+
+    /// <summary>
+    /// What a field can be forced to on top of null and undefined, which are always offered. Each
+    /// entry says which type it stands for, so a field is only offered the ones that fit it.
+    /// </summary>
+    public IEnumerable<DataManualValue>? ManualValues
+    {
+        get => (IEnumerable<DataManualValue>?)GetValue(ManualValuesProperty);
+        set => SetValue(ManualValuesProperty, value);
+    }
 
     public DataEdit()
     {
