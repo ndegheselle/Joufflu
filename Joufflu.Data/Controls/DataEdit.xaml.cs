@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Data.Model;
+using Newtonsoft.Json.Linq;
 using NJsonSchema;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,6 +46,9 @@ public partial class DataEdit : UserControl
     [ObservableProperty]
     private DataObject? _node;
 
+    [ObservableProperty]
+    private string? _json;
+
     public static readonly DependencyProperty ManualValuesProperty = DependencyProperty.Register(
         nameof(ManualValues),
         typeof(IEnumerable<DataManualValue>),
@@ -68,10 +72,19 @@ public partial class DataEdit : UserControl
         InitializeComponent();
     }
 
+    /// <summary>The JSON filled in so far, null while there is nothing being filled in.</summary>
+    public JToken? ToToken() => Node?.ToToken();
+
     [RelayCommand]
-    public void Test()
+    public void Generate()
     {
         var schema = JsonSchema.FromType<Order>();
         Node = (DataObject)DataFactory.ToDataNode(schema);
+    }
+
+    [RelayCommand]
+    public void GenerateJson()
+    {
+        Json = Node?.ToToken()?.ToString();
     }
 }

@@ -131,11 +131,16 @@
                 TimeTemplate="{StaticResource TimeEditor}" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid toolkit:Spacing.Gap="4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
+
         <TreeView ItemsSource="{Binding Node.Properties}">
             <TreeView.ItemContainerStyle>
                 <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
@@ -222,6 +227,18 @@
                 </DataTemplate>
             </TreeView.Resources>
         </TreeView>
-        <Button Grid.Row="1" Command="{Binding TestCommand}">Test</Button>
+        <TextBox
+            Grid.Column="1"
+            Height="auto"
+            AcceptsReturn="True"
+            Text="{Binding Json}" />
+
+        <Button Grid.Row="1" Command="{Binding GenerateCommand}">Generate</Button>
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Command="{Binding GenerateJsonCommand}">
+            Generate json
+        </Button>
     </Grid>
 </UserControl>

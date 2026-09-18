@@ -1,11 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Data;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json.Linq;
 using NJsonSchema;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Windows.Data;
+using System.Xml.Linq;
 namespace Joufflu.Data.Model;
 
-public partial class DataNode : ObservableObject
+public abstract partial class DataNode : ObservableObject
 {
     public JsonSchema Schema { get; set; }
 
@@ -30,8 +33,9 @@ public partial class DataNode : ObservableObject
         Key = key;
         Schema = schema;
     }
-}
 
+    public abstract JToken? ToToken();
+}
 
 public partial class DataArrayControl
 {
@@ -81,6 +85,18 @@ public partial class DataArray : DataNode
             n.Key = $"[{i}]";
         }
     }
+
+    public override JToken? ToToken()
+    {
+        var json = new JArray();
+        foreach (DataNode element in Values)
+        {
+            if (element.ToToken() is JToken value)
+                json.Add(value);
+        }
+
+        return json;
+    }
 }
 
 public partial class DataObject : DataNode
@@ -93,6 +109,20 @@ public partial class DataObject : DataNode
     public DataObject(string? name, JsonSchema schema) : base(name, schema)
     {
     }
+
+    public override JToken? ToToken()
+    {
+        var json = new JObject();
+        foreach (DataNode property in Properties)
+        {
+            if (property.Key is null)
+                continue;
+            if (property.ToToken() is JToken value)
+                json[property.Key] = value;
+        }
+
+        return json;
+    }
 }
 
 /// <summary>One choice of a closed list: the value that is filled in, under the name it is read by.</summary>
@@ -104,10 +134,7 @@ public partial class DataValue : DataNode
     [ObservableProperty]
     private object? _value;
 
-    /// <summary>
-    /// Whether the value is forced from the manual list rather than filled in through the editor
-    /// the schema calls for.
-    /// </summary>
+    /// <summary> Whether the value is forced from the manual list. </summary>
     [ObservableProperty]
     private bool _isManual;
 
@@ -124,26 +151,57 @@ public partial class DataValue : DataNode
             Value = value.Value;
     }
 
-    /// <summary>
-    /// The choices a closed list offers, empty when the schema is not an enumeration. The names
-    /// come from the schema's <c>x-enumNames</c> when it carries them, and fall back to the value
-    /// itself so a list without names still reads.
-    /// </summary>
+    /// <summary> The choices a closed list offers for the enumarations. </summary>
     public IReadOnlyList<DataEnumOption> Options { get; }
 
     public DataValue(string? name, JsonSchema schema) : base(name, schema)
     {
         Options = OptionsOf(schema);
+        Value = DefaultOf(schema);
+    }
 
-        // The numeric editors hold a non-nullable value, so a number starts at zero rather than
-        // showing a zero this node does not hold. A closed list is left unpicked instead: zero is
-        // not necessarily one of its values.
+    public override JToken? ToToken()
+    {
+        if (IsManual)
+        {
+            // Nothing picked writes nothing, undefined included: manual mode writes what it is
+            // pointed at and no more.
+            if (ManualEntry is null or DataUndefined)
+                return null;
+            return TokenOf(ManualEntry.Value);
+        }
+
+        if (Value is null)
+            return JValue.CreateNull();
+
+        // A closed list is written in whatever type its own values are expressed in.
+        if (Schema.IsEnumeration)
+            return TokenOf(Value);
+
+        // Read the same way the editors are picked, so what is written back is of the type the
+        // editor the value was filled in through works in.
+        JsonObjectType type = Schema.Type;
+        if (type.HasFlag(JsonObjectType.Boolean))
+            return new JValue(Convert.ToBoolean(Value, CultureInfo.InvariantCulture));
+        if (type.HasFlag(JsonObjectType.Integer))
+            return new JValue(Convert.ToInt64(Value, CultureInfo.InvariantCulture));
+        if (type.HasFlag(JsonObjectType.Number))
+            return new JValue(Convert.ToDecimal(Value, CultureInfo.InvariantCulture));
+        if (type.HasFlag(JsonObjectType.String))
+            return new JValue(StringOf(Value, Schema.Format));
+
+        return TokenOf(Value);
+    }
+
+    private static object? DefaultOf(JsonSchema schema)
+    {
         if (schema.IsEnumeration)
-            return;
+            return null;
         if (schema.Type.HasFlag(JsonObjectType.Integer))
-            Value = 0;
+            return 0;
         else if (schema.Type.HasFlag(JsonObjectType.Number))
-            Value = 0m;
+            return 0m;
+        return null;
     }
 
     /// <summary>
@@ -159,7 +217,29 @@ public partial class DataValue : DataNode
         return [.. schema.Enumeration.Select((value, index) =>
             new DataEnumOption(index < names.Length ? names[index] : $"{value}", value))];
     }
+
+
+    /// <summary> [value] as the JSON its own type amounts to, whatever the schema says it should have been. </summary>
+    private static JToken TokenOf(object? value) => value switch
+    {
+        null => JValue.CreateNull(),
+        JToken token => token,
+        _ => JToken.FromObject(value)
+    };
+
+    /// <summary> [value] as the text [format] is read as. </summary>
+    private static string StringOf(object value, string? format) => (value, format) switch
+    {
+        (DateTime date, JsonFormatStrings.Date) => date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+        (DateTime date, _) => date.ToString("O", CultureInfo.InvariantCulture),
+        (DateTimeOffset date, _) => date.ToString("O", CultureInfo.InvariantCulture),
+        (TimeSpan time, JsonFormatStrings.Time) => time.ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture),
+        (TimeSpan time, _) => time.ToString("c", CultureInfo.InvariantCulture),
+        _ => Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty
+    };
 }
+
+
 
 public static class DataFactory
 {
