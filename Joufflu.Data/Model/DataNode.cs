@@ -193,15 +193,35 @@ public partial class DataValue : DataNode
         return TokenOf(Value);
     }
 
+    /// <summary>
+    /// Default value based on the [schema]
+    /// </summary>
     private static object? DefaultOf(JsonSchema schema)
     {
-        if (schema.IsEnumeration)
+        if (schema.IsNullable(SchemaType.JsonSchema))
             return null;
-        if (schema.Type.HasFlag(JsonObjectType.Integer))
+
+        // A closed list has no value of its own to fall back on, so it starts on its first choice
+        if (schema.IsEnumeration)
+            return schema.Enumeration.FirstOrDefault();
+
+        JsonObjectType type = schema.Type;
+        if (type.HasFlag(JsonObjectType.Boolean))
+            return false;
+        if (type.HasFlag(JsonObjectType.Integer))
             return 0;
-        else if (schema.Type.HasFlag(JsonObjectType.Number))
+        if (type.HasFlag(JsonObjectType.Number))
             return 0m;
-        return null;
+        if (type.HasFlag(JsonObjectType.String))
+            return schema.Format switch
+            {
+                JsonFormatStrings.DateTime or JsonFormatStrings.Date => DateTime.Today,
+                JsonFormatStrings.Time or JsonFormatStrings.TimeSpan or JsonFormatStrings.Duration => TimeSpan.Zero,
+                _ => string.Empty
+            };
+
+        // A schema saying nothing of a type is filled in as text, which is what its editor is.
+        return string.Empty;
     }
 
     /// <summary>
