@@ -2,6 +2,7 @@
     x:Class="Joufflu.Data.Controls.DataEdit"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
@@ -19,11 +20,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!--
-                One editor per shape a DataValue can take. They are picked by
-                DataValueEditorSelector below, and they all edit the same DataValue.Value; the
-                size comes from the hosting ContentControl, since Sizing.Size is inherited.
-            -->
+            <!--#region inputs-->
             <DataTemplate x:Key="StringEditor">
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
             </DataTemplate>
@@ -58,21 +55,12 @@
             <DataTemplate x:Key="TimeEditor">
                 <inputs:TimeSpanPicker Value="{Binding Value}" />
             </DataTemplate>
+            <!--#endregion-->
 
-            <!--
-                Manual mode: the value is picked from a closed list instead of being filled in, so
-                a field can be forced to nothing or to one of the host's entries (a reference, say)
-                whatever its own type calls for.
-            -->
             <jata:DataManualValuesConverter x:Key="ManualValuesConverter" />
+            <jata:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
 
             <DataTemplate x:Key="ManualEditor">
-                <!--
-                    The entries are searched by typing, since a host's catalog of references is
-                    not something to scroll through. DisplayMemberPath is left unset on purpose:
-                    it and ItemTemplate cannot both be set, and the search falls back to the
-                    entry's ToString, which is its display name.
-                -->
                 <inputs:ComboBoxSearch SelectedItem="{Binding ManualEntry}">
                     <inputs:ComboBoxSearch.ItemsSource>
                         <MultiBinding Converter="{StaticResource ManualValuesConverter}">
@@ -90,6 +78,34 @@
                     </inputs:ComboBoxSearch.ItemTemplate>
                 </inputs:ComboBoxSearch>
             </DataTemplate>
+
+            <!--  Header of a node  -->
+            <DataTemplate x:Key="DataNodeHeader">
+                <Grid toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+                    <jata:DataIcon Type="{Binding Type}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontFamily="Consolas"
+                        Text="{Binding Key}" />
+                </Grid>
+            </DataTemplate>
+
+            <Style
+                x:Key="DataRemoveButton"
+                BasedOn="{StaticResource SoftDangerButton}"
+                TargetType="Button">
+                <Setter Property="toolkit:Sizing.IsSquare" Value="True" />
+                <Setter Property="toolkit:Sizing.Size" Value="sm" />
+                <Setter Property="toolkit:Tooltip.Content" Value="Remove the element" />
+                <Setter Property="Command" Value="{Binding ParentArray.RemoveCommand}" />
+                <Setter Property="CommandParameter" Value="{Binding}" />
+                <Setter Property="Visibility" Value="{Binding ParentArray, Converter={x:Static converters:VisibilityConverter.Default}}" />
+            </Style>
 
             <!--
                 ContentTemplate wins over ContentTemplateSelector, so setting it on IsManual swaps
@@ -128,20 +144,34 @@
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}" ItemsSource="{Binding Items}">
-                    <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
-                        <jata:DataIcon Type="{Binding Type}" />
-                        <TextBlock Text="{Binding Key}" />
-                    </StackPanel>
+                    <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                        <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+                        </Button>
+                    </Grid>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}" ItemsSource="{Binding Properties}">
-                    <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
-                        <jata:DataIcon Type="{Binding Type}" />
-                        <TextBlock Text="{Binding Key}" />
-                    </StackPanel>
+                    <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                        <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+                        </Button>
+                    </Grid>
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type jodels:DataArrayControl}">
                     <Button
-                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Left"
                         toolkit:Sizing.Size="xs"
                         Command="{Binding AddCommand}"
                         Style="{StaticResource GhostButton}">
@@ -152,33 +182,41 @@
                     </Button>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type jodels:DataValue}">
-                    <Grid VerticalAlignment="Center" toolkit:Spacing.Gap="4">
+                    <Grid
+                        Margin="0,0,4,0"
+                        VerticalAlignment="Center"
+                        toolkit:Spacing.Gap="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
-                        <jata:DataIcon Type="{Binding Type}" />
-                        <TextBlock
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            Text="{Binding Key}" />
+                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                         <ContentControl
-                            Grid.Column="2"
+                            Grid.Column="1"
                             VerticalAlignment="Center"
                             toolkit:Sizing.Size="sm"
                             Content="{Binding}"
                             ContentTemplateSelector="{StaticResource DataValueEditorSelector}"
                             Style="{StaticResource DataValueEditorHost}" />
+                        <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+                        </Button>
+                        <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->
                         <ToggleButton
                             Grid.Column="3"
                             toolkit:Sizing.IsSquare="True"
                             toolkit:Sizing.Size="sm"
                             toolkit:Tooltip.Content="Force the value"
-                            IsChecked="{Binding IsManual}"
-                            Style="{StaticResource ToggleGhost}">
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Variable}" />
+                            IsChecked="{Binding IsManual}">
+                            <ToggleButton.IsEnabled>
+                                <MultiBinding Converter="{StaticResource HasManualValuesConverter}">
+                                    <Binding />
+                                    <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
+                                </MultiBinding>
+                            </ToggleButton.IsEnabled>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Asterisk}" />
                         </ToggleButton>
                     </Grid>
                 </DataTemplate>

@@ -14,6 +14,17 @@ public partial class DataNode : ObservableObject
 
     public JsonObjectType Type => Schema.Type;
 
+    /// <summary>
+    /// Whether the node has to be there: a property its object requires, or an element of an array.
+    /// Such a node cannot be left out, so it cannot be forced to undefined.
+    /// </summary>
+    public bool IsRequired { get; init; }
+
+    /// <summary>Whether the schema takes null on top of the type it calls for.</summary>
+    public bool IsNullable => Schema.IsNullable(SchemaType.JsonSchema);
+
+    public DataArray? ParentArray { get; set; }
+
     public DataNode(string? key, JsonSchema schema)
     {
         Key = key;
@@ -55,7 +66,8 @@ public partial class DataArray : DataNode
     [RelayCommand]
     public void Add()
     {
-        var node = Template.ToDataNode($"[{Values.Count}]");
+        var node = Template.ToDataNode($"[{Values.Count}]", isRequired: true);
+        node.ParentArray = this;
         Values.Add(node);
     }
 
@@ -153,7 +165,12 @@ public static class DataFactory
 {
     extension(JsonSchema schema)
     {
-        public DataNode ToDataNode(string? name = null)
+        /// <summary>
+        /// The node [schema] describes. Whether it is required is the parent's to say — a schema
+        /// lists the properties it requires, so a property cannot read it off itself — hence
+        /// [isRequired], passed down as the tree is built.
+        /// </summary>
+        public DataNode ToDataNode(string? name = null, bool isRequired = false)
         {
             schema = schema.ActualSchema;
 
@@ -161,17 +178,20 @@ public static class DataFactory
             {
                 var node = new DataObject(name, schema)
                 {
-                    Properties = schema.ActualProperties.Select(prop => prop.Value.ToDataNode(prop.Key)).ToList()
+                    IsRequired = isRequired,
+                    Properties = schema.ActualProperties
+                        .Select(prop => prop.Value.ToDataNode(prop.Key, prop.Value.IsRequired))
+                        .ToList()
                 };
 
                 return node;
             }
             else if (schema.IsArray)
             {
-                return new DataArray(name, schema);
+                return new DataArray(name, schema) { IsRequired = isRequired };
             }
 
-            return new DataValue(name, schema);
+            return new DataValue(name, schema) { IsRequired = isRequired };
         }
     }
 }

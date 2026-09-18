@@ -28,10 +28,11 @@ public class OrderLine
 /// <summary>The shape the data sample is filled in against, derived from this very type.</summary>
 public class Order
 {
-    public string Customer { get; set; } = "";
+    /// <summary>Required, so the sample shows a field that cannot be forced to undefined.</summary>
+    public required string Customer { get; set; }
     public DateTime PlacedOn { get; set; }
     public EnumDelivery Delivery { get; set; }
-    public bool IsPaid { get; set; }
+    public bool? IsPaid { get; set; }
     public List<OrderLine> Lines { get; set; } = [];
 }
 
@@ -51,8 +52,9 @@ public partial class DataEdit : UserControl
         new PropertyMetadata(null));
 
     /// <summary>
-    /// What a field can be forced to on top of null and undefined, which are always offered. Each
-    /// entry says which type it stands for, so a field is only offered the ones that fit it.
+    /// What a field can be forced to on top of null and undefined, which are offered where the
+    /// schema allows them. Each entry says which type it stands for, so a field is only offered the
+    /// ones that fit it.
     /// </summary>
     public IEnumerable<DataManualValue>? ManualValues
     {

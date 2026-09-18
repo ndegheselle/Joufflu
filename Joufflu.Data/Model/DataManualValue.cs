@@ -1,12 +1,12 @@
-using NJsonSchema;
+﻿using NJsonSchema;
 
 namespace Joufflu.Data.Model;
 
 public record DataManualValue(JsonObjectType Type, object? Value)
 {
-    /// <summary>Offered by every field, whatever its type.</summary>
+    /// <summary>Offered by a field whose schema takes null.</summary>
     public static readonly DataManualValue Null = new(JsonObjectType.Null, null);
-    /// <summary>Offered by every field, whatever its type.</summary>
+    /// <summary>Offered by a field its object does not require.</summary>
     public static readonly DataManualValue Undefined = new DataUndefined();
 
     /// <summary>
