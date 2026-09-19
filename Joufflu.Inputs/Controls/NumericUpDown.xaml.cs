@@ -3,7 +3,7 @@ using Joufflu.Inputs.Controls.Format;
 
 namespace Joufflu.Inputs.Controls
 {
-    public partial class NumericUpDown : SingleValueFormatTextBox<int>
+    public partial class NumericUpDown : SingleValueFormatTextBox<long?>
     {
         static NumericUpDown()
         {
@@ -11,18 +11,21 @@ namespace Joufflu.Inputs.Controls
         }
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(int), typeof(NumericUpDown), new FrameworkPropertyMetadata(default(int), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((NumericUpDown)o).OnValueChanged(e)
-        ));
+        DependencyProperty.Register(
+            nameof(Value),
+            typeof(long?),
+            typeof(NumericUpDown),
+            new FrameworkPropertyMetadata(default(long?), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((NumericUpDown)o).OnValueChanged(e)));
 
-        public override int Value
+        public override long? Value
         {
-            get { return (int)GetValue(ValueProperty); }
+            get { return (long?)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
         public NumericUpDown()
         {
-            Format = "{numeric|noGlobalSelection}";
+            Format = "{numeric|noGlobalSelection|nullable}";
         }
     }
 }

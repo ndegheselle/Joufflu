@@ -3,7 +3,7 @@ using Joufflu.Inputs.Controls.Format;
 
 namespace Joufflu.Inputs.Controls
 {
-    public partial class DecimalUpDown : SingleValueFormatTextBox<decimal>
+    public partial class DecimalUpDown : SingleValueFormatTextBox<decimal?>
     {
         static DecimalUpDown()
         {
@@ -11,18 +11,21 @@ namespace Joufflu.Inputs.Controls
         }
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(decimal), typeof(DecimalUpDown), new FrameworkPropertyMetadata(default(decimal), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((DecimalUpDown)o).OnValueChanged(e)
-        ));
+        DependencyProperty.Register(
+            nameof(Value),
+            typeof(decimal?),
+            typeof(DecimalUpDown),
+            new FrameworkPropertyMetadata(default(decimal?), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((DecimalUpDown)o).OnValueChanged(e)));
 
-        public override decimal Value
+        public override decimal? Value
         {
-            get { return (decimal)GetValue(ValueProperty); }
+            get { return (decimal?)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
         public DecimalUpDown()
         {
-            Format = "{decimal|noGlobalSelection}";
+            Format = "{decimal|noGlobalSelection|nullable}";
         }
     }
 }

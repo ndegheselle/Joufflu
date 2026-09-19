@@ -209,7 +209,7 @@ public partial class DataValue : DataNode
         if (type.HasFlag(JsonObjectType.Boolean))
             return false;
         if (type.HasFlag(JsonObjectType.Integer))
-            return 0;
+            return 0L;
         if (type.HasFlag(JsonObjectType.Number))
             return 0m;
         if (type.HasFlag(JsonObjectType.String))

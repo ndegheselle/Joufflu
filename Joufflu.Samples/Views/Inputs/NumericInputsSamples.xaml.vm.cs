@@ -1,16 +1,16 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Joufflu.Samples.Views.Inputs;
 
 public class NumericInputsSamplesViewModel : ObservableObject
 {
-    private int _numericValue = 42;
-    private decimal _decimalValue = 3.14m;
+    private long? _numericValue = 42;
+    private decimal? _decimalValue = 3.14m;
     private TimeSpan? _duration = new TimeSpan(0, 1, 30, 0);
 
-    public int NumericValue { get => _numericValue; set => SetProperty(ref _numericValue, value); }
+    public long? NumericValue { get => _numericValue; set => SetProperty(ref _numericValue, value); }
 
-    public decimal DecimalValue { get => _decimalValue; set => SetProperty(ref _decimalValue, value); }
+    public decimal? DecimalValue { get => _decimalValue; set => SetProperty(ref _decimalValue, value); }
 
     public TimeSpan? Duration { get => _duration; set => SetProperty(ref _duration, value); }
 

@@ -45,6 +45,8 @@ namespace Joufflu.Inputs.Controls.Format
         {
             if (!_isParsed)
                 ParseGroups(Format, GlobalFormat);
+            else if (_isValuesFromGroups == false)
+                UpdateGroups();
             ValuesChanged?.Invoke(this, Values);
             FormatText();
         }
@@ -166,6 +168,7 @@ namespace Joufflu.Inputs.Controls.Format
 
         public FormatTextBox()
         {
+            IsUndoEnabled = false;
             this.Loaded += OnLoaded;
         }
 
@@ -191,6 +194,10 @@ namespace Joufflu.Inputs.Controls.Format
         protected override void OnPreviewTextInput(TextCompositionEventArgs e)
         {
             base.OnPreviewTextInput(e);
+
+            // If no group is selected default to the first one
+            if (SelectedGroup == null)
+                ChangeSelectedGroup(1);
 
             // Get the new text based on the input and the current selection
 
@@ -248,26 +255,14 @@ namespace Joufflu.Inputs.Controls.Format
                 ChangeSelectedGroup(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1);
                 e.Handled = true;
             }
-            // If arrow keys change group
+            // Left and right walk the text, by group or by character depending on the group
             else if (e.Key == Key.Left)
             {
-                // Numeric group with global selection allow to go to the previous group
-                IBaseNumericGroup? numericGroup = SelectedGroup as IBaseNumericGroup;
-                if (numericGroup?.NoGlobalSelection == true)
-                {
-                    ChangeSelectedGroup(-1);
-                    e.Handled = true;
-                }
+                e.Handled = MoveCaret(-1);
             }
             else if (e.Key == Key.Right)
             {
-                // Numeric group with global selection allow to go to the next group
-                IBaseNumericGroup? numericGroup = SelectedGroup as IBaseNumericGroup;
-                if (numericGroup?.NoGlobalSelection == true)
-                {
-                    ChangeSelectedGroup(+1);
-                    e.Handled = true;
-                }
+                e.Handled = MoveCaret(+1);
             }
             // Up/Down arrows increment or decrement the selected numeric group
             else if (e.Key == Key.Up)
@@ -292,8 +287,13 @@ namespace Joufflu.Inputs.Controls.Format
             {
                 if (SelectedGroup != null)
                 {
-                    SelectedGroup.OnDelete();
+                    // A group keeping its own caret takes out the character the key points at; a
+                    // group selected whole is selected as one thing, so it is emptied as one.
+                    if (SelectedGroup.OnDeleteCharacter(e.Key == Key.Back) == false)
+                        SelectedGroup.OnDelete();
+
                     UpdateCurrentValue();
+                    SelectedGroup.OnAfterInput();
                 }
                 e.Handled = true;
             }
@@ -344,16 +344,47 @@ namespace Joufflu.Inputs.Controls.Format
         #endregion
 
         #region Methods
-        public void ChangeSelectedGroup(int delta)
+        /// <summary>
+        /// How an arrow key pointing in the direction [delta] is handled. A group using NoGlobalSelection
+        /// will allow the carret to move inside the group.
+        /// </summary>
+        /// <returns>true if the carret is handled</returns>
+        private bool MoveCaret(int delta)
+        {
+            if (SelectedGroup is not IBaseNumericGroup numericGroup)
+                return false;
+
+            if (numericGroup.NoGlobalSelection == false)
+            {
+                ChangeSelectedGroup(delta);
+                return true;
+            }
+
+            bool isAtEdge = delta < 0
+                ? CaretIndex <= SelectedGroup.Index
+                : CaretIndex >= SelectedGroup.Index + SelectedGroup.RenderedLength;
+            if (isAtEdge == false)
+                return false;
+
+            ChangeSelectedGroup(delta);
+            return true;
+        }
+
+        /// <summary>
+        /// Move [delta] groups along, and tell whether there was one to move to.
+        /// </summary>
+        /// <returns>true if the group is selected</returns>
+        public bool ChangeSelectedGroup(int delta)
         {
             int newindex = SelectedGroupIndex + delta;
             if (newindex < 0 || newindex >= Groups.Count)
-                return;
+                return false;
 
             if (IsFocused == false)
                 Focus();
 
             Select(Groups[newindex].Index, 0);
+            return true;
         }
 
         private void FormatText()
@@ -382,9 +413,14 @@ namespace Joufflu.Inputs.Controls.Format
                     builder.Append(literal);
                 }
             }
-            this.Text = builder.ToString();
 
-            Select(selectionStart, selectionLength);
+            string text = builder.ToString();
+            if (text != Text)
+            {
+                this.Text = text;
+                Select(selectionStart, selectionLength);
+            }
+
             _isSelectionChanging = false;
         }
 
@@ -396,20 +432,56 @@ namespace Joufflu.Inputs.Controls.Format
             if (Values == null)
             {
                 UpdateValues();
+                return;
             }
-            else
+
+            object? oldValue = Values[SelectedGroupIndex];
+            // Values are boxed (int/decimal), so compare by value, not reference.
+            if (!Equals(oldValue, SelectedGroup.Value))
             {
-                object? oldValue = Values[SelectedGroupIndex];
-                // Values are boxed (int/decimal), so compare by value, not reference.
-                if (!Equals(oldValue, SelectedGroup.Value))
-                    UpdateValues();
+                UpdateValues();
+                return;
             }
+
+            // The value is what it was, but may have changed (separator)
+            FormatText();
         }
+
+        /// <summary>
+        /// Prevent recursive updates
+        /// </summary>
+        private bool _isValuesFromGroups;
 
         private void UpdateValues()
         {
             // Trigger DP change
-            Values = Groups.Select(x => x.Value).ToList();
+            _isValuesFromGroups = true;
+            try
+            {
+                Values = Groups.Select(x => x.Value).ToList();
+            }
+            finally
+            {
+                _isValuesFromGroups = false;
+            }
+        }
+
+        /// <summary>
+        /// Take the groups from <see cref="Values"/>, the other way round from
+        /// <see cref="UpdateValues"/>, so that a value set from outside shows instead of leaving
+        /// the text on what was there before.
+        /// <para>
+        /// A list that does not answer the format is left alone: there is no telling which group
+        /// each of its values would belong to.
+        /// </para>
+        /// </summary>
+        private void UpdateGroups()
+        {
+            if (Values == null || Values.Count != Groups.Count)
+                return;
+
+            for (int i = 0; i < Groups.Count; i++)
+                _groups[i].SetValueFrom(Values[i]);
         }
         #endregion
 
@@ -442,14 +514,7 @@ namespace Joufflu.Inputs.Controls.Format
 
             _isParsed = true;
 
-            if (Values == null || Values.Count != Groups.Count)
-                return;
-
-            // Update group values from parts
-            for (int i = 0; i < Groups.Count; i++)
-            {
-                _groups[i].Value = Values[i];
-            }
+            UpdateGroups();
         }
 
         /// <summary>
@@ -508,12 +573,19 @@ namespace Joufflu.Inputs.Controls.Format
             return (T?)Values.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Prevent recursive updates.
+        /// </summary>
+        private bool _isValueFromGroups;
+
         protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
         {
             if (EqualityComparer<T>.Default.Equals(Value, _previousValue))
                 return;
 
-            Values = ConvertTo();
+            if (_isValueFromGroups == false)
+                Values = ConvertTo();
+
             _previousValue = Value;
             ValueChanged?.Invoke(this, Value);
         }
@@ -526,7 +598,16 @@ namespace Joufflu.Inputs.Controls.Format
 
             if (EqualityComparer<T>.Default.Equals(Value, newValue))
                 return;
-            Value = newValue;
+
+            _isValueFromGroups = true;
+            try
+            {
+                Value = newValue;
+            }
+            finally
+            {
+                _isValueFromGroups = false;
+            }
         }
     }
 }
