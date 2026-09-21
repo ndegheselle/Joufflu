@@ -12,14 +12,11 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Data"
     d:DataContext="{d:DesignInstance Type=vm:SchemaSamplesViewModel}"
     mc:Ignorable="d">
-
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Schema" />
             <TextBlock Style="{StaticResource H2}" Text="Edit" />
             <jata:DataEdit />
-            <TextBlock Style="{StaticResource H2}" Text="Display" />
-            <jata:SchemaDisplay Schema="{Binding Schema}" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -1,10 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Windows;
+using System.Windows.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Data.Model;
 using Newtonsoft.Json.Linq;
 using NJsonSchema;
-using System.Windows;
-using System.Windows.Controls;
 // System.Windows carries a DataObject of its own; the tree's node is the one meant here.
 using DataObject = Joufflu.Data.Model.DataObject;
 
@@ -31,7 +33,9 @@ public class Order
 {
     /// <summary>Required, so the sample shows a field that cannot be forced to undefined.</summary>
     public required string Customer { get; set; }
+    [Required]
     public DateTime PlacedOn { get; set; }
+    [Description("Whatever")]
     public EnumDelivery Delivery { get; set; }
     public bool? IsPaid { get; set; }
     public List<OrderLine> Lines { get; set; } = [];

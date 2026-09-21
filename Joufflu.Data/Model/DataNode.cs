@@ -1,11 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Windows.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json.Linq;
 using NJsonSchema;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Windows.Data;
-using System.Xml.Linq;
 namespace Joufflu.Data.Model;
 
 public abstract partial class DataNode : ObservableObject
@@ -16,6 +15,7 @@ public abstract partial class DataNode : ObservableObject
     private string? _key;
 
     public JsonObjectType Type => Schema.Type;
+    public string? Description => Schema.Description;
 
     /// <summary>
     /// Whether the node has to be there: a property its object requires, or an element of an array.

@@ -87,11 +87,18 @@
                         <ColumnDefinition Width="150" />
                     </Grid.ColumnDefinitions>
                     <jata:DataIcon Type="{Binding Type}" />
-                    <TextBlock
+                    <StackPanel
                         Grid.Column="1"
                         VerticalAlignment="Center"
-                        FontFamily="Consolas"
-                        Text="{Binding Key}" />
+                        Orientation="Horizontal">
+                        <TextBlock FontFamily="Consolas" Text="{Binding Key}" />
+                        <TextBlock
+                            toolkit:Tooltip.Content="Required"
+                            Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
+                            Visibility="{Binding IsRequired, Converter={x:Static converters:VisibilityConverter.Default}}">
+                            *
+                        </TextBlock>
+                    </StackPanel>
                 </Grid>
             </DataTemplate>
 
@@ -221,7 +228,7 @@
                                     <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
                                 </MultiBinding>
                             </ToggleButton.IsEnabled>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Asterisk}" />
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Feather}" />
                         </ToggleButton>
                     </Grid>
                 </DataTemplate>
