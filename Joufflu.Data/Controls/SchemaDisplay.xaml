@@ -1,0 +1,119 @@
+<UserControl
+    x:Class="Joufflu.Data.Controls.SchemaDisplay"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:jata="clr-namespace:Joufflu.Data.Controls"
+    xmlns:jodels="clr-namespace:Joufflu.Data.Model"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Data.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    x:Name="Root"
+    d:DataContext="{d:DesignInstance Type=local:SchemaDisplay}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--
+                One row for every kind of node: what it is called, what it has to be, and what the
+                schema asks of it. Only members of the base node are read, so objects, arrays and
+                values all line up on the same columns.
+            -->
+            <DataTemplate x:Key="SchemaNodeRow">
+                <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="180" />
+                        <!--  Fixed, so a row carrying no mark still lines its type up with the rest.  -->
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <jata:DataIcon Type="{Binding Type}" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontFamily="Consolas"
+                        Text="{Binding Label}"
+                        TextTrimming="CharacterEllipsis"
+                        ToolTip="{Binding Title}" />
+
+                    <!--  A field that cannot be left out, marked the way a schema marks it.  -->
+                    <fonts:FontIcon
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        toolkit:Tooltip.Content="Required"
+                        FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}"
+                        Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
+                        Text="{x:Static fonts:LucideFontIcons.Asterisk}"
+                        Visibility="{Binding IsRequired, Converter={x:Static converters:VisibilityConverter.Default}}" />
+
+                    <TextBlock
+                        Grid.Column="3"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource Muted}"
+                        Text="{Binding TypeName}" />
+
+                    <TextBlock
+                        Grid.Column="4"
+                        MaxWidth="260"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource Small}"
+                        Text="{Binding Constraints}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap"
+                        ToolTip="{Binding Constraints}"
+                        Visibility="{Binding Constraints, Converter={x:Static converters:VisibilityConverter.Default}}" />
+
+                    <StackPanel
+                        Grid.Column="5"
+                        VerticalAlignment="Center"
+                        toolkit:Spacing.Gap="4"
+                        Orientation="Horizontal">
+                        <!--  A shape holding itself: shown once, and left to the row above to have shown.  -->
+                        <fonts:FontIcon
+                            VerticalAlignment="Center"
+                            toolkit:Tooltip.Content="Already shown higher up: the shape contains itself"
+                            Text="{x:Static fonts:LucideFontIcons.Repeat}"
+                            Visibility="{Binding IsRecursive, Converter={x:Static converters:VisibilityConverter.Default}}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Style="{StaticResource Muted}"
+                            Text="{Binding Description}"
+                            TextTrimming="CharacterEllipsis"
+                            TextWrapping="NoWrap"
+                            ToolTip="{Binding Description}" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <TreeView ItemsSource="{Binding Nodes, ElementName=Root}">
+        <TreeView.ItemContainerStyle>
+            <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+        </TreeView.ItemContainerStyle>
+        <TreeView.Resources>
+            <HierarchicalDataTemplate DataType="{x:Type jodels:SchemaObject}" ItemsSource="{Binding Properties}">
+                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource SchemaNodeRow}" />
+            </HierarchicalDataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type jodels:SchemaArray}" ItemsSource="{Binding Items}">
+                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource SchemaNodeRow}" />
+            </HierarchicalDataTemplate>
+            <DataTemplate DataType="{x:Type jodels:SchemaValue}">
+                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource SchemaNodeRow}" />
+            </DataTemplate>
+        </TreeView.Resources>
+    </TreeView>
+</UserControl>

@@ -126,7 +126,22 @@ public partial class DataObject : DataNode
 }
 
 /// <summary>One choice of a closed list: the value that is filled in, under the name it is read by.</summary>
-public record DataEnumOption(string Name, object? Value);
+public record DataEnumOption(string Name, object? Value)
+{
+    /// <summary>
+    /// The choices [schema] offers. <c>x-enumNames</c> is optional and pairs with the values by
+    /// position, so a name is only taken where there is one to take.
+    /// </summary>
+    public static IReadOnlyList<DataEnumOption> OptionsOf(JsonSchema schema)
+    {
+        if (!schema.IsEnumeration)
+            return [];
+
+        string[] names = [.. schema.EnumerationNames];
+        return [.. schema.Enumeration.Select((value, index) =>
+            new DataEnumOption(index < names.Length ? names[index] : $"{value}", value))];
+    }
+}
 
 public partial class DataValue : DataNode
 {
@@ -156,7 +171,7 @@ public partial class DataValue : DataNode
 
     public DataValue(string? name, JsonSchema schema) : base(name, schema)
     {
-        Options = OptionsOf(schema);
+        Options = DataEnumOption.OptionsOf(schema);
         Value = DefaultOf(schema);
     }
 
@@ -223,21 +238,6 @@ public partial class DataValue : DataNode
         // A schema saying nothing of a type is filled in as text, which is what its editor is.
         return string.Empty;
     }
-
-    /// <summary>
-    /// The choices [schema] offers. <c>x-enumNames</c> is optional and pairs with the values by
-    /// position, so a name is only taken where there is one to take.
-    /// </summary>
-    private static IReadOnlyList<DataEnumOption> OptionsOf(JsonSchema schema)
-    {
-        if (!schema.IsEnumeration)
-            return [];
-
-        string[] names = [.. schema.EnumerationNames];
-        return [.. schema.Enumeration.Select((value, index) =>
-            new DataEnumOption(index < names.Length ? names[index] : $"{value}", value))];
-    }
-
 
     /// <summary> [value] as the JSON its own type amounts to, whatever the schema says it should have been. </summary>
     private static JToken TokenOf(object? value) => value switch
