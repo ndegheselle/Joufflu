@@ -35,6 +35,15 @@ docs is available at
 page's raw Markdown source. (Prefer this raw URL over the rendered site, which can return
 `403` to automated fetchers.)
 
+🧩 **For Claude Code:** this repository is also a plugin marketplace. The `joufflu` plugin
+adds skills for the Joufflu API, scaffolding an app shell, custom themes and restyling
+existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
+
+```
+/plugin marketplace add ndegheselle/Joufflu
+/plugin install joufflu@joufflu
+```
+
 ## What's inside
 
 | Section | Contents |
