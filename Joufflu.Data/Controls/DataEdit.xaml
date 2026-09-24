@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:jata="clr-namespace:Joufflu.Data.Controls"
+    xmlns:jnputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:jodels="clr-namespace:Joufflu.Data.Model"
+    xmlns:jonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Data.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -26,11 +26,11 @@
             </DataTemplate>
 
             <DataTemplate x:Key="IntegerEditor">
-                <inputs:NumericUpDown Value="{Binding Value}" />
+                <jnputs:NumericUpDown Value="{Binding Value}" />
             </DataTemplate>
 
             <DataTemplate x:Key="NumberEditor">
-                <inputs:DecimalUpDown Value="{Binding Value}" />
+                <jnputs:DecimalUpDown Value="{Binding Value}" />
             </DataTemplate>
 
             <DataTemplate x:Key="BooleanEditor">
@@ -53,7 +53,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="TimeEditor">
-                <inputs:TimeSpanPicker Value="{Binding Value}" />
+                <jnputs:TimeSpanPicker Value="{Binding Value}" />
             </DataTemplate>
             <!--#endregion-->
 
@@ -61,22 +61,22 @@
             <jata:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
 
             <DataTemplate x:Key="ManualEditor">
-                <inputs:ComboBoxSearch SelectedItem="{Binding ManualEntry}">
-                    <inputs:ComboBoxSearch.ItemsSource>
+                <jnputs:ComboBoxSearch SelectedItem="{Binding ManualEntry}">
+                    <jnputs:ComboBoxSearch.ItemsSource>
                         <MultiBinding Converter="{StaticResource ManualValuesConverter}">
                             <Binding />
                             <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
                         </MultiBinding>
-                    </inputs:ComboBoxSearch.ItemsSource>
-                    <inputs:ComboBoxSearch.ItemTemplate>
+                    </jnputs:ComboBoxSearch.ItemsSource>
+                    <jnputs:ComboBoxSearch.ItemTemplate>
                         <DataTemplate>
                             <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
                                 <jata:DataIcon Type="{Binding Type}" />
                                 <TextBlock VerticalAlignment="Center" Text="{Binding}" />
                             </StackPanel>
                         </DataTemplate>
-                    </inputs:ComboBoxSearch.ItemTemplate>
-                </inputs:ComboBoxSearch>
+                    </jnputs:ComboBoxSearch.ItemTemplate>
+                </jnputs:ComboBoxSearch>
             </DataTemplate>
 
             <!--  Header of a node  -->
@@ -84,7 +84,8 @@
                 <Grid toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="22" />
                     </Grid.ColumnDefinitions>
                     <jata:DataIcon Type="{Binding Type}" />
                     <StackPanel
@@ -99,6 +100,14 @@
                             *
                         </TextBlock>
                     </StackPanel>
+
+                    <jonts:FontIcon
+                        HorizontalAlignment="Right"
+                        Grid.Column="2"
+                        Visibility="{Binding Description, Converter={x:Static converters:VisibilityConverter.Default}}"
+                        toolkit:Tooltip.Content="{Binding Description}"
+                        Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
+                        Text="{x:Static jonts:LucideFontIcons.Info}" />
                 </Grid>
             </DataTemplate>
 
@@ -108,7 +117,6 @@
                 TargetType="Button">
                 <Setter Property="toolkit:Sizing.IsSquare" Value="True" />
                 <Setter Property="toolkit:Sizing.Size" Value="sm" />
-                <Setter Property="toolkit:Tooltip.Content" Value="Remove the element" />
                 <Setter Property="Command" Value="{Binding ParentArray.RemoveCommand}" />
                 <Setter Property="CommandParameter" Value="{Binding}" />
                 <Setter Property="Visibility" Value="{Binding ParentArray, Converter={x:Static converters:VisibilityConverter.Default}}" />
@@ -164,7 +172,7 @@
                         </Grid.ColumnDefinitions>
                         <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                         <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                         </Button>
                     </Grid>
                 </HierarchicalDataTemplate>
@@ -177,7 +185,7 @@
                         </Grid.ColumnDefinitions>
                         <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                         <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                         </Button>
                     </Grid>
                 </HierarchicalDataTemplate>
@@ -188,7 +196,7 @@
                         Command="{Binding AddCommand}"
                         Style="{StaticResource GhostButton}">
                         <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
                             <TextBlock VerticalAlignment="Center">Add</TextBlock>
                         </StackPanel>
                     </Button>
@@ -213,7 +221,7 @@
                             ContentTemplateSelector="{StaticResource DataValueEditorSelector}"
                             Style="{StaticResource DataValueEditorHost}" />
                         <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                         </Button>
                         <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->
                         <ToggleButton
@@ -228,7 +236,7 @@
                                     <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
                                 </MultiBinding>
                             </ToggleButton.IsEnabled>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Feather}" />
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
                         </ToggleButton>
                     </Grid>
                 </DataTemplate>
