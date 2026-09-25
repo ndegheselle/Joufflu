@@ -44,34 +44,21 @@ public class DataValueTemplateSelector : DataTemplateSelector
         if (item is not DataValue value)
             return base.SelectTemplate(item, container);
 
-        return TemplateFor(value.Schema) ?? FallbackTemplate;
+        return TemplateFor(value.Type) ?? FallbackTemplate;
     }
 
     /// <summary>
-    /// The editor [schema] is read by. <see cref="JsonObjectType"/> is a flag enum, so a type
-    /// holding several flags is read by the first one that carries an editor.
+    /// The input corresponding to the [type].
     /// </summary>
-    private DataTemplate? TemplateFor(JsonSchema schema)
+    private DataTemplate? TemplateFor(EnumDataType type) => type switch
     {
-        // A closed list wins over the type it is written in: picking from the list is the point.
-        if (schema.IsEnumeration)
-            return EnumerationTemplate;
+        EnumDataType.Choice => EnumerationTemplate,
+        EnumDataType.Boolean => EnumerationTemplate,
+        EnumDataType.Integer => EnumerationTemplate,
+        EnumDataType.Number => EnumerationTemplate,
+        EnumDataType.DateTime => DateTemplate,
+        EnumDataType.TimeSpan => TimeTemplate,
+        _ => null
 
-        JsonObjectType type = schema.Type;
-        if (type.HasFlag(JsonObjectType.Boolean))
-            return BooleanTemplate;
-        if (type.HasFlag(JsonObjectType.Integer))
-            return IntegerTemplate;
-        if (type.HasFlag(JsonObjectType.Number))
-            return NumberTemplate;
-        if (type.HasFlag(JsonObjectType.String))
-            return schema.Format switch
-            {
-                JsonFormatStrings.DateTime or JsonFormatStrings.Date => DateTemplate,
-                JsonFormatStrings.Time or JsonFormatStrings.TimeSpan or JsonFormatStrings.Duration => TimeTemplate,
-                _ => StringTemplate
-            };
-
-        return null;
-    }
+    };
 }

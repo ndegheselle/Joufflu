@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Joufflu.Data.Controls.DataEdit"
+    x:Class="Joufflu.Data.Controls.DataFill"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
@@ -12,7 +12,7 @@
     xmlns:local="clr-namespace:Joufflu.Data.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
-    d:DataContext="{d:DesignInstance Type=local:DataEdit}"
+    d:DataContext="{d:DesignInstance Type=local:DataFill}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -65,7 +65,7 @@
                     <jnputs:ComboBoxSearch.ItemsSource>
                         <MultiBinding Converter="{StaticResource ManualValuesConverter}">
                             <Binding />
-                            <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
+                            <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataFill}}" />
                         </MultiBinding>
                     </jnputs:ComboBoxSearch.ItemsSource>
                     <jnputs:ComboBoxSearch.ItemTemplate>

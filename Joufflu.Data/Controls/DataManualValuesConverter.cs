@@ -32,7 +32,7 @@ public class DataManualValuesConverter : IMultiValueConverter
             entries.Add(DataManualValue.Null);
 
         if (values.ElementAtOrDefault(1) is IEnumerable<DataManualValue> catalog)
-            entries.AddRange(catalog.Where(entry => entry.Fits(node.Schema.Type)));
+            entries.AddRange(catalog.Where(entry => entry.Fits(node.Type)));
 
         return entries;
     }

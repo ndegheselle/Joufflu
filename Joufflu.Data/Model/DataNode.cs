@@ -5,7 +5,6 @@ using NJsonSchema;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Joufflu.Data.Model;
 
 public enum EnumDataType
@@ -25,6 +24,10 @@ public abstract partial class DataNode : ObservableObject, ICloneable
 {
     [ObservableProperty]
     private string? _key;
+
+    /// <summary>For DataNode with children and to prevent binding errors.</summary>
+    [ObservableProperty]
+    private bool _isExpanded = true;
 
     public EnumDataType Type { get; private set; }
     /// <summary>Whether the schema takes null on top of the type it calls for.</summary>
@@ -67,8 +70,6 @@ public partial class DataArray : DataNode
     public DataNode Template { get; set; }
     public ObservableCollection<DataNode> Values { get; set; } = [];
 
-    [ObservableProperty]
-    private bool _isExpanded = true;
     public CompositeCollection Items { get; }
 
     public DataArray(string? key, DataNode template, bool isNullable = false) : base(EnumDataType.Array, key, isNullable)
@@ -135,10 +136,6 @@ public partial class DataArray : DataNode
 public partial class DataObject : DataNode
 {
     public List<DataNode> Properties { get; set; } = [];
-
-    /// <summary>Whether the properties are shown. Open, so the shape is seen right away.</summary>
-    [ObservableProperty]
-    private bool _isExpanded = true;
     public DataObject(string? key, bool isNullable = false) : base(EnumDataType.Object, key, isNullable)
     {
     }

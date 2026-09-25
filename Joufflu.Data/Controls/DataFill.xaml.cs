@@ -45,7 +45,7 @@ public class Order
 /// Logique d'interaction pour DataEdit.xaml
 /// </summary>
 [ObservableObject]
-public partial class DataEdit : UserControl
+public partial class DataFill : UserControl
 {
     [ObservableProperty]
     private DataObject? _node;
@@ -56,7 +56,7 @@ public partial class DataEdit : UserControl
     public static readonly DependencyProperty ManualValuesProperty = DependencyProperty.Register(
         nameof(ManualValues),
         typeof(IEnumerable<DataManualValue>),
-        typeof(DataEdit),
+        typeof(DataFill),
         new PropertyMetadata(null));
 
     /// <summary>
@@ -70,7 +70,7 @@ public partial class DataEdit : UserControl
         set => SetValue(ManualValuesProperty, value);
     }
 
-    public DataEdit()
+    public DataFill()
     {
         this.DataContext = this;
         InitializeComponent();
