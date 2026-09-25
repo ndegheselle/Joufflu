@@ -31,26 +31,31 @@ public abstract partial class DataNode : ObservableObject, ICloneable
 
     public EnumDataType Type { get; private set; }
     /// <summary>Whether the schema takes null on top of the type it calls for.</summary>
-    public bool IsNullable { get; private set; }
+    public bool IsNullable { get; set; }
 
-    public DataArray? ParentArray { get; set; }
+    public IDataParent? Parent { get; set; }
     public string? Description { get; set; }
 
-    public DataNode(EnumDataType type, string? key, bool isNullable = false)
+    public DataNode(EnumDataType type, string? key)
     {
         Type = type;
         Key = key;
-        IsNullable = isNullable;
     }
 
     public abstract JToken? ToToken();
 
     /// <summary>
     /// A deep copy of the node, values included. The copy stands on its own: it belongs to no
-    /// <see cref="ParentArray"/> until one takes it.
+    /// <see cref="Parent"/> until one takes it.
     /// </summary>
     public abstract DataNode Clone();
     object ICloneable.Clone() => Clone();
+}
+
+public interface IDataParent
+{
+    [RelayCommand]
+    public void Remove(DataNode node);
 }
 
 public partial class DataArrayControl
@@ -63,16 +68,37 @@ public partial class DataArrayControl
 
     [RelayCommand]
     public void Add() => Array.Add();
+    [RelayCommand]
+    public void AddTemplate(EnumDataType templateType) => Array.Template = DataObjectControl.NodeFrom(templateType);
 }
 
-public partial class DataArray : DataNode
+public partial class DataObjectControl
 {
-    public DataNode Template { get; set; }
+    public DataObject Object { get; }
+    public DataObjectControl(DataObject obj)
+    {
+        Object = obj;
+    }
+
+    [RelayCommand]
+    public void Add(EnumDataType type) => Object.Add(NodeFrom(type));
+    public static DataNode NodeFrom(EnumDataType type) => type switch
+    {
+        EnumDataType.Object => new DataObject("new"),
+        EnumDataType.Array => new DataArray("new", null),
+        _ => new DataValue(type, "null", [])
+    };
+}
+
+public partial class DataArray : DataNode, IDataParent
+{
+    [ObservableProperty]
+    private DataNode? _template;
     public ObservableCollection<DataNode> Values { get; set; } = [];
 
     public CompositeCollection Items { get; }
 
-    public DataArray(string? key, DataNode template, bool isNullable = false) : base(EnumDataType.Array, key, isNullable)
+    public DataArray(string? key, DataNode? template) : base(EnumDataType.Array, key)
     {
         Template = template;
         Items = [new CollectionContainer { Collection = Values }, new DataArrayControl(this)];
@@ -84,9 +110,12 @@ public partial class DataArray : DataNode
     [RelayCommand]
     public void Add()
     {
+        if (Template == null)
+            return;
+
         var node = Template.Clone();
         node.Key = $"[{Values.Count}]";
-        node.ParentArray = this;
+        node.Parent = this;
         Values.Add(node);
     }
 
@@ -115,17 +144,18 @@ public partial class DataArray : DataNode
 
     public override DataArray Clone()
     {
-        var clone = new DataArray(Key, Template.Clone(), IsNullable)
+        var clone = new DataArray(Key, Template?.Clone())
         {
             Description = Description,
-            IsExpanded = IsExpanded
+            IsExpanded = IsExpanded,
+            IsNullable = IsNullable,
         };
 
         // Filled in place: [Items] watches this very collection.
         foreach (DataNode value in Values)
         {
             var copy = value.Clone();
-            copy.ParentArray = clone;
+            copy.Parent = clone;
             clone.Values.Add(copy);
         }
 
@@ -133,11 +163,27 @@ public partial class DataArray : DataNode
     }
 }
 
-public partial class DataObject : DataNode
+public partial class DataObject : DataNode, IDataParent
 {
-    public List<DataNode> Properties { get; set; } = [];
-    public DataObject(string? key, bool isNullable = false) : base(EnumDataType.Object, key, isNullable)
+    public ObservableCollection<DataNode> Properties { get; set; } = [];
+    public CompositeCollection Items { get; }
+
+    public DataObject(string? key) : base(EnumDataType.Object, key)
     {
+        Items = [new CollectionContainer { Collection = Properties }, new DataObjectControl(this)];
+    }
+
+    [RelayCommand]
+    public void Add(DataNode node)
+    {
+        node.Parent = this;
+        Properties.Add(node);
+    }
+
+    [RelayCommand]
+    public void Remove(DataNode node)
+    {
+        Properties.Remove(node);
     }
 
     public override JToken? ToToken()
@@ -154,11 +200,12 @@ public partial class DataObject : DataNode
         return json;
     }
 
-    public override DataObject Clone() => new(Key, IsNullable)
+    public override DataObject Clone() => new(Key)
     {
         Description = Description,
         IsExpanded = IsExpanded,
-        Properties = [.. Properties.Select(property => property.Clone())]
+        Properties = [.. Properties.Select(property => property.Clone())],
+        IsNullable = IsNullable,
     };
 }
 
@@ -192,7 +239,7 @@ public partial class DataValue : DataNode
     /// <summary> The choices a closed list offers for the enumarations. </summary>
     public IReadOnlyList<DataEnumOption> Options { get; }
 
-    public DataValue(EnumDataType type, string? key, IReadOnlyList<DataEnumOption> options, bool isNullable = false) : base(type, key, isNullable)
+    public DataValue(EnumDataType type, string? key, IReadOnlyList<DataEnumOption> options) : base(type, key)
     {
         Options = options;
         Value = Default();
@@ -228,12 +275,13 @@ public partial class DataValue : DataNode
     /// The options and the manual entry are records, shared as they are. [ManualEntry] goes in
     /// before [Value], which it would otherwise overwrite.
     /// </summary>
-    public override DataValue Clone() => new(Type, Key, Options, IsNullable)
+    public override DataValue Clone() => new(Type, Key, Options)
     {
         Description = Description,
         IsManual = IsManual,
         ManualEntry = ManualEntry,
-        Value = Value is JToken token ? token.DeepClone() : Value
+        Value = Value is JToken token ? token.DeepClone() : Value,
+        IsNullable = IsNullable,
     };
 
     /// <summary>

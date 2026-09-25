@@ -18,11 +18,10 @@ public static class DataFactory
 
             if (schema.IsObject)
             {
-                var node = new DataObject(key, isNullable)
+                var node = new DataObject(key)
                 {
-                    Properties = schema.ActualProperties
-                        .Select(prop => prop.Value.ToDataNode(prop.Key))
-                        .ToList()
+                    Properties = [.. schema.ActualProperties.Select(prop => prop.Value.ToDataNode(prop.Key))],
+                    IsNullable = isNullable
                 };
 
                 return node;
@@ -31,11 +30,13 @@ public static class DataFactory
             {
                 return new DataArray(
                     key,
-                    schema.Item?.ToDataNode("template") ?? throw new Exception("Schemas with multiple templates are not supported. Only [Item] is supported not [Items]."),
-                    isNullable);
+                    schema.Item?.ToDataNode("template") ?? throw new Exception("Schemas with multiple templates are not supported. Only [Item] is supported not [Items]."))
+                {
+                    IsNullable = isNullable
+                };
             }
 
-            return new DataValue(schema.ToType(), key, schema.Options(), isNullable);
+            return new DataValue(schema.ToType(), key, schema.Options()) { IsNullable = isNullable };
         }
 
         public EnumDataType ToType()

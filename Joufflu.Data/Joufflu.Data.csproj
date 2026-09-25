@@ -34,4 +34,10 @@
     <ProjectReference Include="..\Joufflu.Inputs\Joufflu.Inputs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Controls\DataEdit.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

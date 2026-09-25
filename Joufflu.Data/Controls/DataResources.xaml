@@ -1,0 +1,14 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:joolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
+    <Style
+        x:Key="DataRemoveButton"
+        BasedOn="{StaticResource SoftDangerButton}"
+        TargetType="Button">
+        <Setter Property="joolkit:Sizing.IsSquare" Value="True" />
+        <Setter Property="joolkit:Sizing.Size" Value="sm" />
+        <Setter Property="Command" Value="{Binding Parent.RemoveCommand}" />
+        <Setter Property="CommandParameter" Value="{Binding}" />
+    </Style>
+</ResourceDictionary>
