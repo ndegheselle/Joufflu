@@ -27,12 +27,9 @@ public class DataManualValuesConverter : IMultiValueConverter
         if (values.ElementAtOrDefault(0) is not DataValue node)
             return entries;
 
-        // Forcing a field to nothing is still bound by the schema: null is a value like any other
-        // and only fits a nullable field, and a required field has to be there at all.
+        entries.Add(DataManualValue.Undefined);
         if (node.IsNullable)
             entries.Add(DataManualValue.Null);
-        if (!node.IsRequired)
-            entries.Add(DataManualValue.Undefined);
 
         if (values.ElementAtOrDefault(1) is IEnumerable<DataManualValue> catalog)
             entries.AddRange(catalog.Where(entry => entry.Fits(node.Schema.Type)));

@@ -88,26 +88,19 @@
                         <ColumnDefinition Width="22" />
                     </Grid.ColumnDefinitions>
                     <jata:DataIcon Type="{Binding Type}" />
-                    <StackPanel
+                    <TextBlock
                         Grid.Column="1"
                         VerticalAlignment="Center"
-                        Orientation="Horizontal">
-                        <TextBlock FontFamily="Consolas" Text="{Binding Key}" />
-                        <TextBlock
-                            toolkit:Tooltip.Content="Required"
-                            Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
-                            Visibility="{Binding IsRequired, Converter={x:Static converters:VisibilityConverter.Default}}">
-                            *
-                        </TextBlock>
-                    </StackPanel>
+                        FontFamily="Consolas"
+                        Text="{Binding Key}" />
 
                     <jonts:FontIcon
-                        HorizontalAlignment="Right"
                         Grid.Column="2"
-                        Visibility="{Binding Description, Converter={x:Static converters:VisibilityConverter.Default}}"
+                        HorizontalAlignment="Right"
                         toolkit:Tooltip.Content="{Binding Description}"
                         Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
-                        Text="{x:Static jonts:LucideFontIcons.Info}" />
+                        Text="{x:Static jonts:LucideFontIcons.Info}"
+                        Visibility="{Binding Description, Converter={x:Static converters:VisibilityConverter.Default}}" />
                 </Grid>
             </DataTemplate>
 

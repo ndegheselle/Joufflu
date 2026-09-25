@@ -1,40 +1,53 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Windows.Data;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json.Linq;
 using NJsonSchema;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Windows.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Joufflu.Data.Model;
 
-public abstract partial class DataNode : ObservableObject
+public enum EnumDataType
 {
-    public JsonSchema Schema { get; set; }
+    String,
+    Integer,
+    Number,
+    Boolean,
+    TimeSpan,
+    DateTime,
+    Choice,
+    Array,
+    Object
+}
 
+public abstract partial class DataNode : ObservableObject, ICloneable
+{
     [ObservableProperty]
     private string? _key;
 
-    public JsonObjectType Type => Schema.Type;
-    public string? Description => Schema.Description;
-
-    /// <summary>
-    /// Whether the node has to be there: a property its object requires, or an element of an array.
-    /// Such a node cannot be left out, so it cannot be forced to undefined.
-    /// </summary>
-    public bool IsRequired { get; init; }
-
+    public EnumDataType Type { get; private set; }
     /// <summary>Whether the schema takes null on top of the type it calls for.</summary>
-    public bool IsNullable => Schema.IsNullable(SchemaType.JsonSchema);
+    public bool IsNullable { get; private set; }
 
     public DataArray? ParentArray { get; set; }
+    public string? Description { get; set; }
 
-    public DataNode(string? key, JsonSchema schema)
+    public DataNode(EnumDataType type, string? key, bool isNullable = false)
     {
+        Type = type;
         Key = key;
-        Schema = schema;
+        IsNullable = isNullable;
     }
 
     public abstract JToken? ToToken();
+
+    /// <summary>
+    /// A deep copy of the node, values included. The copy stands on its own: it belongs to no
+    /// <see cref="ParentArray"/> until one takes it.
+    /// </summary>
+    public abstract DataNode Clone();
+    object ICloneable.Clone() => Clone();
 }
 
 public partial class DataArrayControl
@@ -51,16 +64,16 @@ public partial class DataArrayControl
 
 public partial class DataArray : DataNode
 {
-    public JsonSchema Template { get; set; }
+    public DataNode Template { get; set; }
     public ObservableCollection<DataNode> Values { get; set; } = [];
 
     [ObservableProperty]
     private bool _isExpanded = true;
     public CompositeCollection Items { get; }
 
-    public DataArray(string? name, JsonSchema schema) : base(name, schema)
+    public DataArray(string? key, DataNode template, bool isNullable = false) : base(EnumDataType.Array, key, isNullable)
     {
-        Template = schema.Item ?? throw new Exception("Schemas with multiple templates are not supported. Only [Item] is supported not [Items].");
+        Template = template;
         Items = [new CollectionContainer { Collection = Values }, new DataArrayControl(this)];
     }
 
@@ -70,7 +83,8 @@ public partial class DataArray : DataNode
     [RelayCommand]
     public void Add()
     {
-        var node = Template.ToDataNode($"[{Values.Count}]", isRequired: true);
+        var node = Template.Clone();
+        node.Key = $"[{Values.Count}]";
         node.ParentArray = this;
         Values.Add(node);
     }
@@ -97,6 +111,25 @@ public partial class DataArray : DataNode
 
         return json;
     }
+
+    public override DataArray Clone()
+    {
+        var clone = new DataArray(Key, Template.Clone(), IsNullable)
+        {
+            Description = Description,
+            IsExpanded = IsExpanded
+        };
+
+        // Filled in place: [Items] watches this very collection.
+        foreach (DataNode value in Values)
+        {
+            var copy = value.Clone();
+            copy.ParentArray = clone;
+            clone.Values.Add(copy);
+        }
+
+        return clone;
+    }
 }
 
 public partial class DataObject : DataNode
@@ -106,7 +139,7 @@ public partial class DataObject : DataNode
     /// <summary>Whether the properties are shown. Open, so the shape is seen right away.</summary>
     [ObservableProperty]
     private bool _isExpanded = true;
-    public DataObject(string? name, JsonSchema schema) : base(name, schema)
+    public DataObject(string? key, bool isNullable = false) : base(EnumDataType.Object, key, isNullable)
     {
     }
 
@@ -123,25 +156,18 @@ public partial class DataObject : DataNode
 
         return json;
     }
+
+    public override DataObject Clone() => new(Key, IsNullable)
+    {
+        Description = Description,
+        IsExpanded = IsExpanded,
+        Properties = [.. Properties.Select(property => property.Clone())]
+    };
 }
 
 /// <summary>One choice of a closed list: the value that is filled in, under the name it is read by.</summary>
 public record DataEnumOption(string Name, object? Value)
-{
-    /// <summary>
-    /// The choices [schema] offers. <c>x-enumNames</c> is optional and pairs with the values by
-    /// position, so a name is only taken where there is one to take.
-    /// </summary>
-    public static IReadOnlyList<DataEnumOption> OptionsOf(JsonSchema schema)
-    {
-        if (!schema.IsEnumeration)
-            return [];
-
-        string[] names = [.. schema.EnumerationNames];
-        return [.. schema.Enumeration.Select((value, index) =>
-            new DataEnumOption(index < names.Length ? names[index] : $"{value}", value))];
-    }
-}
+{}
 
 public partial class DataValue : DataNode
 {
@@ -169,10 +195,10 @@ public partial class DataValue : DataNode
     /// <summary> The choices a closed list offers for the enumarations. </summary>
     public IReadOnlyList<DataEnumOption> Options { get; }
 
-    public DataValue(string? name, JsonSchema schema) : base(name, schema)
+    public DataValue(EnumDataType type, string? key, IReadOnlyList<DataEnumOption> options, bool isNullable = false) : base(type, key, isNullable)
     {
-        Options = DataEnumOption.OptionsOf(schema);
-        Value = DefaultOf(schema);
+        Options = options;
+        Value = Default();
     }
 
     public override JToken? ToToken()
@@ -189,54 +215,49 @@ public partial class DataValue : DataNode
         if (Value is null)
             return JValue.CreateNull();
 
-        // A closed list is written in whatever type its own values are expressed in.
-        if (Schema.IsEnumeration)
-            return TokenOf(Value);
-
-        // Read the same way the editors are picked, so what is written back is of the type the
-        // editor the value was filled in through works in.
-        JsonObjectType type = Schema.Type;
-        if (type.HasFlag(JsonObjectType.Boolean))
-            return new JValue(Convert.ToBoolean(Value, CultureInfo.InvariantCulture));
-        if (type.HasFlag(JsonObjectType.Integer))
-            return new JValue(Convert.ToInt64(Value, CultureInfo.InvariantCulture));
-        if (type.HasFlag(JsonObjectType.Number))
-            return new JValue(Convert.ToDecimal(Value, CultureInfo.InvariantCulture));
-        if (type.HasFlag(JsonObjectType.String))
-            return new JValue(StringOf(Value, Schema.Format));
-
-        return TokenOf(Value);
+        return Type switch
+        {
+            EnumDataType.String => Convert.ToString(Value, CultureInfo.InvariantCulture) ?? string.Empty,
+            EnumDataType.Boolean => new JValue(Convert.ToBoolean(Value, CultureInfo.InvariantCulture)),
+            EnumDataType.Integer => new JValue(Convert.ToInt64(Value, CultureInfo.InvariantCulture)),
+            EnumDataType.Number => new JValue(Convert.ToDecimal(Value, CultureInfo.InvariantCulture)),
+            EnumDataType.DateTime => new JValue(((DateTime)Value).ToString("O", CultureInfo.InvariantCulture)),
+            EnumDataType.TimeSpan => new JValue(((TimeSpan)Value).ToString("O", CultureInfo.InvariantCulture)),
+            _ => TokenOf(Value)
+        };
     }
+
+    /// <summary>
+    /// The options and the manual entry are records, shared as they are. [ManualEntry] goes in
+    /// before [Value], which it would otherwise overwrite.
+    /// </summary>
+    public override DataValue Clone() => new(Type, Key, Options, IsNullable)
+    {
+        Description = Description,
+        IsManual = IsManual,
+        ManualEntry = ManualEntry,
+        Value = Value is JToken token ? token.DeepClone() : Value
+    };
 
     /// <summary>
     /// Default value based on the [schema]
     /// </summary>
-    private static object? DefaultOf(JsonSchema schema)
+    private object? Default()
     {
-        if (schema.IsNullable(SchemaType.JsonSchema))
+        if (IsNullable)
             return null;
 
-        // A closed list has no value of its own to fall back on, so it starts on its first choice
-        if (schema.IsEnumeration)
-            return schema.Enumeration.FirstOrDefault();
-
-        JsonObjectType type = schema.Type;
-        if (type.HasFlag(JsonObjectType.Boolean))
-            return false;
-        if (type.HasFlag(JsonObjectType.Integer))
-            return 0L;
-        if (type.HasFlag(JsonObjectType.Number))
-            return 0m;
-        if (type.HasFlag(JsonObjectType.String))
-            return schema.Format switch
-            {
-                JsonFormatStrings.DateTime or JsonFormatStrings.Date => DateTime.Today,
-                JsonFormatStrings.Time or JsonFormatStrings.TimeSpan or JsonFormatStrings.Duration => TimeSpan.Zero,
-                _ => string.Empty
-            };
-
-        // A schema saying nothing of a type is filled in as text, which is what its editor is.
-        return string.Empty;
+        return Type switch
+        {
+            EnumDataType.String => "",
+            EnumDataType.Integer => 0L,
+            EnumDataType.Number => 0m,
+            EnumDataType.Boolean => false,
+            EnumDataType.Choice => Options.FirstOrDefault(),
+            EnumDataType.TimeSpan => TimeSpan.Zero,
+            EnumDataType.DateTime => DateTime.Today,
+            _ => throw new Exception($"Can't set a default value for the type [{Type}]")
+        };
     }
 
     /// <summary> [value] as the JSON its own type amounts to, whatever the schema says it should have been. </summary>
@@ -246,52 +267,4 @@ public partial class DataValue : DataNode
         JToken token => token,
         _ => JToken.FromObject(value)
     };
-
-    /// <summary> [value] as the text [format] is read as. </summary>
-    private static string StringOf(object value, string? format) => (value, format) switch
-    {
-        (DateTime date, JsonFormatStrings.Date) => date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-        (DateTime date, _) => date.ToString("O", CultureInfo.InvariantCulture),
-        (DateTimeOffset date, _) => date.ToString("O", CultureInfo.InvariantCulture),
-        (TimeSpan time, JsonFormatStrings.Time) => time.ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture),
-        (TimeSpan time, _) => time.ToString("c", CultureInfo.InvariantCulture),
-        _ => Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty
-    };
-}
-
-
-
-public static class DataFactory
-{
-    extension(JsonSchema schema)
-    {
-        /// <summary>
-        /// The node [schema] describes. Whether it is required is the parent's to say — a schema
-        /// lists the properties it requires, so a property cannot read it off itself — hence
-        /// [isRequired], passed down as the tree is built.
-        /// </summary>
-        public DataNode ToDataNode(string? name = null, bool isRequired = false)
-        {
-            schema = schema.ActualSchema;
-
-            if (schema.IsObject)
-            {
-                var node = new DataObject(name, schema)
-                {
-                    IsRequired = isRequired,
-                    Properties = schema.ActualProperties
-                        .Select(prop => prop.Value.ToDataNode(prop.Key, prop.Value.IsRequired))
-                        .ToList()
-                };
-
-                return node;
-            }
-            else if (schema.IsArray)
-            {
-                return new DataArray(name, schema) { IsRequired = isRequired };
-            }
-
-            return new DataValue(name, schema) { IsRequired = isRequired };
-        }
-    }
 }
