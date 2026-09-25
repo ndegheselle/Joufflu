@@ -17,6 +17,8 @@
             <TextBlock Style="{StaticResource H1}" Text="Schema" />
             <TextBlock Style="{StaticResource H2}" Text="Edit" />
             <jata:DataEdit />
+            <TextBlock Style="{StaticResource H2}" Text="Build" />
+            <jata:SchemaEdit />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
