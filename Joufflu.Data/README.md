@@ -15,6 +15,7 @@ Fill a value in against a JSON Schema, or build one from scratch, instead of typ
 | `DataEdit` | Builds a node from scratch. |
 | `DataObject` / `DataArray` / `DataValue` | The edited tree; `ToToken()` returns its JSON. |
 | `ToDataNode()` | Builds the tree of an [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) `JsonSchema`. |
+| `ToJsonSchema()` | Builds the `JsonSchema` of a tree, the reverse of `ToDataNode()`. |
 | `DataManualValue` | A value a field can be forced to instead of its editor. |
 
 ## Getting started

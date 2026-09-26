@@ -67,6 +67,18 @@ today, the first option).
 {: .note }
 > Not supported: arrays with a list of item schemas, and schemas without a type.
 
+## To a schema
+
+`ToJsonSchema()` does the reverse: the schema of a tree, built from a schema or with
+`DataEdit`, following the table above (time spans get the `time-span` format):
+
+```csharp
+JsonSchema schema = Node.ToJsonSchema();
+string json = schema.ToJson();
+```
+
+Keys, `Description`, `IsNullable`, `IsRequired` and the enum `Options` are kept; values are not.
+
 ## Manual values
 
 `ManualValues` lists what a field can be forced to instead of its editor, like a

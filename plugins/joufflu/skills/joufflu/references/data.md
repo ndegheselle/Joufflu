@@ -20,7 +20,7 @@ Both edit a `Node` (`DataObject`, two-way) in place and take an optional `Manual
 | Control | Edits |
 |---|---|
 | `DataFill` | Values of a node built from a schema. Shape is fixed; only array items can be added (cloned from `Template`) or removed. |
-| `DataEdit` | Everything: properties and items of any type, keys, values. Starts from an empty object when no `Node` is bound. |
+| `DataEdit` | Everything: properties and items of any type, keys, values, string options of a `Choice`. Starts from an empty object when no `Node` is bound. |
 
 ```xml
 <data:DataFill Node="{Binding Node}" ManualValues="{Binding ManualValues}" />
@@ -35,6 +35,8 @@ string? json = Node.ToToken()?.ToString();
 ```
 
 `ToDataNode()` follows `$ref` and sets `IsNullable` and `IsRequired` from the schema.
+`node.ToJsonSchema()` does the reverse (types, formats, `Description`, `IsNullable`,
+`IsRequired`, enum `Options` with `x-enumNames`; values are not written, time spans use `time-span`).
 
 | Schema | `EnumDataType` | Editor | JSON |
 |---|---|---|---|
@@ -55,7 +57,7 @@ the first option. Object keys are unique and case-sensitive (errors on `Key` thr
 `INotifyDataErrorInfo`); array items are keyed `[0]`, `[1]`…
 
 API: `DataObject.Add` / `Remove` / `UniqueKey`, `DataArray.Add()` / `Add(EnumDataType)` /
-`Remove`, `DataNode.Clone()`.
+`Remove`, `DataValue.AddOption(string)` / `RemoveOption`, `DataNode.Clone()`.
 
 ## Manual values
 

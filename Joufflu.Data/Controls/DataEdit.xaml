@@ -181,6 +181,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                     <ContentControl
@@ -190,8 +191,72 @@
                         Content="{Binding}"
                         ContentTemplateSelector="{StaticResource DataValueEditorSelector}"
                         Style="{StaticResource DataValueEditorHost}" />
+                    <!--  String options of a choice  -->
                     <ToggleButton
                         Grid.Column="2"
+                        toolkit:Sizing.IsSquare="True"
+                        toolkit:Sizing.Size="sm"
+                        toolkit:Tooltip.Content="Edit the options">
+                        <ToggleButton.Style>
+                            <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static jodels:EnumDataType.Choice}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.ListPlus}" />
+                        <jnputs:Dropdown.Popup>
+                            <StackPanel
+                                Width="200"
+                                toolkit:Spacing.Gap="4"
+                                DataContext="{Binding OptionsControl}">
+                                <ItemsControl ItemsSource="{Binding Value.Options}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,4" toolkit:Spacing.Gap="4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource DataRemoveButton}">
+                                                    <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <Grid toolkit:Spacing.Gap="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox toolkit:Sizing.Size="sm" Text="{Binding NewOption, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding AddCommand}" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <Button
+                                        Grid.Column="1"
+                                        toolkit:Sizing.IsSquare="True"
+                                        toolkit:Sizing.Size="sm"
+                                        Command="{Binding AddCommand}"
+                                        Style="{StaticResource SoftPrimaryButton}">
+                                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                        </jnputs:Dropdown.Popup>
+                    </ToggleButton>
+                    <ToggleButton
+                        Grid.Column="3"
                         toolkit:Sizing.IsSquare="True"
                         toolkit:Sizing.Size="sm"
                         toolkit:Tooltip.Content="Force the value"
@@ -204,7 +269,7 @@
                         </ToggleButton.IsEnabled>
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
                     </ToggleButton>
-                    <Button Grid.Column="3" Style="{StaticResource DataRemoveButton}">
+                    <Button Grid.Column="4" Style="{StaticResource DataRemoveButton}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
                 </Grid>

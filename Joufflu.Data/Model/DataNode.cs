@@ -147,6 +147,37 @@ public partial class DataArrayControl
     public void AddFromType(EnumDataType type) => Array.Add(type);
 }
 
+public partial class DataOptionsControl : ObservableObject
+{
+    public DataValue Value { get; }
+
+    /// <summary>The option being typed, added by <see cref="Add"/>.</summary>
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AddCommand))]
+    private string _newOption = "";
+
+    public DataOptionsControl(DataValue value)
+    {
+        Value = value;
+        // Removing an option can make the typed one addable again.
+        value.Options.CollectionChanged += (_, _) => AddCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanAdd))]
+    public void Add()
+    {
+        Value.AddOption(NewOption);
+        NewOption = "";
+    }
+
+    /// <summary>Not empty and not already an option.</summary>
+    private bool CanAdd() => !string.IsNullOrEmpty(NewOption)
+        && !Value.Options.Any(option => Equals(option.Value, NewOption));
+
+    [RelayCommand]
+    public void Remove(DataEnumOption option) => Value.RemoveOption(option);
+}
+
 public partial class DataObjectControl
 {
     public DataObject Object { get; }
@@ -380,14 +411,33 @@ public partial class DataValue : DataNode
     }
 
     /// <summary> The choices a closed list offers for the enumerations. </summary>
-    public IReadOnlyList<DataEnumOption> Options { get; }
+    public ObservableCollection<DataEnumOption> Options { get; }
+
+    private DataOptionsControl? _optionsControl;
+    /// <summary>Edits [Options] from <see cref="Controls.DataEdit"/>.</summary>
+    public DataOptionsControl OptionsControl => _optionsControl ??= new DataOptionsControl(this);
 
     /// <summary>[isNullable] is set here as the default value depends on it.</summary>
-    public DataValue(EnumDataType type, string? key, IReadOnlyList<DataEnumOption> options, bool isNullable = false) : base(type, key)
+    public DataValue(EnumDataType type, string? key, IEnumerable<DataEnumOption> options, bool isNullable = false) : base(type, key)
     {
-        Options = options;
+        Options = [.. options];
         IsNullable = isNullable;
         Value = Default();
+    }
+
+    /// <summary>Adds a string option, named by its value. The first one also becomes the value when it can't be null.</summary>
+    public void AddOption(string value)
+    {
+        Options.Add(new DataEnumOption(value, value));
+        if (Value is null && !IsNullable)
+            Value = value;
+    }
+
+    /// <summary>Removes [option], the value falls back to its default if it was the one picked.</summary>
+    public void RemoveOption(DataEnumOption option)
+    {
+        if (Options.Remove(option) && Equals(Value, option.Value))
+            Value = Default();
     }
 
     public override JToken? ToToken()
@@ -417,7 +467,7 @@ public partial class DataValue : DataNode
     }
 
     /// <summary>
-    /// The options and the manual entry are records, shared as they are. [ManualEntry] goes in
+    /// The options (copied in a new list) and the manual entry are records, shared as they are. [ManualEntry] goes in
     /// before [Value], which it would otherwise overwrite.
     /// </summary>
     public override DataValue Clone() => new(Type, Key, Options, IsNullable)
