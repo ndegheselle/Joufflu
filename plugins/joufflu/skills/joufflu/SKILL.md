@@ -169,4 +169,5 @@ repository is the live gallery of every control.
 
 Related skills in this plugin: `joufflu-new-app` (scaffold a Joufflu app shell),
 `joufflu-theme` (create and register a custom theme), `joufflu-restyle` (move an
-existing view onto the design system).
+existing view onto the design system), `joufflu-custom-input` (build an input control
+of your own that matches the Joufflu ones).

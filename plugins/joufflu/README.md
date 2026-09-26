@@ -11,6 +11,7 @@ changes.
 | `joufflu-new-app` | Scaffold a Joufflu app, or add Joufflu to an existing WPF project: packages, `App.xaml`, `ThemeManager`, a `ThemedWindow` shell with side menu, pages, overlays and toasts. |
 | `joufflu-theme` | Create and register a custom palette, override design tokens, add a theme switcher and persist the choice. |
 | `joufflu-restyle` | Audit a view and replace hardcoded colours, sizes, margins and hand-made controls with Joufflu tokens, styles and controls. |
+| `joufflu-custom-input` | Build an input control of your own that matches the Joufflu inputs: background, border and height tokens, size variants and input padding, states, the validation error style and embedded buttons. |
 
 ## Install
 

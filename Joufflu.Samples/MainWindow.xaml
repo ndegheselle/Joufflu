@@ -295,6 +295,12 @@
                         </nav:NavigationItem.Icon>
                         Drag and drop
                     </nav:NavigationItem>
+                    <nav:NavigationItem TargetType="{x:Type toolkitSamples:CustomInputSamplesViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PencilRuler}" />
+                        </nav:NavigationItem.Icon>
+                        Create custom input
+                    </nav:NavigationItem>
 
                     <nav:NavigationTitle>Joufflu controls</nav:NavigationTitle>
 

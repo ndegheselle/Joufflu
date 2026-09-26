@@ -59,6 +59,7 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 - [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/application-shell.md): `ThemedWindow`, `AllowContentOverTitleBar` and the `FullContainer` page host, plus the `OverlayContainer` / `ToastContainer` wrappers.
 - [Derived dimensions](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/derived-dimensions.md): `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` with their per-side and per-corner factors, scaling a theme dimension live.
 - [Animate](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md): `Animate.Bounce` looping a vertical hop on any element, with `BounceHeight` and `BounceDuration`.
+- [Custom input](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/custom-input.md): building an input that matches the Joufflu ones — required background, border and height tokens; optional size triggers with `InputPadding`, hover/focus/disabled states, the `Validation.HasError` border plus `ValidationErrorTemplate` badge, and `EmbeddedButton` for inner buttons.
 
 ## Optional
 

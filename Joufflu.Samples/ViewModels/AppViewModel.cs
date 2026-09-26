@@ -116,6 +116,7 @@ public class AppViewModel : ObservableObject
             new SpacingSamplesViewModel(),
             new DropTargetSamplesViewModel(),
             new AnimateSamplesViewModel(),
+            new CustomInputSamplesViewModel(),
             new ShellSamples(),
 
             // Themes
