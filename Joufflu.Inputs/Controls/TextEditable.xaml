@@ -11,6 +11,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:TextEditable}">
+        <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TextEditable}">
@@ -32,6 +33,7 @@
                             </Grid.Style>
 
                             <TextBlock
+                                x:Name="DisplayText"
                                 VerticalAlignment="Center"
                                 Cursor="Hand"
                                 Text="{Binding Text}"
@@ -88,6 +90,13 @@
                             </StackPanel>
                         </Grid>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <!--  Its own error state, kept when Validation.ErrorTemplate is set to null.  -->
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="DisplayText" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                            <Setter TargetName="PART_TextBox" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -12,6 +12,7 @@
 
     <Style TargetType="{x:Type local:FilePicker}">
         <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:FilePicker}">
@@ -21,13 +22,12 @@
                             MinWidth="100"
                             Text="{Binding FilePath, TargetNullValue='', Mode=TwoWay}" />
 
-                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <StackPanel
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
                             <!--  Clear button  -->
-                            <Button
-                                x:Name="ClearButton"
-                                toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
-                                toolkit:Derive.MarginFactor="1,0"
-                                Command="{Binding ClearCommand}">
+                            <Button x:Name="ClearButton" Command="{Binding ClearCommand}">
                                 <Button.Style>
                                     <Style BasedOn="{StaticResource EmbeddedButton}" TargetType="{x:Type Button}">
                                         <Style.Triggers>
@@ -39,10 +39,7 @@
                                 </Button.Style>
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
-                            <Button
-                                Margin="-1"
-                                toolkit:Sizing.IsSquare="True"
-                                Command="{Binding SelectCommand}">
+                            <Button Command="{Binding SelectCommand}" Style="{StaticResource EmbeddedButton}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
                             </Button>
                         </StackPanel>
@@ -50,13 +47,13 @@
                     <ControlTemplate.Triggers>
                         <!--  Keeps the clear button flush with the text padding (md is the default set above).  -->
                         <Trigger Property="toolkit:Sizing.Size" Value="xs">
-                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
+                            <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
                         </Trigger>
                         <Trigger Property="toolkit:Sizing.Size" Value="sm">
-                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
+                            <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingSm}}" />
                         </Trigger>
                         <Trigger Property="toolkit:Sizing.Size" Value="lg">
-                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
+                            <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingLg}}" />
                         </Trigger>
 
                         <Trigger Property="Validation.HasError" Value="True">

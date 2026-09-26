@@ -114,6 +114,7 @@
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
+        <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -129,6 +130,7 @@
 
                         <!--  Editable hex value: paste or type a #RRGGBB / #AARRGGBB colour  -->
                         <TextBox
+                            x:Name="HexTextBox"
                             Grid.Column="0"
                             MinWidth="100"
                             VerticalContentAlignment="Center"
@@ -285,6 +287,13 @@
                             </Border>
                         </Popup>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <!--  Its own error state, kept when Validation.ErrorTemplate is set to null.  -->
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="HexTextBox" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                            <Setter TargetName="SwatchButton" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

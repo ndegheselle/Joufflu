@@ -57,12 +57,20 @@ keep them for short labels.
 
 ## Validation errors
 
-`ValidationErrorTemplate` shows binding errors (`INotifyDataErrorInfo`, `IDataErrorInfo`,
-`ValidationRule`): a danger border plus a badge on the top-right corner whose tooltip lists the
-errors. `TextBox`, `PasswordBox`, `ComboBox`, `DatePicker` and `FilePicker` use it already; don't
-hand-roll error tooltips. Apply it to any other control with
-`Validation.ErrorTemplate="{DynamicResource ValidationErrorTemplate}"`, or redefine the key to
-restyle every input.
+Binding errors (`INotifyDataErrorInfo`, `IDataErrorInfo`, `ValidationRule`) show in two layers:
+the input's own template turns its border red on `Validation.HasError`, and `ValidationErrorTemplate`
+adds a badge on the top-right corner whose tooltip lists the errors. The template draws no border,
+which would double the input's. Every input is wired already, don't hand-roll error tooltips:
+`TextBox`, `PasswordBox`, `ComboBox`, `DatePicker`, and in `Joufflu.Inputs` `NumericUpDown`,
+`DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `ComboBoxSearch`, `ComboBoxTags`, `FilePicker`,
+`TextEditable`, `ColorPicker` (and `Search`). A custom input needs both: a `Validation.HasError`
+trigger colouring its border with `DangerBrush`, and
+`Validation.ErrorTemplate="{DynamicResource ValidationErrorTemplate}"`. Redefine the key to restyle
+every input; `Validation.ErrorTemplate="{x:Null}"` on an input drops the badge and keeps only its
+red border.
+
+A host showing a view model that validates itself (`ContentControl Content="{Binding CurrentPage}"`)
+needs `ValidatesOnNotifyDataErrors=False` on that binding, or the whole page is outlined in red.
 
 ## Card
 

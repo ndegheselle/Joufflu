@@ -24,6 +24,19 @@
                     <TextBlock VerticalAlignment="Center" Text="{Binding Color, StringFormat='Value: {0}'}" />
                 </StackPanel>
             </c:CodeExample>
+            <c:CodeExample
+                Title="Validation"
+                Code="{Binding ValidationCode}"
+                Description="Binding errors (here from an ObservableValidator) turn the input's border red, and ValidationErrorTemplate adds a corner badge whose tooltip lists them. Pick an opaque colour to clear it. The second input sets Validation.ErrorTemplate to {x:Null}: no badge, only the red border.">
+                <StackPanel
+                    Width="360"
+                    HorizontalAlignment="Left"
+                    toolkit:Spacing.Gap="12">
+                    <inputs:ColorPicker Color="{Binding OpaqueColor}" />
+                    <inputs:ColorPicker Validation.ErrorTemplate="{x:Null}" Color="{Binding OpaqueColor}" />
+                </StackPanel>
+            </c:CodeExample>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -38,6 +38,22 @@
                         SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
                 </StackPanel>
             </c:CodeExample>
+            <c:CodeExample
+                Title="Validation"
+                Code="{Binding ValidationCode}"
+                Description="Binding errors (here from an ObservableValidator) turn the input's border red, and ValidationErrorTemplate adds a corner badge whose tooltip lists them. Pick a country to clear it. The second input sets Validation.ErrorTemplate to {x:Null}: no badge, only the red border.">
+                <StackPanel
+                    Width="360"
+                    HorizontalAlignment="Left"
+                    toolkit:Spacing.Gap="12">
+                    <inputs:ComboBoxSearch ItemsSource="{Binding Countries}" SelectedItem="{Binding RequiredCountry, Mode=TwoWay}" />
+                    <inputs:ComboBoxSearch
+                        Validation.ErrorTemplate="{x:Null}"
+                        ItemsSource="{Binding Countries}"
+                        SelectedItem="{Binding RequiredCountry, Mode=TwoWay}" />
+                </StackPanel>
+            </c:CodeExample>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>

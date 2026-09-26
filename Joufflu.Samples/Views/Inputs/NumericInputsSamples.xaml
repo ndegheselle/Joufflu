@@ -57,6 +57,21 @@
                     <format:FormatTextBox toolkit:Sizing.Size="lg" Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
                 </StackPanel>
             </c:CodeExample>
+            <c:CodeExample
+                Title="Validation"
+                Code="{Binding ValidationCode}"
+                Description="Binding errors (here from an ObservableValidator) turn the input's border red, and ValidationErrorTemplate adds a corner badge whose tooltip lists them. Bring each value in range to clear it: a rating from 1 to 10, a ratio from 0 to 1, at most one hour. The last input sets Validation.ErrorTemplate to {x:Null}: no badge, only the red border.">
+                <StackPanel
+                    Width="360"
+                    HorizontalAlignment="Left"
+                    toolkit:Spacing.Gap="12">
+                    <inputs:NumericUpDown Value="{Binding Rating, Mode=TwoWay}" />
+                    <inputs:DecimalUpDown Value="{Binding Ratio, Mode=TwoWay}" />
+                    <inputs:TimeSpanPicker Value="{Binding ShortDuration, Mode=TwoWay}" />
+                    <inputs:NumericUpDown Validation.ErrorTemplate="{x:Null}" Value="{Binding Rating, Mode=TwoWay}" />
+                </StackPanel>
+            </c:CodeExample>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>

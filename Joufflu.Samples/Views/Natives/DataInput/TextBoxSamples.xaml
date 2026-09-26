@@ -38,7 +38,7 @@
             <c:CodeExample
                 Title="Validation"
                 Code="{Binding ValidationCode}"
-                Description="Binding errors show through ValidationErrorTemplate: a danger border and a corner badge whose tooltip lists the errors. Type a username to clear them.">
+                Description="Binding errors turn the input's border red, and ValidationErrorTemplate adds a corner badge whose tooltip lists them. Type a username to clear them.">
                 <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
             </c:CodeExample>
 

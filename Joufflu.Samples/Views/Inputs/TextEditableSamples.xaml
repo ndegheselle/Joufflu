@@ -24,6 +24,19 @@
                     <TextBlock VerticalAlignment="Center" Text="{Binding EditableText, StringFormat='Value: {0}'}" />
                 </StackPanel>
             </c:CodeExample>
+            <c:CodeExample
+                Title="Validation"
+                Code="{Binding ValidationCode}"
+                Description="Binding errors (here from an ObservableValidator) turn the input's border red, and ValidationErrorTemplate adds a corner badge whose tooltip lists them. Shorten the title to 10 characters to clear it. The second input sets Validation.ErrorTemplate to {x:Null}: no badge, only the red border.">
+                <StackPanel
+                    Width="360"
+                    HorizontalAlignment="Left"
+                    toolkit:Spacing.Gap="12">
+                    <inputs:TextEditable Text="{Binding ShortText, Mode=TwoWay}" />
+                    <inputs:TextEditable Validation.ErrorTemplate="{x:Null}" Text="{Binding ShortText, Mode=TwoWay}" />
+                </StackPanel>
+            </c:CodeExample>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>
