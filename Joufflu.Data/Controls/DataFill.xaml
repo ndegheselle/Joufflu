@@ -77,7 +77,7 @@
                     <Button
                         Grid.Column="2"
                         Style="{StaticResource DataRemoveButton}"
-                        Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        Visibility="{Binding IsArrayItem, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
                 </Grid>
@@ -93,7 +93,7 @@
                     <Button
                         Grid.Column="2"
                         Style="{StaticResource DataRemoveButton}"
-                        Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        Visibility="{Binding IsArrayItem, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
                 </Grid>
@@ -120,7 +120,7 @@
                     <Button
                         Grid.Column="2"
                         Style="{StaticResource DataRemoveButton}"
-                        Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        Visibility="{Binding IsArrayItem, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
                     <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->

@@ -2,7 +2,7 @@
 
   <!--
     Shared metadata for every project in the repository.
-    Only the four shipped component libraries set <IsPackable>true</IsPackable> (in their own
+    Only the six shipped component libraries set <IsPackable>true</IsPackable> (in their own
     .csproj); everything else (samples, experimental projects) inherits IsPackable=false and is
     never packed.
   -->

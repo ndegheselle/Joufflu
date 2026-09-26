@@ -2,7 +2,7 @@
 
 > WPF inputs and reusable controls for .NET, built on a small design system of themed brushes, dimensions, sizing and spacing helpers. Every control reads its colours through `DynamicResource`, so the whole UI re-themes live between Light and Dark with no restart.
 
-Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
+Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Data` (JSON values edited as a tree), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
 
 ## Start here
 
@@ -39,6 +39,12 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 - [Spinner](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/spinner.md): indeterminate loading indicator.
 - [Toasts](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/toasts.md): transient notifications from `IToastService`, including sticky toasts.
 
+## Data (`Joufflu.Data`)
+
+- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree, `ToToken()`, `ToDataNode()` from an NJsonSchema `JsonSchema` (editor and JSON per type), and `ManualValues`.
+- [Data fill](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md): `DataFill`, filling in a node built from a schema.
+- [Data edit](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md): `DataEdit`, building a node from scratch.
+
 ## File explorer (`Joufflu.FileExplorer`)
 
 - [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/index.md): `IExplorerSource` / `IExplorerNode`, `FileSystemSource`, shell-backed file operations, context menus, drag and drop, shortcuts and `VisibleNodes`.
@@ -66,6 +72,7 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 - [Documentation site](https://ndegheselle.github.io/Joufflu/): the rendered docs.
 - [GitHub repository](https://github.com/ndegheselle/Joufflu/): source, samples and issues.
 - [Joufflu on NuGet](https://www.nuget.org/packages/Joufflu): core package (styles, theming & tooltips).
+- [Joufflu.Data on NuGet](https://www.nuget.org/packages/Joufflu.Data): JSON data trees.
 - [Joufflu.Feedback on NuGet](https://www.nuget.org/packages/Joufflu.Feedback): badges, spinner & toasts.
 - [Joufflu.FileExplorer on NuGet](https://www.nuget.org/packages/Joufflu.FileExplorer): file explorer controls.
 - [Joufflu.Inputs on NuGet](https://www.nuget.org/packages/Joufflu.Inputs): input controls.

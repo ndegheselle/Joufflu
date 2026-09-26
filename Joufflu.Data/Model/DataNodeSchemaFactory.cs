@@ -7,9 +7,8 @@ public static class DataFactory
     extension(JsonSchema schema)
     {
         /// <summary>
-        /// The node [schema] describes. Whether it is required is the parent's to say — a schema
-        /// lists the properties it requires, so a property cannot read it off itself — hence
-        /// [isRequired], passed down as the tree is built.
+        /// The node [schema] describes, under [key]: objects and arrays become the tree of their
+        /// properties and item template, anything else a <see cref="DataValue"/>.
         /// </summary>
         public DataNode ToDataNode(string? key = null)
         {
@@ -20,7 +19,12 @@ public static class DataFactory
             {
                 var node = new DataObject(key)
                 {
-                    Properties = [.. schema.ActualProperties.Select(prop => prop.Value.ToDataNode(prop.Key))],
+                    Properties = [.. schema.ActualProperties.Select(prop =>
+                    {
+                        DataNode property = prop.Value.ToDataNode(prop.Key);
+                        property.IsRequired = prop.Value.IsRequired;
+                        return property;
+                    })],
                     IsNullable = isNullable
                 };
 
@@ -36,7 +40,7 @@ public static class DataFactory
                 };
             }
 
-            return new DataValue(schema.ToType(), key, schema.Options()) { IsNullable = isNullable };
+            return new DataValue(schema.ToType(), key, schema.Options(), isNullable);
         }
 
         public EnumDataType ToType()

@@ -44,7 +44,7 @@ dotnet add package Joufflu.Feedback
 dotnet add package CommunityToolkit.Mvvm
 ```
 
-Add `Joufflu.Inputs` / `Joufflu.FileExplorer` only if the pages need them.
+Add `Joufflu.Inputs` / `Joufflu.FileExplorer` / `Joufflu.Data` only if the pages need them.
 
 ## 2. App.xaml
 

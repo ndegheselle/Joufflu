@@ -33,7 +33,7 @@ public class DataValueTemplateSelector : DataTemplateSelector
     /// <summary>A point in time (<c>date</c> or <c>date-time</c>).</summary>
     public DataTemplate? DateTemplate { get; set; }
 
-    /// <summary>A length of time (<c>time</c>, <c>time-span</c> or <c>duration</c>).</summary>
+    /// <summary>A length of time (<c>time-span</c> or <c>duration</c>).</summary>
     public DataTemplate? TimeTemplate { get; set; }
 
     /// <summary>What a schema with no type of its own, or one no editor covers, is filled in with.</summary>
@@ -52,13 +52,13 @@ public class DataValueTemplateSelector : DataTemplateSelector
     /// </summary>
     private DataTemplate? TemplateFor(EnumDataType type) => type switch
     {
+        EnumDataType.String => StringTemplate,
         EnumDataType.Choice => EnumerationTemplate,
-        EnumDataType.Boolean => EnumerationTemplate,
-        EnumDataType.Integer => EnumerationTemplate,
-        EnumDataType.Number => EnumerationTemplate,
+        EnumDataType.Boolean => BooleanTemplate,
+        EnumDataType.Integer => IntegerTemplate,
+        EnumDataType.Number => NumberTemplate,
         EnumDataType.DateTime => DateTemplate,
         EnumDataType.TimeSpan => TimeTemplate,
         _ => null
-
     };
 }

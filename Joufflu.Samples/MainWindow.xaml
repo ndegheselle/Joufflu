@@ -412,7 +412,7 @@
                         </nav:NavigationItem>
                     </nav:NavigationGroup>
 
-                    <!--  Schema (Joufflu.Data library)  -->
+                    <!--  Data (Joufflu.Data library)  -->
                     <nav:NavigationGroup Header="Data">
                         <nav:NavigationGroup.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Braces}" />

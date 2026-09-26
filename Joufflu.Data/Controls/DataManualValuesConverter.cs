@@ -27,7 +27,8 @@ public class DataManualValuesConverter : IMultiValueConverter
         if (values.ElementAtOrDefault(0) is not DataValue node)
             return entries;
 
-        entries.Add(DataManualValue.Undefined);
+        if (!node.IsRequired)
+            entries.Add(DataManualValue.Undefined);
         if (node.IsNullable)
             entries.Add(DataManualValue.Null);
 

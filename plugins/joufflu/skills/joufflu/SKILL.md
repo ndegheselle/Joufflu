@@ -7,7 +7,8 @@ description: >-
   ComboBoxTags, TextEditable, FilePicker, ColorPicker, Dropdown), navigation
   (`Joufflu.Navigation`: NavigationMenu, Navigator, OverlayService/overlays,
   Paging, FullContainer), feedback (`Joufflu.Feedback`: Badge, Spinner, toasts),
-  the file explorer (`Joufflu.FileExplorer`), the toolkit attached properties
+  the file explorer (`Joufflu.FileExplorer`), JSON data trees (`Joufflu.Data`:
+  DataFill, DataEdit, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
   (Sizing, Spacing.Gap, Derive, Tooltip, Animate, DropTarget/DragSource),
   ThemedWindow, FontIcon/Lucide icons, named styles (PrimaryButton, Card, H1…) and
   the design tokens (joufflu:Brushes / Colors / Dimensions). Use it whenever a
@@ -34,7 +35,7 @@ attached properties) so it follows theme changes.
 Before writing Joufflu code, confirm the project references it:
 
 - `.csproj`: `<PackageReference Include="Joufflu" …/>` (or `Joufflu.Inputs`,
-  `Joufflu.Navigation`, `Joufflu.Feedback`, `Joufflu.FileExplorer`), or a
+  `Joufflu.Navigation`, `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Data`), or a
   `ProjectReference` to `Joufflu*.csproj`.
 - `App.xaml` merges `pack://application:,,,/Joufflu;component/Resources.xaml`.
 - `xmlns:…="clr-namespace:Joufflu…;assembly=Joufflu…"` in XAML, `using Joufflu.…;` in C#.
@@ -52,9 +53,10 @@ never invent a property or method that is not listed here or visible in the pack
 | `Joufflu.Navigation` | `NavigationMenu`, `Navigator`, overlays, `Paging`, `FullContainer` | Joufflu |
 | `Joufflu.Feedback` | `Badge`, `Spinner`, toasts, `ToastContainer` | Joufflu |
 | `Joufflu.FileExplorer` | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar`, sources | Joufflu, Joufflu.Feedback |
+| `Joufflu.Data` | `DataFill`, `DataEdit`, the `DataNode` tree, `JsonSchema.ToDataNode()` | Joufflu, Joufflu.Inputs, NJsonSchema |
 
-`Joufflu.Data` (JSON Schema editors) is work in progress and its API is unstable:
-do not use it unless the project already does, and then read its source.
+`Joufflu.Data` API still changes between minor versions: check members against the
+installed package.
 
 ## 3. Required wiring (the most common mistake)
 
@@ -107,6 +109,7 @@ xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inpu
 xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
 xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
 xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
+xmlns:data="clr-namespace:Joufflu.Data.Controls;assembly=Joufflu.Data"
 ```
 
 C# namespaces (these are the real ones; some doc snippets are off):
@@ -119,6 +122,7 @@ C# namespaces (these are the real ones; some doc snippets are off):
 | `ToastService`, `IToastService`, `ToastOptions`, `ToastType` | `Joufflu.Feedback` |
 | `ToastContainer`, `ToastPosition`, `Badge`, `BadgeVariant`, `Spinner` | `Joufflu.Feedback.Controls` |
 | `FileSystemSource`, `FileSystemWatcherSource`, `IExplorerSource` | `Joufflu.FileExplorer.Sources` |
+| `DataObject`, `DataArray`, `DataValue`, `EnumDataType`, `DataManualValue`, `DataFactory` | `Joufflu.Data.Model` (alias `DataObject`: clashes with `System.Windows.DataObject`) |
 
 ## 5. Rules of thumb for new UI
 
@@ -161,6 +165,7 @@ Read the one matching the task before writing code:
 | [references/navigation.md](references/navigation.md) | `ThemedWindow` shell, `NavigationMenu`, `Navigator`, overlays, `Paging`, `FullContainer` |
 | [references/feedback.md](references/feedback.md) | `Badge`, `Spinner`, toasts |
 | [references/file-explorer.md](references/file-explorer.md) | Explorer controls, sources, custom nodes, context menus |
+| [references/data.md](references/data.md) | `DataFill`, `DataEdit`, the node tree, schema mapping, manual values |
 
 For details not covered here, the raw Markdown docs are indexed at
 <https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt> (use the raw
