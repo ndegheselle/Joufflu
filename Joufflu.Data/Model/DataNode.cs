@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using NJsonSchema;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 namespace Joufflu.Data.Model;
 
@@ -32,6 +33,7 @@ public abstract partial class DataNode : ObservableObject, ICloneable
     public EnumDataType Type { get; private set; }
     /// <summary>Whether the schema takes null on top of the type it calls for.</summary>
     public bool IsNullable { get; set; }
+    public bool CanEditKey { get; set; } = true;
 
     public IDataParent? Parent { get; set; }
     public string? Description { get; set; }
@@ -69,7 +71,7 @@ public partial class DataArrayControl
     [RelayCommand]
     public void Add() => Array.Add();
     [RelayCommand]
-    public void AddTemplate(EnumDataType templateType) => Array.Template = DataObjectControl.NodeFrom(templateType);
+    public void AddFromType(EnumDataType type) => Array.Add(type);
 }
 
 public partial class DataObjectControl
@@ -82,11 +84,11 @@ public partial class DataObjectControl
 
     [RelayCommand]
     public void Add(EnumDataType type) => Object.Add(NodeFrom(type));
-    public static DataNode NodeFrom(EnumDataType type) => type switch
+    public static DataNode NodeFrom(EnumDataType type, string key = "new") => type switch
     {
-        EnumDataType.Object => new DataObject("new"),
-        EnumDataType.Array => new DataArray("new", null),
-        _ => new DataValue(type, "null", [])
+        EnumDataType.Object => new DataObject(key),
+        EnumDataType.Array => new DataArray(key, null),
+        _ => new DataValue(type, key, [])
     };
 }
 
@@ -94,8 +96,12 @@ public partial class DataArray : DataNode, IDataParent
 {
     [ObservableProperty]
     private DataNode? _template;
+
     public ObservableCollection<DataNode> Values { get; set; } = [];
 
+    /// <summary>
+    /// Values with the add control item.
+    /// </summary>
     public CompositeCollection Items { get; }
 
     public DataArray(string? key, DataNode? template) : base(EnumDataType.Array, key)
@@ -107,7 +113,6 @@ public partial class DataArray : DataNode, IDataParent
     /// <summary>
     /// Create a new node from the [Template] and add it to the [Values].
     /// </summary>
-    [RelayCommand]
     public void Add()
     {
         if (Template == null)
@@ -115,6 +120,16 @@ public partial class DataArray : DataNode, IDataParent
 
         var node = Template.Clone();
         node.Key = $"[{Values.Count}]";
+        node.CanEditKey = false;
+        node.Parent = this;
+        Values.Add(node);
+    }
+
+    public void Add(EnumDataType type)
+    {
+        var node = DataObjectControl.NodeFrom(type);
+        node.Key = $"[{Values.Count}]";
+        node.CanEditKey = false;
         node.Parent = this;
         Values.Add(node);
     }

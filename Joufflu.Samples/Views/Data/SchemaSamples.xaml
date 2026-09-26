@@ -16,9 +16,9 @@
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock Style="{StaticResource H1}" Text="Schema" />
             <TextBlock Style="{StaticResource H2}" Text="Edit" />
-            <jata:DataEdit />
+            <jata:DataFill />
             <TextBlock Style="{StaticResource H2}" Text="Build" />
-            <jata:SchemaEdit />
+            <jata:DataEdit />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

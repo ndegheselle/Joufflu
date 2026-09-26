@@ -81,12 +81,6 @@
                     <!--  Featured native controls (kept at top level)  -->
                     <nav:NavigationTitle>Natives</nav:NavigationTitle>
 
-                    <nav:NavigationItem TargetType="{x:Type actions:ButtonSamplesViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />
-                        </nav:NavigationItem.Icon>
-                        Buttons
-                    </nav:NavigationItem>
                     <nav:NavigationItem TargetType="{x:Type dataDisplay:TypographySamplesViewModel}">
                         <nav:NavigationItem.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Type}" />
@@ -113,6 +107,12 @@
                         </nav:NavigationGroup.Icon>
 
                         <nav:NavigationTitle>Actions</nav:NavigationTitle>
+                        <nav:NavigationItem TargetType="{x:Type actions:ButtonSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MousePointerClick}" />
+                            </nav:NavigationItem.Icon>
+                            Buttons
+                        </nav:NavigationItem>
                         <nav:NavigationItem TargetType="{x:Type actions:ToggleButtonSamplesViewModel}">
                             <nav:NavigationItem.Icon>
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ToggleLeft}" />

@@ -12,6 +12,7 @@
         <!--  == Natives ==  -->
         <!--  Actions  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.named.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
 

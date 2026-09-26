@@ -20,7 +20,12 @@ Named styles are applied with `Style="{StaticResource Key}"`.
 | Solid | `PrimaryButton`, `SecondaryButton`, `GhostButton`, `SuccessButton`, `InfoButton`, `WarningButton`, `DangerButton` |
 | Soft (tinted background, semantic text) | `SoftPrimaryButton`, `SoftSecondaryButton`, `SoftSuccessButton`, `SoftInfoButton`, `SoftWarningButton`, `SoftDangerButton` |
 | Outline (border + text, soft fill on hover) | `OutlinePrimaryButton`, `OutlineSecondaryButton`, `OutlineSuccessButton`, `OutlineInfoButton`, `OutlineWarningButton`, `OutlineDangerButton` |
-| Other | `IconToggleButton` (ToggleButton), `EmbeddedButton` (small button inside an input) |
+| Other | `EmbeddedButton` (small button inside an input) |
+
+Every Solid/Soft/Outline key has a `ToggleButton` twin with a `ToggleButton` suffix instead of `Button`
+(`PrimaryToggleButton`, `SoftDangerToggleButton`, `OutlineInfoToggleButton`, `GhostToggleButton`…),
+plus `IconToggleButton` (24×24 transparent icon toggle). Solid variants darken when checked;
+soft and outline variants turn solid.
 
 A plain `<Button>` has the default look. Soft Success/Warning have low contrast in Light;
 keep them for short labels.

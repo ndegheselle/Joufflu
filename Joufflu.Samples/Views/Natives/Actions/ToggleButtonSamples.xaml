@@ -25,12 +25,42 @@
                 Description="Toggle buttons mirror the button variants but stay pressed when checked. Toggle one on to see its checked state.">
                 <WrapPanel toolkit:Spacing.Gap="8,0">
                     <ToggleButton IsChecked="True">Default</ToggleButton>
-                    <ToggleButton Style="{StaticResource TogglePrimary}">Primary</ToggleButton>
-                    <ToggleButton Style="{StaticResource ToggleSecondary}">Secondary</ToggleButton>
-                    <ToggleButton Style="{StaticResource ToggleGhost}">Ghost</ToggleButton>
-                    <ToggleButton Style="{StaticResource ToggleSuccess}">Success</ToggleButton>
-                    <ToggleButton Style="{StaticResource ToggleDanger}">Danger</ToggleButton>
+                    <ToggleButton Style="{StaticResource PrimaryToggleButton}">Primary</ToggleButton>
+                    <ToggleButton Style="{StaticResource SecondaryToggleButton}">Secondary</ToggleButton>
+                    <ToggleButton Style="{StaticResource GhostToggleButton}">Ghost</ToggleButton>
+                    <ToggleButton Style="{StaticResource SuccessToggleButton}">Success</ToggleButton>
+                    <ToggleButton Style="{StaticResource InfoToggleButton}">Info</ToggleButton>
+                    <ToggleButton Style="{StaticResource WarningToggleButton}">Warning</ToggleButton>
+                    <ToggleButton Style="{StaticResource DangerToggleButton}">Danger</ToggleButton>
                     <ToggleButton IsEnabled="False">Disabled</ToggleButton>
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Soft"
+                Code="{Binding SoftCode}"
+                Description="A tinted background with the semantic hue as text; checking it turns it solid.">
+                <WrapPanel toolkit:Spacing.Gap="8,0">
+                    <ToggleButton Style="{StaticResource SoftPrimaryToggleButton}">Primary</ToggleButton>
+                    <ToggleButton Style="{StaticResource SoftSecondaryToggleButton}">Secondary</ToggleButton>
+                    <ToggleButton Style="{StaticResource SoftSuccessToggleButton}">Success</ToggleButton>
+                    <ToggleButton Style="{StaticResource SoftInfoToggleButton}">Info</ToggleButton>
+                    <ToggleButton Style="{StaticResource SoftWarningToggleButton}">Warning</ToggleButton>
+                    <ToggleButton Style="{StaticResource SoftDangerToggleButton}">Danger</ToggleButton>
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Outline"
+                Code="{Binding OutlineCode}"
+                Description="A coloured border and text over a transparent fill; checking it turns it solid.">
+                <WrapPanel toolkit:Spacing.Gap="8,0">
+                    <ToggleButton Style="{StaticResource OutlinePrimaryToggleButton}">Primary</ToggleButton>
+                    <ToggleButton Style="{StaticResource OutlineSecondaryToggleButton}">Secondary</ToggleButton>
+                    <ToggleButton Style="{StaticResource OutlineSuccessToggleButton}">Success</ToggleButton>
+                    <ToggleButton Style="{StaticResource OutlineInfoToggleButton}">Info</ToggleButton>
+                    <ToggleButton Style="{StaticResource OutlineWarningToggleButton}">Warning</ToggleButton>
+                    <ToggleButton Style="{StaticResource OutlineDangerToggleButton}">Danger</ToggleButton>
                 </WrapPanel>
             </c:CodeExample>
 
@@ -42,7 +72,7 @@
                     <ToggleButton Style="{StaticResource IconToggleButton}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
                     </ToggleButton>
-                    <ToggleButton toolkit:Sizing.IsSquare="True" Style="{StaticResource TogglePrimary}">
+                    <ToggleButton toolkit:Sizing.IsSquare="True" Style="{StaticResource PrimaryToggleButton}">
                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
                     </ToggleButton>
                 </StackPanel>

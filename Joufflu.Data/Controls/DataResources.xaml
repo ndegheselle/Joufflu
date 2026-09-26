@@ -1,7 +1,13 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:joolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
+    xmlns:jata="clr-namespace:Joufflu.Data.Controls"
+    xmlns:jnputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+    xmlns:jodels="clr-namespace:Joufflu.Data.Model"
+    xmlns:jonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Data.Controls">
     <Style
         x:Key="DataRemoveButton"
         BasedOn="{StaticResource SoftDangerButton}"
@@ -10,5 +16,87 @@
         <Setter Property="joolkit:Sizing.Size" Value="sm" />
         <Setter Property="Command" Value="{Binding Parent.RemoveCommand}" />
         <Setter Property="CommandParameter" Value="{Binding}" />
+    </Style>
+
+    <!--#region inputs-->
+    <DataTemplate x:Key="StringEditor">
+        <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="IntegerEditor">
+        <jnputs:NumericUpDown Value="{Binding Value}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="NumberEditor">
+        <jnputs:DecimalUpDown Value="{Binding Value}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="BooleanEditor">
+        <CheckBox
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            IsChecked="{Binding Value}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="EnumerationEditor">
+        <ComboBox
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding Options}"
+            SelectedValue="{Binding Value}"
+            SelectedValuePath="Value" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="DateEditor">
+        <DatePicker SelectedDate="{Binding Value}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="TimeEditor">
+        <jnputs:TimeSpanPicker Value="{Binding Value}" />
+    </DataTemplate>
+    <!--#endregion-->
+
+    <jata:DataManualValuesConverter x:Key="ManualValuesConverter" />
+    <jata:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
+
+    <jata:DataValueTemplateSelector
+        x:Key="DataValueEditorSelector"
+        BooleanTemplate="{StaticResource BooleanEditor}"
+        DateTemplate="{StaticResource DateEditor}"
+        EnumerationTemplate="{StaticResource EnumerationEditor}"
+        FallbackTemplate="{StaticResource StringEditor}"
+        IntegerTemplate="{StaticResource IntegerEditor}"
+        NumberTemplate="{StaticResource NumberEditor}"
+        StringTemplate="{StaticResource StringEditor}"
+        TimeTemplate="{StaticResource TimeEditor}" />
+
+    <DataTemplate x:Key="ManualEditor">
+        <jnputs:ComboBoxSearch SelectedItem="{Binding ManualEntry}">
+            <jnputs:ComboBoxSearch.ItemsSource>
+                <MultiBinding Converter="{StaticResource ManualValuesConverter}">
+                    <Binding />
+                    <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataControlBase}}" />
+                </MultiBinding>
+            </jnputs:ComboBoxSearch.ItemsSource>
+            <jnputs:ComboBoxSearch.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel joolkit:Spacing.Gap="4" Orientation="Horizontal">
+                        <jata:DataIcon Type="{Binding Type}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </jnputs:ComboBoxSearch.ItemTemplate>
+        </jnputs:ComboBoxSearch>
+    </DataTemplate>
+
+    <!--
+        ContentTemplate wins over ContentTemplateSelector, so setting it on IsManual swaps
+        the schema's editor out for the manual list and clearing it brings the editor back.
+    -->
+    <Style x:Key="DataValueEditorHost" TargetType="ContentControl">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsManual}" Value="True">
+                <Setter Property="ContentTemplate" Value="{StaticResource ManualEditor}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

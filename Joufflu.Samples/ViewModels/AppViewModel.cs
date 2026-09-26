@@ -125,7 +125,7 @@ public class AppViewModel : ObservableObject
 
         Navigator = new Navigator(ResolvePage);
 
-        Navigator.Navigate(typeof(ButtonSamplesViewModel));
+        Navigator.Navigate(typeof(ShellSamples));
     }
 
     /// <summary>Maps a menu item's target type to its page instance, or null when unknown.</summary>

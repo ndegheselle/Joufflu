@@ -6,7 +6,6 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  Soft/outline tints live in Styles/Brushes.xaml so the rest of the library can reach them.  -->
@@ -279,17 +278,6 @@
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerSoftBrush}}" />
             </Trigger>
         </Style.Triggers>
-    </Style>
-
-    <Style
-        x:Key="IconToggleButton"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="ToggleButton">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Height" Value="24" />
-        <Setter Property="Width" Value="24" />
     </Style>
 
     <Style

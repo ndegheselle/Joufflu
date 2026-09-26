@@ -41,22 +41,16 @@ public class Order
     public List<OrderLine> Lines { get; set; } = [];
 }
 
-/// <summary>
-/// Logique d'interaction pour DataEdit.xaml
-/// </summary>
 [ObservableObject]
-public partial class DataFill : UserControl
+public partial class DataControlBase : UserControl
 {
     [ObservableProperty]
-    private DataObject? _node;
-
-    [ObservableProperty]
-    private string? _json;
+    private DataObject? _node = new DataObject("");
 
     public static readonly DependencyProperty ManualValuesProperty = DependencyProperty.Register(
         nameof(ManualValues),
         typeof(IEnumerable<DataManualValue>),
-        typeof(DataFill),
+        typeof(DataControlBase),
         new PropertyMetadata(null));
 
     /// <summary>
@@ -69,6 +63,12 @@ public partial class DataFill : UserControl
         get => (IEnumerable<DataManualValue>?)GetValue(ManualValuesProperty);
         set => SetValue(ManualValuesProperty, value);
     }
+}
+
+public partial class DataFill : DataControlBase
+{
+    [ObservableProperty]
+    private string? _json;
 
     public DataFill()
     {
