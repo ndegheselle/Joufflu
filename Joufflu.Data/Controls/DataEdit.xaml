@@ -34,7 +34,7 @@
                         VerticalAlignment="Center"
                         toolkit:Sizing.Size="sm"
                         FontFamily="Consolas"
-                        Text="{Binding Key}">
+                        Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.Style>
                             <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
                                 <Style.Triggers>

@@ -453,7 +453,8 @@
                 </nav:NavigationMenu>
 
                 <!--  The current page: a plain ContentControl, the view resolved by implicit DataTemplates.  -->
-                <ContentControl Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}" Content="{Binding Navigator.CurrentPage}" />
+                <!--  A page that validates itself (INotifyDataErrorInfo) would otherwise put the whole host in error.  -->
+                <ContentControl Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}" Content="{Binding Navigator.CurrentPage, ValidatesOnNotifyDataErrors=False}" />
             </DockPanel>
         </nav:OverlayContainer>
     </feedbackControls:ToastContainer>

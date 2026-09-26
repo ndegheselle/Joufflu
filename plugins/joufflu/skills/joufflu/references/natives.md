@@ -55,6 +55,15 @@ keep them for short labels.
 
 `DangerMenuItem` colours a destructive `MenuItem` (e.g. "Delete" in a `ContextMenu`).
 
+## Validation errors
+
+`ValidationErrorTemplate` shows binding errors (`INotifyDataErrorInfo`, `IDataErrorInfo`,
+`ValidationRule`): a danger border plus a badge on the top-right corner whose tooltip lists the
+errors. `TextBox`, `PasswordBox`, `ComboBox`, `DatePicker` and `FilePicker` use it already; don't
+hand-roll error tooltips. Apply it to any other control with
+`Validation.ErrorTemplate="{DynamicResource ValidationErrorTemplate}"`, or redefine the key to
+restyle every input.
+
 ## Card
 
 Named `Border` styles for padded, rounded surfaces:

@@ -37,7 +37,7 @@
         <Setter Property="CalendarStyle" Value="{DynamicResource {x:Type Calendar}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
-        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+        <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DatePicker}">

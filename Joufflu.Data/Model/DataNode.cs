@@ -2,7 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json.Linq;
 using NJsonSchema;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -21,10 +24,19 @@ public enum EnumDataType
     Object
 }
 
-public abstract partial class DataNode : ObservableObject, ICloneable
+public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo, ICloneable
 {
     [ObservableProperty]
     private string? _key;
+
+    /// <summary>Why [Key] is refused, null when it is fine.</summary>
+    private string? _keyError;
+
+    partial void OnKeyChanged(string? value)
+    {
+        if (Parent is not null)
+            ValidateKeys(Parent.Children);
+    }
 
     /// <summary>For DataNode with children and to prevent binding errors.</summary>
     [ObservableProperty]
@@ -46,6 +58,57 @@ public abstract partial class DataNode : ObservableObject, ICloneable
 
     public abstract JToken? ToToken();
 
+    #region Errors
+
+    public bool HasErrors => _keyError is not null;
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    /// <summary>
+    /// The key error belongs to [Key] alone: reporting it as an error of the whole node (a null or
+    /// empty name) would flag every <c>{Binding}</c> on the node, the tree's row presenters included.
+    /// </summary>
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (_keyError is not null && propertyName == nameof(Key))
+            return new[] { _keyError };
+        return Array.Empty<string>();
+    }
+
+    /// <summary>
+    /// Flags every node of [siblings] whose key another one already uses. JSON keys are case
+    /// sensitive, so is the comparison; a node without a key writes nothing and clashes with none.
+    /// </summary>
+    internal static void ValidateKeys(IEnumerable<DataNode> siblings)
+    {
+        List<DataNode> nodes = [.. siblings];
+        HashSet<string> duplicates = [.. nodes
+            .Where(node => node.Key is not null)
+            .GroupBy(node => node.Key!, StringComparer.Ordinal)
+            .Where(group => group.Count() > 1)
+            .Select(group => group.Key)];
+
+        foreach (DataNode node in nodes)
+            node.SetKeyError(node.Key is not null && duplicates.Contains(node.Key)
+                ? $"The key [{node.Key}] is already used."
+                : null);
+    }
+
+    /// <summary>A node out of any parent has no sibling to clash with.</summary>
+    internal void ClearKeyError() => SetKeyError(null);
+
+    private void SetKeyError(string? error)
+    {
+        if (_keyError == error)
+            return;
+
+        _keyError = error;
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(Key)));
+        OnPropertyChanged(nameof(HasErrors));
+    }
+
+    #endregion
+
     /// <summary>
     /// A deep copy of the node, values included. The copy stands on its own: it belongs to no
     /// <see cref="Parent"/> until one takes it.
@@ -56,6 +119,9 @@ public abstract partial class DataNode : ObservableObject, ICloneable
 
 public interface IDataParent
 {
+    /// <summary>The nodes whose keys share this parent's scope.</summary>
+    IEnumerable<DataNode> Children { get; }
+
     [RelayCommand]
     public void Remove(DataNode node);
 }
@@ -83,8 +149,8 @@ public partial class DataObjectControl
     }
 
     [RelayCommand]
-    public void Add(EnumDataType type) => Object.Add(NodeFrom(type));
-    public static DataNode NodeFrom(EnumDataType type, string key = "new") => type switch
+    public void Add(EnumDataType type) => Object.Add(NodeFrom(type, Object.UniqueKey("key")));
+    public static DataNode NodeFrom(EnumDataType type, string key) => type switch
     {
         EnumDataType.Object => new DataObject(key),
         EnumDataType.Array => new DataArray(key, null),
@@ -98,6 +164,8 @@ public partial class DataArray : DataNode, IDataParent
     private DataNode? _template;
 
     public ObservableCollection<DataNode> Values { get; set; } = [];
+
+    public IEnumerable<DataNode> Children => Values;
 
     /// <summary>
     /// Values with the add control item.
@@ -137,7 +205,8 @@ public partial class DataArray : DataNode, IDataParent
     [RelayCommand]
     public void Remove(DataNode node)
     {
-        Values.Remove(node);
+        if (Values.Remove(node))
+            node.ClearKeyError();
         for (int i = 0; i < Values.Count; i++)
         {
             DataNode n = Values[i];
@@ -180,25 +249,76 @@ public partial class DataArray : DataNode, IDataParent
 
 public partial class DataObject : DataNode, IDataParent
 {
-    public ObservableCollection<DataNode> Properties { get; set; } = [];
+    private ObservableCollection<DataNode> _properties = [];
+    private readonly CollectionContainer _propertiesContainer;
+
+    /// <summary>
+    /// The properties, whose keys must be unique. Whatever enters the collection, or the collection
+    /// set in its place, is taken as a child and gets its key checked against the others.
+    /// </summary>
+    public ObservableCollection<DataNode> Properties
+    {
+        get => _properties;
+        set
+        {
+            _properties.CollectionChanged -= OnPropertiesChanged;
+            _properties = value;
+            _properties.CollectionChanged += OnPropertiesChanged;
+            // [Items] follows the new collection.
+            _propertiesContainer.Collection = value;
+
+            foreach (DataNode property in value)
+                property.Parent = this;
+            ValidateKeys(value);
+        }
+    }
+
+    public IEnumerable<DataNode> Children => Properties;
+
     public CompositeCollection Items { get; }
 
     public DataObject(string? key) : base(EnumDataType.Object, key)
     {
-        Items = [new CollectionContainer { Collection = Properties }, new DataObjectControl(this)];
+        _properties.CollectionChanged += OnPropertiesChanged;
+        _propertiesContainer = new CollectionContainer { Collection = _properties };
+        Items = [_propertiesContainer, new DataObjectControl(this)];
     }
 
     [RelayCommand]
-    public void Add(DataNode node)
-    {
-        node.Parent = this;
-        Properties.Add(node);
-    }
+    public void Add(DataNode node) => Properties.Add(node);
 
     [RelayCommand]
-    public void Remove(DataNode node)
+    public void Remove(DataNode node) => Properties.Remove(node);
+
+    /// <summary>
+    /// [baseKey] if no property uses it yet, otherwise the first of [baseKey]1, [baseKey]2... that is free.
+    /// </summary>
+    public string UniqueKey(string baseKey)
     {
-        Properties.Remove(node);
+        HashSet<string> used = [.. Properties.Select(property => property.Key).OfType<string>()];
+        if (!used.Contains(baseKey))
+            return baseKey;
+
+        int index = 1;
+        while (used.Contains($"{baseKey} {index}"))
+            index++;
+        return $"{baseKey} {index}";
+    }
+
+    private void OnPropertiesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.OldItems is not null)
+        {
+            foreach (DataNode property in e.OldItems)
+                property.ClearKeyError();
+        }
+        if (e.NewItems is not null)
+        {
+            foreach (DataNode property in e.NewItems)
+                property.Parent = this;
+        }
+
+        ValidateKeys(Properties);
     }
 
     public override JToken? ToToken()

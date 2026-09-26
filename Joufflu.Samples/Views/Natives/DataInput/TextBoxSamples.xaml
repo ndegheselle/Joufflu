@@ -36,6 +36,13 @@
             </c:CodeExample>
 
             <c:CodeExample
+                Title="Validation"
+                Code="{Binding ValidationCode}"
+                Description="Binding errors show through ValidationErrorTemplate: a danger border and a corner badge whose tooltip lists the errors. Type a username to clear them.">
+                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+            </c:CodeExample>
+
+            <c:CodeExample
                 Title="Password &amp; multi-line"
                 Code="{Binding OtherCode}"
                 Description="PasswordBox shares the TextBox styling; a TextBox becomes multi-line with AcceptsReturn.">
