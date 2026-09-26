@@ -96,7 +96,8 @@ public class AppViewModel : ObservableObject
             new PagingSamplesViewModel(),
 
             // Schema (Joufflu.Data library)
-            new SchemaSamplesViewModel(),
+            new DataFillSamplesViewModel(),
+            new DataEditSamplesViewModel(),
 
             // File explorer (Joufflu.FileExplorer library)
             new ExplorerSamplesViewModel(Toasts),

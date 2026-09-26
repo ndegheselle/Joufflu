@@ -412,11 +412,17 @@
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Braces}" />
                         </nav:NavigationGroup.Icon>
 
-                        <nav:NavigationItem TargetType="{x:Type dataSamples:SchemaSamplesViewModel}">
+                        <nav:NavigationItem TargetType="{x:Type dataSamples:DataFillSamplesViewModel}">
                             <nav:NavigationItem.Icon>
-                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Braces}" />
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardList}" />
                             </nav:NavigationItem.Icon>
-                            Schema
+                            Data fill
+                        </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataSamples:DataEditSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />
+                            </nav:NavigationItem.Icon>
+                            Data edit
                         </nav:NavigationItem>
                     </nav:NavigationGroup>
 

@@ -195,8 +195,7 @@ public partial class DataArray : DataNode, IDataParent
 
     public void Add(EnumDataType type)
     {
-        var node = DataObjectControl.NodeFrom(type);
-        node.Key = $"[{Values.Count}]";
+        var node = DataObjectControl.NodeFrom(type, $"[{Values.Count}]");
         node.CanEditKey = false;
         node.Parent = this;
         Values.Add(node);

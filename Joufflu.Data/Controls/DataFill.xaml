@@ -47,123 +47,99 @@
             </DataTemplate>
         </ResourceDictionary>
     </local:DataControlBase.Resources>
-    <Grid toolkit:Spacing.Gap="4">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-
-        <TreeView ItemsSource="{Binding Node.Properties}">
-            <TreeView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.Resources>
-                <DataTemplate DataType="{x:Type jodels:DataArrayControl}">
+    <TreeView ItemsSource="{Binding Node.Properties}">
+        <TreeView.ItemContainerStyle>
+            <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+        </TreeView.ItemContainerStyle>
+        <TreeView.Resources>
+            <DataTemplate DataType="{x:Type jodels:DataArrayControl}">
+                <Button
+                    HorizontalAlignment="Left"
+                    toolkit:Sizing.Size="xs"
+                    Command="{Binding AddCommand}"
+                    Style="{StaticResource SoftPrimaryButton}">
+                    <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
+                        <TextBlock VerticalAlignment="Center">Add</TextBlock>
+                    </StackPanel>
+                </Button>
+            </DataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}" ItemsSource="{Binding Items}">
+                <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                     <Button
-                        HorizontalAlignment="Left"
-                        toolkit:Sizing.Size="xs"
-                        Command="{Binding AddCommand}"
-                        Style="{StaticResource SoftPrimaryButton}">
-                        <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
-                            <TextBlock VerticalAlignment="Center">Add</TextBlock>
-                        </StackPanel>
+                        Grid.Column="2"
+                        Style="{StaticResource DataRemoveButton}"
+                        Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
-                </DataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}" ItemsSource="{Binding Items}">
-                    <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
-                        <Button
-                            Grid.Column="2"
-                            Style="{StaticResource DataRemoveButton}"
-                            Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
-                        </Button>
-                    </Grid>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}" ItemsSource="{Binding Properties}">
-                    <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
-                        <Button
-                            Grid.Column="2"
-                            Style="{StaticResource DataRemoveButton}"
-                            Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
-                        </Button>
-                    </Grid>
-                </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type jodels:DataValue}">
-                    <Grid
-                        Margin="0,0,4,0"
+                </Grid>
+            </HierarchicalDataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}" ItemsSource="{Binding Properties}">
+                <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <Button
+                        Grid.Column="2"
+                        Style="{StaticResource DataRemoveButton}"
+                        Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                    </Button>
+                </Grid>
+            </HierarchicalDataTemplate>
+            <DataTemplate DataType="{x:Type jodels:DataValue}">
+                <Grid
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <ContentControl
+                        Grid.Column="1"
                         VerticalAlignment="Center"
-                        toolkit:Spacing.Gap="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
-                        <ContentControl
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            toolkit:Sizing.Size="sm"
-                            Content="{Binding}"
-                            ContentTemplateSelector="{StaticResource DataValueEditorSelector}"
-                            Style="{StaticResource DataValueEditorHost}" />
-                        <Button
-                            Grid.Column="2"
-                            Style="{StaticResource DataRemoveButton}"
-                            Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
-                        </Button>
-                        <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->
-                        <ToggleButton
-                            Grid.Column="3"
-                            toolkit:Sizing.IsSquare="True"
-                            toolkit:Sizing.Size="sm"
-                            toolkit:Tooltip.Content="Force the value"
-                            IsChecked="{Binding IsManual}">
-                            <ToggleButton.IsEnabled>
-                                <MultiBinding Converter="{StaticResource HasManualValuesConverter}">
-                                    <Binding />
-                                    <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
-                                </MultiBinding>
-                            </ToggleButton.IsEnabled>
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
-                        </ToggleButton>
-                    </Grid>
-                </DataTemplate>
-            </TreeView.Resources>
-        </TreeView>
-        <TextBox
-            Grid.Column="1"
-            Height="auto"
-            AcceptsReturn="True"
-            Text="{Binding Json}" />
-
-        <Button Grid.Row="1" Command="{Binding GenerateCommand}">Generate</Button>
-        <Button
-            Grid.Row="1"
-            Grid.Column="1"
-            Command="{Binding GenerateJsonCommand}">
-            Generate json
-        </Button>
-    </Grid>
+                        toolkit:Sizing.Size="sm"
+                        Content="{Binding}"
+                        ContentTemplateSelector="{StaticResource DataValueEditorSelector}"
+                        Style="{StaticResource DataValueEditorHost}" />
+                    <Button
+                        Grid.Column="2"
+                        Style="{StaticResource DataRemoveButton}"
+                        Visibility="{Binding Parent, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                    </Button>
+                    <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->
+                    <ToggleButton
+                        Grid.Column="3"
+                        toolkit:Sizing.IsSquare="True"
+                        toolkit:Sizing.Size="sm"
+                        toolkit:Tooltip.Content="Force the value"
+                        IsChecked="{Binding IsManual}">
+                        <ToggleButton.IsEnabled>
+                            <MultiBinding Converter="{StaticResource HasManualValuesConverter}">
+                                <Binding />
+                                <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataControlBase}}" />
+                            </MultiBinding>
+                        </ToggleButton.IsEnabled>
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                    </ToggleButton>
+                </Grid>
+            </DataTemplate>
+        </TreeView.Resources>
+    </TreeView>
 </local:DataControlBase>

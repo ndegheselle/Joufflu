@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace Joufflu.Samples.Views.Data;
 
-public partial class SchemaSamples : UserControl
+public partial class DataEditSamples : UserControl
 {
-    public SchemaSamples()
+    public DataEditSamples()
     {
         InitializeComponent();
     }

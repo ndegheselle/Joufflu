@@ -158,8 +158,11 @@
     <DataTemplate DataType="{x:Type customNav:PagingSamplesViewModel}">
         <customNav:PagingSamples />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type dataSamples:SchemaSamplesViewModel}">
-        <dataSamples:SchemaSamples />
+    <DataTemplate DataType="{x:Type dataSamples:DataFillSamplesViewModel}">
+        <dataSamples:DataFillSamples />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type dataSamples:DataEditSamplesViewModel}">
+        <dataSamples:DataEditSamples />
     </DataTemplate>
     <DataTemplate DataType="{x:Type customNav:ConfirmViewModel}">
         <customNavViews:ConfirmView />
