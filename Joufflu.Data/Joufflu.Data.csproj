@@ -12,7 +12,7 @@
     <Description>JSON Schema for Joufflu: edit a schema, and fill a value against one, as themed WPF trees instead of a raw JSON text box.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <Version>0.1.0</Version>
+    <Version>0.8.0</Version>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
