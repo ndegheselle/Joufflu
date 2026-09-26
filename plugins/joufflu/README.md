@@ -7,7 +7,7 @@ changes.
 
 | Skill | Use it to |
 |---|---|
-| `joufflu` | API reference for every package (natives and named styles, inputs, navigation and overlays, feedback, file explorer, toolkit attached properties, theming and design tokens). Loaded automatically when a project references Joufflu. |
+| `joufflu` | API reference for every package (natives and named styles, inputs, navigation and overlays, feedback, file explorer, JSON data trees, toolkit attached properties, theming and design tokens). Loaded automatically when a project references Joufflu. |
 | `joufflu-new-app` | Scaffold a Joufflu app, or add Joufflu to an existing WPF project: packages, `App.xaml`, `ThemeManager`, a `ThemedWindow` shell with side menu, pages, overlays and toasts. |
 | `joufflu-theme` | Create and register a custom palette, override design tokens, add a theme switcher and persist the choice. |
 | `joufflu-restyle` | Audit a view and replace hardcoded colours, sizes, margins and hand-made controls with Joufflu tokens, styles and controls. |
@@ -30,5 +30,3 @@ The skills describe Joufflu's public API. When that API changes, update
 `skills/joufflu/references/*.md` (and the workflow skills if they use the changed members)
 in the same commit, and bump `version` in `.claude-plugin/plugin.json`. Otherwise Claude
 will write code against members that no longer exist.
-
-`Joufflu.Data` is not covered yet because its API is still changing.

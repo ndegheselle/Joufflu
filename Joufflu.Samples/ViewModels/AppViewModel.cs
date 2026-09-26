@@ -95,7 +95,7 @@ public class AppViewModel : ObservableObject
             new OverlaySamplesViewModel(Overlays, Toasts),
             new PagingSamplesViewModel(),
 
-            // Schema (Joufflu.Data library)
+            // Data (Joufflu.Data library)
             new DataFillSamplesViewModel(),
             new DataEditSamplesViewModel(),
 

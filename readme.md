@@ -24,6 +24,7 @@ live between Light and Dark — no restart, no flicker.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
+- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch, instead of a raw text box.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
@@ -52,7 +53,7 @@ existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `FullContainer`, `Paging`, `OverlayContainer` and modal overlays driven by a `Navigator` |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **File explorer** (`Joufflu.FileExplorer`) | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar` and their `IExplorerSource` |
-| **Data** (`Joufflu.Data`) | `DataEditor` filling a value in against a JSON Schema, `SchemaEditor` writing one, `SchemaView` showing one |
+| **Data** (`Joufflu.Data`) | `DataFill` filling a value in against a JSON Schema, `DataEdit` building one from scratch |
 | **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, `ThemeManager` and the design tokens, live theme customization, and the application shell (`ThemedWindow`) |
 
 The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
@@ -67,7 +68,7 @@ data grid, …) restyled to match the design system — come along with the core
 
    ```sh
    dotnet add package Joufflu
-   dotnet add package Joufflu.Data          # optional: JSON Schema editors (needs Joufflu.Inputs)
+   dotnet add package Joufflu.Data          # optional: JSON data trees (needs Joufflu.Inputs)
    dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts
    dotnet add package Joufflu.FileExplorer  # optional: file explorer (needs Joufflu.Feedback)
    dotnet add package Joufflu.Inputs        # optional: input controls

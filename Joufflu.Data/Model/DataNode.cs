@@ -45,9 +45,16 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo,
     public EnumDataType Type { get; private set; }
     /// <summary>Whether the schema takes null on top of the type it calls for.</summary>
     public bool IsNullable { get; set; }
+    /// <summary>Whether the parent object requires the node, which then cannot be forced to undefined.</summary>
+    public bool IsRequired { get; set; }
     public bool CanEditKey { get; set; } = true;
 
-    public IDataParent? Parent { get; set; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsArrayItem))]
+    private IDataParent? _parent;
+
+    /// <summary>Whether the node is an item of a <see cref="DataArray"/>, the only kind <see cref="Controls.DataFill"/> removes.</summary>
+    public bool IsArrayItem => Parent is DataArray;
     public string? Description { get; set; }
 
     public DataNode(EnumDataType type, string? key)
@@ -232,6 +239,7 @@ public partial class DataArray : DataNode, IDataParent
             Description = Description,
             IsExpanded = IsExpanded,
             IsNullable = IsNullable,
+            IsRequired = IsRequired,
         };
 
         // Filled in place: [Items] watches this very collection.
@@ -340,6 +348,7 @@ public partial class DataObject : DataNode, IDataParent
         IsExpanded = IsExpanded,
         Properties = [.. Properties.Select(property => property.Clone())],
         IsNullable = IsNullable,
+        IsRequired = IsRequired,
     };
 }
 
@@ -370,12 +379,14 @@ public partial class DataValue : DataNode
             Value = value.Value;
     }
 
-    /// <summary> The choices a closed list offers for the enumarations. </summary>
+    /// <summary> The choices a closed list offers for the enumerations. </summary>
     public IReadOnlyList<DataEnumOption> Options { get; }
 
-    public DataValue(EnumDataType type, string? key, IReadOnlyList<DataEnumOption> options) : base(type, key)
+    /// <summary>[isNullable] is taken here rather than set afterwards, the default value depending on it.</summary>
+    public DataValue(EnumDataType type, string? key, IReadOnlyList<DataEnumOption> options, bool isNullable = false) : base(type, key)
     {
         Options = options;
+        IsNullable = isNullable;
         Value = Default();
     }
 
@@ -400,7 +411,7 @@ public partial class DataValue : DataNode
             EnumDataType.Integer => new JValue(Convert.ToInt64(Value, CultureInfo.InvariantCulture)),
             EnumDataType.Number => new JValue(Convert.ToDecimal(Value, CultureInfo.InvariantCulture)),
             EnumDataType.DateTime => new JValue(((DateTime)Value).ToString("O", CultureInfo.InvariantCulture)),
-            EnumDataType.TimeSpan => new JValue(((TimeSpan)Value).ToString("O", CultureInfo.InvariantCulture)),
+            EnumDataType.TimeSpan => new JValue(((TimeSpan)Value).ToString("c", CultureInfo.InvariantCulture)),
             _ => TokenOf(Value)
         };
     }
@@ -409,17 +420,17 @@ public partial class DataValue : DataNode
     /// The options and the manual entry are records, shared as they are. [ManualEntry] goes in
     /// before [Value], which it would otherwise overwrite.
     /// </summary>
-    public override DataValue Clone() => new(Type, Key, Options)
+    public override DataValue Clone() => new(Type, Key, Options, IsNullable)
     {
         Description = Description,
         IsManual = IsManual,
         ManualEntry = ManualEntry,
         Value = Value is JToken token ? token.DeepClone() : Value,
-        IsNullable = IsNullable,
+        IsRequired = IsRequired,
     };
 
     /// <summary>
-    /// Default value based on the [schema]
+    /// The value a new node of [Type] starts with.
     /// </summary>
     private object? Default()
     {
@@ -432,7 +443,7 @@ public partial class DataValue : DataNode
             EnumDataType.Integer => 0L,
             EnumDataType.Number => 0m,
             EnumDataType.Boolean => false,
-            EnumDataType.Choice => Options.FirstOrDefault(),
+            EnumDataType.Choice => Options.FirstOrDefault()?.Value,
             EnumDataType.TimeSpan => TimeSpan.Zero,
             EnumDataType.DateTime => DateTime.Today,
             _ => throw new Exception($"Can't set a default value for the type [{Type}]")
