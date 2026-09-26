@@ -35,6 +35,8 @@ string? json = Node.ToToken()?.ToString();
 ```
 
 `ToDataNode()` follows `$ref` and sets `IsNullable` and `IsRequired` from the schema.
+`node.ToJsonSchema()` does the reverse (types, formats, `Description`, `IsNullable`,
+`IsRequired`, enum `Options` with `x-enumNames`; values are not written, time spans use `time-span`).
 
 | Schema | `EnumDataType` | Editor | JSON |
 |---|---|---|---|
