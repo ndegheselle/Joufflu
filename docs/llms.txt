@@ -2,7 +2,7 @@
 
 > WPF inputs and reusable controls for .NET, built on a small design system of themed brushes, dimensions, sizing and spacing helpers. Every control reads its colours through `DynamicResource`, so the whole UI re-themes live between Light and Dark with no restart.
 
-Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Data` (JSON values edited as a tree, from a JSON Schema or from scratch), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
+Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Data` (JSON values edited as a tree), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
 
 ## Start here
 
@@ -41,8 +41,8 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 
 ## Data (`Joufflu.Data`)
 
-- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree and `ToToken()`, `ToDataNode()` building it from an NJsonSchema `JsonSchema` (type, format and editor per value), unique keys, and `ManualValues` forcing a field to an entry, undefined or null.
-- [Data fill](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md): `DataFill`, filling in the values of a node built from a schema.
+- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree, `ToToken()`, `ToDataNode()` from an NJsonSchema `JsonSchema` (editor and JSON per type), and `ManualValues`.
+- [Data fill](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md): `DataFill`, filling in a node built from a schema.
 - [Data edit](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md): `DataEdit`, building a node from scratch.
 
 ## File explorer (`Joufflu.FileExplorer`)

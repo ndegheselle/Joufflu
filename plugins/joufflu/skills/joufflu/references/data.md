@@ -1,81 +1,73 @@
 # Data (`Joufflu.Data`)
 
-JSON values edited as a tree instead of a raw text box. Depends on `Joufflu`,
-`Joufflu.Inputs`, NJsonSchema and Newtonsoft.Json. Nothing to merge beyond the core
-`Resources.xaml`.
+JSON values edited as a tree. Depends on `Joufflu`, `Joufflu.Inputs`, NJsonSchema and
+Newtonsoft.Json. Only the core `Resources.xaml` needs merging.
 
 ```xml
 xmlns:data="clr-namespace:Joufflu.Data.Controls;assembly=Joufflu.Data"
 ```
 
 ```csharp
-using Joufflu.Data.Model;   // DataNode, DataObject, DataArray, DataValue, EnumDataType, DataManualValue, DataFactory
+using Joufflu.Data.Model;   // DataObject, DataArray, DataValue, EnumDataType, DataManualValue
 using NJsonSchema;          // JsonSchema
-// Always alias it: System.Windows.DataObject clashes in any WPF file.
-using DataObject = Joufflu.Data.Model.DataObject;
+using DataObject = Joufflu.Data.Model.DataObject; // always alias: clashes with System.Windows.DataObject
 ```
 
 ## Controls
 
-Both take a `Node` (`DataObject`, two-way by default) and edit it in place, plus an optional
-`ManualValues`. They keep the host's `DataContext`.
+Both edit a `Node` (`DataObject`, two-way) in place and take an optional `ManualValues`.
 
 | Control | Edits |
 |---|---|
-| `DataFill` | Values of a node built from a schema. Keys and shape are fixed; only array items can be added (cloned from the array's `Template`) or removed. Shows `Description` as an info tooltip. |
-| `DataEdit` | Everything: add properties/items of any `EnumDataType`, rename keys, set values, remove rows. Starts from an empty `new DataObject("")` when no `Node` is bound. |
+| `DataFill` | Values of a node built from a schema. Shape is fixed; only array items can be added (cloned from `Template`) or removed. |
+| `DataEdit` | Everything: properties and items of any type, keys, values. Starts from an empty object when no `Node` is bound. |
 
 ```xml
 <data:DataFill Node="{Binding Node}" ManualValues="{Binding ManualValues}" />
 <data:DataEdit Node="{Binding Draft}" />
 ```
 
-## Building and reading the tree
+## Tree
 
 ```csharp
-Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode();   // any JsonSchema, e.g. from FromJsonAsync
-string? json = Node.ToToken()?.ToString();                      // JToken? of the whole tree
+Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode(); // any JsonSchema
+string? json = Node.ToToken()?.ToString();
 ```
 
-`ToDataNode(string? key = null)` is a C# 14 extension on `JsonSchema` (class `DataFactory`).
-It follows `$ref`, sets `IsNullable` from the schema and `IsRequired` from the parent's
-`required` list.
+`ToDataNode()` follows `$ref` and sets `IsNullable` and `IsRequired` from the schema.
 
-| Schema | `EnumDataType` | Editor | JSON written |
+| Schema | `EnumDataType` | Editor | JSON |
 |---|---|---|---|
 | `string` | `String` | `TextBox` | string |
-| `string` + `date` / `date-time` | `DateTime` | `DatePicker` | ISO 8601 (`"O"`) |
+| `string` + `date` / `date-time` | `DateTime` | `DatePicker` | ISO 8601 |
 | `string` + `time-span` / `duration` | `TimeSpan` | `TimeSpanPicker` | `"c"` format |
 | `integer` | `Integer` (`long`) | `NumericUpDown` | number |
 | `number` | `Number` (`decimal`) | `DecimalUpDown` | number |
 | `boolean` | `Boolean` | `CheckBox` | bool |
-| `enum` | `Choice` | `ComboBox` over `Options` (`DataEnumOption(Name, Value)`, names from `x-enumNames`) | the option's value |
+| `enum` | `Choice` | `ComboBox` of `Options` (`DataEnumOption(Name, Value)`) | option value |
 | `array` | `Array` → `DataArray` (`Values`, `Template`) | tree | array |
 | `object` | `Object` → `DataObject` (`Properties`) | tree | object |
 
-Limits: tuple arrays (`items` as a list) throw; a schema with no type is not supported.
-New values start at `null` when nullable, else `""`, `0`, `false`, today, `TimeSpan.Zero`
-or the first option.
+Not supported: arrays with a list of item schemas, schemas without a type.
 
-Tree API: `DataObject.Add(node)` / `Remove(node)` / `UniqueKey("key")`, `DataArray.Add()`
-(clone of `Template`) / `Add(EnumDataType)` / `Remove(node)`, `DataNode.Clone()`. Object keys
-are case-sensitive and must be unique (duplicates are reported through
-`INotifyDataErrorInfo` on `Key`); array items are keyed `[0]`, `[1]`… and re-numbered on
-removal.
+Nullable values start at `null`, others at `""`, `0`, `false`, today, `TimeSpan.Zero` or
+the first option. Object keys are unique and case-sensitive (errors on `Key` through
+`INotifyDataErrorInfo`); array items are keyed `[0]`, `[1]`…
+
+API: `DataObject.Add` / `Remove` / `UniqueKey`, `DataArray.Add()` / `Add(EnumDataType)` /
+`Remove`, `DataNode.Clone()`.
 
 ## Manual values
 
-A field can be forced to an entry instead of its editor (feather toggle on the row):
+A field can be forced to an entry instead of its editor (feather toggle):
 
 ```csharp
 public IReadOnlyList<DataManualValue> ManualValues { get; } =
 [
-    new(EnumDataType.String, "TBD"),   // Type = the field type it fits; null fits any
+    new(EnumDataType.String, "TBD"),   // fits String fields; null type fits any
     new(EnumDataType.Integer, -1L),
 ];
 ```
 
-On top of these, a row offers `DataManualValue.Undefined` when `!IsRequired` (the property is
-not written) and `DataManualValue.Null` when `IsNullable`. A forced entry sets
-`DataValue.Value` and is written as the JSON of its own value. The toggle is disabled when
-nothing fits.
+Also offered: `DataManualValue.Undefined` (property not written) when not required,
+`DataManualValue.Null` when nullable.

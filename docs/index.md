@@ -30,7 +30,7 @@ can paste into your views.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
-- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch, instead of a raw text box.
+- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
@@ -49,7 +49,7 @@ can paste into your views.
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
 | [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging`, `FullContainer` |
 | [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
-| [Data](data/index.md) | `DataFill` and `DataEdit`, JSON values as a tree, from a JSON Schema or from scratch (`Joufflu.Data`) |
+| [Data](data/index.md) | `DataFill`, `DataEdit` (`Joufflu.Data`) |
 | [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, the design tokens, theme customization, application shell, building a custom input |
 

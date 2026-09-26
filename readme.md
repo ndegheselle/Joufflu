@@ -24,7 +24,7 @@ live between Light and Dark — no restart, no flicker.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
-- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch, instead of a raw text box.
+- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 

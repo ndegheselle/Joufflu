@@ -45,7 +45,7 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo,
     public EnumDataType Type { get; private set; }
     /// <summary>Whether the schema takes null on top of the type it calls for.</summary>
     public bool IsNullable { get; set; }
-    /// <summary>Whether the parent object requires the node, which then cannot be forced to undefined.</summary>
+    /// <summary>Whether the parent object requires the node: it then cannot be undefined.</summary>
     public bool IsRequired { get; set; }
     public bool CanEditKey { get; set; } = true;
 
@@ -53,7 +53,7 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo,
     [NotifyPropertyChangedFor(nameof(IsArrayItem))]
     private IDataParent? _parent;
 
-    /// <summary>Whether the node is an item of a <see cref="DataArray"/>, the only kind <see cref="Controls.DataFill"/> removes.</summary>
+    /// <summary>Whether the node is an array item, the only kind <see cref="Controls.DataFill"/> removes.</summary>
     public bool IsArrayItem => Parent is DataArray;
     public string? Description { get; set; }
 
@@ -382,7 +382,7 @@ public partial class DataValue : DataNode
     /// <summary> The choices a closed list offers for the enumerations. </summary>
     public IReadOnlyList<DataEnumOption> Options { get; }
 
-    /// <summary>[isNullable] is taken here rather than set afterwards, the default value depending on it.</summary>
+    /// <summary>[isNullable] is set here as the default value depends on it.</summary>
     public DataValue(EnumDataType type, string? key, IReadOnlyList<DataEnumOption> options, bool isNullable = false) : base(type, key)
     {
         Options = options;

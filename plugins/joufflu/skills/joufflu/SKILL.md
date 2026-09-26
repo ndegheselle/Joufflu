@@ -55,8 +55,8 @@ never invent a property or method that is not listed here or visible in the pack
 | `Joufflu.FileExplorer` | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar`, sources | Joufflu, Joufflu.Feedback |
 | `Joufflu.Data` | `DataFill`, `DataEdit`, the `DataNode` tree, `JsonSchema.ToDataNode()` | Joufflu, Joufflu.Inputs, NJsonSchema |
 
-`Joufflu.Data` is the youngest package and its API still moves between minor versions:
-check the members against the installed version.
+`Joufflu.Data` API still changes between minor versions: check members against the
+installed package.
 
 ## 3. Required wiring (the most common mistake)
 
@@ -122,7 +122,7 @@ C# namespaces (these are the real ones; some doc snippets are off):
 | `ToastService`, `IToastService`, `ToastOptions`, `ToastType` | `Joufflu.Feedback` |
 | `ToastContainer`, `ToastPosition`, `Badge`, `BadgeVariant`, `Spinner` | `Joufflu.Feedback.Controls` |
 | `FileSystemSource`, `FileSystemWatcherSource`, `IExplorerSource` | `Joufflu.FileExplorer.Sources` |
-| `DataObject`, `DataArray`, `DataValue`, `EnumDataType`, `DataManualValue`, `DataFactory` | `Joufflu.Data.Model` (alias `DataObject`, which clashes with `System.Windows.DataObject`) |
+| `DataObject`, `DataArray`, `DataValue`, `EnumDataType`, `DataManualValue`, `DataFactory` | `Joufflu.Data.Model` (alias `DataObject`: clashes with `System.Windows.DataObject`) |
 
 ## 5. Rules of thumb for new UI
 
