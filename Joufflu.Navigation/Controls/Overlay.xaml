@@ -3,21 +3,45 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls">
+    xmlns:nav="clr-namespace:Joufflu.Navigation"
+    xmlns:controls="clr-namespace:Joufflu.Navigation.Controls"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    >
 
-    <!--  ============================ Overlay ============================  -->
-    <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type nav:OverlayInstance}">
-        <Grid>
-            <Border Background="#000000" Opacity="0.5">
-                <Border.InputBindings>
-                    <MouseBinding Command="{Binding ClickAwayCommand}" MouseAction="LeftClick" />
-                </Border.InputBindings>
-            </Border>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  ==================== Overlay ====================  -->
+    <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type controls:OverlayInstance}">
+        <Grid Background="{x:Null}">
+            <Grid Background="{x:Null}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <!--
+                    HACK : allow the user to still drag the window then an overlay is opened then ThemedWindow.AllowContentOverTitleBar is used.
+                    Should not be there then AllowContentOverTitleBar is not set.
+                -->
+                <Border
+                    Height="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
+                    Background="#000000"
+                    IsHitTestVisible="False"
+                    Opacity="0.5" />
+                <Border
+                    Grid.Row="1"
+                    Background="#000000"
+                    Opacity="0.5">
+                    <Border.InputBindings>
+                        <MouseBinding Command="{Binding ClickAwayCommand}" MouseAction="LeftClick" />
+                    </Border.InputBindings>
+                </Border>
+            </Grid>
 
             <Border
-                MinWidth="320"
-                MaxWidth="640"
-                MaxHeight="600"
+                x:Name="Panel"
                 Margin="24"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -25,13 +49,13 @@
                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                 BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                <Grid>
+                <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid x:Name="Header" Margin="16,12,8,8">
+                    <Grid x:Name="Header">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -39,26 +63,22 @@
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            FontSize="15"
-                            FontWeight="Bold"
+                            Style="{StaticResource H4}"
                             Text="{Binding Options.Title}" />
 
                         <Button
                             x:Name="CloseButton"
                             Grid.Column="1"
-                            Width="28"
-                            Height="28"
-                            Padding="0"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Command="{Binding CloseCommand}">
-                            <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
+                            VerticalAlignment="Top"
+                            toolkit:Sizing.IsSquare="True"
+                            Command="{Binding CloseCommand}"
+                            Style="{StaticResource GhostButton}">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                         </Button>
                     </Grid>
 
                     <ScrollViewer
                         Grid.Row="1"
-                        Margin="16,0"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Auto">
                         <ContentPresenter Content="{Binding Content}" />
@@ -78,7 +98,66 @@
             <DataTrigger Binding="{Binding Options.ShowCloseButton}" Value="False">
                 <Setter TargetName="CloseButton" Property="Visibility" Value="Collapsed" />
             </DataTrigger>
+            <DataTrigger Binding="{Binding Options.FullScreen}" Value="True">
+                <Setter TargetName="Panel" Property="Margin" Value="0" />
+                <Setter TargetName="Panel" Property="HorizontalAlignment" Value="Stretch" />
+                <Setter TargetName="Panel" Property="VerticalAlignment" Value="Stretch" />
+                <Setter TargetName="Panel" Property="BorderThickness" Value="0" />
+                <Setter TargetName="Panel" Property="CornerRadius" Value="0" />
+            </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <!--  ==================== Confirmation ====================  -->
+    <!--  Implicit template: the standard content shown by IOverlayService.Confirm().  -->
+    <DataTemplate DataType="{x:Type controls:ConfirmationContent}">
+        <Grid toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+
+            <StackPanel
+                Grid.Row="1"
+                HorizontalAlignment="Right"
+                toolkit:Spacing.Gap="8"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="CancelButton"
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
+                        <TextBlock Margin="4,0,0,0" Text="Cancel" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    x:Name="ConfirmButton"
+                    Command="{Binding ConfirmCommand}"
+                    Style="{StaticResource PrimaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Check}" />
+                        <TextBlock Margin="4,0,0,0" Text="Confirm" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Info}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource InfoButton}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Danger}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource DangerButton}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Warning}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource WarningButton}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="{x:Static nav:EnumConfirmationType.Success}">
+                <Setter TargetName="ConfirmButton" Property="Style" Value="{StaticResource SuccessButton}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 </ResourceDictionary>

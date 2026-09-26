@@ -1,0 +1,127 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Toolkit.CustomInputSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Samples.Views.Toolkit"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    d:DataContext="{d:DesignInstance Type=local:CustomInputSamplesViewModel}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu.Samples;component/Views/Toolkit/RatingInput.xaml" />
+    </UserControl.Resources>
+
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Create custom input" />
+            <TextBlock
+                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                Text="How to build an input of your own that sits with the Joufflu ones. The RatingInput below derives from a bare Control, so it follows every rule by hand; an input derived from a native control (TextBox, ComboBox…) gets them all by basing its style on the native one."
+                TextWrapping="Wrap" />
+
+            <c:CodeExample
+                Title="Minimum"
+                Code="{Binding MinimumCode}"
+                Description="Background, border colour and thickness, and a one-line height, all from the design tokens: the input matches the text box next to it and follows the theme. Without the optional part it keeps its size whatever Sizing.Size says (second row, lg), has no padding and no hover or focus state.">
+                <Grid toolkit:Spacing.Gap="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBox Text="A text box" />
+                    <local:RatingInput
+                        Grid.Column="1"
+                        Style="{StaticResource RatingInputMinimal}"
+                        Value="{Binding Rating}" />
+                    <TextBox
+                        Grid.Row="1"
+                        toolkit:Sizing.Size="lg"
+                        Text="A text box" />
+                    <local:RatingInput
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        toolkit:Sizing.Size="lg"
+                        Style="{StaticResource RatingInputMinimal}"
+                        Value="{Binding Rating}" />
+                </Grid>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Sizes, padding and states"
+                Code="{Binding SizesCode}"
+                Description="Optional: the Sizing.Size triggers set the height, font size and input padding of each size, and the hover and focus triggers match the native inputs. The content sits inside Padding, so the stars line up with the text of the text box.">
+                <Grid toolkit:Spacing.Gap="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBox toolkit:Sizing.Size="xs" Text="Extra small" />
+                    <local:RatingInput
+                        Grid.Column="1"
+                        toolkit:Sizing.Size="xs"
+                        Value="{Binding Rating}" />
+                    <TextBox
+                        Grid.Row="1"
+                        toolkit:Sizing.Size="sm"
+                        Text="Small" />
+                    <local:RatingInput
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        toolkit:Sizing.Size="sm"
+                        Value="{Binding Rating}" />
+                    <TextBox Grid.Row="2" Text="Medium" />
+                    <local:RatingInput
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Value="{Binding Rating}" />
+                    <TextBox
+                        Grid.Row="3"
+                        toolkit:Sizing.Size="lg"
+                        Text="Large" />
+                    <local:RatingInput
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        toolkit:Sizing.Size="lg"
+                        Value="{Binding Rating}" />
+                </Grid>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Validation"
+                Code="{Binding ValidationCode}"
+                Description="Optional: a Validation.HasError trigger turns the border red, and ValidationErrorTemplate adds the corner badge listing the errors. Give a star to clear it. The second input sets Validation.ErrorTemplate to {x:Null}: no badge, only the red border.">
+                <StackPanel
+                    Width="200"
+                    HorizontalAlignment="Left"
+                    toolkit:Spacing.Gap="12">
+                    <local:RatingInput Value="{Binding RequiredRating}" />
+                    <local:RatingInput Validation.ErrorTemplate="{x:Null}" Value="{Binding RequiredRating}" />
+                </StackPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Embedded buttons"
+                Code="{Binding EmbeddedCode}"
+                Description="Optional: buttons inside the input use EmbeddedButton, a transparent square of HeightEmbedded that fits inside the padding of every size. Here the stars and the clear button, which shows once a star is given.">
+                <local:RatingInput
+                    Width="200"
+                    HorizontalAlignment="Left"
+                    Maximum="5"
+                    Value="{Binding Rating}" />
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

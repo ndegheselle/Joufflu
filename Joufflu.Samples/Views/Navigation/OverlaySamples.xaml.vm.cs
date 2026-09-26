@@ -1,8 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Joufflu.Feedback.Controls;
+using Joufflu.Feedback;
 using Joufflu.Navigation;
-using Joufflu.Navigation.Controls;
 
 namespace Joufflu.Samples.Views.Navigation;
 
@@ -17,6 +16,8 @@ public class OverlaySamplesViewModel : ObservableObject
 
     public IRelayCommand OpenFormCommand { get; }
 
+    public IRelayCommand OpenFullScreenCommand { get; }
+
     public IRelayCommand OpenStackedCommand { get; }
 
     public OverlaySamplesViewModel(IOverlayService overlays, IToastService toasts)
@@ -27,6 +28,7 @@ public class OverlaySamplesViewModel : ObservableObject
         OpenSimpleCommand = new RelayCommand(OpenSimple);
         OpenConfirmCommand = new AsyncRelayCommand(OpenConfirmAsync);
         OpenFormCommand = new AsyncRelayCommand(OpenFormAsync);
+        OpenFullScreenCommand = new RelayCommand(OpenFullScreen);
         OpenStackedCommand = new RelayCommand(OpenStacked);
     }
 
@@ -38,10 +40,7 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenConfirmAsync()
     {
-        var content = new DeleteConfirmViewModel(_overlays, "Delete the selected item? This action cannot be undone.");
-        var options = new OverlayOptions { Title = "Please confirm", CloseOnClickAway = false };
-
-        bool? result = await _overlays.Show(content, options);
+        bool? result = await _overlays.Confirm("Delete the selected item? This action cannot be undone.", "Please confirm", EnumConfirmationType.Danger);
         if (result == true)
             _toasts.Success("Item deleted.", "Confirmed");
         else
@@ -50,12 +49,16 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenFormAsync()
     {
-        var form = new SampleFormViewModel(_overlays);
-        var options = new OverlayOptions { Title = "Edit profile", CloseOnClickAway = false };
+        // The form carries its own options and hands back what was typed, being an OverlayViewModel.
+        string? name = await OverlayViewModel<string>.ShowAsync(new SampleFormViewModel(_overlays));
+        if (name != null)
+            _toasts.Success($"Saved name: {name}", "Profile");
+    }
 
-        bool? result = await _overlays.Show(form, options);
-        if (result == true)
-            _toasts.Success($"Saved name: {form.Name}", "Profile");
+    private void OpenFullScreen()
+    {
+        var content = new ConfirmViewModel("This overlay fills the whole surface. Use the close cross to dismiss it.");
+        _overlays.Show(content, new OverlayOptions { Title = "Full screen overlay", FullScreen = true });
     }
 
     private void OpenStacked()
@@ -70,11 +73,16 @@ public class OverlaySamplesViewModel : ObservableObject
     }
 
     public string Code =>
-        "// The overlay content owns its buttons and closes itself\n" +
-        "// via the service, e.g. overlays.CloseTop(true/false).\n" +
-        "var content = new DeleteConfirmViewModel(overlays, \"Delete?\");\n" +
-        "var options = new OverlayOptions { Title = \"Please confirm\" };\n" +
-        "bool? result = await overlays.Show(content, options);";
+        "// Content deriving from OverlayViewModel<T> owns its buttons and its\n" +
+        "// options, closes itself, and hands back what it was validated with.\n" +
+        "var form = new SampleFormViewModel(overlays);\n" +
+        "string? name = await OverlayViewModel<string>.ShowAsync(form);\n" +
+        "\n" +
+        "// Any object works too, its options being given at show time\n" +
+        "bool? result = await overlays.Show(content, new OverlayOptions { Title = \"...\" });\n" +
+        "\n" +
+        "// Standard confirmation, no content of your own\n" +
+        "bool? confirmed = await overlays.Confirm(\"Delete the selected item?\", \"Please confirm\");";
 }
 
 /// <summary>Simple overlay content showing a message.</summary>
@@ -86,47 +94,25 @@ public class ConfirmViewModel : ObservableObject
 }
 
 /// <summary>
-/// Overlay content that renders its own confirm/cancel buttons and closes the overlay itself.
-/// Shows how the caller now owns the action bar instead of <see cref="OverlayOptions"/>.
+/// Overlay content with an editable field, used by the form overlay demo. Deriving from
+/// <see cref="OverlayViewModel{TResult}"/> gives it its options, its cancel command and the result
+/// it is awaited for, so it only writes the save.
 /// </summary>
-public class DeleteConfirmViewModel : ObservableObject
+public partial class SampleFormViewModel : OverlayViewModel<string>
 {
-    private readonly IOverlayService _overlays;
-
-    public DeleteConfirmViewModel(IOverlayService overlays, string message)
-    {
-        _overlays = overlays;
-        Message = message;
-        CancelCommand = new RelayCommand(() => _overlays.CloseTop(false));
-        DeleteCommand = new RelayCommand(() => _overlays.CloseTop(true));
-    }
-
-    public string Message { get; }
-
-    public IRelayCommand CancelCommand { get; }
-
-    public IRelayCommand DeleteCommand { get; }
-}
-
-/// <summary>Overlay content with an editable field, used by the form overlay demo.</summary>
-public class SampleFormViewModel : ObservableObject
-{
-    private readonly IOverlayService _overlays;
     private string _name = "Ada Lovelace";
     private bool _subscribe = true;
 
-    public SampleFormViewModel(IOverlayService overlays)
+    public SampleFormViewModel(IOverlayService overlays) : base(overlays)
     {
-        _overlays = overlays;
-        CancelCommand = new RelayCommand(() => _overlays.CloseTop(false));
-        SaveCommand = new RelayCommand(() => _overlays.CloseTop(true));
+        Options.Title = "Edit profile";
+        Options.CloseOnClickAway = false;
     }
 
     public string Name { get => _name; set => SetProperty(ref _name, value); }
 
     public bool Subscribe { get => _subscribe; set => SetProperty(ref _subscribe, value); }
 
-    public IRelayCommand CancelCommand { get; }
-
-    public IRelayCommand SaveCommand { get; }
+    [RelayCommand]
+    private void Save() => Close(Name);
 }

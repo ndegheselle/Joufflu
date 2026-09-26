@@ -105,6 +105,18 @@ namespace Joufflu.Inputs.Controls
             get => (Brush)GetValue(OpaqueBrushProperty);
             private set => SetValue(OpaqueBrushPropertyKey, value);
         }
+
+        private static readonly DependencyPropertyKey AlphaBrushPropertyKey = DependencyProperty.RegisterReadOnly(
+            nameof(AlphaBrush), typeof(Brush), typeof(ColorPicker), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty AlphaBrushProperty = AlphaBrushPropertyKey.DependencyProperty;
+
+        /// <summary>Transparent -> current colour ramp used as the alpha slider track.</summary>
+        public Brush AlphaBrush
+        {
+            get => (Brush)GetValue(AlphaBrushProperty);
+            private set => SetValue(AlphaBrushPropertyKey, value);
+        }
         #endregion
 
         #region HexText
@@ -306,7 +318,18 @@ namespace Joufflu.Inputs.Controls
         private void UpdateDerived(Color color)
         {
             SwatchBrush = new SolidColorBrush(color);
-            OpaqueBrush = new SolidColorBrush(Color.FromRgb(color.R, color.G, color.B));
+            Color opaque = Color.FromRgb(color.R, color.G, color.B);
+
+            OpaqueBrush = new SolidColorBrush(opaque);
+            AlphaBrush = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    // Same RGB with alpha 0, not Colors.Transparent (#00FFFFFF),
+                    // otherwise the ramp washes through white.
+                    new GradientStop(Color.FromArgb(0, opaque.R, opaque.G, opaque.B), 0),
+                    new GradientStop(opaque, 1),
+                },
+                new Point(0, 0), new Point(1, 0));
             HueBrush = new SolidColorBrush(HsvToRgb(Hue, 1, 1));
             HexText = ToHex(color);
         }

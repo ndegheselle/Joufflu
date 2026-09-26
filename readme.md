@@ -12,6 +12,7 @@ live between Light and Dark — no restart, no flicker.
 [![Joufflu.Inputs on NuGet](https://img.shields.io/nuget/v/Joufflu.Inputs?label=Joufflu.Inputs&logo=nuget)](https://www.nuget.org/packages/Joufflu.Inputs)
 [![Joufflu.Navigation on NuGet](https://img.shields.io/nuget/v/Joufflu.Navigation?label=Joufflu.Navigation&logo=nuget)](https://www.nuget.org/packages/Joufflu.Navigation)
 [![Joufflu.FileExplorer on NuGet](https://img.shields.io/nuget/v/Joufflu.FileExplorer?label=Joufflu.FileExplorer&logo=nuget)](https://www.nuget.org/packages/Joufflu.FileExplorer)
+[![Joufflu.Data on NuGet](https://img.shields.io/nuget/v/Joufflu.Data?label=Joufflu.Data&logo=nuget)](https://www.nuget.org/packages/Joufflu.Data)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
 ![preview](./images/preview.PNG)
@@ -20,7 +21,7 @@ live between Light and Dark — no restart, no flicker.
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
-- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text.
+- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
@@ -34,15 +35,25 @@ docs is available at
 page's raw Markdown source. (Prefer this raw URL over the rendered site, which can return
 `403` to automated fetchers.)
 
+🧩 **For Claude Code:** this repository is also a plugin marketplace. The `joufflu` plugin
+adds skills for the Joufflu API, scaffolding an app shell, custom themes and restyling
+existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
+
+```
+/plugin marketplace add ndegheselle/Joufflu
+/plugin install joufflu@joufflu
+```
+
 ## What's inside
 
 | Section | Contents |
 |---|---|
-| **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
-| **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `NavigationContainer` and modal overlays driven by a `Navigator` |
-| **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts`, improved tooltip |
+| **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
+| **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `FullContainer`, `Paging`, `OverlayContainer` and modal overlays driven by a `Navigator` |
+| **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **File explorer** (`Joufflu.FileExplorer`) | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar` and their `IExplorerSource` |
-| **Toolkit** (`Joufflu`) | Sizing and spacing attached properties, `ThemeManager`, live theme customization, and the application shell (`ThemedWindow`) |
+| **Data** (`Joufflu.Data`) | `DataEditor` filling a value in against a JSON Schema, `SchemaEditor` writing one, `SchemaView` showing one |
+| **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, `ThemeManager` and the design tokens, live theme customization, and the application shell (`ThemedWindow`) |
 
 The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
 data grid, …) restyled to match the design system — come along with the core
@@ -51,12 +62,13 @@ data grid, …) restyled to match the design system — come along with the core
 ## Getting started
 
 1. Add the packages you need. `Joufflu` is the core (styles & theming);
-   `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Inputs` and
+   `Joufflu.Data`, `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Inputs` and
    `Joufflu.Navigation` are optional and all build on it:
 
    ```sh
    dotnet add package Joufflu
-   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts, tooltips
+   dotnet add package Joufflu.Data          # optional: JSON Schema editors (needs Joufflu.Inputs)
+   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts
    dotnet add package Joufflu.FileExplorer  # optional: file explorer (needs Joufflu.Feedback)
    dotnet add package Joufflu.Inputs        # optional: input controls
    dotnet add package Joufflu.Navigation    # optional: navigation & overlays

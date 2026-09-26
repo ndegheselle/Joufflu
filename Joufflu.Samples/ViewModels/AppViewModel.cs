@@ -1,7 +1,8 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.Feedback.Controls;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Joufflu.Feedback;
 using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
+using Joufflu.Samples.Views.Data;
 using Joufflu.Samples.Views.Feedback;
 using Joufflu.Samples.Views.FileExplorer;
 using Joufflu.Samples.Views.Inputs;
@@ -12,6 +13,7 @@ using Joufflu.Samples.Views.Natives.Feedback;
 using Joufflu.Samples.Views.Natives.Layout;
 using Joufflu.Samples.Views.Natives.Navigation;
 using Joufflu.Samples.Views.Navigation;
+using Joufflu.Samples.Views.Themes;
 using Joufflu.Samples.Views.Toolkit;
 
 namespace Joufflu.Samples.ViewModels;
@@ -32,8 +34,16 @@ public class AppViewModel : ObservableObject
 
     public Navigator Navigator { get; }
 
+    /// <summary>
+    /// Kept accessible so the window's <c>ToastContainer</c> can follow the corner its
+    /// position sample picks.
+    /// </summary>
+    public ToastSamplesViewModel ToastSamples { get; }
+
     public AppViewModel()
     {
+        ToastSamples = new ToastSamplesViewModel(Toasts);
+
         _pages = new object[]
         {
             // Native controls
@@ -50,6 +60,7 @@ public class AppViewModel : ObservableObject
             new ListBoxSamplesViewModel(),
 
             new TypographySamplesViewModel(),
+            new FontIconSamplesViewModel(),
             new LabelSamples(),
             new ListViewSamplesViewModel(),
             new TreeViewSamplesViewModel(),
@@ -71,40 +82,52 @@ public class AppViewModel : ObservableObject
 
             // Inputs (Joufflu.Inputs library)
             new NumericInputsSamplesViewModel(),
-            new SelectionInputsSamplesViewModel(),
+            new SearchSamplesViewModel(),
+            new ComboBoxSearchSamplesViewModel(),
             new ComboBoxTagsSamplesViewModel(),
             new TextEditableSamplesViewModel(),
             new FilePickerSamplesViewModel(),
             new ColorPickerSamplesViewModel(),
+            new DropdownSamplesViewModel(),
 
             // Navigation (Joufflu.Navigation library)
             new NavigationMenuSamplesViewModel(),
             new OverlaySamplesViewModel(Overlays, Toasts),
             new PagingSamplesViewModel(),
 
+            // Schema (Joufflu.Data library)
+            new DataFillSamplesViewModel(),
+            new DataEditSamplesViewModel(),
+
             // File explorer (Joufflu.FileExplorer library)
             new ExplorerSamplesViewModel(Toasts),
             new ExplorerListSamplesViewModel(Toasts),
             new ExplorerTreeSamplesViewModel(Toasts),
+            new ExplorerSourcesSamplesViewModel(Toasts),
 
             // Custom controls
-            new FontIconSamplesViewModel(),
             new BadgeSamplesViewModel(),
             new SpinnerSamplesViewModel(),
-            new ToastSamplesViewModel(Toasts),
+            ToastSamples,
             new TooltipSamplesViewModel(),
 
             // Toolkit
             new SizingSamplesViewModel(),
             new SpacingSamplesViewModel(),
-            new ThemeSamplesViewModel(),
-            new ThemeCustomizerViewModel(),
+            new DropTargetSamplesViewModel(),
+            new AnimateSamplesViewModel(),
+            new CustomInputSamplesViewModel(),
             new ShellSamples(),
+
+            // Themes
+            new ThemeSamplesViewModel(),
+            new ThemeTokensViewModel(),
+            new ThemeCustomizerViewModel(),
         }.ToDictionary(page => page.GetType());
 
         Navigator = new Navigator(ResolvePage);
 
-        Navigator.Navigate(typeof(ButtonSamplesViewModel));
+        Navigator.Navigate(typeof(ShellSamples));
     }
 
     /// <summary>Maps a menu item's target type to its page instance, or null when unknown.</summary>

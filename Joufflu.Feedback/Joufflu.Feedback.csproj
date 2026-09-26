@@ -9,10 +9,10 @@
     <IsPackable>true</IsPackable>
     <PackageId>Joufflu.Feedback</PackageId>
     <Title>Joufflu.Feedback</Title>
-    <Description>WPF feedback controls for Joufflu: semantic badges, an indeterminate spinner, stackable toasts driven by a service, and themed attached-property tooltips.</Description>
+    <Description>WPF feedback controls for Joufflu: semantic badges, an indeterminate spinner, and stackable toasts driven by a service and shown by a container in any corner.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <Version>0.3.0</Version>
+    <Version>0.7.0</Version>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

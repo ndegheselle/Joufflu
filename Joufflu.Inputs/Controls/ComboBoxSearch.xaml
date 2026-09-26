@@ -3,12 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-    xmlns:local="clr-namespace:Joufflu.Inputs.Controls">
+    xmlns:local="clr-namespace:Joufflu.Inputs.Controls"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/TextBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/ComboBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style
@@ -33,7 +35,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Grid Margin="{TemplateBinding Padding}">
+                            <Grid x:Name="TextArea" Margin="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}">
                                 <ContentPresenter
                                     x:Name="ContentSite"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -48,7 +50,7 @@
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalAlignment="Center"
                                     IsHitTestVisible="False"
-                                    Opacity="0.5"
+                                    Style="{StaticResource Muted}"
                                     Text="Search ..."
                                     Visibility="Collapsed" />
 
@@ -78,21 +80,27 @@
                             <Button
                                 x:Name="ClearButton"
                                 Grid.Column="1"
-                                joufflu:Sizing.IsSquare="True"
+                                toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
+                                toolkit:Derive.MarginFactor="1,0"
                                 Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                 Focusable="False"
-                                Style="{StaticResource GhostButton}">
+                                Style="{StaticResource EmbeddedButton}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
 
+                            <!--  Chevron handle : the text box takes the control surface, so the drop down needs a target of its own  -->
                             <ToggleButton
                                 x:Name="ToggleButton"
                                 Grid.Column="2"
+                                Width="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
+                                Height="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
+                                toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
+                                toolkit:Derive.MarginFactor="0,0,1,0"
                                 ClickMode="Press"
                                 Focusable="False"
                                 Foreground="{TemplateBinding Foreground}"
                                 IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                Template="{StaticResource ComboBoxToggleButtonTemplate}" />
+                                Template="{StaticResource ComboBoxChevronToggleButtonTemplate}" />
                         </Grid>
 
                         <!--  Popup showing items  -->
@@ -124,6 +132,23 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
+                        <!--  Text inputs carry their own padding key, and the clear button stays flush with it (md is the default set above).  -->
+                        <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
+                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
+                            <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
+                        </Trigger>
+                        <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingSm}}" />
+                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
+                            <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
+                        </Trigger>
+                        <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingLg}}" />
+                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
+                            <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
+                        </Trigger>
+
                         <Trigger Property="Text" Value="">
                             <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>

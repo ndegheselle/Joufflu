@@ -72,6 +72,18 @@ private void UpdatePage()
 > default, so without it the control would never push the new page back to the
 > view model.
 
+## Without a known total
+
+Leave `Total` at its `-1` default when the size of the set is unknown (a cursor-based
+API, a stream). The range label is hidden and the page list grows one page ahead of
+the current one, so the user can always move forward:
+
+```xml
+<nav:Paging PageNumber="{Binding PageNumber, Mode=TwoWay}" Capacity="{Binding Capacity, Mode=TwoWay}" />
+```
+
+Set `Total` as soon as you know it and the control switches back to a bounded list.
+
 ## Reacting without bindings
 
 For code-behind, the control raises `PagingChange` with the new page number and

@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            joufflu:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock
                 Style="{StaticResource H1}"
                 Text="Tool bar" />
@@ -19,22 +20,22 @@
                 Code="&lt;ToolBar&gt;&#x0a;    &lt;Button&gt;...&lt;/Button&gt;&#x0a;    &lt;ToggleButton&gt;...&lt;/ToggleButton&gt;&#x0a;    &lt;Separator /&gt;&#x0a;&lt;/ToolBar&gt;">
                 <ToolBarTray>
                     <ToolBar>
-                        <Button>
+                        <Button toolkit:Sizing.IsSquare="True">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
                         </Button>
-                        <Button>
+                        <Button toolkit:Sizing.IsSquare="True">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
                         </Button>
                         <Separator />
-                        <ToggleButton IsChecked="True">
+                        <ToggleButton IsChecked="True" toolkit:Sizing.IsSquare="True">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
                         </ToggleButton>
-                        <ToggleButton>
+                        <ToggleButton toolkit:Sizing.IsSquare="True">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
                         </ToggleButton>
                         <Separator />
-                        <Button>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash2}" />
+                        <Button toolkit:Sizing.IsSquare="True">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
                         </Button>
                     </ToolBar>
                 </ToolBarTray>

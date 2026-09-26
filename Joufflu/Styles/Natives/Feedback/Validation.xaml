@@ -1,0 +1,50 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts"
+    xmlns:joufflu="clr-namespace:Joufflu">
+
+    <!--
+        Shown over any element whose binding reports errors (INotifyDataErrorInfo, IDataErrorInfo,
+        ValidationRules): a badge on the top-right corner whose tooltip lists every error.
+        It draws no border: each Joufflu input turns its own border red on Validation.HasError, so the
+        red state follows the input's corner radius, size and focus states, and an adorner border
+        would only double it.
+        The badge sits on the corner rather than inside the element so it never hides content
+        (text, a ComboBox arrow, a DatePicker button).
+        Joufflu inputs pick it up through a DynamicResource: redefine the key to restyle them all,
+        or set Validation.ErrorTemplate="{x:Null}" on an element to keep only its own red border.
+    -->
+    <ControlTemplate x:Key="ValidationErrorTemplate">
+        <Grid>
+            <AdornedElementPlaceholder x:Name="Adorner" />
+
+            <!--  The errors travel through Tag: the tooltip lives in a popup, out of reach of ElementName.  -->
+            <Border
+                Margin="0,-6,-6,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}"
+                Tag="{Binding AdornedElement.(Validation.Errors), ElementName=Adorner}"
+                ToolTipService.BetweenShowDelay="0"
+                ToolTipService.InitialShowDelay="0">
+                <Border.ToolTip>
+                    <ToolTip BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}">
+                        <ItemsControl MaxWidth="300" ItemsSource="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ToolTip}}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type ValidationError}">
+                                    <TextBlock
+                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
+                                        Text="{Binding ErrorContent}"
+                                        TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ToolTip>
+                </Border.ToolTip>
+                <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" Text="{x:Static fonts:LucideFontIcons.AlertCircle}" />
+            </Border>
+        </Grid>
+    </ControlTemplate>
+
+</ResourceDictionary>

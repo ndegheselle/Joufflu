@@ -12,6 +12,11 @@ namespace Joufflu.Inputs.Controls
     [TemplatePart(Name = ElementTextBox, Type = typeof(FrameworkElement))]
     public partial class TextEditable : ContentControl, INotifyPropertyChanged
     {
+        static TextEditable()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TextEditable), new FrameworkPropertyMetadata(typeof(TextEditable)));
+        }
+
         public struct TextEditedArgs
         {
             public string Text { get; set; }

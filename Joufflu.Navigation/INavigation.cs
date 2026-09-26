@@ -1,6 +1,34 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Joufflu.Navigation.Controls;
 
 namespace Joufflu.Navigation;
+
+/// <summary>
+/// Options describing an overlay's chrome (title, close affordances).
+/// The overlay content is responsible for rendering its own action buttons.
+/// </summary>
+public class OverlayOptions : ObservableObject
+{
+    public string Title { get; set; } = "";
+
+    /// <summary>Shows the close cross in the title bar.</summary>
+    public bool ShowCloseButton { get; set; } = true;
+
+    /// <summary>Closes the overlay when the dimmed background behind it is clicked.</summary>
+    public bool CloseOnClickAway { get; set; } = true;
+
+    /// <summary>Stretches the overlay to fill the whole surface instead of a centered, sized panel.</summary>
+    public bool FullScreen { get; set; } = false;
+}
+
+public enum EnumConfirmationType
+{
+    Neutral,
+    Info,
+    Success,
+    Warning,
+    Danger
+}
 
 /// <summary>
 /// Optional contract for a view model that wants to react to navigation lifecycle events.
@@ -42,7 +70,23 @@ public interface IOverlayService
     /// </summary>
     Task<bool?> Show(object content, OverlayOptions? options = null);
 
+    /// <summary>
+    /// Show a confirmation overlay with a simple message.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="title"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral);
+
     void Close(OverlayInstance overlay, bool? result = null);
+
+    /// <summary>
+    /// Closes the overlay showing <paramref name="content"/>, doing nothing when it isn't on the
+    /// stack anymore. Lets content close itself rather than whatever is on top, which is what an
+    /// overlay opening another one of its own kind needs.
+    /// </summary>
+    void Close(object content, bool? result = null);
 
     void CloseTop(bool? result = null);
 }

@@ -3,6 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Brushes.xaml" />
 
         <!--  == Joufflu controls ==  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
@@ -11,6 +12,7 @@
         <!--  == Natives ==  -->
         <!--  Actions  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.named.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
 
@@ -26,6 +28,7 @@
 
         <!--  Data display  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Label.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/ListView.xaml" />
@@ -43,6 +46,7 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/ProgressBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/StatusBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/ToolTip.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Feedback/Validation.xaml" />
 
         <!--  Layout  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Layout/ScrollBar.xaml" />

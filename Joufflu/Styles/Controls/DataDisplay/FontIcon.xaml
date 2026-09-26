@@ -2,31 +2,32 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts"
-    xmlns:joufflu="clr-namespace:Joufflu">
+    xmlns:joufflu="clr-namespace:Joufflu"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <!--  Lucide icon font (embedded as a WPF Resource). Family name is "lucide".  -->
     <FontFamily x:Key="LucideIconFamily">/Joufflu;component/Assets/Fonts/#lucide</FontFamily>
 
     <Style x:Key="{x:Type fonts:FontIcon}" TargetType="{x:Type fonts:FontIcon}">
         <Setter Property="FontFamily" Value="{StaticResource LucideIconFamily}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
 
         <Style.Triggers>
             <!--  Honors the inherited Sizing.Size (md keeps the default size).  -->
-            <Trigger Property="joufflu:Sizing.Size" Value="xs">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
             </Trigger>
-            <Trigger Property="joufflu:Sizing.Size" Value="sm">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
             </Trigger>
-            <Trigger Property="joufflu:Sizing.Size" Value="lg">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
             </Trigger>
-            <Trigger Property="joufflu:Sizing.Size" Value="xl">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXl}}" />
+            <Trigger Property="toolkit:Sizing.Size" Value="xl">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXl}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

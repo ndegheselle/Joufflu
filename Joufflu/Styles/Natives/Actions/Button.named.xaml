@@ -1,73 +1,14 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:joufflu="clr-namespace:Joufflu">
+    xmlns:joufflu="clr-namespace:Joufflu"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/ToggleButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <!--
-        Soft/outline tints. The soft background is the semantic hue at low opacity rather than a
-        dedicated palette colour, so it is derived automatically for the built-in themes and for any
-        custom theme (the Color is a DynamicResource; only the opacity is fixed). The "Soft" brush is
-        the resting fill and doubles as the outline hover; "SoftStrong" is the soft hover.
-        Secondary is achromatic, so its soft treatment is a neutral foreground wash instead of a hue.
-    -->
-    <SolidColorBrush
-        x:Key="PrimarySoftBrush"
-        Opacity="0.14"
-        Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
-    <SolidColorBrush
-        x:Key="PrimarySoftStrongBrush"
-        Opacity="0.24"
-        Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
-
-    <SolidColorBrush
-        x:Key="SecondarySoftBrush"
-        Opacity="0.08"
-        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
-    <SolidColorBrush
-        x:Key="SecondarySoftStrongBrush"
-        Opacity="0.14"
-        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
-
-    <SolidColorBrush
-        x:Key="SuccessSoftBrush"
-        Opacity="0.14"
-        Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
-    <SolidColorBrush
-        x:Key="SuccessSoftStrongBrush"
-        Opacity="0.24"
-        Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
-
-    <SolidColorBrush
-        x:Key="InfoSoftBrush"
-        Opacity="0.14"
-        Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
-    <SolidColorBrush
-        x:Key="InfoSoftStrongBrush"
-        Opacity="0.24"
-        Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
-
-    <SolidColorBrush
-        x:Key="WarningSoftBrush"
-        Opacity="0.14"
-        Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
-    <SolidColorBrush
-        x:Key="WarningSoftStrongBrush"
-        Opacity="0.24"
-        Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
-
-    <SolidColorBrush
-        x:Key="DangerSoftBrush"
-        Opacity="0.14"
-        Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
-    <SolidColorBrush
-        x:Key="DangerSoftStrongBrush"
-        Opacity="0.24"
-        Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
+    <!--  Soft/outline tints live in Styles/Brushes.xaml so the rest of the library can reach them.  -->
 
     <Style
         x:Key="GhostButton"
@@ -168,11 +109,11 @@
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-        <Setter Property="Background" Value="{StaticResource PrimarySoftBrush}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimarySoftStrongBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftStrongBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -182,11 +123,11 @@
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
-        <Setter Property="Background" Value="{StaticResource SecondarySoftBrush}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource SecondarySoftStrongBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftStrongBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -196,11 +137,11 @@
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
-        <Setter Property="Background" Value="{StaticResource SuccessSoftBrush}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessSoftBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource SuccessSoftStrongBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessSoftStrongBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -210,11 +151,11 @@
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
-        <Setter Property="Background" Value="{StaticResource InfoSoftBrush}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoSoftBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource InfoSoftStrongBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoSoftStrongBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -224,11 +165,11 @@
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
-        <Setter Property="Background" Value="{StaticResource WarningSoftBrush}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningSoftBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource WarningSoftStrongBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningSoftStrongBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -238,11 +179,11 @@
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
-        <Setter Property="Background" Value="{StaticResource DangerSoftBrush}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerSoftBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource DangerSoftStrongBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerSoftStrongBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -259,7 +200,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimarySoftBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -274,7 +215,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource SecondarySoftBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -289,7 +230,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource SuccessSoftBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessSoftBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -304,7 +245,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource InfoSoftBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoSoftBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -319,7 +260,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource WarningSoftBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningSoftBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -334,19 +275,32 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource DangerSoftBrush}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerSoftBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style
-        x:Key="IconToggleButton"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="ToggleButton">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
+        x:Key="EmbeddedButton"
+        BasedOn="{StaticResource GhostButton}"
+        TargetType="Button">
         <Setter Property="Padding" Value="0" />
-        <Setter Property="Height" Value="24" />
-        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}" />
+        <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}" />
+        <Style.Triggers>
+            <!--  Size variants (md is the default, no trigger needed)  -->
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}" />
+                <Setter Property="Padding" Value="0" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}" />
+                <Setter Property="Padding" Value="0" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}" />
+                <Setter Property="Padding" Value="0" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

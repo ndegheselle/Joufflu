@@ -15,6 +15,9 @@ public static class Colors
     public static ComponentResourceKey BorderColor => new ComponentResourceKey(typeof(Colors), "BorderColor");
     public static ComponentResourceKey Border100Color => new ComponentResourceKey(typeof(Colors), "Border100Color");
 
+    // State
+    public static ComponentResourceKey DisabledOpacity => new ComponentResourceKey(typeof(Colors), "DisabledOpacity");
+
     // Primary
     public static ComponentResourceKey PrimaryColor => new ComponentResourceKey(typeof(Colors), "PrimaryColor");
     public static ComponentResourceKey Primary100Color => new ComponentResourceKey(typeof(Colors), "Primary100Color");
@@ -63,29 +66,41 @@ public static class Brushes
     public static ComponentResourceKey PrimaryBrush => new ComponentResourceKey(typeof(Brushes), "PrimaryBrush");
     public static ComponentResourceKey Primary100Brush => new ComponentResourceKey(typeof(Brushes), "Primary100Brush");
     public static ComponentResourceKey PrimaryContentBrush => new ComponentResourceKey(typeof(Brushes), "PrimaryContentBrush");
+    public static ComponentResourceKey PrimarySoftBrush => new ComponentResourceKey(typeof(Brushes), "PrimarySoftBrush");
+    public static ComponentResourceKey PrimarySoftStrongBrush => new ComponentResourceKey(typeof(Brushes), "PrimarySoftStrongBrush");
 
     // Secondary
     public static ComponentResourceKey SecondaryBrush => new ComponentResourceKey(typeof(Brushes), "SecondaryBrush");
     public static ComponentResourceKey Secondary100Brush => new ComponentResourceKey(typeof(Brushes), "Secondary100Brush");
     public static ComponentResourceKey SecondaryContentBrush => new ComponentResourceKey(typeof(Brushes), "SecondaryContentBrush");
+    public static ComponentResourceKey SecondarySoftBrush => new ComponentResourceKey(typeof(Brushes), "SecondarySoftBrush");
+    public static ComponentResourceKey SecondarySoftStrongBrush => new ComponentResourceKey(typeof(Brushes), "SecondarySoftStrongBrush");
 
     // Success
     public static ComponentResourceKey SuccessBrush => new ComponentResourceKey(typeof(Brushes), "SuccessBrush");
     public static ComponentResourceKey Success100Brush => new ComponentResourceKey(typeof(Brushes), "Success100Brush");
     public static ComponentResourceKey SuccessContentBrush => new ComponentResourceKey(typeof(Brushes), "SuccessContentBrush");
+    public static ComponentResourceKey SuccessSoftBrush => new ComponentResourceKey(typeof(Brushes), "SuccessSoftBrush");
+    public static ComponentResourceKey SuccessSoftStrongBrush => new ComponentResourceKey(typeof(Brushes), "SuccessSoftStrongBrush");
 
     // Info
     public static ComponentResourceKey InfoBrush => new ComponentResourceKey(typeof(Brushes), "InfoBrush");
     public static ComponentResourceKey Info100Brush => new ComponentResourceKey(typeof(Brushes), "Info100Brush");
     public static ComponentResourceKey InfoContentBrush => new ComponentResourceKey(typeof(Brushes), "InfoContentBrush");
+    public static ComponentResourceKey InfoSoftBrush => new ComponentResourceKey(typeof(Brushes), "InfoSoftBrush");
+    public static ComponentResourceKey InfoSoftStrongBrush => new ComponentResourceKey(typeof(Brushes), "InfoSoftStrongBrush");
 
     // Warning
     public static ComponentResourceKey WarningBrush => new ComponentResourceKey(typeof(Brushes), "WarningBrush");
     public static ComponentResourceKey Warning100Brush => new ComponentResourceKey(typeof(Brushes), "Warning100Brush");
     public static ComponentResourceKey WarningContentBrush => new ComponentResourceKey(typeof(Brushes), "WarningContentBrush");
+    public static ComponentResourceKey WarningSoftBrush => new ComponentResourceKey(typeof(Brushes), "WarningSoftBrush");
+    public static ComponentResourceKey WarningSoftStrongBrush => new ComponentResourceKey(typeof(Brushes), "WarningSoftStrongBrush");
 
     // Danger
     public static ComponentResourceKey DangerBrush => new ComponentResourceKey(typeof(Brushes), "DangerBrush");
     public static ComponentResourceKey Danger100Brush => new ComponentResourceKey(typeof(Brushes), "Danger100Brush");
     public static ComponentResourceKey DangerContentBrush => new ComponentResourceKey(typeof(Brushes), "DangerContentBrush");
+    public static ComponentResourceKey DangerSoftBrush => new ComponentResourceKey(typeof(Brushes), "DangerSoftBrush");
+    public static ComponentResourceKey DangerSoftStrongBrush => new ComponentResourceKey(typeof(Brushes), "DangerSoftStrongBrush");
 }

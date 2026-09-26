@@ -27,7 +27,7 @@ can paste into your views.
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
-- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text.
+- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
@@ -44,12 +44,12 @@ can paste into your views.
 
 | Section | What's inside |
 |---|---|
-| [Native controls](natives/index.md) | Buttons (solid, soft & outline variants) |
-| [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker` |
-| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
-| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts, tooltips (`Joufflu.Feedback`) |
+| [Native controls](natives/index.md) | Buttons (solid, soft & outline variants), `FontIcon`, the `Card` styles and the typography scale |
+| [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
+| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging`, `FullContainer` |
+| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
 | [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
-| [Toolkit](toolkit/index.md) | Sizing, spacing, theme customization, application shell |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, the design tokens, theme customization, application shell, building a custom input |
 
 ## Getting started
 
@@ -59,7 +59,7 @@ can paste into your views.
 
    ```sh
    dotnet add package Joufflu
-   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts, tooltips
+   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts
    dotnet add package Joufflu.FileExplorer  # optional: file explorer (needs Joufflu.Feedback)
    dotnet add package Joufflu.Inputs        # optional: input controls
    dotnet add package Joufflu.Navigation    # optional: navigation & overlays
@@ -67,7 +67,7 @@ can paste into your views.
 
 2. Merge the control styles in `App.xaml` so the themed styles and the
    design-system keys (`joufflu:Brushes`, `joufflu:Dimensions`,
-   `joufflu:Spacing`, `joufflu:ControlProperties`) are available:
+   `toolkit:Spacing`, `toolkit:Sizing`) are available:
 
    ```xml
    <Application.Resources>

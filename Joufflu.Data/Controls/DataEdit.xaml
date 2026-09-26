@@ -1,0 +1,214 @@
+﻿<local:DataControlBase
+    x:Class="Joufflu.Data.Controls.DataEdit"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:jata="clr-namespace:Joufflu.Data.Controls"
+    xmlns:jnputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+    xmlns:jodels="clr-namespace:Joufflu.Data.Model"
+    xmlns:jonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Data.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    d:DataContext="{d:DesignInstance Type=local:DataEdit}"
+    mc:Ignorable="d">
+    <local:DataControlBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Joufflu.Data;component/Controls/DataResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--  Header of a node  -->
+            <DataTemplate x:Key="DataNodeHeader">
+                <Grid toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="120" />
+                    </Grid.ColumnDefinitions>
+                    <jata:DataIcon Type="{Binding Type}" />
+                    <TextBox
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        toolkit:Sizing.Size="sm"
+                        FontFamily="Consolas"
+                        Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.Style>
+                            <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CanEditKey}" Value="False">
+                                        <Setter Property="IsReadOnly" Value="True" />
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderThickness" Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </local:DataControlBase.Resources>
+
+    <TreeView ItemsSource="{Binding Node.Items}">
+        <TreeView.ItemContainerStyle>
+            <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+        </TreeView.ItemContainerStyle>
+        <TreeView.Resources>
+            <x:Array x:Key="DataTypes" Type="{x:Type jodels:EnumDataType}">
+                <x:Static Member="jodels:EnumDataType.String" />
+                <x:Static Member="jodels:EnumDataType.Integer" />
+                <x:Static Member="jodels:EnumDataType.Number" />
+                <x:Static Member="jodels:EnumDataType.Boolean" />
+                <x:Static Member="jodels:EnumDataType.TimeSpan" />
+                <x:Static Member="jodels:EnumDataType.DateTime" />
+                <x:Static Member="jodels:EnumDataType.Choice" />
+                <x:Static Member="jodels:EnumDataType.Array" />
+                <x:Static Member="jodels:EnumDataType.Object" />
+            </x:Array>
+            <DataTemplate DataType="{x:Type jodels:DataArrayControl}">
+                <Grid>
+                    <Button
+                        HorizontalAlignment="Left"
+                        toolkit:Sizing.Size="xs"
+                        Command="{Binding AddCommand}"
+                        Style="{StaticResource SoftPrimaryButton}"
+                        Visibility="{Binding Array.Template, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
+                            <TextBlock VerticalAlignment="Center">Add</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <ToggleButton
+                        HorizontalAlignment="Left"
+                        jnputs:Dropdown.CloseOnClick="True"
+                        toolkit:Sizing.Size="xs"
+                        Style="{StaticResource SoftPrimaryToggleButton}"
+                        Visibility="{Binding Array.Template, Converter={x:Static converters:VisibilityConverter.Default}, ConverterParameter=False}">
+                        <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
+                            <TextBlock VerticalAlignment="Center">Add</TextBlock>
+                        </StackPanel>
+                        <jnputs:Dropdown.Popup>
+                            <ItemsControl ItemsSource="{StaticResource DataTypes}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            HorizontalContentAlignment="Left"
+                                            Command="{Binding DataContext.AddFromTypeCommand, RelativeSource={RelativeSource AncestorType=jnputs:DropdownPopupHost}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource GhostButton}">
+                                            <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
+                                                <jata:DataIcon Type="{Binding}" />
+                                                <TextBlock Text="{Binding}" />
+                                            </StackPanel>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </jnputs:Dropdown.Popup>
+                    </ToggleButton>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type jodels:DataObjectControl}">
+                <ToggleButton
+                    HorizontalAlignment="Left"
+                    jnputs:Dropdown.CloseOnClick="True"
+                    toolkit:Sizing.Size="xs"
+                    Style="{StaticResource SoftPrimaryToggleButton}">
+                    <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
+                        <TextBlock VerticalAlignment="Center">Add</TextBlock>
+                    </StackPanel>
+                    <jnputs:Dropdown.Popup>
+                        <ItemsControl ItemsSource="{StaticResource DataTypes}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        HorizontalContentAlignment="Left"
+                                        Command="{Binding DataContext.AddCommand, RelativeSource={RelativeSource AncestorType=jnputs:DropdownPopupHost}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource GhostButton}">
+                                        <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
+                                            <jata:DataIcon Type="{Binding}" />
+                                            <TextBlock Text="{Binding}" />
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </jnputs:Dropdown.Popup>
+                </ToggleButton>
+            </DataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}" ItemsSource="{Binding Items}">
+                <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                    </Button>
+                </Grid>
+            </HierarchicalDataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}" ItemsSource="{Binding Items}">
+                <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                    </Button>
+                </Grid>
+            </HierarchicalDataTemplate>
+            <DataTemplate DataType="{x:Type jodels:DataValue}">
+                <Grid
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <ContentControl
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        toolkit:Sizing.Size="sm"
+                        Content="{Binding}"
+                        ContentTemplateSelector="{StaticResource DataValueEditorSelector}"
+                        Style="{StaticResource DataValueEditorHost}" />
+                    <ToggleButton
+                        Grid.Column="2"
+                        toolkit:Sizing.IsSquare="True"
+                        toolkit:Sizing.Size="sm"
+                        toolkit:Tooltip.Content="Force the value"
+                        IsChecked="{Binding IsManual}">
+                        <ToggleButton.IsEnabled>
+                            <MultiBinding Converter="{StaticResource HasManualValuesConverter}">
+                                <Binding />
+                                <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
+                            </MultiBinding>
+                        </ToggleButton.IsEnabled>
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                    </ToggleButton>
+                    <Button Grid.Column="3" Style="{StaticResource DataRemoveButton}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                    </Button>
+                </Grid>
+            </DataTemplate>
+        </TreeView.Resources>
+    </TreeView>
+</local:DataControlBase>

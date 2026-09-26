@@ -6,21 +6,6 @@ using CommunityToolkit.Mvvm.Input;
 namespace Joufflu.Navigation.Controls;
 
 /// <summary>
-/// Options describing an overlay's chrome (title, close affordances).
-/// The overlay content is responsible for rendering its own action buttons.
-/// </summary>
-public class OverlayOptions : ObservableObject
-{
-    public string Title { get; set; } = "";
-
-    /// <summary>Shows the close cross in the title bar.</summary>
-    public bool ShowCloseButton { get; set; } = true;
-
-    /// <summary>Closes the overlay when the dimmed background behind it is clicked.</summary>
-    public bool CloseOnClickAway { get; set; } = true;
-}
-
-/// <summary>
 /// A live overlay sitting on the <see cref="OverlayService"/> stack.
 /// </summary>
 public class OverlayInstance : ObservableObject
@@ -56,6 +41,23 @@ public class OverlayInstance : ObservableObject
     public void Close(bool? result) => _service.Close(this, result);
 }
 
+public class ConfirmationContent : OverlayOptions
+{
+    public string Message { get; set; } = "";
+    public EnumConfirmationType Type { get; set; }
+
+    public IRelayCommand CancelCommand { get; }
+    public IRelayCommand ConfirmCommand { get; }
+
+    public ConfirmationContent(IOverlayService overlays, string message, EnumConfirmationType type)
+    {
+        Message = message;
+        Type = type;
+        CancelCommand = new RelayCommand(() => overlays.CloseTop(false));
+        ConfirmCommand = new RelayCommand(() => overlays.CloseTop(true));
+    }
+}
+
 /// <summary>
 /// Default <see cref="IOverlayService"/> implementation: a stack of modal overlays.
 /// </summary>
@@ -79,6 +81,11 @@ public class OverlayService : ObservableObject, IOverlayService
         return instance.Completion.Task;
     }
 
+    public Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral)
+    {
+        return Show(new ConfirmationContent(this, message, type), new OverlayOptions() { Title = title });
+    }
+
     public void Close(OverlayInstance overlay, bool? result = null)
     {
         if (!Overlays.Remove(overlay))
@@ -87,6 +94,13 @@ public class OverlayService : ObservableObject, IOverlayService
         (overlay.Content as IPage)?.OnNavigatedFrom();
         overlay.Completion.TrySetResult(result);
         OnPropertyChanged(nameof(HasOverlays));
+    }
+
+    public void Close(object content, bool? result = null)
+    {
+        OverlayInstance? overlay = Overlays.FirstOrDefault(x => ReferenceEquals(x.Content, content));
+        if (overlay != null)
+            Close(overlay, result);
     }
 
     public void CloseTop(bool? result = null)

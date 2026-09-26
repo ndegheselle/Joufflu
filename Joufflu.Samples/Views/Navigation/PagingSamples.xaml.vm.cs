@@ -75,6 +75,12 @@ namespace Joufflu.Samples.Views.Navigation
 
         public string Code => "<nav:Paging Total=\"123\" />";
 
+        public string NoTotalCode =>
+            "<!-- Total left at its -1 default -->\n" +
+            "<nav:Paging\n" +
+            "    PageNumber=\"{Binding PageNumber, Mode=TwoWay}\"\n" +
+            "    Capacity=\"{Binding Capacity, Mode=TwoWay}\" />";
+
         public string DataGridCode =>
             "<DataGrid ItemsSource=\"{Binding PageItems}\" AutoGenerateColumns=\"False\">\n" +
             "    <DataGrid.Columns>\n" +

@@ -1,6 +1,5 @@
-using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.Feedback.Controls;
+using Joufflu.Feedback;
 using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Sources;
 

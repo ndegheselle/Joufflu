@@ -64,13 +64,13 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
                             <Setter TargetName="CheckMark" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
                             <Setter TargetName="IndeterminateMark" Property="Fill" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
                             <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
                         </Trigger>
@@ -88,7 +88,7 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Opacity" Value="0.6" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

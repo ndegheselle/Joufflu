@@ -19,9 +19,10 @@ The snippets use these namespaces:
 
 ```xml
 xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
 xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 ```
 
 ## How it fits together
@@ -35,9 +36,10 @@ Three services drive everything, shared between the shell window and the pages:
 | `ToastService` | Shows stacking, auto-dismissing notifications. |
 
 Navigation is **view-model-first**: navigate to a *view model* and WPF resolves
-the matching *view* through an implicit `DataTemplate`. `NavigationContainer`
-renders the current page and hosts the overlay and toast stacks; `NavigationMenu`
-drives the same `Navigator` from the side.
+the matching *view* through an implicit `DataTemplate`. A plain `ContentControl`
+bound to `Navigator.CurrentPage` renders the current page; `NavigationMenu` drives
+the same `Navigator` from the side; `OverlayContainer` and `ToastContainer` wrap
+the whole app and host the overlay and toast stacks above it.
 
 ## Step 1 — The shared shell view model
 
@@ -53,8 +55,8 @@ using Joufflu.Navigation;
 
 public class ShellViewModel : ObservableObject
 {
-    // Shared with the NavigationContainer and NavigationMenu in the shell window,
-    // and injected into the pages that need them.
+    // Shared with the shell window's page container, NavigationMenu and the
+    // overlay/toast containers, and injected into the pages that need them.
     public Navigator Navigator { get; }
     public OverlayService Overlays { get; } = new();
     public ToastService Toasts { get; } = new();
@@ -97,10 +99,14 @@ overlay view model too (Step 5).
 
 ## Step 3 — The shell window
 
-A `ThemedWindow` holding the side `NavigationMenu` and the `NavigationContainer`.
-Bind both to the shell view model's services so they stay in sync: selecting a
-menu item navigates the container, and its overlays/toasts use the shared
-services.
+A `ThemedWindow` whose content is a `ToastContainer` around an `OverlayContainer`,
+wrapping the side `NavigationMenu` and the page `ContentControl`. Bind everything to
+the shell view model's services so they stay in sync: selecting a menu item navigates
+the page, and the overlays/toasts use the shared services.
+
+Wrapping the *whole* app rather than the page area only is what lets a full screen
+overlay cover the entire window, side menu included. Toasts wrap the overlays in
+turn, so they stay on top of them.
 
 The `d:DataContext` line gives the XAML designer the runtime view-model type, so
 bindings like `{Binding Navigator}` get IntelliSense and design-time validation.
@@ -122,24 +128,26 @@ No runtime effect.
     Height="640"
     d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
     mc:Ignorable="d">
-    <DockPanel>
-        <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
+    <!-- Each container wraps the app and stacks its own layer above it. -->
+    <feedback:ToastContainer Toasts="{Binding Toasts}">
+        <nav:OverlayContainer Overlays="{Binding Overlays}">
+            <DockPanel>
+                <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
 
-            <!-- An item targets the type of the page it navigates to. -->
-            <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
-                <nav:NavigationItem.Icon>
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
-                </nav:NavigationItem.Icon>
-                Home
-            </nav:NavigationItem>
-        </nav:NavigationMenu>
+                    <!-- An item targets the type of the page it navigates to. -->
+                    <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+                        </nav:NavigationItem.Icon>
+                        Home
+                    </nav:NavigationItem>
+                </nav:NavigationMenu>
 
-        <!-- Renders the current page and hosts the overlay + toast stacks. -->
-        <nav:NavigationContainer
-            Navigator="{Binding Navigator}"
-            Overlays="{Binding Overlays}"
-            Toasts="{Binding Toasts}" />
-    </DockPanel>
+                <!-- Renders the current page, resolved by its implicit DataTemplate. -->
+                <ContentControl Content="{Binding Navigator.CurrentPage}" />
+            </DockPanel>
+        </nav:OverlayContainer>
+    </feedback:ToastContainer>
 </controls:ThemedWindow>
 ```
 
@@ -206,10 +214,10 @@ Its view:
     x:Class="MyApp.Views.HomeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
-    <StackPanel Margin="24" joufflu:Spacing.Gap="12">
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
+    <StackPanel Margin="24" toolkit:Spacing.Gap="12">
         <TextBlock Style="{StaticResource H1}" Text="Home" />
-        <StackPanel Orientation="Horizontal" joufflu:Spacing.Gap="8">
+        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <Button Command="{Binding SayHelloCommand}" Content="Say hello" />
             <Button Command="{Binding DeleteCommand}" Content="Delete…"
                     Style="{StaticResource DangerButton}" />
@@ -320,6 +328,12 @@ private async Task DeleteAsync()
 The full loop: the menu navigates the `Navigator`, the page opens a modal through
 the shared `OverlayService`, awaits its result, and confirms with the shared
 `ToastService`.
+
+{: .note }
+> A plain "are you sure?" needs none of this content: `_overlays.Confirm(message,
+> title)` shows the [standard confirmation overlay](navigation/overlays.md) and
+> returns the same `Task<bool?>`. Write your own content, as above, when the modal
+> shows more than a message.
 
 ## Where to go next
 

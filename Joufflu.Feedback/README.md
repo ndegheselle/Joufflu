@@ -1,7 +1,7 @@
 # Joufflu.Feedback
 
 **Feedback controls for the [Joufflu](https://www.nuget.org/packages/Joufflu) WPF
-design system — badges, a spinner, toasts and themed tooltips.**
+design system — badges, a spinner and toasts.**
 
 Small presentational controls that read their colours from the Joufflu design
 system, so they re-theme live between Light and Dark along with the rest of your
@@ -14,8 +14,7 @@ UI.
 
 - 🏷️ **`Badge`** — a themed pill in the semantic colours, sized via `Sizing.Size`.
 - ⏳ **`Spinner`** — an indeterminate loading indicator.
-- 🔔 **Toasts** — stackable, auto-dismissing notifications shown from an injected `IToastService`.
-- 💬 **Tooltip** — the `Tooltip.Content` and `Tooltip.Placement` attached properties for themed tooltips on any element.
+- 🔔 **Toasts** — stackable, auto-dismissing notifications shown from an injected `IToastService` and rendered by a `ToastContainer` wrapping your app, in any corner.
 
 This package builds on the core [`Joufflu`](https://www.nuget.org/packages/Joufflu)
 package.

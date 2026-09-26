@@ -1,0 +1,94 @@
+<UserControl
+    x:Class="Joufflu.Samples.Views.Inputs.DropdownSamples"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Samples.Views.Inputs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    d:DataContext="{d:DesignInstance Type=local:DropdownSamplesViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock Style="{StaticResource H1}" Text="Dropdown" />
+
+            <c:CodeExample
+                Title="Dropdown"
+                Code="{Binding Code}"
+                Description="Dropdown.Popup hangs a themed popup off any ToggleButton, open while the button is checked. The button stays a plain ToggleButton, so its style, content and attached properties are yours. Dropdown.CloseOnClick dismisses the popup when a button inside it is clicked, the way picking a command from a menu does.">
+                <ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
+                    <inputs:Dropdown.Popup>
+                        <StackPanel toolkit:Spacing.Gap="4">
+                            <Button Content="Rename" Style="{StaticResource GhostButton}" />
+                            <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
+                            <Button Content="Delete" Style="{StaticResource GhostButton}" />
+                        </StackPanel>
+                    </inputs:Dropdown.Popup>
+                </ToggleButton>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Popup placement"
+                Code="{Binding PlacementCode}"
+                Description="Dropdown.Placement anchors a corner of the popup to the matching corner of the button. BottomRight right aligns it, TopLeft and TopRight open it upward — useful near the bottom of the window. Dropdown.HorizontalOffset and Dropdown.VerticalOffset add to that placement.">
+                <WrapPanel toolkit:Spacing.Gap="8,8">
+                    <ToggleButton Content="BottomLeft" inputs:Dropdown.Placement="BottomLeft">
+                        <inputs:Dropdown.Popup>
+                            <TextBlock Text="Opens down, left aligned." />
+                        </inputs:Dropdown.Popup>
+                    </ToggleButton>
+                    <ToggleButton Content="BottomRight" inputs:Dropdown.Placement="BottomRight">
+                        <inputs:Dropdown.Popup>
+                            <TextBlock Text="Opens down, right aligned." />
+                        </inputs:Dropdown.Popup>
+                    </ToggleButton>
+                    <ToggleButton Content="TopLeft" inputs:Dropdown.Placement="TopLeft">
+                        <inputs:Dropdown.Popup>
+                            <TextBlock Text="Opens up, left aligned." />
+                        </inputs:Dropdown.Popup>
+                    </ToggleButton>
+                    <ToggleButton Content="TopRight" inputs:Dropdown.Placement="TopRight">
+                        <inputs:Dropdown.Popup>
+                            <TextBlock Text="Opens up, right aligned." />
+                        </inputs:Dropdown.Popup>
+                    </ToggleButton>
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Button style"
+                Code="{Binding StyleCode}"
+                Description="Because the button is a real ToggleButton, every ToggleButton style and attached property works directly on it — Sizing.IsSquare and Sizing.Size included.">
+                <ToggleButton
+                    inputs:Dropdown.Placement="BottomRight"
+                    toolkit:Sizing.IsSquare="True"
+                    toolkit:Sizing.Size="lg">
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />
+                    <inputs:Dropdown.Popup>
+                        <TextBlock Text="An icon only dropdown." />
+                    </inputs:Dropdown.Popup>
+                </ToggleButton>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Popup chrome"
+                Code="{Binding PopupStyleCode}"
+                Description="Dropdown.PopupStyle styles the DropdownPopupHost drawing the chrome — its Padding, background, border and corner radius. Base it on the default style to keep the theme. A Popup itself is only a positioning primitive and has nothing worth styling.">
+                <ToggleButton Content="Padded">
+                    <inputs:Dropdown.PopupStyle>
+                        <Style BasedOn="{StaticResource {x:Type inputs:DropdownPopupHost}}" TargetType="{x:Type inputs:DropdownPopupHost}">
+                            <Setter Property="Padding" Value="12,8" />
+                        </Style>
+                    </inputs:Dropdown.PopupStyle>
+                    <inputs:Dropdown.Popup>
+                        <TextBlock Text="Content padded away from the border." />
+                    </inputs:Dropdown.Popup>
+                </ToggleButton>
+            </c:CodeExample>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,73 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:joufflu="clr-namespace:Joufflu">
+
+    <!--
+        Soft tints. The soft background is the semantic hue at low opacity rather than a dedicated
+        palette colour, so it is derived automatically for the built-in themes and for any custom
+        theme (the Color is a DynamicResource; only the opacity is fixed). "Soft" is the resting
+        fill (also used as the selected state of list rows and tree items, and as the outline
+        hover); "SoftStrong" is its hover. Secondary is achromatic, so its soft treatment is a
+        neutral foreground wash instead of a hue.
+
+        They live here rather than in the theme dictionaries because they are theme-independent by
+        construction, and they are keyed by ComponentResourceKey so any style in the library can
+        reach them with DynamicResource instead of a same-file StaticResource.
+    -->
+
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.PrimarySoftBrush}"
+        Opacity="0.14"
+        Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.PrimarySoftStrongBrush}"
+        Opacity="0.24"
+        Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
+
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.SecondarySoftBrush}"
+        Opacity="0.08"
+        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.SecondarySoftStrongBrush}"
+        Opacity="0.14"
+        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
+
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.SuccessSoftBrush}"
+        Opacity="0.14"
+        Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.SuccessSoftStrongBrush}"
+        Opacity="0.24"
+        Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
+
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.InfoSoftBrush}"
+        Opacity="0.14"
+        Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.InfoSoftStrongBrush}"
+        Opacity="0.24"
+        Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
+
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.WarningSoftBrush}"
+        Opacity="0.14"
+        Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.WarningSoftStrongBrush}"
+        Opacity="0.24"
+        Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
+
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.DangerSoftBrush}"
+        Opacity="0.14"
+        Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
+    <SolidColorBrush
+        x:Key="{x:Static joufflu:Brushes.DangerSoftStrongBrush}"
+        Opacity="0.24"
+        Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
+
+</ResourceDictionary>

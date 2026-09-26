@@ -12,6 +12,11 @@ namespace Joufflu.Inputs.Controls
 
     public partial class FilePicker : Control
     {
+        static FilePicker()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(FilePicker), new FrameworkPropertyMetadata(typeof(FilePicker)));
+        }
+
         #region Dependency Properties
         public static readonly DependencyProperty FilePathProperty = DependencyProperty.Register(
             nameof(FilePath),

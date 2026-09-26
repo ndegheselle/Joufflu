@@ -5,6 +5,8 @@ namespace Joufflu.Converters
 {
     public class VisibilityConverter : IValueConverter
     {
+        public static VisibilityConverter Default = new VisibilityConverter();
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             BooleanConverter lConverterBool = new BooleanConverter();

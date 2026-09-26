@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System.Collections;
+﻿using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -8,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Joufflu.Inputs.Controls
 {
@@ -16,6 +16,11 @@ namespace Joufflu.Inputs.Controls
     /// </summary>
     public partial class ComboBoxSearch : ComboBox, INotifyPropertyChanged
     {
+        static ComboBoxSearch()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxSearch), new FrameworkPropertyMetadata(typeof(ComboBoxSearch)));
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -42,11 +47,9 @@ namespace Joufflu.Inputs.Controls
             IsTextSearchEnabled = false;
             // Don't let selection follow the view's current item: refreshing the filter moves
             // the CollectionView's CurrentItem, which would otherwise raise spurious selection
-            // changes (and auto-add tags) the first time the filter runs.
+            // changes the first time the filter runs.
             IsSynchronizedWithCurrentItem = false;
 
-            // Attach once here (not in OnApplyTemplate, which can run repeatedly and would
-            // otherwise stack duplicate handlers).
             AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(OnTextChanged));
 
             // Release the filter on a possibly caller-owned view while off the visual tree,
@@ -176,6 +179,16 @@ namespace Joufflu.Inputs.Controls
             base.OnLostKeyboardFocus(e);
         }
 
+        protected override void OnDropDownOpened(EventArgs e)
+        {
+            // Opened through the chevron (or the arrow keys) rather than by typing : the text is
+            // then the item that is selected, not a search, so the whole list has to be shown back
+            // instead of the single item the previous filter left.
+            RefreshFilter(true);
+
+            base.OnDropDownOpened(e);
+        }
+
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             if (_editableTextBox == null)
@@ -206,13 +219,17 @@ namespace Joufflu.Inputs.Controls
             Text = null;
         }
 
-        private void RefreshFilter()
+        /// <param name="force">
+        /// Refresh even if the text has not changed, for the cases where what the filter makes of
+        /// that text did change (the drop down being opened on a selected item, typically).
+        /// </param>
+        private void RefreshFilter(bool force = false)
         {
             if (ItemsSource == null)
                 return;
 
             // Prevent unnecessary refresh if the text has not changed
-            if (_previousRefreshText == Text)
+            if (!force && _previousRefreshText == Text)
                 return;
             _previousRefreshText = Text;
 
@@ -241,6 +258,10 @@ namespace Joufflu.Inputs.Controls
             if (value == null)
                 return false;
             if (string.IsNullOrEmpty(Text))
+                return true;
+            // Text left by a selection is not something the user searched for : the list stays whole
+            // so that the other choices remain reachable once an item has been picked.
+            if (SelectedItem != null && Text == GetTextFromItem(SelectedItem))
                 return true;
 
             return DoesValueContainSearch(value);

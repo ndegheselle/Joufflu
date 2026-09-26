@@ -1,16 +1,17 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:joufflu="clr-namespace:Joufflu">
+    xmlns:joufflu="clr-namespace:Joufflu"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <Style x:Key="{x:Type ToggleButton}" TargetType="ToggleButton">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
-        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeMd}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingMd}}" />
+        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -102,131 +103,59 @@
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
             </MultiTrigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Opacity" Value="0.6" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>
 
             <!--  Size variants  -->
-            <Trigger Property="joufflu:Sizing.Size" Value="xs">
-                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightXs}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeXs}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingXs}}" />
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingXs}}" />
             </Trigger>
-            <Trigger Property="joufflu:Sizing.Size" Value="sm">
-                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightSm}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeSm}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingSm}}" />
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingSm}}" />
             </Trigger>
-            <Trigger Property="joufflu:Sizing.Size" Value="lg">
-                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightLg}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlFontSizeLg}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlPaddingLg}}" />
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingLg}}" />
             </Trigger>
 
             <!--  Square (icon toggle button)  -->
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="joufflu:Sizing.IsSquare" Value="True" />
-                    <Condition Property="joufflu:Sizing.Size" Value="xs" />
+                    <Condition Property="toolkit:Sizing.IsSquare" Value="True" />
+                    <Condition Property="toolkit:Sizing.Size" Value="xs" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightXs}}" />
+                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
                 <Setter Property="Padding" Value="0" />
             </MultiTrigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="joufflu:Sizing.IsSquare" Value="True" />
-                    <Condition Property="joufflu:Sizing.Size" Value="sm" />
+                    <Condition Property="toolkit:Sizing.IsSquare" Value="True" />
+                    <Condition Property="toolkit:Sizing.Size" Value="sm" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightSm}}" />
+                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
                 <Setter Property="Padding" Value="0" />
             </MultiTrigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="joufflu:Sizing.IsSquare" Value="True" />
-                    <Condition Property="joufflu:Sizing.Size" Value="md" />
+                    <Condition Property="toolkit:Sizing.IsSquare" Value="True" />
+                    <Condition Property="toolkit:Sizing.Size" Value="md" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightMd}}" />
+                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
                 <Setter Property="Padding" Value="0" />
             </MultiTrigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="joufflu:Sizing.IsSquare" Value="True" />
-                    <Condition Property="joufflu:Sizing.Size" Value="lg" />
+                    <Condition Property="toolkit:Sizing.IsSquare" Value="True" />
+                    <Condition Property="toolkit:Sizing.Size" Value="lg" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.ControlHeightLg}}" />
+                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
                 <Setter Property="Padding" Value="0" />
             </MultiTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <!--
-        Named ToggleButton styles use a "Toggle" prefix to avoid colliding with the
-        same-named Button styles (ResourceDictionary keys are strings, not type-scoped).
-    -->
-
-    <Style
-        x:Key="ToggleGhost"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="{x:Type ToggleButton}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-    </Style>
-
-    <Style
-        x:Key="TogglePrimary"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
-            </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style
-        x:Key="ToggleSecondary"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Secondary100Brush}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style
-        x:Key="ToggleSuccess"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Success100Brush}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style
-        x:Key="ToggleDanger"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Danger100Brush}}" />
-            </Trigger>
         </Style.Triggers>
     </Style>
 
