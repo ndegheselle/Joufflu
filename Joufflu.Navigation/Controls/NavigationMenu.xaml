@@ -131,6 +131,9 @@
                             <Setter TargetName="ChildrenHost" Property="Margin" Value="0" />
                             <Setter TargetName="ChildrenHost" Property="Padding" Value="0" />
                             <Setter TargetName="ChildrenHost" Property="BorderThickness" Value="0" />
+                            <!--  Collapsed: no indent to show nesting, so shade the children to keep them visually grouped  -->
+                            <Setter TargetName="ChildrenHost" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+                            <Setter TargetName="ChildrenHost" Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
                             <Setter TargetName="HeaderButton" Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
                             <Setter TargetName="HeaderButton" Property="HorizontalContentAlignment" Value="Center" />
                             <Setter TargetName="HeaderButton" Property="Padding" Value="0" />
