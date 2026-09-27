@@ -1,7 +1,7 @@
 ﻿# Joufflu.Data 0.8.2
 
 - Add `DataDisplay`, showing a node read only : the key, the type and the value of each node, a value read the way its editor shows it (the name of a `Choice` option, a date without its time when it has none), null and undefined greyed apart from a text, and a forced value flagged with a feather
-- Let objects and arrays be forced to a manual value in `DataFill` and `DataEdit` too, their properties or items hidden while forced and written as the entry instead. `IsManual` and `ManualEntry` move from `DataValue` up to `DataNode`, and `Load()` forces an object or an array left out, matching a manual value or given a JSON of another shape, rather than filling its children
+- Let objects and arrays be forced to a manual value in `DataFill` and `DataEdit` too, and shown forced in `DataDisplay`, their properties or items hidden while forced and written as the entry instead. `IsManual` and `ManualEntry` move from `DataValue` up to `DataNode`, and `Load()` forces an object or an array left out, matching a manual value or given a JSON of another shape, rather than filling its children
 
 # Joufflu.Data 0.8.1
 

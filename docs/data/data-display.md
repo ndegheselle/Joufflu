@@ -24,7 +24,7 @@ Node.Load(JToken.Parse(json), ManualValues);
 - **null**, and **undefined** on a field forced to nothing, are greyed and italic, apart from
   a text saying "null".
 - A value forced to one of the [manual values](index.md#manual-values) is flagged with a
-  feather.
+  feather. A forced object or array shows the entry instead of its properties or items.
 - A node with a `Description` shows it on an info icon, as in [Data fill](data-fill.md).
 
 Only expanding and collapsing nodes changes the tree.

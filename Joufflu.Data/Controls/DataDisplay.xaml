@@ -44,6 +44,55 @@
                         Visibility="{Binding Description, Converter={x:Static converters:VisibilityConverter.Default}}" />
                 </Grid>
             </DataTemplate>
+
+            <!--  Undefined and null are no value: they read apart from a text saying "null".  -->
+            <Style x:Key="DataForcedText" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ManualEntry}" Value="{x:Null}">
+                        <Setter Property="FontStyle" Value="Italic" />
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ManualEntry.Value}" Value="{x:Null}">
+                        <Setter Property="FontStyle" Value="Italic" />
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--  Row of an object or an array: forced, the entry stands for its children, which are left out.  -->
+            <DataTemplate x:Key="DataParentRow">
+                <Grid
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <jonts:FontIcon
+                        Grid.Column="1"
+                        toolkit:Tooltip.Content="Forced value"
+                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
+                        Text="{x:Static jonts:LucideFontIcons.Feather}"
+                        Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
+                    <TextBlock
+                        Grid.Column="2"
+                        Style="{StaticResource DataForcedText}"
+                        Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource ValueTextConverter}">
+                                <Binding />
+                                <Binding Path="IsManual" />
+                                <Binding Path="ManualEntry" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Grid>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <TreeView ItemsSource="{Binding Node.Properties}">
@@ -53,11 +102,23 @@
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}" ItemsSource="{Binding Values}">
-                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}">
+                <HierarchicalDataTemplate.ItemsSource>
+                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
+                        <Binding Path="Values" />
+                        <Binding Path="IsManual" />
+                    </MultiBinding>
+                </HierarchicalDataTemplate.ItemsSource>
+                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataParentRow}" />
             </HierarchicalDataTemplate>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}" ItemsSource="{Binding Properties}">
-                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}">
+                <HierarchicalDataTemplate.ItemsSource>
+                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
+                        <Binding Path="Properties" />
+                        <Binding Path="IsManual" />
+                    </MultiBinding>
+                </HierarchicalDataTemplate.ItemsSource>
+                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataParentRow}" />
             </HierarchicalDataTemplate>
             <DataTemplate DataType="{x:Type jodels:DataValue}">
                 <Grid
