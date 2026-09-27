@@ -44,6 +44,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 - [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree, `ToToken()`, `ToDataNode()` from an NJsonSchema `JsonSchema` (editor and JSON per type), and `ManualValues`.
 - [Data fill](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md): `DataFill`, filling in a node built from a schema.
 - [Data edit](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md): `DataEdit`, building a node from scratch.
+- [Data display](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-display.md): `DataDisplay`, showing a node read only with the key, type and value of each node.
 
 ## File explorer (`Joufflu.FileExplorer`)
 

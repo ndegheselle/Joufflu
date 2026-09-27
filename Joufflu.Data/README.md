@@ -13,6 +13,7 @@ Fill a value in against a JSON Schema, or build one from scratch, instead of typ
 |---|---|
 | `DataFill` | Fills in the values of a node built from a schema. |
 | `DataEdit` | Builds a node from scratch. |
+| `DataDisplay` | Shows a node read only: key, type and value. |
 | `DataObject` / `DataArray` / `DataValue` | The edited tree; `ToToken()` returns its JSON. |
 | `ToDataNode()` | Builds the tree of an [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) `JsonSchema`. |
 | `ToJsonSchema()` | Builds the `JsonSchema` of a tree, the reverse of `ToDataNode()`. |

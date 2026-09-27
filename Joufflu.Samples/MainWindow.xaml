@@ -430,6 +430,12 @@
                             </nav:NavigationItem.Icon>
                             Data edit
                         </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataSamples:DataDisplaySamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Eye}" />
+                            </nav:NavigationItem.Icon>
+                            Data display
+                        </nav:NavigationItem>
                     </nav:NavigationGroup>
 
                     <!--  File explorer (Joufflu.FileExplorer library)  -->

@@ -57,6 +57,7 @@
 
     <jata:DataManualValuesConverter x:Key="ManualValuesConverter" />
     <jata:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
+    <jata:DataValueTextConverter x:Key="ValueTextConverter" />
 
     <jata:DataValueTemplateSelector
         x:Key="DataValueEditorSelector"

@@ -8,7 +8,7 @@ description: >-
   (`Joufflu.Navigation`: NavigationMenu, Navigator, OverlayService/overlays,
   Paging, FullContainer), feedback (`Joufflu.Feedback`: Badge, Spinner, toasts),
   the file explorer (`Joufflu.FileExplorer`), JSON data trees (`Joufflu.Data`:
-  DataFill, DataEdit, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
+  DataFill, DataEdit, DataDisplay, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
   (Sizing, Spacing.Gap, Derive, Tooltip, Animate, DropTarget/DragSource),
   ThemedWindow, FontIcon/Lucide icons, named styles (PrimaryButton, Card, H1…) and
   the design tokens (joufflu:Brushes / Colors / Dimensions). Use it whenever a
@@ -53,7 +53,7 @@ never invent a property or method that is not listed here or visible in the pack
 | `Joufflu.Navigation` | `NavigationMenu`, `Navigator`, overlays, `Paging`, `FullContainer` | Joufflu |
 | `Joufflu.Feedback` | `Badge`, `Spinner`, toasts, `ToastContainer` | Joufflu |
 | `Joufflu.FileExplorer` | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar`, sources | Joufflu, Joufflu.Feedback |
-| `Joufflu.Data` | `DataFill`, `DataEdit`, the `DataNode` tree, `JsonSchema.ToDataNode()` | Joufflu, Joufflu.Inputs, NJsonSchema |
+| `Joufflu.Data` | `DataFill`, `DataEdit`, `DataDisplay`, the `DataNode` tree, `JsonSchema.ToDataNode()` | Joufflu, Joufflu.Inputs, NJsonSchema |
 
 `Joufflu.Data` API still changes between minor versions: check members against the
 installed package.
@@ -165,7 +165,7 @@ Read the one matching the task before writing code:
 | [references/navigation.md](references/navigation.md) | `ThemedWindow` shell, `NavigationMenu`, `Navigator`, overlays, `Paging`, `FullContainer` |
 | [references/feedback.md](references/feedback.md) | `Badge`, `Spinner`, toasts |
 | [references/file-explorer.md](references/file-explorer.md) | Explorer controls, sources, custom nodes, context menus |
-| [references/data.md](references/data.md) | `DataFill`, `DataEdit`, the node tree, schema mapping, manual values |
+| [references/data.md](references/data.md) | `DataFill`, `DataEdit`, `DataDisplay`, the node tree, schema mapping, manual values |
 
 For details not covered here, the raw Markdown docs are indexed at
 <https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt> (use the raw

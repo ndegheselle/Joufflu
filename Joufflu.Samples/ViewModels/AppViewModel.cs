@@ -98,6 +98,7 @@ public class AppViewModel : ObservableObject
             // Data (Joufflu.Data library)
             new DataFillSamplesViewModel(),
             new DataEditSamplesViewModel(),
+            new DataDisplaySamplesViewModel(),
 
             // File explorer (Joufflu.FileExplorer library)
             new ExplorerSamplesViewModel(Toasts),

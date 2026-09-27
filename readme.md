@@ -53,7 +53,7 @@ existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `FullContainer`, `Paging`, `OverlayContainer` and modal overlays driven by a `Navigator` |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **File explorer** (`Joufflu.FileExplorer`) | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar` and their `IExplorerSource` |
-| **Data** (`Joufflu.Data`) | `DataFill` filling a value in against a JSON Schema, `DataEdit` building one from scratch |
+| **Data** (`Joufflu.Data`) | `DataFill` filling a value in against a JSON Schema, `DataEdit` building one from scratch, `DataDisplay` showing one read only |
 | **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, `ThemeManager` and the design tokens, live theme customization, and the application shell (`ThemedWindow`) |
 
 The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,

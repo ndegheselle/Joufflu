@@ -15,16 +15,19 @@ using DataObject = Joufflu.Data.Model.DataObject; // always alias: clashes with 
 
 ## Controls
 
-Both edit a `Node` (`DataObject`, two-way) in place and take an optional `ManualValues`.
+`DataFill` and `DataEdit` edit a `Node` (`DataObject`, two-way) in place and take an optional
+`ManualValues`. `DataDisplay` only takes a `Node` (one-way).
 
 | Control | Edits |
 |---|---|
 | `DataFill` | Values of a node built from a schema. Shape is fixed; only array items can be added (cloned from `Template`) or removed. |
 | `DataEdit` | Everything: properties and items of any type, keys, values, string options of a `Choice`. Starts from an empty object when no `Node` is bound. |
+| `DataDisplay` | Nothing: read only, key, type (`EnumDataType` name) and value of each node. `null` / undefined greyed italic, forced values flagged with a feather, `Choice` shown by option name. |
 
 ```xml
 <data:DataFill Node="{Binding Node}" ManualValues="{Binding ManualValues}" />
 <data:DataEdit Node="{Binding Draft}" />
+<data:DataDisplay Node="{Binding Node}" />
 ```
 
 ## Tree

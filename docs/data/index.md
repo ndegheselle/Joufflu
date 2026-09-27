@@ -11,6 +11,7 @@ JSON values edited as a tree, from the optional
 
 - **Data fill** — fills in a value against a JSON Schema.
 - **Data edit** — builds a value from scratch.
+- **Data display** — shows a value read only.
 
 Add the package (`dotnet add package Joufflu.Data`). Only the core `Resources.xaml` needs
 merging. The snippets use:
@@ -27,7 +28,8 @@ using DataObject = Joufflu.Data.Model.DataObject; // System.Windows has one too
 
 ## Nodes
 
-Both controls edit a `Node`, a `DataObject` root, in place.
+The controls take a `Node`, a `DataObject` root: `DataFill` and `DataEdit` edit it in place,
+`DataDisplay` only shows it.
 
 | Node | Holds |
 |---|---|

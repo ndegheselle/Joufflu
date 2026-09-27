@@ -49,7 +49,7 @@ can paste into your views.
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
 | [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging`, `FullContainer` |
 | [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
-| [Data](data/index.md) | `DataFill`, `DataEdit` (`Joufflu.Data`) |
+| [Data](data/index.md) | `DataFill`, `DataEdit`, `DataDisplay` (`Joufflu.Data`) |
 | [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, the design tokens, theme customization, application shell, building a custom input |
 
