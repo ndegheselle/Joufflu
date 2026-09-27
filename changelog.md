@@ -1,9 +1,12 @@
-﻿# Joufflu.Data 0.8.1
+﻿# Joufflu.Data 0.8.2
+
+- Add `DataDisplay`, showing a node read only : the key, the type and the value of each node, a value read the way its editor shows it (the name of a `Choice` option, a date without its time when it has none), null and undefined greyed apart from a text, and a forced value flagged with a feather
+
+# Joufflu.Data 0.8.1
 
 - Add `DataNode.Load(JToken, manualValues)`, the reverse of `ToToken()` : fills a tree with a JSON value, forcing what matches a manual value or what the editor can't hold rather than losing it, and a property left out to undefined when not required
 - Add `JToken.ToDataNode()`, inferring a tree from a JSON value for `DataEdit`, and `DataArray.Add(DataNode)`
 - Add `DataNode.Changed`, raised when a node or anything under it changes
-- Add `DataDisplay`, showing a node read only : the key, the type and the value of each node, a value read the way its editor shows it (the name of a `Choice` option, a date without its time when it has none), null and undefined greyed apart from a text, and a forced value flagged with a feather
 - Fall back to the default value when leaving manual mode on a value the editor can't hold, a string in a number field for example, instead of failing on `ToToken()`
 
 # Version 0.7.0

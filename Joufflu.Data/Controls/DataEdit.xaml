@@ -211,7 +211,7 @@
                         <jnputs:Dropdown.Popup>
                             <StackPanel
                                 Width="200"
-                                toolkit:Spacing.Gap="4"
+                                Margin="4"
                                 DataContext="{Binding OptionsControl}">
                                 <ItemsControl ItemsSource="{Binding Value.Options}">
                                     <ItemsControl.ItemTemplate>
@@ -224,6 +224,7 @@
                                                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                                                 <Button
                                                     Grid.Column="1"
+                                                    toolkit:Sizing.Size="xs"
                                                     Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                     CommandParameter="{Binding}"
                                                     Style="{StaticResource DataRemoveButton}">
@@ -238,7 +239,7 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBox toolkit:Sizing.Size="sm" Text="{Binding NewOption, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox toolkit:Sizing.Size="xs" Text="{Binding NewOption, UpdateSourceTrigger=PropertyChanged}">
                                         <TextBox.InputBindings>
                                             <KeyBinding Key="Enter" Command="{Binding AddCommand}" />
                                         </TextBox.InputBindings>
@@ -246,7 +247,7 @@
                                     <Button
                                         Grid.Column="1"
                                         toolkit:Sizing.IsSquare="True"
-                                        toolkit:Sizing.Size="sm"
+                                        toolkit:Sizing.Size="xs"
                                         Command="{Binding AddCommand}"
                                         Style="{StaticResource SoftPrimaryButton}">
                                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
