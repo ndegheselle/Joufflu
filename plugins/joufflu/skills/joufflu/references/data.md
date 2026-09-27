@@ -57,7 +57,20 @@ the first option. Object keys are unique and case-sensitive (errors on `Key` thr
 `INotifyDataErrorInfo`); array items are keyed `[0]`, `[1]`…
 
 API: `DataObject.Add` / `Remove` / `UniqueKey`, `DataArray.Add()` / `Add(EnumDataType)` /
-`Remove`, `DataValue.AddOption(string)` / `RemoveOption`, `DataNode.Clone()`.
+`Add(DataNode)` / `Remove`, `DataValue.AddOption(string)` / `RemoveOption`, `DataNode.Clone()`.
+`DataNode.Changed` is raised when the node or anything under it changes (not on expand).
+
+## From JSON
+
+```csharp
+node.Load(token, ManualValues);             // fill a tree (e.g. from a schema) with a JSON value
+DataNode draft = token.ToDataNode();        // infer a tree from a JSON value, for DataEdit
+```
+
+`Load` keeps the node's shape: a value matching a manual value, or one its editor can't hold, is
+forced (kept, not lost); a property missing from the token is forced to undefined when not
+required; array items are rebuilt from `Template` (inferred when none). `JToken.ToDataNode()`
+takes types from the values, gives arrays no template and reads `null` as a nullable string.
 
 ## Manual values
 
