@@ -17,6 +17,7 @@ and shape are fixed, only values and array items change.
 
 - A property's `description` shows as an info tooltip.
 - **Add** on an array clones its `Template`; array items can be removed.
-- The feather toggle forces a field to one of the [manual values](index.md#manual-values).
+- The feather toggle forces a field, object or array to one of the
+  [manual values](index.md#manual-values), hiding the properties or items of an object or an array.
 
 To reset, build a new node from the schema.

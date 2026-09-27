@@ -145,28 +145,58 @@
                     </jnputs:Dropdown.Popup>
                 </ToggleButton>
             </DataTemplate>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}" ItemsSource="{Binding Items}">
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}">
+                <HierarchicalDataTemplate.ItemsSource>
+                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
+                        <Binding Path="Items" />
+                        <Binding Path="IsManual" />
+                    </MultiBinding>
+                </HierarchicalDataTemplate.ItemsSource>
                 <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
-                    <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
+                    <ContentControl
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        toolkit:Sizing.Size="sm"
+                        Style="{StaticResource DataManualEditorHost}" />
+                    <ToggleButton Grid.Column="2" Style="{StaticResource DataManualToggle}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                    </ToggleButton>
+                    <Button Grid.Column="3" Style="{StaticResource DataRemoveButton}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
                 </Grid>
             </HierarchicalDataTemplate>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}" ItemsSource="{Binding Items}">
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}">
+                <HierarchicalDataTemplate.ItemsSource>
+                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
+                        <Binding Path="Items" />
+                        <Binding Path="IsManual" />
+                    </MultiBinding>
+                </HierarchicalDataTemplate.ItemsSource>
                 <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
-                    <Button Grid.Column="2" Style="{StaticResource DataRemoveButton}">
+                    <ContentControl
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        toolkit:Sizing.Size="sm"
+                        Style="{StaticResource DataManualEditorHost}" />
+                    <ToggleButton Grid.Column="2" Style="{StaticResource DataManualToggle}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                    </ToggleButton>
+                    <Button Grid.Column="3" Style="{StaticResource DataRemoveButton}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
                 </Grid>
@@ -256,18 +286,7 @@
                             </StackPanel>
                         </jnputs:Dropdown.Popup>
                     </ToggleButton>
-                    <ToggleButton
-                        Grid.Column="3"
-                        toolkit:Sizing.IsSquare="True"
-                        toolkit:Sizing.Size="sm"
-                        toolkit:Tooltip.Content="Force the value"
-                        IsChecked="{Binding IsManual}">
-                        <ToggleButton.IsEnabled>
-                            <MultiBinding Converter="{StaticResource HasManualValuesConverter}">
-                                <Binding />
-                                <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataEdit}}" />
-                            </MultiBinding>
-                        </ToggleButton.IsEnabled>
+                    <ToggleButton Grid.Column="3" Style="{StaticResource DataManualToggle}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
                     </ToggleButton>
                     <Button Grid.Column="4" Style="{StaticResource DataRemoveButton}">

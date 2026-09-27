@@ -58,6 +58,7 @@
     <jata:DataManualValuesConverter x:Key="ManualValuesConverter" />
     <jata:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
     <jata:DataValueTextConverter x:Key="ValueTextConverter" />
+    <jata:DataChildrenConverter x:Key="ChildrenConverter" />
 
     <jata:DataValueTemplateSelector
         x:Key="DataValueEditorSelector"
@@ -99,5 +100,39 @@
                 <Setter Property="ContentTemplate" Value="{StaticResource ManualEditor}" />
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <!--
+        The manual list of an object or an array, which has no editor to swap out. Content is only
+        set while forced: left to the tree's own templates, the node would show itself again.
+    -->
+    <Style x:Key="DataManualEditorHost" TargetType="ContentControl">
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsManual}" Value="True">
+                <Setter Property="Visibility" Value="Visible" />
+                <Setter Property="Content" Value="{Binding}" />
+                <Setter Property="ContentTemplate" Value="{StaticResource ManualEditor}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->
+    <Style
+        x:Key="DataManualToggle"
+        BasedOn="{StaticResource {x:Type ToggleButton}}"
+        TargetType="ToggleButton">
+        <Setter Property="joolkit:Sizing.IsSquare" Value="True" />
+        <Setter Property="joolkit:Sizing.Size" Value="sm" />
+        <Setter Property="joolkit:Tooltip.Content" Value="Force the value" />
+        <Setter Property="IsChecked" Value="{Binding IsManual}" />
+        <Setter Property="IsEnabled">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource HasManualValuesConverter}">
+                    <Binding />
+                    <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataControlBase}}" />
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

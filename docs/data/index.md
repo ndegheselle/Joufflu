@@ -90,9 +90,9 @@ Node = (DataObject)schema.ToDataNode();
 Node.Load(JToken.Parse(json), ManualValues);
 ```
 
-The tree keeps its shape. A value matching one of the [manual values](#manual-values), or one its
-editor can't hold, is forced to it rather than lost; a property the JSON leaves out is forced to
-**undefined** when not required.
+The tree keeps its shape. A node matching one of the [manual values](#manual-values), or one its
+editor can't hold (an object given a string, say), is forced to it rather than lost; a property
+the JSON leaves out is forced to **undefined** when not required.
 
 Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, for `DataEdit`:
 
@@ -118,4 +118,5 @@ public IReadOnlyList<DataManualValue> ManualValues { get; } =
 
 The feather toggle swaps a field's editor for the entries that fit it, plus **undefined**
 (the property is left out) when not required and **null** when nullable. It is disabled
-when nothing fits.
+when nothing fits. Objects and arrays have it too: forced, their properties or items are
+hidden and the entry is written in their place, and they come back as they were once released.

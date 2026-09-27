@@ -8,7 +8,7 @@ namespace Joufflu.Data.Controls;
 /// The entries a field can be forced to: null where the schema takes it and undefined where the
 /// schema leaves the field out, followed by the host's entries that fit the field's own type.
 /// <para>
-/// Bound to the <see cref="DataValue"/> and to the host's catalog, in that order.
+/// Bound to the <see cref="DataNode"/> and to the host's catalog, in that order.
 /// </para>
 /// </summary>
 public class DataManualValuesConverter : IMultiValueConverter
@@ -18,13 +18,13 @@ public class DataManualValuesConverter : IMultiValueConverter
 
     /// <summary>
     /// The entries the bound field can be forced to, read off the same [values] both converters
-    /// take: the <see cref="DataValue"/> and the host's catalog, in that order.
+    /// take: the <see cref="DataNode"/> and the host's catalog, in that order.
     /// </summary>
     internal static List<DataManualValue> EntriesOf(object[] values)
     {
         List<DataManualValue> entries = [];
 
-        if (values.ElementAtOrDefault(0) is not DataValue node)
+        if (values.ElementAtOrDefault(0) is not DataNode node)
             return entries;
 
         if (!node.IsRequired)
@@ -54,4 +54,18 @@ public class DataHasManualValuesConverter : IMultiValueConverter
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         => throw new NotSupportedException($"{nameof(DataHasManualValuesConverter)} only tells whether there are entries.");
+}
+
+/// <summary>
+/// The children an object or an array shows in the tree: none while it is forced, the manual
+/// entry standing for the whole of it.
+/// <para>Bound to the children and to <see cref="DataNode.IsManual"/>, in that order.</para>
+/// </summary>
+public class DataChildrenConverter : IMultiValueConverter
+{
+    public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        => values.ElementAtOrDefault(1) is true ? null : values.ElementAtOrDefault(0);
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        => throw new NotSupportedException($"{nameof(DataChildrenConverter)} only hides the children.");
 }

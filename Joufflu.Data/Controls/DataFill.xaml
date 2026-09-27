@@ -66,36 +66,66 @@
                     </StackPanel>
                 </Button>
             </DataTemplate>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}" ItemsSource="{Binding Items}">
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}">
+                <HierarchicalDataTemplate.ItemsSource>
+                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
+                        <Binding Path="Items" />
+                        <Binding Path="IsManual" />
+                    </MultiBinding>
+                </HierarchicalDataTemplate.ItemsSource>
                 <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <ContentControl
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        toolkit:Sizing.Size="sm"
+                        Style="{StaticResource DataManualEditorHost}" />
                     <Button
                         Grid.Column="2"
                         Style="{StaticResource DataRemoveButton}"
                         Visibility="{Binding IsArrayItem, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
+                    <ToggleButton Grid.Column="3" Style="{StaticResource DataManualToggle}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                    </ToggleButton>
                 </Grid>
             </HierarchicalDataTemplate>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}" ItemsSource="{Binding Properties}">
+            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}">
+                <HierarchicalDataTemplate.ItemsSource>
+                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
+                        <Binding Path="Properties" />
+                        <Binding Path="IsManual" />
+                    </MultiBinding>
+                </HierarchicalDataTemplate.ItemsSource>
                 <Grid Margin="0,0,4,0" toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                    <ContentControl
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        toolkit:Sizing.Size="sm"
+                        Style="{StaticResource DataManualEditorHost}" />
                     <Button
                         Grid.Column="2"
                         Style="{StaticResource DataRemoveButton}"
                         Visibility="{Binding IsArrayItem, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
+                    <ToggleButton Grid.Column="3" Style="{StaticResource DataManualToggle}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                    </ToggleButton>
                 </Grid>
             </HierarchicalDataTemplate>
             <DataTemplate DataType="{x:Type jodels:DataValue}">
@@ -123,19 +153,7 @@
                         Visibility="{Binding IsArrayItem, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                     </Button>
-                    <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->
-                    <ToggleButton
-                        Grid.Column="3"
-                        toolkit:Sizing.IsSquare="True"
-                        toolkit:Sizing.Size="sm"
-                        toolkit:Tooltip.Content="Force the value"
-                        IsChecked="{Binding IsManual}">
-                        <ToggleButton.IsEnabled>
-                            <MultiBinding Converter="{StaticResource HasManualValuesConverter}">
-                                <Binding />
-                                <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataControlBase}}" />
-                            </MultiBinding>
-                        </ToggleButton.IsEnabled>
+                    <ToggleButton Grid.Column="3" Style="{StaticResource DataManualToggle}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
                     </ToggleButton>
                 </Grid>

@@ -103,8 +103,8 @@ public static class DataFactory
 
         /// <summary>
         /// Fills [node] with the values of [token], the reverse of <c>ToToken</c>: the shape stays
-        /// the node's. A value matching one of [manualValues], or one its editor can't hold, is
-        /// forced; a property [token] leaves out is forced to undefined when not required.
+        /// the node's. A node matching one of [manualValues], or one its editor or shape can't hold,
+        /// is forced; a property [token] leaves out is forced to undefined when not required.
         /// </summary>
         public void Load(JToken? token, IEnumerable<DataManualValue>? manualValues = null)
             => Load(node, token, [.. manualValues ?? []]);
@@ -151,6 +151,13 @@ public static class DataFactory
     {
         switch (node)
         {
+            case DataValue value:
+                LoadValue(value, token, manualValues);
+                break;
+            // The root has no row to leave manual mode from: it is never forced.
+            case not DataValue when node.Parent is not null && ForcedEntryOf(node, token, manualValues) is DataManualValue entry:
+                Force(node, entry);
+                break;
             case DataObject obj:
                 foreach (DataNode property in obj.Properties)
                     Load(property, property.Key is null ? null : (token as JObject)?[property.Key], manualValues);
@@ -163,11 +170,32 @@ public static class DataFactory
                     Load(array.Values[^1], item, manualValues);
                 }
                 break;
-            case DataValue value:
-                LoadValue(value, token, manualValues);
-                break;
         }
     }
+
+    /// <summary>
+    /// What an object or an array is forced to: undefined when [token] leaves it out and it is not
+    /// required, the manual value [token] matches, or [token] itself when it is not the node's shape.
+    /// </summary>
+    private static DataManualValue? ForcedEntryOf(DataNode node, JToken? token, IReadOnlyList<DataManualValue> manualValues)
+    {
+        if (token is null)
+            return node.IsRequired ? null : DataManualValue.Undefined;
+
+        if (MatchOf(node, token, manualValues) is DataManualValue entry)
+            return entry;
+
+        bool fits = node is DataObject ? token is JObject : token is JArray;
+        return fits ? null : RawOf(token);
+    }
+
+    /// <summary>The first of [manualValues] fitting [node] that writes [token].</summary>
+    private static DataManualValue? MatchOf(DataNode node, JToken token, IReadOnlyList<DataManualValue> manualValues)
+        => manualValues.FirstOrDefault(entry =>
+            entry.Fits(node.Type) && JToken.DeepEquals(DataValue.TokenOf(entry.Value), token));
+
+    /// <summary>[token] as an entry of its own, kept as it is rather than lost.</summary>
+    private static DataManualValue RawOf(JToken token) => new(null, token is JValue raw ? raw.Value : token);
 
     private static void LoadValue(DataValue value, JToken? token, IReadOnlyList<DataManualValue> manualValues)
     {
@@ -178,21 +206,18 @@ public static class DataFactory
             return;
         }
 
-        DataManualValue? entry = manualValues.FirstOrDefault(entry =>
-            entry.Fits(value.Type) && JToken.DeepEquals(DataValue.TokenOf(entry.Value), token));
-        if (entry is not null)
+        if (MatchOf(value, token, manualValues) is DataManualValue entry)
             Force(value, entry);
         else if (TryValueOf(value, token, out object? converted))
             value.Value = converted;
         else
-            // Kept as it is rather than lost.
-            Force(value, new DataManualValue(null, token is JValue raw ? raw.Value : token));
+            Force(value, RawOf(token));
     }
 
-    private static void Force(DataValue value, DataManualValue entry)
+    private static void Force(DataNode node, DataManualValue entry)
     {
-        value.IsManual = true;
-        value.ManualEntry = entry;
+        node.IsManual = true;
+        node.ManualEntry = entry;
     }
 
     /// <summary>[token] as the CLR value the editor of [value] works in, false when it holds none.</summary>

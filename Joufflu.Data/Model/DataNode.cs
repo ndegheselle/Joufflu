@@ -57,6 +57,23 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo,
     public bool IsArrayItem => Parent is DataArray;
     public string? Description { get; set; }
 
+    /// <summary> Whether the node is forced from the manual list, an object or an array then leaving its children out. </summary>
+    [ObservableProperty]
+    private bool _isManual;
+
+    /// <summary>The entry picked while in manual mode.</summary>
+    [ObservableProperty]
+    private DataManualValue? _manualEntry;
+
+    partial void OnIsManualChanged(bool value) => OnManualModeChanged(value);
+    partial void OnManualEntryChanged(DataManualValue? value) => OnManualEntryPicked(value);
+
+    /// <summary>Called when [IsManual] changes.</summary>
+    protected virtual void OnManualModeChanged(bool isManual) { }
+
+    /// <summary>Called when [ManualEntry] changes.</summary>
+    protected virtual void OnManualEntryPicked(DataManualValue? entry) { }
+
     public DataNode(EnumDataType type, string? key)
     {
         Type = type;
@@ -64,6 +81,14 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo,
     }
 
     public abstract JToken? ToToken();
+
+    /// <summary>
+    /// What manual mode writes: nothing when nothing is picked, undefined included, as it writes
+    /// what it is pointed at and no more.
+    /// </summary>
+    protected JToken? ManualToken() => ManualEntry is null or DataUndefined
+        ? null
+        : DataValue.TokenOf(ManualEntry.Value);
 
     /// <summary>Raised when the node or anything under it changes, whether it is expanded aside.</summary>
     public event EventHandler? Changed;
@@ -274,6 +299,9 @@ public partial class DataArray : DataNode, IDataParent
 
     public override JToken? ToToken()
     {
+        if (IsManual)
+            return ManualToken();
+
         var json = new JArray();
         foreach (DataNode element in Values)
         {
@@ -292,6 +320,8 @@ public partial class DataArray : DataNode, IDataParent
             IsExpanded = IsExpanded,
             IsNullable = IsNullable,
             IsRequired = IsRequired,
+            IsManual = IsManual,
+            ManualEntry = ManualEntry,
         };
 
         // Filled in place: [Items] watches this very collection.
@@ -384,6 +414,9 @@ public partial class DataObject : DataNode, IDataParent
 
     public override JToken? ToToken()
     {
+        if (IsManual)
+            return ManualToken();
+
         var json = new JObject();
         foreach (DataNode property in Properties)
         {
@@ -403,6 +436,8 @@ public partial class DataObject : DataNode, IDataParent
         Properties = [.. Properties.Select(property => property.Clone())],
         IsNullable = IsNullable,
         IsRequired = IsRequired,
+        IsManual = IsManual,
+        ManualEntry = ManualEntry,
     };
 }
 
@@ -416,21 +451,14 @@ public partial class DataValue : DataNode
     [ObservableProperty]
     private object? _value;
 
-    /// <summary> Whether the value is forced from the manual list. </summary>
-    [ObservableProperty]
-    private bool _isManual;
-
     /// <summary>
-    /// The entry picked while in manual mode. Picking one forces <see cref="Value"/>, which stays
-    /// the single thing a host reads: leaving manual mode keeps whatever was forced.
+    /// Picking a manual entry forces <see cref="Value"/>, which stays the single thing a host
+    /// reads: leaving manual mode keeps whatever was forced.
     /// </summary>
-    [ObservableProperty]
-    private DataManualValue? _manualEntry;
-
-    partial void OnManualEntryChanged(DataManualValue? value)
+    protected override void OnManualEntryPicked(DataManualValue? entry)
     {
-        if (value is not null)
-            Value = value.Value;
+        if (entry is not null)
+            Value = entry.Value;
     }
 
     /// <summary> The choices a closed list offers for the enumerations. </summary>
@@ -450,9 +478,9 @@ public partial class DataValue : DataNode
     }
 
     /// <summary>A forced value the editor can't hold, a reference in a number say, falls back to the default.</summary>
-    partial void OnIsManualChanged(bool value)
+    protected override void OnManualModeChanged(bool isManual)
     {
-        if (!value && !Holds(Value))
+        if (!isManual && !Holds(Value))
             Value = Default();
     }
 
@@ -474,13 +502,7 @@ public partial class DataValue : DataNode
     public override JToken? ToToken()
     {
         if (IsManual)
-        {
-            // Nothing picked writes nothing, undefined included: manual mode writes what it is
-            // pointed at and no more.
-            if (ManualEntry is null or DataUndefined)
-                return null;
-            return TokenOf(ManualEntry.Value);
-        }
+            return ManualToken();
 
         if (Value is null)
             return JValue.CreateNull();
