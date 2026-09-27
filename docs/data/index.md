@@ -79,6 +79,28 @@ string json = schema.ToJson();
 
 Keys, `Description`, `IsNullable`, `IsRequired` and the enum `Options` are kept; values are not.
 
+## From JSON
+
+`Load()` fills a tree with a JSON value, the reverse of `ToToken()`, to edit a value again:
+
+```csharp
+Node = (DataObject)schema.ToDataNode();
+Node.Load(JToken.Parse(json), ManualValues);
+```
+
+The tree keeps its shape. A value matching one of the [manual values](#manual-values), or one its
+editor can't hold, is forced to it rather than lost; a property the JSON leaves out is forced to
+**undefined** when not required.
+
+Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, for `DataEdit`:
+
+```csharp
+Node = (DataObject)JObject.Parse(json).ToDataNode();
+```
+
+`Changed` is raised when a node or anything under it changes, to react to an edit anywhere in
+the tree.
+
 ## Manual values
 
 `ManualValues` lists what a field can be forced to instead of its editor, like a

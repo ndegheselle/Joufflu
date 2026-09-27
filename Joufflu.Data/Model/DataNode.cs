@@ -65,6 +65,23 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo,
 
     public abstract JToken? ToToken();
 
+    /// <summary>Raised when the node or anything under it changes, whether it is expanded aside.</summary>
+    public event EventHandler? Changed;
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName != nameof(IsExpanded))
+            OnChanged();
+    }
+
+    /// <summary>Raises <see cref="Changed"/> on the node and on every parent up to the root.</summary>
+    protected void OnChanged()
+    {
+        Changed?.Invoke(this, EventArgs.Empty);
+        (Parent as DataNode)?.OnChanged();
+    }
+
     #region Errors
 
     public bool HasErrors => _keyError is not null;
@@ -214,6 +231,7 @@ public partial class DataArray : DataNode, IDataParent
     {
         Template = template;
         Items = [new CollectionContainer { Collection = Values }, new DataArrayControl(this)];
+        Values.CollectionChanged += (_, _) => OnChanged();
     }
 
     /// <summary>
@@ -231,9 +249,12 @@ public partial class DataArray : DataNode, IDataParent
         Values.Add(node);
     }
 
-    public void Add(EnumDataType type)
+    public void Add(EnumDataType type) => Add(DataObjectControl.NodeFrom(type, ""));
+
+    /// <summary>Adds [node] as the last item, keyed by its index.</summary>
+    public void Add(DataNode node)
     {
-        var node = DataObjectControl.NodeFrom(type, $"[{Values.Count}]");
+        node.Key = $"[{Values.Count}]";
         node.CanEditKey = false;
         node.Parent = this;
         Values.Add(node);
@@ -308,6 +329,7 @@ public partial class DataObject : DataNode, IDataParent
             foreach (DataNode property in value)
                 property.Parent = this;
             ValidateKeys(value);
+            OnChanged();
         }
     }
 
@@ -357,6 +379,7 @@ public partial class DataObject : DataNode, IDataParent
         }
 
         ValidateKeys(Properties);
+        OnChanged();
     }
 
     public override JToken? ToToken()
@@ -421,8 +444,16 @@ public partial class DataValue : DataNode
     public DataValue(EnumDataType type, string? key, IEnumerable<DataEnumOption> options, bool isNullable = false) : base(type, key)
     {
         Options = [.. options];
+        Options.CollectionChanged += (_, _) => OnChanged();
         IsNullable = isNullable;
         Value = Default();
+    }
+
+    /// <summary>A forced value the editor can't hold, a reference in a number say, falls back to the default.</summary>
+    partial void OnIsManualChanged(bool value)
+    {
+        if (!value && !Holds(Value))
+            Value = Default();
     }
 
     /// <summary>Adds a string option, named by its value. The first one also becomes the value when it can't be null.</summary>
@@ -479,6 +510,19 @@ public partial class DataValue : DataNode
         IsRequired = IsRequired,
     };
 
+    /// <summary>Whether [value] is one the editor of [Type] holds.</summary>
+    private bool Holds(object? value) => value is null ? IsNullable : Type switch
+    {
+        EnumDataType.String => value is string,
+        EnumDataType.Integer => value is long or int or short or byte,
+        EnumDataType.Number => value is decimal or double or float or long or int,
+        EnumDataType.Boolean => value is bool,
+        EnumDataType.DateTime => value is DateTime,
+        EnumDataType.TimeSpan => value is TimeSpan,
+        EnumDataType.Choice => Options.Any(option => Equals(option.Value, value)),
+        _ => true
+    };
+
     /// <summary>
     /// The value a new node of [Type] starts with.
     /// </summary>
@@ -501,7 +545,7 @@ public partial class DataValue : DataNode
     }
 
     /// <summary> [value] as the JSON its own type amounts to, whatever the schema says it should have been. </summary>
-    private static JToken TokenOf(object? value) => value switch
+    internal static JToken TokenOf(object? value) => value switch
     {
         null => JValue.CreateNull(),
         JToken token => token,

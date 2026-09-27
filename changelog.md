@@ -1,4 +1,11 @@
-﻿# Version 0.7.0
+﻿# Joufflu.Data 0.8.1
+
+- Add `DataNode.Load(JToken, manualValues)`, the reverse of `ToToken()` : fills a tree with a JSON value, forcing what matches a manual value or what the editor can't hold rather than losing it, and a property left out to undefined when not required
+- Add `JToken.ToDataNode()`, inferring a tree from a JSON value for `DataEdit`, and `DataArray.Add(DataNode)`
+- Add `DataNode.Changed`, raised when a node or anything under it changes
+- Fall back to the default value when leaving manual mode on a value the editor can't hold, a string in a number field for example, instead of failing on `ToToken()`
+
+# Version 0.7.0
 
 - Add a *Design tokens* page, to the sample gallery and to the documentation, listing every `Colors`, `Brushes` and `Dimensions` key with the role it actually plays in the control styles, grouped by what it is for — the sample one paints each colour as a swatch live against the selected theme. The naming conventions the palette rests on are spelled out rather than left to be inferred : `X100` is the hover and pressed variant of an accent, `XContent` what is drawn on top of it, `Background100` an elevated surface and `Background200` a transient one
 - Give `ComboBoxSearch` a chevron of its own to open its choices with, on the right of the clear button and following the input padding of every `Sizing.Size` : its editable text box takes the whole control surface, so the drop down had no handle left and could only be opened by typing or with the arrow keys. Opening it shows the list whole even when an item is already selected — the text a selection leaves behind is not something the user searched for, so it no longer filters the choices down to the one already picked
