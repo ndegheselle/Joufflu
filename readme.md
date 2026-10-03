@@ -60,6 +60,12 @@ The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
 data grid, …) restyled to match the design system — come along with the core
 `Joufflu` styles.
 
+## Flutter (preview)
+
+[`Joufflu.Flutter`](./Joufflu.Flutter/README.md) brings the design system to Flutter
+mobile apps: the same tokens and palettes on top of Material 3, with a gallery app and a
+live theme customizer. Only the theme is ported for now.
+
 ## Getting started
 
 1. Add the packages you need. `Joufflu` is the core (styles & theming);

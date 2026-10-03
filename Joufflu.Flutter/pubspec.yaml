@@ -1,0 +1,18 @@
+name: joufflu
+description: "A Flutter design system for mobile apps: themed tokens, live Light / Dark theming and restyled Material widgets."
+version: 0.1.0
+homepage: https://github.com/ndegheselle/Joufflu
+repository: https://github.com/ndegheselle/Joufflu/tree/main/Joufflu.Flutter
+
+environment:
+  sdk: ^3.13.5
+  flutter: ">=3.47.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
