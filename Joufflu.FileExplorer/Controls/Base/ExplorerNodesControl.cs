@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Data;
 using Joufflu.FileExplorer.Sources;
 using Joufflu.Helpers;
+using Joufflu.Toolkit;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows;
@@ -58,13 +59,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         typeof(ExplorerNodesControl),
         new FrameworkPropertyMetadata(ExplorerNodeKinds.All, OnVisibleNodesChanged));
 
-    public static readonly DependencyPropertyKey IsDragOverKey = DependencyProperty.RegisterReadOnly(
-        nameof(IsDragOver),
-        typeof(bool),
-        typeof(ExplorerNodesControl),
-        new FrameworkPropertyMetadata(false));
-    public static readonly DependencyProperty IsDragOverProperty = IsDragOverKey.DependencyProperty;
-
     #endregion
 
     /// <summary>
@@ -82,12 +76,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     {
         get => (ExplorerNodeKinds)GetValue(VisibleNodesProperty);
         set => SetValue(VisibleNodesProperty, value);
-    }
-
-    public bool IsDragOver
-    {
-        get => (bool)GetValue(IsDragOverProperty);
-        private set => SetValue(IsDragOverKey, value);
     }
 
     protected const string PartItemsHost = "PART_ItemsHost";
@@ -113,6 +101,8 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         this.ContextMenu = new ContextMenu();
         ContextMenuOpening += ExplorerNodesControl_ContextMenuOpening;
         MouseDoubleClick += ExplorerNodesControl_MouseDoubleClick;
+        // Files dropped anywhere on the control, its template lighting up on DropTarget.IsDragOver
+        DropTarget.SetCommand(this, DropFilesCommand);
     }
 
     public override void OnApplyTemplate()
@@ -121,30 +111,20 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
 
         if (ItemsHost != null)
         {
-            ItemsHost.Drop -= ItemsHost_Drop;
             ItemsHost.MouseMove -= ItemsHost_MouseMove;
             ItemsHost.PreviewMouseLeftButtonDown -= ItemsHost_PreviewMouseLeftButtonDown;
             ItemsHost.PreviewMouseLeftButtonUp -= ItemsHost_PreviewMouseLeftButtonUp;
             ItemsHost.QueryContinueDrag -= ItemsHost_QueryContinueDrag;
-
-            ItemsHost.DragEnter -= ItemsHost_DragEnter;
-            ItemsHost.DragOver -= ItemsHost_DragOver;
-            ItemsHost.DragLeave -= ItemsHost_DragLeave;
         }
 
         ItemsHost = GetTemplateChild(PartItemsHost) as ItemsControl;
 
         if (ItemsHost != null)
         {
-            ItemsHost.Drop += ItemsHost_Drop;
             ItemsHost.MouseMove += ItemsHost_MouseMove;
             ItemsHost.PreviewMouseLeftButtonDown += ItemsHost_PreviewMouseLeftButtonDown;
             ItemsHost.PreviewMouseLeftButtonUp += ItemsHost_PreviewMouseLeftButtonUp;
             ItemsHost.QueryContinueDrag += ItemsHost_QueryContinueDrag;
-
-            ItemsHost.DragEnter += ItemsHost_DragEnter;
-            ItemsHost.DragOver += ItemsHost_DragOver;
-            ItemsHost.DragLeave += ItemsHost_DragLeave;
         }
 
         UpdateSelectedNodes();
@@ -422,38 +402,41 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         _isCanceled = false;
     }
 
-    private void ItemsHost_Drop(object sender, DragEventArgs e)
+    [RelayCommand(CanExecute = nameof(CanDropFiles))]
+    private void DropFiles(DropData data)
     {
-        if (!TryGetDrop(e, out IExplorerDirectory? target, out IReadOnlyList<string> files))
+        if (!TryGetDrop(data, out IExplorerDirectory? target, out IReadOnlyList<string> files))
             return;
 
         Source.Transfer(files, target, isMove: false);
     }
 
+    private bool CanDropFiles(DropData data) => TryGetDrop(data, out _, out _);
+
     /// <summary>
     /// Directory a drop would land in : the one under the pointer, or the opened one anywhere else.
     /// </summary>
-    private IExplorerDirectory? GetDropTarget(DragEventArgs e)
-        => (e.OriginalSource as FrameworkElement)?.DataContext as IExplorerDirectory ?? Source.Current;
+    private IExplorerDirectory? GetDropTarget(DropData data)
+        => (data.Target.InputHitTest(data.Position) as FrameworkElement)?.DataContext as IExplorerDirectory ?? Source.Current;
 
     /// <summary>
     /// Target and dropped paths of a drag, false when it has nothing to transfer : the paths already in the target
     /// directory are left out, so that dragging a node around the folder it is displayed in doesn't copy it next to
     /// itself.
     /// </summary>
-    private bool TryGetDrop(DragEventArgs e, [NotNullWhen(true)] out IExplorerDirectory? target, out IReadOnlyList<string> files)
+    private bool TryGetDrop(DropData data, [NotNullWhen(true)] out IExplorerDirectory? target, out IReadOnlyList<string> files)
     {
         target = null;
         files = [];
 
-        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
+        if (data.GetDataPresent(DataFormats.FileDrop) == false)
             return false;
 
-        IExplorerDirectory? directory = GetDropTarget(e);
+        IExplorerDirectory? directory = GetDropTarget(data);
         if (directory == null)
             return false;
 
-        if (e.Data.GetData(DataFormats.FileDrop) is not string[] paths)
+        if (data.GetData(DataFormats.FileDrop) is not string[] paths)
             return false;
 
         target = directory;
@@ -506,31 +489,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
             _isCanceled = true;
             e.Action = DragAction.Cancel;
         }
-    }
-
-    private int _enterCount;
-    private void ItemsHost_DragEnter(object sender, DragEventArgs e)
-    {
-        _enterCount++;
-        ItemsHost_DragOver(sender, e);
-    }
-    private void ItemsHost_DragOver(object sender, DragEventArgs e)
-    {
-        if (!TryGetDrop(e, out _, out _))
-        {
-            e.Effects = DragDropEffects.None;
-            e.Handled = true;
-            IsDragOver = false;
-            return;
-        }
-
-        IsDragOver = true;
-    }
-    private void ItemsHost_DragLeave(object sender, DragEventArgs e)
-    {
-        _enterCount = Math.Max(0, _enterCount - 1);
-        if (_enterCount == 0)
-            IsDragOver = false;
     }
 
     /// <summary>
