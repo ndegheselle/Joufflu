@@ -8,6 +8,10 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
         <!--  Merged for the base Button style the select-all button is based on.  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
+        <!--  Merged for the input styles the column cell elements use (see toolkit:DataGridEditing).  -->
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/TextBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/CheckBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/ComboBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  Invisible drag handle used to resize columns  -->
@@ -23,29 +27,38 @@
         </Setter>
     </Style>
 
+    <Style
+        x:Key="DataGridCheckBoxElementStyle"
+        BasedOn="{StaticResource {x:Type CheckBox}}"
+        TargetType="{x:Type CheckBox}">
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+    </Style>
+
     <Style TargetType="{x:Type DataGridCell}">
-        <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingMd}}" />
-        <Setter Property="FontSize" Value="{StaticResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
+        <!--  An input fits in any cell; taller content (template columns) still grows the row.  -->
+        <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
                     <Border
-                        Margin="{TemplateBinding Padding}"
+                        toolkit:Derive.Margin="{TemplateBinding Padding}"
+                        toolkit:Derive.MarginFactor="1,0"
                         Background="{TemplateBinding Background}"
                         SnapsToDevicePixels="True">
-                        <ContentPresenter VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
 
         <Style.Triggers>
-            <!--
-                Cell selection is a tint, not a fill, so hosted controls keep their own colours (see
-                the DataGridRow style). The tint is translucent, so it is only painted when the row
-                itself is not selected (SelectionUnit=Cell) — otherwise it would stack on top of the
-                row tint and darken the whole selected row.
-            -->
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
@@ -58,16 +71,19 @@
 
             <!--  Size variants (md is the default, no trigger needed)  -->
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingXs}}" />
-                <Setter Property="FontSize" Value="{StaticResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingXs}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="sm">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingSm}}" />
-                <Setter Property="FontSize" Value="{StaticResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingSm}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="lg">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingLg}}" />
-                <Setter Property="FontSize" Value="{StaticResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -315,6 +331,11 @@
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="ScrollViewer.PanningMode" Value="Both" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <!--  Dynamic, so an app overriding the implicit input styles gets its own in the grid too.  -->
+        <Setter Property="toolkit:DataGridEditing.TextEditingStyle" Value="{DynamicResource {x:Type TextBox}}" />
+        <Setter Property="toolkit:DataGridEditing.CheckBoxElementStyle" Value="{StaticResource DataGridCheckBoxElementStyle}" />
+        <Setter Property="toolkit:DataGridEditing.CheckBoxEditingStyle" Value="{DynamicResource {x:Type CheckBox}}" />
+        <Setter Property="toolkit:DataGridEditing.ComboBoxEditingStyle" Value="{DynamicResource {x:Type ComboBox}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGrid}">

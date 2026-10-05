@@ -23,10 +23,12 @@
 
     <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" TargetType="{x:Type ScrollViewer}">
         <Setter Property="CanContentScroll" Value="True" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                    <Grid Background="{TemplateBinding Background}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -36,12 +38,13 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <DockPanel Margin="{TemplateBinding Padding}">
+                        <DockPanel>
                             <!--  Header row background band (top corners rounded to match the ListView border)  -->
                             <Border
+                                Padding="{TemplateBinding Padding}"
                                 toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
                                 toolkit:Derive.CornerRadiusFactor="1,1,0,0"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
+                                Background="{TemplateBinding Background}"
                                 DockPanel.Dock="Top">
                                 <ScrollViewer
                                     Padding="0"
@@ -50,7 +53,6 @@
                                     VerticalScrollBarVisibility="Hidden">
                                     <GridViewHeaderRowPresenter
                                         x:Name="PART_GridViewHeaderRowPresenter"
-                                        Margin="{StaticResource {x:Static joufflu:Dimensions.PaddingMd}}"
                                         AllowsColumnReorder="{Binding Path=TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
                                         ColumnHeaderContainerStyle="{Binding Path=TemplatedParent.View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
                                         ColumnHeaderContextMenu="{Binding Path=TemplatedParent.View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
@@ -129,7 +131,6 @@
 
                         <Thumb
                             x:Name="PART_HeaderGripper"
-                            Margin="0,0,-8,0"
                             HorizontalAlignment="Right"
                             Style="{StaticResource ListViewColumnHeaderGripperStyle}" />
                     </Grid>
@@ -147,7 +148,7 @@
     <Style x:Key="{x:Type ListViewItem}" TargetType="ListViewItem">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="UseLayoutRounding" Value="True" />
@@ -159,11 +160,14 @@
                         x:Name="Border"
                         Background="{TemplateBinding Background}"
                         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                        <GridViewRowPresenter
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}" />
+                        <!--  Composate for default WPF margin  -->
+                        <Grid Margin="-6,0,0,0">
+                            <GridViewRowPresenter
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}" />
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -180,12 +184,6 @@
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
 
-            <!--
-                Selection is a tint, not a fill: the foreground stays put so that anything hosted in
-                a cell (buttons, icons, inputs) keeps its own colours. A style setter on a child
-                always beats the Foreground inherited from this row, so a contrasting selected
-                foreground could never reach them anyway.
-            -->
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftBrush}}" />
             </Trigger>

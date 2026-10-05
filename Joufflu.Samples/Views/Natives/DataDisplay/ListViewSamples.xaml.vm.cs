@@ -11,6 +11,8 @@ public class Person
     public string Role { get; set; } = "";
 
     public int Age { get; set; }
+
+    public bool IsActive { get; set; }
 }
 
 public class ListViewSamplesViewModel : ObservableObject

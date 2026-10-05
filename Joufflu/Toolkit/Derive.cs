@@ -45,7 +45,7 @@ public static class Derive
 
     /// <summary>
     /// Resource key of the scalar (a <see cref="double"/>) or <see cref="Thickness"/> the border
-    /// thickness is derived from.
+    /// thickness is derived from, or that value itself.
     /// </summary>
     public static readonly DependencyProperty BorderThicknessProperty = DependencyProperty.RegisterAttached(
         "BorderThickness",
@@ -115,7 +115,7 @@ public static class Derive
 
     /// <summary>
     /// Resource key of the scalar (a <see cref="double"/>) or <see cref="System.Windows.CornerRadius"/>
-    /// the corner radius is derived from.
+    /// the corner radius is derived from, or that value itself.
     /// </summary>
     public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.RegisterAttached(
         "CornerRadius",
@@ -181,7 +181,7 @@ public static class Derive
 
     /// <summary>
     /// Resource key of the scalar (a <see cref="double"/>) or <see cref="Thickness"/> the margin is
-    /// derived from.
+    /// derived from, or that value itself (e.g. <c>{TemplateBinding Padding}</c>).
     /// </summary>
     public static readonly DependencyProperty MarginProperty = DependencyProperty.RegisterAttached(
         "Margin",
@@ -239,15 +239,16 @@ public static class Derive
 
     /// <summary>
     /// Points <paramref name="source"/> at the resource <paramref name="key"/>, so the derived value
-    /// follows every later change of that resource.
+    /// follows every later change of that resource. A value instead of a key (a
+    /// <c>{TemplateBinding Padding}</c>, for instance) is used as is: whatever feeds it keeps it live.
     /// </summary>
     private static void Track(DependencyObject d, DependencyProperty source, object? key)
     {
         if (d is not FrameworkElement element)
             return;
 
-        if (key == null)
-            element.SetValue(source, null);
+        if (key is null or Thickness or CornerRadius or double)
+            element.SetValue(source, key);
         else
             element.SetResourceReference(source, key);
     }
