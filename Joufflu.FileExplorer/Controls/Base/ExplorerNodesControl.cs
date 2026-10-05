@@ -274,7 +274,15 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         if (e.Handled || IsInRenameBox(e.OriginalSource))
             return;
 
-        // Shortcuts
+        // Paste goes to the current directory, whatever is selected
+        if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V)
+        {
+            Source.PasteCommand.Execute(Source.Current);
+            e.Handled = true;
+            return;
+        }
+
+        // Shortcuts acting on the selection
         IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
 
         if (nodes.Count > 0)
@@ -295,11 +303,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
                 Renaming(nodes.First()); 
                 e.Handled = true;
             }
-
-        }
-        else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V){
-            Source.PasteCommand.Execute(Source.Current); 
-            e.Handled = true;
         }
     }
     #endregion
