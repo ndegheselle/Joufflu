@@ -22,15 +22,15 @@ public class OverlayContainer : ContentControl
     public OverlayContainer()
     {
         // Provide a working default while still allowing a binding to override it.
-        SetCurrentValue(OverlaysProperty, new OverlayService());
+        SetCurrentValue(OverlaysProperty, new Overlayer());
     }
 
-    public OverlayService Overlays
+    public Overlayer Overlays
     {
-        get => (OverlayService)GetValue(OverlaysProperty);
+        get => (Overlayer)GetValue(OverlaysProperty);
         set => SetValue(OverlaysProperty, value);
     }
 
     public static readonly DependencyProperty OverlaysProperty = DependencyProperty.Register(
-        nameof(Overlays), typeof(OverlayService), typeof(OverlayContainer), new PropertyMetadata(null));
+        nameof(Overlays), typeof(Overlayer), typeof(OverlayContainer), new PropertyMetadata(null));
 }

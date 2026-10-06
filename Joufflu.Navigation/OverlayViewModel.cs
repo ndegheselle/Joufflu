@@ -5,7 +5,7 @@ namespace Joufflu.Navigation;
 
 /// <summary>
 /// Base for content shown as a modal overlay : it carries its own <see cref="Options"/>, so
-/// <see cref="IOverlayService.Show"/> takes nothing but the content, and it closes itself rather
+/// <see cref="IOverlayer.Show"/> takes nothing but the content, and it closes itself rather
 /// than whatever is on top of the stack.
 /// <para>
 /// Use <see cref="OverlayViewModel{TResult}"/> when the overlay is awaited for something it picks
@@ -20,9 +20,9 @@ public abstract partial class OverlayViewModel : ObservableObject, IOverlayConte
     /// </summary>
     public OverlayOptions Options { get; } = new();
 
-    protected IOverlayService Overlays { get; }
+    protected IOverlayer Overlays { get; }
 
-    protected OverlayViewModel(IOverlayService overlays)
+    protected OverlayViewModel(IOverlayer overlays)
     {
         Overlays = overlays;
     }
@@ -50,7 +50,7 @@ public abstract class OverlayViewModel<TResult> : OverlayViewModel
     /// </summary>
     public TResult? Result { get; private set; }
 
-    protected OverlayViewModel(IOverlayService overlays) : base(overlays)
+    protected OverlayViewModel(IOverlayer overlays) : base(overlays)
     { }
 
     /// <summary>

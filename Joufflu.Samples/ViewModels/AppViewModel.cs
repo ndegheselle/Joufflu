@@ -25,7 +25,7 @@ namespace Joufflu.Samples.ViewModels;
 /// </summary>
 public class AppViewModel : ObservableObject
 {
-    public OverlayService Overlays { get; } = new();
+    public Overlayer Overlays { get; } = new();
 
     public ToastService Toasts { get; } = new();
 
@@ -118,9 +118,9 @@ public class AppViewModel : ObservableObject
             new DropTargetSamplesViewModel(),
             new AnimateSamplesViewModel(),
             new CustomInputSamplesViewModel(),
-            new ShellSamples(),
 
             // Themes
+            new ShellSamples(),
             new ThemeSamplesViewModel(),
             new ThemeTokensViewModel(),
             new ThemeCustomizerViewModel(),

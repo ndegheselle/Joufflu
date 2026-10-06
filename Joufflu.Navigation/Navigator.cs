@@ -2,6 +2,44 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Joufflu.Navigation;
 
+public enum EnumConfirmationType
+{
+    Neutral,
+    Info,
+    Success,
+    Warning,
+    Danger
+}
+
+/// <summary>
+/// Optional contract for a view model that wants to react to navigation lifecycle events.
+/// Navigation works on any object (resolved to a view through implicit <c>DataTemplate</c>s);
+/// implementing this interface is only needed when lifecycle callbacks are useful.
+/// </summary>
+public interface IPage
+{
+    /// <summary>Called right after the page becomes the active content.</summary>
+    void OnNavigatedTo() { }
+
+    /// <summary>Called right after the page stops being the active content.</summary>
+    void OnNavigatedFrom() { }
+}
+
+/// <summary>
+/// Displays a single page (view model) at a time and exposes the current one.
+/// </summary>
+public interface INavigator
+{
+    object? CurrentPage { get; }
+
+    void Navigate(object? page);
+
+    /// <summary>Navigates to the page the implementation resolves for <paramref name="type"/>.</summary>
+    void Navigate(Type? type);
+
+    event EventHandler<object?>? Navigated;
+}
+
 /// <summary>
 /// Default <see cref="INavigator"/> implementation. Shows a single page (view model) at a time;
 /// the matching view is resolved by WPF through implicit <c>DataTemplate</c>s.

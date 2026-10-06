@@ -7,7 +7,7 @@ namespace Joufflu.Samples.Views.Navigation;
 
 public class OverlaySamplesViewModel : ObservableObject
 {
-    private readonly IOverlayService _overlays;
+    private readonly IOverlayer _overlays;
     private readonly IToastService _toasts;
 
     public IRelayCommand OpenSimpleCommand { get; }
@@ -20,7 +20,7 @@ public class OverlaySamplesViewModel : ObservableObject
 
     public IRelayCommand OpenStackedCommand { get; }
 
-    public OverlaySamplesViewModel(IOverlayService overlays, IToastService toasts)
+    public OverlaySamplesViewModel(IOverlayer overlays, IToastService toasts)
     {
         _overlays = overlays;
         _toasts = toasts;
@@ -103,7 +103,7 @@ public partial class SampleFormViewModel : OverlayViewModel<string>
     private string _name = "Ada Lovelace";
     private bool _subscribe = true;
 
-    public SampleFormViewModel(IOverlayService overlays) : base(overlays)
+    public SampleFormViewModel(IOverlayer overlays) : base(overlays)
     {
         Options.Title = "Edit profile";
         Options.CloseOnClickAway = false;

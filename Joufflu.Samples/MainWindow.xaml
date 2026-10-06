@@ -53,7 +53,7 @@
                     </nav:NavigationMenu.Header>
 
                     <nav:NavigationTitle>Themes</nav:NavigationTitle>
-                    <nav:NavigationItem TargetType="{x:Type toolkitSamples:ShellSamples}">
+                    <nav:NavigationItem TargetType="{x:Type themesSamples:ShellSamples}">
                         <nav:NavigationItem.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.AppWindow}" />
                         </nav:NavigationItem.Icon>
