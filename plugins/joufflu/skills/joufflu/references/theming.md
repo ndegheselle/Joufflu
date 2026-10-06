@@ -123,7 +123,7 @@ Use the brush in UI; the colour is for gradients and animations.
 | Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill), `X100` (hover/pressed fill), `XContent` (text/icons on the fill) |
 
 Also available, derived automatically from the accent colour (not per theme):
-`Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoftStrongBrush`
+`Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoft100Brush`
 (≈24 %, its hover) for each accent.
 
 `Colors.DisabledOpacity` (double, `0.5`): opacity of a disabled control.

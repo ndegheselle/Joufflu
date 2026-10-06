@@ -40,6 +40,7 @@ public sealed class ThemeManager : ObservableObject
 
     private const string LightSource = "pack://application:,,,/Joufflu;component/Themes/Light.xaml";
     private const string DarkSource = "pack://application:,,,/Joufflu;component/Themes/Dark.xaml";
+    private const string BrushesSource = "pack://application:,,,/Joufflu;component/Styles/Brushes.xaml";
 
     [DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
     public static extern bool ShouldSystemUseDarkMode();
@@ -191,7 +192,7 @@ public sealed class ThemeManager : ObservableObject
     }
 
     /// <summary>
-    /// Builds the resource dictionary for a concrete registered theme (its colours, brushes, …) so its
+    /// Builds the resource dictionary for a concrete registered theme (its colours) so its
     /// palette can be inspected without selecting it. Returns <c>null</c> for <see cref="System"/> (a
     /// resolver, not a concrete theme) or an unknown name.
     /// </summary>
@@ -225,7 +226,8 @@ public sealed class ThemeManager : ObservableObject
     {
         Registration registration = Resolve(_theme);
 
-        var next = registration.CreateDictionary();
+        ResourceDictionary theme = registration.CreateDictionary();
+        ResourceDictionary next = WithBrushes(theme);
 
         var merged = Application.Current.Resources.MergedDictionaries;
         if (_themeDictionary is not null)
@@ -246,6 +248,17 @@ public sealed class ThemeManager : ObservableObject
 
         IsDark = registration.IsDark;
         OnPropertyChanged(nameof(IsDark));
+    }
+
+    /// <summary>
+    /// Pairs a theme, which only defines colours, with a fresh copy of the brushes built from them.
+    /// A brush resolves its <c>DynamicResource</c> colour once, the first time it is used, and never
+    /// again: shared across themes, it would keep the colours of the first one.
+    /// </summary>
+    private static ResourceDictionary WithBrushes(ResourceDictionary theme)
+    {
+        var brushes = new ResourceDictionary { Source = new Uri(BrushesSource) };
+        return new ResourceDictionary { MergedDictionaries = { theme, brushes } };
     }
 
     /// <summary>

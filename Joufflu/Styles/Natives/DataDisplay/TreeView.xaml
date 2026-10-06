@@ -179,7 +179,7 @@
                     <Condition Property="IsSelected" Value="True" />
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftStrongBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoft100Brush}}" />
                 </MultiTrigger.Setters>
             </MultiTrigger>
 

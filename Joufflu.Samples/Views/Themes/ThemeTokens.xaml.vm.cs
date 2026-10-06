@@ -14,15 +14,17 @@ public sealed record TokenEntry(string Key, string Usage, ComponentResourceKey? 
 public sealed record TokenGroup(string Title, string Description, IReadOnlyList<TokenEntry> Entries);
 
 /// <summary>
-/// One accent family, the three keys it is made of shown side by side rather than described: the
-/// fill, the hover and pressed fill, and the content drawn on top of both.
+/// One accent family, the keys it is made of shown side by side rather than described: the fill, the
+/// hover and pressed fill, the content drawn on top of both, then the soft tint and its hover.
 /// </summary>
 public sealed record AccentEntry(
     string Name,
     string Usage,
     ComponentResourceKey Fill,
     ComponentResourceKey Hover,
-    ComponentResourceKey Content);
+    ComponentResourceKey Content,
+    ComponentResourceKey Soft,
+    ComponentResourceKey Soft100);
 
 /// <summary>
 /// Reference of every key a theme is made of. The descriptions are the roles the keys actually play
@@ -80,7 +82,7 @@ public class ThemeTokensViewModel : ObservableObject
     ];
 
     /// <summary>
-    /// The six accent families. Each one is rendered as its three swatches so the relationship
+    /// The six accent families. Each one is rendered as its swatches so the relationship
     /// between them is seen rather than read.
     /// </summary>
     public IReadOnlyList<AccentEntry> AccentTokens { get; } =
@@ -90,37 +92,49 @@ public class ThemeTokensViewModel : ObservableObject
             "Main call to action: the default filled button, the selected tab or navigation entry.",
             Joufflu.Brushes.PrimaryBrush,
             Joufflu.Brushes.Primary100Brush,
-            Joufflu.Brushes.PrimaryContentBrush),
+            Joufflu.Brushes.PrimaryContentBrush,
+            Joufflu.Brushes.PrimarySoftBrush,
+            Joufflu.Brushes.PrimarySoft100Brush),
         new AccentEntry(
             "Secondary",
             "Neutral filled action, for a button that must read as a button without competing with Primary.",
             Joufflu.Brushes.SecondaryBrush,
             Joufflu.Brushes.Secondary100Brush,
-            Joufflu.Brushes.SecondaryContentBrush),
+            Joufflu.Brushes.SecondaryContentBrush,
+            Joufflu.Brushes.SecondarySoftBrush,
+            Joufflu.Brushes.SecondarySoft100Brush),
         new AccentEntry(
             "Success",
             "Confirmation: success toast, valid state, positive badge.",
             Joufflu.Brushes.SuccessBrush,
             Joufflu.Brushes.Success100Brush,
-            Joufflu.Brushes.SuccessContentBrush),
+            Joufflu.Brushes.SuccessContentBrush,
+            Joufflu.Brushes.SuccessSoftBrush,
+            Joufflu.Brushes.SuccessSoft100Brush),
         new AccentEntry(
             "Info",
             "Neutral information: info toast, informative badge.",
             Joufflu.Brushes.InfoBrush,
             Joufflu.Brushes.Info100Brush,
-            Joufflu.Brushes.InfoContentBrush),
+            Joufflu.Brushes.InfoContentBrush,
+            Joufflu.Brushes.InfoSoftBrush,
+            Joufflu.Brushes.InfoSoft100Brush),
         new AccentEntry(
             "Warning",
             "Something needs attention but nothing is broken yet.",
             Joufflu.Brushes.WarningBrush,
             Joufflu.Brushes.Warning100Brush,
-            Joufflu.Brushes.WarningContentBrush),
+            Joufflu.Brushes.WarningContentBrush,
+            Joufflu.Brushes.WarningSoftBrush,
+            Joufflu.Brushes.WarningSoft100Brush),
         new AccentEntry(
             "Danger",
             "Destructive action and validation errors - a delete button, the border of a field in error.",
             Joufflu.Brushes.DangerBrush,
             Joufflu.Brushes.Danger100Brush,
-            Joufflu.Brushes.DangerContentBrush),
+            Joufflu.Brushes.DangerContentBrush,
+            Joufflu.Brushes.DangerSoftBrush,
+            Joufflu.Brushes.DangerSoft100Brush),
     ];
 
     /// <summary>The odd one out of <c>Joufflu.Colors</c>: a number rather than a colour.</summary>

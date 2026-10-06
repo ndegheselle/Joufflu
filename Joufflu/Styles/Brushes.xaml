@@ -4,16 +4,57 @@
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <!--
+        One brush per palette colour, so a theme only defines the colours. Not merged in
+        Resources.xaml: ThemeManager pairs a fresh copy of this dictionary with every theme it
+        applies, because a brush resolves its DynamicResource colour once and never again; a copy
+        shared across themes would keep the colours of the first one.
+    -->
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ForegroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Foreground100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Foreground100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Foreground200Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Foreground200Color}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BorderBrush}" Color="{DynamicResource {x:Static joufflu:Colors.BorderColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Border100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Border100Color}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BackgroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.BackgroundColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Background100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Background100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Background200Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Background200Color}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.PrimaryBrush}" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Primary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Primary100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.PrimaryContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryContentColor}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Secondary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Secondary100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryContentColor}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SuccessBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Success100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Success100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SuccessContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SuccessContentColor}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InfoBrush}" Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Info100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Info100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InfoContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.InfoContentColor}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.WarningBrush}" Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Warning100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Warning100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.WarningContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.WarningContentColor}}" />
+
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DangerBrush}" Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Danger100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Danger100Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DangerContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.DangerContentColor}}" />
+
+    <!--
         Soft tints. The soft background is the semantic hue at low opacity rather than a dedicated
         palette colour, so it is derived automatically for the built-in themes and for any custom
         theme (the Color is a DynamicResource; only the opacity is fixed). "Soft" is the resting
         fill (also used as the selected state of list rows and tree items, and as the outline
-        hover); "SoftStrong" is its hover. Secondary is achromatic, so its soft treatment is a
+        hover); "Soft100" is its hover, as X100 is the hover of X. Secondary is achromatic, so its soft treatment is a
         neutral foreground wash instead of a hue.
 
-        They live here rather than in the theme dictionaries because they are theme-independent by
-        construction, and they are keyed by ComponentResourceKey so any style in the library can
-        reach them with DynamicResource instead of a same-file StaticResource.
+        Like the brushes above, they are keyed by ComponentResourceKey so any style in the library
+        can reach them with DynamicResource instead of a same-file StaticResource.
     -->
 
     <SolidColorBrush
@@ -21,7 +62,7 @@
         Opacity="0.14"
         Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
     <SolidColorBrush
-        x:Key="{x:Static joufflu:Brushes.PrimarySoftStrongBrush}"
+        x:Key="{x:Static joufflu:Brushes.PrimarySoft100Brush}"
         Opacity="0.24"
         Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
 
@@ -30,7 +71,7 @@
         Opacity="0.08"
         Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
     <SolidColorBrush
-        x:Key="{x:Static joufflu:Brushes.SecondarySoftStrongBrush}"
+        x:Key="{x:Static joufflu:Brushes.SecondarySoft100Brush}"
         Opacity="0.14"
         Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
 
@@ -39,7 +80,7 @@
         Opacity="0.14"
         Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
     <SolidColorBrush
-        x:Key="{x:Static joufflu:Brushes.SuccessSoftStrongBrush}"
+        x:Key="{x:Static joufflu:Brushes.SuccessSoft100Brush}"
         Opacity="0.24"
         Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
 
@@ -48,7 +89,7 @@
         Opacity="0.14"
         Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
     <SolidColorBrush
-        x:Key="{x:Static joufflu:Brushes.InfoSoftStrongBrush}"
+        x:Key="{x:Static joufflu:Brushes.InfoSoft100Brush}"
         Opacity="0.24"
         Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
 
@@ -57,7 +98,7 @@
         Opacity="0.14"
         Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
     <SolidColorBrush
-        x:Key="{x:Static joufflu:Brushes.WarningSoftStrongBrush}"
+        x:Key="{x:Static joufflu:Brushes.WarningSoft100Brush}"
         Opacity="0.24"
         Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
 
@@ -66,7 +107,7 @@
         Opacity="0.14"
         Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
     <SolidColorBrush
-        x:Key="{x:Static joufflu:Brushes.DangerSoftStrongBrush}"
+        x:Key="{x:Static joufflu:Brushes.DangerSoft100Brush}"
         Opacity="0.24"
         Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
 

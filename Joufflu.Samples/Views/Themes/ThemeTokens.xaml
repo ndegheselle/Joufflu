@@ -24,7 +24,6 @@
         </Style>
 
         <Style x:Key="AccentCaption" TargetType="{x:Type TextBlock}">
-            <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="FontFamily" Value="Consolas" />
             <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
             <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
@@ -68,55 +67,87 @@
 
         <!--  One accent family: its three keys drawn side by side, then what the family is for  -->
         <DataTemplate x:Key="AccentEntryTemplate" DataType="{x:Type vm:AccentEntry}">
-            <Grid Margin="0,6" toolkit:Spacing.Gap="14,0">
+            <Grid Margin="0,6" toolkit:Spacing.Gap="4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel toolkit:Spacing.Gap="6,0" Orientation="Horizontal">
-                    <!--  The fill, with "Aa" over it in the content colour: the pairing the family exists for  -->
-                    <StackPanel toolkit:Spacing.Gap="0,3">
-                        <Border
+                <!--  The fill, with "Aa" over it in the content colour: the pairing the family exists for  -->
+                <StackPanel toolkit:Spacing.Gap="0,3">
+                    <Border
                             HorizontalAlignment="Left"
                             c:ResourceSwatch.BackgroundKey="{Binding Fill}"
                             Style="{StaticResource AccentSwatch}">
-                            <TextBlock
+                        <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 c:ResourceSwatch.ForegroundKey="{Binding Content}"
                                 Text="Aa" />
-                        </Border>
-                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name}" />
-                    </StackPanel>
+                    </Border>
+                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name}" />
+                </StackPanel>
 
-                    <!--  The same fill as it is drawn while hovered or pressed  -->
-                    <StackPanel toolkit:Spacing.Gap="0,3">
-                        <Border
+                <!--  The same fill as it is drawn while hovered or pressed  -->
+                <StackPanel Grid.Column="1" toolkit:Spacing.Gap="0,3">
+                    <Border
                             HorizontalAlignment="Left"
                             c:ResourceSwatch.BackgroundKey="{Binding Hover}"
                             Style="{StaticResource AccentSwatch}">
-                            <TextBlock
+                        <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 c:ResourceSwatch.ForegroundKey="{Binding Content}"
                                 Text="Aa" />
-                        </Border>
-                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}100}" />
-                    </StackPanel>
+                    </Border>
+                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}100}" />
+                </StackPanel>
 
-                    <!--  The content colour on its own  -->
-                    <StackPanel toolkit:Spacing.Gap="0,3">
-                        <Border
+                <!--  The content colour on its own  -->
+                <StackPanel Grid.Column="2" toolkit:Spacing.Gap="0,3">
+                    <Border
                             HorizontalAlignment="Left"
                             c:ResourceSwatch.BackgroundKey="{Binding Content}"
                             Style="{StaticResource AccentSwatch}" />
-                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Content}" />
-                    </StackPanel>
+                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Content}" />
+                </StackPanel>
+
+                <!--  The soft tint, with "Aa" in the fill colour as a soft button draws it; set apart as it is a brush only  -->
+                <StackPanel Grid.Column="3" toolkit:Spacing.Gap="0,3">
+                    <Border
+                            HorizontalAlignment="Left"
+                            c:ResourceSwatch.BackgroundKey="{Binding Soft}"
+                            Style="{StaticResource AccentSwatch}">
+                        <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                c:ResourceSwatch.ForegroundKey="{Binding Fill}"
+                                Text="Aa" />
+                    </Border>
+                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Soft}" />
+                </StackPanel>
+
+                <!--  The same tint while hovered  -->
+                <StackPanel Grid.Column="4" toolkit:Spacing.Gap="0,3">
+                    <Border
+                            HorizontalAlignment="Left"
+                            c:ResourceSwatch.BackgroundKey="{Binding Soft100}"
+                            Style="{StaticResource AccentSwatch}">
+                        <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                c:ResourceSwatch.ForegroundKey="{Binding Fill}"
+                                Text="Aa" />
+                    </Border>
+                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Soft100}" />
                 </StackPanel>
 
                 <TextBlock
-                    Grid.Column="1"
+                    Grid.Column="5"
                     VerticalAlignment="Center"
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                     Text="{Binding Usage}"
@@ -160,7 +191,7 @@
             <TextBlock Style="{StaticResource H4}" Text="Accents" />
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                Text="Six semantic families sharing one shape: the fill, the same fill for hover and pressed, and the content drawn on top of both. The three tiles below are those three keys, the Aa showing the pairing each family exists for."
+                Text="Six semantic families sharing one shape: the fill, the same fill for hover and pressed, and the content drawn on top of both. The first three tiles below are those three keys, the Aa showing the pairing each family exists for. The last two are brushes only, derived from the fill: the soft tint (soft buttons, selected rows) and its hover, drawn with the fill as text."
                 TextWrapping="Wrap" />
             <ItemsControl ItemTemplate="{StaticResource AccentEntryTemplate}" ItemsSource="{Binding AccentTokens}" />
 

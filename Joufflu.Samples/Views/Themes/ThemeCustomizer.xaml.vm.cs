@@ -519,9 +519,8 @@ public class ThemeCustomizerViewModel : ObservableObject
         SetProperty(ref _selectedPreset, null, nameof(SelectedPreset));
         var res = Application.Current.Resources;
         res[entry.Key] = entry.Color;
-        // The semantic brushes bind their Color via DynamicResource, but each brush lives in the
-        // same merged theme dictionary as its colour and resolves it there before reaching this
-        // app-level override. Override the derived brush explicitly so the preview moves
+        // A brush resolves its DynamicResource colour once, when first used, so overriding the colour
+        // alone leaves it as it was. Override the brush too so the preview moves
         // (same reason ApplyDimension overrides the derived Thickness/CornerRadius keys).
         res[BrushKey(entry.ResourceName)] = new SolidColorBrush(entry.Color);
         RegenerateXaml();
@@ -780,20 +779,10 @@ public class ThemeCustomizerViewModel : ObservableObject
         sb.AppendLine("    xmlns:system=\"clr-namespace:System;assembly=mscorlib\">");
         sb.AppendLine();
 
-        // Colors
+        // Colours only: the core resources build every brush from them.
         sb.AppendLine("    <!--  Colors  -->");
         foreach (var entry in _allColors)
             sb.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{entry.ResourceName}}}\">{ToHex(entry.Color)}</Color>");
-        sb.AppendLine();
-
-        // Brushes (one per colour; brush name mirrors the colour name)
-        sb.AppendLine("    <!--  Brushes  -->");
-        foreach (var entry in _allColors)
-        {
-            string brushName = entry.ResourceName.Replace("Color", "Brush");
-            sb.AppendLine(
-                $"    <SolidColorBrush x:Key=\"{{x:Static joufflu:Brushes.{brushName}}}\" Color=\"{{DynamicResource {{x:Static joufflu:Colors.{entry.ResourceName}}}}}\" />");
-        }
         sb.AppendLine();
 
         AppendDimensions(sb);

@@ -175,6 +175,9 @@ public class ThemedWindow : Window
         if (!(d is ThemedWindow sourceWindow))
             return;
 
+        if (e.NewValue == null)
+            return;
+
         if (e.NewValue is ImageSource image)
         {
             sourceWindow.IconSource = image;
@@ -182,7 +185,6 @@ public class ThemedWindow : Window
         }
 
         string? newIcon = e.NewValue.ToString();
-
         sourceWindow.IconSource = String.IsNullOrEmpty(newIcon) ? null : new BitmapImage(new Uri(newIcon));
     }
 

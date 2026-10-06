@@ -29,10 +29,10 @@ Ask for the missing inputs only: base colour(s), light or dark, theme name.
 
 ## 2. Write the palette — `Themes/<Name>.xaml`
 
-Every theme redefines the same 18 accent colours plus surfaces and text, **and** the
-matching `SolidColorBrush`es built from them (the built-in brushes are defined inside the
-theme dictionaries, so a theme must provide both). Keys it leaves out keep the built-in
-value, but a complete palette avoids mismatches.
+Every theme redefines the same 18 accent colours plus surfaces and text — colours only.
+The brushes are defined once and `ThemeManager` builds them from whichever theme it
+applies. Keys it leaves out keep the built-in value, but a complete palette avoids
+mismatches.
 
 Template (fill every colour):
 
@@ -58,11 +58,6 @@ Template (fill every colour):
     <Color x:Key="{x:Static joufflu:Colors.Primary100Color}">#506E92</Color>
     <Color x:Key="{x:Static joufflu:Colors.PrimaryContentColor}">#FFFFFF</Color>
     <!-- … Secondary, Success, Info, Warning, Danger the same way … -->
-
-    <!-- Brushes: one per colour above, always built with DynamicResource -->
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ForegroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Foreground100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Foreground100Color}}" />
-    <!-- … one SolidColorBrush for every Color key: Foreground*, Border*, Background*, and X / X100 / XContent of each accent … -->
 </ResourceDictionary>
 ```
 
@@ -71,8 +66,9 @@ Joufflu repository or the package source is available, copy `Joufflu/Themes/Ligh
 (or `Dark.xaml`) as the starting point so no key is missed. The sample themes in
 `Joufflu.Samples/Themes/` (Nord, Ocean, Dracula, …) follow this layout.
 
-Do **not** define `XSoftBrush` / `XSoftStrongBrush`: they are derived from the accent
-colour automatically.
+Do **not** define brushes (`XBrush`, `XSoftBrush`, `XSoft100Brush`): `ThemeManager`
+builds them from the colours of every theme it applies, and those take precedence over any
+brush the theme defines.
 
 ### Choosing the colours
 
