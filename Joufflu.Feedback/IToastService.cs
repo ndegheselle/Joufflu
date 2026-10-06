@@ -79,7 +79,6 @@ public class ToastInstance : ObservableObject
         {
             _timer = new DispatcherTimer { Interval = Options.Duration };
             _timer.Tick += OnTick;
-            _timer.Start();
         }
     }
 
@@ -89,7 +88,14 @@ public class ToastInstance : ObservableObject
         _service.Close(this);
     }
 
-    internal void StopTimer()
+    public void StartTimer()
+    {
+        if (_timer == null)
+            return;
+        _timer.Start();
+    }
+
+    private void StopTimer()
     {
         if (_timer == null)
             return;
@@ -111,6 +117,7 @@ public class ToastService : ObservableObject, IToastService
         ArgumentNullException.ThrowIfNull(options);
 
         var instance = new ToastInstance(options, this);
+        instance.StartTimer();
         Toasts.Insert(0, instance);
         return instance;
     }
