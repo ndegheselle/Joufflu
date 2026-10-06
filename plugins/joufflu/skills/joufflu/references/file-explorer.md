@@ -5,13 +5,13 @@ Needs `Joufflu.Feedback` too (sources report errors as toasts).
 ```xml
 xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
 xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base;assembly=Joufflu.FileExplorer"
-xmlns:data="clr-namespace:Joufflu.FileExplorer.Data;assembly=Joufflu.FileExplorer"
-xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters;assembly=Joufflu.FileExplorer"
+xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu.FileExplorer"
+xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
 ```
 
 ```csharp
-using Joufflu.FileExplorer.Sources;   // IExplorerSource, FileSystemSource, FileSystemWatcherSource
-using Joufflu.FileExplorer.Data;      // IExplorerNode, IExplorerDirectory, IExplorerFile, FileSystemFile, FileSystemDirectory
+using Joufflu.FileExplorer.Nodes;       // IExplorerSource, IExplorerNode, IExplorerDirectory, IExplorerFile
+using Joufflu.FileExplorer.FileSystem;  // FileSystemSource, FileSystemWatcherSource, FileSystemFile, FileSystemDirectory
 ```
 
 ## Controls
@@ -99,10 +99,10 @@ up to `object`, so types without a menu fall back to the defaults.
 <fileExplorer:Explorer Source="{Binding Source}">
     <fileExplorer:Explorer.Resources>
         <!-- System icons instead of font icons -->
-        <DataTemplate DataType="{x:Type data:FileSystemFile}">
+        <DataTemplate DataType="{x:Type fileSystem:FileSystemFile}">
             <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="4">
                 <Image Width="16" Height="16"
-                       Source="{Binding Converter={x:Static converters:ExplorerIconConverter.Small}}" />
+                       Source="{Binding Converter={x:Static icons:ExplorerIconConverter.Small}}" />
                 <TextBlock Text="{Binding Name}" />
             </StackPanel>
         </DataTemplate>

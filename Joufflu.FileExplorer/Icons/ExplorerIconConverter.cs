@@ -1,10 +1,10 @@
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Helpers;
+using Joufflu.FileExplorer.FileSystem;
+using Joufflu.FileExplorer.Nodes;
 
-namespace Joufflu.FileExplorer.Converters
+namespace Joufflu.FileExplorer.Icons
 {
     /// <summary>
     /// System icon of an <see cref="IExplorerNode"/> (or of a path given as a string), so that a node template can

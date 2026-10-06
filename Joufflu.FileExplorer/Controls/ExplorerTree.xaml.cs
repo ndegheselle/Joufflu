@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Joufflu.FileExplorer.Controls.Base;
-using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Nodes;
 using Joufflu.Helpers;
 
 namespace Joufflu.FileExplorer.Controls

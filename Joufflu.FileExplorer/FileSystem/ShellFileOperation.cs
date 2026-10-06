@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace Joufflu.FileExplorer.Helpers
+namespace Joufflu.FileExplorer.FileSystem
 {
     /// <summary>
     /// File operations handed over to the Windows shell, on a whole batch of paths at once.

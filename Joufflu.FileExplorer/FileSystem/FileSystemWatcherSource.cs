@@ -1,9 +1,9 @@
 using System.IO;
 using System.Windows.Threading;
 using Joufflu.Feedback;
-using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Nodes;
 
-namespace Joufflu.FileExplorer.Sources
+namespace Joufflu.FileExplorer.FileSystem
 {
     /// <summary>
     /// A <see cref="FileSystemSource"/> that keeps its nodes in step with the disk : a file or a directory created,

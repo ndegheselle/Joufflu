@@ -4,7 +4,7 @@ namespace Joufflu.Converters
 {
     public class BooleanFlipConverter : IValueConverter
     {
-        public static BooleanFlipConverter Default = new BooleanFlipConverter();
+        public static BooleanFlipConverter Default { get; } = new BooleanFlipConverter();
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

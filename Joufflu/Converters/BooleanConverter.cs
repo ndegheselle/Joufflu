@@ -9,7 +9,7 @@ namespace Joufflu.Converters
     /// </summary>
     public class BooleanConverter : IValueConverter
     {
-        public static BooleanConverter Default = new BooleanConverter();
+        public static BooleanConverter Default { get; } = new BooleanConverter();
 
         /// <param name="value"></param>
         /// <param name="targetType"></param>
@@ -52,6 +52,8 @@ namespace Joufflu.Converters
     /// </summary>
     public class BooleansConverter : IMultiValueConverter
     {
+        public static BooleansConverter Default { get; } = new BooleansConverter();
+
         public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             string lConjonction = parameter?.ToString()?.Trim() ?? "&&";

@@ -1,9 +1,8 @@
 
 using System.ComponentModel;
 using System.Windows.Input;
-using Joufflu.FileExplorer.Data;
 
-namespace Joufflu.FileExplorer.Sources;
+namespace Joufflu.FileExplorer.Nodes;
 
 public interface IExplorerSource : INotifyPropertyChanged
 {
@@ -46,6 +45,6 @@ public interface IExplorerSource : INotifyPropertyChanged
 /// <remarks>
 /// The node is carried along with the name, the source keeping no state about an edition in progress : which node is
 /// being renamed is the business of the control the name is typed in, see
-/// <see cref="Controls.Base.IExplorerUi.RenamedNode"/>.
+/// <see cref="Controls.Base.ExplorerNodesControl.RenamedNode"/>.
 /// </remarks>
 public record ExplorerNodeRename(IExplorerNode Node, string Name);

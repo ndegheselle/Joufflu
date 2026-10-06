@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace Joufflu.FileExplorer.Data;
+namespace Joufflu.FileExplorer.Nodes;
 
 /// <summary>
 /// Sorts nodes like the Windows explorer : directories first, then a natural (digit aware) name comparison.

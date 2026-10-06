@@ -61,7 +61,7 @@ ThemeManager.Instance.Initialize();
 Then open a source in your view model:
 
 ```csharp
-// using Joufflu.FileExplorer.Sources; — toasts is an injected IToastService, null is accepted
+// using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
 public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();

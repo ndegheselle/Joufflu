@@ -6,10 +6,9 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Helpers;
+using Joufflu.FileExplorer.Nodes;
 
-namespace Joufflu.FileExplorer.Sources
+namespace Joufflu.FileExplorer.FileSystem
 {
     /// <summary>
     /// The files and the directories under a directory of this machine.

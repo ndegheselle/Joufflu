@@ -12,7 +12,7 @@ act with. Controls sharing the same source stay in sync — selecting a folder i
 tree, double clicking one in the list or using the breadcrumb opens it for all of them.
 
 ```csharp
-// using Joufflu.FileExplorer.Sources; — toasts is an injected IToastService, null is accepted
+// using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
 public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();

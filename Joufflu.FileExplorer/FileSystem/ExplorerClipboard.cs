@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Windows;
 
-namespace Joufflu.FileExplorer.Helpers
+namespace Joufflu.FileExplorer.FileSystem
 {
     /// <summary>
     /// Cut and copy of nodes, through the clipboard of Windows.

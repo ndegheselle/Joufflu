@@ -3,7 +3,8 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.FileSystem;
+using Joufflu.FileExplorer.Nodes;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 

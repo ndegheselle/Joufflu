@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.Nodes;
 using Joufflu.Helpers;
 using Joufflu.Toolkit;
 using System.Diagnostics.CodeAnalysis;
@@ -42,7 +41,7 @@ public static class ExplorerNodeKindsExtensions
 /// </summary>
 [ObservableObject]
 [TemplatePart(Name = PartItemsHost, Type = typeof(ItemsControl))]
-public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerUi
+public abstract partial class ExplorerNodesControl : ExplorerControl
 {
     #region Dependency Properties
 
@@ -92,8 +91,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     /// </summary>
     [ObservableProperty]
     private IExplorerNode? renamedNode;
-
-    ICommand IExplorerUi.RenamingCommand => RenamingCommand;
 
     protected ExplorerNodesControl()
     {
@@ -216,19 +213,22 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
 
     #region Rename
 
+    // The rest of the rename lives in Rename/ : the editable name (ExplorerRename.xaml), the behaviour of its box
+    // (ExplorerRename) and the trigger showing it (IsRenamedConverter).
+
     /// <summary>
     /// Starts the edition of the name of a node, null giving up the one in progress : the control displays an editable
-    /// name in place of that node until <see cref="Rename"/> ends it.
+    /// name in place of that node until <see cref="EndRename"/> ends it.
     /// </summary>
     [RelayCommand]
-    private void Renaming(IExplorerNode? node) => RenamedNode = node;
+    private void BeginRename(IExplorerNode? node) => RenamedNode = node;
 
     /// <summary>
     /// Ends the edition, <paramref name="rename"/> being null when it has been given up : the control closes its
     /// editable name in either case, and only hands a validated one over to the <see cref="ExplorerControl.Source"/>.
     /// </summary>
     [RelayCommand]
-    private void Rename(ExplorerNodeRename? rename)
+    private void EndRename(ExplorerNodeRename? rename)
     {
         RenamedNode = null;
         if (rename == null)
@@ -280,7 +280,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
                 e.Handled = true;
             }
             else if(e.Key == Key.F2){
-                Renaming(nodes.First()); 
+                BeginRename(nodes.First()); 
                 e.Handled = true;
             }
         }
@@ -346,7 +346,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         }
 
         var element = (FrameworkElement)sender;
-        menu.DataContext = new ExplorerMenuContext(Source, this, nodes);
+        menu.DataContext = new ExplorerMenuContext(Source, BeginRenameCommand, nodes);
         element.ContextMenu = menu;
     }
     #endregion

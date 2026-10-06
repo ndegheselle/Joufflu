@@ -121,7 +121,8 @@ C# namespaces (these are the real ones; some doc snippets are off):
 | `OverlayService` | `Joufflu.Navigation.Controls` |
 | `ToastService`, `IToastService`, `ToastOptions`, `ToastType` | `Joufflu.Feedback` |
 | `ToastContainer`, `ToastPosition`, `Badge`, `BadgeVariant`, `Spinner` | `Joufflu.Feedback.Controls` |
-| `FileSystemSource`, `FileSystemWatcherSource`, `IExplorerSource` | `Joufflu.FileExplorer.Sources` |
+| `IExplorerSource`, `IExplorerNode`, `IExplorerDirectory`, `IExplorerFile` | `Joufflu.FileExplorer.Nodes` |
+| `FileSystemSource`, `FileSystemWatcherSource`, `FileSystemFile`, `FileSystemDirectory` | `Joufflu.FileExplorer.FileSystem` |
 | `DataObject`, `DataArray`, `DataValue`, `EnumDataType`, `DataManualValue`, `DataFactory` | `Joufflu.Data.Model` (alias `DataObject`: clashes with `System.Windows.DataObject`) |
 
 ## 5. Rules of thumb for new UI

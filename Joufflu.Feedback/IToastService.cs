@@ -88,14 +88,14 @@ public class ToastInstance : ObservableObject
         _service.Close(this);
     }
 
-    public void StartTimer()
+    internal void StartTimer()
     {
         if (_timer == null)
             return;
         _timer.Start();
     }
 
-    private void StopTimer()
+    internal void StopTimer()
     {
         if (_timer == null)
             return;

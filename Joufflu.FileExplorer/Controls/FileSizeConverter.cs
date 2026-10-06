@@ -1,9 +1,9 @@
-using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Nodes;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 
-namespace Joufflu.FileExplorer.Converters
+namespace Joufflu.FileExplorer.Controls
 {
     /// <summary>
     /// Human readable size of a file <see cref="IExplorerNode"/> (or of a <see cref="FileInfo"/> or a path given as a

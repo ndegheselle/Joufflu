@@ -1,5 +1,4 @@
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.Nodes;
 using Joufflu.Helpers;
 using System.IO;
 using System.Windows;
@@ -7,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace Joufflu.FileExplorer.Controls.Base
+namespace Joufflu.FileExplorer.Controls.Base.Rename
 {
     /// <summary>
     /// Turns a <see cref="TextBox"/> into the editable name of the node being renamed : it takes the focus as it is

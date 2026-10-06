@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="clr-namespace:Joufflu.FileExplorer.Data"
+    xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -12,10 +12,10 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/MenuItem.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemDirectory}">
+    <DataTemplate x:Key="{base:ContextMenuTemplateKey fileSystem:FileSystemDirectory}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
-                Command="{Binding Ui.RenamingCommand}"
+                Command="{Binding BeginRenameCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Rename"
                 InputGestureText="F2">
@@ -89,10 +89,10 @@
             </MenuItem>
         </ContextMenu>
     </DataTemplate>
-    <DataTemplate x:Key="{base:ContextMenuTemplateKey data:FileSystemFile}">
+    <DataTemplate x:Key="{base:ContextMenuTemplateKey fileSystem:FileSystemFile}">
         <ContextMenu d:DataContext="{d:DesignInstance Type=base:ExplorerMenuContext}">
             <MenuItem
-                Command="{Binding Ui.RenamingCommand}"
+                Command="{Binding BeginRenameCommand}"
                 CommandParameter="{Binding Node}"
                 Header="Rename"
                 InputGestureText="F2">

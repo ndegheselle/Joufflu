@@ -5,7 +5,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Joufflu.FileExplorer.Helpers
+namespace Joufflu.FileExplorer.Icons
 {
     /// <summary>
     /// Icons the Windows shell associates with a folder or a file type.

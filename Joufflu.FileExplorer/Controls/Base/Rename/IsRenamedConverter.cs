@@ -1,13 +1,12 @@
 using System.Globalization;
 using System.Windows.Data;
-using Joufflu.FileExplorer.Controls.Base;
-using Joufflu.FileExplorer.Data;
+using Joufflu.FileExplorer.Nodes;
 
-namespace Joufflu.FileExplorer.Converters
+namespace Joufflu.FileExplorer.Controls.Base.Rename
 {
     /// <summary>
     /// Whether a node is the one being renamed, so that the control displaying it turns its name into an editable one.
-    /// Values : the <see cref="IExplorerNode"/>, then the <see cref="IExplorerUi.RenamedNode"/> of the control.
+    /// Values : the <see cref="IExplorerNode"/>, then the <see cref="ExplorerNodesControl.RenamedNode"/> of the control.
     /// </summary>
     public class IsRenamedConverter : IMultiValueConverter
     {
