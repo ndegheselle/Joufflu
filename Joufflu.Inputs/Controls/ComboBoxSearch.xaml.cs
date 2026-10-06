@@ -191,22 +191,24 @@ namespace Joufflu.Inputs.Controls
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
-            if (_editableTextBox == null)
-                return;
-
-            // Show italic text if no item is selected
-            if (SelectedItem != null)
+            if (_editableTextBox != null)
             {
-                Text = GetTextFromItem(SelectedItem);
-                _editableTextBox.FontStyle = FontStyles.Normal;
-                _editableTextBox.SelectAll();
-            }
-            else
-            {
-                _editableTextBox.FontStyle = FontStyles.Italic;
+                // Show italic text if no item is selected
+                if (SelectedItem != null)
+                {
+                    Text = GetTextFromItem(SelectedItem);
+                    _editableTextBox.FontStyle = FontStyles.Normal;
+                    _editableTextBox.SelectAll();
+                }
+                else
+                {
+                    _editableTextBox.FontStyle = FontStyles.Italic;
+                }
             }
 
-            e.Handled = true;
+            // Raise the event like Selector does, without ComboBox's base: it syncs Text with the
+            // selected item and would wipe the search being typed when the selection is cleared.
+            RaiseEvent(e);
         }
 
         #endregion

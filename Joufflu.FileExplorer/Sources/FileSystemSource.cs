@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Security;
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -102,7 +103,17 @@ namespace Joufflu.FileExplorer.Sources
         /// </summary>
         protected virtual Task OpenDirectory(IExplorerDirectory directory, int depth)
         {
-            LoadDirectory(directory, depth);
+            try
+            {
+                LoadDirectory(directory, depth);
+            }
+            catch (Exception exception) when (IsReadError(exception))
+            {
+                // Unreadable : Current is left as it was, nothing is opened.
+                toasts?.Error(exception.Message);
+                return Task.CompletedTask;
+            }
+
             Current = directory;
             return Task.CompletedTask;
         }
@@ -110,6 +121,7 @@ namespace Joufflu.FileExplorer.Sources
         /// <summary>
         /// Read a directory into its children, recursif on <paramref name="depth"/> sub directories, without making
         /// it the <see cref="Current"/> one. Also used to reload a directory the shell just modified.
+        /// Throws when the directory itself can't be read, a sub directory that can't be read is left empty.
         /// </summary>
         protected virtual void LoadDirectory(IExplorerDirectory directory, int depth)
         {
@@ -121,9 +133,29 @@ namespace Joufflu.FileExplorer.Sources
                 directory.Children.Add(node);
 
                 if (depth > 0 && node is IExplorerDirectory subDirectory)
-                    LoadDirectory(subDirectory, depth - 1);
+                    TryLoadDirectory(subDirectory, depth - 1);
             }
         }
+
+        /// <summary>
+        /// <see cref="LoadDirectory"/> that doesn't throw on a directory it can't read (access denied, deleted
+        /// meanwhile...) : its children are left empty or partly read, and false is returned.
+        /// </summary>
+        protected bool TryLoadDirectory(IExplorerDirectory directory, int depth)
+        {
+            try
+            {
+                LoadDirectory(directory, depth);
+                return true;
+            }
+            catch (Exception exception) when (IsReadError(exception))
+            {
+                return false;
+            }
+        }
+
+        private static bool IsReadError(Exception exception)
+            => exception is IOException or UnauthorizedAccessException or SecurityException;
 
         /// <summary>
         /// Node displaying a file system entry. Every node of the source goes through it, so a derived source
@@ -362,7 +394,7 @@ namespace Joufflu.FileExplorer.Sources
             foreach (IExplorerDirectory directory in directories.OfType<IExplorerDirectory>().Distinct())
             {
                 if (Directory.Exists(directory.Path))
-                    LoadDirectory(directory, LoadDepth);
+                    TryLoadDirectory(directory, LoadDepth);
             }
         }
 
