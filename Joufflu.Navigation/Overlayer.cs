@@ -30,10 +30,16 @@ public class OverlayOptions : ObservableObject
 public interface IOverlayer
 {
     /// <summary>
-    /// Shows <paramref name="content"/> as a modal overlay and completes when it is closed.
-    /// The result carries whatever the closing action provided (<see langword="null"/> when dismissed).
+    /// Shows [content] as a modal overlay and completes when it is closed.
+    /// The result correspond to the closing action (true then validated, false then canceled, null then ignored).
     /// </summary>
-    Task<bool?> Show(object content, OverlayOptions? options = null);
+    Task<bool?> ShowAsync(object content, OverlayOptions? options = null);
+
+    /// <summary>
+    /// Show a [content] that is expecting to provide a specific result if validated.
+    /// Return the result provided by the [content] if validated, null otherwise.
+    /// </summary>
+    Task<TResult?> ShowAsync<TResult>(IOverlayContent<TResult> content, OverlayOptions? options = null);
 
     /// <summary>
     /// Show a confirmation overlay with a simple message.
@@ -44,25 +50,30 @@ public interface IOverlayer
     /// <returns></returns>
     Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral);
 
-    void Close(OverlayInstance overlay, bool? result = null);
-
-    /// <summary>
-    /// Closes the overlay showing <paramref name="content"/>, doing nothing when it isn't on the
-    /// stack anymore. Lets content close itself rather than whatever is on top, which is what an
-    /// overlay opening another one of its own kind needs.
-    /// </summary>
-    void Close(object content, bool? result = null);
-
-    void CloseTop(bool? result = null);
+    /// <summary> Close [content] by ignoring it (null returned).</summary>
+    void Ignore(object content);
+    /// <summary> Close [content] by canceling it (false returned).</summary>
+    void Cancel(object content);
+    /// <summary> Close [content] by validating it (true returned).</summary>
+    void Validate(object content);
 }
 
 /// <summary>
 /// Optional contract for overlay content that wants to provide its own options
-/// (title, action bar, ...) instead of having them supplied at <see cref="IOverlayer.Show"/> time.
+/// (title, action bar, ...) instead of having them supplied at <see cref="IOverlayer.ShowAsync"/> time.
 /// </summary>
 public interface IOverlayContent : IPage
 {
     OverlayOptions Options { get; }
+}
+
+/// <summary>
+/// Optional contract for overlay that want to return a specific value.
+/// </summary>
+/// <typeparam name="TResult"></typeparam>
+public interface IOverlayContent<TResult> : IOverlayContent
+{
+    TResult? Result { get; }
 }
 
 /// <summary>
@@ -77,7 +88,7 @@ public class OverlayInstance : ObservableObject
     public OverlayOptions Options { get; }
 
     /// <summary>Closes the overlay with a <see langword="null"/> (dismissed) result.</summary>
-    public ICommand CloseCommand { get; }
+    public ICommand IgnoreCommand { get; }
 
     /// <summary>Closes the overlay only when <see cref="OverlayOptions.CloseOnClickAway"/> is set.</summary>
     public ICommand ClickAwayCommand { get; }
@@ -90,31 +101,32 @@ public class OverlayInstance : ObservableObject
         Options = options;
         _service = service;
 
-        CloseCommand = new RelayCommand(() => Close(null));
+        IgnoreCommand = new RelayCommand(() => _service.Ignore(this));
         ClickAwayCommand = new RelayCommand(() =>
         {
             if (Options.CloseOnClickAway)
-                Close(null);
+                _service.Ignore(this);
         });
     }
-
-    public void Close(bool? result) => _service.Close(this, result);
 }
 
-public class ConfirmationContent : OverlayOptions
+public class ConfirmationContent: IOverlayContent
 {
+    public OverlayOptions Options { get; }
     public string Message { get; set; } = "";
     public EnumConfirmationType Type { get; set; }
 
     public IRelayCommand CancelCommand { get; }
     public IRelayCommand ConfirmCommand { get; }
 
-    public ConfirmationContent(IOverlayer overlays, string message, EnumConfirmationType type)
+
+    public ConfirmationContent(IOverlayer overlays, string title, string message, EnumConfirmationType type)
     {
+        Options = new OverlayOptions() { Title = title };
         Message = message;
         Type = type;
-        CancelCommand = new RelayCommand(() => overlays.CloseTop(false));
-        ConfirmCommand = new RelayCommand(() => overlays.CloseTop(true));
+        CancelCommand = new RelayCommand(() => overlays.Cancel(this));
+        ConfirmCommand = new RelayCommand(() => overlays.Validate(this));
     }
 }
 
@@ -127,7 +139,8 @@ public class Overlayer : ObservableObject, IOverlayer
 
     public bool HasOverlays => Overlays.Count > 0;
 
-    public Task<bool?> Show(object content, OverlayOptions? options = null)
+    /// <inheritdoc/>
+    public Task<bool?> ShowAsync(object content, OverlayOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(content);
 
@@ -141,12 +154,38 @@ public class Overlayer : ObservableObject, IOverlayer
         return instance.Completion.Task;
     }
 
-    public Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral)
+    /// <inheritdoc/>
+    public async Task<TResult?> ShowAsync<TResult>(IOverlayContent<TResult> content, OverlayOptions? options = null)
     {
-        return Show(new ConfirmationContent(this, message, type), new OverlayOptions() { Title = title });
+        return await ShowAsync((object)content, options) == true ? content.Result : default;
     }
 
-    public void Close(OverlayInstance overlay, bool? result = null)
+    public Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral)
+    {
+        return ShowAsync(new ConfirmationContent(this, title, message, type));
+    }
+
+    public void Cancel(object content)
+    {
+        Close(content, false);
+    }
+    public void Validate(object content)
+    {
+        Close(content, true);
+    }
+    public void Ignore(object content)
+    {
+        Close(content, null);
+    }
+
+    private void Close(object content, bool? result = null)
+    {
+        OverlayInstance? overlay = Overlays.FirstOrDefault(x => ReferenceEquals(x.Content, content));
+        if (overlay != null)
+            Close(overlay, result);
+    }
+
+    private void Close(OverlayInstance overlay, bool? result = null)
     {
         if (!Overlays.Remove(overlay))
             return;
@@ -154,18 +193,5 @@ public class Overlayer : ObservableObject, IOverlayer
         (overlay.Content as IPage)?.OnNavigatedFrom();
         overlay.Completion.TrySetResult(result);
         OnPropertyChanged(nameof(HasOverlays));
-    }
-
-    public void Close(object content, bool? result = null)
-    {
-        OverlayInstance? overlay = Overlays.FirstOrDefault(x => ReferenceEquals(x.Content, content));
-        if (overlay != null)
-            Close(overlay, result);
-    }
-
-    public void CloseTop(bool? result = null)
-    {
-        if (Overlays.Count > 0)
-            Close(Overlays[^1], result);
     }
 }

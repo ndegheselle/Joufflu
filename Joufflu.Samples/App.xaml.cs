@@ -13,7 +13,7 @@ namespace Joufflu.Samples
     /// </summary>
     public partial class App : Application
     {
-        private AppViewModel? appViewModel;
+        private ShellViewModel? shellViewModel;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -43,9 +43,11 @@ namespace Joufflu.Samples
             // Insert the current theme's dictionary before any window is shown.
             ThemeManager.Instance.Initialize();
 
-            appViewModel = new AppViewModel();
+            shellViewModel = new ShellViewModel();
+            // Draws each page and overlay content with its view, wherever it is shown.
+            Resources.MergedDictionaries.Add(shellViewModel.ViewTemplates);
 
-            MainWindow mainWindow = new MainWindow(appViewModel);
+            MainWindow mainWindow = new MainWindow(shellViewModel);
             mainWindow.Show();
         }
 
@@ -124,7 +126,7 @@ namespace Joufflu.Samples
         {
             try
             {
-                appViewModel?.Toasts.Error("An unexpected error happend ...", "Ooops");
+                shellViewModel?.Toasts.Error("An unexpected error happend ...", "Ooops");
             }
             catch
             {}

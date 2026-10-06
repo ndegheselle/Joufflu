@@ -27,7 +27,7 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels"
     Width="1100"
     Height="790"
-    d:DataContext="{d:DesignInstance Type=vm:AppViewModel}"
+    d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
     AllowContentOverTitleBar="True"
     IconVisibility="Collapsed"
     WindowStartupLocation="CenterScreen"
@@ -37,7 +37,7 @@
         <!--  Wraps the whole app so overlays cover every part of it, side menu included.  -->
         <nav:OverlayContainer Overlays="{Binding Overlays}">
             <DockPanel>
-                <!--  Each item targets its page type; AppViewModel's navigator resolves it to the page instance.  -->
+                <!--  Each item targets its page type; ShellViewModel's navigator resolves it to the page instance.  -->
                 <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
                     <nav:NavigationMenu.Header>
                         <StackPanel
