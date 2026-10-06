@@ -153,7 +153,7 @@ namespace Joufflu.FileExplorer.Sources
             parent.Children.Add(node);
 
             if (node is IExplorerDirectory directory)
-                LoadDirectory(directory, LoadDepth);
+                TryLoadDirectory(directory, LoadDepth);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Joufflu.FileExplorer.Sources
                 if (child == null)
                 {
                     // Not loaded yet : the directory is read again, and the walk down goes on through what it holds.
-                    LoadDirectory(directory, 0);
+                    TryLoadDirectory(directory, 0);
                     child = FindChild(directory);
 
                     if (child == null)
