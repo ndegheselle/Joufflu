@@ -54,7 +54,7 @@ namespace Joufflu.Navigation.Controls
                 nameof(PageNumber),
                 typeof(int),
                 typeof(Paging),
-                new PropertyMetadata(1, (o, value) => ((Paging)o).OnPageNumberChange()));
+                new PropertyMetadata(1, (o, value) => ((Paging)o).OnPageNumberChange(), (o, value) => ((Paging)o).CoercePageNumber((int)value)));
 
         public static readonly DependencyProperty CapacityProperty =
             DependencyProperty.Register(
@@ -105,6 +105,7 @@ namespace Joufflu.Navigation.Controls
         #region Change Events
         private void OnTotalChanged()
         {
+            CoerceValue(PageNumberProperty);
             UpdateAvailablesPages();
             NotifyPropertyChanged(nameof(PageMax));
             NotifyPropertyChanged(nameof(IntervalMin));
@@ -112,17 +113,16 @@ namespace Joufflu.Navigation.Controls
             RaiseCommandsChanged();
         }
 
+        private int CoercePageNumber(int value)
+        {
+            if (Total <= 0)
+                return Math.Max(1, value);
+            return Math.Clamp((int)value, 1, PageMax);
+        }
+
         private void OnPageNumberChange()
         {
-            int value = (int)GetValue(PageNumberProperty);
-            if (value > PageMax)
-                value = PageMax;
-            if (value < 1)
-                value = 1;
-
             UpdateAvailablesPages();
-            SetValue(PageNumberProperty, value);
-
             PagingChange?.Invoke(PageNumber, Capacity);
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
@@ -131,11 +131,15 @@ namespace Joufflu.Navigation.Controls
 
         private void OnCapacityChanged()
         {
-            if (PageNumber > PageMax && PageMax != 0)
-                PageNumber = PageMax;
-
-            PagingChange?.Invoke(PageNumber, Capacity);
             NotifyPropertyChanged(nameof(PageMax));
+            int previous = PageNumber;
+            CoerceValue(PageNumberProperty);
+            // If page number changed PagingChange and property change already fired.
+            if (previous != PageNumber)
+                return;
+
+            UpdateAvailablesPages();
+            PagingChange?.Invoke(PageNumber, Capacity);
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
             RaiseCommandsChanged();

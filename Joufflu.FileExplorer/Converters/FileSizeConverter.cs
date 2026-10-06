@@ -40,12 +40,12 @@ namespace Joufflu.FileExplorer.Converters
         private static string Format(long size)
         {
             if (size >= (1 << 30))
-                return $"{size >> 30} Go";
+                return $"{size >> 30} Gb";
             if (size >= (1 << 20))
-                return $"{size >> 20} Mo";
+                return $"{size >> 20} Mb";
             if (size >= (1 << 10))
-                return $"{size >> 10} Ko";
-            return $"{size} o";
+                return $"{size >> 10} Kb";
+            return $"{size} b";
         }
     }
 }

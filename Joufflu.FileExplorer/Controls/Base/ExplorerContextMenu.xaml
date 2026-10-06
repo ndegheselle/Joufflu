@@ -61,7 +61,7 @@
             <MenuItem
                 Command="{Binding Source.PasteCommand}"
                 CommandParameter="{Binding Node}"
-                Header="Past"
+                Header="Paste"
                 InputGestureText="Ctrl+V">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardPaste}" />
@@ -81,7 +81,7 @@
                 Command="{Binding Source.RemoveCommand}"
                 CommandParameter="{Binding Nodes}"
                 Header="Delete"
-                InputGestureText="Suppr"
+                InputGestureText="Delete"
                 Style="{StaticResource DangerMenuItem}">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
@@ -157,7 +157,7 @@
                 Command="{Binding Source.RemoveCommand}"
                 CommandParameter="{Binding Nodes}"
                 Header="Delete"
-                InputGestureText="Suppr"
+                InputGestureText="Delete"
                 Style="{StaticResource DangerMenuItem}">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
@@ -190,7 +190,7 @@
                 Command="{Binding Source.RemoveCommand}"
                 CommandParameter="{Binding Nodes}"
                 Header="Delete"
-                InputGestureText="Suppr"
+                InputGestureText="Delete"
                 Style="{StaticResource DangerMenuItem}">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
@@ -219,7 +219,7 @@
             <MenuItem
                 Command="{Binding Source.PasteCommand}"
                 CommandParameter="{Binding Node}"
-                Header="Past"
+                Header="Paste"
                 InputGestureText="Ctrl+V">
                 <MenuItem.Icon>
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ClipboardPaste}" />
