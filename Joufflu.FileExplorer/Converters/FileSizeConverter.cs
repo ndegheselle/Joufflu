@@ -26,7 +26,6 @@ namespace Joufflu.FileExplorer.Converters
                 // Directories and the other nodes are sizeless, their cell stays empty.
                 IExplorerNode => null,
                 FileInfo info => info.Length,
-                string path => File.Exists(path) ? new FileInfo(path).Length : null,
                 long length => length,
                 _ => null
             };

@@ -495,7 +495,7 @@ public class ThemedWindow : Window
     /// </summary>
     private void DisableSizeToContentWhenMaximizing(object? sender, HwndInteropPositionChangingEventArgs e)
     {
-        if (e.Type == HwndInteropPositionChangingEventArgs.PositionChangeType.MAXIMIZERESTORE)
+        if (e.Type.HasFlag(HwndInteropPositionChangingEventArgs.PositionChangeType.MAXIMIZERESTORE))
         {
             SizeToContent = SizeToContent.Manual;
         }
