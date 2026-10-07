@@ -120,6 +120,18 @@ public class NumericUpDownTests
     }
 
     [Test]
+    public void Up_puts_the_caret_at_the_end_of_the_number()
+    {
+        _host.Click(0);
+        _host.Type("99");
+        _host.Click(0);
+        _host.Press(Key.Up);
+
+        Assert.That(Box.Text, Is.EqualTo("100"));
+        Assert.That(Box.CaretIndex, Is.EqualTo(3));
+    }
+
+    [Test]
     public void A_value_set_from_outside_shows_in_the_text()
     {
         Box.Value = 12;

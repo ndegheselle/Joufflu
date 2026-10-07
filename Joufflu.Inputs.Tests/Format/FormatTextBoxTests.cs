@@ -88,6 +88,29 @@ public class FormatTextBoxTests
     }
 
     [Test]
+    public void A_group_after_literal_text_edits_its_own_text_only()
+    {
+        FormatTextBox box = Show(new FormatTextBox { Format = "x{numeric|length:2|noGlobalSelection}" });
+        box.Values = new List<object?> { 1L };
+        _host!.Click(2);
+        _host.Type("2");
+
+        Assert.That(box.Text, Is.EqualTo("x12"));
+        Assert.That(box.CaretIndex, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void A_group_before_literal_text_edits_its_own_text_only()
+    {
+        FormatTextBox box = Show(new FormatTextBox { Format = "{numeric|length:2|noGlobalSelection}h" });
+        box.Values = new List<object?> { 1L };
+        _host!.Click(1);
+        _host.Type("2");
+
+        Assert.That(box.Text, Is.EqualTo("12h"));
+    }
+
+    [Test]
     public void Loading_again_keeps_what_was_typed()
     {
         FormatTextBox box = Show(new FormatTextBox { Format = Format, GlobalFormat = "numeric" });

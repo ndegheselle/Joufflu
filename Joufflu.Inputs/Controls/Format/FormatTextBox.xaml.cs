@@ -195,20 +195,19 @@ namespace Joufflu.Inputs.Controls.Format
         {
             base.OnPreviewTextInput(e);
 
+            e.Handled = true;
+
             // If no group is selected default to the first one
             if (SelectedGroup == null)
                 ChangeSelectedGroup(1);
+            if (SelectedGroup is not BaseGroup group)
+                return;
 
-            // Get the new text based on the input and the current selection
-
-            bool validInput = SelectedGroup?.OnInput(e.Text) ?? false;
-            if (validInput)
-            {
-                UpdateCurrentValue();
-                SelectedGroup?.OnAfterInput();
-            }
-
-            e.Handled = true;
+            (int caret, int selectionLength) = SelectionInGroup(group);
+            EditResult result = group.Input(e.Text, caret, selectionLength);
+            if (!result.Accepted)
+                return;
+            CommitEdit(group, result.Caret);
         }
 
         protected override void OnSelectionChanged(RoutedEventArgs e)
@@ -236,8 +235,11 @@ namespace Joufflu.Inputs.Controls.Format
                 e.Handled = true;
             }
 
+            if (SelectedGroup is not { SelectsWhole: true } group)
+                return;
+
             _isSelectionChanging = true;
-            SelectedGroup?.OnSelection();
+            SelectWhole(group);
             _isSelectionChanging = false;
         }
 
@@ -264,10 +266,10 @@ namespace Joufflu.Inputs.Controls.Format
             {
                 e.Handled = MoveCaret(+1);
             }
-            // Up/Down arrows increment or decrement the selected numeric group
+            // Up/Down arrows increment or decrement the selected group
             else if (e.Key == Key.Up)
             {
-                if (SelectedGroup is IBaseNumericGroup)
+                if (SelectedGroup != null)
                 {
                     Spin(1);
                     e.Handled = true;
@@ -275,7 +277,7 @@ namespace Joufflu.Inputs.Controls.Format
             }
             else if (e.Key == Key.Down)
             {
-                if (SelectedGroup is IBaseNumericGroup)
+                if (SelectedGroup != null)
                 {
                     Spin(-1);
                     e.Handled = true;
@@ -286,15 +288,7 @@ namespace Joufflu.Inputs.Controls.Format
             else if (e.Key == Key.Delete || e.Key == Key.Back)
             {
                 if (SelectedGroup != null)
-                {
-                    // A group keeping its own caret takes out the character the key points at; a
-                    // group selected whole is selected as one thing, so it is emptied as one.
-                    if (SelectedGroup.OnDeleteCharacter(e.Key == Key.Back) == false)
-                        SelectedGroup.OnDelete();
-
-                    UpdateCurrentValue();
-                    SelectedGroup.OnAfterInput();
-                }
+                    DeleteInGroup(SelectedGroup, backwards: e.Key == Key.Back);
                 e.Handled = true;
             }
         }
@@ -304,7 +298,7 @@ namespace Joufflu.Inputs.Controls.Format
             base.OnMouseWheel(e);
 
             // Only spin when focused so we don't hijack scrolling of a parent container
-            if (IsKeyboardFocusWithin && SelectedGroup is IBaseNumericGroup)
+            if (IsKeyboardFocusWithin && SelectedGroup != null)
             {
                 Spin(e.Delta > 0 ? 1 : -1);
                 e.Handled = true;
@@ -312,23 +306,43 @@ namespace Joufflu.Inputs.Controls.Format
         }
 
         /// <summary>
-        /// Increment (direction &gt; 0) or decrement the selected numeric group.
+        /// A group keeping its own caret takes out the character the key points at; a group
+        /// selected whole is selected as one thing, so it is emptied as one.
+        /// </summary>
+        private void DeleteInGroup(BaseGroup group, bool backwards)
+        {
+            if (group.SelectsWhole)
+            {
+                group.Clear();
+                CommitEdit(group, 0);
+                return;
+            }
+
+            (int caret, int selectionLength) = SelectionInGroup(group);
+            EditResult result = group.DeleteCharacter(backwards, caret, selectionLength);
+            if (!result.Accepted)
+                return;
+            CommitEdit(group, result.Caret);
+        }
+
+        /// <summary>
+        /// Increment (direction &gt; 0) or decrement the selected group.
         /// </summary>
         private void Spin(int direction)
         {
             if (SelectedGroup == null)
                 ChangeSelectedGroup(1);
+            if (SelectedGroup is not BaseGroup group)
+                return;
 
-            if (SelectedGroup is IBaseNumericGroup numericGroup)
-            {
-                if (direction >= 0)
-                    numericGroup.Increment();
-                else
-                    numericGroup.Decrement();
+            if (direction >= 0)
+                group.Increment();
+            else
+                group.Decrement();
 
-                UpdateCurrentValue();
-                SelectedGroup?.OnAfterInput();
-            }
+            // A group keeping its own caret has it at the end of the number it now reads.
+            string spunText = group.Render();
+            CommitEdit(group, spunText.Length);
         }
 
         private void UpButton_Click(object sender, RoutedEventArgs e) => Spin(1);
@@ -338,23 +352,83 @@ namespace Joufflu.Inputs.Controls.Format
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var group in Groups)
-                group.OnDelete();
+                group.Clear();
             UpdateValues();
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// How an arrow key pointing in the direction [delta] is handled. A group using NoGlobalSelection
-        /// will allow the carret to move inside the group.
+        /// The caret and the length of the selection within [group], kept inside it: a group only
+        /// edits its own text.
+        /// </summary>
+        private (int Caret, int SelectionLength) SelectionInGroup(BaseGroup group)
+        {
+            int caret = Math.Clamp(CaretIndex - group.Index, 0, group.RenderedLength);
+            int selectionLength = Math.Min(SelectionLength, group.RenderedLength - caret);
+            return (caret, selectionLength);
+        }
+
+        /// <summary>
+        /// Show what [group] now holds, then place the caret at [caret] within it.
+        /// </summary>
+        private void CommitEdit(BaseGroup group, int caret)
+        {
+            UpdateCurrentValue();
+            PlaceCaretAfterEdit(group, caret);
+        }
+
+        /// <summary>
+        /// Where the caret goes once [group] was edited and the text built again. Not before: the
+        /// box may still hold a text shorter than what was typed, and the caret would be clamped
+        /// back into the middle of the number.
+        /// </summary>
+        private void PlaceCaretAfterEdit(BaseGroup group, int caret)
+        {
+            // Nothing typed, nothing to answer for.
+            if (group.IsEmpty)
+                return;
+
+            // Once the field is full, another digit can no longer fit, so move on to the next
+            // group. When there is none to move to - a lone group, or the last one — a group
+            // keeping its own caret keeps it at the end of what was typed rather than letting it
+            // drift back into the middle of the number.
+            if (group.IsFull)
+            {
+                bool movedOn = ChangeSelectedGroup(1);
+                if (movedOn || group.SelectsWhole)
+                    return;
+            }
+
+            if (group.SelectsWhole)
+            {
+                SelectWhole(group);
+                return;
+            }
+
+            // The caret is only ever set after an edit, so that clicking about the box stays the
+            // user's own business.
+            int caretInGroup = Math.Min(caret, group.RenderedLength);
+            Select(group.Index + caretInGroup, 0);
+        }
+
+        /// <summary>
+        /// Select the whole of [group]: its rendered width, which may be shorter than its max
+        /// Length when the value is not padded.
+        /// </summary>
+        private void SelectWhole(BaseGroup group) => Select(group.Index, group.RenderedLength);
+
+        /// <summary>
+        /// How an arrow key pointing in the direction [delta] is handled. A group not selected
+        /// whole lets the caret move inside it.
         /// </summary>
         /// <returns>true if the carret is handled</returns>
         private bool MoveCaret(int delta)
         {
-            if (SelectedGroup is not IBaseNumericGroup numericGroup)
+            if (SelectedGroup == null)
                 return false;
 
-            if (numericGroup.NoGlobalSelection == false)
+            if (SelectedGroup.SelectsWhole)
             {
                 ChangeSelectedGroup(delta);
                 return true;
@@ -403,7 +477,7 @@ namespace Joufflu.Inputs.Controls.Format
             {
                 if (part is BaseGroup group)
                 {
-                    string rendered = group.ToString() ?? "";
+                    string rendered = group.Render();
                     group.Index = builder.Length;
                     group.RenderedLength = rendered.Length;
                     builder.Append(rendered);
@@ -536,7 +610,7 @@ namespace Joufflu.Inputs.Controls.Format
                 {
                     // Extract the content inside the curly braces
                     string groupContent = match.Groups[1].Value;
-                    BaseGroup group = GroupsFactory.Create(this, groupContent, globalFormat);
+                    BaseGroup group = GroupsFactory.Create(groupContent, globalFormat);
 
                     group.Index = index;
                     groups.Add(group);

@@ -8,11 +8,10 @@ namespace Joufflu.Inputs.Controls.Format
         /// <summary>
         /// Create a group from its parameters, "numeric|max:59|padded" for one.
         /// </summary>
-        /// <param name="parent">Parent UI element</param>
         /// <param name="stringParams">The group's own parameters, separated by |</param>
         /// <param name="globalStringParams">Parameters shared by every group, separated by |</param>
         /// <exception cref="ArgumentException">If no type is given, or an option is unknown</exception>
-        public static BaseGroup Create(FormatTextBox parent, string stringParams, string? globalStringParams)
+        public static BaseGroup Create(string stringParams, string? globalStringParams)
         {
             // Global parameters go first so that the group's own override them.
             IEnumerable<string> splitParams = stringParams.Split("|");
@@ -22,12 +21,12 @@ namespace Joufflu.Inputs.Controls.Format
             if (splitParams.Contains("numeric"))
             {
                 GroupOptions options = GroupOptions.Parse(splitParams.Where(x => x != "numeric"));
-                return new NumberGroup<long>(parent, options, defaultIncrementDelta: 1);
+                return new NumberGroup<long>(options, defaultIncrementDelta: 1);
             }
             if (splitParams.Contains("decimal"))
             {
                 GroupOptions options = GroupOptions.Parse(splitParams.Where(x => x != "decimal"));
-                return new NumberGroup<decimal>(parent, options, defaultIncrementDelta: 0.1m);
+                return new NumberGroup<decimal>(options, defaultIncrementDelta: 0.1m);
             }
 
             throw new ArgumentException("Unknown type key.");
@@ -96,6 +95,19 @@ namespace Joufflu.Inputs.Controls.Format
         }
     }
 
+    /// <summary>
+    /// What became of an edit: whether the group took it, and where the caret belongs in the
+    /// group once the text is built again.
+    /// </summary>
+    public readonly record struct EditResult(bool Accepted, int Caret)
+    {
+        public static EditResult Rejected => new EditResult(false, 0);
+    }
+
+    /// <summary>
+    /// One editable part of a <see cref="FormatTextBox"/>. A group knows nothing of the box: it
+    /// is handed the caret and selection within its own text, and the box places them back.
+    /// </summary>
     public abstract class BaseGroup
     {
         /// <summary>
@@ -115,54 +127,55 @@ namespace Joufflu.Inputs.Controls.Format
         /// </summary>
         public abstract object? Value { get; }
 
-        protected readonly FormatTextBox _parent;
-
-        protected BaseGroup(FormatTextBox parent)
-        {
-            _parent = parent;
-        }
+        /// <summary>
+        /// A group selected whole is replaced by what is typed and emptied as one thing. One that
+        /// is not keeps a caret of its own and is edited character by character.
+        /// </summary>
+        public abstract bool SelectsWhole { get; }
 
         /// <summary>
-        /// What to do with the string input of the user
+        /// Holds nothing, and nothing is being typed into it either.
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns>Got a valid value</returns>
-        public abstract bool OnInput(string input);
-
-        public abstract void OnAfterInput();
-
-        // What happen when the user click inside the group
-        public abstract void OnSelection();
-
-        public abstract void OnDelete();
+        public abstract bool IsEmpty { get; }
 
         /// <summary>
-        /// Take out the one character the caret is at, [backwards] for the one before it rather
-        /// than the one after. Tells whether the group took the key: a group with no caret of its
-        /// own has no character in particular to take out, and is emptied instead.
+        /// Uses every character it has, so a further digit could not be appended.
         /// </summary>
-        public virtual bool OnDeleteCharacter(bool backwards) => false;
+        public abstract bool IsFull { get; }
+
+        /// <summary>
+        /// Type [input] over the [selectionLength] characters at [caret], both within the group.
+        /// </summary>
+        public abstract EditResult Input(string input, int caret, int selectionLength);
+
+        /// <summary>
+        /// Take out the selected characters, or the one beside the caret when none is: the one
+        /// before it when [backwards], the one after it otherwise.
+        /// </summary>
+        public abstract EditResult DeleteCharacter(bool backwards, int caret, int selectionLength);
+
+        public abstract void Clear();
+
+        public abstract void Increment();
+
+        public abstract void Decrement();
 
         /// <summary>
         /// Take [value] as this group's own, coming from outside where nothing says which type a
         /// group counts in.
         /// </summary>
         public abstract void Load(object? value);
-    }
 
-    public interface IBaseNumericGroup
-    {
-        public bool NoGlobalSelection { get; set; }
-
-        public void Increment();
-
-        public void Decrement();
+        /// <summary>
+        /// The text the group shows in the box.
+        /// </summary>
+        public abstract string Render();
     }
 
     /// <summary>
     /// A number, counted in long for a "numeric" group and in decimal for a "decimal" one.
     /// </summary>
-    internal class NumberGroup<T> : BaseGroup, IBaseNumericGroup where T : struct, INumber<T>, IMinMaxValue<T>
+    internal class NumberGroup<T> : BaseGroup where T : struct, INumber<T>, IMinMaxValue<T>
     {
         #region Options
         public string? StringFormat { get; }
@@ -171,7 +184,7 @@ namespace Joufflu.Inputs.Controls.Format
 
         public char NullableChar { get; }
 
-        public bool NoGlobalSelection { get; set; }
+        public override bool SelectsWhole { get; }
 
         public bool IsPadded { get; }
 
@@ -191,24 +204,27 @@ namespace Joufflu.Inputs.Controls.Format
         public override object? Value => _number;
 
         /// <summary>
-        /// Where the caret belongs once the text has been built again: right after what was just
-        /// typed. Only a group that keeps the caret rather than selecting itself whole reads it.
-        /// </summary>
-        private int _caretAfterInput;
-
-        /// <summary>
         /// What has been typed while a number cannot give it back as it stands: "3," on its way to
         /// "3,5", or "-" on its way to "-4". Null when the text is the value read out and nothing
         /// more, which is all it is once the number is whole.
         /// </summary>
         private string? _typedText;
 
-        public NumberGroup(FormatTextBox parent, GroupOptions options, T defaultIncrementDelta) : base(parent)
+        public override bool IsEmpty => _number == null && _typedText == null;
+
+        /// <summary>
+        /// Not full before, just because the next digit might go past the max: an over-large value
+        /// is clamped by <see cref="SetNumber"/> instead. A group with no length of its own is
+        /// never full.
+        /// </summary>
+        public override bool IsFull => _number is T number && Length > 0 && number.ToString()!.Length >= Length;
+
+        public NumberGroup(GroupOptions options, T defaultIncrementDelta)
         {
             StringFormat = options.StringFormat;
             IsNullable = options.IsNullable;
             NullableChar = options.NullableChar;
-            NoGlobalSelection = options.NoGlobalSelection;
+            SelectsWhole = !options.NoGlobalSelection;
             IsPadded = options.IsPadded;
 
             T? max = ParseOption(options.Max);
@@ -285,43 +301,30 @@ namespace Joufflu.Inputs.Controls.Format
             _number = (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
         }
 
-        public override bool OnInput(string input)
+        public override EditResult Input(string input, int caret, int selectionLength)
         {
             input = NormalizeInput(input);
 
             string newText;
-            if (NoGlobalSelection && _number == null && _typedText == null)
+            int newCaret;
+            if (SelectsWhole)
+            {
+                newText = (_typedText ?? _number?.ToString()) + input;
+                newCaret = newText.Length;
+            }
+            else if (IsEmpty)
             {
                 // What a group holding nothing shows stands for nothing: it is not text to type
                 // into, so what is typed starts the number afresh rather than landing among the
                 // characters that say the group is empty.
                 newText = input;
-                _caretAfterInput = Index + input.Length;
-            }
-            else if (NoGlobalSelection)
-            {
-                // We replace the selected text by the input
-                string oldText = _parent.Text;
-                int carretOffset = 0;
-                // An unbounded group has no slice of its own to cut out: it is the whole text.
-                if (Length > 0 && Index + Length < oldText.Length)
-                {
-                    oldText = oldText.Substring(Index, Length);
-                    carretOffset = Index;
-                }
-
-                oldText = oldText.Remove(_parent.CaretIndex - carretOffset, _parent.SelectionLength);
-                newText = oldText.Insert(_parent.CaretIndex - carretOffset, input);
-
-                // The caret cannot be moved from here: the box still holds the text as it was,
-                // which is shorter than what is being typed into it, so the position would be
-                // clamped back to the end of the old text and the next character would land in
-                // the middle of the number. It waits for the text to be built again.
-                _caretAfterInput = _parent.CaretIndex + input.Length;
+                newCaret = input.Length;
             }
             else
             {
-                newText = (_typedText ?? _number?.ToString()) + input;
+                string remainingText = Render().Remove(caret, selectionLength);
+                newText = remainingText.Insert(caret, input);
+                newCaret = caret + input.Length;
             }
 
             // If the number is too big we loop back to only the new number. A group that holds
@@ -329,29 +332,18 @@ namespace Joufflu.Inputs.Controls.Format
             if (Length > 0 && newText.Length > Length)
             {
                 newText = input;
-                // Nothing of what was there is left, so the caret follows the one character that is.
-                _caretAfterInput = Index + input.Length;
+                newCaret = input.Length;
             }
 
-            return ApplyText(newText);
+            if (!ApplyText(newText))
+                return EditResult.Rejected;
+            return new EditResult(true, newCaret);
         }
 
-        public override bool OnDeleteCharacter(bool backwards)
+        public override EditResult DeleteCharacter(bool backwards, int caret, int selectionLength)
         {
-            // A group selected whole has no character in particular to take out.
-            if (NoGlobalSelection == false)
-                return false;
-
-            string oldText = _parent.Text;
-            int carretOffset = 0;
-            if (Length > 0 && Index + Length < oldText.Length)
-            {
-                oldText = oldText.Substring(Index, Length);
-                carretOffset = Index;
-            }
-
-            int caret = Math.Clamp(_parent.CaretIndex - carretOffset, 0, oldText.Length);
-            int length = Math.Min(_parent.SelectionLength, oldText.Length - caret);
+            string oldText = Render();
+            int length = selectionLength;
 
             if (length == 0)
             {
@@ -360,19 +352,20 @@ namespace Joufflu.Inputs.Controls.Format
                 if (backwards)
                 {
                     if (caret <= 0)
-                        return true;
+                        return new EditResult(true, caret);
                     caret -= 1;
                 }
                 else if (caret >= oldText.Length)
                 {
-                    return true;
+                    return new EditResult(true, caret);
                 }
 
                 length = 1;
             }
 
-            _caretAfterInput = carretOffset + caret;
-            return ApplyText(oldText.Remove(caret, length));
+            if (!ApplyText(oldText.Remove(caret, length)))
+                return EditResult.Rejected;
+            return new EditResult(true, caret);
         }
 
         /// <summary>
@@ -384,7 +377,7 @@ namespace Joufflu.Inputs.Controls.Format
             // Nothing left is nothing held, which is what emptying the group means.
             if (newText.Length == 0)
             {
-                OnDelete();
+                Clear();
                 return true;
             }
 
@@ -424,56 +417,7 @@ namespace Joufflu.Inputs.Controls.Format
                 ? CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator
                 : input;
 
-        public override void OnAfterInput()
-        {
-            // Nothing typed, nothing to answer for. What is half typed counts as something: the
-            // caret has to follow it even though no number holds it yet.
-            if (_number == null && _typedText == null)
-                return;
-
-            // Once the field is full, another digit can no longer fit, so move on to the next
-            // group. When there is none to move to - a lone group, or the last one — a group
-            // keeping its own caret keeps it at the end of what was typed rather than letting it
-            // drift back into the middle of the number.
-            if (IsFull() && (_parent.ChangeSelectedGroup(1) || NoGlobalSelection == false))
-                return;
-
-            if (NoGlobalSelection)
-            {
-                // Now that the text is the one that was typed, the caret can go where the typing
-                // left it. It is only ever set here, so that clicking about the box stays the
-                // user's own business.
-                _parent.Select(Math.Min(_caretAfterInput, _parent.Text.Length), 0);
-                return;
-            }
-
-            OnSelection();
-        }
-
-        /// <summary>
-        /// Full once the value uses every character of the group, so a further digit could not be
-        /// appended. Not before, just because the next digit might go past the max: an over-large
-        /// value is clamped by <see cref="SetNumber"/> instead. A group with no length of its own
-        /// is never full.
-        /// </summary>
-        private bool IsFull()
-        {
-            if (_number is not T number || Length == 0)
-                return false;
-            return number.ToString()!.Length >= Length;
-        }
-
-        public override void OnSelection()
-        {
-            if (NoGlobalSelection)
-                return;
-
-            // For numeric groups, we select the whole number (its rendered width, which
-            // may be shorter than the max Length when the value is not padded).
-            _parent.Select(Index, RenderedLength);
-        }
-
-        public override void OnDelete()
+        public override void Clear()
         {
             if (IsNullable)
                 SetNumber(null);
@@ -481,7 +425,7 @@ namespace Joufflu.Inputs.Controls.Format
                 SetNumber(T.Zero);
         }
 
-        public override string? ToString()
+        public override string Render()
         {
             // What is being typed stands for itself until a number can give it back.
             if (_typedText != null)
@@ -492,16 +436,16 @@ namespace Joufflu.Inputs.Controls.Format
             if (_number is not T number)
                 return new string(NullableChar, Length);
 
-            string? format = number.ToString();
+            string text = number.ToString()!;
             if (StringFormat != null)
-                format = string.Format("{0" + StringFormat + "}", number);
+                text = string.Format("{0" + StringFormat + "}", number);
             if (IsPadded)
-                format = format?.PadLeft(Length, '0');
+                text = text.PadLeft(Length, '0');
 
-            return format;
+            return text;
         }
 
-        public void Increment()
+        public override void Increment()
         {
             // An empty group starts at zero rather than one step past it.
             if (_number is not T number)
@@ -512,7 +456,7 @@ namespace Joufflu.Inputs.Controls.Format
             SetNumber(number + IncrementDelta);
         }
 
-        public void Decrement()
+        public override void Decrement()
         {
             // An empty group starts at zero rather than one step before it.
             if (_number is not T number)
