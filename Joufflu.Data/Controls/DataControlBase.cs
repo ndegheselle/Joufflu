@@ -1,7 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using Joufflu.Data.Model;
-using Newtonsoft.Json.Linq;
 // System.Windows carries a DataObject of its own; the tree's node is the one meant here.
 using DataObject = Joufflu.Data.Model.DataObject;
 
@@ -46,9 +45,6 @@ public class DataControlBase : UserControl
         get => (IEnumerable<DataManualValue>?)GetValue(ManualValuesProperty);
         set => SetValue(ManualValuesProperty, value);
     }
-
-    /// <summary>The JSON of [Node] so far, null while there is no node.</summary>
-    public JToken? ToToken() => Node?.ToToken();
 
     protected override void OnContentChanged(object oldContent, object newContent)
     {

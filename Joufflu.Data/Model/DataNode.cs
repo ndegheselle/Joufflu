@@ -1,14 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json.Linq;
-using NJsonSchema;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json.Linq;
+using NJsonSchema;
 namespace Joufflu.Data.Model;
 
 public enum EnumDataType
@@ -24,7 +23,7 @@ public enum EnumDataType
     Object
 }
 
-public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo, ICloneable
+public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
 {
     [ObservableProperty]
     private string? _key;
@@ -163,7 +162,6 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo,
     /// <see cref="Parent"/> until one takes it.
     /// </summary>
     public abstract DataNode Clone();
-    object ICloneable.Clone() => Clone();
 }
 
 public interface IDataParent
@@ -195,17 +193,13 @@ public partial class DataOptionsControl : ObservableObject
 
     /// <summary>The option being typed, added by <see cref="Add"/>.</summary>
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddCommand))]
     private string _newOption = "";
 
     public DataOptionsControl(DataValue value)
     {
         Value = value;
-        // Removing an option can make the typed one addable again.
-        value.Options.CollectionChanged += (_, _) => AddCommand.NotifyCanExecuteChanged();
     }
 
-    [RelayCommand(CanExecute = nameof(CanAdd))]
     public void Add()
     {
         Value.AddOption(NewOption);
@@ -443,7 +437,7 @@ public partial class DataObject : DataNode, IDataParent
 
 /// <summary>One choice of a closed list: the value that is filled in, under the name it is read by.</summary>
 public record DataEnumOption(string Name, object? Value)
-{}
+{ }
 
 public partial class DataValue : DataNode
 {
