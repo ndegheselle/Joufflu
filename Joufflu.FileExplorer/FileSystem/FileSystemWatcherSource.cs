@@ -48,7 +48,7 @@ namespace Joufflu.FileExplorer.FileSystem
         {
             StopWatching();
 
-            if (Root == null || !Directory.Exists(Root.Path))
+            if (isDisposed || Root == null || !Directory.Exists(Root.Path))
                 return;
 
             watcher = new FileSystemWatcher(Root.Path)

@@ -8,7 +8,7 @@ using Joufflu.FileExplorer.Nodes;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
-public class ExplorerSourcesSamplesViewModel : ObservableObject
+public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
 {
     /// <summary>Directory the watched sample writes into, emptied by the button of the sample.</summary>
     private readonly string watchedDirectoryPath = Path.Combine(Path.GetTempPath(), "Joufflu.Samples.Watcher");
@@ -19,7 +19,7 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
     public IExplorerSource Source { get; private set; }
 
     /// <summary>The disk, kept in step with it : what the buttons write shows up without a refresh.</summary>
-    public IExplorerSource WatcherSource { get; private set; }
+    public FileSystemWatcherSource WatcherSource { get; private set; }
 
     /// <summary>A source of the application, see <see cref="VirtualFilesSource"/>.</summary>
     public IExplorerSource VirtualSource { get; private set; }
@@ -156,4 +156,6 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
                 Directory.Delete(path, true);
         });
     }
+
+    public void Dispose() => WatcherSource.Dispose();
 }

@@ -29,7 +29,7 @@ namespace Joufflu.Samples.ViewModels;
 /// views: each page is registered with the view drawing it, see <see cref="ViewTemplates"/>.
 /// </para>
 /// </summary>
-public class ShellViewModel : ObservableObject
+public class ShellViewModel : ObservableObject, IDisposable
 {
     public Overlayer Overlays { get; } = new();
 
@@ -181,5 +181,13 @@ public class ShellViewModel : ObservableObject
         page = create();
         _pages[target] = page;
         return page;
+    }
+
+    /// <summary>Disposes the pages built so far that hold resources, a watched directory for instance.</summary>
+    public void Dispose()
+    {
+        foreach (IDisposable page in _pages.Values.OfType<IDisposable>())
+            page.Dispose();
+        _pages.Clear();
     }
 }

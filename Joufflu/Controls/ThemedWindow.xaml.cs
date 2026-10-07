@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows;
@@ -188,25 +187,31 @@ public class ThemedWindow : Window
         sourceWindow.IconSource = String.IsNullOrEmpty(newIcon) ? null : new BitmapImage(new Uri(newIcon));
     }
 
+    // The application icon never changes, extract it once and share it across windows.
+    private static readonly Lazy<BitmapSource?> _applicationIcon = new(GetApplicationIcon);
+
     /// <inheritdoc/>
     public ThemedWindow()
     {
-        IconSource = GetApplicationIcon();
+        IconSource = _applicationIcon.Value;
         MaximizeBorderThickness = GetSystemMaximizeBorderThickness();
     }
 
-    private BitmapSource? GetApplicationIcon()
+    private static BitmapSource? GetApplicationIcon()
     {
-        string? appFilePath = Process.GetCurrentProcess().MainModule?.FileName;
+        string? appFilePath = Environment.ProcessPath;
         if (!File.Exists(appFilePath))
             return null;
 
-        Icon? appIcon = System.Drawing.Icon.ExtractAssociatedIcon(appFilePath);
+        // The bitmap copies the icon pixels, so the GDI icon handle can be released right after.
+        using Icon? appIcon = System.Drawing.Icon.ExtractAssociatedIcon(appFilePath);
 
         if (appIcon == null)
             return null;
 
-        return Imaging.CreateBitmapSourceFromHIcon(appIcon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+        BitmapSource bitmap = Imaging.CreateBitmapSourceFromHIcon(appIcon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+        bitmap.Freeze();
+        return bitmap;
     }
 
     private Thickness GetSystemMaximizeBorderThickness()
