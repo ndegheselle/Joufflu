@@ -1,8 +1,9 @@
 using System.Globalization;
 using System.Windows.Data;
+using Joufflu.Data.Controls;
 using Joufflu.Data.Model;
 
-namespace Joufflu.Data.Controls;
+namespace Joufflu.Data.Converters;
 
 /// <summary>
 /// The text a <see cref="DataNode"/> is read by in <see cref="DataDisplay"/>: the entry it is forced

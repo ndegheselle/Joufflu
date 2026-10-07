@@ -7,6 +7,7 @@
     xmlns:jonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:converters="clr-namespace:Joufflu.Data.Converters"
     xmlns:local="clr-namespace:Joufflu.Data.Controls">
     <Style
         x:Key="DataRemoveButton"
@@ -55,11 +56,11 @@
     </DataTemplate>
     <!--#endregion-->
 
-    <jata:DataManualValuesConverter x:Key="ManualValuesConverter" />
-    <jata:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
-    <jata:DataValueTextConverter x:Key="ValueTextConverter" />
-    <jata:DataChildrenConverter x:Key="ChildrenConverter" />
-    <jata:DataChildrenConverter x:Key="ChildrenWithAddRowConverter" WithAddRow="True" />
+    <converters:DataManualValuesConverter x:Key="ManualValuesConverter" />
+    <converters:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
+    <converters:DataValueTextConverter x:Key="ValueTextConverter" />
+    <converters:DataChildrenConverter x:Key="ChildrenConverter" />
+    <converters:DataChildrenConverter x:Key="ChildrenWithAddRowConverter" WithAddRow="True" />
 
     <jata:DataValueTemplateSelector
         x:Key="DataValueEditorSelector"

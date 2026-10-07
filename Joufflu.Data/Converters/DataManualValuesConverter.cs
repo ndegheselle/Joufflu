@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using Joufflu.Data.Model;
 
-namespace Joufflu.Data.Controls;
+namespace Joufflu.Data.Converters;
 
 /// <summary>
 /// The entries a field can be forced to: null where the schema takes it and undefined where the
