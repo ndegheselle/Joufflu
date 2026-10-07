@@ -46,22 +46,22 @@
             </DataTemplate>
 
             <!--  Undefined and null are no value: they read apart from a text saying "null".  -->
-            <Style x:Key="DataForcedText" TargetType="TextBlock">
+            <Style x:Key="DataManualText" TargetType="TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="TextTrimming" Value="CharacterEllipsis" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding ManualEntry}" Value="{x:Null}">
+                    <DataTrigger Binding="{Binding ManualValue}" Value="{x:Null}">
                         <Setter Property="FontStyle" Value="Italic" />
                         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ManualEntry.Value}" Value="{x:Null}">
+                    <DataTrigger Binding="{Binding ManualValue.Value}" Value="{x:Null}">
                         <Setter Property="FontStyle" Value="Italic" />
                         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
-            <!--  Row of an object or an array: forced, the entry stands for its children, which are left out.  -->
+            <!--  Row of an object or an array: in manual mode, the manual value stands for its children, which are left out.  -->
             <DataTemplate x:Key="DataParentRow">
                 <Grid
                     Margin="0,0,4,0"
@@ -75,19 +75,19 @@
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                     <jonts:FontIcon
                         Grid.Column="1"
-                        toolkit:Tooltip.Content="Forced value"
+                        toolkit:Tooltip.Content="Manual value"
                         Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
                     <TextBlock
                         Grid.Column="2"
-                        Style="{StaticResource DataForcedText}"
+                        Style="{StaticResource DataManualText}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <TextBlock.Text>
                             <MultiBinding Converter="{StaticResource ValueTextConverter}">
                                 <Binding />
                                 <Binding Path="IsManual" />
-                                <Binding Path="ManualEntry" />
+                                <Binding Path="ManualValue" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
@@ -131,10 +131,10 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
-                    <!--  A forced value is flagged the way the toggle forcing it reads.  -->
+                    <!--  A manual value is flagged the way the toggle setting it reads.  -->
                     <jonts:FontIcon
                         Grid.Column="1"
-                        toolkit:Tooltip.Content="Forced value"
+                        toolkit:Tooltip.Content="Manual value"
                         Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
@@ -147,7 +147,7 @@
                                 <Binding />
                                 <Binding Path="Value" />
                                 <Binding Path="IsManual" />
-                                <Binding Path="ManualEntry" />
+                                <Binding Path="ManualValue" />
                             </MultiBinding>
                         </TextBlock.Text>
                         <TextBlock.Style>
@@ -158,11 +158,11 @@
                                         <Setter Property="FontStyle" Value="Italic" />
                                         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
                                     </DataTrigger>
-                                    <!--  Forced to nothing yet, which writes nothing: read as undefined.  -->
+                                    <!--  Set manually to nothing yet, which writes nothing: read as undefined.  -->
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding IsManual}" Value="True" />
-                                            <Condition Binding="{Binding ManualEntry}" Value="{x:Null}" />
+                                            <Condition Binding="{Binding ManualValue}" Value="{x:Null}" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="FontStyle" Value="Italic" />
                                         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />

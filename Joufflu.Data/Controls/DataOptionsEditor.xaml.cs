@@ -28,7 +28,7 @@ public partial class DataOptionsEditor : UserControl
     }
 
     [RelayCommand]
-    private void Remove(DataEnumOption option)
+    private void Remove(DataChoiceOption option)
     {
         if (DataContext is not DataValue value)
             return;

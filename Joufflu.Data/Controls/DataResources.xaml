@@ -39,7 +39,7 @@
             IsChecked="{Binding Value}" />
     </DataTemplate>
 
-    <DataTemplate x:Key="EnumerationEditor">
+    <DataTemplate x:Key="ChoiceEditor">
         <ComboBox
             DisplayMemberPath="Name"
             ItemsSource="{Binding Options}"
@@ -66,7 +66,7 @@
         x:Key="DataValueEditorSelector"
         BooleanTemplate="{StaticResource BooleanEditor}"
         DateTemplate="{StaticResource DateEditor}"
-        EnumerationTemplate="{StaticResource EnumerationEditor}"
+        ChoiceTemplate="{StaticResource ChoiceEditor}"
         FallbackTemplate="{StaticResource StringEditor}"
         IntegerTemplate="{StaticResource IntegerEditor}"
         NumberTemplate="{StaticResource NumberEditor}"
@@ -74,7 +74,7 @@
         TimeTemplate="{StaticResource TimeEditor}" />
 
     <DataTemplate x:Key="ManualEditor">
-        <jnputs:ComboBoxSearch SelectedItem="{Binding ManualEntry}">
+        <jnputs:ComboBoxSearch SelectedItem="{Binding ManualValue}">
             <jnputs:ComboBoxSearch.ItemsSource>
                 <MultiBinding Converter="{StaticResource ManualValuesConverter}">
                     <Binding />
@@ -106,7 +106,7 @@
 
     <!--
         The manual list of an object or an array, which has no editor to swap out. Content is only
-        set while forced: left to the tree's own templates, the node would show itself again.
+        set in manual mode: left to the tree's own templates, the node would show itself again.
     -->
     <Style x:Key="DataManualEditorHost" TargetType="ContentControl">
         <Setter Property="Visibility" Value="Collapsed" />
@@ -119,14 +119,14 @@
         </Style.Triggers>
     </Style>
 
-    <!--  Nothing to force the value to means nothing to switch to, so the toggle is left out of reach.  -->
+    <!--  No manual value to set means nothing to switch to, so the toggle is left out of reach.  -->
     <Style
         x:Key="DataManualToggle"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="ToggleButton">
         <Setter Property="joolkit:Sizing.IsSquare" Value="True" />
         <Setter Property="joolkit:Sizing.Size" Value="sm" />
-        <Setter Property="joolkit:Tooltip.Content" Value="Force the value" />
+        <Setter Property="joolkit:Tooltip.Content" Value="Set the value manually" />
         <Setter Property="IsChecked" Value="{Binding IsManual}" />
         <Setter Property="IsEnabled">
             <Setter.Value>

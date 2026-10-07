@@ -52,22 +52,22 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     public bool IsArrayItem => Parent is DataArray;
     public string? Description { get; set; }
 
-    /// <summary> Whether the node is forced from the manual list, an object or an array then leaving its children out. </summary>
+    /// <summary>Whether the node takes a value from the manual list, an object or an array then leaving its children out.</summary>
     [ObservableProperty]
     private bool _isManual;
 
-    /// <summary>The entry picked while in manual mode.</summary>
+    /// <summary>The manual value picked while in manual mode.</summary>
     [ObservableProperty]
-    private DataManualValue? _manualEntry;
+    private DataManualValue? _manualValue;
 
     partial void OnIsManualChanged(bool value) => OnManualModeChanged(value);
-    partial void OnManualEntryChanged(DataManualValue? value) => OnManualEntryPicked(value);
+    partial void OnManualValueChanged(DataManualValue? value) => OnManualValuePicked(value);
 
     /// <summary>Called when [IsManual] changes.</summary>
     protected virtual void OnManualModeChanged(bool isManual) { }
 
-    /// <summary>Called when [ManualEntry] changes.</summary>
-    protected virtual void OnManualEntryPicked(DataManualValue? entry) { }
+    /// <summary>Called when [ManualValue] changes.</summary>
+    protected virtual void OnManualValuePicked(DataManualValue? manualValue) { }
 
     public DataNode(EnumDataType type, string? key)
     {
@@ -81,9 +81,9 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     /// What manual mode writes: nothing when nothing is picked, undefined included, as it writes
     /// what it is pointed at and no more.
     /// </summary>
-    protected JToken? ManualToken() => ManualEntry is null or DataUndefined
+    protected JToken? ManualToken() => ManualValue is null or DataUndefined
         ? null
-        : DataValue.TokenOf(ManualEntry.Value);
+        : DataValue.TokenOf(ManualValue.Value);
 
     /// <summary>Raised when the node or anything under it changes, whether it is expanded aside.</summary>
     public event EventHandler? Changed;

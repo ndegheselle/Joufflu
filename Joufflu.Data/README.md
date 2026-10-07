@@ -18,7 +18,7 @@ Fill a value in against a JSON Schema, or build one from scratch, instead of typ
 | `ToDataNode()` | Builds the tree of an [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) `JsonSchema`. |
 | `ToJsonSchema()` | Builds the `JsonSchema` of a tree, the reverse of `ToDataNode()`. |
 | `Load()` | Fills a tree with a JSON value, the reverse of `ToToken()`. |
-| `DataManualValue` | A value a field can be forced to instead of its editor. |
+| `DataManualValue` | A value a field can be set to manually instead of through its editor. |
 
 ## Getting started
 

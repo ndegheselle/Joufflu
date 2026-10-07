@@ -6,12 +6,12 @@ using Joufflu.Data.Model;
 namespace Joufflu.Data.Converters;
 
 /// <summary>
-/// The text a <see cref="DataNode"/> is read by in <see cref="DataDisplay"/>: the entry it is forced
+/// The text a <see cref="DataNode"/> is read by in <see cref="DataDisplay"/>: the manual value it is set
 /// to, the name of the option it picks, or its value written the way its editor shows it. An object
-/// or an array has no text but the entry it is forced to.
+/// or an array has no text but the manual value it is set to.
 /// <para>
 /// Bound to the <see cref="DataNode"/> first; the bindings after it (its value, whether it is
-/// forced and to what) are only there to refresh the text when they change.
+/// in manual mode and to what) are only there to refresh the text when they change.
 /// </para>
 /// </summary>
 public class DataValueTextConverter : IMultiValueConverter
@@ -24,7 +24,7 @@ public class DataValueTextConverter : IMultiValueConverter
     {
         // Nothing picked writes nothing, as undefined does.
         if (node.IsManual)
-            return (node.ManualEntry ?? DataManualValue.Undefined).ToString();
+            return (node.ManualValue ?? DataManualValue.Undefined).ToString();
 
         return node is DataValue value ? ValueTextOf(value, culture) : "";
     }

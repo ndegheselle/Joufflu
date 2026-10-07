@@ -20,7 +20,7 @@ public class DataIcon : FontIcon
         nameof(Type), typeof(EnumDataType?), typeof(DataIcon),
         new PropertyMetadata(EnumDataType.String, (d, _) => ((DataIcon)d).Refresh()));
 
-    /// <summary>What the icon stands for. Null for a value of no type, like the manual null entry.</summary>
+    /// <summary>What the icon stands for. Null for a value of no type, like the manual null value.</summary>
     public EnumDataType? Type
     {
         get => (EnumDataType?)GetValue(TypeProperty);

@@ -17,7 +17,7 @@ public partial class DataFillSamplesViewModel : ObservableObject
     [ObservableProperty]
     private string? _json;
 
-    /// <summary>What a field can be forced to, on top of null and undefined.</summary>
+    /// <summary>What a field can be set to manually, on top of null and undefined.</summary>
     public IReadOnlyList<DataManualValue> ManualValues { get; } =
     [
         new(EnumDataType.String, "TBD"),

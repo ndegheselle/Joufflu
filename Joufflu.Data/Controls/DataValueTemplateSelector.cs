@@ -28,7 +28,7 @@ public class DataValueTemplateSelector : DataTemplateSelector
     public DataTemplate? BooleanTemplate { get; set; }
 
     /// <summary>A closed list of values, whatever the type they are expressed in.</summary>
-    public DataTemplate? EnumerationTemplate { get; set; }
+    public DataTemplate? ChoiceTemplate { get; set; }
 
     /// <summary>A point in time (<c>date</c> or <c>date-time</c>).</summary>
     public DataTemplate? DateTemplate { get; set; }
@@ -53,7 +53,7 @@ public class DataValueTemplateSelector : DataTemplateSelector
     private DataTemplate? TemplateFor(EnumDataType type) => type switch
     {
         EnumDataType.String => StringTemplate,
-        EnumDataType.Choice => EnumerationTemplate,
+        EnumDataType.Choice => ChoiceTemplate,
         EnumDataType.Boolean => BooleanTemplate,
         EnumDataType.Integer => IntegerTemplate,
         EnumDataType.Number => NumberTemplate,

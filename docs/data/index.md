@@ -35,7 +35,7 @@ The controls take a `Node`, a `DataObject` root: `DataFill` and `DataEdit` edit 
 |---|---|
 | `DataObject` | `Properties`, keyed by unique, case-sensitive keys |
 | `DataArray` | `Values`, keyed `[0]`, `[1]`…, and the `Template` new items are cloned from |
-| `DataValue` | a `Value`, or the `Options` of an enum |
+| `DataValue` | a `Value`, or the `Options` of a `Choice` |
 
 `ToToken()` returns the JSON:
 
@@ -79,7 +79,7 @@ JsonSchema schema = Node.ToJsonSchema();
 string json = schema.ToJson();
 ```
 
-Keys, `Description`, `IsNullable`, `IsRequired` and the enum `Options` are kept; values are not.
+Keys, `Description`, `IsNullable`, `IsRequired` and the `Options` of a `Choice` are kept; values are not.
 
 ## From JSON
 
@@ -91,8 +91,8 @@ Node.Load(JToken.Parse(json), ManualValues);
 ```
 
 The tree keeps its shape. A node matching one of the [manual values](#manual-values), or one its
-editor can't hold (an object given a string, say), is forced to it rather than lost; a property
-the JSON leaves out is forced to **undefined** when not required.
+editor can't hold (an object given a string, say), is set to it manually rather than lost; a property
+the JSON leaves out is set manually to **undefined** when not required.
 
 Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, for `DataEdit`:
 
@@ -105,8 +105,8 @@ the tree.
 
 ## Manual values
 
-`ManualValues` lists what a field can be forced to instead of its editor, like a
-placeholder resolved later. Each entry names the type it fits (`null` fits any):
+`ManualValues` lists what a field can be set to manually instead of through its editor, like a
+placeholder resolved later. Each manual value names the type it fits (`null` fits any):
 
 ```csharp
 public IReadOnlyList<DataManualValue> ManualValues { get; } =
@@ -116,7 +116,7 @@ public IReadOnlyList<DataManualValue> ManualValues { get; } =
 ];
 ```
 
-The feather toggle swaps a field's editor for the entries that fit it, plus **undefined**
+The feather toggle swaps a field's editor for the manual values that fit it, plus **undefined**
 (the property is left out) when not required and **null** when nullable. It is disabled
-when nothing fits. Objects and arrays have it too: forced, their properties or items are
-hidden and the entry is written in their place, and they come back as they were once released.
+when nothing fits. Objects and arrays have it too: in manual mode, their properties or items are
+hidden and the manual value is written in their place, and they come back as they were once released.

@@ -22,7 +22,7 @@ public class OrderLine
 /// <summary>The shape the data sample is filled in against, derived from this very type.</summary>
 public class Order
 {
-    /// <summary>Required, so the sample shows a field that cannot be forced to undefined.</summary>
+    /// <summary>Required, so the sample shows a field that cannot be set manually to undefined.</summary>
     public required string Customer { get; set; }
     [Required]
     public DateTime PlacedOn { get; set; }

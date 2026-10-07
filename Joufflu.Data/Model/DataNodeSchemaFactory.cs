@@ -82,7 +82,7 @@ public static class DataFactory
         /// The choices [schema] offers. <c>x-enumNames</c> is optional and pairs with the values by
         /// position, so a name is only taken where there is one to take.
         /// </summary>
-        public IReadOnlyList<DataEnumOption> Options()
+        public IReadOnlyList<DataChoiceOption> Options()
         {
             if (!schema.IsEnumeration)
                 return [];
@@ -91,7 +91,7 @@ public static class DataFactory
             return [.. schema.Enumeration.Select((value, index) =>
             {
                 string name = index < names.Length ? names[index] : $"{value}";
-                return new DataEnumOption(name, value);
+                return new DataChoiceOption(name, value);
             })];
         }
     }
@@ -107,7 +107,7 @@ public static class DataFactory
         /// <summary>
         /// Fills [node] with the values of [token], the reverse of <c>ToToken</c>: the shape stays
         /// the node's. A node matching one of [manualValues], or one its editor or shape can't hold,
-        /// is forced; a property [token] leaves out is forced to undefined when not required.
+        /// is set manually; a property [token] leaves out is set manually to undefined when not required.
         /// </summary>
         public void Load(JToken? token, IEnumerable<DataManualValue>? manualValues = null)
             => Load(node, token, [.. manualValues ?? []]);
@@ -157,9 +157,9 @@ public static class DataFactory
             case DataValue value:
                 LoadValue(value, token, manualValues);
                 break;
-            // The root has no row to leave manual mode from: it is never forced.
-            case not DataValue when node.Parent is not null && ForcedEntryOf(node, token, manualValues) is DataManualValue entry:
-                Force(node, entry);
+            // The root has no row to leave manual mode from: it is never set manually.
+            case not DataValue when node.Parent is not null && ManualValueOf(node, token, manualValues) is DataManualValue manualValue:
+                SetManual(node, manualValue);
                 break;
             case DataObject obj:
                 foreach (DataNode property in obj.Properties)
@@ -181,16 +181,16 @@ public static class DataFactory
     }
 
     /// <summary>
-    /// What an object or an array is forced to: undefined when [token] leaves it out and it is not
+    /// The manual value of an object or an array: undefined when [token] leaves it out and it is not
     /// required, the manual value [token] matches, or [token] itself when it is not the node's shape.
     /// </summary>
-    private static DataManualValue? ForcedEntryOf(DataNode node, JToken? token, IReadOnlyList<DataManualValue> manualValues)
+    private static DataManualValue? ManualValueOf(DataNode node, JToken? token, IReadOnlyList<DataManualValue> manualValues)
     {
         if (token is null)
             return node.IsRequired ? null : DataManualValue.Undefined;
 
-        if (MatchOf(node, token, manualValues) is DataManualValue entry)
-            return entry;
+        if (MatchOf(node, token, manualValues) is DataManualValue manualValue)
+            return manualValue;
 
         bool fits = node is DataObject ? token is JObject : token is JArray;
         return fits ? null : RawOf(token);
@@ -198,7 +198,7 @@ public static class DataFactory
 
     /// <summary>The first of [manualValues] fitting [node] that writes [token].</summary>
     private static DataManualValue? MatchOf(DataNode node, JToken token, IReadOnlyList<DataManualValue> manualValues)
-        => manualValues.FirstOrDefault(entry => entry.Fits(node.Type) && IsWrittenAs(entry.Value, token));
+        => manualValues.FirstOrDefault(manualValue => manualValue.Fits(node.Type) && IsWrittenAs(manualValue.Value, token));
 
     /// <summary>Whether [value] is written as [token].</summary>
     private static bool IsWrittenAs(object? value, JToken token)
@@ -207,7 +207,7 @@ public static class DataFactory
         return JToken.DeepEquals(valueToken, token);
     }
 
-    /// <summary>[token] as an entry of its own, kept as it is rather than lost.</summary>
+    /// <summary>[token] as a manual value of its own, kept as it is rather than lost.</summary>
     private static DataManualValue RawOf(JToken token) => new(null, token is JValue raw ? raw.Value : token);
 
     private static void LoadValue(DataValue value, JToken? token, IReadOnlyList<DataManualValue> manualValues)
@@ -215,22 +215,22 @@ public static class DataFactory
         if (token is null)
         {
             if (!value.IsRequired)
-                Force(value, DataManualValue.Undefined);
+                SetManual(value, DataManualValue.Undefined);
             return;
         }
 
-        if (MatchOf(value, token, manualValues) is DataManualValue entry)
-            Force(value, entry);
+        if (MatchOf(value, token, manualValues) is DataManualValue manualValue)
+            SetManual(value, manualValue);
         else if (TryValueOf(value, token, out object? converted))
             value.Value = converted;
         else
-            Force(value, RawOf(token));
+            SetManual(value, RawOf(token));
     }
 
-    private static void Force(DataNode node, DataManualValue entry)
+    private static void SetManual(DataNode node, DataManualValue manualValue)
     {
         node.IsManual = true;
-        node.ManualEntry = entry;
+        node.ManualValue = manualValue;
     }
 
     /// <summary>[token] as the CLR value the editor of [value] works in, false when it holds none.</summary>
@@ -273,7 +273,7 @@ public static class DataFactory
                     result = time;
                     return isTime;
                 case EnumDataType.Choice:
-                    DataEnumOption? option = value.Options.FirstOrDefault(option => IsWrittenAs(option.Value, token));
+                    DataChoiceOption? option = value.Options.FirstOrDefault(option => IsWrittenAs(option.Value, token));
                     result = option?.Value;
                     return option is not null;
             }
@@ -317,7 +317,7 @@ public static class DataFactory
                 break;
         }
 
-        // An enumeration without a type takes null through its values only.
+        // A choice without a type takes null through its values only.
         if (node.IsNullable && schema.Type != JsonObjectType.None)
             schema.Type |= JsonObjectType.Null;
 
@@ -351,7 +351,7 @@ public static class DataFactory
                 break;
             case EnumDataType.Choice:
                 schema.Type = TypeOf(value.Options);
-                foreach (DataEnumOption option in value.Options)
+                foreach (DataChoiceOption option in value.Options)
                 {
                     schema.Enumeration.Add(option.Value);
                     schema.EnumerationNames.Add(option.Name);
@@ -361,7 +361,7 @@ public static class DataFactory
     }
 
     /// <summary>The type all the non null [options] share, none if they differ.</summary>
-    private static JsonObjectType TypeOf(IReadOnlyList<DataEnumOption> options)
+    private static JsonObjectType TypeOf(IReadOnlyList<DataChoiceOption> options)
     {
         JsonObjectType[] types = [.. options
             .Where(option => option.Value is not null)

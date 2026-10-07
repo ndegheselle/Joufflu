@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 namespace Joufflu.Data.Model;
 
 /// <summary>One choice of a closed list: the value that is filled in, under the name it is read by.</summary>
-public record DataEnumOption(string Name, object? Value)
+public record DataChoiceOption(string Name, object? Value)
 { }
 
 public partial class DataValue : DataNode
@@ -16,20 +16,20 @@ public partial class DataValue : DataNode
     private object? _value;
 
     /// <summary>
-    /// Picking a manual entry forces <see cref="Value"/>, which stays the single thing a host
-    /// reads: leaving manual mode keeps whatever was forced.
+    /// Picking a manual value sets <see cref="Value"/>, which stays the single thing a host
+    /// reads: leaving manual mode keeps whatever was set.
     /// </summary>
-    protected override void OnManualEntryPicked(DataManualValue? entry)
+    protected override void OnManualValuePicked(DataManualValue? manualValue)
     {
-        if (entry is not null)
-            Value = entry.Value;
+        if (manualValue is not null)
+            Value = manualValue.Value;
     }
 
-    /// <summary> The choices a closed list offers for the enumerations. </summary>
-    public ObservableCollection<DataEnumOption> Options { get; }
+    /// <summary>The options a <see cref="EnumDataType.Choice"/> offers.</summary>
+    public ObservableCollection<DataChoiceOption> Options { get; }
 
     /// <summary>[isNullable] is set here as the default value depends on it.</summary>
-    public DataValue(EnumDataType type, string? key, IEnumerable<DataEnumOption> options, bool isNullable = false) : base(type, key)
+    public DataValue(EnumDataType type, string? key, IEnumerable<DataChoiceOption> options, bool isNullable = false) : base(type, key)
     {
         Options = [.. options];
         Options.CollectionChanged += (_, _) => OnChanged();
@@ -37,7 +37,7 @@ public partial class DataValue : DataNode
         Value = Default();
     }
 
-    /// <summary>A forced value the editor can't hold, a reference in a number say, falls back to the default.</summary>
+    /// <summary>A manual value the editor can't hold, a reference in a number say, falls back to the default.</summary>
     protected override void OnManualModeChanged(bool isManual)
     {
         if (!isManual && !Holds(Value))
@@ -55,14 +55,14 @@ public partial class DataValue : DataNode
         if (Options.Any(option => Equals(option.Value, value)))
             return false;
 
-        Options.Add(new DataEnumOption(value, value));
+        Options.Add(new DataChoiceOption(value, value));
         if (Value is null && !IsNullable)
             Value = value;
         return true;
     }
 
     /// <summary>Removes [option], the value falls back to its default if it was the one picked.</summary>
-    public void RemoveOption(DataEnumOption option)
+    public void RemoveOption(DataChoiceOption option)
     {
         if (Options.Remove(option) && Equals(Value, option.Value))
             Value = Default();
@@ -89,14 +89,14 @@ public partial class DataValue : DataNode
     }
 
     /// <summary>
-    /// The options (copied in a new list) and the manual entry are records, shared as they are. [ManualEntry] goes in
+    /// The options (copied in a new list) and the manual value are records, shared as they are. [ManualValue] goes in
     /// before [Value], which it would otherwise overwrite.
     /// </summary>
     public override DataValue Clone() => new(Type, Key, Options, IsNullable)
     {
         Description = Description,
         IsManual = IsManual,
-        ManualEntry = ManualEntry,
+        ManualValue = ManualValue,
         Value = Value is JToken token ? token.DeepClone() : Value,
         IsRequired = IsRequired,
     };

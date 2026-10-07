@@ -5,8 +5,8 @@ using Joufflu.Data.Model;
 namespace Joufflu.Data.Converters;
 
 /// <summary>
-/// The entries a field can be forced to: null where the schema takes it and undefined where the
-/// schema leaves the field out, followed by the host's entries that fit the field's own type.
+/// The manual values a field can be set to: null where the schema takes it and undefined where the
+/// schema leaves the field out, followed by the host's manual values that fit the field's own type.
 /// <para>
 /// Bound to the <see cref="DataNode"/> and to the host's catalog, in that order.
 /// </para>
@@ -17,34 +17,34 @@ public class DataManualValuesConverter : IMultiValueConverter
         => EntriesOf(values);
 
     /// <summary>
-    /// The entries the bound field can be forced to, read off the same [values] both converters
+    /// The manual values the bound field can be set to, read off the same [values] both converters
     /// take: the <see cref="DataNode"/> and the host's catalog, in that order.
     /// </summary>
     internal static List<DataManualValue> EntriesOf(object[] values)
     {
-        List<DataManualValue> entries = [];
+        List<DataManualValue> manualValues = [];
 
         if (values.ElementAtOrDefault(0) is not DataNode node)
-            return entries;
+            return manualValues;
 
         if (!node.IsRequired)
-            entries.Add(DataManualValue.Undefined);
+            manualValues.Add(DataManualValue.Undefined);
         if (node.IsNullable)
-            entries.Add(DataManualValue.Null);
+            manualValues.Add(DataManualValue.Null);
 
         if (values.ElementAtOrDefault(1) is IEnumerable<DataManualValue> catalog)
-            entries.AddRange(catalog.Where(entry => entry.Fits(node.Type)));
+            manualValues.AddRange(catalog.Where(manualValue => manualValue.Fits(node.Type)));
 
-        return entries;
+        return manualValues;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        => throw new NotSupportedException($"{nameof(DataManualValuesConverter)} only builds the list of entries.");
+        => throw new NotSupportedException($"{nameof(DataManualValuesConverter)} only builds the list of manual values.");
 }
 
 /// <summary>
-/// Whether a field has anything to be forced to, so that manual mode is only offered where it
-/// leads somewhere: a required field of a type no entry fits has nothing to pick from.
+/// Whether a field has any manual value to be set to, so that manual mode is only offered where it
+/// leads somewhere: a required field of a type no manual value fits has nothing to pick from.
 /// <para>Bound like <see cref="DataManualValuesConverter"/>.</para>
 /// </summary>
 public class DataHasManualValuesConverter : IMultiValueConverter
@@ -53,5 +53,5 @@ public class DataHasManualValuesConverter : IMultiValueConverter
         => DataManualValuesConverter.EntriesOf(values).Count > 0;
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        => throw new NotSupportedException($"{nameof(DataHasManualValuesConverter)} only tells whether there are entries.");
+        => throw new NotSupportedException($"{nameof(DataHasManualValuesConverter)} only tells whether there are manual values.");
 }

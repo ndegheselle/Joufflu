@@ -22,7 +22,7 @@ using DataObject = Joufflu.Data.Model.DataObject; // always alias: clashes with 
 |---|---|
 | `DataFill` | Values of a node built from a schema. Shape is fixed; only array items can be added (cloned from `Template`) or removed. |
 | `DataEdit` | Everything: properties and items of any type, keys, values, string options of a `Choice`. Starts from an empty object when no `Node` is bound. |
-| `DataDisplay` | Nothing: read only, key, type (`EnumDataType` name) and value of each node. `null` / undefined greyed italic, forced values flagged with a feather, `Choice` shown by option name. |
+| `DataDisplay` | Nothing: read only, key, type (`EnumDataType` name) and value of each node. `null` / undefined greyed italic, manual values flagged with a feather, `Choice` shown by option name. |
 
 ```xml
 <data:DataFill Node="{Binding Node}" ManualValues="{Binding ManualValues}" />
@@ -49,7 +49,7 @@ string? json = Node.ToToken()?.ToString();
 | `integer` | `Integer` (`long`) | `NumericUpDown` | number |
 | `number` | `Number` (`decimal`) | `DecimalUpDown` | number |
 | `boolean` | `Boolean` | `CheckBox` | bool |
-| `enum` | `Choice` | `ComboBox` of `Options` (`DataEnumOption(Name, Value)`) | option value |
+| `enum` | `Choice` | `ComboBox` of `Options` (`DataChoiceOption(Name, Value)`) | option value |
 | `array` | `Array` → `DataArray` (`Values`, `Template`) | tree | array |
 | `object` | `Object` → `DataObject` (`Properties`) | tree | object |
 
@@ -71,13 +71,13 @@ DataNode draft = token.ToDataNode();        // infer a tree from a JSON value, f
 ```
 
 `Load` keeps the node's shape: a value matching a manual value, or one its editor can't hold, is
-forced (kept, not lost); a property missing from the token is forced to undefined when not
+set manually (kept, not lost); a property missing from the token is set manually to undefined when not
 required; array items are rebuilt from `Template` (inferred when none). `JToken.ToDataNode()`
 takes types from the values, gives arrays no template and reads `null` as a nullable string.
 
 ## Manual values
 
-A field can be forced to an entry instead of its editor (feather toggle):
+A field can be set to a manual value instead of through its editor (feather toggle):
 
 ```csharp
 public IReadOnlyList<DataManualValue> ManualValues { get; } =

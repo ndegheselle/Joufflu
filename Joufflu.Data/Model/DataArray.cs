@@ -87,7 +87,7 @@ public partial class DataArray : DataNode, IDataParent
             IsNullable = IsNullable,
             IsRequired = IsRequired,
             IsManual = IsManual,
-            ManualEntry = ManualEntry,
+            ManualValue = ManualValue,
         };
 
         // Filled in place: the constructor watches this very collection.

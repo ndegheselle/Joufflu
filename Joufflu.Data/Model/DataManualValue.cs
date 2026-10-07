@@ -14,7 +14,7 @@ public record DataManualValue(EnumDataType? Type, object? Value)
     public override string ToString() => Value?.ToString() ?? "null";
 
     /// <summary>
-    /// Whether the entry can be forced into a field of [type]. 
+    /// Whether the manual value fits a field of [type].
     /// </summary>
     public bool Fits(EnumDataType type) => Type == null || Type == type;
 }

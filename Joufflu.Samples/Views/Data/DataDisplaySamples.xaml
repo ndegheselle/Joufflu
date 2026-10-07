@@ -18,7 +18,7 @@
             <c:CodeExample
                 Title="Show a node"
                 Code="{Binding DisplayCode}"
-                Description="DataDisplay shows a node read only: the key, the type and the value of each node. Null reads apart from a text, a forced value is flagged with a feather.">
+                Description="DataDisplay shows a node read only: the key, the type and the value of each node. Null reads apart from a text, a manual value is flagged with a feather.">
                 <Grid Height="420" toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />

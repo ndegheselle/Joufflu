@@ -99,6 +99,6 @@ public partial class DataObject : DataNode, IDataParent
         IsNullable = IsNullable,
         IsRequired = IsRequired,
         IsManual = IsManual,
-        ManualEntry = ManualEntry,
+        ManualValue = ManualValue,
     };
 }

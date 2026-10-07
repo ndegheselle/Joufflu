@@ -21,6 +21,10 @@
 - Define the `Brushes` once, in `Styles/Brushes.xaml`, rather than in every theme : a theme is now its colours alone, and the theme customizer generates colours only. `ThemeManager` pairs a fresh copy of the brushes with every theme it applies, since a brush resolves its `DynamicResource` colour once and never again. This also fixes the `XSoftBrush` / `XSoft100Brush` tints, which were shared across themes and kept the colours of the first one shown. A custom theme still defining its own brushes keeps working, the paired ones taking precedence
 - Rename the `XSoftStrongBrush` keys `XSoft100Brush` (`PrimarySoft100Brush`, `DangerSoft100Brush`, …), the hover of a soft tint following the same convention as the hover of a fill, `X100`. The *Design tokens* page shows each accent's soft tint and its hover next to its other keys. **Breaking** : a reference to a `XSoftStrongBrush` key needs renaming
 
+# Joufflu.Data (unreleased)
+
+- Call one thing by one name : a node in manual mode holds a **manual value**, no longer an entry it is forced to, and a `Choice` offers **choice options**, no longer enum options or an enumeration. The feather toggle reads "Set the value manually" and a manual value is flagged "Manual value" in `DataDisplay`. JSON Schema's own `enum` keeps its name where a schema is read or written. **Breaking** : `DataNode.ManualEntry` becomes `ManualValue` (and `OnManualEntryPicked` `OnManualValuePicked`), `DataEnumOption` becomes `DataChoiceOption`, and `DataValueTemplateSelector.EnumerationTemplate` becomes `ChoiceTemplate`
+
 # Joufflu.Data 0.8.2
 
 - Add `DataDisplay`, showing a node read only : the key, the type and the value of each node, a value read the way its editor shows it (the name of a `Choice` option, a date without its time when it has none), null and undefined greyed apart from a text, and a forced value flagged with a feather

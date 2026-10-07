@@ -9,8 +9,8 @@ using DataObject = Joufflu.Data.Model.DataObject;
 namespace Joufflu.Data.Converters;
 
 /// <summary>
-/// The children an object or an array shows in the tree: none while it is forced, the manual
-/// entry standing for the whole of it.
+/// The children an object or an array shows in the tree: none while it is in manual mode, its manual
+/// value standing for the whole of it.
 /// <para>Bound to the node and to <see cref="DataNode.IsManual"/>, in that order.</para>
 /// </summary>
 public class DataChildrenConverter : IMultiValueConverter

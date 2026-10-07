@@ -8,7 +8,7 @@ namespace Joufflu.Data.Controls;
 
 /// <summary>
 /// What <see cref="DataFill"/> and <see cref="DataEdit"/> share: the node they show and what its
-/// fields can be forced to.
+/// fields can be set to manually.
 /// <para>
 /// Only the content binds to the control itself: the control keeps its host's DataContext, so
 /// <see cref="Node"/> and <see cref="ManualValues"/> can be bound from the outside.
@@ -36,8 +36,8 @@ public class DataControlBase : UserControl
         new PropertyMetadata(null));
 
     /// <summary>
-    /// What a field can be forced to on top of null and undefined, which are offered where the
-    /// schema allows them. Each entry says which type it stands for, so a field is only offered the
+    /// The manual values a field can be set to on top of null and undefined, which are offered where the
+    /// schema allows them. Each manual value says which type it stands for, so a field is only offered the
     /// ones that fit it.
     /// </summary>
     public IEnumerable<DataManualValue>? ManualValues

@@ -6,7 +6,7 @@ using DataObject = Joufflu.Data.Model.DataObject;
 namespace Joufflu.Data.Controls;
 
 /// <summary>
-/// Shows a <see cref="Node"/> read only: the key, the type and the value of each node, a forced
+/// Shows a <see cref="Node"/> read only: the key, the type and the value of each node, a manual
 /// value flagged as such. Nothing is edited but whether a node is expanded.
 /// <para>
 /// Only the content binds to the control itself: the control keeps its host's DataContext, so

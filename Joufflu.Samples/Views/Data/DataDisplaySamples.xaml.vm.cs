@@ -9,7 +9,7 @@ namespace Joufflu.Samples.Views.Data;
 
 public partial class DataDisplaySamplesViewModel : ObservableObject
 {
-    /// <summary>The JSON shown, with a forced value and a null among the others.</summary>
+    /// <summary>The JSON shown, with a manual value and a null among the others.</summary>
     public string Json { get; } = """
         {
           "Customer": "TBD",
