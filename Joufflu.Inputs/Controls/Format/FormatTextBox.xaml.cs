@@ -525,7 +525,6 @@ namespace Joufflu.Inputs.Controls.Format
         /// <returns></returns>
         private List<object> ParseFormatString(string format, string? globalFormat)
         {
-            GroupsFactory groupsFactory = new GroupsFactory();
             List<object> groups = new List<object>();
             int index = 0;
 
@@ -537,7 +536,7 @@ namespace Joufflu.Inputs.Controls.Format
                 {
                     // Extract the content inside the curly braces
                     string groupContent = match.Groups[1].Value;
-                    BaseGroup group = groupsFactory.CreateGroupFromParams(this, groupContent, globalFormat);
+                    BaseGroup group = GroupsFactory.Create(this, groupContent, globalFormat);
 
                     group.Index = index;
                     groups.Add(group);
