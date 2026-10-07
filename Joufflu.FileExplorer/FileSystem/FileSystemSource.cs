@@ -185,7 +185,7 @@ namespace Joufflu.FileExplorer.FileSystem
         public void Cut(IEnumerable<IExplorerNode> nodes) => SetClipboard(nodes, isMove: true);
 
         /// <summary>
-        /// Copy or move the nodes held by the clipboard into a directory, <see cref="Current"/> when none is given.
+        /// Copy or move the nodes held by the clipboard into [target].
         /// </summary>
         /// <remarks>
         /// Whether the nodes have been copied or cut is read from the clipboard itself, see
@@ -224,7 +224,8 @@ namespace Joufflu.FileExplorer.FileSystem
 
             foreach (string source in paths.Where(path => CanTransfer(path, targetPath)))
             {
-                string name = Path.GetFileName(Path.TrimEndingDirectorySeparator(source));
+                string sourcePath = Path.TrimEndingDirectorySeparator(source);
+                string name = Path.GetFileName(sourcePath);
                 string destination = Path.Combine(targetPath, name);
 
                 if (PathsEqual(source, destination))
@@ -258,7 +259,10 @@ namespace Joufflu.FileExplorer.FileSystem
             // A move also empties the directories the paths are coming from, when they are loaded.
             List<IExplorerDirectory?> changed = [target];
             if (isMove)
-                changed.AddRange(sources.Select(source => FindDirectory(Path.GetDirectoryName(source))));
+            {
+                IEnumerable<string?> sourceDirectoryPaths = sources.Select(Path.GetDirectoryName);
+                changed.AddRange(sourceDirectoryPaths.Select(FindDirectory));
+            }
 
             Refresh(changed);
         }
@@ -323,10 +327,9 @@ namespace Joufflu.FileExplorer.FileSystem
             {
                 // Moved onto its new path, the rename going through the shell as the other operations do : a name
                 // already taken displays the same prompt as in the Windows explorer.
-                ShellFileOperation.Transfer(
-                    [rename.Node.Path],
-                    [Path.Combine(Path.GetDirectoryName(rename.Node.Path) ?? "", name)],
-                    isMove: true);
+                string directoryPath = Path.GetDirectoryName(rename.Node.Path) ?? "";
+                string renamedPath = Path.Combine(directoryPath, name);
+                ShellFileOperation.Transfer([rename.Node.Path], [renamedPath], isMove: true);
             }
             catch (Exception exception)
             {
@@ -371,7 +374,9 @@ namespace Joufflu.FileExplorer.FileSystem
 
             try
             {
-                Directory.CreateDirectory(Path.Combine(parent.Path, GetNewDirectoryName(parent.Path)));
+                string name = GetNewDirectoryName(parent.Path);
+                string path = Path.Combine(parent.Path, name);
+                Directory.CreateDirectory(path);
             }
             catch (Exception exception)
             {
@@ -473,7 +478,8 @@ namespace Joufflu.FileExplorer.FileSystem
             for (int index = 1; index < int.MaxValue; index++)
             {
                 string candidate = index > 1 ? $"{baseName} ({index})" : baseName;
-                if (!Exists(Path.Combine(parentPath, candidate)))
+                string candidatePath = Path.Combine(parentPath, candidate);
+                if (!Exists(candidatePath))
                     return candidate;
             }
 
@@ -486,7 +492,11 @@ namespace Joufflu.FileExplorer.FileSystem
         /// Whether two paths designate the same node, the file system of Windows being case insensitive.
         /// </summary>
         protected static bool PathsEqual(string left, string right)
-            => string.Equals(Normalize(left), Normalize(right), StringComparison.OrdinalIgnoreCase);
+        {
+            string normalizedLeft = ExplorerPaths.Normalize(left);
+            string normalizedRight = ExplorerPaths.Normalize(right);
+            return string.Equals(normalizedLeft, normalizedRight, StringComparison.OrdinalIgnoreCase);
+        }
 
         /// <summary>
         /// Whether <paramref name="candidate"/> is <paramref name="path"/> itself or one of its parents.
@@ -496,11 +506,11 @@ namespace Joufflu.FileExplorer.FileSystem
         /// being inside "C:\foo".
         /// </remarks>
         protected static bool IsSameOrAncestor(string candidate, string path)
-            => (Normalize(path) + Path.DirectorySeparatorChar).StartsWith(
-                Normalize(candidate) + Path.DirectorySeparatorChar,
-                StringComparison.OrdinalIgnoreCase);
-
-        private static string Normalize(string path) => Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+        {
+            string pathSegments = ExplorerPaths.Normalize(path) + Path.DirectorySeparatorChar;
+            string candidateSegments = ExplorerPaths.Normalize(candidate) + Path.DirectorySeparatorChar;
+            return pathSegments.StartsWith(candidateSegments, StringComparison.OrdinalIgnoreCase);
+        }
 
         #endregion
     }

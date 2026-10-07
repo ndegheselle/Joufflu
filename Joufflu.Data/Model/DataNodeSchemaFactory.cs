@@ -89,7 +89,10 @@ public static class DataFactory
 
             string[] names = [.. schema.EnumerationNames];
             return [.. schema.Enumeration.Select((value, index) =>
-            new DataEnumOption(index < names.Length ? names[index] : $"{value}", value))];
+            {
+                string name = index < names.Length ? names[index] : $"{value}";
+                return new DataEnumOption(name, value);
+            })];
         }
     }
 
@@ -160,14 +163,18 @@ public static class DataFactory
                 break;
             case DataObject obj:
                 foreach (DataNode property in obj.Properties)
-                    Load(property, property.Key is null ? null : (token as JObject)?[property.Key], manualValues);
+                {
+                    JToken? propertyToken = property.Key is null ? null : (token as JObject)?[property.Key];
+                    Load(property, propertyToken, manualValues);
+                }
                 break;
             case DataArray array when token is JArray items:
                 array.Values.Clear();
                 foreach (JToken item in items)
                 {
-                    array.Add(array.Template?.Clone() ?? item.ToDataNode());
-                    Load(array.Values[^1], item, manualValues);
+                    DataNode itemNode = array.Template?.Clone() ?? item.ToDataNode();
+                    array.Add(itemNode);
+                    Load(itemNode, item, manualValues);
                 }
                 break;
         }
@@ -191,8 +198,14 @@ public static class DataFactory
 
     /// <summary>The first of [manualValues] fitting [node] that writes [token].</summary>
     private static DataManualValue? MatchOf(DataNode node, JToken token, IReadOnlyList<DataManualValue> manualValues)
-        => manualValues.FirstOrDefault(entry =>
-            entry.Fits(node.Type) && JToken.DeepEquals(DataValue.TokenOf(entry.Value), token));
+        => manualValues.FirstOrDefault(entry => entry.Fits(node.Type) && IsWrittenAs(entry.Value, token));
+
+    /// <summary>Whether [value] is written as [token].</summary>
+    private static bool IsWrittenAs(object? value, JToken token)
+    {
+        JToken? valueToken = DataValue.TokenOf(value);
+        return JToken.DeepEquals(valueToken, token);
+    }
 
     /// <summary>[token] as an entry of its own, kept as it is rather than lost.</summary>
     private static DataManualValue RawOf(JToken token) => new(null, token is JValue raw ? raw.Value : token);
@@ -247,18 +260,20 @@ public static class DataFactory
                     result = (DateTime)token;
                     return true;
                 case EnumDataType.DateTime when token.Type == JTokenType.String:
-                    bool isDate = DateTime.TryParse((string?)token, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out DateTime date);
+                    string? dateText = (string?)token;
+                    bool isDate = DateTime.TryParse(dateText, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out DateTime date);
                     result = date;
                     return isDate;
                 case EnumDataType.TimeSpan when token.Type == JTokenType.TimeSpan:
                     result = (TimeSpan)token;
                     return true;
                 case EnumDataType.TimeSpan when token.Type == JTokenType.String:
-                    bool isTime = TimeSpan.TryParse((string?)token, CultureInfo.InvariantCulture, out TimeSpan time);
+                    string? timeText = (string?)token;
+                    bool isTime = TimeSpan.TryParse(timeText, CultureInfo.InvariantCulture, out TimeSpan time);
                     result = time;
                     return isTime;
                 case EnumDataType.Choice:
-                    DataEnumOption? option = value.Options.FirstOrDefault(option => JToken.DeepEquals(DataValue.TokenOf(option.Value), token));
+                    DataEnumOption? option = value.Options.FirstOrDefault(option => IsWrittenAs(option.Value, token));
                     result = option?.Value;
                     return option is not null;
             }

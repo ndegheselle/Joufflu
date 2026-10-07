@@ -292,28 +292,42 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
             return;
         }
 
-        // Shortcuts acting on the selection
         IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
+        if (nodes.Count == 0)
+            return;
 
-        if (nodes.Count > 0)
+        e.Handled = RunSelectionShortcut(e.Key, nodes);
+    }
+
+    /// <summary>
+    /// Runs the shortcut [key] stands for on the selected [nodes].
+    /// </summary>
+    /// <returns>true if [key] is one of the shortcuts acting on the selection</returns>
+    private bool RunSelectionShortcut(Key key, IReadOnlyList<IExplorerNode> nodes)
+    {
+        bool isControlDown = Keyboard.Modifiers == ModifierKeys.Control;
+
+        if (isControlDown && key == Key.C)
         {
-            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C){
-                Source.CopyCommand.Execute(nodes); 
-                e.Handled = true;
-            }
-            else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.X){
-                Source.CutCommand.Execute(nodes); 
-                e.Handled = true;
-            }
-            else if(e.Key == Key.Delete){
-                Source.RemoveCommand.Execute(nodes); 
-                e.Handled = true;
-            }
-            else if(e.Key == Key.F2){
-                BeginRename(nodes.First()); 
-                e.Handled = true;
-            }
+            Source.CopyCommand.Execute(nodes);
+            return true;
         }
+        if (isControlDown && key == Key.X)
+        {
+            Source.CutCommand.Execute(nodes);
+            return true;
+        }
+        if (key == Key.Delete)
+        {
+            Source.RemoveCommand.Execute(nodes);
+            return true;
+        }
+        if (key == Key.F2)
+        {
+            BeginRename(nodes.First());
+            return true;
+        }
+        return false;
     }
     #endregion
 
@@ -481,10 +495,10 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     {
         try
         {
-            return string.Equals(
-                Path.GetDirectoryName(Path.TrimEndingDirectorySeparator(Path.GetFullPath(path))),
-                Path.TrimEndingDirectorySeparator(Path.GetFullPath(directoryPath)),
-                StringComparison.OrdinalIgnoreCase);
+            string nodePath = ExplorerPaths.Normalize(path);
+            string? parentPath = Path.GetDirectoryName(nodePath);
+            string normalizedDirectoryPath = ExplorerPaths.Normalize(directoryPath);
+            return string.Equals(parentPath, normalizedDirectoryPath, StringComparison.OrdinalIgnoreCase);
         }
         catch (ArgumentException)
         {

@@ -185,56 +185,37 @@ namespace Joufflu.Inputs.Controls.Format
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            // If escape unfocus the textbox
-            if (e.Key == Key.Escape)
+            switch (e.Key)
             {
-                Keyboard.ClearFocus();
-                e.Handled = true;
-            }
-            // If tab select next group
-            else if (e.Key == Key.Tab)
-            {
-                _editor.MoveToGroup(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1);
-                ShowEditor();
-                e.Handled = true;
-            }
-            // Left and right walk the text, by group or by character depending on the group
-            else if (e.Key == Key.Left)
-            {
-                e.Handled = _editor.MoveCaret(-1);
-                ShowEditor();
-            }
-            else if (e.Key == Key.Right)
-            {
-                e.Handled = _editor.MoveCaret(+1);
-                ShowEditor();
-            }
-            // Up/Down arrows increment or decrement the selected group
-            else if (e.Key == Key.Up)
-            {
-                if (_editor.SelectedGroup != null)
-                {
-                    _editor.Spin(1);
+                case Key.Escape:
+                    Keyboard.ClearFocus();
+                    e.Handled = true;
+                    break;
+                case Key.Tab:
+                    int delta = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1;
+                    _editor.MoveToGroup(delta);
+                    ShowEditor();
+                    e.Handled = true;
+                    break;
+                // Left and right walk the text, by group or by character depending on the group
+                case Key.Left:
+                case Key.Right:
+                    e.Handled = _editor.MoveCaret(e.Key == Key.Left ? -1 : +1);
+                    ShowEditor();
+                    break;
+                case Key.Up:
+                case Key.Down:
+                    if (SpinSelectedGroup(e.Key == Key.Up ? 1 : -1))
+                        e.Handled = true;
+                    break;
+                // The text is fully driven by the groups, so the key is always handled to prevent
+                // raw text editing.
+                case Key.Delete:
+                case Key.Back:
+                    _editor.Delete(backwards: e.Key == Key.Back);
                     ShowUserEdit();
                     e.Handled = true;
-                }
-            }
-            else if (e.Key == Key.Down)
-            {
-                if (_editor.SelectedGroup != null)
-                {
-                    _editor.Spin(-1);
-                    ShowUserEdit();
-                    e.Handled = true;
-                }
-            }
-            // Delete and Backspace clear the selected group. The text is fully driven
-            // by the groups, so the key is always handled to prevent raw text editing.
-            else if (e.Key == Key.Delete || e.Key == Key.Back)
-            {
-                _editor.Delete(backwards: e.Key == Key.Back);
-                ShowUserEdit();
-                e.Handled = true;
+                    break;
             }
         }
 
@@ -243,12 +224,25 @@ namespace Joufflu.Inputs.Controls.Format
             base.OnMouseWheel(e);
 
             // Only spin when focused so we don't hijack scrolling of a parent container
-            if (IsKeyboardFocusWithin && _editor.SelectedGroup != null)
-            {
-                _editor.Spin(e.Delta > 0 ? 1 : -1);
-                ShowUserEdit();
+            if (!IsKeyboardFocusWithin)
+                return;
+            if (SpinSelectedGroup(e.Delta > 0 ? 1 : -1))
                 e.Handled = true;
-            }
+        }
+
+        /// <summary>
+        /// Increment (direction &gt; 0) or decrement the selected group. With none selected, the
+        /// key or the wheel is left to the box.
+        /// </summary>
+        /// <returns>true if a group was spun</returns>
+        private bool SpinSelectedGroup(int direction)
+        {
+            if (_editor.SelectedGroup == null)
+                return false;
+
+            _editor.Spin(direction);
+            ShowUserEdit();
+            return true;
         }
 
         private void UpButton_Click(object sender, RoutedEventArgs e) => SpinFromButton(1);
