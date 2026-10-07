@@ -481,7 +481,7 @@ namespace Joufflu.Inputs.Controls.Format
                 return;
 
             for (int i = 0; i < Groups.Count; i++)
-                _groups[i].SetValueFrom(Values[i]);
+                _groups[i].Load(Values[i]);
         }
         #endregion
 

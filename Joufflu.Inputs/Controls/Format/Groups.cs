@@ -110,7 +110,10 @@ namespace Joufflu.Inputs.Controls.Format
         // the value is unpadded). Set by the parent when it formats the text.
         public int RenderedLength { get; set; }
 
-        public object? Value { get; set; }
+        /// <summary>
+        /// What the group holds, boxed in the type it counts in, null when it holds nothing.
+        /// </summary>
+        public abstract object? Value { get; }
 
         protected readonly FormatTextBox _parent;
 
@@ -142,9 +145,9 @@ namespace Joufflu.Inputs.Controls.Format
 
         /// <summary>
         /// Take [value] as this group's own, coming from outside where nothing says which type a
-        /// group counts in. Overridden by a group that counts in one of its own.
+        /// group counts in.
         /// </summary>
-        public virtual void SetValueFrom(object? value) => Value = value;
+        public abstract void Load(object? value);
     }
 
     public interface IBaseNumericGroup
@@ -179,33 +182,13 @@ namespace Joufflu.Inputs.Controls.Format
         public T IncrementDelta { get; }
         #endregion
 
-        public new T? Value
-        {
-            get { return (T?)base.Value; }
-            set
-            {
-                // Whatever was being typed is answered for by the value now being set.
-                _typedText = null;
+        /// <summary>
+        /// Written through <see cref="SetNumber"/> when the user edits the group, and through
+        /// <see cref="Load"/> when the value comes from outside.
+        /// </summary>
+        private T? _number;
 
-                // null is a valid value (cleared/nullable group) and must not be clamped.
-                if (value is not T number)
-                {
-                    base.Value = null;
-                    return;
-                }
-                if (number > Max)
-                {
-                    base.Value = Max;
-                    return;
-                }
-                if (number < Min)
-                {
-                    base.Value = Min;
-                    return;
-                }
-                base.Value = number;
-            }
-        }
+        public override object? Value => _number;
 
         /// <summary>
         /// Where the caret belongs once the text has been built again: right after what was just
@@ -240,7 +223,34 @@ namespace Joufflu.Inputs.Controls.Format
 
             // Last, so that the bounds it is clamped between are known.
             if (!IsNullable)
-                Value = T.Zero;
+                SetNumber(T.Zero);
+        }
+
+        /// <summary>
+        /// Hold [number], brought back between the bounds. Whatever was being typed is answered
+        /// for by it.
+        /// </summary>
+        private void SetNumber(T? number)
+        {
+            _typedText = null;
+
+            // null is a valid value (cleared/nullable group) and must not be clamped.
+            if (number is not T given)
+            {
+                _number = null;
+                return;
+            }
+            if (given > Max)
+            {
+                _number = Max;
+                return;
+            }
+            if (given < Min)
+            {
+                _number = Min;
+                return;
+            }
+            _number = given;
         }
 
         private static T? ParseOption(string? text)
@@ -258,22 +268,29 @@ namespace Joufflu.Inputs.Controls.Format
         /// host filling in the values has no reason to know which type the group counts in.
         /// Anything countable is taken and counted as the group's own.
         /// <para>
-        /// Set past the clamping the group does of its own values: what a host hands over is taken
-        /// as it stands, the way it always has been when the text is first parsed.
+        /// Not clamped, unlike what the user edits: what a host hands over is taken as it stands.
         /// </para>
         /// </summary>
-        public override void SetValueFrom(object? value)
-            // Past the setter, so nothing here clears what is being typed on its behalf.
-            => base.Value = _typedText is not null ? base.Value : value is null
-                ? null
-                : Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
+        public override void Load(object? value)
+        {
+            // What is being typed stands until the user finishes it.
+            if (_typedText != null)
+                return;
+
+            if (value is null)
+            {
+                _number = null;
+                return;
+            }
+            _number = (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
+        }
 
         public override bool OnInput(string input)
         {
             input = NormalizeInput(input);
 
             string newText;
-            if (NoGlobalSelection && Value == null && _typedText == null)
+            if (NoGlobalSelection && _number == null && _typedText == null)
             {
                 // What a group holding nothing shows stands for nothing: it is not text to type
                 // into, so what is typed starts the number afresh rather than landing among the
@@ -304,7 +321,7 @@ namespace Joufflu.Inputs.Controls.Format
             }
             else
             {
-                newText = (_typedText ?? Value?.ToString()) + input;
+                newText = (_typedText ?? _number?.ToString()) + input;
             }
 
             // If the number is too big we loop back to only the new number. A group that holds
@@ -373,13 +390,13 @@ namespace Joufflu.Inputs.Controls.Format
 
             if (TryParse(newText, out T newValue))
             {
-                Value = newValue;
+                SetNumber(newValue);
 
                 // What was written is kept only where a number cannot give it back: a separator
                 // with no fraction after it yet. A leading zero, say, is the group's own to render
                 // as it always has. Never when the group clamped what was written either: what is
                 // shown is then what is held.
-                if (EqualityComparer<T?>.Default.Equals(Value, newValue)
+                if (EqualityComparer<T?>.Default.Equals(_number, newValue)
                     && newText.EndsWith(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator))
                     _typedText = newText;
                 return true;
@@ -389,7 +406,7 @@ namespace Joufflu.Inputs.Controls.Format
             // for its digits, a separator waiting for its fraction.
             if (TryParse(newText + "0", out _))
             {
-                Value = null;
+                SetNumber(null);
                 _typedText = newText;
                 return true;
             }
@@ -411,7 +428,7 @@ namespace Joufflu.Inputs.Controls.Format
         {
             // Nothing typed, nothing to answer for. What is half typed counts as something: the
             // caret has to follow it even though no number holds it yet.
-            if (Value == null && _typedText == null)
+            if (_number == null && _typedText == null)
                 return;
 
             // Once the field is full, another digit can no longer fit, so move on to the next
@@ -436,12 +453,12 @@ namespace Joufflu.Inputs.Controls.Format
         /// <summary>
         /// Full once the value uses every character of the group, so a further digit could not be
         /// appended. Not before, just because the next digit might go past the max: an over-large
-        /// value is clamped by the Value setter instead. A group with no length of its own is
-        /// never full.
+        /// value is clamped by <see cref="SetNumber"/> instead. A group with no length of its own
+        /// is never full.
         /// </summary>
         private bool IsFull()
         {
-            if (Value is not T number || Length == 0)
+            if (_number is not T number || Length == 0)
                 return false;
             return number.ToString()!.Length >= Length;
         }
@@ -459,9 +476,9 @@ namespace Joufflu.Inputs.Controls.Format
         public override void OnDelete()
         {
             if (IsNullable)
-                Value = null;
+                SetNumber(null);
             else
-                Value = T.Zero;
+                SetNumber(T.Zero);
         }
 
         public override string? ToString()
@@ -472,12 +489,12 @@ namespace Joufflu.Inputs.Controls.Format
 
             // A group with a width of its own shows what it is waiting for; one without has no
             // slots to show, so an empty number is an empty field, the way a number field reads.
-            if (Value == null)
+            if (_number is not T number)
                 return new string(NullableChar, Length);
 
-            string? format = Value.ToString();
+            string? format = number.ToString();
             if (StringFormat != null)
-                format = string.Format("{0" + StringFormat + "}", Value);
+                format = string.Format("{0" + StringFormat + "}", number);
             if (IsPadded)
                 format = format?.PadLeft(Length, '0');
 
@@ -487,23 +504,23 @@ namespace Joufflu.Inputs.Controls.Format
         public void Increment()
         {
             // An empty group starts at zero rather than one step past it.
-            if (Value is not T number)
+            if (_number is not T number)
             {
-                Value = T.Zero;
+                SetNumber(T.Zero);
                 return;
             }
-            Value = number + IncrementDelta;
+            SetNumber(number + IncrementDelta);
         }
 
         public void Decrement()
         {
             // An empty group starts at zero rather than one step before it.
-            if (Value is not T number)
+            if (_number is not T number)
             {
-                Value = T.Zero;
+                SetNumber(T.Zero);
                 return;
             }
-            Value = number - IncrementDelta;
+            SetNumber(number - IncrementDelta);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿# Joufflu.Inputs (unreleased)
 
 - Build the groups of a `FormatTextBox` from options parsed up front rather than read by a virtual call from the group's constructor, and make `numeric` and `decimal` one generic number group, as their code was identical but for the step and the type they count in. The format strings are unchanged. **Breaking** : `NumericGroup`, `DecimalGroup`, `BaseNumericGroup<T>` and `GroupsFactory` are no longer public, and `StringFormat`, `IsNullable` and `NullableChar` leave `BaseGroup`, whose `Length` can no longer be set from outside
+- Give a number group one way to be written by the user, clamped between its bounds, and one to be loaded from outside, taken as it stands, rather than a `new` typed `Value` hiding the base one, which clamped or not depending on the type the group was seen as. **Breaking** : `BaseGroup.Value` is read only, and `BaseGroup.SetValueFrom` becomes `Load`
 
 # Joufflu.FileExplorer (unreleased)
 
