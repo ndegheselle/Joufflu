@@ -9,9 +9,9 @@ namespace Joufflu.Converters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            BooleanConverter lConverterBool = new BooleanConverter();
-            bool lVisible = lConverterBool.Convert(value, targetType, parameter, culture) as bool? ?? false;
-            return lVisible ? Visibility.Visible : Visibility.Collapsed;
+            BooleanConverter booleanConverter = new BooleanConverter();
+            bool isVisible = booleanConverter.Convert(value, targetType, parameter, culture) as bool? ?? false;
+            return isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(

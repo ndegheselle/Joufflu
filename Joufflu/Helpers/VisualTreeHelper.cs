@@ -40,38 +40,41 @@ namespace Joufflu.Helpers
             return parent ?? FindParent<T>(parentObject);
         }
 
-        public static IEnumerable<DependencyObject> GetChildren(DependencyObject pElement, bool pRecursif)
+        /// <summary>
+        /// The visual children of <paramref name="element"/>, and theirs too, depth first, when
+        /// <paramref name="recursive"/>.
+        /// </summary>
+        public static IEnumerable<DependencyObject> GetChildren(DependencyObject element, bool recursive)
         {
-            if (pElement != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(pElement); i++)
-                {
-                    DependencyObject lChild = VisualTreeHelper.GetChild(pElement, i);
-                    if (lChild != null)
-                    {
-                        yield return lChild;
+            if (element == null)
+                yield break;
 
-                        if (pRecursif)
-                        {
-                            foreach (DependencyObject lChildOfChild in GetChildren(lChild, true))
-                                yield return lChildOfChild;
-                        }
-                    }
-                }
+            // Counted at each step: the caller may change the tree between two children.
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(element, i);
+                if (child == null)
+                    continue;
+
+                yield return child;
+                if (!recursive)
+                    continue;
+
+                foreach (DependencyObject descendant in GetChildren(child, recursive: true))
+                    yield return descendant;
             }
         }
 
-        public static IEnumerable<T> GetChildren<T>(DependencyObject pElement, bool pRecursif) where T : DependencyObject
+        public static IEnumerable<T> GetChildren<T>(DependencyObject element, bool recursive) where T : DependencyObject
         {
-            IEnumerable<DependencyObject> lList = GetChildren(pElement, pRecursif);
-            return lList.OfType<T>();
+            IEnumerable<DependencyObject> children = GetChildren(element, recursive);
+            return children.OfType<T>();
         }
 
-        public static T? GetChild<T>(DependencyObject pElement, bool pRecursif) where T : DependencyObject
+        public static T? GetChild<T>(DependencyObject element, bool recursive) where T : DependencyObject
         {
-            IEnumerable<DependencyObject> lList = GetChildren(pElement, pRecursif);
-            var lReturn = lList.OfType<T>().FirstOrDefault();
-            return lReturn;
+            IEnumerable<DependencyObject> children = GetChildren(element, recursive);
+            return children.OfType<T>().FirstOrDefault();
         }
     }
 }

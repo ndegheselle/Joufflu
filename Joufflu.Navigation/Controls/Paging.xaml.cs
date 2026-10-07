@@ -106,7 +106,7 @@ namespace Joufflu.Navigation.Controls
         private void OnTotalChanged()
         {
             CoerceValue(PageNumberProperty);
-            UpdateAvailablesPages();
+            UpdateAvailablePages();
             NotifyPropertyChanged(nameof(PageMax));
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
@@ -122,7 +122,7 @@ namespace Joufflu.Navigation.Controls
 
         private void OnPageNumberChange()
         {
-            UpdateAvailablesPages();
+            UpdateAvailablePages();
             PagingChange?.Invoke(PageNumber, Capacity);
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
@@ -138,7 +138,7 @@ namespace Joufflu.Navigation.Controls
             if (previous != PageNumber)
                 return;
 
-            UpdateAvailablesPages();
+            UpdateAvailablePages();
             PagingChange?.Invoke(PageNumber, Capacity);
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
@@ -152,7 +152,7 @@ namespace Joufflu.Navigation.Controls
         }
         #endregion
 
-        private void UpdateAvailablesPages()
+        private void UpdateAvailablePages()
         {
             AvailablePages.Clear();
 
@@ -180,7 +180,7 @@ namespace Joufflu.Navigation.Controls
 
         #region Commands
         [RelayCommand()]
-        private void GotTo(int pageNumber)
+        private void GoTo(int pageNumber)
         {
             PageNumber = pageNumber;
         }

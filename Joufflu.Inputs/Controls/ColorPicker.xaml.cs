@@ -161,7 +161,7 @@ namespace Joufflu.Inputs.Controls
         public double Hue { get => (double)GetValue(HueProperty); set => SetValue(HueProperty, value); }
         /// <summary>Saturation (0-1).</summary>
         public double Saturation { get => (double)GetValue(SaturationProperty); set => SetValue(SaturationProperty, value); }
-        /// <summary>Brightness / value (0-1).</summary>
+        /// <summary>Brightness (0-1).</summary>
         public double Brightness { get => (double)GetValue(BrightnessProperty); set => SetValue(BrightnessProperty, value); }
 
         private static void OnHsbChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -279,12 +279,12 @@ namespace Joufflu.Inputs.Controls
             _isUpdating = true;
             try
             {
-                RgbToHsv(color, out double h, out double s, out double v);
+                RgbToHsb(color, out double h, out double s, out double brightness);
                 // Hue is undefined for greys/black; keep the slider where it was so it doesn't jump.
                 if (s > 0)
                     Hue = h;
                 Saturation = s;
-                Brightness = v;
+                Brightness = brightness;
 
                 Alpha = color.A / 255d;
                 AlphaPercent = Math.Round(Alpha * 100);
@@ -300,7 +300,7 @@ namespace Joufflu.Inputs.Controls
         /// <summary>Rebuilds the colour from the current hue/saturation/brightness and alpha.</summary>
         private void SyncFromHsb()
         {
-            Color rgb = HsvToRgb(Hue, Saturation, Brightness);
+            Color rgb = HsbToRgb(Hue, Saturation, Brightness);
             var color = Color.FromArgb((byte)Math.Round(Math.Clamp(Alpha, 0, 1) * 255), rgb.R, rgb.G, rgb.B);
             _isUpdating = true;
             try
@@ -330,7 +330,7 @@ namespace Joufflu.Inputs.Controls
                     new GradientStop(opaque, 1),
                 },
                 new Point(0, 0), new Point(1, 0));
-            HueBrush = new SolidColorBrush(HsvToRgb(Hue, 1, 1));
+            HueBrush = new SolidColorBrush(HsbToRgb(Hue, 1, 1));
             HexText = ToHex(color);
         }
 
@@ -372,15 +372,15 @@ namespace Joufflu.Inputs.Controls
             return false;
         }
 
-        #region HSV <-> RGB
-        private static void RgbToHsv(Color color, out double h, out double s, out double v)
+        #region HSB <-> RGB
+        private static void RgbToHsb(Color color, out double h, out double s, out double brightness)
         {
             double r = color.R / 255d, g = color.G / 255d, b = color.B / 255d;
             double max = Math.Max(r, Math.Max(g, b));
             double min = Math.Min(r, Math.Min(g, b));
             double delta = max - min;
 
-            v = max;
+            brightness = max;
             s = max <= 0 ? 0 : delta / max;
 
             if (delta <= 0)
@@ -400,15 +400,15 @@ namespace Joufflu.Inputs.Controls
                 h += 360;
         }
 
-        private static Color HsvToRgb(double h, double s, double v)
+        private static Color HsbToRgb(double h, double s, double brightness)
         {
             h = ((h % 360) + 360) % 360;
             s = Math.Clamp(s, 0, 1);
-            v = Math.Clamp(v, 0, 1);
+            brightness = Math.Clamp(brightness, 0, 1);
 
-            double c = v * s;
+            double c = brightness * s;
             double x = c * (1 - Math.Abs((h / 60 % 2) - 1));
-            double m = v - c;
+            double m = brightness - c;
 
             double r, g, b;
             if (h < 60) { r = c; g = x; b = 0; }

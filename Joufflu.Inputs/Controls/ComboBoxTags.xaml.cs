@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -24,11 +25,12 @@ namespace Joufflu.Inputs.Controls
             if (values[1] == DependencyProperty.UnsetValue)
                 return values[0].ToString();
 
-            string lDisplayMemberPath = (string)values[1];
-            if (!string.IsNullOrEmpty(lDisplayMemberPath))
-                return values[0].GetType().GetProperty(lDisplayMemberPath)?.GetValue(values[0])?.ToString();
-            else
+            string displayMemberPath = (string)values[1];
+            if (string.IsNullOrEmpty(displayMemberPath))
                 return values[0].ToString();
+
+            PropertyInfo? displayMember = values[0].GetType().GetProperty(displayMemberPath);
+            return displayMember?.GetValue(values[0])?.ToString();
         }
 
         public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)

@@ -14,13 +14,13 @@ namespace Joufflu.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            double lRequested = ToDouble(values.Length > 0 ? values[0] : null);
-            double lWidth = ToDouble(values.Length > 1 ? values[1] : null);
-            double lHeight = ToDouble(values.Length > 2 ? values[2] : null);
+            double requested = ToDouble(values.Length > 0 ? values[0] : null);
+            double width = ToDouble(values.Length > 1 ? values[1] : null);
+            double height = ToDouble(values.Length > 2 ? values[2] : null);
 
-            double lMax = Math.Min(lWidth, lHeight) / 2;
-            double lRadius = lMax > 0 ? Math.Min(lRequested, lMax) : lRequested;
-            return new CornerRadius(lRadius);
+            double max = Math.Min(width, height) / 2;
+            double radius = max > 0 ? Math.Min(requested, max) : requested;
+            return new CornerRadius(radius);
         }
 
         private static double ToDouble(object? value)

@@ -47,8 +47,9 @@ namespace Joufflu.Converters
     }
 
     /// <summary>
-    /// Permet de convertir une liste de propriété en un booleen (opérateur And / Or en paramètre)
-    /// Il est possible d'utilisé le converter ConverterBooleanInverse dans les Binding du MultiBinding
+    /// Combines the values of a MultiBinding into one boolean, each read the way
+    /// <see cref="BooleanConverter"/> reads it. The parameter is the operator: "&amp;&amp;" (the default)
+    /// when every value must be true, "||" when one is enough.
     /// </summary>
     public class BooleansConverter : IMultiValueConverter
     {
@@ -56,18 +57,12 @@ namespace Joufflu.Converters
 
         public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            string lConjonction = parameter?.ToString()?.Trim() ?? "&&";
-            BooleanConverter lConverter = new BooleanConverter();
-            bool lResultat = lConjonction == "&&" ? true : false;
+            string conjunction = parameter?.ToString()?.Trim() ?? "&&";
+            bool requiresAll = conjunction == "&&";
+            BooleanConverter converter = new BooleanConverter();
 
-            foreach (object lValue in values)
-            {
-                if (lConjonction == "&&")
-                    lResultat = lResultat && (bool)lConverter.Convert(lValue, targetType, parameter, culture)!;
-                else
-                    lResultat = lResultat || (bool)lConverter.Convert(lValue, targetType, parameter, culture)!;
-            }
-            return lResultat;
+            IEnumerable<bool> results = values.Select(value => (bool)converter.Convert(value, targetType, parameter, culture)!);
+            return requiresAll ? results.All(result => result) : results.Any(result => result);
         }
 
         public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
