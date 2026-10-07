@@ -32,4 +32,8 @@
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Joufflu.Inputs.Tests" />
+  </ItemGroup>
+
 </Project>

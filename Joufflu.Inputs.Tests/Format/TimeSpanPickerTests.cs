@@ -7,12 +7,12 @@ namespace Joufflu.Inputs.Tests.Format;
 /// Groups are days / hours / minutes / seconds, rendered "000d 00h 00m 00s":
 /// days start at 0, hours at 5, minutes at 9, seconds at 13.
 /// </summary>
+[Apartment(ApartmentState.STA)]
 public class TimeSpanPickerTests
 {
     private const int Days = 0;
     private const int Hours = 5;
     private const int Minutes = 9;
-    private const int Seconds = 13;
 
     private FormatInputHost<TimeSpanPicker> _host = null!;
     private TimeSpanPicker Box => _host.Box;
@@ -22,13 +22,6 @@ public class TimeSpanPickerTests
 
     [TearDown]
     public void TearDown() => _host.Dispose();
-
-    [Test]
-    public void Starts_with_placeholders()
-    {
-        Assert.That(Box.Value, Is.Null);
-        Assert.That(Box.Text, Is.EqualTo("---d --h --m --s"));
-    }
 
     [Test]
     public void A_value_set_from_outside_fills_each_group()
@@ -59,27 +52,6 @@ public class TimeSpanPickerTests
     }
 
     [Test]
-    public void A_full_group_moves_on_to_the_next()
-    {
-        _host.Click(Days);
-        _host.Type("123");
-
-        Assert.That(Box.Text, Is.EqualTo("123d --h --m --s"));
-        Assert.That(Box.SelectionStart, Is.EqualTo(Hours));
-        Assert.That(Box.SelectionLength, Is.EqualTo(2));
-    }
-
-    [Test]
-    public void Typing_past_the_max_clamps_and_moves_on()
-    {
-        _host.Click(Hours);
-        _host.Type("59");
-
-        Assert.That(Box.Text, Is.EqualTo("---d 23h --m --s"));
-        Assert.That(Box.SelectionStart, Is.EqualTo(Minutes));
-    }
-
-    [Test]
     public void Typing_every_group_gives_the_time_span()
     {
         _host.Click(Days);
@@ -91,16 +63,6 @@ public class TimeSpanPickerTests
 
         Assert.That(Box.Value, Is.EqualTo(new TimeSpan(100, 2, 30, 45)));
         Assert.That(Box.Text, Is.EqualTo("100d 02h 30m 45s"));
-    }
-
-    [Test]
-    public void Typing_into_a_full_group_starts_it_over()
-    {
-        Box.Value = new TimeSpan(1, 2, 3, 45);
-        _host.Click(Seconds);
-        _host.Type("6");
-
-        Assert.That(Box.Value, Is.EqualTo(new TimeSpan(1, 2, 3, 6)));
     }
 
     [Test]
@@ -129,27 +91,5 @@ public class TimeSpanPickerTests
 
         Assert.That(Box.SelectionStart, Is.EqualTo(Days));
         Assert.That(Box.SelectionLength, Is.EqualTo(3));
-    }
-
-    [Test]
-    public void Up_counts_the_selected_group()
-    {
-        Box.Value = new TimeSpan(1, 2, 3, 4);
-        _host.Click(Minutes);
-        _host.Press(Key.Up);
-
-        Assert.That(Box.Value, Is.EqualTo(new TimeSpan(1, 2, 4, 4)));
-        Assert.That(Box.SelectionStart, Is.EqualTo(Minutes));
-        Assert.That(Box.SelectionLength, Is.EqualTo(2));
-    }
-
-    [Test]
-    public void Up_stops_at_the_max()
-    {
-        Box.Value = new TimeSpan(0, 23, 0, 0);
-        _host.Click(Hours);
-        _host.Press(Key.Up);
-
-        Assert.That(Box.Value, Is.EqualTo(new TimeSpan(0, 23, 0, 0)));
     }
 }

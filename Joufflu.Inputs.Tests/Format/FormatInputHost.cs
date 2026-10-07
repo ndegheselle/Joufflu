@@ -3,15 +3,14 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Joufflu.Inputs.Controls.Format;
 
-// WPF controls can only be created and driven from a single-threaded apartment.
-[assembly: Apartment(ApartmentState.STA)]
-
 namespace Joufflu.Inputs.Tests.Format;
 
 /// <summary>
-/// Hosts a format input in a real, off-screen window and drives it the way the keyboard does.
-/// A window is needed: the control parses its format once loaded, and key events need a
-/// presentation source.
+/// Hosts a format input in a real, off-screen window and drives it the way the keyboard does,
+/// for what only WPF does: bindings, initialization, Loaded and the keyboard reaching the
+/// editor. A window is needed: the control creates its editor once initialized, and key events
+/// need a presentation source. Fixtures using it run in a single-threaded apartment, the only
+/// one WPF controls can be created and driven from.
 /// </summary>
 internal sealed class FormatInputHost<TBox> : IDisposable where TBox : FormatTextBox
 {

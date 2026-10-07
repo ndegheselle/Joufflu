@@ -99,7 +99,7 @@ namespace Joufflu.Inputs.Controls.Format
     /// What became of an edit: whether the group took it, and where the caret belongs in the
     /// group once the text is built again.
     /// </summary>
-    public readonly record struct EditResult(bool Accepted, int Caret)
+    internal readonly record struct EditResult(bool Accepted, int Caret)
     {
         public static EditResult Rejected => new EditResult(false, 0);
     }
@@ -108,7 +108,7 @@ namespace Joufflu.Inputs.Controls.Format
     /// One editable part of a <see cref="FormatTextBox"/>. A group knows nothing of the box: it
     /// is handed the caret and selection within its own text, and the box places them back.
     /// </summary>
-    public abstract class BaseGroup
+    internal abstract class BaseGroup
     {
         /// <summary>
         /// How many characters the group holds, 0 when nothing says: a group given neither a
