@@ -38,22 +38,22 @@
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <ToggleButton Content="BottomLeft" inputs:Dropdown.Placement="BottomLeft">
                         <inputs:Dropdown.Popup>
-                            <TextBlock Text="Opens down, left aligned." />
+                            <TextBlock Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Text="Opens down, left aligned." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
                     <ToggleButton Content="BottomRight" inputs:Dropdown.Placement="BottomRight">
                         <inputs:Dropdown.Popup>
-                            <TextBlock Text="Opens down, right aligned." />
+                            <TextBlock Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Text="Opens down, right aligned." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
                     <ToggleButton Content="TopLeft" inputs:Dropdown.Placement="TopLeft">
                         <inputs:Dropdown.Popup>
-                            <TextBlock Text="Opens up, left aligned." />
+                            <TextBlock Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Text="Opens up, left aligned." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
                     <ToggleButton Content="TopRight" inputs:Dropdown.Placement="TopRight">
                         <inputs:Dropdown.Popup>
-                            <TextBlock Text="Opens up, right aligned." />
+                            <TextBlock Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Text="Opens up, right aligned." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
                 </WrapPanel>
@@ -69,7 +69,7 @@
                     toolkit:Sizing.Size="lg">
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />
                     <inputs:Dropdown.Popup>
-                        <TextBlock Text="An icon only dropdown." />
+                        <TextBlock Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Text="An icon only dropdown." />
                     </inputs:Dropdown.Popup>
                 </ToggleButton>
             </c:CodeExample>

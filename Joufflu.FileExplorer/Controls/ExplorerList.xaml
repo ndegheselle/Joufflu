@@ -18,11 +18,6 @@
                         x:Name="PART_ItemsHost"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                         ItemsSource="{Binding View}">
-                        <ListView.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="{x:Type ListViewItem}">
-                                <Setter Property="Padding" Value="0" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn CellTemplate="{StaticResource ExplorerNodeTemplate}" Header="Name" />

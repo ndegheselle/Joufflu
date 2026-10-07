@@ -208,35 +208,38 @@
                                 <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ThemePreset}">
-                                            <DockPanel>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                                                 <StackPanel
-                                                    Margin="12,0,0,0"
-                                                    toolkit:Spacing.Gap="3,0"
-                                                    DockPanel.Dock="Right"
+                                                    Grid.Column="1"
+                                                    toolkit:Spacing.Gap="2,0"
                                                     Orientation="Horizontal">
                                                     <Border
-                                                        Width="10"
+                                                        Width="18"
                                                         Height="18"
                                                         Background="{Binding Primary}"
                                                         CornerRadius="2" />
                                                     <Border
-                                                        Width="10"
+                                                        Width="18"
                                                         Height="18"
                                                         Background="{Binding Secondary}"
                                                         CornerRadius="2" />
                                                     <Border
-                                                        Width="10"
+                                                        Width="18"
                                                         Height="18"
                                                         Background="{Binding Accent}"
                                                         CornerRadius="2" />
                                                     <Border
-                                                        Width="10"
+                                                        Width="18"
                                                         Height="18"
                                                         Background="{Binding Neutral}"
                                                         CornerRadius="2" />
                                                 </StackPanel>
-                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                            </DockPanel>
+                                            </Grid>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
