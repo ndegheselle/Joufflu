@@ -1,0 +1,56 @@
+<UserControl
+    x:Class="Joufflu.Data.Controls.DataOptionsEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:jodels="clr-namespace:Joufflu.Data.Model"
+    xmlns:jonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Data.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    d:DataContext="{d:DesignInstance Type=jodels:DataValue}"
+    mc:Ignorable="d">
+    <StackPanel Width="200" Margin="4">
+        <ItemsControl ItemsSource="{Binding Options}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,0,0,4" toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                        <Button
+                            Grid.Column="1"
+                            toolkit:Sizing.IsSquare="True"
+                            toolkit:Sizing.Size="xs"
+                            Command="{Binding RemoveCommand, RelativeSource={RelativeSource AncestorType=local:DataOptionsEditor}}"
+                            CommandParameter="{Binding}"
+                            Style="{StaticResource SoftDangerButton}">
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Grid toolkit:Spacing.Gap="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="NewOptionBox" toolkit:Sizing.Size="xs">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding AddCommand, RelativeSource={RelativeSource AncestorType=local:DataOptionsEditor}}" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button
+                Grid.Column="1"
+                toolkit:Sizing.IsSquare="True"
+                toolkit:Sizing.Size="xs"
+                Command="{Binding AddCommand, RelativeSource={RelativeSource AncestorType=local:DataOptionsEditor}}"
+                Style="{StaticResource SoftPrimaryButton}">
+                <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
+            </Button>
+        </Grid>
+    </StackPanel>
+</UserControl>

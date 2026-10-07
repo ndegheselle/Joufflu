@@ -245,51 +245,7 @@
                         </ToggleButton.Style>
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.ListPlus}" />
                         <jnputs:Dropdown.Popup>
-                            <StackPanel
-                                Width="200"
-                                Margin="4"
-                                DataContext="{Binding OptionsControl}">
-                                <ItemsControl ItemsSource="{Binding Value.Options}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="0,0,0,4" toolkit:Spacing.Gap="4">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                                <Button
-                                                    Grid.Column="1"
-                                                    toolkit:Sizing.Size="xs"
-                                                    Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource DataRemoveButton}">
-                                                    <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
-                                                </Button>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                <Grid toolkit:Spacing.Gap="4">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox toolkit:Sizing.Size="xs" Text="{Binding NewOption, UpdateSourceTrigger=PropertyChanged}">
-                                        <TextBox.InputBindings>
-                                            <KeyBinding Key="Enter" Command="{Binding AddCommand}" />
-                                        </TextBox.InputBindings>
-                                    </TextBox>
-                                    <Button
-                                        Grid.Column="1"
-                                        toolkit:Sizing.IsSquare="True"
-                                        toolkit:Sizing.Size="xs"
-                                        Command="{Binding AddCommand}"
-                                        Style="{StaticResource SoftPrimaryButton}">
-                                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
-                                    </Button>
-                                </Grid>
-                            </StackPanel>
+                            <local:DataOptionsEditor />
                         </jnputs:Dropdown.Popup>
                     </ToggleButton>
                     <ToggleButton Grid.Column="3" Style="{StaticResource DataManualToggle}">

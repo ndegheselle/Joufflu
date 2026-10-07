@@ -180,33 +180,6 @@ public interface IDataParent
     public void Remove(DataNode node);
 }
 
-public partial class DataOptionsControl : ObservableObject
-{
-    public DataValue Value { get; }
-
-    /// <summary>The option being typed, added by <see cref="Add"/>.</summary>
-    [ObservableProperty]
-    private string _newOption = "";
-
-    public DataOptionsControl(DataValue value)
-    {
-        Value = value;
-    }
-
-    public void Add()
-    {
-        Value.AddOption(NewOption);
-        NewOption = "";
-    }
-
-    /// <summary>Not empty and not already an option.</summary>
-    private bool CanAdd() => !string.IsNullOrEmpty(NewOption)
-        && !Value.Options.Any(option => Equals(option.Value, NewOption));
-
-    [RelayCommand]
-    public void Remove(DataEnumOption option) => Value.RemoveOption(option);
-}
-
 public partial class DataArray : DataNode, IDataParent
 {
     [ObservableProperty]
@@ -412,10 +385,6 @@ public partial class DataValue : DataNode
     /// <summary> The choices a closed list offers for the enumerations. </summary>
     public ObservableCollection<DataEnumOption> Options { get; }
 
-    private DataOptionsControl? _optionsControl;
-    /// <summary>Edits [Options] from <see cref="Controls.DataEdit"/>.</summary>
-    public DataOptionsControl OptionsControl => _optionsControl ??= new DataOptionsControl(this);
-
     /// <summary>[isNullable] is set here as the default value depends on it.</summary>
     public DataValue(EnumDataType type, string? key, IEnumerable<DataEnumOption> options, bool isNullable = false) : base(type, key)
     {
@@ -432,12 +401,21 @@ public partial class DataValue : DataNode
             Value = Default();
     }
 
-    /// <summary>Adds a string option, named by its value. The first one also becomes the value when it can't be null.</summary>
-    public void AddOption(string value)
+    /// <summary>
+    /// Adds a string option, named by its value. The first one also becomes the value when it can't be null.
+    /// Refuses an empty value and one already offered, returning false.
+    /// </summary>
+    public bool AddOption(string value)
     {
+        if (string.IsNullOrEmpty(value))
+            return false;
+        if (Options.Any(option => Equals(option.Value, value)))
+            return false;
+
         Options.Add(new DataEnumOption(value, value));
         if (Value is null && !IsNullable)
             Value = value;
+        return true;
     }
 
     /// <summary>Removes [option], the value falls back to its default if it was the one picked.</summary>
