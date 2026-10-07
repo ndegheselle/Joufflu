@@ -92,12 +92,19 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     [ObservableProperty]
     private IExplorerNode? renamedNode;
 
+    /// <summary>
+    /// Source whose changes the control is listening to, see <see cref="TrackSource"/>.
+    /// </summary>
+    private IExplorerSource? trackedSource;
+
     protected ExplorerNodesControl()
     {
         // Default context menu to fix the first right click
         this.ContextMenu = new ContextMenu();
         ContextMenuOpening += ExplorerNodesControl_ContextMenuOpening;
         MouseDoubleClick += ExplorerNodesControl_MouseDoubleClick;
+        Loaded += ExplorerNodesControl_Loaded;
+        Unloaded += ExplorerNodesControl_Unloaded;
         // Files dropped anywhere on the control, its template lighting up on DropTarget.IsDragOver
         DropTarget.SetCommand(this, DropFilesCommand);
     }
@@ -171,27 +178,50 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     /// </summary>
     protected override void OnSourceChanged(IExplorerSource? previous, IExplorerSource? source)
     {
-        void OnSourcePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != nameof(IExplorerSource.Current))
-                return;
-
-            // Navigating away gives up the edition in progress, its node not being displayed anymore.
-            RenamedNode = null;
-            OnCurrentChanged();
-        }
-
         // The nodes of the previous source are gone, so is any edition of one of them.
         RenamedNode = null;
 
-        // Update the displayed nodes and track then source change
-        if (previous != null)
-            previous.PropertyChanged -= OnSourcePropertyChanged;
+        if (IsLoaded)
+            TrackSource(source);
         if (source != null)
-        {
-            source.PropertyChanged += OnSourcePropertyChanged;
             OnCurrentChanged();
-        }
+    }
+
+    // The source usually outlives the control (held by a view model) : it is only listened to while the control is
+    // loaded, so that it doesn't keep an unloaded control alive.
+    private void ExplorerNodesControl_Loaded(object sender, RoutedEventArgs e)
+    {
+        TrackSource(Source);
+        // The source may have navigated while the control was unloaded.
+        if (Source != null)
+            OnCurrentChanged();
+    }
+
+    private void ExplorerNodesControl_Unloaded(object sender, RoutedEventArgs e) => TrackSource(null);
+
+    /// <summary>
+    /// Listens to <paramref name="source"/> instead of the source listened to so far, null to stop listening.
+    /// </summary>
+    private void TrackSource(IExplorerSource? source)
+    {
+        if (trackedSource == source)
+            return;
+
+        if (trackedSource != null)
+            trackedSource.PropertyChanged -= OnSourcePropertyChanged;
+        trackedSource = source;
+        if (trackedSource != null)
+            trackedSource.PropertyChanged += OnSourcePropertyChanged;
+    }
+
+    private void OnSourcePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(IExplorerSource.Current))
+            return;
+
+        // Navigating away gives up the edition in progress, its node not being displayed anymore.
+        RenamedNode = null;
+        OnCurrentChanged();
     }
 
     /// <summary>

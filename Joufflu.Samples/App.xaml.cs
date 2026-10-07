@@ -51,6 +51,12 @@ namespace Joufflu.Samples
             mainWindow.Show();
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            shellViewModel?.Dispose();
+            base.OnExit(e);
+        }
+
         /// <summary>Registers a theme dictionary shipped under <c>Themes/&lt;name&gt;.xaml</c>.</summary>
         private static void RegisterTheme(string name, bool isDark) =>
             ThemeManager.Instance.Register(
