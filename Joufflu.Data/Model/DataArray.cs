@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Specialized;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json.Linq;
@@ -10,14 +10,15 @@ public partial class DataArray : DataNode, IDataParent
     [ObservableProperty]
     private DataNode? _template;
 
-    public ObservableCollection<DataNode> Values { get; set; } = [];
+    /// <summary>The items. Whatever enters the collection is taken as a child, whatever leaves it is let go.</summary>
+    public DataNodeCollection Values { get; } = [];
 
     public IEnumerable<DataNode> Children => Values;
 
     public DataArray(string? key, DataNode? template) : base(EnumDataType.Array, key)
     {
         Template = template;
-        Values.CollectionChanged += (_, _) => OnChanged();
+        Values.CollectionChanged += OnValuesChanged;
     }
 
     /// <summary>Adds a copy of [Template], nothing when there is no template.</summary>
@@ -34,20 +35,32 @@ public partial class DataArray : DataNode, IDataParent
     {
         node.Key = $"[{Values.Count}]";
         node.CanEditKey = false;
-        node.Parent = this;
         Values.Add(node);
     }
 
+    /// <summary>Removes [node], the items after it are keyed again by their new index.</summary>
     [RelayCommand]
     public void Remove(DataNode node)
     {
-        if (Values.Remove(node))
-            node.ClearKeyError();
+        Values.Remove(node);
         for (int i = 0; i < Values.Count; i++)
+            Values[i].Key = $"[{i}]";
+    }
+
+    private void OnValuesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.OldItems is not null)
         {
-            DataNode n = Values[i];
-            n.Key = $"[{i}]";
+            foreach (DataNode value in e.OldItems)
+                value.Detach();
         }
+        if (e.NewItems is not null)
+        {
+            foreach (DataNode value in e.NewItems)
+                value.Parent = this;
+        }
+
+        OnChanged();
     }
 
     public override JToken? ToToken()
@@ -79,11 +92,7 @@ public partial class DataArray : DataNode, IDataParent
 
         // Filled in place: the constructor watches this very collection.
         foreach (DataNode value in Values)
-        {
-            var copy = value.Clone();
-            copy.Parent = clone;
-            clone.Values.Add(copy);
-        }
+            clone.Values.Add(value.Clone());
 
         return clone;
     }

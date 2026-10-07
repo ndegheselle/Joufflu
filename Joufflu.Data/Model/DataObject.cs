@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json.Linq;
 
@@ -7,14 +6,15 @@ namespace Joufflu.Data.Model;
 
 public partial class DataObject : DataNode, IDataParent
 {
-    private ObservableCollection<DataNode> _properties = [];
+    private DataNodeCollection _properties = [];
 
     /// <summary>
     /// The properties, whose keys must be unique. Whatever enters the collection, or the collection
-    /// given at creation, is taken as a child and gets its key checked against the others.
+    /// given at creation, is taken as a child and gets its key checked against the others; whatever
+    /// leaves it is let go.
     /// <para>Only set at creation, so nothing bound to it has to follow another collection.</para>
     /// </summary>
-    public ObservableCollection<DataNode> Properties
+    public DataNodeCollection Properties
     {
         get => _properties;
         init
@@ -62,7 +62,7 @@ public partial class DataObject : DataNode, IDataParent
         if (e.OldItems is not null)
         {
             foreach (DataNode property in e.OldItems)
-                property.ClearKeyError();
+                property.Detach();
         }
         if (e.NewItems is not null)
         {

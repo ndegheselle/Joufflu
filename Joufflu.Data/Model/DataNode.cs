@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json.Linq;
@@ -137,8 +138,15 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
                 : null);
     }
 
-    /// <summary>A node out of any parent has no sibling to clash with.</summary>
-    internal void ClearKeyError() => SetKeyError(null);
+    /// <summary>
+    /// Lets the node go once its parent removed it: it no longer raises <see cref="Changed"/> on
+    /// that parent, and out of any parent it has no sibling to clash with.
+    /// </summary>
+    internal void Detach()
+    {
+        Parent = null;
+        SetKeyError(null);
+    }
 
     private void SetKeyError(string? error)
     {
@@ -173,4 +181,17 @@ public interface IDataParent
     IEnumerable<DataNode> Children { get; }
 
     void Remove(DataNode node);
+}
+
+/// <summary>
+/// The children of an object or an array. Clearing removes them one by one: the reset a plain
+/// clear raises does not tell which nodes left, and their parent has to detach each of them.
+/// </summary>
+public class DataNodeCollection : ObservableCollection<DataNode>
+{
+    protected override void ClearItems()
+    {
+        while (Count > 0)
+            RemoveAt(Count - 1);
+    }
 }
