@@ -105,11 +105,6 @@ namespace Joufflu.Inputs.Controls.Format
         /// </summary>
         private bool _isShowingEditor;
 
-        /// <summary>
-        /// Set while the box hands the editor's values out, which the editor already holds.
-        /// </summary>
-        private bool _isPushingValues;
-
         // UI Parts
         private Button? _clearButton;
 
@@ -308,11 +303,13 @@ namespace Joufflu.Inputs.Controls.Format
         }
 
         /// <summary>
-        /// Show values set from outside. Those the box hands out itself are already shown.
+        /// Show values set from outside. Values the editor already holds, those the box hands out
+        /// itself among them, are already shown.
         /// </summary>
         private void LoadValuesIntoEditor()
         {
-            if (_isPushingValues)
+            List<object?> editorValues = _editor.GetValues();
+            if (Values != null && Values.SequenceEqual(editorValues))
                 return;
 
             _editor.Load(Values);
@@ -353,51 +350,60 @@ namespace Joufflu.Inputs.Controls.Format
             if (Values != null && Values.SequenceEqual(values))
                 return;
 
-            _isPushingValues = true;
-            try
-            {
-                Values = values;
-            }
-            finally
-            {
-                _isPushingValues = false;
-            }
+            // Not SetValue, which would replace a binding the host set on Values.
+            SetCurrentValue(ValuesProperty, values);
         }
         #endregion
     }
 
 
+    /// <summary>
+    /// A format text box standing for a single <see cref="Value"/>, made of its
+    /// <see cref="FormatTextBox.Values"/> and read back from them.
+    /// </summary>
     public abstract class SingleValueFormatTextBox<T> : FormatTextBox
     {
         public event EventHandler<T?>? ValueChanged;
 
-        private T? _previousValue = default;
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
+            nameof(Value),
+            typeof(T),
+            typeof(SingleValueFormatTextBox<T>),
+            new FrameworkPropertyMetadata(
+                default(T),
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                (o, e) => ((SingleValueFormatTextBox<T>)o).OnValueChanged()));
 
-        public virtual T? Value { get; set; } = default;
-
-        public virtual List<object?> ConvertTo() { return new List<object?>() { Value }; }
-
-        public virtual T? ConvertFrom()
+        public T? Value
         {
-            if (Values.Any(x => x == null))
-                return default;
-            return (T?)Values.FirstOrDefault();
+            get => (T?)GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         /// <summary>
-        /// Prevent recursive updates.
+        /// The values of the groups making [value].
         /// </summary>
-        private bool _isValueFromGroups;
+        protected virtual List<object?> ToValues(T? value) => new List<object?>() { value };
 
-        protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// The value the groups' [values] make, the default while any of them is missing.
+        /// </summary>
+        protected virtual T? FromValues(IReadOnlyList<object?> values)
         {
-            if (EqualityComparer<T>.Default.Equals(Value, _previousValue))
-                return;
+            if (values.Any(x => x == null))
+                return default;
+            return (T?)values.FirstOrDefault();
+        }
 
-            if (_isValueFromGroups == false)
-                Values = ConvertTo();
+        private void OnValueChanged()
+        {
+            // Values already making this value are left as they are: either the value was read
+            // from them, or rewriting them would wipe what the user typed in some groups and not
+            // others yet, which makes no value at all.
+            T? valueFromValues = ReadValueFromValues();
+            if (!EqualityComparer<T?>.Default.Equals(valueFromValues, Value))
+                SetCurrentValue(ValuesProperty, ToValues(Value));
 
-            _previousValue = Value;
             ValueChanged?.Invoke(this, Value);
         }
 
@@ -405,20 +411,11 @@ namespace Joufflu.Inputs.Controls.Format
         {
             base.OnValuesChanged();
 
-            var newValue = ConvertFrom();
-
-            if (EqualityComparer<T>.Default.Equals(Value, newValue))
-                return;
-
-            _isValueFromGroups = true;
-            try
-            {
-                Value = newValue;
-            }
-            finally
-            {
-                _isValueFromGroups = false;
-            }
+            T? valueFromValues = ReadValueFromValues();
+            // Not SetValue, which would replace a binding the host set on Value.
+            SetCurrentValue(ValueProperty, valueFromValues);
         }
+
+        private T? ReadValueFromValues() => Values == null ? default : FromValues(Values);
     }
 }

@@ -1,4 +1,7 @@
+using System.ComponentModel;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Markup;
 using Joufflu.Inputs.Controls;
 
 namespace Joufflu.Inputs.Tests.Format;
@@ -50,6 +53,60 @@ public class NumericUpDownTests
     }
 
     [Test]
+    public void A_two_way_binding_follows_both_ways()
+    {
+        var source = new NumberSource();
+        Box.SetBinding(NumericUpDown.ValueProperty, new Binding(nameof(NumberSource.Number)) { Source = source });
+
+        _host.Click(0);
+        _host.Type("42");
+
+        Assert.That(source.Number, Is.EqualTo(42));
+
+        source.Number = 7;
+
+        Assert.That(Box.Text, Is.EqualTo("7"));
+    }
+
+    [Test]
+    public void A_one_way_binding_survives_typing()
+    {
+        var source = new NumberSource();
+        Box.SetBinding(NumericUpDown.ValueProperty, new Binding(nameof(NumberSource.Number)) { Source = source, Mode = BindingMode.OneWay });
+
+        _host.Click(0);
+        _host.Type("4");
+        source.Number = 9;
+
+        Assert.That(Box.Value, Is.EqualTo(9));
+    }
+
+    [Test]
+    public void Value_can_be_set_in_xaml()
+    {
+        const string xaml = "<NumericUpDown xmlns=\"clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs\" Value=\"5\" />";
+        var box = (NumericUpDown)XamlReader.Parse(xaml);
+
+        Assert.That(box.Value, Is.EqualTo(5));
+        Assert.That(box.Text, Is.EqualTo("5"));
+    }
+
+    [Test]
+    public void Value_can_be_bound_in_xaml()
+    {
+        const string xaml = "<NumericUpDown xmlns=\"clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs\""
+            + " xmlns:wpf=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\""
+            + " Value=\"{wpf:Binding Number}\" />";
+        var box = (NumericUpDown)XamlReader.Parse(xaml);
+        box.DataContext = new NumberSource { Number = 6 };
+        // A binding on the DataContext is resolved by the dispatcher, which the window runs.
+        using var host = new FormatInputHost<NumericUpDown>(box);
+
+        Assert.That(box.Value, Is.EqualTo(6));
+        Assert.That(box.Text, Is.EqualTo("6"));
+    }
+
+    [Test]
     public void ValueChanged_is_raised_once_per_new_value()
     {
         var raised = new List<long?>();
@@ -59,5 +116,22 @@ public class NumericUpDownTests
         _host.Type("42");
 
         Assert.That(raised, Is.EqualTo(new long?[] { 4, 42 }));
+    }
+
+    private sealed class NumberSource : INotifyPropertyChanged
+    {
+        private long? _number;
+
+        public long? Number
+        {
+            get => _number;
+            set
+            {
+                _number = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Number)));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
