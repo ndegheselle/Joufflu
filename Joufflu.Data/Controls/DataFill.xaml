@@ -54,11 +54,11 @@
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
-            <DataTemplate DataType="{x:Type jodels:DataArrayControl}">
+            <DataTemplate DataType="{x:Type jata:DataArrayAddRow}">
                 <Button
                     HorizontalAlignment="Left"
                     toolkit:Sizing.Size="xs"
-                    Command="{Binding AddCommand}"
+                    Command="{Binding AddFromTemplateCommand}"
                     Style="{StaticResource SoftPrimaryButton}">
                     <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
@@ -68,8 +68,8 @@
             </DataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}">
                 <HierarchicalDataTemplate.ItemsSource>
-                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
-                        <Binding Path="Items" />
+                    <MultiBinding Converter="{StaticResource ChildrenWithAddRowConverter}">
+                        <Binding />
                         <Binding Path="IsManual" />
                     </MultiBinding>
                 </HierarchicalDataTemplate.ItemsSource>
@@ -100,7 +100,7 @@
             <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}">
                 <HierarchicalDataTemplate.ItemsSource>
                     <MultiBinding Converter="{StaticResource ChildrenConverter}">
-                        <Binding Path="Properties" />
+                        <Binding />
                         <Binding Path="IsManual" />
                     </MultiBinding>
                 </HierarchicalDataTemplate.ItemsSource>

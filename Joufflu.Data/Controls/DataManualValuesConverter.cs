@@ -55,17 +55,3 @@ public class DataHasManualValuesConverter : IMultiValueConverter
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         => throw new NotSupportedException($"{nameof(DataHasManualValuesConverter)} only tells whether there are entries.");
 }
-
-/// <summary>
-/// The children an object or an array shows in the tree: none while it is forced, the manual
-/// entry standing for the whole of it.
-/// <para>Bound to the children and to <see cref="DataNode.IsManual"/>, in that order.</para>
-/// </summary>
-public class DataChildrenConverter : IMultiValueConverter
-{
-    public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        => values.ElementAtOrDefault(1) is true ? null : values.ElementAtOrDefault(0);
-
-    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        => throw new NotSupportedException($"{nameof(DataChildrenConverter)} only hides the children.");
-}

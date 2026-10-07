@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
-using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json.Linq;
@@ -162,6 +161,14 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     /// <see cref="Parent"/> until one takes it.
     /// </summary>
     public abstract DataNode Clone();
+
+    /// <summary>An empty node of [type]: an object without properties, an array without template, a value at its default.</summary>
+    public static DataNode Create(EnumDataType type, string key) => type switch
+    {
+        EnumDataType.Object => new DataObject(key),
+        EnumDataType.Array => new DataArray(key, null),
+        _ => new DataValue(type, key, [])
+    };
 }
 
 public interface IDataParent
@@ -171,20 +178,6 @@ public interface IDataParent
 
     [RelayCommand]
     public void Remove(DataNode node);
-}
-
-public partial class DataArrayControl
-{
-    public DataArray Array { get; }
-    public DataArrayControl(DataArray array)
-    {
-        Array = array;
-    }
-
-    [RelayCommand]
-    public void Add() => Array.Add();
-    [RelayCommand]
-    public void AddFromType(EnumDataType type) => Array.Add(type);
 }
 
 public partial class DataOptionsControl : ObservableObject
@@ -214,24 +207,6 @@ public partial class DataOptionsControl : ObservableObject
     public void Remove(DataEnumOption option) => Value.RemoveOption(option);
 }
 
-public partial class DataObjectControl
-{
-    public DataObject Object { get; }
-    public DataObjectControl(DataObject obj)
-    {
-        Object = obj;
-    }
-
-    [RelayCommand]
-    public void Add(EnumDataType type) => Object.Add(NodeFrom(type, Object.UniqueKey("key")));
-    public static DataNode NodeFrom(EnumDataType type, string key) => type switch
-    {
-        EnumDataType.Object => new DataObject(key),
-        EnumDataType.Array => new DataArray(key, null),
-        _ => new DataValue(type, key, [])
-    };
-}
-
 public partial class DataArray : DataNode, IDataParent
 {
     [ObservableProperty]
@@ -241,34 +216,20 @@ public partial class DataArray : DataNode, IDataParent
 
     public IEnumerable<DataNode> Children => Values;
 
-    /// <summary>
-    /// Values with the add control item.
-    /// </summary>
-    public CompositeCollection Items { get; }
-
     public DataArray(string? key, DataNode? template) : base(EnumDataType.Array, key)
     {
         Template = template;
-        Items = [new CollectionContainer { Collection = Values }, new DataArrayControl(this)];
         Values.CollectionChanged += (_, _) => OnChanged();
     }
 
-    /// <summary>
-    /// Create a new node from the [Template] and add it to the [Values].
-    /// </summary>
-    public void Add()
+    /// <summary>Adds a copy of [Template], nothing when there is no template.</summary>
+    public void AddFromTemplate()
     {
-        if (Template == null)
+        if (Template is null)
             return;
 
-        var node = Template.Clone();
-        node.Key = $"[{Values.Count}]";
-        node.CanEditKey = false;
-        node.Parent = this;
-        Values.Add(node);
+        Add(Template.Clone());
     }
-
-    public void Add(EnumDataType type) => Add(DataObjectControl.NodeFrom(type, ""));
 
     /// <summary>Adds [node] as the last item, keyed by its index.</summary>
     public void Add(DataNode node)
@@ -318,7 +279,7 @@ public partial class DataArray : DataNode, IDataParent
             ManualEntry = ManualEntry,
         };
 
-        // Filled in place: [Items] watches this very collection.
+        // Filled in place: the constructor watches this very collection.
         foreach (DataNode value in Values)
         {
             var copy = value.Clone();
@@ -333,22 +294,20 @@ public partial class DataArray : DataNode, IDataParent
 public partial class DataObject : DataNode, IDataParent
 {
     private ObservableCollection<DataNode> _properties = [];
-    private readonly CollectionContainer _propertiesContainer;
 
     /// <summary>
     /// The properties, whose keys must be unique. Whatever enters the collection, or the collection
-    /// set in its place, is taken as a child and gets its key checked against the others.
+    /// given at creation, is taken as a child and gets its key checked against the others.
+    /// <para>Only set at creation, so nothing bound to it has to follow another collection.</para>
     /// </summary>
     public ObservableCollection<DataNode> Properties
     {
         get => _properties;
-        set
+        init
         {
             _properties.CollectionChanged -= OnPropertiesChanged;
             _properties = value;
             _properties.CollectionChanged += OnPropertiesChanged;
-            // [Items] follows the new collection.
-            _propertiesContainer.Collection = value;
 
             foreach (DataNode property in value)
                 property.Parent = this;
@@ -359,16 +318,11 @@ public partial class DataObject : DataNode, IDataParent
 
     public IEnumerable<DataNode> Children => Properties;
 
-    public CompositeCollection Items { get; }
-
     public DataObject(string? key) : base(EnumDataType.Object, key)
     {
         _properties.CollectionChanged += OnPropertiesChanged;
-        _propertiesContainer = new CollectionContainer { Collection = _properties };
-        Items = [_propertiesContainer, new DataObjectControl(this)];
     }
 
-    [RelayCommand]
     public void Add(DataNode node) => Properties.Add(node);
 
     [RelayCommand]

@@ -53,7 +53,13 @@
         </ResourceDictionary>
     </local:DataControlBase.Resources>
 
-    <TreeView ItemsSource="{Binding Node.Items}">
+    <TreeView>
+        <TreeView.ItemsSource>
+            <MultiBinding Converter="{StaticResource ChildrenWithAddRowConverter}">
+                <Binding Path="Node" />
+                <Binding Path="Node.IsManual" />
+            </MultiBinding>
+        </TreeView.ItemsSource>
         <TreeView.ItemContainerStyle>
             <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -71,12 +77,12 @@
                 <x:Static Member="jodels:EnumDataType.Array" />
                 <x:Static Member="jodels:EnumDataType.Object" />
             </x:Array>
-            <DataTemplate DataType="{x:Type jodels:DataArrayControl}">
+            <DataTemplate DataType="{x:Type jata:DataArrayAddRow}">
                 <Grid>
                     <Button
                         HorizontalAlignment="Left"
                         toolkit:Sizing.Size="xs"
-                        Command="{Binding AddCommand}"
+                        Command="{Binding AddFromTemplateCommand}"
                         Style="{StaticResource SoftPrimaryButton}"
                         Visibility="{Binding Array.Template, Converter={x:Static converters:VisibilityConverter.Default}}">
                         <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
@@ -100,7 +106,7 @@
                                     <DataTemplate>
                                         <Button
                                             HorizontalContentAlignment="Left"
-                                            Command="{Binding DataContext.AddFromTypeCommand, RelativeSource={RelativeSource AncestorType=jnputs:DropdownPopupHost}}"
+                                            Command="{Binding DataContext.AddOfTypeCommand, RelativeSource={RelativeSource AncestorType=jnputs:DropdownPopupHost}}"
                                             CommandParameter="{Binding}"
                                             Style="{StaticResource GhostButton}">
                                             <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
@@ -115,7 +121,7 @@
                     </ToggleButton>
                 </Grid>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type jodels:DataObjectControl}">
+            <DataTemplate DataType="{x:Type jata:DataObjectAddRow}">
                 <ToggleButton
                     HorizontalAlignment="Left"
                     jnputs:Dropdown.CloseOnClick="True"
@@ -147,8 +153,8 @@
             </DataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}">
                 <HierarchicalDataTemplate.ItemsSource>
-                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
-                        <Binding Path="Items" />
+                    <MultiBinding Converter="{StaticResource ChildrenWithAddRowConverter}">
+                        <Binding />
                         <Binding Path="IsManual" />
                     </MultiBinding>
                 </HierarchicalDataTemplate.ItemsSource>
@@ -175,8 +181,8 @@
             </HierarchicalDataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}">
                 <HierarchicalDataTemplate.ItemsSource>
-                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
-                        <Binding Path="Items" />
+                    <MultiBinding Converter="{StaticResource ChildrenWithAddRowConverter}">
+                        <Binding />
                         <Binding Path="IsManual" />
                     </MultiBinding>
                 </HierarchicalDataTemplate.ItemsSource>

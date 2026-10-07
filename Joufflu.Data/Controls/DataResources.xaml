@@ -59,6 +59,7 @@
     <jata:DataHasManualValuesConverter x:Key="HasManualValuesConverter" />
     <jata:DataValueTextConverter x:Key="ValueTextConverter" />
     <jata:DataChildrenConverter x:Key="ChildrenConverter" />
+    <jata:DataChildrenConverter x:Key="ChildrenWithAddRowConverter" WithAddRow="True" />
 
     <jata:DataValueTemplateSelector
         x:Key="DataValueEditorSelector"
