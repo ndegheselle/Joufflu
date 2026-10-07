@@ -10,7 +10,7 @@ public class FormatEditorNumberTests
     private FormatEditor _editor = null!;
 
     [SetUp]
-    public void SetUp() => _editor = new FormatEditor("{numeric|noGlobalSelection|nullable}", null);
+    public void SetUp() => _editor = new FormatEditor([new IntegerGroup { IsNullable = true, SelectsWhole = false }]);
 
     private void Type(string text)
     {
@@ -164,7 +164,7 @@ public class FormatEditorDecimalTests
     private FormatEditor _editor = null!;
 
     [SetUp]
-    public void SetUp() => _editor = new FormatEditor("{decimal|noGlobalSelection|nullable}", null);
+    public void SetUp() => _editor = new FormatEditor([new DecimalGroup { IsNullable = true, SelectsWhole = false }]);
 
     private void Type(string text)
     {

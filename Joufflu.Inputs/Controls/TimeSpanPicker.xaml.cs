@@ -12,16 +12,25 @@ namespace Joufflu.Inputs.Controls
 
         public TimeSpanPicker()
         {
-            GlobalFormat = "numeric|min:0|padded|nullable";
-            Format = "{max:365}d {max:23}h {max:59}m {max:59}s";
+            Parts.Add(TimeGroup(max: 365, stringFormat: "000"));
+            Parts.Add(new FormatLiteral { Text = "d " });
+            Parts.Add(TimeGroup(max: 23, stringFormat: "00"));
+            Parts.Add(new FormatLiteral { Text = "h " });
+            Parts.Add(TimeGroup(max: 59, stringFormat: "00"));
+            Parts.Add(new FormatLiteral { Text = "m " });
+            Parts.Add(TimeGroup(max: 59, stringFormat: "00"));
+            Parts.Add(new FormatLiteral { Text = "s" });
         }
+
+        private static IntegerGroup TimeGroup(long max, string stringFormat)
+            => new IntegerGroup { Min = 0, Max = max, StringFormat = stringFormat, IsNullable = true };
 
         protected override TimeSpan? FromValues(IReadOnlyList<object?> values)
         {
             if (values.Count < 4)
                 return null;
 
-            // Groups are days / hours / minutes / seconds (see the Format above). A numeric group
+            // Groups are days / hours / minutes / seconds (see the Parts above). An integer group
             // counts in long, and a boxed value only comes back out as the very type it went in as.
             long? days = values[0] as long?;
             long? hours = values[1] as long?;

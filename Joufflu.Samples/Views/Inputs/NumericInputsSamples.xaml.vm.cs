@@ -40,7 +40,12 @@ public class NumericInputsSamplesViewModel : ObservableValidator
         "<inputs:TimeSpanPicker Value=\"{Binding Duration, Mode=TwoWay}\" />";
 
     public string FormatCode =>
-        "<format:FormatTextBox Format=\"{}{max:23}h {max:59}m {max:59}s\" GlobalFormat=\"numeric\" />";
+        "<format:FormatTextBox>\n" +
+        "    <format:IntegerGroup Max=\"23\" StringFormat=\"00\" />\n" +
+        "    <format:FormatLiteral Text=\"h \" />\n" +
+        "    <format:IntegerGroup Max=\"59\" StringFormat=\"00\" />\n" +
+        "    <format:FormatLiteral Text=\"m\" />\n" +
+        "</format:FormatTextBox>";
 
     public string ValidationCode =>
         "<inputs:NumericUpDown Value=\"{Binding Rating, Mode=TwoWay}\" />\n" +

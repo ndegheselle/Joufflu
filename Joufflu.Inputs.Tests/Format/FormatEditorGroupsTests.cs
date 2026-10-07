@@ -17,8 +17,20 @@ public class FormatEditorGroupsTests
     private FormatEditor _editor = null!;
 
     [SetUp]
-    public void SetUp()
-        => _editor = new FormatEditor("{max:365}d {max:23}h {max:59}m {max:59}s", "numeric|min:0|padded|nullable");
+    public void SetUp() => _editor = new FormatEditor(
+    [
+        TimeGroup(max: 365, stringFormat: "000"),
+        new FormatLiteral { Text = "d " },
+        TimeGroup(max: 23, stringFormat: "00"),
+        new FormatLiteral { Text = "h " },
+        TimeGroup(max: 59, stringFormat: "00"),
+        new FormatLiteral { Text = "m " },
+        TimeGroup(max: 59, stringFormat: "00"),
+        new FormatLiteral { Text = "s" },
+    ]);
+
+    private static IntegerGroup TimeGroup(long max, string stringFormat)
+        => new IntegerGroup { Min = 0, Max = max, StringFormat = stringFormat, IsNullable = true };
 
     private void Type(string text)
     {

@@ -12,7 +12,7 @@ namespace Joufflu.Inputs.Controls
 
         public DecimalUpDown()
         {
-            Format = "{decimal|noGlobalSelection|nullable}";
+            Parts.Add(new DecimalGroup { IsNullable = true, SelectsWhole = false });
         }
     }
 }

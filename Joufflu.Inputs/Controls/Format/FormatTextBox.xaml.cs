@@ -1,16 +1,19 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 
 namespace Joufflu.Inputs.Controls.Format
 {
     /// <summary>
-    /// A text box typed into group by group, as its <see cref="Format"/> says. What it shows and
+    /// A text box typed into group by group, as its <see cref="Parts"/> say. What it shows and
     /// how it answers the keyboard is the <see cref="FormatEditor"/>'s: the box forwards its input
     /// there and shows the outcome.
     /// </summary>
+    [ContentProperty(nameof(Parts))]
     [TemplatePart(Name = "PART_ClearButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_UpButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_DownButton", Type = typeof(Button))]
@@ -71,33 +74,16 @@ namespace Joufflu.Inputs.Controls.Format
             set { _showIncrementsButtons = value; OnPropertyChanged(); }
         }
 
-        public static readonly DependencyProperty GlobalFormatProperty = DependencyProperty.Register(
-            nameof(GlobalFormat),
-            typeof(string),
-            typeof(FormatTextBox),
-            new FrameworkPropertyMetadata(null, (o, e) => ((FormatTextBox)o).OnFormatChanged()));
-
-        public string? GlobalFormat
-        {
-            get => (string?)GetValue(GlobalFormatProperty);
-            set => SetValue(GlobalFormatProperty, value);
-        }
-
-        public static readonly DependencyProperty FormatProperty = DependencyProperty.Register(
-            nameof(Format),
-            typeof(string),
-            typeof(FormatTextBox),
-            new FrameworkPropertyMetadata("", (o, e) => ((FormatTextBox)o).OnFormatChanged()));
-
-        public string Format
-        {
-            get => (string)GetValue(FormatProperty);
-            set => SetValue(FormatProperty, value);
-        }
+        /// <summary>
+        /// What the box shows, in order: <see cref="IntegerGroup"/>s and <see cref="DecimalGroup"/>s
+        /// the user types into, and <see cref="FormatLiteral"/> text between them. The content of
+        /// the box in XAML.
+        /// </summary>
+        public ObservableCollection<FormatPart> Parts { get; } = new ObservableCollection<FormatPart>();
         #endregion
 
-        // Empty until the control is initialized, see OnFormatChanged.
-        private FormatEditor _editor = new FormatEditor("", null);
+        // Empty until the control is initialized, see OnPartsChanged.
+        private FormatEditor _editor = new FormatEditor([]);
 
         /// <summary>
         /// Set while the box writes the editor's text and selection back to itself, which is no
@@ -151,6 +137,7 @@ namespace Joufflu.Inputs.Controls.Format
         public FormatTextBox()
         {
             IsUndoEnabled = false;
+            Parts.CollectionChanged += (sender, e) => OnPartsChanged();
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -285,10 +272,10 @@ namespace Joufflu.Inputs.Controls.Format
 
         #region Methods
         /// <summary>
-        /// A new editor for the new format. Before the control is initialized XAML may still be
-        /// setting the other format property, so the editor waits for both, in OnInitialized.
+        /// A new editor for the new parts. Before the control is initialized XAML is still adding
+        /// them one by one, so the editor waits for all of them, in OnInitialized.
         /// </summary>
-        private void OnFormatChanged()
+        private void OnPartsChanged()
         {
             if (!IsInitialized)
                 return;
@@ -297,7 +284,7 @@ namespace Joufflu.Inputs.Controls.Format
 
         private void CreateEditor()
         {
-            _editor = new FormatEditor(Format, GlobalFormat);
+            _editor = new FormatEditor(Parts);
             _editor.Load(Values);
             ShowEditor();
         }

@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Joufflu.Inputs.Controls.Format
 {
@@ -11,13 +10,9 @@ namespace Joufflu.Inputs.Controls.Format
     /// </summary>
     internal sealed class FormatEditor
     {
-        // Matches the content inside curly braces, ignoring escaped ones
-        private static readonly Regex _formatRegex =
-            new Regex(@"(?<!\\)\{(.*?)(?<!\\)\}|[^{}]+", RegexOptions.Compiled);
-
-        // Ordered format parts: BaseGroup for a group, string for literal text between groups.
+        // Ordered format parts: GroupEditor for a group, string for literal text between groups.
         private readonly List<object> _parts;
-        private readonly List<BaseGroup> _groups;
+        private readonly List<GroupEditor> _groups;
 
         public string Text { get; private set; } = "";
 
@@ -30,33 +25,23 @@ namespace Joufflu.Inputs.Controls.Format
         /// </summary>
         public int SelectedGroupIndex { get; private set; } = -1;
 
-        public BaseGroup? SelectedGroup => SelectedGroupIndex >= 0 ? _groups[SelectedGroupIndex] : null;
+        public GroupEditor? SelectedGroup => SelectedGroupIndex >= 0 ? _groups[SelectedGroupIndex] : null;
 
-        /// <exception cref="ArgumentException">If a group has no type, or an unknown option</exception>
-        public FormatEditor(string format, string? globalFormat)
+        public FormatEditor(IEnumerable<FormatPart> parts)
         {
-            _parts = ParseFormat(format, globalFormat);
-            _groups = _parts.OfType<BaseGroup>().ToList();
+            _parts = parts.Select(CreateEditorPart).ToList();
+            _groups = _parts.OfType<GroupEditor>().ToList();
             Render();
         }
 
-        private static List<object> ParseFormat(string format, string? globalFormat)
+        private static object CreateEditorPart(FormatPart part) => part switch
         {
-            List<object> parts = new List<object>();
-            foreach (Match match in _formatRegex.Matches(format))
-            {
-                bool isGroup = match.Value.StartsWith("{") && match.Value.EndsWith("}");
-                if (!isGroup)
-                {
-                    parts.Add(match.Value);
-                    continue;
-                }
-
-                string groupParams = match.Groups[1].Value;
-                parts.Add(GroupsFactory.Create(groupParams, globalFormat));
-            }
-            return parts;
-        }
+            FormatLiteral literal => literal.Text,
+            IntegerGroup group => group.CreateEditor(),
+            DecimalGroup group => group.CreateEditor(),
+            // FormatPart cannot be derived from outside the library: a part added to it, not here.
+            _ => throw new NotSupportedException($"{part.GetType().Name} is not a known format part."),
+        };
 
         /// <summary>
         /// What each group holds, in the order of the format.
@@ -100,7 +85,7 @@ namespace Joufflu.Inputs.Controls.Format
                 return false;
 
             SelectedGroupIndex = newIndex;
-            BaseGroup group = _groups[newIndex];
+            GroupEditor group = _groups[newIndex];
             if (group.SelectsWhole)
                 SelectWhole(group);
             else
@@ -116,7 +101,7 @@ namespace Joufflu.Inputs.Controls.Format
         /// <returns>true if the key is handled here</returns>
         public bool MoveCaret(int delta)
         {
-            if (SelectedGroup is not BaseGroup group)
+            if (SelectedGroup is not GroupEditor group)
                 return false;
 
             if (group.SelectsWhole)
@@ -140,7 +125,7 @@ namespace Joufflu.Inputs.Controls.Format
             // If no group is selected default to the first one
             if (SelectedGroup == null)
                 MoveToGroup(1);
-            if (SelectedGroup is not BaseGroup group)
+            if (SelectedGroup is not GroupEditor group)
                 return;
 
             (int caret, int selectionLength) = SelectionInGroup(group);
@@ -156,7 +141,7 @@ namespace Joufflu.Inputs.Controls.Format
         /// </summary>
         public void Delete(bool backwards)
         {
-            if (SelectedGroup is not BaseGroup group)
+            if (SelectedGroup is not GroupEditor group)
                 return;
 
             if (group.SelectsWhole)
@@ -180,7 +165,7 @@ namespace Joufflu.Inputs.Controls.Format
         {
             if (SelectedGroup == null)
                 MoveToGroup(1);
-            if (SelectedGroup is not BaseGroup group)
+            if (SelectedGroup is not GroupEditor group)
                 return;
 
             if (direction >= 0)
@@ -195,7 +180,7 @@ namespace Joufflu.Inputs.Controls.Format
 
         public void Clear()
         {
-            foreach (BaseGroup group in _groups)
+            foreach (GroupEditor group in _groups)
                 group.Clear();
             Render();
         }
@@ -205,7 +190,7 @@ namespace Joufflu.Inputs.Controls.Format
         /// The caret and the length of the selection within [group], kept inside it: a group only
         /// edits its own text.
         /// </summary>
-        private (int Caret, int SelectionLength) SelectionInGroup(BaseGroup group)
+        private (int Caret, int SelectionLength) SelectionInGroup(GroupEditor group)
         {
             int caret = Math.Clamp(SelectionStart - group.Index, 0, group.RenderedLength);
             int selectionLength = Math.Min(SelectionLength, group.RenderedLength - caret);
@@ -217,13 +202,13 @@ namespace Joufflu.Inputs.Controls.Format
         /// within it. Not before: the caret could not be placed in a text not yet holding what
         /// was typed.
         /// </summary>
-        private void CommitEdit(BaseGroup group, int caret)
+        private void CommitEdit(GroupEditor group, int caret)
         {
             Render();
             PlaceCaretAfterEdit(group, caret);
         }
 
-        private void PlaceCaretAfterEdit(BaseGroup group, int caret)
+        private void PlaceCaretAfterEdit(GroupEditor group, int caret)
         {
             // Nothing typed, nothing to answer for.
             if (group.IsEmpty)
@@ -256,7 +241,7 @@ namespace Joufflu.Inputs.Controls.Format
         /// Select the whole of [group]: its rendered width, which may be shorter than its max
         /// Length when the value is not padded.
         /// </summary>
-        private void SelectWhole(BaseGroup group) => SetSelection(group.Index, group.RenderedLength);
+        private void SelectWhole(GroupEditor group) => SetSelection(group.Index, group.RenderedLength);
 
         // Kept within the text, as the text box would.
         private void SetSelection(int start, int length)
@@ -269,7 +254,7 @@ namespace Joufflu.Inputs.Controls.Format
         {
             for (int i = 0; i < _groups.Count; i++)
             {
-                BaseGroup group = _groups[i];
+                GroupEditor group = _groups[i];
                 if (position >= group.Index && position <= group.Index + group.RenderedLength)
                     return i;
             }
@@ -287,7 +272,7 @@ namespace Joufflu.Inputs.Controls.Format
             StringBuilder builder = new StringBuilder();
             foreach (object part in _parts)
             {
-                if (part is not BaseGroup group)
+                if (part is not GroupEditor group)
                 {
                     builder.Append((string)part);
                     continue;

@@ -12,7 +12,7 @@ All inputs are two-way bindable like WPF's own and honour `toolkit:Sizing.Size`.
 | Whole number | `NumericUpDown` | `Value` (`long?`) |
 | Decimal number | `DecimalUpDown` | `Value` (`decimal?`) |
 | Duration | `TimeSpanPicker` | `Value` (`TimeSpan?`) |
-| Custom segmented format (time, codes…) | `format:FormatTextBox` | `Format`, `GlobalFormat`, `Values` |
+| Custom segmented format (time, codes…) | `format:FormatTextBox` | `Parts` (content), `Values` |
 | Debounced search box | `Search` | `SearchText`, `SearchCommand`, `SearchChanged` |
 | Combo filtering as you type | `ComboBoxSearch` | `ItemsSource`, `SelectedItem`, `DisplayMemberPath` |
 | Multi-selection as tags | `ComboBoxTags` | `SelectedItems` (`IList`), `AllowAdd` |
@@ -38,19 +38,23 @@ or convertible to them. A `ValueChanged` event is also raised.
 
 ## FormatTextBox
 
-A text box split into groups described by a format string; <kbd>Tab</kbd> / arrows move
+A text box split into groups, declared as its content; <kbd>Tab</kbd> / arrows move
 between groups, arrows up/down increment.
 
 ```xml
-<format:FormatTextBox Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
+<format:FormatTextBox>
+    <format:IntegerGroup Max="23" StringFormat="00" />
+    <format:FormatLiteral Text="h " />
+    <format:IntegerGroup Max="59" StringFormat="00" />
+    <format:FormatLiteral Text="m" />
+</format:FormatTextBox>
 ```
 
-- Each `{…}` is a group; options are `|`-separated `key` or `key:value`.
-- `GlobalFormat` options apply to every group (prefixed to each).
-- A group needs a type: `numeric` or `decimal`.
-- Options: `min:`, `max:`, `length:`, `padded`, `nullable`, `nullableChar:`, `format:`
-  (string format), `incrementDelta:`, `noGlobalSelection`. An unknown option throws.
-- The `{}` prefix escapes the braces in XAML.
+- Parts: `IntegerGroup` (`long`), `DecimalGroup` (`decimal`), `FormatLiteral` (`Text`, not typed into).
+- Group properties: `Min`, `Max` (also the group's width), `Step` (default `1` / `0.1`),
+  `StringFormat` (.NET numeric format: `00` pads, `N0` separates thousands), `IsNullable`,
+  `PromptChar` (default `-`), `SelectsWhole` (default `true`; `false` keeps a caret in the group).
+- From code: `box.Parts.Add(new IntegerGroup { Max = 59 });`
 - Values: `Values` (list, one per group), `ValuesChanged` event.
 
 ## Search

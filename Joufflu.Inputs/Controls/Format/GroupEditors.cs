@@ -3,98 +3,6 @@ using System.Numerics;
 
 namespace Joufflu.Inputs.Controls.Format
 {
-    internal static class GroupsFactory
-    {
-        /// <summary>
-        /// Create a group from its parameters, "numeric|max:59|padded" for one.
-        /// </summary>
-        /// <param name="stringParams">The group's own parameters, separated by |</param>
-        /// <param name="globalStringParams">Parameters shared by every group, separated by |</param>
-        /// <exception cref="ArgumentException">If no type is given, or an option is unknown</exception>
-        public static BaseGroup Create(string stringParams, string? globalStringParams)
-        {
-            // Global parameters go first so that the group's own override them.
-            IEnumerable<string> splitParams = stringParams.Split("|");
-            if (globalStringParams != null)
-                splitParams = globalStringParams.Split("|").Concat(splitParams);
-
-            if (splitParams.Contains("numeric"))
-            {
-                GroupOptions options = GroupOptions.Parse(splitParams.Where(x => x != "numeric"));
-                return new NumberGroup<long>(options, defaultIncrementDelta: 1);
-            }
-            if (splitParams.Contains("decimal"))
-            {
-                GroupOptions options = GroupOptions.Parse(splitParams.Where(x => x != "decimal"));
-                return new NumberGroup<decimal>(options, defaultIncrementDelta: 0.1m);
-            }
-
-            throw new ArgumentException("Unknown type key.");
-        }
-    }
-
-    /// <summary>
-    /// The options a group is written with: "key:value" pairs, and flags with no value. The bounds
-    /// stay text, for the group to read in the type it counts in.
-    /// </summary>
-    internal record GroupOptions
-    {
-        private static readonly HashSet<string> _knownKeys = new HashSet<string>()
-        {
-            "length", "format", "nullable", "nullableChar", "noGlobalSelection", "padded", "min", "max", "incrementDelta",
-        };
-
-        /// <summary>
-        /// How many characters the group holds, 0 when nothing says.
-        /// </summary>
-        public int Length { get; init; }
-
-        public string? StringFormat { get; init; }
-
-        public bool IsNullable { get; init; }
-
-        public char NullableChar { get; init; } = '-';
-
-        public bool NoGlobalSelection { get; init; }
-
-        public bool IsPadded { get; init; }
-
-        public string? Min { get; init; }
-
-        public string? Max { get; init; }
-
-        public string? IncrementDelta { get; init; }
-
-        /// <exception cref="ArgumentException">If an option is unknown, most likely a typo</exception>
-        public static GroupOptions Parse(IEnumerable<string> stringParams)
-        {
-            // A later option overrides an earlier one with the same key.
-            Dictionary<string, string?> options = new Dictionary<string, string?>();
-            foreach (string param in stringParams)
-            {
-                string[] keyValue = param.Split(":", 2);
-                options[keyValue[0]] = keyValue.Length > 1 ? keyValue[1] : null;
-            }
-
-            string[] unknownKeys = options.Keys.Where(key => !_knownKeys.Contains(key)).ToArray();
-            if (unknownKeys.Length > 0)
-                throw new ArgumentException("Unknown option(s): " + string.Join(", ", unknownKeys));
-
-            return new GroupOptions()
-            {
-                Length = options.GetValueOrDefault("length") is string length ? int.Parse(length) : 0,
-                StringFormat = options.GetValueOrDefault("format"),
-                IsNullable = options.ContainsKey("nullable"),
-                NullableChar = options.GetValueOrDefault("nullableChar") is string nullableChar ? nullableChar[0] : '-',
-                NoGlobalSelection = options.ContainsKey("noGlobalSelection"),
-                IsPadded = options.ContainsKey("padded"),
-                Min = options.GetValueOrDefault("min"),
-                Max = options.GetValueOrDefault("max"),
-                IncrementDelta = options.GetValueOrDefault("incrementDelta"),
-            };
-        }
-    }
-
     /// <summary>
     /// What became of an edit: whether the group took it, and where the caret belongs in the
     /// group once the text is built again.
@@ -105,14 +13,16 @@ namespace Joufflu.Inputs.Controls.Format
     }
 
     /// <summary>
-    /// One editable part of a <see cref="FormatTextBox"/>. A group knows nothing of the box: it
-    /// is handed the caret and selection within its own text, and the box places them back.
+    /// The editable side of a group of a <see cref="FormatTextBox"/>, built by the
+    /// <see cref="FormatEditor"/> from the group's definition and holding what the user types. A
+    /// group knows nothing of the box: it is handed the caret and selection within its own text,
+    /// and the box places them back.
     /// </summary>
-    internal abstract class BaseGroup
+    internal abstract class GroupEditor
     {
         /// <summary>
-        /// How many characters the group holds, 0 when nothing says: a group given neither a
-        /// length nor a max is bounded by its type alone, and takes as much as that type does.
+        /// How many characters the group holds, 0 when nothing says: a group given no max is
+        /// bounded by its type alone, and takes as much as that type does.
         /// </summary>
         public int Length { get; protected set; } = 0;
 
@@ -173,26 +83,24 @@ namespace Joufflu.Inputs.Controls.Format
     }
 
     /// <summary>
-    /// A number, counted in long for a "numeric" group and in decimal for a "decimal" one.
+    /// The editable side of a <see cref="NumberGroup{T}"/>.
     /// </summary>
-    internal class NumberGroup<T> : BaseGroup where T : struct, INumber<T>, IMinMaxValue<T>
+    internal class NumberGroupEditor<T> : GroupEditor where T : struct, INumber<T>, IMinMaxValue<T>
     {
         #region Options
         public string? StringFormat { get; }
 
         public bool IsNullable { get; }
 
-        public char NullableChar { get; }
+        public char PromptChar { get; }
 
         public override bool SelectsWhole { get; }
-
-        public bool IsPadded { get; }
 
         public T Min { get; }
 
         public T Max { get; }
 
-        public T IncrementDelta { get; }
+        public T Step { get; }
         #endregion
 
         /// <summary>
@@ -219,22 +127,18 @@ namespace Joufflu.Inputs.Controls.Format
         /// </summary>
         public override bool IsFull => _number is T number && Length > 0 && number.ToString()!.Length >= Length;
 
-        public NumberGroup(GroupOptions options, T defaultIncrementDelta)
+        public NumberGroupEditor(NumberGroup<T> definition)
         {
-            StringFormat = options.StringFormat;
-            IsNullable = options.IsNullable;
-            NullableChar = options.NullableChar;
-            SelectsWhole = !options.NoGlobalSelection;
-            IsPadded = options.IsPadded;
+            StringFormat = definition.StringFormat;
+            IsNullable = definition.IsNullable;
+            PromptChar = definition.PromptChar;
+            SelectsWhole = definition.SelectsWhole;
+            Min = definition.Min ?? T.MinValue;
+            Max = definition.Max ?? T.MaxValue;
+            Step = definition.Step;
 
-            T? max = ParseOption(options.Max);
-            Min = ParseOption(options.Min) ?? T.MinValue;
-            Max = max ?? T.MaxValue;
-            IncrementDelta = ParseOption(options.IncrementDelta) ?? defaultIncrementDelta;
-
-            // A group given no length is as wide as its max, when it is given one.
-            Length = options.Length;
-            if (Length == 0 && max is T explicitMax)
+            // A group is as wide as its max, when it is given one.
+            if (definition.Max is T explicitMax)
                 Length = explicitMax.ToString()!.Length;
 
             // Last, so that the bounds it is clamped between are known.
@@ -267,13 +171,6 @@ namespace Joufflu.Inputs.Controls.Format
                 return;
             }
             _number = given;
-        }
-
-        private static T? ParseOption(string? text)
-        {
-            if (text == null || !TryParse(text, out T value))
-                return null;
-            return value;
         }
 
         private static bool TryParse(string text, out T value)
@@ -434,15 +331,9 @@ namespace Joufflu.Inputs.Controls.Format
             // A group with a width of its own shows what it is waiting for; one without has no
             // slots to show, so an empty number is an empty field, the way a number field reads.
             if (_number is not T number)
-                return new string(NullableChar, Length);
+                return new string(PromptChar, Length);
 
-            string text = number.ToString()!;
-            if (StringFormat != null)
-                text = string.Format("{0" + StringFormat + "}", number);
-            if (IsPadded)
-                text = text.PadLeft(Length, '0');
-
-            return text;
+            return number.ToString(StringFormat, CultureInfo.CurrentCulture);
         }
 
         public override void Increment()
@@ -453,7 +344,7 @@ namespace Joufflu.Inputs.Controls.Format
                 SetNumber(T.Zero);
                 return;
             }
-            SetNumber(number + IncrementDelta);
+            SetNumber(number + Step);
         }
 
         public override void Decrement()
@@ -464,7 +355,7 @@ namespace Joufflu.Inputs.Controls.Format
                 SetNumber(T.Zero);
                 return;
             }
-            SetNumber(number - IncrementDelta);
+            SetNumber(number - Step);
         }
     }
 }
