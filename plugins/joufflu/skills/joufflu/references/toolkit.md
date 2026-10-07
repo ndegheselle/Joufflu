@@ -47,7 +47,7 @@ Themed tooltip shown instantly on hover (native `ToolTip` has a delay).
 </Button>
 ```
 
-`Placement`: `Top` (default), `Bottom`, `Left`, `Right`; flips at screen edges. Setting
+`Placement`: `Top`, `Bottom` (default), `Left`, `Right`; flips at screen edges. Setting
 `Content` to `null` removes it (usable from triggers).
 
 ## Drag and drop

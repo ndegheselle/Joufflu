@@ -77,10 +77,17 @@ namespace Joufflu.Inputs.Controls.Format
         /// <summary>
         /// What the box shows, in order: <see cref="IntegerGroup"/>s and <see cref="DecimalGroup"/>s
         /// the user types into, and <see cref="FormatLiteral"/> text between them. The content of
-        /// the box in XAML.
+        /// the box in XAML. Empty, the box shows its <see cref="DefaultParts"/>.
         /// </summary>
         public ObservableCollection<FormatPart> Parts { get; } = new ObservableCollection<FormatPart>();
         #endregion
+
+        /// <summary>
+        /// What a derived box shows while no <see cref="Parts"/> are written for it, the single number
+        /// of a <c>NumericUpDown</c> for instance. Kept apart from <see cref="Parts"/> so that parts
+        /// written in XAML replace them rather than being added after them.
+        /// </summary>
+        protected virtual IReadOnlyList<FormatPart> DefaultParts => [];
 
         // Empty until the control is initialized, see OnPartsChanged.
         private FormatEditor _editor = new FormatEditor([]);
@@ -191,12 +198,14 @@ namespace Joufflu.Inputs.Controls.Format
                 Keyboard.ClearFocus();
                 e.Handled = true;
             }
-            // If tab select next group
+            // Tab moves to the next group; past the last one (or before the first with Shift) it
+            // is left to WPF, so the focus can leave the box.
             else if (e.Key == Key.Tab)
             {
-                _editor.MoveToGroup(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1);
-                ShowEditor();
-                e.Handled = true;
+                bool moved = _editor.MoveToGroup(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1);
+                if (moved)
+                    ShowEditor();
+                e.Handled = moved;
             }
             // Left and right walk the text, by group or by character depending on the group
             else if (e.Key == Key.Left)
@@ -284,7 +293,8 @@ namespace Joufflu.Inputs.Controls.Format
 
         private void CreateEditor()
         {
-            _editor = new FormatEditor(Parts);
+            IReadOnlyList<FormatPart> shownParts = Parts.Count > 0 ? Parts : DefaultParts;
+            _editor = new FormatEditor(shownParts);
             _editor.Load(Values);
             ShowEditor();
         }

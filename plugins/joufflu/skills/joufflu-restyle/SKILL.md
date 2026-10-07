@@ -40,7 +40,7 @@ Search the XAML (and code-behind that sets visuals) for:
 | Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls | `Sizing.Size` / typography styles |
 | `CornerRadius="4"`, `BorderThickness="1"` literals | Tokens |
 | `ToolTip="…"` | `toolkit:Tooltip.Content` |
-| `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `OverlayViewModel`) |
+| `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `IOverlayContent`) |
 | Status text / popups for success/errors | Toasts |
 | `AllowDrop` + `Drop`/`DragOver` handlers, `DoDragDrop` in `MouseMove` | `DropTarget` / `DragSource` |
 | `Image` icons or Segoe MDL2/Fluent glyphs | `fonts:FontIcon` + `LucideFontIcons` |
@@ -122,7 +122,7 @@ Delete `ControlTemplate`s that only reimplemented the default look.
 ### Behaviour swaps (confirm with the user when it changes the view model)
 
 - `MessageBox.Show("Sure?", …, YesNo)` → `await _overlays.Confirm(message, title,
-  EnumConfirmationType.Danger) == true` (needs an `IOverlayService` and an
+  EnumConfirmationType.Danger) == true` (needs an `IOverlayer` and an
   `OverlayContainer` in the shell — see the `joufflu-new-app` skill).
 - Transient success/error messages → `_toasts.Success(...)` / `_toasts.Error(...)`.
 - Drag/drop code-behind → `toolkit:DropTarget.Command` with `CanExecute` as the filter,

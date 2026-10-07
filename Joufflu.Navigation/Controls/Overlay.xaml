@@ -69,6 +69,7 @@
                             Grid.Column="1"
                             VerticalAlignment="Top"
                             toolkit:Sizing.IsSquare="True"
+                            toolkit:Sizing.Size="xs"
                             Command="{Binding IgnoreCommand}"
                             Style="{StaticResource GhostButton}">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
@@ -107,7 +108,7 @@
     </DataTemplate>
 
     <!--  ==================== Confirmation ====================  -->
-    <!--  Implicit template: the standard content shown by IOverlayService.Confirm().  -->
+    <!--  Implicit template: the standard content shown by IOverlayer.Confirm().  -->
     <DataTemplate DataType="{x:Type nav:ConfirmationContent}">
         <Grid toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <Grid.RowDefinitions>

@@ -3,7 +3,7 @@ description: >-
   WPF inputs and reusable components for .NET, with a small design system
   (brushes, dimensions, sizing and spacing helpers).
 
-# GitHub Pages: served from the /docs folder on the main branch.
+# GitHub Pages: served from the /docs folder of the docs branch (see publishing.md).
 url: https://ndegheselle.github.io
 baseurl: /Joufflu
 

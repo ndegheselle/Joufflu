@@ -49,7 +49,7 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenFormAsync()
     {
-        // The form carries its own options and hands back what was typed, being an OverlayViewModel.
+        // The form carries its own options and hands back what was typed, being an IOverlayContent<string>.
         string? name = await _overlays.ShowAsync(new SampleFormViewModel(_overlays));
         if (name != null)
             _toasts.Success($"Saved name: {name}", "Profile");
@@ -73,13 +73,12 @@ public class OverlaySamplesViewModel : ObservableObject
     }
 
     public string Code =>
-        "// Content deriving from OverlayViewModel<T> owns its buttons and its\n" +
-        "// options, closes itself, and hands back what it was validated with.\n" +
-        "var form = new SampleFormViewModel(overlays);\n" +
-        "string? name = await OverlayViewModel<string>.ShowAsync(form);\n" +
+        "// Content implementing IOverlayContent<T> owns its buttons and its options,\n" +
+        "// closes itself with overlays.Validate(this), and hands back its Result.\n" +
+        "string? name = await overlays.ShowAsync(new SampleFormViewModel(overlays));\n" +
         "\n" +
         "// Any object works too, its options being given at show time\n" +
-        "bool? result = await overlays.Show(content, new OverlayOptions { Title = \"...\" });\n" +
+        "bool? result = await overlays.ShowAsync(content,new OverlayOptions { Title = \"...\" });\n" +
         "\n" +
         "// Standard confirmation, no content of your own\n" +
         "bool? confirmed = await overlays.Confirm(\"Delete the selected item?\", \"Please confirm\");";
@@ -94,9 +93,9 @@ public class ConfirmViewModel : ObservableObject
 }
 
 /// <summary>
-/// Overlay content with an editable field, used by the form overlay demo. Deriving from
-/// <see cref="OverlayViewModel{TResult}"/> gives it its options, its cancel command and the result
-/// it is awaited for, so it only writes the save.
+/// Overlay content with an editable field, used by the form overlay demo. Implementing
+/// <see cref="IOverlayContent{TResult}"/> gives it its own options and the result it is awaited for;
+/// the close cross dismisses it and Save validates it.
 /// </summary>
 public partial class SampleFormViewModel : ObservableObject, IOverlayContent<string>
 {

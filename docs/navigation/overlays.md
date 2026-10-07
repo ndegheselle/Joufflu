@@ -11,7 +11,7 @@ area. Multiple overlays stack.
 
 ## Hosting the overlays
 
-Overlays are rendered by an `OverlayContainer` bound to the `OverlayService` you
+Overlays are rendered by an `OverlayContainer` bound to the `Overlayer` you
 show them from. Wrap the whole window content in it so an overlay covers
 everything — side menu included:
 
@@ -21,64 +21,79 @@ everything — side menu included:
 </nav:OverlayContainer>
 ```
 
+The container creates an `Overlayer` of its own when none is bound; bind one from
+your shell view model to share it with the pages, behind `IOverlayer`.
+
 Toasts have their own [`ToastContainer`](../feedback/toasts.md); wrap it around
 this one to keep them above the overlays.
 
 ## Showing an overlay
 
-The overlay content owns its buttons and closes itself. `Show` completes when the overlay closes and returns the
-result it closed with - `null` when dismissed.
+The overlay content owns its buttons and closes itself through the overlayer, in
+one of three ways that tell the caller how it ended:
+
+| Close with | `ShowAsync` returns |
+|---|---|
+| `overlays.Validate(content)` | `true` |
+| `overlays.Cancel(content)` | `false` |
+| `overlays.Ignore(content)` | `null` — also what the close cross and a click on the dimmed background do |
+
+Each closes the overlay showing that content, whichever is on top, so content
+opening another overlay of its own kind still closes itself.
 
 `OverlayOptions` exposes `Title`, `ShowCloseButton`, `CloseOnClickAway` (set
 `false` to force the user through the action buttons) and `FullScreen`.
 
-### `OverlayViewModel`
-
-Deriving overlay content from `OverlayViewModel` gives it its own `Options` (set
-in the constructor, read once when the overlay is pushed), a `CancelCommand`, and
-a `Close` that closes itself:
-
-```csharp
-public class SampleFormViewModel : OverlayViewModel<string>
-{
-    public SampleFormViewModel(IOverlayService overlays) : base(overlays)
-    {
-        Options.Title = "Edit profile";
-        Options.CloseOnClickAway = false;
-    }
-
-    public string Name { get; set; } = "Joe Doe";
-
-    [RelayCommand]
-    private void Save() => Close(Name);
-}
-```
-
-Use the non-generic `OverlayViewModel` for overlays only worth a yes or a no. 
-Use `OverlayViewModel<TResult>` for overlays awaited, its static `ShowAsync` shows the 
-content and hands back what it was closed with, the default of `TResult` when it was 
-cancelled or dismissed:
-
-```csharp
-string? name = await OverlayViewModel<string>.ShowAsync(new SampleFormViewModel(overlays));
-```
-
- Use
-
 ### Any object
 
-Content doesn't have to derive from `OverlayViewModel` — any object works, with
-the options given at show time and closed via the service:
+Any object works as content, resolved to its view through an implicit
+`DataTemplate`, with the options given at show time:
 
 ```csharp
 var options = new OverlayOptions { Title = "Edit profile" };
-bool? result = await overlays.Show(content, options);
+bool? result = await overlays.ShowAsync(content, options);
 ```
 
-Content implementing `IOverlayContent` carries its own `Options`, so `Show` can be
-called without them; that's what `OverlayViewModel` does. Close it with
-`overlays.Close(content, result)` — rather than `CloseTop`, so content opening
-another overlay of its own kind still closes itself and not whichever is on top.
+Content implementing `IOverlayContent` carries its own `Options` instead, so
+`ShowAsync` can be called without them.
+
+### Awaiting a result
+
+Content implementing `IOverlayContent<TResult>` also exposes the `Result` it was
+validated with. Shown through the generic `ShowAsync`, the overlay hands that
+result back when validated, and the default of `TResult` when cancelled or
+ignored:
+
+```csharp
+public partial class SampleFormViewModel : ObservableObject, IOverlayContent<string>
+{
+    private readonly IOverlayer _overlays;
+
+    public SampleFormViewModel(IOverlayer overlays) => _overlays = overlays;
+
+    public OverlayOptions Options { get; } = new() { Title = "Edit profile", CloseOnClickAway = false };
+
+    [ObservableProperty]
+    private string _name = "Joe Doe";
+
+    public string? Result => Name;
+
+    [RelayCommand]
+    private void Save() => _overlays.Validate(this);
+
+    [RelayCommand]
+    private void Cancel() => _overlays.Cancel(this);
+}
+```
+
+```csharp
+string? name = await overlays.ShowAsync(new SampleFormViewModel(overlays));
+if (name != null)
+    // saved
+```
+
+`IOverlayContent` derives from [`IPage`](navigation-menu.md#page-lifecycle), so content can also react to
+being shown and closed through `OnNavigatedTo` / `OnNavigatedFrom`.
 
 ## Standard confirmation
 
@@ -104,5 +119,5 @@ if (result == true)
 centered, sized panel — a whole-window editor or wizard rather than a dialog:
 
 ```csharp
-await overlays.Show(content, new OverlayOptions { Title = "Edit", FullScreen = true });
+await overlays.ShowAsync(content, new OverlayOptions { Title = "Edit", FullScreen = true });
 ```

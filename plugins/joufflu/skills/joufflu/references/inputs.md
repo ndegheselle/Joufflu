@@ -36,6 +36,15 @@ Built on `FormatTextBox`, with clear and increment/decrement buttons.
 View-model properties should be the nullable types above (`long?`, `decimal?`, `TimeSpan?`)
 or convertible to them. A `ValueChanged` event is also raised.
 
+To bound or format a `NumericUpDown` / `DecimalUpDown`, give it its group as content: it
+replaces the default one (nullable, own caret — set those back if wanted).
+
+```xml
+<inputs:NumericUpDown Value="{Binding Quantity, Mode=TwoWay}">
+    <format:IntegerGroup Min="0" Max="99" IsNullable="True" SelectsWhole="False" />
+</inputs:NumericUpDown>
+```
+
 ## FormatTextBox
 
 A text box split into groups, declared as its content; <kbd>Tab</kbd> / arrows move

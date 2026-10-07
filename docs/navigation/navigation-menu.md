@@ -72,3 +72,19 @@ instance directly:
 Navigator.Navigate(typeof(HomeViewModel));
 Navigator.Navigate(new HomeViewModel());
 ```
+
+## Page lifecycle
+
+A page doesn't have to implement anything. One that wants to know when it is shown
+or left implements `IPage`, whose two methods have empty defaults so only the one
+needed is written:
+
+```csharp
+public class HomeViewModel : IPage
+{
+    public void OnNavigatedTo() => Refresh();
+}
+```
+
+The `Navigator` calls `OnNavigatedFrom` on the page it leaves, then `OnNavigatedTo`
+on the new one. Overlay content gets the same calls when it is shown and closed.

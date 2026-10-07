@@ -102,14 +102,13 @@ Delete the template's `MainWindow.xaml(.cs)` if it is no longer used.
 using CommunityToolkit.Mvvm.ComponentModel;
 using Joufflu.Feedback;
 using Joufflu.Navigation;
-using Joufflu.Navigation.Controls;
 
 namespace MyApp.ViewModels;
 
 public class ShellViewModel : ObservableObject
 {
     public Navigator Navigator { get; }
-    public OverlayService Overlays { get; } = new();
+    public Overlayer Overlays { get; } = new();
     public ToastService Toasts { get; } = new();
 
     // Pages keyed by their own type: what each NavigationItem.TargetType points at.
@@ -130,8 +129,8 @@ public class ShellViewModel : ObservableObject
 ```
 
 If the project uses dependency injection, resolve pages from the container in the
-navigator's resolver instead of the dictionary, and register `OverlayService` /
-`ToastService` as singletons behind `IOverlayService` / `IToastService`.
+navigator's resolver instead of the dictionary, and register `Overlayer` /
+`ToastService` as singletons behind `IOverlayer` / `IToastService`.
 
 ## 5. ShellWindow.xaml(.cs)
 
@@ -201,10 +200,10 @@ namespace MyApp.ViewModels;
 
 public partial class HomeViewModel : ObservableObject
 {
-    private readonly IOverlayService _overlays;
+    private readonly IOverlayer _overlays;
     private readonly IToastService _toasts;
 
-    public HomeViewModel(IOverlayService overlays, IToastService toasts)
+    public HomeViewModel(IOverlayer overlays, IToastService toasts)
     {
         _overlays = overlays;
         _toasts = toasts;

@@ -88,6 +88,8 @@ public class VirtualFile : ObservableObject, IExplorerNode
 // A source hands its own nodes over along with the ones it reads.
 public class VirtualFilesSource : FileSystemSource
 {
+    public VirtualFilesSource(string rootDirectoryPath, IToastService? toasts) : base(rootDirectoryPath, toasts) { }
+
     protected override void LoadDirectory(IExplorerDirectory directory, int depth)
     {
         base.LoadDirectory(directory, depth);
@@ -101,8 +103,8 @@ public class VirtualFilesSource : FileSystemSource
 
 The context menu of a node type is a `DataTemplate` keyed with
 `ContextMenuTemplateKey`. Its data context is an `ExplorerMenuContext`: `Source` for
-the commands, `Node` for the node the menu was opened on, `Nodes` for the whole
-selection.
+the commands, `BeginRenameCommand` to rename the node in the control the menu was opened
+in, `Node` for the node the menu was opened on, `Nodes` for the whole selection.
 
 ```xml
 <fileExplorer:Explorer Source="{Binding VirtualSource}">
@@ -167,5 +169,6 @@ dropped or pasted into it, and the commands the menus and the shortcuts bind
 `CopyPathCommand`, `OpenWithDefaultCommand`).
 
 The nodes it hands over are `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and
-the `Parent` directory, `IExplorerDirectory` adding its `Children` and `IExplorerFile`
-a `Size`.
+the `Parent` directory, `IExplorerDirectory` adding its `Children` and its
+`DirectoryTree` (itself and its ancestors, from the root, which the breadcrumb shows),
+and `IExplorerFile` a `Size`.

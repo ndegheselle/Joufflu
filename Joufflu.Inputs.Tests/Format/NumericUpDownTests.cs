@@ -92,6 +92,19 @@ public class NumericUpDownTests
     }
 
     [Test]
+    public void A_group_written_in_xaml_replaces_the_default_one()
+    {
+        const string xaml = "<NumericUpDown xmlns=\"clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs\""
+            + " xmlns:format=\"clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs\">"
+            + "<format:IntegerGroup StringFormat=\"00\" />"
+            + "</NumericUpDown>";
+        var box = (NumericUpDown)XamlReader.Parse(xaml);
+        box.Value = 5;
+
+        Assert.That(box.Text, Is.EqualTo("05"));
+    }
+
+    [Test]
     public void Value_can_be_bound_in_xaml()
     {
         const string xaml = "<NumericUpDown xmlns=\"clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs\""

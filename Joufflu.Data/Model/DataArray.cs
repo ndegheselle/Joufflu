@@ -90,9 +90,9 @@ public partial class DataArray : DataNode, IDataParent
             ManualEntry = ManualEntry,
         };
 
-        // Filled in place: the constructor watches this very collection.
+        // Through Add, as any item: keyed by its index and with a key that can't be edited.
         foreach (DataNode value in Values)
-            clone.Values.Add(value.Clone());
+            clone.Add(value.Clone());
 
         return clone;
     }

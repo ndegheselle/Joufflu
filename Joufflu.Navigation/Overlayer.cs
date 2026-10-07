@@ -101,11 +101,11 @@ public class OverlayInstance : ObservableObject
         Options = options;
         _service = service;
 
-        IgnoreCommand = new RelayCommand(() => _service.Ignore(this));
+        IgnoreCommand = new RelayCommand(() => _service.Ignore(Content));
         ClickAwayCommand = new RelayCommand(() =>
         {
             if (Options.CloseOnClickAway)
-                _service.Ignore(this);
+                _service.Ignore(Content);
         });
     }
 }

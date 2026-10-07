@@ -171,20 +171,9 @@ public class ThemedWindow : Window
 
     private static void OnIconPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (!(d is ThemedWindow sourceWindow))
-            return;
-
-        if (e.NewValue == null)
-            return;
-
-        if (e.NewValue is ImageSource image)
-        {
-            sourceWindow.IconSource = image;
-            return;
-        }
-
-        string? newIcon = e.NewValue.ToString();
-        sourceWindow.IconSource = String.IsNullOrEmpty(newIcon) ? null : new BitmapImage(new Uri(newIcon));
+        var window = (ThemedWindow)d;
+        // Cleared, the window goes back to the application icon it shows when Icon is never set.
+        window.IconSource = (ImageSource?)e.NewValue ?? _applicationIcon.Value;
     }
 
     // The application icon never changes, extract it once and share it across windows.

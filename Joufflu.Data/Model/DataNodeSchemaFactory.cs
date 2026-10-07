@@ -149,6 +149,10 @@ public static class DataFactory
 
     private static void Load(DataNode node, JToken? token, IReadOnlyList<DataManualValue> manualValues)
     {
+        // Loading again starts from scratch: what an earlier load forced may not be forced by this one.
+        node.IsManual = false;
+        node.ManualEntry = null;
+
         switch (node)
         {
             case DataValue value:

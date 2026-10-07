@@ -10,9 +10,7 @@ namespace Joufflu.Inputs.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(NumericUpDown), new FrameworkPropertyMetadata(typeof(NumericUpDown)));
         }
 
-        public NumericUpDown()
-        {
-            Parts.Add(new IntegerGroup { IsNullable = true, SelectsWhole = false });
-        }
+        protected override IReadOnlyList<FormatPart> DefaultParts { get; } =
+            [new IntegerGroup { IsNullable = true, SelectsWhole = false }];
     }
 }

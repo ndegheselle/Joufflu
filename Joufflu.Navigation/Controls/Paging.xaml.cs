@@ -72,19 +72,26 @@ namespace Joufflu.Navigation.Controls
         public List<int> AvailableCapacities { get; set; } = new List<int>() { 5, 10, 25, 50, 100, 200 };
         public ObservableCollection<PagingSelectionItem> AvailablePages { get; set; } = [];
 
+        /// <summary>
+        /// Whether the size of the set is known : a negative <see cref="Total"/> leaves it unknown, while 0 is an
+        /// empty set.
+        /// </summary>
+        public bool IsTotalKnown => Total >= 0;
+
         public int PageMax
         {
             get
             {
-                // If there is no total we set the max page to the current
-                if (Total <= 0)
+                // An unknown total has no last page : one past the current one keeps Next available.
+                if (!IsTotalKnown)
                     return PageNumber + 1;
                 int max = (int)Math.Ceiling(Total / (double)Capacity);
                 return Math.Max(1, max);
             }
         }
 
-        public int IntervalMin { get { return Capacity * (PageNumber - 1) + 1; } }
+        // An empty set shows "0-0 of 0" rather than starting at its first item.
+        public int IntervalMin => Total == 0 ? 0 : Capacity * (PageNumber - 1) + 1;
 
         public int IntervalMax
         {
@@ -107,6 +114,7 @@ namespace Joufflu.Navigation.Controls
         {
             CoerceValue(PageNumberProperty);
             UpdateAvailablesPages();
+            NotifyPropertyChanged(nameof(IsTotalKnown));
             NotifyPropertyChanged(nameof(PageMax));
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
@@ -115,7 +123,7 @@ namespace Joufflu.Navigation.Controls
 
         private int CoercePageNumber(int value)
         {
-            if (Total <= 0)
+            if (!IsTotalKnown)
                 return Math.Max(1, value);
             return Math.Clamp((int)value, 1, PageMax);
         }
@@ -182,7 +190,12 @@ namespace Joufflu.Navigation.Controls
         [RelayCommand()]
         private void GotTo(int pageNumber)
         {
-            PageNumber = pageNumber;
+            // A click toggles the page button off ; on the current page nothing changes, so the buttons are built
+            // again to show it checked.
+            if (pageNumber == PageNumber)
+                UpdateAvailablesPages();
+            else
+                PageNumber = pageNumber;
         }
 
         [RelayCommand(CanExecute = nameof(CanGoBack))]

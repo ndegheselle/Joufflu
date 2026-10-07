@@ -22,8 +22,8 @@ public class VirtualFile : ObservableObject, IExplorerNode
     public DateTime ModifiedAt { get; }
 
     /// <summary>
-    /// Directory the virtual file belongs to. Settable : a directory is read again into new instances whenever its
-    /// parent is reloaded, and the virtual file outlives that reload.
+    /// Directory the virtual file belongs to. Settable : a directory changed on the disk is read again into a new
+    /// instance, and the virtual file outlives it.
     /// </summary>
     public IExplorerDirectory? Parent { get; set; }
 

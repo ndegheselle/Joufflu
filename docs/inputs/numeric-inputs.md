@@ -8,8 +8,8 @@ nav_order: 1
 
 ## NumericUpDown
 
-Selects a whole number. Built on `FormatTextBox` with the numeric format, plus
-clear and increment/decrement buttons.
+Selects a whole number (`long?`). Built on `FormatTextBox` with a single
+`IntegerGroup`, plus clear and increment/decrement buttons.
 
 ```xml
 <inputs:NumericUpDown Value="{Binding NumericValue, Mode=TwoWay}" />
@@ -17,7 +17,7 @@ clear and increment/decrement buttons.
 
 ## DecimalUpDown
 
-Selects a double / decimal value using the decimal format.
+Selects a `decimal?` value, through a single `DecimalGroup`.
 
 ```xml
 <inputs:DecimalUpDown Value="{Binding DecimalValue, Mode=TwoWay}" />
@@ -29,6 +29,16 @@ Selects a `TimeSpan` through a days/hours/minutes/seconds format.
 
 ```xml
 <inputs:TimeSpanPicker Value="{Binding Duration, Mode=TwoWay}" />
+```
+
+To bound or format the number of a `NumericUpDown` or a `DecimalUpDown`, write its
+group yourself: a group given as content replaces the default one (which is
+nullable and keeps its own caret, so set those back when you want them).
+
+```xml
+<inputs:NumericUpDown Value="{Binding Quantity, Mode=TwoWay}">
+    <format:IntegerGroup Min="0" Max="99" IsNullable="True" SelectsWhole="False" />
+</inputs:NumericUpDown>
 ```
 
 ## FormatTextBox

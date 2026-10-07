@@ -29,7 +29,7 @@ public static class Tooltip
     public static object? GetContent(DependencyObject obj) => obj.GetValue(ContentProperty);
     public static void SetContent(DependencyObject obj, object? value) => obj.SetValue(ContentProperty, value);
 
-    /// <summary>Side of the element the tooltip is placed on (defaults to <see cref="TooltipPlacement.Top"/>).</summary>
+    /// <summary>Side of the element the tooltip is placed on (defaults to <see cref="TooltipPlacement.Bottom"/>).</summary>
     public static readonly DependencyProperty PlacementProperty =
         DependencyProperty.RegisterAttached(
             "Placement",

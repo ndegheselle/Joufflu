@@ -31,8 +31,8 @@ fade-in keep working, but unlike the native tooltip it appears with no delay.
 
 ## Tooltip.Placement
 
-`Tooltip.Placement` chooses which side the tooltip sits on — `Top` (default),
-`Bottom`, `Left` or `Right`. It is centered on the shared edge, kept a small gap
+`Tooltip.Placement` chooses which side the tooltip sits on — `Top`, `Bottom`
+(default), `Left` or `Right`. It is centered on the shared edge, kept a small gap
 clear of the element, and still flips automatically when it would run off a screen
 edge.
 

@@ -165,6 +165,9 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     /// <param name="container">Item container displaying <paramref name="node"/>.</param>
     protected virtual bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
     {
+        if (Source == null)
+            return false;
+
         Source.Open(node);
         return true;
     }
@@ -281,7 +284,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
 
         // An already handled key has been acted on by the host (the navigation keys of a list for instance), and the
         // keys typed in a name being edited belong to that edition.
-        if (e.Handled || IsInRenameBox(e.OriginalSource))
+        if (e.Handled || Source == null || IsInRenameBox(e.OriginalSource))
             return;
 
         // Paste goes to the current directory, whatever is selected
@@ -356,7 +359,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         else
         {
             // Outside of any node : the menu of the opened folder itself.
-            target = Source.Current;
+            target = Source?.Current;
             nodes = target == null ? [] : [target];
             scope = MenuScope.None;
         }
@@ -435,7 +438,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     [RelayCommand(CanExecute = nameof(CanDropFiles))]
     private void DropFiles(DropData data)
     {
-        if (!TryGetDrop(data, out IExplorerDirectory? target, out IReadOnlyList<string> files))
+        if (Source == null || !TryGetDrop(data, out IExplorerDirectory? target, out IReadOnlyList<string> files))
             return;
 
         Source.Transfer(files, target, isMove: false);
@@ -447,7 +450,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     /// Directory a drop would land in : the one under the pointer, or the opened one anywhere else.
     /// </summary>
     private IExplorerDirectory? GetDropTarget(DropData data)
-        => (data.Target.InputHitTest(data.Position) as FrameworkElement)?.DataContext as IExplorerDirectory ?? Source.Current;
+        => (data.Target.InputHitTest(data.Position) as FrameworkElement)?.DataContext as IExplorerDirectory ?? Source?.Current;
 
     /// <summary>
     /// Target and dropped paths of a drag, false when it has nothing to transfer : the paths already in the target

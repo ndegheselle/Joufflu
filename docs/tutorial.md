@@ -32,7 +32,7 @@ Three services drive everything, shared between the shell window and the pages:
 | Service | Role |
 |---|---|
 | `Navigator` | Holds the current page (a view model) and switches between pages. Built with a resolver turning a page type into the page instance. |
-| `OverlayService` | Shows modal overlays on top of the current page. |
+| `Overlayer` | Shows modal overlays on top of the current page. |
 | `ToastService` | Shows stacking, auto-dismissing notifications. |
 
 Navigation is **view-model-first**: navigate to a *view model* and WPF resolves
@@ -50,7 +50,7 @@ Step 4.
 
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.Feedback.Controls;
+using Joufflu.Feedback;
 using Joufflu.Navigation;
 
 public class ShellViewModel : ObservableObject
@@ -58,7 +58,7 @@ public class ShellViewModel : ObservableObject
     // Shared with the shell window's page container, NavigationMenu and the
     // overlay/toast containers, and injected into the pages that need them.
     public Navigator Navigator { get; }
-    public OverlayService Overlays { get; } = new();
+    public Overlayer Overlays { get; } = new();
     public ToastService Toasts { get; } = new();
 
     // Pages keyed by their own type, which is what the menu's NavigationItems
@@ -184,17 +184,18 @@ services to open overlays and raise toasts:
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Joufflu.Feedback;
 using Joufflu.Navigation;
 
 public class HomeViewModel : ObservableObject
 {
-    private readonly IOverlayService _overlays;
+    private readonly IOverlayer _overlays;
     private readonly IToastService _toasts;
 
     public IRelayCommand SayHelloCommand { get; }
     public IAsyncRelayCommand DeleteCommand { get; }
 
-    public HomeViewModel(IOverlayService overlays, IToastService toasts)
+    public HomeViewModel(IOverlayer overlays, IToastService toasts)
     {
         _overlays = overlays;
         _toasts = toasts;
@@ -263,28 +264,29 @@ private void SayHello() => _toasts.Success("Hello!", "Greetings");
 
 ### A modal overlay, then a toast with the result
 
-`OverlayService.Show` returns a `Task<bool?>` that completes when the overlay
-closes: `true`/`false` from the action buttons, `null` when dismissed. The
-overlay content owns its buttons and closes itself through the service.
+`Overlayer.ShowAsync` returns a `Task<bool?>` that completes when the overlay
+closes: `true` when the content validates it, `false` when it cancels it, `null`
+when the user dismisses it with the close cross. The overlay content owns its
+buttons and closes itself through the overlayer.
 
 Overlay content view model:
 
 ```csharp
 public class DeleteConfirmViewModel : ObservableObject
 {
-    private readonly IOverlayService _overlays;
+    private readonly IOverlayer _overlays;
 
     public string Message { get; }
     public IRelayCommand CancelCommand { get; }
     public IRelayCommand DeleteCommand { get; }
 
-    public DeleteConfirmViewModel(IOverlayService overlays, string message)
+    public DeleteConfirmViewModel(IOverlayer overlays, string message)
     {
         _overlays = overlays;
         Message = message;
-        // CloseTop passes the result back to the awaiting Show() call.
-        CancelCommand = new RelayCommand(() => _overlays.CloseTop(false));
-        DeleteCommand = new RelayCommand(() => _overlays.CloseTop(true));
+        // Cancel and Validate close this overlay and hand false / true to the awaiting ShowAsync.
+        CancelCommand = new RelayCommand(() => _overlays.Cancel(this));
+        DeleteCommand = new RelayCommand(() => _overlays.Validate(this));
     }
 }
 ```
@@ -316,7 +318,7 @@ private async Task DeleteAsync()
     var content = new DeleteConfirmViewModel(_overlays, "Delete this item? This can't be undone.");
     var options = new OverlayOptions { Title = "Please confirm", CloseOnClickAway = false };
 
-    bool? result = await _overlays.Show(content, options);
+    bool? result = await _overlays.ShowAsync(content, options);
 
     if (result == true)
         _toasts.Success("Item deleted.", "Confirmed");
@@ -326,7 +328,7 @@ private async Task DeleteAsync()
 ```
 
 The full loop: the menu navigates the `Navigator`, the page opens a modal through
-the shared `OverlayService`, awaits its result, and confirms with the shared
+the shared `Overlayer`, awaits its result, and confirms with the shared
 `ToastService`.
 
 {: .note }

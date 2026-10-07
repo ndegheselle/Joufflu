@@ -18,7 +18,7 @@ separator when there are more than seven of them.
 
 | Property | Type | Default | Purpose |
 |---|---|---|---|
-| `Total` | `int` | `-1` | Number of items in the whole set. `-1` hides the range label and leaves the page count unbounded. |
+| `Total` | `int` | `-1` | Number of items in the whole set. A negative value (the `-1` default) leaves it unknown: the range label is hidden and the page count unbounded. `0` is an empty set. |
 | `PageNumber` | `int` | `1` | Current page, 1-based. Clamped between `1` and the last page. |
 | `Capacity` | `int` | `10` | Items per page, picked from `AvailableCapacities` (`5, 10, 25, 50, 100, 200` by default). |
 | `PageMax` | `int` (read-only) | — | Last page, derived from `Total` and `Capacity`. |

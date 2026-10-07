@@ -124,17 +124,47 @@ namespace Joufflu.FileExplorer.FileSystem
         /// </summary>
         protected virtual void LoadDirectory(IExplorerDirectory directory, int depth)
         {
-            directory.Children.Clear();
-            var dirInfo = new DirectoryInfo(directory.Path);
-            foreach (var entry in dirInfo.EnumerateFileSystemInfos())
+            // Read before touching the children : a directory that can't be read keeps the nodes it showed.
+            List<FileSystemInfo> entries = [.. new DirectoryInfo(directory.Path).EnumerateFileSystemInfos()];
+
+            // The nodes still on the disk are kept rather than replaced, so a reload leaves the tree expanded below
+            // them and the selection of a list where it was.
+            var shown = new Dictionary<string, IExplorerNode>(StringComparer.OrdinalIgnoreCase);
+            foreach (IExplorerNode node in directory.Children)
+                shown.TryAdd(node.Path, node);
+
+            List<IExplorerNode> read = [];
+            foreach (FileSystemInfo entry in entries)
             {
-                IExplorerNode node = CreateNode(entry, directory);
-                directory.Children.Add(node);
+                IExplorerNode node = shown.TryGetValue(entry.FullName, out IExplorerNode? shownNode) && IsUnchanged(shownNode, entry)
+                    ? shownNode
+                    : CreateNode(entry, directory);
+                read.Add(node);
 
                 if (depth > 0 && node is IExplorerDirectory subDirectory)
                     TryLoadDirectory(subDirectory, depth - 1);
             }
+
+            List<IExplorerNode> removed = [.. directory.Children.Except(read)];
+            List<IExplorerNode> added = [.. read.Except(directory.Children)];
+            foreach (IExplorerNode node in removed)
+                directory.Children.Remove(node);
+            foreach (IExplorerNode node in added)
+                directory.Children.Add(node);
         }
+
+        /// <summary>
+        /// Whether a node still shows an entry as it is on the disk. A file written meanwhile is read again for its
+        /// size and date, and a name changed in case only is read again for its name, which the path lookup ignores.
+        /// </summary>
+        private static bool IsUnchanged(IExplorerNode node, FileSystemInfo entry) => (node, entry) switch
+        {
+            (IExplorerDirectory, DirectoryInfo) => node.Name == entry.Name,
+            (IExplorerFile file, FileInfo info) => file.Name == info.Name
+                && file.ModifiedAt == info.LastWriteTime
+                && file.Size == info.Length,
+            _ => false,
+        };
 
         /// <summary>
         /// <see cref="LoadDirectory"/> that doesn't throw on a directory it can't read (access denied, deleted
@@ -193,16 +223,20 @@ namespace Joufflu.FileExplorer.FileSystem
         /// one is pasted as a move in the other.
         /// </remarks>
         [RelayCommand(CanExecute = nameof(CanPaste))]
-        public async Task Paste(IExplorerDirectory target)
+        public async Task Paste(IExplorerDirectory? target)
         {
+            IExplorerDirectory? directory = target ?? Current;
+            if (directory == null)
+                return;
+
             IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out bool isMove);
             if (paths.Count == 0)
                 return;
 
-            await Transfer(paths, target, isMove);
+            await Transfer(paths, directory, isMove);
         }
 
-        public bool CanPaste(IExplorerDirectory target)
+        public bool CanPaste(IExplorerDirectory? target)
         {
             IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out bool isMove);
             return paths.Count > 0;

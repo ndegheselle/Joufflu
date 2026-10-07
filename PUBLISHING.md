@@ -1,6 +1,7 @@
 # Update the documentation
 
-Simply push on the `docs` branch.
+GitHub Pages serves the `docs/` folder of the `docs` branch. To publish, merge `main`
+into `docs` (a pull request from `main` to `docs`) and push.
 
 # Publishing to NuGet.org
 
@@ -75,9 +76,8 @@ published package version (passed via `-p:Version`). Keep them in sync.
 
 - **Release order for the dependents.** `Joufflu.Data`, `Joufflu.Feedback`,
   `Joufflu.FileExplorer`, `Joufflu.Inputs` and `Joufflu.Navigation` depend on `Joufflu` at the
-  `<Version>` in `Joufflu/Joufflu.csproj` at build time (not their own tag); `Joufflu.Navigation`
-  and `Joufflu.FileExplorer` additionally depend on `Joufflu.Feedback`, and `Joufflu.Data` on
-  `Joufflu.Inputs`. When bumping the whole family, release `Joufflu` first, then
+  `<Version>` in `Joufflu/Joufflu.csproj` at build time (not their own tag); `Joufflu.FileExplorer`
+  additionally depends on `Joufflu.Feedback`, and `Joufflu.Data` on `Joufflu.Inputs`. When bumping the whole family, release `Joufflu` first, then
   `Joufflu.Feedback` and `Joufflu.Inputs`, so those versions exist on nuget.org before the
   packages that depend on them.
 - **Push at most three tags at a time.** GitHub dispatches no `push` event when more than

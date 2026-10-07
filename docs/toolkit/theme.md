@@ -120,6 +120,10 @@ with the theme-name strings too):
 
 ```xml
 xmlns:themes="clr-namespace:Joufflu.Themes;assembly=Joufflu"
+xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
+
+<!-- In the resources of the window or the app -->
+<conv:EnumMatchToBooleanConverter x:Key="EnumMatch" />
 
 <RadioButton Content="System"
     IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance},

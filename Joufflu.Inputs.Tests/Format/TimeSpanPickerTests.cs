@@ -66,6 +66,17 @@ public class TimeSpanPickerTests
     }
 
     [Test]
+    public void Tab_moves_between_groups_then_leaves_the_box_after_the_last()
+    {
+        const int Seconds = 13;
+        _host.Click(Minutes);
+
+        Assert.That(_host.Press(Key.Tab), Is.True);
+        Assert.That(Box.SelectionStart, Is.EqualTo(Seconds));
+        Assert.That(_host.Press(Key.Tab), Is.False);
+    }
+
+    [Test]
     public void Clearing_one_group_keeps_the_others()
     {
         Box.Value = new TimeSpan(1, 2, 3, 4);

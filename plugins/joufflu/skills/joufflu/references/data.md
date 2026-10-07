@@ -59,8 +59,9 @@ Nullable values start at `null`, others at `""`, `0`, `false`, today, `TimeSpan.
 the first option. Object keys are unique and case-sensitive (errors on `Key` through
 `INotifyDataErrorInfo`); array items are keyed `[0]`, `[1]`…
 
-API: `DataObject.Add` / `Remove` / `UniqueKey`, `DataArray.Add()` / `Add(EnumDataType)` /
-`Add(DataNode)` / `Remove`, `DataValue.AddOption(string)` / `RemoveOption`, `DataNode.Clone()`.
+API: `DataObject.Add` / `Remove` / `UniqueKey`, `DataArray.AddFromTemplate()` / `Add(DataNode)` /
+`Remove`, `DataNode.Create(type, key)` for an empty node of a type, `DataValue.AddOption(string)` /
+`RemoveOption`, `DataNode.Clone()`.
 `DataNode.Changed` is raised when the node or anything under it changes (not on expand).
 
 ## From JSON

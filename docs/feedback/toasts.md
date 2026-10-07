@@ -48,7 +48,7 @@ gallery's **Toasts** page does exactly that.
 
 ## Showing a toast
 
-Show them from an injected `IToastService` (in `Joufflu.Feedback.Controls`):
+Show them from an injected `IToastService` (in `Joufflu.Feedback`):
 
 ```csharp
 toasts.Info("A neutral message.", "Heads up");

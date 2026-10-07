@@ -52,7 +52,11 @@ internal sealed class FormatInputHost<TBox> : IDisposable where TBox : FormatTex
         }
     }
 
-    public void Press(Key key)
+    /// <summary>
+    /// Press [key], returning whether the box handled it: a key it leaves goes on to WPF, Tab
+    /// moving the focus to the next control for instance.
+    /// </summary>
+    public bool Press(Key key)
     {
         PresentationSource source = PresentationSource.FromVisual(_window);
         var args = new KeyEventArgs(Keyboard.PrimaryDevice, source, 0, key)
@@ -60,6 +64,7 @@ internal sealed class FormatInputHost<TBox> : IDisposable where TBox : FormatTex
             RoutedEvent = Keyboard.PreviewKeyDownEvent,
         };
         Box.RaiseEvent(args);
+        return args.Handled;
     }
 
     /// <summary>

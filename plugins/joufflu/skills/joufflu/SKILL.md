@@ -5,7 +5,7 @@ description: >-
   core styles and theming (`Joufflu`), inputs (`Joufflu.Inputs`: NumericUpDown,
   DecimalUpDown, TimeSpanPicker, FormatTextBox, Search, ComboBoxSearch,
   ComboBoxTags, TextEditable, FilePicker, ColorPicker, Dropdown), navigation
-  (`Joufflu.Navigation`: NavigationMenu, Navigator, OverlayService/overlays,
+  (`Joufflu.Navigation`: NavigationMenu, Navigator, Overlayer/overlays,
   Paging, FullContainer), feedback (`Joufflu.Feedback`: Badge, Spinner, toasts),
   the file explorer (`Joufflu.FileExplorer`), JSON data trees (`Joufflu.Data`:
   DataFill, DataEdit, DataDisplay, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
@@ -117,8 +117,7 @@ C# namespaces (these are the real ones; some doc snippets are off):
 | Type | Namespace |
 |---|---|
 | `ThemeManager` | `Joufflu.Themes` |
-| `Navigator`, `IOverlayService`, `OverlayOptions`, `OverlayViewModel`, `EnumConfirmationType`, `INavigator` | `Joufflu.Navigation` |
-| `OverlayService` | `Joufflu.Navigation.Controls` |
+| `Navigator`, `INavigator`, `IPage`, `Overlayer`, `IOverlayer`, `OverlayOptions`, `IOverlayContent`, `EnumConfirmationType` | `Joufflu.Navigation` |
 | `ToastService`, `IToastService`, `ToastOptions`, `ToastType` | `Joufflu.Feedback` |
 | `ToastContainer`, `ToastPosition`, `Badge`, `BadgeVariant`, `Spinner` | `Joufflu.Feedback.Controls` |
 | `IExplorerSource`, `IExplorerNode`, `IExplorerDirectory`, `IExplorerFile` | `Joufflu.FileExplorer.Nodes` |
@@ -142,7 +141,7 @@ C# namespaces (these are the real ones; some doc snippets are off):
   `InfoButton`, `WarningButton`, `DangerButton`, plus `Soft*` and `Outline*` variants.
 - **Icons**: `<fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />`.
 - **Tooltips**: `toolkit:Tooltip.Content="…"` (instant, themed) rather than `ToolTip`.
-- **Modals / notifications**: `IOverlayService` and `IToastService`, not `MessageBox`
+- **Modals / notifications**: `IOverlayer` and `IToastService`, not `MessageBox`
   or a new `Window`.
 - **Drag and drop**: `toolkit:DropTarget.Command` / `toolkit:DragSource.Data`, not
   hand-written `Drop` / `MouseMove` handlers.
