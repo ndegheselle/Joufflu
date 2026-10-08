@@ -64,7 +64,7 @@
             <!--  Row of an object or an array: forced, the entry stands for its children, which are left out.  -->
             <DataTemplate x:Key="DataParentRow">
                 <Grid
-                    Margin="0,0,4,0"
+                    Margin="0,0,2,0"
                     VerticalAlignment="Center"
                     toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
@@ -122,7 +122,7 @@
             </HierarchicalDataTemplate>
             <DataTemplate DataType="{x:Type jodels:DataValue}">
                 <Grid
-                    Margin="0,0,4,0"
+                    Margin="0,0,2,0"
                     VerticalAlignment="Center"
                     toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
