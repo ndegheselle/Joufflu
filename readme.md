@@ -20,7 +20,7 @@ live between Light and Dark — no restart, no flicker.
 ## Highlights
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
+- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys. Change a token and every control follows; the gallery's **Customize theme** page edits them live, offers presets and generates the dictionary to merge.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
@@ -33,7 +33,8 @@ live between Light and Dark — no restart, no flicker.
 🤖 **For LLM agents:** a machine-readable [`llms.txt`](https://llmstxt.org/) index of the
 docs is available at
 <https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt> — it links every
-page's raw Markdown source. (Prefer this raw URL over the rendered site, which can return
+page's raw Markdown source — and [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
+holds all of those pages in a single file. (Prefer this raw URL over the rendered site, which can return
 `403` to automated fetchers.)
 
 🧩 **For Claude Code:** this repository is also a plugin marketplace. The `joufflu` plugin
@@ -44,6 +45,29 @@ existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
 /plugin marketplace add ndegheselle/Joufflu
 /plugin install joufflu@joufflu
 ```
+
+### Tell your agent to use it
+
+An LLM only reaches for a library it knows about. For a project where an agent writes
+your WPF UI, paste this into its `AGENTS.md` / `CLAUDE.md` (or your Cursor / Copilot
+rules file):
+
+```md
+## UI
+This WPF app uses the Joufflu component library (NuGet: Joufflu, Joufflu.Inputs,
+Joufflu.Navigation, Joufflu.Feedback, Joufflu.FileExplorer, Joufflu.Data).
+Before writing XAML, read https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt
+(everything in one file: .../docs/llms-full.txt). Reuse Joufflu controls and named styles
+(PrimaryButton, Card, H1...), Spacing.Gap and Sizing.Size instead of hand-written
+templates, and never hardcode colours: use joufflu:Brushes / joufflu:Dimensions through
+DynamicResource so the Light/Dark theme keeps working. To customize the look (brand
+colours, radius, density), override the joufflu:Colors / joufflu:Dimensions tokens in a
+dictionary merged after Joufflu, or register a theme with ThemeManager.Register; do not
+restyle controls one by one.
+```
+
+Not sure which WPF UI library fits? See [Joufflu vs other WPF UI libraries](https://ndegheselle.github.io/Joufflu/comparison.html)
+and the copy-paste [recipes](https://ndegheselle.github.io/Joufflu/recipes.html).
 
 ## What's inside
 

@@ -9,6 +9,9 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 - [Overview and getting started](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/index.md): what the library is, package layout, and the four-step setup (add packages, merge `Resources.xaml`, initialize `ThemeManager`).
 - [Tutorial: a navigable app shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/tutorial.md): builds an MVVM app on `Joufflu.Navigation` — shared shell view model, view-model-first navigation, an example page, a modal overlay and a toast.
 
+- [Recipes](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/recipes.md): copy-paste screens — settings page, brand/custom theme, theme switcher, searchable paged table, delete confirmation, status row, size density.
+- [Joufflu vs other WPF UI libraries](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/comparison.md): when to pick Joufflu, when another library (Material, Fluent, Metro) fits better, and how to mix.
+
 ## Native controls
 
 - [Buttons](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/buttons.md): default button plus named styles — solid, soft and outline variants, icon (`IsSquare`) buttons, and `Sizing.Size`.
@@ -70,6 +73,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 
 ## Optional
 
+- [Everything in one file](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt): every page above concatenated, for agents that prefer a single fetch.
 - [Documentation site](https://ndegheselle.github.io/Joufflu/): the rendered docs.
 - [GitHub repository](https://github.com/ndegheselle/Joufflu/): source, samples and issues.
 - [Joufflu on NuGet](https://www.nuget.org/packages/Joufflu): core package (styles, theming & tooltips).

@@ -1,0 +1,3396 @@
+# Joufflu WPF Components - full documentation
+
+> Every documentation page of Joufflu concatenated in one file. Index with one-line summaries: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/index.md -->
+
+# Joufflu WPF Components
+
+**A modern WPF component library that makes your desktop apps look good by
+default.**
+
+WPF inputs and reusable components for .NET, built on a design system of themed
+brushes, dimensions and layout helpers. Every control reads its colours through
+`DynamicResource`, so the whole UI re-themes live between Light and Dark — no
+restart, no flicker.
+
+These pages mirror the controls in the **`Joufflu.Samples`** gallery app — same
+titles, descriptions and code snippets. Each control page lists example markup you
+can paste into your views.
+
+{: .note }
+> **Using an LLM agent?** Point it at the machine-readable
+> [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt)
+> index — a single file linking every page's raw Markdown source, or
+> [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
+> for every page in one file. Use those raw URLs rather
+> than the rendered site, which can return `403` to automated fetchers.
+
+## Highlights
+
+- 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
+- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys; the gallery's **Customize theme** page edits them live and generates the dictionary.
+- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
+- 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
+- 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
+- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch.
+- 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
+- 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
+
+{: .note }
+> The gallery's **Natives** group — WPF's built-in controls restyled to match the
+> design system (text boxes, combo boxes, data grid, …) — is mostly undocumented
+> here; only natives with named style variants are (see
+> [Native controls](natives/index.md)). Otherwise these pages cover the
+> custom controls the library adds.
+
+## Sections
+
+| Section | What's inside |
+|---|---|
+| [Native controls](natives/index.md) | Buttons (solid, soft & outline variants), `FontIcon`, the `Card` styles and the typography scale |
+| [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
+| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging`, `FullContainer` |
+| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
+| [Data](data/index.md) | `DataFill`, `DataEdit`, `DataDisplay` (`Joufflu.Data`) |
+| [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, the design tokens, theme customization, application shell, building a custom input |
+
+## Getting started
+
+1. Add the packages you need. `Joufflu` is the core (styles & theming);
+   `Joufflu.Data`, `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Inputs` and
+   `Joufflu.Navigation` are optional and all build on it:
+
+   ```sh
+   dotnet add package Joufflu
+   dotnet add package Joufflu.Data          # optional: JSON data trees (needs Joufflu.Inputs)
+   dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts
+   dotnet add package Joufflu.FileExplorer  # optional: file explorer (needs Joufflu.Feedback)
+   dotnet add package Joufflu.Inputs        # optional: input controls
+   dotnet add package Joufflu.Navigation    # optional: navigation & overlays
+   ```
+
+2. Merge the control styles in `App.xaml` so the themed styles and the
+   design-system keys (`joufflu:Brushes`, `joufflu:Dimensions`,
+   `toolkit:Spacing`, `toolkit:Sizing`) are available:
+
+   ```xml
+   <Application.Resources>
+       <ResourceDictionary>
+           <ResourceDictionary.MergedDictionaries>
+               <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
+           </ResourceDictionary.MergedDictionaries>
+       </ResourceDictionary>
+   </Application.Resources>
+   ```
+
+3. Initialize the theme manager once at startup, before the first window shows:
+
+   ```csharp
+   // App.xaml.cs — OnStartup
+   ThemeManager.Instance.Initialize();
+   ```
+
+4. Use the controls as shown in the pages above.
+
+New to the library? The [Tutorial](tutorial.md) builds a full
+navigable app shell — side menu, pages, modals and toasts — from scratch, and the
+[Recipes](recipes.md) give copy-paste screens. Choosing between UI libraries? See
+[Joufflu vs other WPF UI libraries](comparison.md).
+
+To explore everything interactively, run the **`Joufflu.Samples`** project.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/tutorial.md -->
+
+# Tutorial: a navigable app shell
+
+Builds a small MVVM app on `Joufflu.Navigation`: a collapsible side menu that
+switches pages, a shared shell view model owning the navigation services, an
+example page, and a modal overlay plus a toast raised from it. The result
+matches the wiring the **`Joufflu.Samples`** gallery uses.
+
+{: .note }
+> Assumes the packages are installed and `App.xaml` merges the Joufflu resource
+> dictionaries, with `ThemeManager.Instance.Initialize()` called at startup. See
+> [Getting started](index.md#getting-started) first if not.
+
+The snippets use these namespaces:
+
+```xml
+xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+```
+
+## How it fits together
+
+Three services drive everything, shared between the shell window and the pages:
+
+| Service | Role |
+|---|---|
+| `Navigator` | Holds the current page (a view model) and switches between pages. Built with a resolver turning a page type into the page instance. |
+| `Overlayer` | Shows modal overlays on top of the current page. |
+| `ToastService` | Shows stacking, auto-dismissing notifications. |
+
+Navigation is **view-model-first**: navigate to a *view model* and WPF resolves
+the matching *view* through an implicit `DataTemplate`. A plain `ContentControl`
+bound to `Navigator.CurrentPage` renders the current page; `NavigationMenu` drives
+the same `Navigator` from the side; `OverlayContainer` and `ToastContainer` wrap
+the whole app and host the overlay and toast stacks above it.
+
+## Step 1 — The shared shell view model
+
+The shell view model owns the three services so the window and every page share
+the same instances. It also keeps a registry of pages keyed by their own type,
+which is what the menu items target. It starts empty; the first page is added in
+Step 4.
+
+```csharp
+using CommunityToolkit.Mvvm.ComponentModel;
+using Joufflu.Feedback;
+using Joufflu.Navigation;
+
+public class ShellViewModel : ObservableObject
+{
+    // Shared with the shell window's page container, NavigationMenu and the
+    // overlay/toast containers, and injected into the pages that need them.
+    public Navigator Navigator { get; }
+    public Overlayer Overlays { get; } = new();
+    public ToastService Toasts { get; } = new();
+
+    // Pages keyed by their own type, which is what the menu's NavigationItems
+    // target. Filled in as we add pages (Step 4).
+    private readonly Dictionary<Type, object> _pages = new();
+
+    public ShellViewModel()
+    {
+        // The navigator turns an item's target type into the page to display.
+        Navigator = new Navigator(target => _pages.GetValueOrDefault(target));
+    }
+}
+```
+
+## Step 2 — Map view models to views
+
+An implicit `DataTemplate` (a `DataType` with no `x:Key`) maps each view model to
+its view. Add one per page, typically in `App.xaml`. The `HomeViewModel` /
+`HomeView` pair comes in Step 4; here is the mapping it needs:
+
+```xml
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <!-- Joufflu resource dictionaries merged here (see Getting started) -->
+        </ResourceDictionary.MergedDictionaries>
+
+        <!-- One DataTemplate per page: the view model resolves to its view. -->
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:HomeView />
+        </DataTemplate>
+    </ResourceDictionary>
+</Application.Resources>
+```
+
+The same mechanism resolves overlay content — add a `DataTemplate` for every
+overlay view model too (Step 5).
+
+## Step 3 — The shell window
+
+A `ThemedWindow` whose content is a `ToastContainer` around an `OverlayContainer`,
+wrapping the side `NavigationMenu` and the page `ContentControl`. Bind everything to
+the shell view model's services so they stay in sync: selecting a menu item navigates
+the page, and the overlays/toasts use the shared services.
+
+Wrapping the *whole* app rather than the page area only is what lets a full screen
+overlay cover the entire window, side menu included. Toasts wrap the overlays in
+turn, so they stay on top of them.
+
+The `d:DataContext` line gives the XAML designer the runtime view-model type, so
+bindings like `{Binding Navigator}` get IntelliSense and design-time validation.
+No runtime effect.
+
+```xml
+<controls:ThemedWindow
+    x:Class="MyApp.ShellWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+    xmlns:vm="clr-namespace:MyApp.ViewModels"
+    Title="My App"
+    Width="1000"
+    Height="640"
+    d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
+    mc:Ignorable="d">
+    <!-- Each container wraps the app and stacks its own layer above it. -->
+    <feedback:ToastContainer Toasts="{Binding Toasts}">
+        <nav:OverlayContainer Overlays="{Binding Overlays}">
+            <DockPanel>
+                <nav:NavigationMenu DockPanel.Dock="Left" Navigator="{Binding Navigator}">
+
+                    <!-- An item targets the type of the page it navigates to. -->
+                    <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+                        </nav:NavigationItem.Icon>
+                        Home
+                    </nav:NavigationItem>
+                </nav:NavigationMenu>
+
+                <!-- Renders the current page, resolved by its implicit DataTemplate. -->
+                <ContentControl Content="{Binding Navigator.CurrentPage}" />
+            </DockPanel>
+        </nav:OverlayContainer>
+    </feedback:ToastContainer>
+</controls:ThemedWindow>
+```
+
+Create the window in code to pass the shell view model as its `DataContext`,
+e.g. in `App.xaml.cs`:
+
+```csharp
+protected override void OnStartup(StartupEventArgs e)
+{
+    base.OnStartup(e);
+    ThemeManager.Instance.Initialize();
+
+    var shell = new ShellViewModel();
+    new ShellWindow { DataContext = shell }.Show();
+}
+```
+
+{: .note }
+> Remove `StartupUri="MainWindow.xaml"` from `App.xaml`, or WPF opens that window
+> too and you end up with two.
+
+{: .note }
+> Each item's `TargetType` is passed to the navigator's resolver, which returns
+> the page. Add more items with the Step 4 recipe. A `NavigationGroup` expands to
+> reveal children instead of navigating; a `NavigationTitle` is a section label.
+> See [Navigation menu](navigation/navigation-menu.md) for the full
+> markup.
+
+## Step 4 — An example page
+
+A page is a view model plus a matching view. The view model takes the shared
+services to open overlays and raise toasts:
+
+```csharp
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Joufflu.Feedback;
+using Joufflu.Navigation;
+
+public class HomeViewModel : ObservableObject
+{
+    private readonly IOverlayer _overlays;
+    private readonly IToastService _toasts;
+
+    public IRelayCommand SayHelloCommand { get; }
+    public IAsyncRelayCommand DeleteCommand { get; }
+
+    public HomeViewModel(IOverlayer overlays, IToastService toasts)
+    {
+        _overlays = overlays;
+        _toasts = toasts;
+
+        SayHelloCommand = new RelayCommand(SayHello);
+        DeleteCommand = new AsyncRelayCommand(DeleteAsync);
+    }
+
+    // ... commands implemented in Step 5 ...
+}
+```
+
+Its view:
+
+```xml
+<UserControl
+    x:Class="MyApp.Views.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
+    <StackPanel Margin="24" toolkit:Spacing.Gap="12">
+        <TextBlock Style="{StaticResource H1}" Text="Home" />
+        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
+            <Button Command="{Binding SayHelloCommand}" Content="Say hello" />
+            <Button Command="{Binding DeleteCommand}" Content="Delete…"
+                    Style="{StaticResource DangerButton}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>
+```
+
+Register the page in the shell and land on it at startup. In `ShellViewModel`
+(Step 1), the constructor builds the page with the shared services and navigates
+to it:
+
+```csharp
+public ShellViewModel()
+{
+    // Register the page under its own type, which is what its NavigationItem targets.
+    _pages[typeof(HomeViewModel)] = new HomeViewModel(Overlays, Toasts);
+
+    Navigator = new Navigator(target => _pages.GetValueOrDefault(target));
+
+    // Navigate to the default page so the window doesn't start empty.
+    Navigator.Navigate(typeof(HomeViewModel));
+}
+```
+
+The recipe per page, repeated for each:
+
+1. Write its view model and view.
+2. Map them with a `DataTemplate` (Step 2).
+3. Register the view model under its type in `_pages` (above).
+4. Point a `NavigationItem` at that type (Step 3).
+
+## Step 5 — Modals and toasts from the page
+
+### A toast
+
+One call on the shared `ToastService`. Toasts stack in the top-right and
+auto-dismiss:
+
+```csharp
+private void SayHello() => _toasts.Success("Hello!", "Greetings");
+```
+
+### A modal overlay, then a toast with the result
+
+`Overlayer.ShowAsync` returns a `Task<bool?>` that completes when the overlay
+closes: `true` when the content validates it, `false` when it cancels it, `null`
+when the user dismisses it with the close cross. The overlay content owns its
+buttons and closes itself through the overlayer.
+
+Overlay content view model:
+
+```csharp
+public class DeleteConfirmViewModel : ObservableObject
+{
+    private readonly IOverlayer _overlays;
+
+    public string Message { get; }
+    public IRelayCommand CancelCommand { get; }
+    public IRelayCommand DeleteCommand { get; }
+
+    public DeleteConfirmViewModel(IOverlayer overlays, string message)
+    {
+        _overlays = overlays;
+        Message = message;
+        // Cancel and Validate close this overlay and hand false / true to the awaiting ShowAsync.
+        CancelCommand = new RelayCommand(() => _overlays.Cancel(this));
+        DeleteCommand = new RelayCommand(() => _overlays.Validate(this));
+    }
+}
+```
+
+Its view (add a matching `DataTemplate` as in Step 2):
+
+```xml
+<UserControl
+    x:Class="MyApp.Views.DeleteConfirmView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel MinWidth="320">
+        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+        <StackPanel Margin="0,16,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Command="{Binding CancelCommand}" Content="Cancel"
+                    Style="{StaticResource SecondaryButton}" />
+            <Button Margin="8,0,0,0" Command="{Binding DeleteCommand}" Content="Delete"
+                    Style="{StaticResource DangerButton}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>
+```
+
+Open it from the page and react to the result with a toast:
+
+```csharp
+private async Task DeleteAsync()
+{
+    var content = new DeleteConfirmViewModel(_overlays, "Delete this item? This can't be undone.");
+    var options = new OverlayOptions { Title = "Please confirm", CloseOnClickAway = false };
+
+    bool? result = await _overlays.ShowAsync(content, options);
+
+    if (result == true)
+        _toasts.Success("Item deleted.", "Confirmed");
+    else
+        _toasts.Info("Cancelled.");
+}
+```
+
+The full loop: the menu navigates the `Navigator`, the page opens a modal through
+the shared `Overlayer`, awaits its result, and confirms with the shared
+`ToastService`.
+
+{: .note }
+> A plain "are you sure?" needs none of this content: `_overlays.Confirm(message,
+> title)` shows the [standard confirmation overlay](navigation/overlays.md) and
+> returns the same `Task<bool?>`. Write your own content, as above, when the modal
+> shows more than a message.
+
+## Where to go next
+
+- [Navigation menu](navigation/navigation-menu.md) — groups,
+  nesting, the collapsible rail and the menu `Header`.
+- [Overlays](navigation/overlays.md) — overlay options and
+  stacking.
+- [Toasts](feedback/toasts.md) — toast types and sticky
+  toasts.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/recipes.md -->
+
+# Recipes
+
+Complete, copy-paste building blocks for the screens most apps need. They assume the
+packages are installed and `App.xaml` merges the Joufflu resources with
+`ThemeManager.Instance.Initialize()` called at startup (see
+[Getting started](index.md#getting-started)). For a whole app shell, follow the
+[Tutorial](tutorial.md).
+
+Every snippet uses these namespaces:
+
+```xml
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
+xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+```
+
+## A settings page
+
+A `Card` per group of settings, headings from the typography scale, `Spacing.Gap`
+instead of per-element margins, and a toast to confirm the save.
+
+```xml
+<StackPanel Margin="24" toolkit:Spacing.Gap="16">
+    <TextBlock Style="{StaticResource H1}" Text="Settings" />
+
+    <Border Style="{StaticResource Card}">
+        <StackPanel toolkit:Spacing.Gap="12">
+            <TextBlock Style="{StaticResource H4}" Text="General" />
+            <TextBlock Style="{StaticResource Muted}" Text="Applies to every project." />
+
+            <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
+            <inputs:NumericUpDown Value="{Binding MaxItems, Mode=TwoWay}" />
+            <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding Language}" />
+            <CheckBox Content="Check for updates at startup" IsChecked="{Binding CheckUpdates}" />
+        </StackPanel>
+    </Border>
+
+    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" toolkit:Spacing.Gap="8">
+        <Button Command="{Binding ResetCommand}" Content="Reset" Style="{StaticResource SecondaryButton}" />
+        <Button Command="{Binding SaveCommand}" Content="Save" Style="{StaticResource PrimaryButton}" />
+    </StackPanel>
+</StackPanel>
+```
+
+```csharp
+// SaveCommand, with the shared ToastService injected
+private void Save()
+{
+    _settings.Save();
+    _toasts.Success("Settings saved.", "Done");
+}
+```
+
+## Brand it: a custom theme
+
+Customizing is overriding tokens, not restyling controls. Create a dictionary with
+the keys you want to change, merge it **after** the Joufflu resources, and every
+control, restyled native and Joufflu control picks the change up. Use the gallery's
+**Customize theme** page to pick colours and dimensions live and copy the generated
+dictionary rather than writing it by hand.
+
+```xml
+<!-- App.xaml -->
+<ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
+    <ResourceDictionary Source="MyTheme.xaml" />   <!-- your overrides, after Joufflu -->
+</ResourceDictionary.MergedDictionaries>
+```
+
+To make a palette selectable by name next to System / Light / Dark, register it
+before `Initialize()`:
+
+```csharp
+ThemeManager.Instance.Register(
+    "Ocean",
+    new Uri("pack://application:,,,/MyApp;component/Themes/Ocean.xaml"),
+    isDark: true);
+
+ThemeManager.Instance.Initialize();
+```
+
+The keys to override are listed in [Design tokens](toolkit/tokens.md) and the full
+flow in [Customize theme](toolkit/customize-theme.md) and [Theme](toolkit/theme.md).
+
+## A theme switcher
+
+`ThemeManager.Theme` takes `System`, `Light`, `Dark` or the name of a registered
+custom theme and re-themes the whole UI live. Persisting the choice is up to the app;
+see [Theme](toolkit/theme.md#persisting-the-theme).
+
+```csharp
+using Joufflu.Themes;
+
+ThemeManager.Instance.Theme = ThemeManager.Dark;
+```
+
+## A searchable, paged table
+
+`Search` debounces typing before it raises `SearchChanged`, `Paging` tells the view
+model which slice to show. The view model filters, counts and slices.
+
+```xml
+<DockPanel Margin="24">
+    <inputs:Search x:Name="Search" DockPanel.Dock="Top" Margin="0,0,0,12" />
+
+    <nav:Paging
+        DockPanel.Dock="Bottom"
+        Margin="0,12,0,0"
+        Total="{Binding Total}"
+        PageNumber="{Binding PageNumber, Mode=TwoWay}"
+        Capacity="{Binding Capacity, Mode=TwoWay}" />
+
+    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding PageItems}">
+        <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+            <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+            <DataGridTemplateColumn Header="Status">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <feedback:Badge Variant="Success">Active</feedback:Badge>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</DockPanel>
+```
+
+```csharp
+// code-behind: route the debounced text to the view model
+Search.SearchChanged += text => ((ItemsViewModel)DataContext).Filter = text;
+```
+
+See [Paging](navigation/paging.md#paged-data-grid) for the view-model side.
+
+## Confirm before deleting
+
+One awaited call shows a modal over the whole window, with the confirm button
+coloured for a destructive action. The `Overlayer` is the one the window's
+`OverlayContainer` is bound to.
+
+```csharp
+bool? confirmed = await _overlays.Confirm(
+    "Delete the selected item? This action cannot be undone.",
+    "Please confirm",
+    EnumConfirmationType.Danger);
+
+if (confirmed == true)
+{
+    Delete();
+    _toasts.Success("Item deleted.");
+}
+```
+
+## A status row with badges and a spinner
+
+```xml
+<StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
+    <feedback:Spinner />
+    <TextBlock VerticalAlignment="Center" Text="Syncing..." />
+    <feedback:Badge Variant="Info">12 pending</feedback:Badge>
+    <feedback:Badge Variant="Danger">3 errors</feedback:Badge>
+</StackPanel>
+```
+
+## A form with a different density
+
+`Sizing.Size` (`xs`, `sm`, `md`, `lg`...) is inherited, so setting it once on a panel
+resizes every control inside it.
+
+```xml
+<StackPanel toolkit:Sizing.Size="sm" toolkit:Spacing.Gap="8">
+    <TextBox />
+    <ComboBox />
+    <Button Content="Apply" Style="{StaticResource PrimaryButton}" />
+</StackPanel>
+```
+
+## Rules these recipes follow
+
+- Look changes are token overrides in a dictionary merged after Joufflu (or a registered
+  theme), never edits to control styles.
+- Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}`),
+  never from hex values, so Light / Dark and custom themes keep working.
+- Gaps between children use `Spacing.Gap`, not a `Margin` on each child.
+- Roles are named styles (`PrimaryButton`, `DangerButton`, `Card`, `H1`, `Muted`),
+  not local setters.
+- Modals and toasts go through the shared `Overlayer` and `ToastService`, never
+  `MessageBox`.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/comparison.md -->
+
+# Joufflu vs other WPF UI libraries
+
+Which WPF UI library should you pick for a modern-looking desktop app? This page
+says where Joufflu fits and, as importantly, where another library is the better
+choice. Check each project's own repository for its current status before deciding:
+this page does not track their releases.
+
+## At a glance
+
+| You want | Reach for |
+|---|---|
+| A neutral, modern look that you can make your own by overriding tokens, with live Light / Dark theming, a themed window, and inputs, navigation, modals and toasts that already match | **Joufflu** |
+| A Material Design look | MaterialDesignInXaml |
+| A Windows 11 / Fluent look | WPF-UI, ModernWpf, or the Fluent theme built into recent .NET versions of WPF |
+| A Metro-style window and controls | MahApps.Metro |
+| The widest catalogue of ready-made controls | HandyControl, Extended WPF Toolkit |
+| Plain WPF with only a few touch-ups | Hand-written styles |
+
+## What Joufflu is
+
+- **One design system, not a bag of controls.** Colours, corner radius, spacing,
+  control heights and font sizes are resource keys (`joufflu:Brushes.*`,
+  `joufflu:Dimensions.*`). Every Joufflu control and every restyled native control
+  reads them through `DynamicResource`, so a theme change reaches all of them at once.
+- **Customizable by design.** Brand colours, corner radius, spacing, control heights
+  and font sizes are all tokens: override a few in a dictionary merged after the Joufflu
+  resources and every control follows, with no `ControlTemplate` copied or edited.
+  Register a whole palette by name (`ThemeManager.Register`) to make it selectable next
+  to Light and Dark. The gallery's **Customize theme** page edits the tokens live,
+  starts from presets and generates the dictionary to paste into your app
+  ([Customize theme](toolkit/customize-theme.md)).
+- **Restyled natives.** Buttons, text boxes, combo boxes, data grids and the rest of the
+  built-in WPF controls pick up the style from the implicit styles, with no
+  `Style=` needed on each one.
+- **The pieces an app shell needs.** `ThemedWindow` (custom chrome), `NavigationMenu` and
+  a view-model-first `Navigator`, awaitable modal overlays (`await overlays.Confirm(...)`),
+  stacking toasts, paging, badges, a spinner, a file explorer and JSON-schema driven
+  data trees.
+- **Typed, explicit APIs.** Layout and size helpers are attached properties
+  (`Spacing.Gap`, `Sizing.Size`, `Derive.Margin`) checked by the XAML compiler, with no
+  reflection or string-based conventions.
+- **Modular.** Core styles in `Joufflu`; inputs, navigation, feedback, file explorer and
+  data are separate NuGet packages you add only when needed.
+- **Built to be read by AI agents.** [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt),
+  [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
+  and a Claude Code plugin give an agent the exact namespaces, names and wiring.
+
+## When not to pick Joufflu
+
+Be honest about the trade-offs:
+
+- **It is young and has a single maintainer.** Expect API changes between 0.x versions
+  (see the changelog), and a smaller community than the long-established libraries.
+- **It targets `net10.0-windows` only.** Older .NET Framework and earlier .NET versions
+  are not supported.
+- **It has its own look.** Tokens let you re-colour and re-proportion it, but it does
+  not reproduce Material Design or Windows 11 Fluent visuals. If your product must
+  follow one of those design languages, use a library built for it.
+- **The control catalogue is focused.** There is no ribbon, docking manager, charting
+  or property grid. Combine Joufflu with a dedicated library for those, or write them
+  against the same tokens.
+
+## Migrating or mixing
+
+- To move an existing view onto Joufflu, replace hardcoded colours and sizes with the
+  tokens and named styles, and delete local styles that fight the implicit ones. The
+  `joufflu-restyle` skill of the [Claude Code plugin](https://github.com/ndegheselle/Joufflu/tree/main/plugins/joufflu)
+  automates this audit.
+- Two libraries that both restyle the native controls will fight over the implicit
+  styles. If you mix, keep one of them in charge of the natives and use the other only
+  for controls it alone provides.
+
+## Next steps
+
+- [Getting started](index.md#getting-started)
+- [Tutorial: a navigable app shell](tutorial.md)
+- [Recipes](recipes.md): complete, copy-paste screens
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/buttons.md -->
+
+# Buttons
+
+A plain `<Button>` is themed by default. Named styles, applied through `Style`,
+give it a semantic intent and a visual emphasis — solid, soft or outline.
+
+## Variants
+
+The solid named styles map to the semantic brushes: a filled background with its
+matching content colour.
+
+```xml
+<Button>Default</Button>
+<Button Style="{StaticResource PrimaryButton}">Primary</Button>
+<Button Style="{StaticResource SecondaryButton}">Secondary</Button>
+<Button Style="{StaticResource GhostButton}">Ghost</Button>
+<Button Style="{StaticResource SuccessButton}">Success</Button>
+<Button Style="{StaticResource DangerButton}">Danger</Button>
+<Button Style="{StaticResource InfoButton}">Info</Button>
+<Button Style="{StaticResource WarningButton}">Warning</Button>
+```
+
+## Soft
+
+A tinted background with the semantic hue as text — lower emphasis than solid,
+for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
+≈24 % on hover), not a dedicated palette entry, so it derives automatically in
+both Light and Dark and follows any custom theme.
+
+```xml
+<Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
+<Button Style="{StaticResource SoftSecondaryButton}">Secondary</Button>
+<Button Style="{StaticResource SoftSuccessButton}">Success</Button>
+<Button Style="{StaticResource SoftInfoButton}">Info</Button>
+<Button Style="{StaticResource SoftWarningButton}">Warning</Button>
+<Button Style="{StaticResource SoftDangerButton}">Danger</Button>
+```
+
+{: .note }
+> Since the soft text is the semantic hue itself, the brighter semantics (Success,
+> Warning) sit at lower text-contrast on the pale tint in the Light theme. Reserve
+> soft buttons for short labels / secondary actions, or use solid when contrast
+> matters.
+
+## Outline
+
+A coloured border and text over a transparent fill; hovering fills it with the
+soft tint.
+
+```xml
+<Button Style="{StaticResource OutlinePrimaryButton}">Primary</Button>
+<Button Style="{StaticResource OutlineSecondaryButton}">Secondary</Button>
+<Button Style="{StaticResource OutlineSuccessButton}">Success</Button>
+<Button Style="{StaticResource OutlineInfoButton}">Info</Button>
+<Button Style="{StaticResource OutlineWarningButton}">Warning</Button>
+<Button Style="{StaticResource OutlineDangerButton}">Danger</Button>
+```
+
+## Icon buttons
+
+`IsSquare` makes a button as wide as it is tall, for a single icon. Composes with
+any variant.
+
+```xml
+<Button toolkit:Sizing.IsSquare="True" Style="{StaticResource PrimaryButton}">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
+</Button>
+```
+
+## Sizes
+
+The inherited `Sizing.Size` attached property (`xs` / `sm` / `md` /
+`lg`) scales height, font size and padding.
+
+```xml
+<Button toolkit:Sizing.Size="xs">XS</Button>
+<Button toolkit:Sizing.Size="sm">SM</Button>
+<Button toolkit:Sizing.Size="md">MD</Button>
+<Button toolkit:Sizing.Size="lg">LG</Button>
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/icons.md -->
+
+# Icons
+
+`FontIcon` renders a glyph from the embedded [Lucide](https://lucide.dev) icon
+font. It derives from `TextBlock`, so it takes a foreground brush, aligns like
+text and can be dropped anywhere content is expected — inside a button, a label
+or a stack panel.
+
+The glyphs are exposed as constants on `LucideFontIcons`; set one on the `Text`
+property through `x:Static`.
+
+```xml
+<!-- Declare the namespaces once on the root element -->
+<UserControl
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
+
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+</UserControl>
+```
+
+## Sizes
+
+The size follows the inherited `Sizing.Size` attached property (`xs` / `sm` /
+`md` / `lg` / `xl`), so an icon scales with the control — or the panel — it sits
+in. `md` is the default.
+
+```xml
+<fonts:FontIcon toolkit:Sizing.Size="xs" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+<fonts:FontIcon toolkit:Sizing.Size="sm" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+<fonts:FontIcon toolkit:Sizing.Size="md" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+<fonts:FontIcon toolkit:Sizing.Size="lg" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+```
+
+## Colour
+
+Foreground is a normal `TextBlock` property, so point it at any design-system
+brush to give an icon a semantic hue.
+
+```xml
+<fonts:FontIcon
+    Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}"
+    Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+<fonts:FontIcon
+    Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}"
+    Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+<fonts:FontIcon
+    Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
+    Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+```
+
+## In a button
+
+Pair an icon with `Sizing.IsSquare` for a compact, single-icon button.
+See [Buttons](buttons.md#icon-buttons).
+
+```xml
+<Button toolkit:Sizing.IsSquare="True" Style="{StaticResource PrimaryButton}">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
+</Button>
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/card.md -->
+
+# Card
+
+`Card` and `CardSecondary` are named `Border` styles that provide the app's
+padded, rounded surfaces. Apply them through the `Style` property of a plain
+`<Border>` and put any content inside.
+
+## Card
+
+The primary surface for grouping content: a `Background100` fill, a themed border,
+rounded corners and the standard spacing as padding.
+
+```xml
+<Border Style="{StaticResource Card}">
+    <StackPanel toolkit:Spacing.Gap="4">
+        <TextBlock FontWeight="Bold" Text="Card" />
+        <TextBlock
+            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+            Text="The primary surface for grouping content."
+            TextWrapping="Wrap" />
+    </StackPanel>
+</Border>
+```
+
+## CardSecondary
+
+A subtly inset panel meant to sit **inside** a `Card`. It uses the deeper
+`Background` fill so it reads as a recessed area against the card surface.
+
+```xml
+<Border Style="{StaticResource Card}">
+    <StackPanel toolkit:Spacing.Gap="8">
+        <TextBlock FontWeight="Bold" Text="Nested" />
+        <Border Style="{StaticResource CardSecondary}">
+            <TextBlock Text="CardSecondary inside a Card." TextWrapping="Wrap" />
+        </Border>
+    </StackPanel>
+</Border>
+```
+
+{: .note }
+> Both styles derive their fill, border, corner radius and padding from the theme
+> resources, so they follow Light / Dark and any custom theme automatically.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/typography.md -->
+
+# Typography
+
+Named `TextBlock` styles form a small typographic scale. A plain `<TextBlock>`
+without a style is the default body size; apply a named style through the `Style`
+property to give text a role.
+
+## Headings
+
+`H1` down to `H6` step the font size and weight from a page title to a minor
+subheading.
+
+```xml
+<TextBlock Style="{StaticResource H1}" Text="H1 — The quick brown fox" />
+<TextBlock Style="{StaticResource H2}" Text="H2 — The quick brown fox" />
+<TextBlock Style="{StaticResource H3}" Text="H3 — The quick brown fox" />
+<TextBlock Style="{StaticResource H4}" Text="H4 — The quick brown fox" />
+<TextBlock Style="{StaticResource H5}" Text="H5 — The quick brown fox" />
+<TextBlock Style="{StaticResource H6}" Text="H6 — The quick brown fox" />
+```
+
+## Body text
+
+`Lead` introduces a section with a larger, lighter paragraph. `Muted`
+de-emphasizes secondary text at the default size, and `Small` is for fine print,
+captions and footnotes.
+
+```xml
+<TextBlock Style="{StaticResource Lead}" Text="Lead — a larger, lighter introductory paragraph." />
+<TextBlock Text="Default — the standard body text size used across the app." />
+<TextBlock Style="{StaticResource Muted}" Text="Muted — secondary text, dimmed to sit quietly next to primary content." />
+<TextBlock Style="{StaticResource Small}" Text="Small — fine print, captions and footnotes." />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/numeric-inputs.md -->
+
+# Numeric & format inputs
+
+## NumericUpDown
+
+Selects a whole number (`long?`). Built on `FormatTextBox` with a single
+`IntegerGroup`, plus clear and increment/decrement buttons.
+
+```xml
+<inputs:NumericUpDown Value="{Binding NumericValue, Mode=TwoWay}" />
+```
+
+## DecimalUpDown
+
+Selects a `decimal?` value, through a single `DecimalGroup`.
+
+```xml
+<inputs:DecimalUpDown Value="{Binding DecimalValue, Mode=TwoWay}" />
+```
+
+## TimeSpanPicker
+
+Selects a `TimeSpan` through a days/hours/minutes/seconds format.
+
+```xml
+<inputs:TimeSpanPicker Value="{Binding Duration, Mode=TwoWay}" />
+```
+
+To bound or format the number of a `NumericUpDown` or a `DecimalUpDown`, write its
+group yourself: a group given as content replaces the default one (which is
+nullable and keeps its own caret, so set those back when you want them).
+
+```xml
+<inputs:NumericUpDown Value="{Binding Quantity, Mode=TwoWay}">
+    <format:IntegerGroup Min="0" Max="99" IsNullable="True" SelectsWhole="False" />
+</inputs:NumericUpDown>
+```
+
+## FormatTextBox
+
+The base input: groups the user types into, with literal text between them,
+each group read into its own value and navigated with <kbd>Tab</kbd> / arrows.
+
+```xml
+<format:FormatTextBox>
+    <format:IntegerGroup Max="23" StringFormat="00" />
+    <format:FormatLiteral Text="h " />
+    <format:IntegerGroup Max="59" StringFormat="00" />
+    <format:FormatLiteral Text="m" />
+</format:FormatTextBox>
+```
+
+`IntegerGroup` counts in `long` and `DecimalGroup` in `decimal`. Both take:
+
+| Property | Default | Meaning |
+|---|---|---|
+| `Min`, `Max` | the type's own | Bounds of what can be typed or spun to. `Max` also sets the group's width: once the number is as long as it, typing moves on to the next group. |
+| `Step` | `1` / `0.1` | What <kbd>↑</kbd> / <kbd>↓</kbd> and the mouse wheel add or take away. |
+| `StringFormat` | none | A .NET numeric format string: `00` pads to two digits, `N0` separates thousands. |
+| `IsNullable` | `false` | Whether the group can hold no number rather than zero. |
+| `PromptChar` | `-` | Shown once per character of a group holding no number. |
+| `SelectsWhole` | `true` | Selected, typed over and emptied as one thing; when `false` the group keeps its own caret, like a plain text box. |
+
+`Values` holds one value per group, raising `ValuesChanged`.
+
+The `format` namespace is:
+
+```xml
+xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/search.md -->
+
+# Search
+
+A text box that debounces before raising `SearchChanged`, to limit calls to an
+API or database. <kbd>Escape</kbd> clears it.
+
+```xml
+<inputs:Search />
+```
+
+```csharp
+// code-behind: search.SearchChanged += text => Filter(text);
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/combo-box-search.md -->
+
+# Search combo box
+
+An editable combo box that filters its items as you type, on the text
+`DisplayMemberPath` shows for each item.
+
+The chevron on the right opens the list, as do <kbd>Up</kbd> and <kbd>Down</kbd>.
+Opening it that way shows every choice, even once an item is selected : the text
+left behind by a selection is not a search, so it does not filter the list down to
+the item already picked.
+
+```xml
+<inputs:ComboBoxSearch ItemsSource="{Binding Countries}"
+                       SelectedItem="{Binding SelectedCountry}" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/combo-box-tags.md -->
+
+# Combo box tags
+
+## ComboBoxTags
+
+Builds on `ComboBoxSearch` to select several items, shown as removable tags. Set
+`AllowAdd="True"` to let users add values not in the source list.
+
+```xml
+<inputs:ComboBoxTags AllowAdd="True"
+                     ItemsSource="{Binding Countries}"
+                     SelectedItems="{Binding SelectedCountries}" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/text-editable.md -->
+
+# Text editable
+
+## TextEditable
+
+Displays a value that turns into an editable text box on demand, for use outside
+a form.
+
+```xml
+<inputs:TextEditable Text="{Binding EditableText, Mode=TwoWay}" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/file-picker.md -->
+
+# File picker
+
+## FilePicker
+
+Selects a file through the system dialog and exposes the chosen path, with a clear
+button.
+
+```xml
+<inputs:FilePicker FilePath="{Binding FilePath, Mode=TwoWay}" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/color-picker.md -->
+
+# Color picker
+
+## ColorPicker
+
+Edits a colour through an editable hex value and a popup with a saturation square,
+hue and alpha sliders. Two-way bindable through `Color`
+(`System.Windows.Media.Color`).
+
+```xml
+<inputs:ColorPicker Color="{Binding Color, Mode=TwoWay}" />
+```
+
+The popup provides:
+
+- a **saturation / brightness** square you can drag,
+- a **hue** slider,
+- an **alpha** slider (checkerboard behind a transparent → opaque ramp),
+- an editable **hex** field and an **opacity** percentage.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/dropdown.md -->
+
+# Dropdown
+
+Attached properties that hang a themed popup off any `ToggleButton` — a menu of
+commands, a filter panel, a colour list. The popup is open while the button is
+checked, and closes when you click outside it.
+
+The button is not wrapped in a control: it stays a plain `ToggleButton` you own,
+so its `Style`, its content, its triggers and every attached property
+(`Sizing.IsSquare`, `Sizing.Size`, `Derive.*`, …) apply directly to it.
+
+```xml
+<ToggleButton Content="Actions">
+    <inputs:Dropdown.Popup>
+        <StackPanel toolkit:Spacing.Gap="4">
+            <Button Content="Rename" Style="{StaticResource GhostButton}" />
+            <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
+        </StackPanel>
+    </inputs:Dropdown.Popup>
+</ToggleButton>
+```
+
+| Attached property | Type | Default | Purpose |
+|---|---|---|---|
+| `Dropdown.Popup` | `object` | `null` | Content shown in the popup. Setting it is what turns the button into a dropdown. |
+| `Dropdown.Placement` | `DropdownPlacement` | `BottomLeft` | Corner of the popup anchored to the matching corner of the button: `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight`. |
+| `Dropdown.HorizontalOffset` / `Dropdown.VerticalOffset` | `double` | `0` | Extra offset applied on top of the placement. |
+| `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
+| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, background, border, corner radius. |
+
+`BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight` open it
+upward — useful for a dropdown sitting near the bottom of the window.
+
+```xml
+<ToggleButton Content="Filter" inputs:Dropdown.Placement="BottomRight">
+    ...
+</ToggleButton>
+```
+
+An icon-only dropdown is just an icon-only toggle button:
+
+```xml
+<ToggleButton
+    inputs:Dropdown.Placement="BottomRight"
+    toolkit:Sizing.IsSquare="True"
+    toolkit:Sizing.Size="lg">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />
+    <inputs:Dropdown.Popup>
+        <TextBlock Text="An icon only dropdown." />
+    </inputs:Dropdown.Popup>
+</ToggleButton>
+```
+
+## Closing on click
+
+By default the popup stays open until you click outside it. For a menu of commands
+that is rarely what you want, so `Dropdown.CloseOnClick` dismisses it as soon as a
+button inside is clicked:
+
+```xml
+<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
+    <inputs:Dropdown.Popup>
+        <StackPanel toolkit:Spacing.Gap="4">
+            <Button Content="Rename" Style="{StaticResource GhostButton}" />
+            <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
+        </StackPanel>
+    </inputs:Dropdown.Popup>
+</ToggleButton>
+```
+
+It listens for `ButtonBase.Click`, not for any mouse click, so a `TextBox`, a
+`Slider` or a `ComboBox` in the popup stays usable. The flip side is that a
+`CheckBox`, a `RadioButton` or a nested `ToggleButton` is a `ButtonBase` too and
+will close it — leave `CloseOnClick` off for a popup built out of those.
+
+The command still runs: the click is not handled, it only unchecks the button.
+
+## Popup chrome
+
+The popup content is wrapped in a `DropdownPopupHost`, a `ContentControl` whose
+default style draws the themed border. A `Popup` is only a positioning primitive —
+it derives from `FrameworkElement`, so it has no template, background or padding of
+its own — which is why `Dropdown.PopupStyle` targets the host rather than the popup.
+Padding, background, border and corner radius all go through it, based on the
+default style to keep the theme:
+
+```xml
+<ToggleButton Content="Padded">
+    <inputs:Dropdown.PopupStyle>
+        <Style
+            TargetType="{x:Type inputs:DropdownPopupHost}"
+            BasedOn="{StaticResource {x:Type inputs:DropdownPopupHost}}">
+            <Setter Property="Padding" Value="12,8" />
+        </Style>
+    </inputs:Dropdown.PopupStyle>
+    <inputs:Dropdown.Popup>
+        <TextBlock Text="Content padded away from the border." />
+    </inputs:Dropdown.Popup>
+</ToggleButton>
+```
+
+Padding defaults to `0`, so content sits flush against the border unless you ask
+otherwise.
+
+## Bindings inside the popup
+
+A `Popup` lives outside the button's logical tree, so nothing would normally flow
+into it. `DataContext`, `Foreground` and `Sizing.Size` are restored on the host for
+you, so ordinary command and value bindings need nothing special:
+
+```xml
+<ToggleButton Content="Actions">
+    <inputs:Dropdown.Popup>
+        <Button Command="{Binding RenameCommand}" Content="Rename" />
+    </inputs:Dropdown.Popup>
+</ToggleButton>
+```
+
+What cannot cross the boundary is anything that walks *out* of the popup — a
+`RelativeSource` ancestor lookup or an `ElementName`, both of which stop at the
+popup's own `PopupRoot`. Bind through `DropdownPopupHost.PlacementTarget` instead;
+the host is a plain ancestor inside the popup, so that lookup stays in one tree:
+
+```xml
+<Button Command="{Binding PlacementTarget.DataContext.SaveCommand,
+    RelativeSource={RelativeSource AncestorType={x:Type inputs:DropdownPopupHost}}}" />
+```
+
+`PlacementTarget` is the `ToggleButton` itself, so the same route reaches its
+properties — `IsChecked`, a `Tag`, an inherited value — not just its `DataContext`.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/navigation-menu.md -->
+
+# Navigation menu
+
+## Collapsible side menu
+
+The collapsible side menu plugged into its own `Navigator`. The chevron collapses
+it to an icons-only rail. A `NavigationGroup` displays like an item but expands to
+reveal children, and groups can nest.
+
+When collapsed, each item and group hides its label and surfaces it as a
+right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
+rail discoverable.
+
+```xml
+<nav:NavigationMenu Navigator="{Binding DemoNavigator}">
+    <nav:NavigationTitle>Demo</nav:NavigationTitle>
+    <!-- An item targets the type of the page it navigates to -->
+    <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
+        <nav:NavigationItem.Icon>
+            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+        </nav:NavigationItem.Icon>
+        Home
+    </nav:NavigationItem>
+    <!-- A group displays like an item but expands to reveal children -->
+    <nav:NavigationGroup Header="Parent">
+        <nav:NavigationItem TargetType="{x:Type vm:Submenu1ViewModel}">Submenu 1</nav:NavigationItem>
+        <nav:NavigationItem TargetType="{x:Type vm:Submenu2ViewModel}">Submenu 2</nav:NavigationItem>
+        <!-- Groups can nest -->
+        <nav:NavigationGroup Header="Parent">
+            <!-- … more items … -->
+        </nav:NavigationGroup>
+    </nav:NavigationGroup>
+</nav:NavigationMenu>
+```
+
+## Resolving a target type to a page
+
+An item's `TargetType` is the **type** of the page (view model) it navigates to.
+The `Navigator` turns that type into the page instance through the resolver it is
+built with — usually a lookup in the shell view model's page registry:
+
+```csharp
+// Pages keyed by their own type, which is what the menu items target.
+private readonly Dictionary<Type, object> _pages = new object[]
+{
+    new HomeViewModel(),
+    new Submenu1ViewModel(),
+    new Submenu2ViewModel(),
+}.ToDictionary(page => page.GetType());
+
+public Navigator Navigator { get; }
+
+public ShellViewModel()
+{
+    Navigator = new Navigator(target => _pages.GetValueOrDefault(target));
+}
+```
+
+An item shows as selected while the current page is of its `TargetType`, so give
+each menu entry its own page type. Returning `null` from the resolver (an unknown
+type) leaves the current page in place.
+
+Navigating from code takes either form — a type, resolved the same way, or a page
+instance directly:
+
+```csharp
+Navigator.Navigate(typeof(HomeViewModel));
+Navigator.Navigate(new HomeViewModel());
+```
+
+## Page lifecycle
+
+A page doesn't have to implement anything. One that wants to know when it is shown
+or left implements `IPage`, whose two methods have empty defaults so only the one
+needed is written:
+
+```csharp
+public class HomeViewModel : IPage
+{
+    public void OnNavigatedTo() => Refresh();
+}
+```
+
+The `Navigator` calls `OnNavigatedFrom` on the page it leaves, then `OnNavigatedTo`
+on the new one. Overlay content gets the same calls when it is shown and closed.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md -->
+
+# Overlays
+
+Modal content shown above the page: a title bar with a close cross and a content
+area. Multiple overlays stack.
+
+## Hosting the overlays
+
+Overlays are rendered by an `OverlayContainer` bound to the `Overlayer` you
+show them from. Wrap the whole window content in it so an overlay covers
+everything — side menu included:
+
+```xml
+<nav:OverlayContainer Overlays="{Binding Overlays}">
+    <!-- the whole app -->
+</nav:OverlayContainer>
+```
+
+The container creates an `Overlayer` of its own when none is bound; bind one from
+your shell view model to share it with the pages, behind `IOverlayer`.
+
+Toasts have their own [`ToastContainer`](../feedback/toasts.md); wrap it around
+this one to keep them above the overlays.
+
+## Showing an overlay
+
+The overlay content owns its buttons and closes itself through the overlayer, in
+one of three ways that tell the caller how it ended:
+
+| Close with | `ShowAsync` returns |
+|---|---|
+| `overlays.Validate(content)` | `true` |
+| `overlays.Cancel(content)` | `false` |
+| `overlays.Ignore(content)` | `null` — also what the close cross and a click on the dimmed background do |
+
+Each closes the overlay showing that content, whichever is on top, so content
+opening another overlay of its own kind still closes itself.
+
+`OverlayOptions` exposes `Title`, `ShowCloseButton`, `CloseOnClickAway` (set
+`false` to force the user through the action buttons) and `FullScreen`.
+
+### Any object
+
+Any object works as content, resolved to its view through an implicit
+`DataTemplate`, with the options given at show time:
+
+```csharp
+var options = new OverlayOptions { Title = "Edit profile" };
+bool? result = await overlays.ShowAsync(content, options);
+```
+
+Content implementing `IOverlayContent` carries its own `Options` instead, so
+`ShowAsync` can be called without them.
+
+### Awaiting a result
+
+Content implementing `IOverlayContent<TResult>` also exposes the `Result` it was
+validated with. Shown through the generic `ShowAsync`, the overlay hands that
+result back when validated, and the default of `TResult` when cancelled or
+ignored:
+
+```csharp
+public partial class SampleFormViewModel : ObservableObject, IOverlayContent<string>
+{
+    private readonly IOverlayer _overlays;
+
+    public SampleFormViewModel(IOverlayer overlays) => _overlays = overlays;
+
+    public OverlayOptions Options { get; } = new() { Title = "Edit profile", CloseOnClickAway = false };
+
+    [ObservableProperty]
+    private string _name = "Joe Doe";
+
+    public string? Result => Name;
+
+    [RelayCommand]
+    private void Save() => _overlays.Validate(this);
+
+    [RelayCommand]
+    private void Cancel() => _overlays.Cancel(this);
+}
+```
+
+```csharp
+string? name = await overlays.ShowAsync(new SampleFormViewModel(overlays));
+if (name != null)
+    // saved
+```
+
+`IOverlayContent` derives from [`IPage`](navigation-menu.md#page-lifecycle), so content can also react to
+being shown and closed through `OnNavigatedTo` / `OnNavigatedFrom`.
+
+## Standard confirmation
+
+For the common "are you sure?" case, `Confirm` shows a built-in overlay — the
+message plus a *Cancel* / *Confirm* pair — with no content of your own:
+
+```csharp
+bool? result = await overlays.Confirm(
+    "Delete the selected item? This action cannot be undone.",
+    "Please confirm",
+    EnumConfirmationType.Danger);
+
+if (result == true)
+    // confirmed
+```
+
+`EnumConfirmationType` colours the confirm button in the matching semantic style:
+`Neutral` (the default), `Info`, `Success`, `Warning` or `Danger`.
+
+## Full screen
+
+`FullScreen = true` stretches the overlay over the entire container instead of a
+centered, sized panel — a whole-window editor or wizard rather than a dialog:
+
+```csharp
+await overlays.ShowAsync(content, new OverlayOptions { Title = "Edit", FullScreen = true });
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/paging.md -->
+
+# Paging
+
+## Paging
+
+Page selector for a set of `Total` items. It exposes `PageNumber` and `Capacity`
+(items per page), and the range currently displayed. Pages are elided with a
+separator when there are more than seven of them.
+
+```xml
+<nav:Paging Total="123" />
+```
+
+| Property | Type | Default | Purpose |
+|---|---|---|---|
+| `Total` | `int` | `-1` | Number of items in the whole set. A negative value (the `-1` default) leaves it unknown: the range label is hidden and the page count unbounded. `0` is an empty set. |
+| `PageNumber` | `int` | `1` | Current page, 1-based. Clamped between `1` and the last page. |
+| `Capacity` | `int` | `10` | Items per page, picked from `AvailableCapacities` (`5, 10, 25, 50, 100, 200` by default). |
+| `PageMax` | `int` (read-only) | — | Last page, derived from `Total` and `Capacity`. |
+| `IntervalMin` / `IntervalMax` | `int` (read-only) | — | Bounds of the range currently displayed, shown as `1-10 of 123`. |
+
+## Paged data grid
+
+Paging only tells you which slice to display, it never touches the data itself.
+Bind `Total` to the number of items in the whole set, then bind `PageNumber` and
+`Capacity` two way so the view model is notified of every change and can load the
+matching slice.
+
+```xml
+<DataGrid ItemsSource="{Binding PageItems}" AutoGenerateColumns="False">
+    <DataGrid.Columns>
+        <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+    </DataGrid.Columns>
+</DataGrid>
+<nav:Paging
+    Total="{Binding Total}"
+    PageNumber="{Binding PageNumber, Mode=TwoWay}"
+    Capacity="{Binding Capacity, Mode=TwoWay}" />
+```
+
+```csharp
+// The view model reacts to any paging change from its own setters.
+public int PageNumber
+{
+    get => _pageNumber;
+    set { if (SetProperty(ref _pageNumber, value)) UpdatePage(); }
+}
+
+public int Capacity
+{
+    get => _capacity;
+    set { if (SetProperty(ref _capacity, value)) UpdatePage(); }
+}
+
+private void UpdatePage()
+{
+    // Query only the current page (Skip/Take, SQL OFFSET/FETCH, API page parameters, …)
+    PageItems.Clear();
+    foreach (var item in _source.Skip((PageNumber - 1) * Capacity).Take(Capacity))
+        PageItems.Add(item);
+}
+```
+
+{: .note }
+> `Mode=TwoWay` is required: neither `PageNumber` nor `Capacity` binds two way by
+> default, so without it the control would never push the new page back to the
+> view model.
+
+## Without a known total
+
+Leave `Total` at its `-1` default when the size of the set is unknown (a cursor-based
+API, a stream). The range label is hidden and the page list grows one page ahead of
+the current one, so the user can always move forward:
+
+```xml
+<nav:Paging PageNumber="{Binding PageNumber, Mode=TwoWay}" Capacity="{Binding Capacity, Mode=TwoWay}" />
+```
+
+Set `Total` as soon as you know it and the control switches back to a bounded list.
+
+## Reacting without bindings
+
+For code-behind, the control raises `PagingChange` with the new page number and
+capacity every time either changes:
+
+```csharp
+paging.PagingChange += (pageNumber, capacity) => UpdatePage(pageNumber, capacity);
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/badge.md -->
+
+# Badge
+
+## Variants
+
+A pill themed from the semantic brushes. Set `Variant` (`Default`, `Primary`,
+`Secondary`, `Success`, `Info`, `Warning`, `Danger`).
+
+```xml
+<feedback:Badge>Default</feedback:Badge>
+<feedback:Badge Variant="Primary">Primary</feedback:Badge>
+<feedback:Badge Variant="Success">Active</feedback:Badge>
+<feedback:Badge Variant="Danger">3</feedback:Badge>
+```
+
+## Sizes
+
+Sized through the inherited `Sizing.Size` attached property.
+
+```xml
+<feedback:Badge Variant="Primary" toolkit:Sizing.Size="xs">xs</feedback:Badge>
+<feedback:Badge Variant="Primary" toolkit:Sizing.Size="lg">lg</feedback:Badge>
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/spinner.md -->
+
+# Spinner
+
+## Loading indicator
+
+An indeterminate loading indicator. Colour comes from `Foreground`, diameter from
+`Sizing.Size`.
+
+```xml
+<feedback:Spinner />
+<feedback:Spinner toolkit:Sizing.Size="lg" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/toasts.md -->
+
+# Toasts
+
+Transient notifications stacked in a corner of the window, above page content and
+overlays, auto-dismissed after a few seconds unless sticky.
+
+## Hosting the toasts
+
+A `ToastContainer` bound to the same `ToastService` renders them. It wraps the
+content it sits above, so wrapping the whole window keeps the toasts on top of
+everything:
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}">
+    <!-- the whole app -->
+</feedback:ToastContainer>
+```
+
+When the app also uses an
+[`OverlayContainer`](../navigation/overlays.md#hosting-the-overlays), wrap it
+*inside* the `ToastContainer` so toasts stay above the modal overlays:
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}">
+    <nav:OverlayContainer Overlays="{Binding Overlays}">
+        <!-- the whole app -->
+    </nav:OverlayContainer>
+</feedback:ToastContainer>
+```
+
+### Position
+
+`Position` picks the corner the stack sits in: `TopRight` (the default), `TopLeft`,
+`BottomRight` or `BottomLeft`. The newest toast always sits closest to that corner,
+so the stack grows away from it. Bind it to change corners at runtime — the
+gallery's **Toasts** page does exactly that.
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
+    <!-- the whole app -->
+</feedback:ToastContainer>
+```
+
+## Showing a toast
+
+Show them from an injected `IToastService` (in `Joufflu.Feedback`):
+
+```csharp
+toasts.Info("A neutral message.", "Heads up");
+toasts.Success("Saved.");
+toasts.Warning("Careful.");
+toasts.Error("Failed.");
+toasts.Show(new ToastOptions { Message = "Sticky", Duration = TimeSpan.Zero });
+```
+
+A `Duration` of `TimeSpan.Zero` makes a toast sticky: it stays until the user
+closes it.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md -->
+
+# Data
+
+JSON values edited as a tree, from the optional
+[`Joufflu.Data`](https://www.nuget.org/packages/Joufflu.Data) package.
+
+- **Data fill** — fills in a value against a JSON Schema.
+- **Data edit** — builds a value from scratch.
+- **Data display** — shows a value read only.
+
+Add the package (`dotnet add package Joufflu.Data`). Only the core `Resources.xaml` needs
+merging. The snippets use:
+
+```xml
+xmlns:data="clr-namespace:Joufflu.Data.Controls;assembly=Joufflu.Data"
+```
+
+```csharp
+using Joufflu.Data.Model;
+using NJsonSchema;
+using DataObject = Joufflu.Data.Model.DataObject; // System.Windows has one too
+```
+
+## Nodes
+
+The controls take a `Node`, a `DataObject` root: `DataFill` and `DataEdit` edit it in place,
+`DataDisplay` only shows it.
+
+| Node | Holds |
+|---|---|
+| `DataObject` | `Properties`, keyed by unique, case-sensitive keys |
+| `DataArray` | `Values`, keyed `[0]`, `[1]`…, and the `Template` new items are cloned from |
+| `DataValue` | a `Value`, or the `Options` of an enum |
+
+`ToToken()` returns the JSON:
+
+```csharp
+string? json = Node.ToToken()?.ToString();
+```
+
+## From a schema
+
+`ToDataNode()` builds the tree of an [NJsonSchema](https://github.com/RicoSuter/NJsonSchema)
+`JsonSchema`:
+
+```csharp
+Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode();
+```
+
+| Schema | Editor | Written as |
+|---|---|---|
+| `string` | `TextBox` | string |
+| `string`, format `date` / `date-time` | `DatePicker` | ISO 8601 string |
+| `string`, format `time-span` / `duration` | `TimeSpanPicker` | `[d.]hh:mm:ss` string |
+| `integer` | `NumericUpDown` | number |
+| `number` | `DecimalUpDown` | number |
+| `boolean` | `CheckBox` | `true` / `false` |
+| `enum` | `ComboBox`, named by `x-enumNames` | the option's value |
+| `array` / `object` | tree | array / object |
+
+New values start at `null` when nullable, else at the type's default (`""`, `0`, `false`,
+today, the first option).
+
+{: .note }
+> Not supported: arrays with a list of item schemas, and schemas without a type.
+
+## To a schema
+
+`ToJsonSchema()` does the reverse: the schema of a tree, built from a schema or with
+`DataEdit`, following the table above (time spans get the `time-span` format):
+
+```csharp
+JsonSchema schema = Node.ToJsonSchema();
+string json = schema.ToJson();
+```
+
+Keys, `Description`, `IsNullable`, `IsRequired` and the enum `Options` are kept; values are not.
+
+## From JSON
+
+`Load()` fills a tree with a JSON value, the reverse of `ToToken()`, to edit a value again:
+
+```csharp
+Node = (DataObject)schema.ToDataNode();
+Node.Load(JToken.Parse(json), ManualValues);
+```
+
+The tree keeps its shape. A node matching one of the [manual values](#manual-values), or one its
+editor can't hold (an object given a string, say), is forced to it rather than lost; a property
+the JSON leaves out is forced to **undefined** when not required.
+
+Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, for `DataEdit`:
+
+```csharp
+Node = (DataObject)JObject.Parse(json).ToDataNode();
+```
+
+`Changed` is raised when a node or anything under it changes, to react to an edit anywhere in
+the tree.
+
+## Manual values
+
+`ManualValues` lists what a field can be forced to instead of its editor, like a
+placeholder resolved later. Each entry names the type it fits (`null` fits any):
+
+```csharp
+public IReadOnlyList<DataManualValue> ManualValues { get; } =
+[
+    new(EnumDataType.String, "TBD"),
+    new(EnumDataType.Integer, -1L),
+];
+```
+
+The feather toggle swaps a field's editor for the entries that fit it, plus **undefined**
+(the property is left out) when not required and **null** when nullable. It is disabled
+when nothing fits. Objects and arrays have it too: forced, their properties or items are
+hidden and the entry is written in their place, and they come back as they were once released.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md -->
+
+# Data fill
+
+## Fill in from a schema
+
+`DataFill` edits the values of a node [built from a schema](index.md#from-a-schema): keys
+and shape are fixed, only values and array items change.
+
+```xml
+<data:DataFill Node="{Binding Node}" ManualValues="{Binding ManualValues}" />
+```
+
+- A property's `description` shows as an info tooltip.
+- **Add** on an array clones its `Template`; array items can be removed.
+- The feather toggle forces a field, object or array to one of the
+  [manual values](index.md#manual-values), hiding the properties or items of an object or an array.
+
+To reset, build a new node from the schema.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md -->
+
+# Data edit
+
+## Build from scratch
+
+`DataEdit` builds a node freely: add properties and array items of any type, rename keys,
+set values, remove rows.
+
+```xml
+<data:DataEdit Node="{Binding Node}" />
+```
+
+```csharp
+public DataObject Node { get; set; } = new("");
+```
+
+- New properties are named `key`, `key 1`, `key 2`…; a duplicate key is flagged on its text box.
+- **Add** on an array picks the item type, or clones its `Template` when it has one.
+- A `Choice` value edits its options (strings) from the list button next to it: type one and
+  press Enter, or remove one. The first option becomes the value.
+
+Without a bound `Node`, it starts from an empty object. `ManualValues` works as in
+[Data fill](data-fill.md).
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-display.md -->
+
+# Data display
+
+## Show a node
+
+`DataDisplay` shows a node read only: the key, the type and the value of each node.
+
+```xml
+<data:DataDisplay Node="{Binding Node}" />
+```
+
+```csharp
+Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode();
+Node.Load(JToken.Parse(json), ManualValues);
+```
+
+- Values read the way their editor shows them: the name of a `Choice` option, a date without
+  its time when it has none, a time span as `[d.]hh:mm:ss`.
+- **null**, and **undefined** on a field forced to nothing, are greyed and italic, apart from
+  a text saying "null".
+- A value forced to one of the [manual values](index.md#manual-values) is flagged with a
+  feather. A forced object or array shows the entry instead of its properties or items.
+- A node with a `Description` shows it on an info icon, as in [Data fill](data-fill.md).
+
+Only expanding and collapsing nodes changes the tree.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/index.md -->
+
+# File explorer
+
+A themed file explorer from the optional
+[`Joufflu.FileExplorer`](https://www.nuget.org/packages/Joufflu.FileExplorer) package.
+
+- **Explorer** — everything together: control bar, tree, list and a status bar.
+- **List** — the nodes of the opened folder, with extra columns of your own.
+- **Tree** — the loaded hierarchy, folders only by default.
+- **Sources** — what the controls display: the disk, the disk watched live, or a source of your own.
+
+Add the package (`dotnet add package Joufflu.FileExplorer`) and merge its
+`Resources.xaml` after the core one and after `Joufflu.Feedback` (the sources report
+their errors as toasts). The snippets use these namespaces:
+
+```xml
+xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
+xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base;assembly=Joufflu.FileExplorer"
+xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu.FileExplorer"
+xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+```
+
+## Sources
+
+Every control binds a `Source`, an `IExplorerSource`: it holds the opened directory
+(`Current`), the loaded hierarchy (`Root`) and the commands acting on the nodes.
+`FileSystemSource` reads a folder of this machine:
+
+```csharp
+// using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
+public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+// ...
+await Source.Open();
+```
+
+Controls sharing the same source stay in sync: selecting a folder in the tree, double
+clicking one in the list or using the breadcrumb opens it for all of them.
+
+{: .note }
+> `FileSystemSource` hands copying, moving, renaming and deleting over to the Windows
+> shell, so they come with its progress window, its "replace or skip" prompt and its
+> recycle bin.
+
+`FileSystemWatcherSource` reads the same disk and keeps up with it, and a source of
+your own displays whatever you hand over — see [sources](sources.md).
+
+## Nodes
+
+A source hands over `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and the
+`Parent` directory. `IExplorerDirectory` adds its `Children`, `IExplorerFile` a `Size`.
+`FileSystemFile` and `FileSystemDirectory` implement them for the disk, and a type of
+your own is displayed like the others — see
+[virtual nodes](sources.md#virtual-nodes).
+
+## Interactions
+
+Both the list and the tree come with:
+
+- **Context menus** — keyed on the node type, so a type of your own gets a menu of its own.
+- **Drag and drop** — between the controls, and with the Windows explorer.
+- **Shortcuts** — `F2` renames, `Ctrl+C` / `Ctrl+X` / `Ctrl+V` copy, cut and paste, `Delete` removes.
+- **`VisibleNodes`** — the kinds of node shown: `All`, `Files` or `Directories`.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/explorer.md -->
+
+# Explorer
+
+## Explorer
+
+Everything together: the control bar with the breadcrumb of the opened path, the tree
+of the loaded hierarchy next to the list of the opened folder, and a status bar
+counting its items and the selected ones.
+
+```xml
+<fileExplorer:Explorer Source="{Binding Source}" />
+```
+
+The parts share the `Source` of the explorer, which is what keeps them in sync.
+`ExtraColumns` is handed over to its list, see
+[extra columns](list.md#extra-columns).
+
+## Custom node template
+
+The node visuals are implicit templates keyed by node type: redeclaring one in the
+resources of a control replaces it there only. Here `ExplorerIconConverter` trades the
+font icons for the icons the system associates with each file type.
+
+```xml
+<fileExplorer:Explorer Source="{Binding Source}">
+    <fileExplorer:Explorer.Resources>
+        <DataTemplate x:Key="NodeWithSystemIcon">
+            <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="4">
+                <Image Width="16" Height="16"
+                       Source="{Binding Converter={x:Static icons:ExplorerIconConverter.Small}}" />
+                <TextBlock Text="{Binding Name}" />
+            </StackPanel>
+        </DataTemplate>
+        <!-- Replaces the implicit template of the node type, in this control only -->
+        <DataTemplate DataType="{x:Type fileSystem:FileSystemFile}">
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource NodeWithSystemIcon}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type fileSystem:FileSystemDirectory}">
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource NodeWithSystemIcon}" />
+        </DataTemplate>
+    </fileExplorer:Explorer.Resources>
+</fileExplorer:Explorer>
+```
+
+## Virtual nodes
+
+A source hands over the nodes it wants, of the disk or of the application, and a node
+type of your own is templated like the others — see
+[virtual nodes](sources.md#virtual-nodes).
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/list.md -->
+
+# List
+
+## ExplorerList
+
+Lists the nodes of the opened folder, directories first then by natural name order,
+with each file's size. Double click a folder to open it, right click a node for its
+menu.
+
+```xml
+<fileExplorer:ExplorerList Source="{Binding Source}" />
+```
+
+`SelectedNodes` is bindable, so a status bar can count the selection, and `View` gives
+the sorted and filtered nodes as the list displays them.
+
+## Extra columns
+
+`ExtraColumns` adds columns after the ones of the list (name, modification date, size).
+Each cell is bound to the node of its row, so a node type of your own shows the data it
+carries: here the path every node has, and a cell template reading the parent folder.
+
+```xml
+<fileExplorer:ExplorerList Source="{Binding Source}">
+    <fileExplorer:ExplorerList.ExtraColumns>
+        <GridViewColumn Header="Full path" Width="260" DisplayMemberBinding="{Binding Path}" />
+        <GridViewColumn Header="In folder">
+            <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Parent.Name}" />
+                </DataTemplate>
+            </GridViewColumn.CellTemplate>
+        </GridViewColumn>
+    </fileExplorer:ExplorerList.ExtraColumns>
+</fileExplorer:ExplorerList>
+```
+
+`Explorer` has an `ExtraColumns` of its own, handed over to its list.
+
+## Filtering the nodes
+
+`VisibleNodes` chooses the kinds of node shown: `All` by default, or `Files` /
+`Directories` to keep only one. Here the list keeps only the files.
+
+```xml
+<fileExplorer:ExplorerList Source="{Binding Source}" VisibleNodes="Files" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/tree.md -->
+
+# Tree
+
+## ExplorerTree
+
+Shows the loaded hierarchy, each level sorted on its own so it stays independent from
+the list. A tree shows only folders by default. Selecting a folder opens it, and so
+does expanding it, which selects it; a double click expands it.
+
+```xml
+<fileExplorer:ExplorerTree Source="{Binding Source}" />
+```
+
+## Showing files too
+
+`VisibleNodes` chooses the kinds of node a control shows: `Directories` (the tree
+default), `Files`, or `All`. Set it to `All` to list the files alongside the folders.
+
+```xml
+<fileExplorer:ExplorerTree Source="{Binding Source}" VisibleNodes="All" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/sources.md -->
+
+# Sources
+
+Every control binds a `Source`, an `IExplorerSource`: it holds the opened directory
+(`Current`), the loaded hierarchy (`Root`) and the commands the menus and the shortcuts
+act with. Controls sharing the same source stay in sync — selecting a folder in the
+tree, double clicking one in the list or using the breadcrumb opens it for all of them.
+
+```csharp
+// using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
+public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+// ...
+await Source.Open();
+```
+
+## FileSystemSource
+
+A directory of this machine, read when it is opened: a directory is loaded along with
+two levels of sub directories, so the tree shows an expander without reading the disk
+again.
+
+{: .note }
+> Copying, moving, renaming and deleting are handed over to the Windows shell, so they
+> come with its progress window, its "replace or skip" prompt and its recycle bin. A
+> whole selection goes in one call, which is what keeps the windows of the shell to one
+> for the batch.
+
+What it reads is a snapshot: the nodes are read again when a directory is opened, or
+after an operation made through the explorer. A change made outside of it — by another
+application, or by the Windows explorer — shows up the next time that directory is
+opened.
+
+## FileSystemWatcherSource
+
+The same source, watching the disk: a file or a directory created, deleted, renamed or
+moved outside of the explorer shows up in it without a refresh.
+
+```csharp
+public IExplorerSource Source { get; } = new FileSystemWatcherSource(@"C:\Projects", toasts);
+// ...
+await Source.Open();
+```
+
+The opened directory follows what happens to it: renamed, it is opened again under its
+new path; deleted, the directory that held it is opened instead, the way the Windows
+explorer does.
+
+{: .note }
+> It is `IDisposable`: dispose it to stop watching. Only the loaded nodes are
+> maintained, an event about a directory that has never been opened being dropped — it
+> will be read from the disk when it is opened. The content of a file isn't watched, a
+> node only carrying the size and the date it has been read with.
+
+## Virtual nodes
+
+A source hands over the nodes it wants: this one adds a `notes.md` of its own in every
+directory, associated to a path no file of the disk stands behind. A node type of the
+application is templated like the others — its visual and its context menu are keyed on
+its type, and an extra column shows the state it carries.
+
+```csharp
+// A node type of the application : it carries a path, and a state no file of the disk has.
+// An IExplorerNode and not an IExplorerFile : it has no size, so the size column stays empty on its row.
+public class VirtualFile : ObservableObject, IExplorerNode
+{
+    public string Path { get; set; }
+    public string Name { get; }
+    public DateTime ModifiedAt { get; }
+    public IExplorerDirectory? Parent { get; set; }
+
+    public bool IsPinned { get => isPinned; set => SetProperty(ref isPinned, value); }
+    private bool isPinned;
+
+    public VirtualFile(IExplorerDirectory parent, string name)
+    {
+        Parent = parent;
+        Name = name;
+        Path = System.IO.Path.Combine(parent.Path, name);
+        ModifiedAt = parent.ModifiedAt;
+    }
+}
+
+// A source hands its own nodes over along with the ones it reads.
+public class VirtualFilesSource : FileSystemSource
+{
+    public VirtualFilesSource(string rootDirectoryPath, IToastService? toasts) : base(rootDirectoryPath, toasts) { }
+
+    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    {
+        base.LoadDirectory(directory, depth);
+        directory.Children.Add(GetVirtualFile(directory));
+    }
+
+    // Nothing to hand over to the shell : a virtual file is opened by the application itself.
+    public override Task Open(IExplorerNode node) { ... }
+}
+```
+
+The context menu of a node type is a `DataTemplate` keyed with
+`ContextMenuTemplateKey`. Its data context is an `ExplorerMenuContext`: `Source` for
+the commands, `BeginRenameCommand` to rename the node in the control the menu was opened
+in, `Node` for the node the menu was opened on, `Nodes` for the whole selection.
+
+```xml
+<fileExplorer:Explorer Source="{Binding VirtualSource}">
+    <fileExplorer:Explorer.Resources>
+        <conv:TypeConverter x:Key="NodeTypeConverter" />
+
+        <!-- Visual of the virtual nodes, implicit as the ones of the library are -->
+        <DataTemplate DataType="{x:Type local:VirtualFile}">
+            <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="4">
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.StickyNote}" />
+                <TextBlock Text="{Binding Name}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <!-- Context menu keyed on the node type, replaces the one of the files nowhere else -->
+        <DataTemplate x:Key="{base:ContextMenuTemplateKey local:VirtualFile}">
+            <ContextMenu>
+                <MenuItem Header="Pinned" IsCheckable="True"
+                          IsChecked="{Binding Node.IsPinned, Mode=TwoWay}" />
+                <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                          CommandParameter="{Binding Node}" />
+            </ContextMenu>
+        </DataTemplate>
+    </fileExplorer:Explorer.Resources>
+    <fileExplorer:Explorer.ExtraColumns>
+        <GridViewColumn Header="Pinned" Width="70">
+            <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                    <!-- The column is shared by every row : only the virtual nodes show a box -->
+                    <CheckBox IsChecked="{Binding IsPinned, Mode=OneWay}" IsHitTestVisible="False">
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Type local:VirtualFile}"
+                                                 Binding="{Binding Converter={StaticResource NodeTypeConverter}}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                </DataTemplate>
+            </GridViewColumn.CellTemplate>
+        </GridViewColumn>
+    </fileExplorer:Explorer.ExtraColumns>
+</fileExplorer:Explorer>
+```
+
+{: .note }
+> A context menu template is searched from the most specific type of the node up to
+> `object`, and on the scope of the menu (`Single`, `Multiple`, `None` outside of any
+> node), so a type without a menu of its own falls back on the default ones.
+
+## A source of something else
+
+A source that reads none of the disk implements `IExplorerSource` itself: `Root` and
+`Current`, `Open()` and `Open(node)`, `Transfer(paths, target, isMove)` for what is
+dropped or pasted into it, and the commands the menus and the shortcuts bind
+(`RenameCommand`, `RemoveCommand`, `CreateDirectoryCommand`, `CopyCommand`,
+`CutCommand`, `PasteCommand`, `OpenCommand`, `OpenInExplorerCommand`,
+`CopyPathCommand`, `OpenWithDefaultCommand`).
+
+The nodes it hands over are `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and
+the `Parent` directory, `IExplorerDirectory` adding its `Children` and its
+`DirectoryTree` (itself and its ancestors, from the root, which the breadcrumb shows),
+and `IExplorerFile` a `Size`.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/sizing.md -->
+
+# Sizing
+
+## Sizing.Size
+
+The inherited `Size` attached property (`xs` / `sm` / `md` / `lg`) scales height,
+font size and padding. `xl` exists too, for icons only: it enlarges a `FontIcon`. Since it inherits, setting it on a panel sizes every child.
+
+```xml
+<!-- Attached property drives height, font size and padding -->
+<Button toolkit:Sizing.Size="xs" />
+<Button toolkit:Sizing.Size="sm" />
+<Button toolkit:Sizing.Size="md" />  <!-- default -->
+<Button toolkit:Sizing.Size="lg" />
+
+<!-- Size is inherited, so a panel sets it for every child -->
+<StackPanel toolkit:Sizing.Size="lg">
+    <TextBox /> <ComboBox /> <Button>OK</Button>
+</StackPanel>
+```
+
+Other controls honor the same attached property — `TreeView` scales its expander,
+indentation and text together:
+
+```xml
+<TreeView toolkit:Sizing.Size="lg" ItemsSource="{Binding Tree}" />
+```
+
+## Sizing.IsSquare
+
+`IsSquare` forces equal width and height, for single-icon buttons.
+
+```xml
+<Button toolkit:Sizing.IsSquare="True"
+        toolkit:Sizing.Size="lg">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+</Button>
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/spacing.md -->
+
+# Spacing
+
+## Spacing.Gap
+
+`Gap` adds even spacing between a panel's children — no per-child margins. A
+`StackPanel` spaces along its orientation; `WrapPanel` and `Grid` space on both
+axes.
+
+`Gap` is a `Thickness`: a single value is a uniform gap on both axes, a
+`"horizontal,vertical"` pair sets each axis independently (`Left` drives
+horizontal, `Top` vertical).
+
+```xml
+<!-- Gap adds spacing between children of any panel -->
+<!-- StackPanel: gap along the Orientation axis -->
+<StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
+    <Button>One</Button> <Button>Two</Button> <Button>Three</Button>
+</StackPanel>
+
+<!-- Gap is a Thickness: one value is uniform, -->
+<!-- "horizontal,vertical" sets each axis (Left/Top) -->
+<WrapPanel toolkit:Spacing.Gap="8,12">
+    ...
+</WrapPanel>
+
+<!-- Grid: gap sits between rows and columns -->
+<Grid toolkit:Spacing.Gap="12">
+    ...
+</Grid>
+```
+
+{: .note }
+> Spacing is implemented through child margins, so any margin set directly on a
+> child is overwritten while spacing is active.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md -->
+
+# Tooltip
+
+## Tooltip.Content
+
+Set `Tooltip.Content` on **any** element to attach a themed tooltip that shows
+instantly on hover. It builds on the native `ToolTip`, so screen-edge flipping and
+fade-in keep working, but unlike the native tooltip it appears with no delay.
+
+`Tooltip.Content` is an `object`: it accepts a plain string or arbitrary XAML.
+
+```xml
+<!-- A string tooltip -->
+<Button Content="Save" toolkit:Tooltip.Content="Save your changes" />
+
+<!-- Arbitrary content: icons, panels, anything -->
+<Button Content="Rich tooltip">
+    <toolkit:Tooltip.Content>
+        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
+            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
+            <TextBlock Text="Arbitrary content, icons included." />
+        </StackPanel>
+    </toolkit:Tooltip.Content>
+</Button>
+```
+
+## Tooltip.Placement
+
+`Tooltip.Placement` chooses which side the tooltip sits on — `Top`, `Bottom`
+(default), `Left` or `Right`. It is centered on the shared edge, kept a small gap
+clear of the element, and still flips automatically when it would run off a screen
+edge.
+
+```xml
+<Button Content="Top"    toolkit:Tooltip.Content="Placed above" toolkit:Tooltip.Placement="Top" />
+<Button Content="Bottom" toolkit:Tooltip.Content="Placed below" toolkit:Tooltip.Placement="Bottom" />
+<Button Content="Left"   toolkit:Tooltip.Content="Placed left"  toolkit:Tooltip.Placement="Left" />
+<Button Content="Right"  toolkit:Tooltip.Content="Placed right" toolkit:Tooltip.Placement="Right" />
+```
+
+{: .note }
+> Setting `Tooltip.Content` to `null` removes the tooltip, so it composes with
+> triggers — the [navigation menu](../navigation/navigation-menu.md) attaches a
+> right-placed tooltip to each item only while the menu is collapsed.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/drop-target.md -->
+
+# Drag and drop
+
+## DropTarget.Command
+
+`DropTarget.Command` makes **any** element a drop target: `AllowDrop` and the four
+drag events (`DragEnter`, `DragOver`, `DragLeave`, `Drop`) are handled for you, and
+the command is executed with the dropped `IDataObject` as parameter.
+
+The command's `CanExecute` is what decides the accepted data: what it refuses can't
+be dropped — the cursor shows a no-drop sign — and never lights the zone up.
+
+```xml
+<!-- AllowDrop and the drag events are handled by the behavior -->
+<Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+    <TextBlock VerticalAlignment="Center" Text="Drop .pdf files here" />
+</Border>
+```
+
+```csharp
+// The command's CanExecute is the whole filter: what it refuses can't be dropped
+public IRelayCommand DropFilesCommand { get; }
+    = new RelayCommand<IDataObject>(DropFiles, CanDropFiles);
+
+private static bool CanDropFiles(IDataObject? data)
+{
+    string[]? files = data?.GetData(DataFormats.FileDrop) as string[];
+    return files?.Length > 0 && files.All(f => Path.GetExtension(f).Equals(".pdf", StringComparison.OrdinalIgnoreCase));
+}
+
+// Same IDataObject, once the drop landed
+private static void DropFiles(IDataObject? data) { ... }
+```
+
+{: .note }
+> `CanExecute` is called on every mouse move of the drag, so keep it cheap and side
+> effect free — look at the paths, not at the files.
+
+## Where the drop landed
+
+The parameter is a `DropData`: the dragged data — which it is an `IDataObject` of, so a
+command only interested in what was dropped keeps taking one and reads it as above — and
+where the pointer is on the target, for the drops that land *somewhere* rather than just on
+something: a canvas placing what it receives under the cursor, a list inserting it at an
+index.
+
+```csharp
+// Position is relative to Target, the element holding DropTarget.Command
+private void DropNode(IDataObject? data)
+{
+    if (data is not DropData drop)
+        return;
+
+    Point onCanvas = drop.Target.TranslatePoint(drop.Position, Canvas);
+    ...
+}
+```
+
+{: .note }
+> `Position` is where the drop landed for the command itself, and where the pointer is for
+> `CanExecute`, which is called all along the drag: a target can accept a drag over one of
+> its areas and refuse it over another.
+
+## DropTarget.IsDragOver
+
+`IsDragOver` is `true` while **accepted** data hovers the element, which is all a
+trigger needs to highlight a valid drop. It inherits, so template and content
+children see it too.
+
+```xml
+<Border toolkit:DropTarget.Command="{Binding DropFilesCommand}">
+    <!-- Background and BorderBrush are styled, not set on the Border, so the trigger can override them -->
+    <Border.Style>
+        <Style TargetType="Border">
+            <Setter Property="Background" Value="Transparent" />
+            <Style.Triggers>
+                <!-- True only while accepted data hovers: refused files never highlight -->
+                <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Border.Style>
+    <TextBlock VerticalAlignment="Center" Text="Drop .pdf files here" />
+</Border>
+```
+
+## DropTarget.Effect
+
+`Effect` is the drop effect reported to the drag source for an accepted drop, which
+drives the mouse cursor — `Copy` by default. Data the source doesn't allow this
+effect for is rejected, so a `Move` target only accepts drags that can be moved.
+
+```xml
+<Border toolkit:DropTarget.Command="{Binding MoveCommand}"
+        toolkit:DropTarget.Effect="Move" />
+```
+
+## DragSource.Data
+
+`DragSource.Data` is the counterpart of `DropTarget.Command`: it makes **any** element
+a drag source, carrying that data to the drop targets. The mouse events are handled
+for you, and the drag only starts once the pointer moved past the system drag
+threshold, so clicks keep working — a draggable button is still clickable.
+
+The data is given to the targets as is when it already is an `IDataObject`, and
+wrapped in a `DataObject` otherwise: a `string` arrives as text, a view model under
+its own type — and under every base class and interface of it, so a target can ask for
+what the data **is** instead of having to know the exact kind it is given.
+
+```xml
+<!-- The mouse events are handled by the behavior: the drag starts past the system threshold -->
+<Border toolkit:DragSource.Data="{Binding}"
+        toolkit:DragSource.AllowedEffects="Move">
+    <TextBlock Text="{Binding}" />
+</Border>
+```
+
+```csharp
+// The target reads what the source carried, wrapped in a DataObject
+private static string? GetTag(IDataObject? data) => data?.GetData(DataFormats.UnicodeText) as string;
+
+// Whatever kind of node was dragged, the target only asks for the base it can handle
+private static BaseNode? GetNode(IDataObject? data) => data?.GetData(typeof(BaseNode)) as BaseNode;
+```
+
+## DragSource.AllowedEffects
+
+`AllowedEffects` is what the source lets the targets answer with — `Copy` by default.
+A target asking for anything else is refused, so `AllowedEffects` and
+`DropTarget.Effect` must agree for the drop to happen.
+
+```xml
+<!-- Both agree on Move: the item leaves the source -->
+<Border toolkit:DragSource.Data="{Binding}" toolkit:DragSource.AllowedEffects="Move" />
+<Border toolkit:DropTarget.Command="{Binding TakeCommand}" toolkit:DropTarget.Effect="Move" />
+```
+
+## DragSource.IsDragging
+
+`IsDragging` is `true` for the whole duration of the drag, which is all a trigger
+needs to fade the original out while it travels. It inherits, so template and content
+children see it too.
+
+```xml
+<Border toolkit:DragSource.Data="{Binding}">
+    <Border.Style>
+        <Style TargetType="Border">
+            <Style.Triggers>
+                <!-- True for the whole drag: the original fades out while it travels -->
+                <Trigger Property="toolkit:DragSource.IsDragging" Value="True">
+                    <Setter Property="Opacity" Value="0.4" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Border.Style>
+    <TextBlock Text="{Binding}" />
+</Border>
+```
+
+{: .note }
+> The drag is a blocking call: nothing else happens on the element until the drop
+> lands or the drag is cancelled.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/theme.md -->
+
+# Theme
+
+Joufflu ships two colour palettes — `Themes/Light.xaml` and `Themes/Dark.xaml` — with the
+same keys, different values. `ThemeManager` swaps the active one at runtime through a single
+merged dictionary; since every control reads its colours through `DynamicResource`, the whole
+UI re-themes live.
+
+The keys themselves — what each colour and dimension is used for — are listed in
+[Design tokens](tokens.html).
+
+Themes are selected **by name**. Three are always available — `System`, `Light` and `Dark` —
+and you can register your own palettes so they become selectable alongside the built-ins.
+
+## App setup
+
+Merge only the control styles in `App.xaml`. Do **not** hardcode a theme dictionary — the
+manager inserts the matching Light/Dark dictionary ahead of the styles at runtime.
+
+```xml
+<!-- App.xaml -->
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+</Application.Resources>
+```
+
+Initialize the manager once at startup, before the first window is shown:
+
+```csharp
+// App.xaml.cs — OnStartup
+ThemeManager.Instance.Initialize();
+```
+
+## ThemeManager
+
+Owns the active theme. Set `Theme` (a name) from anywhere and the UI re-themes live:
+
+```csharp
+using Joufflu.Themes;
+
+ThemeManager.Instance.Theme = ThemeManager.Dark;   // "System" / "Light" / "Dark" / any registered name
+
+bool isDark = ThemeManager.Instance.IsDark;         // the theme actually on screen
+```
+
+`ThemeManager.System`, `.Light` and `.Dark` are string constants for the built-in names. In the
+`System` theme the manager reads the Windows apps theme and keeps following it, so the UI tracks
+the OS light/dark switch automatically.
+
+The manager does **not** persist the selection — that is left to the app, since each app stores its
+settings differently (see [Persisting the theme](#persisting-the-theme)).
+
+## Registering a custom theme
+
+A custom theme is just a resource dictionary with the same keys as `Light.xaml` / `Dark.xaml`
+(see [Customize theme](customize-theme.html) to generate one). Register it by name — from a pack
+`Uri` or an in-memory `ResourceDictionary` — and it becomes selectable through `Theme`, appearing
+in the `Themes` list next to the built-ins:
+
+```csharp
+// Register BEFORE Initialize() so a restored custom selection can be applied on launch.
+ThemeManager.Instance.Register(
+    "Ocean",
+    new Uri("pack://application:,,,/MyApp;component/Themes/Ocean.xaml"),
+    isDark: true);   // isDark surfaces through IsDark while the theme is selected
+
+ThemeManager.Instance.Initialize();
+
+// Later, select it like any other theme:
+ThemeManager.Instance.Theme = "Ocean";
+```
+
+Reusing an existing name replaces that theme; `Unregister(name)` removes a custom one (the built-ins
+cannot be removed). Registering the currently-selected theme re-applies it live — handy when the
+restored selection is a custom theme registered after `Initialize()`.
+
+## Persisting the theme
+
+`ThemeManager` does not save the selected theme — each app owns its settings and usually wants to
+fold the theme into the same store as its other preferences. Making the choice survive a restart is
+two small steps:
+
+1. **Restore** the saved name before `Initialize()`, so the right theme is shown from the first frame.
+2. **Save** on every change: `ThemeManager` is an `ObservableObject`, so subscribe to `PropertyChanged`
+   and write the name whenever `Theme` changes.
+
+```csharp
+// App.xaml.cs — OnStartup, after registering custom themes and before Initialize().
+string? saved = LoadThemeSetting();                 // your own settings store
+if (!string.IsNullOrWhiteSpace(saved))
+    ThemeManager.Instance.Theme = saved;
+
+ThemeManager.Instance.PropertyChanged += (_, e) =>
+{
+    if (e.PropertyName == nameof(ThemeManager.Theme))
+        SaveThemeSetting(ThemeManager.Instance.Theme);
+};
+
+ThemeManager.Instance.Initialize();
+```
+
+`LoadThemeSetting`/`SaveThemeSetting` are whatever your app already uses (a JSON file, the registry,
+`Settings.settings`, …). The sample app persists a small JSON file under `%AppData%` — see its
+`App.xaml.cs` for the full working example.
+
+## Building a theme switcher
+
+No dedicated switcher control — bind any UI directly to `ThemeManager.Instance.Theme`. Map each
+theme name to a `RadioButton` with the enum-to-boolean converter (it compares by value, so it works
+with the theme-name strings too):
+
+```xml
+xmlns:themes="clr-namespace:Joufflu.Themes;assembly=Joufflu"
+xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
+
+<!-- In the resources of the window or the app -->
+<conv:EnumMatchToBooleanConverter x:Key="EnumMatch" />
+
+<RadioButton Content="System"
+    IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance},
+        Converter={StaticResource EnumMatch},
+        ConverterParameter=System, Mode=TwoWay}" />
+<RadioButton Content="Light"
+    IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance},
+        Converter={StaticResource EnumMatch},
+        ConverterParameter=Light, Mode=TwoWay}" />
+<RadioButton Content="Dark"
+    IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance},
+        Converter={StaticResource EnumMatch},
+        ConverterParameter=Dark, Mode=TwoWay}" />
+<!-- Registered custom themes slot in the same way -->
+<RadioButton Content="Ocean"
+    IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance},
+        Converter={StaticResource EnumMatch},
+        ConverterParameter=Ocean, Mode=TwoWay}" />
+```
+
+See the **Theme** page in the sample gallery for the full working example.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tokens.md -->
+
+# Design tokens
+
+A theme is a collection of the keys below. Every control style reads them
+through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
+leaves out keeps the built-in value.
+
+Keys are `ComponentResourceKey` statics rather than strings, so a renamed key breaks the build
+instead of silently falling back at runtime:
+
+```xml
+xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+
+<!-- Always DynamicResource: a theme swap, or the customizer editing a
+     dimension, has to reach controls already on screen. -->
+<Border
+    Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
+    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
+    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+
+<!-- The raw Color is there for what a brush cannot express -->
+<GradientStop Offset="0" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
+```
+
+See [Theme](theme.html) for swapping palettes at runtime, [Customize theme](customize-theme.html)
+for editing these values live, and [Derived dimensions](derived-dimensions.html) for scaling one
+per side or per corner.
+
+## Colors
+
+Each colour exists twice: `Joufflu.Colors.XColor` holds the `Color`, `Joufflu.Brushes.XBrush` the
+`SolidColorBrush` built from it. Use the brush in the UI; the colour is there for gradients,
+animations and anything that needs the raw value.
+
+### Surfaces
+
+The neutral ground every control is drawn on, from the furthest back to the closest.
+
+| Key | Used for |
+|---|---|
+| `Background` | Window and page background, the furthest back surface. |
+| `Background100` | Elevated surface sitting on top of the background: cards, popups, drop-downs, data rows. |
+| `Background200` | Transient surface: hovered ghost button, hovered or selected row, slider track. |
+| `Border` | Default border of every framed control (text box, card, drop-down). |
+| `Border100` | Stronger border, used when a control is hovered or focused, and for separator lines. |
+
+### Text
+
+The suffix says how much the text recedes.
+
+| Key | Used for |
+|---|---|
+| `Foreground` | Default text and icon colour, on `Background` or `Background100`. |
+| `Foreground100` | Muted text: placeholders, hints, secondary labels. What the `Muted` typography style uses. |
+| `Foreground200` | Text on a selected row, where the default foreground would lose contrast. |
+
+### Accents
+
+Six semantic families sharing one shape — the three keys of each are shown side by side below:
+`X` is the fill, `X100` the same fill while hovered or pressed, `XContent` the text and icons drawn
+on top of both (the `Aa` in the first two tiles). The last two tiles are brushes only, derived from
+the fill so no theme defines them: `XSoftBrush`, the fill at low opacity (soft buttons, selected
+rows, outline hover), and `XSoft100Brush`, its hover — drawn with the fill as text, as a soft button
+is.
+
+<table>
+<tbody>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft100</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D4D4D8;color:#27272A">Aa</div><code style="font-size:11px">Secondary100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft100</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BD81;color:#004C39">Aa</div><code style="font-size:11px">Success100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft100</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#3B82F6;color:#172554">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#1D6FF4;color:#172554">Aa</div><code style="font-size:11px">Info100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#172554;color:#172554">&nbsp;</div><code style="font-size:11px">InfoContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.14);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.24);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft100</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EEAF00;color:#411E03">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D69D00;color:#411E03">Aa</div><code style="font-size:11px">Warning100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#411E03;color:#411E03">&nbsp;</div><code style="font-size:11px">WarningContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.14);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.24);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft100</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF627D;color:#4D0218">Aa</div><code style="font-size:11px">Danger</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF3E5F;color:#4D0218">Aa</div><code style="font-size:11px">Danger100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#4D0218;color:#4D0218">&nbsp;</div><code style="font-size:11px">DangerContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.14);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.24);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft100</code></div></td><td>Destructive action and validation errors — a delete button, the border of a field in error.</td></tr>
+</tbody>
+</table>
+
+The swatches show the built-in **Light** palette; every theme redefines the same eighteen keys.
+The sample gallery renders them live against whichever theme is selected.
+
+### State
+
+| Key | Used for |
+|---|---|
+| `DisabledOpacity` | Opacity applied to a whole control while `IsEnabled` is `False` (`0.5`). Disabled controls fade rather than switch to a dedicated palette, so a single key covers every control. |
+
+## Dimensions
+
+`Joufflu.Dimensions` holds the metrics. The values in parentheses are the built-in defaults.
+
+### Shape
+
+A scalar plus the ready made `Thickness`/`CornerRadius` built from it. Bind the scalar through
+[`Derive`](derived-dimensions.html) when you need only some sides or corners, the composite one
+otherwise.
+
+| Key | Type | Used for |
+|---|---|---|
+| `Thickness` | `double` | Base border width (`1`). |
+| `BorderThickness` | `Thickness` | `Thickness` on all four sides, for a uniform border. |
+| `Radius` | `double` | Base corner radius (`4`). |
+| `CornerRadius` | `CornerRadius` | `Radius` on all four corners, for a uniformly rounded border. |
+
+### Layout
+
+Distances between things rather than inside them.
+
+| Key | Type | Used for |
+|---|---|---|
+| `Spacing` | `double` | Standard gap between sibling elements (`12`). Feed it to [`Spacing.Gap`](spacing.html). |
+| `SpacingThickness` | `Thickness` | `Spacing` on all four sides, the standard page padding. |
+| `TitleBarHeight` | `double` | Height of the custom window title bar (`30`). |
+| `TitleBarHeightOffset` | `Thickness` | `Top` only, used as a margin to push content below an overlapping title bar. |
+
+### Control heights
+
+Vertical size of single line controls. [`Sizing.Size`](sizing.html) picks one of the four; `md` is
+the default written in the base styles, so only `xs`/`sm`/`lg` appear in the size triggers.
+
+| Key | Value | Used for |
+|---|---|---|
+| `HeightXs` | `24` | Dense tables and toolbars. |
+| `HeightSm` | `28` | |
+| `HeightMd` | `32` | The default. |
+| `HeightLg` | `40` | Prominent, touch friendly controls. |
+| `HeightEmbedded` | `20` | `0.625` of `HeightMd`, kept in sync by the theme customizer. The small clear button embedded inside a search box, combo box or numeric input. |
+
+### Font sizes
+
+The [typography](../natives/typography.html) styles (`H1`…`H6`, `Muted`, …) are built on these, so
+restyling the scale restyles the text.
+
+| Key | Value |
+|---|---|
+| `FontSizeXs` | `11` |
+| `FontSizeSm` | `12` |
+| `FontSizeMd` | `13` (the default body size) |
+| `FontSizeLg` | `16` |
+| `FontSizeXl` | `24` |
+
+### Paddings
+
+Space inside a control, one `Thickness` per size. Two families: buttons and anything content shaped
+use `Padding*`, text inputs use `InputPadding*`, whose halved horizontal keeps the caret closer to
+the border.
+
+| Key | Value | Input key | Value |
+|---|---|---|---|
+| `PaddingXs` | `6,2` | `InputPaddingXs` | `3,2` |
+| `PaddingSm` | `9,3` | `InputPaddingSm` | `4.5,3` |
+| `PaddingMd` | `12,4` | `InputPaddingMd` | `6,4` |
+| `PaddingLg` | `18,6` | `InputPaddingLg` | `9,6` |
+
+`PaddingMd` and `InputPaddingMd` are the defaults.
+
+See the **Design tokens** page in the sample gallery for the same reference with live swatches.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/customize-theme.md -->
+
+# Customize theme
+
+The gallery's theme customizer tweaks colours and dimensions with the whole
+gallery updating live. Start from a **preset theme**, then copy or save the
+generated resource dictionary and merge it into your app **after** the Joufflu
+resources to apply it.
+
+The design system is exposed as resource keys you override in a dictionary:
+`joufflu:Colors.*` for the colours and `joufflu:Dimensions.*` for the metrics. The
+`joufflu:Brushes.*` are built from the colours by the core resources, so overriding a
+colour is enough for every brush to follow. [Design tokens](tokens.html) lists them all, with the role each one
+plays in the control styles.
+
+```xml
+<!-- Merge your overrides AFTER the Joufflu resources -->
+<ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
+    <ResourceDictionary Source="MyTheme.xaml" />
+</ResourceDictionary.MergedDictionaries>
+```
+
+Run the **`Joufflu.Samples`** app and open *Customize theme* to generate a
+dictionary interactively.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/application-shell.md -->
+
+# Application shell
+
+Styles that shape the whole window rather than a control on a page. The
+`Joufflu.Samples` gallery window is the live example.
+
+## Window
+
+The default `Window` style themes a standard WPF window (background, foreground,
+native chrome) to match the design system. Applied implicitly to every `Window`.
+
+```xml
+<Window ...>
+    <!-- inherits the themed Window style automatically -->
+</Window>
+```
+
+## ThemedWindow
+
+`ThemedWindow` is a custom window with a fully styled title bar and caption
+buttons.
+
+```xml
+<controls:ThemedWindow xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
+                       Title="My app">
+    ...
+</controls:ThemedWindow>
+```
+
+### Title bar over content
+
+Set `AllowContentOverTitleBar="True"` to draw content beneath a transparent title
+bar instead of below it. A full-height side panel's background then reaches the
+top of the window, while the caption buttons keep floating top-right:
+
+```xml
+<controls:ThemedWindow ...
+    AllowContentOverTitleBar="True"
+    IconVisibility="Collapsed">
+    ...
+</controls:ThemedWindow>
+```
+
+`IconVisibility="Collapsed"` hides the title-bar icon and `TitleVisibility="Collapsed"`
+hides the title text — set both to clear the top-left corner for the side panel's
+own header.
+
+#### Keeping content clear of the bar
+
+**Why.** In this mode the title bar spans the full window width and stays
+draggable across its whole surface — that is what lets you drag the window from
+anywhere along the top. But the bar is drawn *over* the content, and though
+transparent its drag surface is hit-test visible: any control in the top strip is
+covered by it. A side-panel collapse button becomes unclickable; a page's
+vertical scrollbar runs behind the caption buttons.
+
+**How.** Reserve a strip of empty space at the top of your content equal to the
+bar's height. That height is a fixed value shared through the `Dimensions.TitleBarHeight`
+and `Dimensions.TitleBarHeightOffset` that can be used like so :
+
+```xml
+<controls:ThemedWindow ...
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    AllowContentOverTitleBar="True">
+
+    <feedback:ToastContainer Toasts="{Binding Toasts}">
+        <nav:OverlayContainer Overlays="{Binding Overlays}">
+            <DockPanel>
+                <nav:NavigationMenu DockPanel.Dock="Left" ... />
+
+                <!-- The page drops below the bar; overlays and toasts stay full-bleed. -->
+                <ContentControl
+                    Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"
+                    Content="{Binding Navigator.CurrentPage}" />
+            </DockPanel>
+        </nav:OverlayContainer>
+    </feedback:ToastContainer>
+</controls:ThemedWindow>
+```
+
+The `Joufflu.Samples` gallery window uses this setup. Because the height is a shared
+resource, the offset always matches the title bar even if that height changes.
+
+{: .note }
+> Offset only the panels whose top strip holds interactive content — a hosted page
+> and its scrollbar. Offsetting the page alone leaves the containers around it
+> full-bleed, so modal backdrops still cover the whole window.
+
+#### FullContainer
+
+`FullContainer` (`Joufflu.Navigation`) does that placement for you: it puts a page's
+header in the title bar strip and scrolls the content below it, so you no longer
+apply the offset by hand.
+
+```xml
+<nav:FullContainer Header="Profile">
+    <!-- the page content, scrolled below the title bar -->
+</nav:FullContainer>
+```
+
+`Header` is templated as an `H1` by default; set `HeaderTemplate` for anything else
+(a title plus a toolbar, for instance).
+
+## OverlayContainer
+
+Wraps the whole application and layers the modal overlay stack above it
+(`Joufflu.Navigation`). Because it encapsulates everything — side menu included —
+a full screen overlay covers the whole window.
+
+```xml
+<nav:OverlayContainer Overlays="{Binding Overlays}">
+    <!-- the whole app: menu, page, status bar, ... -->
+</nav:OverlayContainer>
+```
+
+## ToastContainer
+
+Stacks the toasts in a corner of whatever it wraps — `Position` picks which one
+(`Joufflu.Feedback`, usable on its own without the navigation package). Wrap it
+*around* the `OverlayContainer` so toasts stay above the overlays too:
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
+    <nav:OverlayContainer Overlays="{Binding Overlays}">
+        <!-- the whole app -->
+    </nav:OverlayContainer>
+</feedback:ToastContainer>
+```
+
+## The current page
+
+The current page needs no dedicated container: a plain `ContentControl` bound to
+the navigator renders it, the view resolved by an implicit `DataTemplate`.
+
+```xml
+<ContentControl Content="{Binding Navigator.CurrentPage}" />
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/derived-dimensions.md -->
+
+# Derived dimensions
+
+A `Thickness` or a `CornerRadius` declared in a `ResourceDictionary` is baked at
+parse time. Its `Left`/`Top`/`Right`/`Bottom` (or `TopLeft`/`TopRight`/…) are
+plain CLR properties, not dependency properties, so they can only be fed with
+`StaticResource` and never follow a later change of the scalar they were built
+from:
+
+```xml
+<!-- Baked at load: editing Dimensions.Thickness at runtime does nothing here -->
+<Thickness x:Key="MenuBorderThickness"
+           Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
+```
+
+`Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` build the
+value on the element instead, from a real `DynamicResource`. A scalar edited at
+runtime — by the [theme customizer](customize-theme.html), for instance — flows
+straight through, and no derived resource key has to be declared or re-pushed by
+hand.
+
+## Factors
+
+Each of the three properties has a matching factor, a `Thickness` (or a
+`CornerRadius`) whose components multiply the derived value side by side:
+
+| Factor component | Result |
+| --- | --- |
+| `0` | The side or corner is dropped |
+| `1` | It is kept as is |
+| anything else | It is scaled — `2` for a doubled margin, `0.5` for a halved radius |
+
+The default is `1,1,1,1`, so the derived value is applied whole.
+
+## Derive.BorderThickness
+
+Point `Derive.BorderThickness` at a resource key and pick the sides with
+`Derive.BorderThicknessFactor`, in the usual `Left,Top,Right,Bottom` order.
+
+```xml
+<!-- Right edge only, following Dimensions.Thickness live -->
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+        toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
+
+<!-- Open at the bottom, with a doubled top edge -->
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+        toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
+```
+
+Both properties work in a `Style` setter, so a control can derive its own border
+without a keyed `Thickness`:
+
+```xml
+<Style TargetType="{x:Type nav:NavigationMenu}">
+    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
+    <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
+</Style>
+```
+
+> **In a style, the fed property stops being overridable.** The derived value is
+> pushed with `SetCurrentValue`, which outranks a style setter — and even a local
+> value. So do not also set the property it feeds (here `BorderThickness`) in the
+> same style, move any `Style.Triggers` that change it onto the `Derive` property,
+> and expect that a consumer can no longer override it. When the fed property has
+> to stay overridable — a control's `Padding`, say — give it a plain keyed default
+> instead of deriving it.
+
+## Derive.CornerRadius
+
+Same shape, with `Derive.CornerRadiusFactor` in the
+`TopLeft,TopRight,BottomRight,BottomLeft` order.
+
+```xml
+<!-- Top corners only, matching the border it sits in -->
+<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+        toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
+```
+
+## Derive.Margin
+
+Same shape again, on any `FrameworkElement`, with `Derive.MarginFactor`.
+
+```xml
+<!-- Spaced everywhere but the top -->
+<Border toolkit:Derive.Margin="{x:Static joufflu:Dimensions.Spacing}"
+        toolkit:Derive.MarginFactor="1,0,1,1" />
+```
+
+## Notes
+
+- The source resource may be a `double` (the usual case, spread over every side
+  or corner before scaling) or an already built `Thickness` / `CornerRadius`,
+  whose own sides are then scaled.
+- `Derive.BorderThickness` applies to `Border` and to any `Control`;
+  `Derive.CornerRadius` applies to `Border`; `Derive.Margin` to any
+  `FrameworkElement`. Anything else throws.
+- The derived value is written with `SetCurrentValue`, which outranks a style
+  setter : a style deriving a value should not also set the property it feeds,
+  and the `Style.Triggers` meant to change it have to move to the `Derive`
+  property instead. An animation or a template trigger still takes over. So
+  `Derive` fits a value the control owns — a `Border` inside a template — not one
+  a consumer overrides : a property like a text input's `Padding` carries a plain
+  keyed default (`Dimensions.InputPadding*`) instead, which a local value or a
+  style still beats.
+
+Snippets use these XML namespaces:
+
+```xml
+xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md -->
+
+# Animate
+
+## Animate.Bounce
+
+`Bounce` loops a vertical hop on any element — a notification badge, a
+call-to-action button — without touching its template.
+
+The element rises to the full height, lands, then rebounds twice at roughly 42%
+and 18% of it before coming to rest: heights fall off geometrically and each
+rebound spends less time in the air than the last, the way something bouncing
+loses the same share of its energy on every impact. That settle is what keeps it
+from reading as a mechanical up-down pulse.
+
+It animates a `TranslateTransform` added to the element's `RenderTransform`, so
+it never affects layout and never moves its neighbours. `BounceHeight` sets how
+far the first hop rises (in DIPs, default `6`), the rebounds scaling with it,
+and `BounceDuration` the length of a full cycle (default `0:0:1`) — the hop and
+its rebounds plus the pause before the next one, so a longer duration reads as a
+slow idle nudge rather than a slower hop.
+
+```xml
+<!-- Bounce loops a vertical hop on any element, template untouched -->
+<Button toolkit:Animate.Bounce="True">Look at me</Button>
+
+<!-- Tune the hop: height in DIPs, duration of a full cycle (hop + pause) -->
+<fonts:FontIcon
+    toolkit:Animate.Bounce="True"
+    toolkit:Animate.BounceHeight="10"
+    toolkit:Animate.BounceDuration="0:0:0.6"
+    Text="{x:Static fonts:LucideFontIcons.Bell}" />
+
+<!-- Hidden elements pause their own hop: no frames spent on a -->
+<!-- bounce nobody can see, resumed when the element is back   -->
+<Border Visibility="Collapsed" toolkit:Animate.Bounce="True" />
+```
+
+`Bounce` is a plain boolean, so bind it to a view-model flag to start and stop
+the loop at runtime.
+
+```xml
+<!-- Bounce is a plain bool, so bind it to start and stop the loop -->
+<feedback:Badge toolkit:Animate.Bounce="{Binding HasUnread}">3</feedback:Badge>
+
+<!-- A transform already on the element is kept and composed with -->
+<!-- the bounce, then restored once Bounce goes back to False     -->
+<Border toolkit:Animate.Bounce="{Binding HasUnread}">
+    <Border.RenderTransform>
+        <RotateTransform Angle="8" />
+    </Border.RenderTransform>
+</Border>
+```
+
+{: .note }
+> `BounceHeight` and `BounceDuration` are baked into the animation's key frames,
+> so changing either while the element is bouncing restarts the hop from the top
+> of its cycle.
+
+## Hidden elements and lifetime
+
+The hop pauses itself whenever the element is not visible — `Collapsed` or
+`Hidden`, under a collapsed ancestor, or out of the visual tree — and resumes
+where it left off when the element comes back, parked at rest in the meantime.
+A bounce left on a hidden element therefore costs no frames.
+
+Nothing has to be unhooked for the element to be collected: the helper keeps no
+reference back to it, and an element dropped with `Bounce` still `True` is
+collected exactly like one that was stopped first — WPF retires the clock once
+its target goes away.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/custom-input.md -->
+
+# Custom input
+
+An input of your own sits with the Joufflu ones when it reads the same design tokens.
+The gallery's **Custom input** page builds a star `RatingInput` from a bare `Control`
+step by step; this page lists the rules it follows.
+
+| | Rule | Tokens |
+|---|---|---|
+| **Required** | Background | `Brushes.BackgroundBrush` |
+| **Required** | Border colour and thickness | `Brushes.BorderBrush`, `Dimensions.BorderThickness`, `Dimensions.CornerRadius` |
+| **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
+| Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
+| Optional | Hover, focus and disabled states | `Background100Brush`, `Border100Brush`, `Colors.DisabledOpacity` |
+| Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
+| Optional | Buttons inside the input | `EmbeddedButton` |
+
+Always reference the tokens with `DynamicResource`: a `StaticResource` is read once and
+misses every later theme switch.
+
+## Derive from a native control first
+
+When the input is a native control underneath (a `TextBox` with extras, a `ComboBox`
+variant…), derive from it and base the style on the native one. It inherits every rule
+on this page at once, and only the template needs writing:
+
+```xml
+<Style TargetType="{x:Type local:PrefixedTextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+    <Setter Property="Template"> ... </Setter>
+</Style>
+```
+
+The template must keep reading `Background`, `BorderBrush`, `BorderThickness` and
+`Padding` through `TemplateBinding`, or the inherited triggers have nothing to act on.
+The rest of this page is for an input built from a bare `Control`.
+
+## The minimum
+
+Set the background, the border and the height from the tokens in the style, and let the
+template read them from the control:
+
+```xml
+<Style TargetType="{x:Type local:RatingInput}">
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+    <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="{x:Type local:RatingInput}">
+                <Grid>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                    <!-- content -->
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
+```
+
+Setting them in the style rather than in the template keeps them overridable, and lets
+the triggers below change them. A multi-line input (a list, a text area) leaves the
+height alone.
+
+## Sizes and padding
+
+`Sizing.Size` is inherited: a panel set to `lg` expects every input in it to grow. Set the
+`md` values by default, and one trigger per other size:
+
+| Size | Height | Font size | Input padding |
+|---|---|---|---|
+| `xs` | `HeightXs` (24) | `FontSizeXs` (11) | `InputPaddingXs` (3,2) |
+| `sm` | `HeightSm` (28) | `FontSizeSm` (12) | `InputPaddingSm` (4.5,3) |
+| `md` | `HeightMd` (32) | `FontSizeMd` (13) | `InputPaddingMd` (6,4) |
+| `lg` | `HeightLg` (40) | `FontSizeLg` (16) | `InputPaddingLg` (9,6) |
+
+```xml
+<Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
+<Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
+
+<Style.Triggers>
+    <Trigger Property="toolkit:Sizing.Size" Value="xs">
+        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
+    </Trigger>
+    <!-- same for sm and lg -->
+</Style.Triggers>
+```
+
+Inputs use the `InputPadding` keys, tighter than the `Padding` keys of the buttons. In the
+template, lay the content over the border inside `Padding`, so it lines up with the text
+of the native inputs:
+
+```xml
+<Grid>
+    <Border ... />
+    <Grid Margin="{TemplateBinding Padding}"> <!-- content --> </Grid>
+</Grid>
+```
+
+## States
+
+The native inputs lighten their background on hover and their border on focus, and fade
+when disabled:
+
+```xml
+<Trigger Property="IsMouseOver" Value="True">
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
+</Trigger>
+<Trigger Property="IsKeyboardFocusWithin" Value="True">
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+</Trigger>
+<Trigger Property="IsEnabled" Value="False">
+    <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
+</Trigger>
+```
+
+## Validation error style
+
+Binding errors show in two layers, as on every Joufflu input: the input turns its own
+border red, and `ValidationErrorTemplate` adds a badge on the corner whose tooltip lists
+the errors. The template draws no border of its own, so the trigger is what makes the
+border red:
+
+```xml
+<Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
+
+<!-- In Style.Triggers, after the hover and focus triggers so it wins over them -->
+<Trigger Property="Validation.HasError" Value="True">
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+</Trigger>
+```
+
+A user of the input drops the badge with `Validation.ErrorTemplate="{x:Null}"`; the red
+border stays.
+
+## Embedded buttons
+
+A button inside the input (clear, open, step…) uses the `EmbeddedButton` style: a
+transparent square of `HeightEmbedded` (20). Placed inside `Padding`, it fits every
+size: the smallest input leaves exactly 24 − 2 × 2 = 20 for it.
+
+```xml
+<Grid Margin="{TemplateBinding Padding}">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    <!-- content -->
+    <Button Grid.Column="1" Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"
+            Style="{StaticResource EmbeddedButton}">
+        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
+    </Button>
+</Grid>
+```
+
+`EmbeddedButton` is a named style of `Button.named.xaml`. A `StaticResource` in a
+`ResourceDictionary` only sees that dictionary and the ones it merges, so a dictionary
+holding the input's style merges it:
+
+```xml
+<ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
+</ResourceDictionary.MergedDictionaries>
+```
+
+## Checking the result
+
+Put the input next to a `TextBox` and compare them:
+
+- in each size, with `Sizing.Size` on a parent panel;
+- after switching between Light and Dark, and to a custom theme;
+- hovered, focused and disabled;
+- with a binding error, with and without `Validation.ErrorTemplate="{x:Null}"`.

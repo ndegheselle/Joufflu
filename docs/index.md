@@ -20,13 +20,15 @@ can paste into your views.
 {: .note }
 > **Using an LLM agent?** Point it at the machine-readable
 > [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt)
-> index — a single file linking every page's raw Markdown source. Use that raw URL rather
+> index — a single file linking every page's raw Markdown source, or
+> [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
+> for every page in one file. Use those raw URLs rather
 > than the rendered site, which can return `403` to automated fetchers.
 
 ## Highlights
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
+- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys; the gallery's **Customize theme** page edits them live and generates the dictionary.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
@@ -92,6 +94,8 @@ can paste into your views.
 4. Use the controls as shown in the pages above.
 
 New to the library? The [Tutorial](tutorial.md) builds a full
-navigable app shell — side menu, pages, modals and toasts — from scratch.
+navigable app shell — side menu, pages, modals and toasts — from scratch, and the
+[Recipes](recipes.md) give copy-paste screens. Choosing between UI libraries? See
+[Joufflu vs other WPF UI libraries](comparison.md).
 
 To explore everything interactively, run the **`Joufflu.Samples`** project.

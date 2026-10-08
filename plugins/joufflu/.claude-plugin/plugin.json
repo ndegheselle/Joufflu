@@ -1,6 +1,6 @@
 {
   "name": "joufflu",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Use the Joufflu WPF component library (Joufflu, Joufflu.Inputs, Joufflu.Navigation, Joufflu.Feedback, Joufflu.FileExplorer, Joufflu.Data): API reference, app shell scaffolding, custom themes, restyling existing views onto the design system and building custom inputs that match it.",
   "author": {
     "name": "Nicolas De Gheselle",
@@ -9,5 +9,5 @@
   "homepage": "https://ndegheselle.github.io/Joufflu/",
   "repository": "https://github.com/ndegheselle/Joufflu",
   "license": "MIT",
-  "keywords": ["joufflu", "wpf", "dotnet", "xaml", "ui", "design-system", "theming"]
+  "keywords": ["joufflu", "wpf", "dotnet", "xaml", "ui", "modern-ui", "design-system", "theming", "dark-mode"]
 }

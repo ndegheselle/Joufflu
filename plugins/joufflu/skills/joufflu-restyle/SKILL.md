@@ -7,7 +7,9 @@ description: >-
   (custom numeric boxes, search boxes, tooltips, MessageBox dialogs, drag-and-drop
   handlers, icon images) for their Joufflu equivalents. Use when the user asks to
   restyle, clean up, modernise, "make theme-aware", fix dark mode, or audit a view
-  in a project that references Joufflu, or when a control doesn't follow the theme
+  in a project that references Joufflu, or when the user wants an old-looking WPF
+  view to look modern and Joufflu is not referenced yet (add it first with
+  `joufflu-new-app`), or when a control doesn't follow the theme
   switch; or says "/joufflu-restyle".
 ---
 

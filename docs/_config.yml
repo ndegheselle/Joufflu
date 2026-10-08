@@ -11,6 +11,11 @@ baseurl: /Joufflu
 remote_theme: just-the-docs/just-the-docs@v0.8.2
 plugins:
   - jekyll-remote-theme
+  - jekyll-sitemap
+
+# Maintenance script, not a page.
+exclude:
+  - build-llms-full.ps1
 
 # Sidebar / search
 search_enabled: true

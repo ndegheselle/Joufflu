@@ -9,7 +9,7 @@
     <IsPackable>true</IsPackable>
     <PackageId>Joufflu</PackageId>
     <Title>Joufflu</Title>
-    <Description>WPF design system: themed styles for the native controls, live Light/Dark theming, a custom-chrome window, icons, themed tooltips and sizing/spacing layout helpers.</Description>
+    <Description>Modern, easily customizable WPF UI library and design system (override colour and dimension tokens, or register your own theme): themed styles for the native controls (buttons, text boxes, data grid...), live Light/Dark theming, a custom-chrome window, icons, themed tooltips and sizing/spacing layout helpers.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <Version>0.9.0</Version>
