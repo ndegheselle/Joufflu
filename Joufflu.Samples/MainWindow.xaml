@@ -21,6 +21,7 @@
     xmlns:nativeNavigation="clr-namespace:Joufflu.Samples.Views.Natives.Navigation"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
     xmlns:navigation="clr-namespace:Joufflu.Samples.Views.Navigation"
+    xmlns:themes="clr-namespace:Joufflu.Themes;assembly=Joufflu"
     xmlns:themesSamples="clr-namespace:Joufflu.Samples.Views.Themes"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     xmlns:toolkitSamples="clr-namespace:Joufflu.Samples.Views.Toolkit"
@@ -31,6 +32,30 @@
     AllowContentOverTitleBar="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <controls:ThemedWindow.TitleBarContent>
+        <!--  Light / dark switch: the icon shows the theme a click switches to. No Background on the host, so the bar stays draggable around it.  -->
+        <Button
+            Margin="0,0,4,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            toolkit:Sizing.IsSquare="True"
+            toolkit:Sizing.Size="sm"
+            Click="ThemeSwitch_Click"
+            Style="{StaticResource GhostButton}">
+            <fonts:FontIcon>
+                <fonts:FontIcon.Style>
+                    <Style TargetType="{x:Type fonts:FontIcon}" BasedOn="{StaticResource {x:Type fonts:FontIcon}}">
+                        <Setter Property="Text" Value="{x:Static fonts:LucideFontIcons.Moon}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDark, Source={x:Static themes:ThemeManager.Instance}}" Value="True">
+                                <Setter Property="Text" Value="{x:Static fonts:LucideFontIcons.Sun}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </fonts:FontIcon.Style>
+            </fonts:FontIcon>
+        </Button>
+    </controls:ThemedWindow.TitleBarContent>
     <!--  Toasts sit above everything, modal overlays included.  -->
     <feedbackControls:ToastContainer Position="{Binding ToastSamples.Position}" Toasts="{Binding Toasts}">
         <!--  Wraps the whole app so overlays cover every part of it, side menu included.  -->

@@ -236,7 +236,7 @@
                                 Background="Transparent"
                                 HorizontalScrollBarVisibility="Disabled"
                                 VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter Margin="8,0,4,8" />
+                                <ItemsPresenter Margin="8,0,8,8" />
                             </ScrollViewer>
                         </DockPanel>
                     </Grid>
