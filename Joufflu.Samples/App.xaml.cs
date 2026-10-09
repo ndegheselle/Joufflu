@@ -32,6 +32,7 @@ namespace Joufflu.Samples
             RegisterTheme("Nord", isDark: false);
             RegisterTheme("Synthwave", isDark: true);
             RegisterTheme("Dracula", isDark: true);
+            RegisterTheme("Debug", isDark: true);
 
             // The ThemeManager does not persist the selection itself — each app saves the parameters it cares
             // about however it likes. Here: restore the saved theme name, then keep it in sync on every change.
