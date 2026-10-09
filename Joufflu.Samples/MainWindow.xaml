@@ -31,10 +31,6 @@
     AllowContentOverTitleBar="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <controls:ThemedWindow.TitleBarContent>
-        <Border Background="Red">
-        </Border>
-    </controls:ThemedWindow.TitleBarContent>
     <!--  Toasts sit above everything, modal overlays included.  -->
     <feedbackControls:ToastContainer Position="{Binding ToastSamples.Position}" Toasts="{Binding Toasts}">
         <!--  Wraps the whole app so overlays cover every part of it, side menu included.  -->

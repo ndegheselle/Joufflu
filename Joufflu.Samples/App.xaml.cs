@@ -49,9 +49,6 @@ namespace Joufflu.Samples
 
             MainWindow mainWindow = new MainWindow(shellViewModel);
             mainWindow.Show();
-
-            Window newWindow = new Window();
-            newWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)

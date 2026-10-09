@@ -77,70 +77,85 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
 
+                                <!--
+                                    Layer 1 (bottom): the title bar surface, background and drag area.
+                                    Content drawn over it with a null background still lets the window be grabbed.
+                                -->
                                 <Border
                                     x:Name="TitleBar"
                                     Grid.Row="0"
                                     Height="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
                                     Background="{TemplateBinding TitleBarBackground}"
                                     KeyboardNavigation.DirectionalNavigation="None"
-                                    KeyboardNavigation.TabNavigation="None"
-                                    TextElement.Foreground="{TemplateBinding TitleBarForeground}">
-
-                                    <Grid x:Name="PART_DragMoveThumb" Background="Transparent">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock
-                                            Grid.Column="1"
-                                            Margin="5,0,0,0"
-                                            VerticalAlignment="Center"
-                                            FontSize="11.5"
-                                            RenderOptions.ClearTypeHint="Auto"
-                                            Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                            TextOptions.TextFormattingMode="Display"
-                                            TextOptions.TextRenderingMode="Auto"
-                                            Visibility="{Binding TitleVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
-
-                                        <ContentPresenter
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            Content="{Binding TitleBarContent, RelativeSource={RelativeSource TemplatedParent}}" />
-
-                                        <StackPanel
-                                            Grid.Column="2"
-                                            HorizontalAlignment="Right"
-                                            Orientation="Horizontal"
-                                            Background="{TemplateBinding TitleBarBackground}">
-
-                                            <Button
-                                                x:Name="PART_MinimizeButton"
-                                                Foreground="{TemplateBinding TitleBarForeground}"
-                                                Style="{StaticResource WindowCaptionButtonStyle}">
-                                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Minus}" />
-                                            </Button>
-
-                                            <Button
-                                                x:Name="PART_MaximizeRestoreButton"
-                                                Foreground="{TemplateBinding TitleBarForeground}"
-                                                Style="{StaticResource WindowCaptionButtonStyle}">
-                                                <fonts:FontIcon x:Name="PART_MaximizeRestoreIcon" Text="{x:Static fonts:LucideFontIcons.Square}" />
-                                            </Button>
-
-                                            <Button
-                                                x:Name="PART_CloseButton"
-                                                Foreground="{TemplateBinding TitleBarForeground}"
-                                                Style="{StaticResource WindowCloseButtonStyle}">
-                                                <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
+                                    KeyboardNavigation.TabNavigation="None">
+                                    <Grid x:Name="PART_DragMoveThumb" Background="Transparent" />
                                 </Border>
 
+                                <!--  Layer 2: the window content, over the title bar when AllowContentOverTitleBar is set.  -->
                                 <ContentPresenter x:Name="WindowContent" Grid.Row="1" />
+
+                                <!--
+                                    Layer 3 (top): title, TitleBarContent and caption buttons, always above the content.
+                                    No background, so empty areas fall through to the drag area below.
+                                -->
+                                <Grid
+                                    x:Name="TitleBarForegroundLayer"
+                                    Grid.Row="0"
+                                    Height="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
+                                    KeyboardNavigation.DirectionalNavigation="None"
+                                    KeyboardNavigation.TabNavigation="None"
+                                    TextElement.Foreground="{TemplateBinding TitleBarForeground}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="11.5"
+                                        IsHitTestVisible="False"
+                                        RenderOptions.ClearTypeHint="Auto"
+                                        Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        TextOptions.TextFormattingMode="Display"
+                                        TextOptions.TextRenderingMode="Auto"
+                                        Visibility="{Binding TitleVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+
+                                    <ContentPresenter
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        Content="{Binding TitleBarContent, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+
+                                        <Button
+                                            x:Name="PART_MinimizeButton"
+                                            Foreground="{TemplateBinding TitleBarForeground}"
+                                            Style="{StaticResource WindowCaptionButtonStyle}">
+                                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Minus}" />
+                                        </Button>
+
+                                        <Button
+                                            x:Name="PART_MaximizeRestoreButton"
+                                            Foreground="{TemplateBinding TitleBarForeground}"
+                                            Style="{StaticResource WindowCaptionButtonStyle}">
+                                            <fonts:FontIcon x:Name="PART_MaximizeRestoreIcon" Text="{x:Static fonts:LucideFontIcons.Square}" />
+                                        </Button>
+
+                                        <Button
+                                            x:Name="PART_CloseButton"
+                                            Foreground="{TemplateBinding TitleBarForeground}"
+                                            Style="{StaticResource WindowCloseButtonStyle}">
+                                            <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
                             </Grid>
                         </Border>
                     </AdornerDecorator>
@@ -148,7 +163,7 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsActive" Value="False">
-                            <Setter TargetName="TitleBar" Property="TextElement.Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                            <Setter TargetName="TitleBarForegroundLayer" Property="TextElement.Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
                             <Setter TargetName="PART_MinimizeButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
                             <Setter TargetName="PART_MaximizeRestoreButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
                             <Setter TargetName="PART_CloseButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
@@ -166,6 +181,7 @@
                                 <Condition Property="ShrinkTitleBarWhenMaximized" Value="True" />
                             </MultiTrigger.Conditions>
                             <Setter TargetName="TitleBar" Property="MinHeight" Value="22" />
+                            <Setter TargetName="TitleBarForegroundLayer" Property="MinHeight" Value="22" />
                         </MultiTrigger>
 
                         <Trigger Property="WindowStyle" Value="ToolWindow">
@@ -188,6 +204,7 @@
 
                         <Trigger Property="WindowStyle" Value="None">
                             <Setter TargetName="TitleBar" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="TitleBarForegroundLayer" Property="Visibility" Value="Collapsed" />
                         </Trigger>
 
                         <Trigger Property="AllowContentOverTitleBar" Value="True">

@@ -48,9 +48,12 @@ double click closes).
 The code-behind class must derive from `ThemedWindow` too
 (`public partial class ShellWindow : ThemedWindow`).
 
-With `AllowContentOverTitleBar="True"` the transparent, draggable title bar covers the top
-strip of content: anything interactive there is unclickable. Push pages down with
-`Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"`; keep the overlay/toast containers full-bleed.
+With `AllowContentOverTitleBar="True"` the window is layered: title bar + drag area (bottom),
+content, then title / `TitleBarContent` / caption buttons (top, never covered). Content with a
+`null` Background (no `Transparent`) lets the window be grabbed through it; the page is not laid
+out for you, so push it down with
+`Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"` and keep the
+overlay/toast containers full-bleed. A `NavigationMenu` at the top keeps its header strip draggable.
 
 ## Shell window
 

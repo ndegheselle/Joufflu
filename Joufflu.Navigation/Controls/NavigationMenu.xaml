@@ -181,7 +181,7 @@
     <!--  ============================ NavigationMenu ============================  -->
     <Style TargetType="{x:Type nav:NavigationMenu}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <!--  Right edge only: the menu just separates itself from the content beside it.  -->
         <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
@@ -190,12 +190,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationMenu}">
-                    <Border
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <DockPanel>
+                    <Grid>
+                        <!--
+                            Paints the menu without taking part in hit testing, so the header strip
+                            lets the window be grabbed when under a ThemedWindow title bar.
+                        -->
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            IsHitTestVisible="False" />
+
+                        <DockPanel Margin="{TemplateBinding Padding}">
+                            <!--  No background: the header and the free space around the collapse button drag the window.  -->
                             <Grid DockPanel.Dock="Top">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -207,7 +214,8 @@
                                     Grid.Column="0"
                                     Margin="8"
                                     VerticalAlignment="Center"
-                                    Content="{TemplateBinding Header}" />
+                                    Content="{TemplateBinding Header}"
+                                    IsHitTestVisible="False" />
 
                                 <Button
                                     x:Name="CollapseButton"
@@ -223,11 +231,15 @@
                                 </Button>
                             </Grid>
 
-                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <!--  The items area blocks the drag: only the header strip moves the window.  -->
+                            <ScrollViewer
+                                Background="Transparent"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
                                 <ItemsPresenter Margin="8,0,4,8" />
                             </ScrollViewer>
                         </DockPanel>
-                    </Border>
+                    </Grid>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsCollapsed" Value="True">

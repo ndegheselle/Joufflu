@@ -16,6 +16,10 @@ When collapsed, each item and group hides its label and surfaces it as a
 right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
 rail discoverable.
 
+Under a `ThemedWindow` with `AllowContentOverTitleBar`, the menu's top strip (the
+`Header` and the space beside the collapse button) drags the window; the collapse
+button and the items stay clickable. The `Header` is therefore not interactive.
+
 ```xml
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}">
     <nav:NavigationTitle>Demo</nav:NavigationTitle>

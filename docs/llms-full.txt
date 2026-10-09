@@ -1292,6 +1292,10 @@ When collapsed, each item and group hides its label and surfaces it as a
 right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
 rail discoverable.
 
+Under a `ThemedWindow` with `AllowContentOverTitleBar`, the menu's top strip (the
+`Header` and the space beside the collapse button) drags the window; the collapse
+button and the items stay clickable. The `Header` is therefore not interactive.
+
 ```xml
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}">
     <nav:NavigationTitle>Demo</nav:NavigationTitle>
@@ -2952,18 +2956,40 @@ top of the window, while the caption buttons keep floating top-right:
 `TitleVisibility="Collapsed"` hides the title text, clearing the top-left corner for
 the side panel's own header.
 
+#### Layering
+
+The window is drawn in three layers, bottom to top:
+
+1. the title bar surface (`TitleBarBackground`) and its drag area;
+2. the window content;
+3. the title, `TitleBarContent` and the caption buttons.
+
+So content can be drawn over the bar, but never over the title bar content or the
+caption buttons: they stay visible and clickable.
+
+#### Grabbing the window through the content
+
+The drag area sits *under* the content. A control with a `null` background lets the
+mouse through to it, so the window can still be grabbed and moved from the top strip;
+a control with a background (even `Transparent`) swallows the click. Leave the
+containers around the page (`DockPanel`, `Grid`, `OverlayContainer`, `ToastContainer`...)
+without a `Background`, and only paint what must be clickable:
+
+```xml
+<!-- Draggable: no Background, the click reaches the title bar -->
+<Grid Height="30" />
+
+<!-- Not draggable: the border takes the click -->
+<Border Height="30" Background="Transparent" />
+```
+
 #### Keeping content clear of the bar
 
-**Why.** In this mode the title bar spans the full window width and stays
-draggable across its whole surface — that is what lets you drag the window from
-anywhere along the top. But the bar is drawn *over* the content, and though
-transparent its drag surface is hit-test visible: any control in the top strip is
-covered by it. A side-panel collapse button becomes unclickable; a page's
-vertical scrollbar runs behind the caption buttons.
-
-**How.** Reserve a strip of empty space at the top of your content equal to the
-bar's height. That height is a fixed value shared through the `Dimensions.TitleBarHeight`
-and `Dimensions.TitleBarHeightOffset` that can be used like so :
+**Compromise.** The window does not lay out your page: content is free to run under
+the title bar, so a page's own controls (a header, a scrollbar, a button) can end up
+behind the title bar content or the caption buttons. Reserve a strip of empty space
+at the top of the content equal to the bar's height, a fixed value shared through
+`Dimensions.TitleBarHeight` and `Dimensions.TitleBarHeightOffset`:
 
 ```xml
 <controls:ThemedWindow ...
@@ -2989,9 +3015,18 @@ The `Joufflu.Samples` gallery window uses this setup. Because the height is a sh
 resource, the offset always matches the title bar even if that height changes.
 
 {: .note }
-> Offset only the panels whose top strip holds interactive content — a hosted page
+> Offset only the panels whose top strip holds interactive content, a hosted page
 > and its scrollbar. Offsetting the page alone leaves the containers around it
 > full-bleed, so modal backdrops still cover the whole window.
+
+`TitleBarContent` is in layer 3 too: give it no background (or handle the drag
+yourself) when the window should stay grabbable through it.
+
+#### NavigationMenu under the bar
+
+A `NavigationMenu` reaching the top of the window leaves its header strip (the
+`Header` and the free space beside the collapse button) draggable. The header is not
+interactive; the collapse button and the items are.
 
 ## OverlayContainer
 
