@@ -10,6 +10,7 @@
 
 # Joufflu.Navigation (unreleased)
 
+- Remove `FullContainer`. **Breaking** : with `AllowContentOverTitleBar`, offset the hosted page with `Dimensions.TitleBarHeightOffset` yourself
 - Rename `OverlayService` / `IOverlayService` to `Overlayer` / `IOverlayer`, now in `Joufflu.Navigation`, and `Show` to `ShowAsync`. Content closes itself with `Validate`, `Cancel` or `Ignore`, handing `true`, `false` or `null` to the awaiting `ShowAsync`, in place of `Close(content, result)` and `CloseTop`; the close cross and a click away ignore. `OverlayViewModel` and `OverlayViewModel<TResult>` are gone : content implements `IOverlayContent` to carry its own options and `IOverlayContent<TResult>` for the `Result` the generic `ShowAsync` hands back when validated. **Breaking** for any code showing or closing overlays
 - Treat a `Paging` total of 0 as an empty set rather than an unknown one : a single page, Next disabled and "0-0 of 0", a negative `Total` alone leaving the size unknown, through a new `IsTotalKnown`. Keep the current page checked when its button is clicked again
 
@@ -26,6 +27,7 @@
 
 # Joufflu (unreleased)
 
+- Take the application icon out of the `ThemedWindow` title bar, shown by default, into an `AppIcon` control of its own, put in `ThemedWindow.TitleBarContent` where wanted : it shows the application icon or its `Source`, a click opens the system menu and a double click closes the window. **Breaking** : `IconVisibility` and `IconPresenter` leave `ThemedWindow`, which shows no icon unless given an `AppIcon`
 - Define the `Brushes` once, in `Styles/Brushes.xaml`, rather than in every theme : a theme is now its colours alone, and the theme customizer generates colours only. `ThemeManager` pairs a fresh copy of the brushes with every theme it applies, since a brush resolves its `DynamicResource` colour once and never again. This also fixes the `XSoftBrush` / `XSoft100Brush` tints, which were shared across themes and kept the colours of the first one shown. A custom theme still defining its own brushes keeps working, the paired ones taking precedence
 - Rename the `XSoftStrongBrush` keys `XSoft100Brush` (`PrimarySoft100Brush`, `DangerSoft100Brush`, …), the hover of a soft tint following the same convention as the hover of a fill, `X100`. The *Design tokens* page shows each accent's soft tint and its hover next to its other keys. **Breaking** : a reference to a `XSoftStrongBrush` key needs renaming
 - Show the application icon again when a `ThemedWindow`'s `Icon` is cleared, rather than keeping the previous one

@@ -90,15 +90,8 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-
-                                        <Image
-                                            x:Name="PART_IconPresenter"
-                                            Width="16"
-                                            Height="16"
-                                            Margin="5,0,0,0"
-                                            Source="{Binding IconSource, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                            Visibility="{Binding IconVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
 
                                         <TextBlock
                                             Grid.Column="1"

@@ -1,6 +1,6 @@
 {
   "name": "joufflu",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "Use the Joufflu WPF component library (Joufflu, Joufflu.Inputs, Joufflu.Navigation, Joufflu.Feedback, Joufflu.FileExplorer, Joufflu.Data): API reference, app shell scaffolding, custom themes, restyling existing views onto the design system and building custom inputs that match it.",
   "author": {
     "name": "Nicolas De Gheselle",

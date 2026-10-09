@@ -49,7 +49,7 @@ can paste into your views.
 |---|---|
 | [Native controls](natives/index.md) | Buttons (solid, soft & outline variants), `FontIcon`, the `Card` styles and the typography scale |
 | [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
-| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging`, `FullContainer` |
+| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
 | [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
 | [Data](data/index.md) | `DataFill`, `DataEdit`, `DataDisplay` (`Joufflu.Data`) |
 | [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |

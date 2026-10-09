@@ -5,7 +5,7 @@
 Joufflu gives .NET WPF apps a cohesive set of inputs and reusable controls built
 on a design system of themed brushes, dimensions and layout helpers. Every
 control reads its colours through `DynamicResource`, so the whole UI re-themes
-live between Light and Dark — no restart, no flicker.
+live between Light and Dark - no restart, no flicker.
 
 [![Joufflu on NuGet](https://img.shields.io/nuget/v/Joufflu?label=Joufflu&logo=nuget)](https://www.nuget.org/packages/Joufflu)
 [![Joufflu.Feedback on NuGet](https://img.shields.io/nuget/v/Joufflu.Feedback?label=Joufflu.Feedback&logo=nuget)](https://www.nuget.org/packages/Joufflu.Feedback)
@@ -19,21 +19,28 @@ live between Light and Dark — no restart, no flicker.
 
 ## Highlights
 
-- 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys. Change a token and every control follows; the gallery's **Customize theme** page edits them live, offers presets and generates the dictionary to merge.
-- 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
-- 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container and awaitable modal dialogs.
-- 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
-- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch.
-- 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
-- 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
+- 🌗 **Live Light / Dark theming** - flip the theme at runtime and every control follows instantly.
+- 🎨 **A real design system, built to be customized** - semantic colours, dimensions, sizing and spacing exposed as override-able resource keys. Change a token and every control follows; the gallery's **Customize theme** page edits them live, offers presets and generates the dictionary to merge.
+- 🪟 **Custom-chrome window & natives** - a themed application shell plus restyled built-in WPF controls that match out of the box.
+- 📦 **Modular packages** - take just the core styles, or add inputs and navigation only where you need them.
+
+Controls :
+- 🧩 **Ready-to-use inputs** - numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
+- 🧭 **Navigation & overlays** - a navigation menu, a view-model-first page container and awaitable modal dialogs.
+- 🗂️ **A file explorer** - breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
+- 🧾 **JSON data trees** - fill a value in against a JSON Schema, or build one from scratch.
+
+Not sure if Joufflu is your fit? See [Joufflu vs other WPF UI libraries](https://ndegheselle.github.io/Joufflu/comparison.html)
+and the copy-paste [recipes](https://ndegheselle.github.io/Joufflu/recipes.html).
+
+## Documentation
 
 📖 **Full documentation:** <https://ndegheselle.github.io/Joufflu/>
 
 🤖 **For LLM agents:** a machine-readable [`llms.txt`](https://llmstxt.org/) index of the
 docs is available at
-<https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt> — it links every
-page's raw Markdown source — and [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
+<https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt> - it links every
+page's raw Markdown source - and [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
 holds all of those pages in a single file. (Prefer this raw URL over the rendered site, which can return
 `403` to automated fetchers.)
 
@@ -46,42 +53,19 @@ existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
 /plugin install joufflu@joufflu
 ```
 
-### Tell your agent to use it
-
-An LLM only reaches for a library it knows about. For a project where an agent writes
-your WPF UI, paste this into its `AGENTS.md` / `CLAUDE.md` (or your Cursor / Copilot
-rules file):
-
-```md
-## UI
-This WPF app uses the Joufflu component library (NuGet: Joufflu, Joufflu.Inputs,
-Joufflu.Navigation, Joufflu.Feedback, Joufflu.FileExplorer, Joufflu.Data).
-Before writing XAML, read https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt
-(everything in one file: .../docs/llms-full.txt). Reuse Joufflu controls and named styles
-(PrimaryButton, Card, H1...), Spacing.Gap and Sizing.Size instead of hand-written
-templates, and never hardcode colours: use joufflu:Brushes / joufflu:Dimensions through
-DynamicResource so the Light/Dark theme keeps working. To customize the look (brand
-colours, radius, density), override the joufflu:Colors / joufflu:Dimensions tokens in a
-dictionary merged after Joufflu, or register a theme with ThemeManager.Register; do not
-restyle controls one by one.
-```
-
-Not sure which WPF UI library fits? See [Joufflu vs other WPF UI libraries](https://ndegheselle.github.io/Joufflu/comparison.html)
-and the copy-paste [recipes](https://ndegheselle.github.io/Joufflu/recipes.html).
-
 ## What's inside
 
 | Section | Contents |
 |---|---|
 | **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
-| **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `FullContainer`, `Paging`, `OverlayContainer` and awaitable modal overlays shown by an `Overlayer` |
+| **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `Paging`, `OverlayContainer` and awaitable modal overlays shown by an `Overlayer` |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **File explorer** (`Joufflu.FileExplorer`) | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar` and their `IExplorerSource` |
 | **Data** (`Joufflu.Data`) | `DataFill` filling a value in against a JSON Schema, `DataEdit` building one from scratch, `DataDisplay` showing one read only |
 | **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, `ThemeManager` and the design tokens, live theme customization, and the application shell (`ThemedWindow`) |
 
-The **Natives** — WPF's built-in controls (buttons, text boxes, combo boxes,
-data grid, …) restyled to match the design system — come along with the core
+The **Natives** - WPF's built-in controls (buttons, text boxes, combo boxes,
+data grid, …) restyled to match the design system - come along with the core
 `Joufflu` styles.
 
 ## Getting started
@@ -114,7 +98,7 @@ data grid, …) restyled to match the design system — come along with the core
 3. Initialize the theme manager once at startup, before the first window shows:
 
    ```csharp
-   // App.xaml.cs — OnStartup
+   // App.xaml.cs - OnStartup
    ThemeManager.Instance.Initialize();
    ```
 
@@ -125,9 +109,9 @@ data grid, …) restyled to match the design system — come along with the core
 The design system is exposed as resource keys you can override in your own
 dictionary (merged **after** the Joufflu resources):
 
-- **Colours / brushes** — `joufflu:Colors.*` and `joufflu:Brushes.*`, including
+- **Colours / brushes** - `joufflu:Colors.*` and `joufflu:Brushes.*`, including
   the semantic families (primary, secondary, success, info, warning, danger).
-- **Dimensions** — `joufflu:Dimensions.*` (corner radius, border thickness,
+- **Dimensions** - `joufflu:Dimensions.*` (corner radius, border thickness,
   spacing, control heights, font sizes and padding per size).
 
 Run the gallery and open **Customize theme** to tweak these interactively and

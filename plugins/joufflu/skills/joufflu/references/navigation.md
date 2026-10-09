@@ -38,17 +38,19 @@ themed implicitly.
 
 ```xml
 <controls:ThemedWindow x:Class="MyApp.ShellWindow" … Title="My App"
-                       AllowContentOverTitleBar="True"
-                       IconVisibility="Collapsed" TitleVisibility="Collapsed">
+                       AllowContentOverTitleBar="True" TitleVisibility="Collapsed">
 ```
+
+The title bar has no icon by default: put `<controls:AppIcon />` in
+`ThemedWindow.TitleBarContent` (application icon or `Source`; click opens the system menu,
+double click closes).
 
 The code-behind class must derive from `ThemedWindow` too
 (`public partial class ShellWindow : ThemedWindow`).
 
 With `AllowContentOverTitleBar="True"` the transparent, draggable title bar covers the top
 strip of content: anything interactive there is unclickable. Push pages down with
-`Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"` or host
-pages in `FullContainer`; keep the overlay/toast containers full-bleed.
+`Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"`; keep the overlay/toast containers full-bleed.
 
 ## Shell window
 
@@ -102,16 +104,6 @@ public ShellViewModel()
 - `CurrentPage`, `Navigated` event. The resolver may also create pages lazily or via DI.
 - A page implementing `IPage` gets `OnNavigatedTo()` / `OnNavigatedFrom()` (default no-op
   interface methods; implement only what you need).
-
-## FullContainer
-
-Page host that puts `Header` in the title-bar strip and scrolls content below it (for
-`AllowContentOverTitleBar` windows). `Header` is rendered as `H1`; use `HeaderTemplate`
-for a title + toolbar.
-
-```xml
-<nav:FullContainer Header="Profile"> … page content … </nav:FullContainer>
-```
 
 ## Overlays (modals)
 

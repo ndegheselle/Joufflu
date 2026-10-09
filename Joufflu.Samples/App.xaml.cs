@@ -1,10 +1,10 @@
-﻿using Joufflu.Samples.ViewModels;
-using Joufflu.Themes;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
+using Joufflu.Samples.ViewModels;
+using Joufflu.Themes;
 
 namespace Joufflu.Samples
 {
@@ -49,6 +49,9 @@ namespace Joufflu.Samples
 
             MainWindow mainWindow = new MainWindow(shellViewModel);
             mainWindow.Show();
+
+            Window newWindow = new Window();
+            newWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -135,7 +138,7 @@ namespace Joufflu.Samples
                 shellViewModel?.Toasts.Error("An unexpected error happend ...", "Ooops");
             }
             catch
-            {}
+            { }
         }
     }
 }

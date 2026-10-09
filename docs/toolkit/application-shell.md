@@ -32,6 +32,25 @@ buttons.
 </controls:ThemedWindow>
 ```
 
+### Application icon
+
+The title bar shows no icon by default. Add an `AppIcon` to
+`ThemedWindow.TitleBarContent` to bring it back: it shows the application's icon (or
+the `Source` it is given), a click opens the window's system menu and a double click
+closes the window, like a native icon.
+
+```xml
+<controls:ThemedWindow ... TitleVisibility="Collapsed">
+    <controls:ThemedWindow.TitleBarContent>
+        <controls:AppIcon Margin="5,0,0,0" />
+    </controls:ThemedWindow.TitleBarContent>
+    ...
+</controls:ThemedWindow>
+```
+
+`TitleBarContent` shares its cell with the title text, so collapse the title or pad it
+when both are shown.
+
 ### Title bar over content
 
 Set `AllowContentOverTitleBar="True"` to draw content beneath a transparent title
@@ -41,14 +60,13 @@ top of the window, while the caption buttons keep floating top-right:
 ```xml
 <controls:ThemedWindow ...
     AllowContentOverTitleBar="True"
-    IconVisibility="Collapsed">
+    TitleVisibility="Collapsed">
     ...
 </controls:ThemedWindow>
 ```
 
-`IconVisibility="Collapsed"` hides the title-bar icon and `TitleVisibility="Collapsed"`
-hides the title text — set both to clear the top-left corner for the side panel's
-own header.
+`TitleVisibility="Collapsed"` hides the title text, clearing the top-left corner for
+the side panel's own header.
 
 #### Keeping content clear of the bar
 
@@ -90,21 +108,6 @@ resource, the offset always matches the title bar even if that height changes.
 > Offset only the panels whose top strip holds interactive content — a hosted page
 > and its scrollbar. Offsetting the page alone leaves the containers around it
 > full-bleed, so modal backdrops still cover the whole window.
-
-#### FullContainer
-
-`FullContainer` (`Joufflu.Navigation`) does that placement for you: it puts a page's
-header in the title bar strip and scrolls the content below it, so you no longer
-apply the offset by hand.
-
-```xml
-<nav:FullContainer Header="Profile">
-    <!-- the page content, scrolled below the title bar -->
-</nav:FullContainer>
-```
-
-`Header` is templated as an `H1` by default; set `HeaderTemplate` for anything else
-(a title plus a toolbar, for instance).
 
 ## OverlayContainer
 

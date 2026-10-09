@@ -12,10 +12,6 @@ Navigation building blocks from `Joufflu.Navigation`:
 - **Overlays** — modal dialogs stacked above the current page, plus a standard confirmation.
 - **Paging** — a page selector for browsing large sets of data.
 
-The package also ships `FullContainer`, a page host that puts its header in the
-window's title bar strip — see
-[Application shell](../toolkit/application-shell.md#fullcontainer).
-
 The view models use `Navigator`, `Overlayer` / `IOverlayer` and `IPage` from the
 `Joufflu.Navigation` namespace. The XAML snippets use the `nav` XML namespace, plus
 `vm` for your own view models:

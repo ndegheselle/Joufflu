@@ -181,7 +181,7 @@
     <!--  ============================ NavigationMenu ============================  -->
     <Style TargetType="{x:Type nav:NavigationMenu}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
         <!--  Right edge only: the menu just separates itself from the content beside it.  -->
         <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
@@ -212,9 +212,11 @@
                                 <Button
                                     x:Name="CollapseButton"
                                     Grid.Column="1"
-                                    Margin="8"
+                                    Margin="2"
                                     HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
                                     toolkit:Sizing.IsSquare="True"
+                                    toolkit:Sizing.Size="sm"
                                     Command="{Binding ToggleCollapseCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                     Style="{StaticResource GhostButton}">
                                     <fonts:FontIcon x:Name="CollapseIcon" Text="{x:Static fonts:LucideFontIcons.PanelLeftClose}" />
@@ -222,7 +224,7 @@
                             </Grid>
 
                             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter Margin="8,0,8,8" />
+                                <ItemsPresenter Margin="8,0,4,8" />
                             </ScrollViewer>
                         </DockPanel>
                     </Border>

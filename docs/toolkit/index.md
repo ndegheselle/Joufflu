@@ -21,7 +21,7 @@ in `Joufflu.Controls`.
 - **Theme** — `ThemeManager` for System/Light/Dark plus registering custom themes, and how to bind a theme switcher UI to it.
 - **Design tokens** — the reference of every `Colors`, `Brushes` and `Dimensions` key a theme is made of, and the role each one plays in the control styles.
 - **Customize theme** — the live theme editor and preset themes.
-- **Application shell** — the window styles, the `FullContainer` page host and the overlay/toast containers wrapping the app.
+- **Application shell** — the window styles, and the overlay/toast containers wrapping the app.
 - **Custom input** — the rules an input of your own follows to sit with the Joufflu ones: background, border and height, then sizes and padding, states, the validation error style and embedded buttons.
 
 Snippets use the `toolkit` XML namespace for those helpers and `joufflu` for the

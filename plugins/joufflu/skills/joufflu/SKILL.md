@@ -6,7 +6,7 @@ description: >-
   DecimalUpDown, TimeSpanPicker, FormatTextBox, Search, ComboBoxSearch,
   ComboBoxTags, TextEditable, FilePicker, ColorPicker, Dropdown), navigation
   (`Joufflu.Navigation`: NavigationMenu, Navigator, Overlayer/overlays,
-  Paging, FullContainer), feedback (`Joufflu.Feedback`: Badge, Spinner, toasts),
+  Paging), feedback (`Joufflu.Feedback`: Badge, Spinner, toasts),
   the file explorer (`Joufflu.FileExplorer`), JSON data trees (`Joufflu.Data`:
   DataFill, DataEdit, DataDisplay, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
   (Sizing, Spacing.Gap, Derive, Tooltip, Animate, DropTarget/DragSource),
@@ -69,7 +69,7 @@ never invent a property or method that is not listed here or visible in the pack
 |---|---|---|
 | `Joufflu` | Styles of the native WPF controls, `ThemeManager`, `ThemedWindow`, `FontIcon` + Lucide glyphs, toolkit attached properties, converters, design tokens | CommunityToolkit.Mvvm |
 | `Joufflu.Inputs` | Input controls and `Dropdown` | Joufflu |
-| `Joufflu.Navigation` | `NavigationMenu`, `Navigator`, overlays, `Paging`, `FullContainer` | Joufflu |
+| `Joufflu.Navigation` | `NavigationMenu`, `Navigator`, overlays, `Paging` | Joufflu |
 | `Joufflu.Feedback` | `Badge`, `Spinner`, toasts, `ToastContainer` | Joufflu |
 | `Joufflu.FileExplorer` | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar`, sources | Joufflu, Joufflu.Feedback |
 | `Joufflu.Data` | `DataFill`, `DataEdit`, `DataDisplay`, the `DataNode` tree, `JsonSchema.ToDataNode()` | Joufflu, Joufflu.Inputs, NJsonSchema |
@@ -181,7 +181,7 @@ Read the one matching the task before writing code:
 | [references/toolkit.md](references/toolkit.md) | `Sizing`, `Spacing`, `Derive`, `Tooltip`, `Animate`, `DropTarget`/`DragSource`, converters, helpers |
 | [references/theming.md](references/theming.md) | `ThemeManager`, custom themes, persistence, switcher, every design token |
 | [references/inputs.md](references/inputs.md) | All `Joufflu.Inputs` controls and `Dropdown` |
-| [references/navigation.md](references/navigation.md) | `ThemedWindow` shell, `NavigationMenu`, `Navigator`, overlays, `Paging`, `FullContainer` |
+| [references/navigation.md](references/navigation.md) | `ThemedWindow` shell, `NavigationMenu`, `Navigator`, overlays, `Paging` |
 | [references/feedback.md](references/feedback.md) | `Badge`, `Spinner`, toasts |
 | [references/file-explorer.md](references/file-explorer.md) | Explorer controls, sources, custom nodes, context menus |
 | [references/data.md](references/data.md) | `DataFill`, `DataEdit`, `DataDisplay`, the node tree, schema mapping, manual values |
