@@ -115,7 +115,8 @@ public partial class DataValue : DataNode
     };
 
     /// <summary>
-    /// The value a new node of [Type] starts with.
+    /// The value a new node of [Type] starts with. A value of no type of its own, from a schema
+    /// such as <c>{}</c>, has nothing to start from and starts empty, which such a schema accepts.
     /// </summary>
     private object? Default()
     {
@@ -131,7 +132,7 @@ public partial class DataValue : DataNode
             EnumDataType.Choice => Options.FirstOrDefault()?.Value,
             EnumDataType.TimeSpan => TimeSpan.Zero,
             EnumDataType.DateTime => DateTime.Today,
-            _ => throw new Exception($"Can't set a default value for the type [{Type}]")
+            _ => null
         };
     }
 

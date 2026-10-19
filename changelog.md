@@ -38,6 +38,7 @@
 
 - Start `Load` afresh on every node : a value or an object an earlier load forced to a manual value is no longer kept forced, and written back, when the new JSON doesn't call for it
 - Clone the items of a `DataArray` through `Add`, so a copied item keeps a key that can't be edited
+- Let `ToDataNode` read a schema property saying nothing of a type (`{}`) : it becomes an empty value, filled in as text and loading whatever JSON it is given, where building it threw `Can't set a default value for the type [Object]`
 
 # Joufflu.Data 0.8.2
 
