@@ -10,9 +10,10 @@ A theme is a collection of the keys below. Every control style reads them
 through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
 leaves out keeps the built-in value.
 
-A theme registered with `ThemeManager` carries **colours** only: it is inserted ahead of
-`Resources.xaml`, so the `Dimensions` keys (and `Colors.DisabledOpacity`) it would define are
-shadowed by the built-in ones. Override those in a dictionary merged after `Resources.xaml`.
+A theme registered with `ThemeManager` can define both: it is merged right after
+`Resources.xaml`, so its `Dimensions` keys (and `Colors.DisabledOpacity`) override the built-in
+ones, and change with the theme. A dictionary merged after `Resources.xaml` still overrides
+every theme.
 
 Keys are `ComponentResourceKey` statics rather than strings, so a renamed key breaks the build
 instead of silently falling back at runtime:

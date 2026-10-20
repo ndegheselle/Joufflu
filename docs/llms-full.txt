@@ -638,8 +638,8 @@ resizes every control inside it.
 
 ## Rules these recipes follow
 
-- Look changes are token overrides in a dictionary merged after Joufflu (or, for colours
-  only, a registered theme), never edits to control styles.
+- Look changes are token overrides in a dictionary merged after Joufflu (or a registered
+  theme), never edits to control styles.
 - Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}`),
   never from hex values, so Light / Dark and custom themes keep working.
 - Gaps between children use `Spacing.Gap`, not a `Margin` on each child.
@@ -926,7 +926,7 @@ and you can register your own palettes so they become selectable alongside the b
 ## App setup
 
 Merge only the control styles in `App.xaml`. Do **not** hardcode a theme dictionary — the
-manager inserts the matching Light/Dark dictionary ahead of the styles at runtime.
+manager inserts the matching Light/Dark dictionary right after them at runtime.
 
 ```xml
 <!-- App.xaml -->
@@ -968,7 +968,9 @@ settings differently (see [Persisting the theme](#persisting-the-theme)).
 ## Registering a custom theme
 
 A custom theme is just a resource dictionary with the same keys as `Light.xaml` / `Dark.xaml`
-(see [Customize theme](customize-theme.html) to generate one). Register it by name — from a pack
+(see [Customize theme](customize-theme.html) to generate one). It can also override any
+[dimension](tokens.html#dimensions) — a denser or rounder theme — since the manager merges it right
+after `Resources.xaml`. Register it by name — from a pack
 `Uri` or an in-memory `ResourceDictionary` — and it becomes selectable through `Theme`, appearing
 in the `Themes` list next to the built-ins:
 
@@ -1062,9 +1064,10 @@ A theme is a collection of the keys below. Every control style reads them
 through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
 leaves out keeps the built-in value.
 
-A theme registered with `ThemeManager` carries **colours** only: it is inserted ahead of
-`Resources.xaml`, so the `Dimensions` keys (and `Colors.DisabledOpacity`) it would define are
-shadowed by the built-in ones. Override those in a dictionary merged after `Resources.xaml`.
+A theme registered with `ThemeManager` can define both: it is merged right after
+`Resources.xaml`, so its `Dimensions` keys (and `Colors.DisabledOpacity`) override the built-in
+ones, and change with the theme. A dictionary merged after `Resources.xaml` still overrides
+every theme.
 
 Keys are `ComponentResourceKey` statics rather than strings, so a renamed key breaks the build
 instead of silently falling back at runtime:

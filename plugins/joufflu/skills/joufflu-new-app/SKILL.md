@@ -61,7 +61,7 @@ map each page view model to its view:
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- ThemeManager inserts the Light/Dark palette ahead of this at runtime -->
+                <!-- ThemeManager inserts the Light/Dark palette right after this at runtime -->
                 <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 

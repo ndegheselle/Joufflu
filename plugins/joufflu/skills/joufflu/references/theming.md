@@ -70,7 +70,8 @@ Or a `ComboBox`:
 ## Overriding tokens without a new theme
 
 Tweak dimensions (or colours for every theme) in a dictionary merged **after** the core
-resources:
+resources (a registered theme may also carry dimensions of its own; this dictionary still
+wins over it):
 
 ```xml
 <ResourceDictionary.MergedDictionaries>

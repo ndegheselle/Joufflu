@@ -9,9 +9,11 @@ namespace Joufflu.Themes;
 /// <summary>
 /// Applies and tracks the active Joufflu colour theme application-wide.
 /// <para>
-/// A theme is a single <see cref="ResourceDictionary"/> kept at the front of
-/// <see cref="Application"/>.<c>Resources.MergedDictionaries</c>. Switching swaps that one dictionary;
-/// because every control references colours through <c>DynamicResource</c>, the whole UI re-themes live.
+/// A theme is a single <see cref="ResourceDictionary"/> in <see cref="Application"/>.<c>Resources.MergedDictionaries</c>,
+/// right after the dictionary holding the default dimensions (Joufflu's <c>Resources.xaml</c>): it overrides those
+/// defaults, while a dictionary merged after <c>Resources.xaml</c> still overrides the theme. Switching swaps that
+/// one dictionary; because every control references the tokens through <c>DynamicResource</c>, the whole UI
+/// re-themes live.
 /// </para>
 /// <para>
 /// Themes are selected by name. Three are always available: <see cref="Light"/> and <see cref="Dark"/>
@@ -230,19 +232,11 @@ public sealed class ThemeManager : ObservableObject
         ResourceDictionary next = WithBrushes(theme);
 
         var merged = Application.Current.Resources.MergedDictionaries;
-        if (_themeDictionary is not null)
-        {
-            // Swap in place so the theme keeps its position ahead of the control styles.
-            int index = merged.IndexOf(_themeDictionary);
-            if (index >= 0)
-                merged[index] = next;
-            else
-                merged.Insert(0, next);
-        }
+        int index = _themeDictionary is null ? -1 : merged.IndexOf(_themeDictionary);
+        if (index >= 0)
+            merged[index] = next;
         else
-        {
-            merged.Insert(0, next);
-        }
+            merged.Insert(IndexAfterDefaultDimensions(merged), next);
 
         _themeDictionary = next;
 
@@ -251,7 +245,23 @@ public sealed class ThemeManager : ObservableObject
     }
 
     /// <summary>
-    /// Pairs a theme, which only defines colours, with a fresh copy of the brushes built from them.
+    /// Where a theme goes: right after the dictionary defining the default dimensions, so the dimensions a theme
+    /// defines win over them (later merged dictionaries take precedence), or first when there is none.
+    /// </summary>
+    private static int IndexAfterDefaultDimensions(IList<ResourceDictionary> merged)
+    {
+        for (int i = 0; i < merged.Count; i++)
+        {
+            // Contains also searches the nested merged dictionaries, where Resources.xaml keeps Dimensions.xaml.
+            if (merged[i].Contains(Dimensions.Radius))
+                return i + 1;
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// Pairs a theme, which defines the colours and may override dimensions, with a fresh copy of the
+    /// brushes built from them.
     /// A brush resolves its <c>DynamicResource</c> colour once, the first time it is used, and never
     /// again: shared across themes, it would keep the colours of the first one.
     /// </summary>

@@ -33,6 +33,7 @@
 - Define the `Brushes` once, in `Styles/Brushes.xaml`, rather than in every theme : a theme is now its colours alone, and the theme customizer generates colours only. `ThemeManager` pairs a fresh copy of the brushes with every theme it applies, since a brush resolves its `DynamicResource` colour once and never again. This also fixes the `XSoftBrush` / `XSoft100Brush` tints, which were shared across themes and kept the colours of the first one shown. A custom theme still defining its own brushes keeps working, the paired ones taking precedence
 - Rename the `XSoftStrongBrush` keys `XSoft100Brush` (`PrimarySoft100Brush`, `DangerSoft100Brush`, …), the hover of a soft tint following the same convention as the hover of a fill, `X100`. The *Design tokens* page shows each accent's soft tint and its hover next to its other keys. **Breaking** : a reference to a `XSoftStrongBrush` key needs renaming
 - Show the application icon again when a `ThemedWindow`'s `Icon` is cleared, rather than keeping the previous one
+- Let a theme registered with `ThemeManager` override the `Dimensions` (and `Colors.DisabledOpacity`), as the docs promised : the theme is now merged right after the dictionary holding the default dimensions (`Resources.xaml`) rather than first, where those defaults shadowed it. A dictionary merged after `Resources.xaml` still overrides every theme
 
 # Joufflu.Data (unreleased)
 

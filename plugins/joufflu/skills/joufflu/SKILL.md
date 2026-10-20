@@ -42,8 +42,7 @@ Less XAML to write, and the result stays consistent when the theme changes.
 
 It is also built to be customized without touching control styles: every colour and
 metric is a token (`joufflu:Colors.*`, `joufflu:Dimensions.*`), overridden in a
-dictionary merged after `Resources.xaml` (colours can also be registered as a named
-theme; dimensions cannot, a registered theme sits before `Resources.xaml`). For a
+dictionary merged after `Resources.xaml` or registered as a named theme. For a
 "custom look" request, change tokens (see `joufflu-theme`), never restyle controls.
 
 Goal of this skill: **reuse Joufflu instead of rewriting**, call it with the right
@@ -88,7 +87,7 @@ installed package.
    <Application.Resources>
        <ResourceDictionary>
            <ResourceDictionary.MergedDictionaries>
-               <!-- ThemeManager inserts the active Light/Dark palette ahead of this at runtime -->
+               <!-- ThemeManager inserts the active Light/Dark palette right after this at runtime -->
                <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
                <!-- Your own overrides / theme tweaks go AFTER -->
            </ResourceDictionary.MergedDictionaries>

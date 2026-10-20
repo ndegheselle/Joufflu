@@ -69,7 +69,7 @@
             <c:CodeExample
                 Title="App setup"
                 Code="{Binding SetupCode}"
-                Description="Merge only the control styles in App.xaml. Initialize() inserts the matching Light/Dark dictionary ahead of them at runtime — no theme dictionary is hardcoded." />
+                Description="Merge only the control styles in App.xaml. Initialize() inserts the matching Light/Dark dictionary right after them at runtime — no theme dictionary is hardcoded." />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

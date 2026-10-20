@@ -29,7 +29,9 @@ Ask for the missing inputs only: base colour(s), light or dark, theme name.
 
 ## 2. Write the palette — `Themes/<Name>.xaml`
 
-Every theme redefines the same 18 accent colours plus surfaces and text — colours only.
+Every theme redefines the same 18 accent colours plus surfaces and text. It may also
+override `Dimensions.*` keys (see §5) when its look includes them: `ThemeManager` merges
+it right after `Resources.xaml`, so they win over the defaults.
 The brushes are defined once and `ThemeManager` builds them from whichever theme it
 applies. Keys it leaves out keep the built-in value, but a complete palette avoids
 mismatches.
@@ -137,7 +139,8 @@ ThemeManager.Instance.Initialize();
 
 ## 5. Token overrides (shape, spacing, sizes)
 
-For changes that apply whatever the palette, merge a dictionary **after** the core
+Put them in the theme file when they belong to that theme. For changes that apply
+whatever the palette, merge a dictionary **after** the core
 resources in `App.xaml`:
 
 ```xml
