@@ -27,7 +27,7 @@ public class ThemeSamplesViewModel : ObservableObject
         "ThemeManager.Instance.Initialize();\n\n" +
         "// 3. Switch theme from anywhere by name:\n" +
         "ThemeManager.Instance.Theme = ThemeManager.Dark;   // Light / Dark / System / \"Ocean\"\n\n" +
-        "// Themes lists every selectable name; the choice is persisted and restored.\n" +
+        "// Themes lists every selectable name; persisting the choice is up to the app.\n" +
         "// In System the app follows the Windows theme live.\n" +
         "bool isDark = ThemeManager.Instance.IsDark;";
 

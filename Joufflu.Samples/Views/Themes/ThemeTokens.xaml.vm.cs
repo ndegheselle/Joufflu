@@ -71,11 +71,11 @@ public class ThemeTokensViewModel : ObservableObject
                     Joufflu.Brushes.ForegroundBrush),
                 new TokenEntry(
                     "Foreground100",
-                    "Muted text: placeholders, hints, secondary labels. This is what the Muted typography style uses.",
+                    "Muted text: placeholders, hints, secondary labels. This is what the Lead typography style uses.",
                     Joufflu.Brushes.Foreground100Brush),
                 new TokenEntry(
                     "Foreground200",
-                    "Text on a selected row, where the default foreground would lose contrast.",
+                    "Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item.",
                     Joufflu.Brushes.Foreground200Brush),
             ]),
 
@@ -199,7 +199,7 @@ public class ThemeTokensViewModel : ObservableObject
 
         new TokenGroup(
             "Font sizes",
-            "The typography styles (H1…H6, Muted, …) are built on these, so restyling the scale restyles the text.",
+            "The Lead and Small typography styles read these keys; the headings H1…H6 use fixed sizes (32, 26, 22, 18, 15, 13).",
             [
                 new TokenEntry("FontSizeXs", "11"),
                 new TokenEntry("FontSizeSm", "12"),

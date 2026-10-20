@@ -2,11 +2,11 @@
 
 > WPF inputs and reusable controls for .NET, built on a small design system of themed brushes, dimensions, sizing and spacing helpers. Every control reads its colours through `DynamicResource`, so the whole UI re-themes live between Light and Dark with no restart.
 
-Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Data` (JSON values edited as a tree), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
+Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Data` (JSON values edited as a tree), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu, modal overlays and paging). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
 
 ## Start here
 
-- [Overview and getting started](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/index.md): what the library is, package layout, and the four-step setup (add packages, merge `Resources.xaml`, initialize `ThemeManager`).
+- [Overview and getting started](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/index.md): what the library is, package layout, and the three-step setup (add packages, merge `Resources.xaml`, initialize `ThemeManager`).
 - [Tutorial: a navigable app shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/tutorial.md): builds an MVVM app on `Joufflu.Navigation` — shared shell view model, view-model-first navigation, an example page, a modal overlay and a toast.
 
 - [Recipes](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/recipes.md): copy-paste screens — settings page, brand/custom theme, theme switcher, searchable paged table, delete confirmation, status row, size density.

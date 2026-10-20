@@ -2,8 +2,8 @@
 
 Merging the core `Resources.xaml` styles every built-in WPF control implicitly:
 `Button`, `ToggleButton`, `CheckBox`, `RadioButton`, `Slider`, `TextBox`, `ListBox`,
-`Calendar`, `ComboBox`, `DatePicker`, `TextBlock`, `Label`, `TreeView`, `ListView`,
-`DataGrid`, `Hyperlink`, `Menu`, `MenuItem`, `TabControl`, `ToolBar`, `ProgressBar`,
+`Calendar`, `ComboBox`, `DatePicker`, `PasswordBox`, `Separator`, `Label`, `TreeView`, `ListView`,
+`DataGrid`, `Hyperlink`, `Menu`, `MenuItem`, `ContextMenu`, `TabControl`, `ToolBar`, `ProgressBar`,
 `StatusBar`, `ToolTip`, `ScrollBar`, `ScrollViewer`, `Window`, `GridSplitter`, `GroupBox`,
 `Expander`. Use them as-is. A local style must be based on the default one:
 
@@ -97,8 +97,8 @@ Named `TextBlock` styles; an unstyled `TextBlock` is body text (`FontSizeMd`).
 | Key | Role |
 |---|---|
 | `H1` … `H6` | Page title down to minor subheading |
-| `Lead` | Larger, lighter intro paragraph |
-| `Muted` | Secondary text (`Foreground100`) |
+| `Lead` | Larger, lighter intro paragraph (`Foreground100`) |
+| `Muted` | Secondary text, dimmed (opacity 0.65) |
 | `Small` | Fine print, captions |
 
 ```xml
@@ -110,7 +110,8 @@ Named `TextBlock` styles; an unstyled `TextBlock` is body text (`FontSizeMd`).
 
 `FontIcon` (in `Joufflu.Assets.Fonts`) derives from `TextBlock` and renders a glyph
 of the embedded [Lucide](https://lucide.dev) font. Glyphs are constants on
-`LucideFontIcons` named in PascalCase after the Lucide icon name (`Home`, `Plus`,
+`LucideFontIcons` named, mostly in PascalCase, after the Lucide icon name (the close
+glyph is the lowercase `x`) (`Home`, `Plus`,
 `Trash`, `Save`, `Search`, `Settings`, `Bell`, `Info`, `Leaf`, `EllipsisVertical`,
 `StickyNote`, …). If unsure a glyph exists, grep `LucideFontIcons.cs` in the package
 source or check IntelliSense; don't guess.

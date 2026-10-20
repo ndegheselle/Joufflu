@@ -71,8 +71,8 @@ can paste into your views.
    ```
 
 2. Merge the control styles in `App.xaml` so the themed styles and the
-   design-system keys (`joufflu:Brushes`, `joufflu:Dimensions`,
-   `toolkit:Spacing`, `toolkit:Sizing`) are available:
+   `joufflu:Dimensions` keys are available (the `joufflu:Brushes` come with the
+   theme, step 3):
 
    ```xml
    <Application.Resources>
@@ -220,6 +220,7 @@ No runtime effect.
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
@@ -252,8 +253,12 @@ No runtime effect.
 </controls:ThemedWindow>
 ```
 
+Its code-behind (`ShellWindow.xaml.cs`) must derive from `ThemedWindow` too
+(`public partial class ShellWindow : ThemedWindow`), or the build fails on the
+mismatched base class.
+
 Create the window in code to pass the shell view model as its `DataContext`,
-e.g. in `App.xaml.cs`:
+e.g. in `App.xaml.cs` (`using Joufflu.Themes;` for `ThemeManager`):
 
 ```csharp
 protected override void OnStartup(StartupEventArgs e)
@@ -633,8 +638,8 @@ resizes every control inside it.
 
 ## Rules these recipes follow
 
-- Look changes are token overrides in a dictionary merged after Joufflu (or a registered
-  theme), never edits to control styles.
+- Look changes are token overrides in a dictionary merged after Joufflu (or, for colours
+  only, a registered theme), never edits to control styles.
 - Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}`),
   never from hex values, so Light / Dark and custom themes keep working.
 - Gaps between children use `Spacing.Gap`, not a `Margin` on each child.
@@ -848,8 +853,9 @@ at the top of the content equal to the bar's height, a fixed value shared throug
 </controls:ThemedWindow>
 ```
 
-The `Joufflu.Samples` gallery window uses this setup. Because the height is a shared
-resource, the offset always matches the title bar even if that height changes.
+The `Joufflu.Samples` gallery window uses this setup. The offset is built from
+`TitleBarHeight` when the resources load, so if you override `TitleBarHeight`, override
+`TitleBarHeightOffset` (`0,<height>,0,0`) with it.
 
 {: .note }
 > Offset only the panels whose top strip holds interactive content, a hosted page
@@ -1056,6 +1062,10 @@ A theme is a collection of the keys below. Every control style reads them
 through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
 leaves out keeps the built-in value.
 
+A theme registered with `ThemeManager` carries **colours** only: it is inserted ahead of
+`Resources.xaml`, so the `Dimensions` keys (and `Colors.DisabledOpacity`) it would define are
+shadowed by the built-in ones. Override those in a dictionary merged after `Resources.xaml`.
+
 Keys are `ComponentResourceKey` statics rather than strings, so a renamed key breaks the build
 instead of silently falling back at runtime:
 
@@ -1103,8 +1113,8 @@ The suffix says how much the text recedes.
 | Key | Used for |
 |---|---|
 | `Foreground` | Default text and icon colour, on `Background` or `Background100`. |
-| `Foreground100` | Muted text: placeholders, hints, secondary labels. What the `Muted` typography style uses. |
-| `Foreground200` | Text on a selected row, where the default foreground would lose contrast. |
+| `Foreground100` | Muted text: placeholders, hints, secondary labels. What the `Lead` typography style uses. |
+| `Foreground200` | Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item. |
 
 ### Accents
 
@@ -1178,8 +1188,8 @@ the default written in the base styles, so only `xs`/`sm`/`lg` appear in the siz
 
 ### Font sizes
 
-The [typography](../natives/typography.html) styles (`H1`…`H6`, `Muted`, …) are built on these, so
-restyling the scale restyles the text.
+The [typography](../natives/typography.html) styles `Lead` and `Small` read these keys; the
+headings `H1`…`H6` use fixed sizes (32, 26, 22, 18, 15, 13).
 
 | Key | Value |
 |---|---|
@@ -1776,8 +1786,8 @@ the loop at runtime.
 ## Hidden elements and lifetime
 
 The hop pauses itself whenever the element is not visible — `Collapsed` or
-`Hidden`, under a collapsed ancestor, or out of the visual tree — and resumes
-where it left off when the element comes back, parked at rest in the meantime.
+`Hidden`, under a collapsed ancestor, or out of the visual tree — parks at rest,
+and starts again from the top of its cycle when the element comes back.
 A bounce left on a hidden element therefore costs no frames.
 
 Nothing has to be unhooked for the element to be collected: the helper keeps no
@@ -2582,7 +2592,9 @@ reveal children, and groups can nest.
 
 When collapsed, each item and group hides its label and surfaces it as a
 right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
-rail discoverable.
+rail discoverable. `IsCollapsed` (bindable) collapses the menu from code. A group's
+`Icon` is what shows on the collapsed rail, and `IsExpanded` (closed by default)
+opens it; a group holding the selected item opens on its own.
 
 Under a `ThemedWindow` with `AllowContentOverTitleBar`, the menu's top strip (the
 `Header` and the space beside the collapse button) drags the window; the collapse
@@ -2590,6 +2602,10 @@ button and the items stay clickable. The `Header` is therefore not interactive.
 
 ```xml
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}">
+    <!-- Optional header slot, hidden when collapsed -->
+    <nav:NavigationMenu.Header>
+        <TextBlock FontWeight="SemiBold" Text="My app" />
+    </nav:NavigationMenu.Header>
     <nav:NavigationTitle>Demo</nav:NavigationTitle>
     <!-- An item targets the type of the page it navigates to -->
     <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
@@ -2600,6 +2616,9 @@ button and the items stay clickable. The `Header` is therefore not interactive.
     </nav:NavigationItem>
     <!-- A group displays like an item but expands to reveal children -->
     <nav:NavigationGroup Header="Parent">
+        <nav:NavigationGroup.Icon>
+            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
+        </nav:NavigationGroup.Icon>
         <nav:NavigationItem TargetType="{x:Type vm:Submenu1ViewModel}">Submenu 1</nav:NavigationItem>
         <nav:NavigationItem TargetType="{x:Type vm:Submenu2ViewModel}">Submenu 2</nav:NavigationItem>
         <!-- Groups can nest -->
@@ -2804,6 +2823,7 @@ separator when there are more than seven of them.
 | `Total` | `int` | `-1` | Number of items in the whole set. A negative value (the `-1` default) leaves it unknown: the range label is hidden and the page count unbounded. `0` is an empty set. |
 | `PageNumber` | `int` | `1` | Current page, 1-based. Clamped between `1` and the last page. |
 | `Capacity` | `int` | `10` | Items per page, picked from `AvailableCapacities` (`5, 10, 25, 50, 100, 200` by default). |
+| `IsTotalKnown` | `bool` (read-only) | — | Whether `Total` is known (`>= 0`). |
 | `PageMax` | `int` (read-only) | — | Last page, derived from `Total` and `Capacity`. |
 | `IntervalMin` / `IntervalMax` | `int` (read-only) | — | Bounds of the range currently displayed, shown as `1-10 of 123`. |
 
@@ -2943,7 +2963,7 @@ New values start at `null` when nullable, else at the type's default (`""`, `0`,
 today, the first option).
 
 {: .note }
-> Not supported: arrays with a list of item schemas, and schemas without a type.
+> Not supported: arrays with a list of item schemas, or with no `items` schema. A schema with no type (`{}`) becomes a value filled in as free text.
 
 ## To a schema
 
@@ -3110,7 +3130,9 @@ Every control binds a `Source`, an `IExplorerSource`: it holds the opened direct
 
 ```csharp
 // using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -3129,7 +3151,8 @@ your own displays whatever you hand over — see [sources](sources.md).
 ## Nodes
 
 A source hands over `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and the
-`Parent` directory. `IExplorerDirectory` adds its `Children`, `IExplorerFile` a `Size`.
+`Parent` directory. `IExplorerDirectory` adds its `Children` and its `DirectoryTree` (itself and its ancestors, for
+the breadcrumb), `IExplorerFile` a `Size`.
 `FileSystemFile` and `FileSystemDirectory` implement them for the disk, and a type of
 your own is displayed like the others — see
 [virtual nodes](sources.md#virtual-nodes).
@@ -3285,7 +3308,9 @@ tree, double clicking one in the list or using the breadcrumb opens it for all o
 
 ```csharp
 // using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -3313,7 +3338,9 @@ The same source, watching the disk: a file or a directory created, deleted, rena
 moved outside of the explorer shows up in it without a refresh.
 
 ```csharp
-public IExplorerSource Source { get; } = new FileSystemWatcherSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemWatcherSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -3429,7 +3456,9 @@ in, `Node` for the node the menu was opened on, `Nodes` for the whole selection.
 {: .note }
 > A context menu template is searched from the most specific type of the node up to
 > `object`, and on the scope of the menu (`Single`, `Multiple`, `None` outside of any
-> node), so a type without a menu of its own falls back on the default ones.
+> node). The built-in menus are keyed on `FileSystemDirectory` and `FileSystemFile` for a single
+> node and on `object` for a multi-selection or the empty area, so a single node of a type of
+> your own shows no menu until you key one on its type.
 
 ## A source of something else
 

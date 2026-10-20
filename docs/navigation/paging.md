@@ -22,6 +22,7 @@ separator when there are more than seven of them.
 | `Total` | `int` | `-1` | Number of items in the whole set. A negative value (the `-1` default) leaves it unknown: the range label is hidden and the page count unbounded. `0` is an empty set. |
 | `PageNumber` | `int` | `1` | Current page, 1-based. Clamped between `1` and the last page. |
 | `Capacity` | `int` | `10` | Items per page, picked from `AvailableCapacities` (`5, 10, 25, 50, 100, 200` by default). |
+| `IsTotalKnown` | `bool` (read-only) | — | Whether `Total` is known (`>= 0`). |
 | `PageMax` | `int` (read-only) | — | Last page, derived from `Total` and `Capacity`. |
 | `IntervalMin` / `IntervalMax` | `int` (read-only) | — | Bounds of the range currently displayed, shown as `1-10 of 123`. |
 

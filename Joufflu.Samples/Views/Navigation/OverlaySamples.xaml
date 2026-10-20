@@ -17,7 +17,7 @@
             <c:CodeExample
                 Title="Modal overlays"
                 Code="{Binding Code}"
-                Description="Overlays are modal content shown above the page. They have a title bar with a close cross, a content area and an optional action bar. Multiple overlays stack.">
+                Description="Overlays are modal content shown above the page. They have a title bar with a close cross and a content area that owns its buttons. Multiple overlays stack.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <Button Command="{Binding OpenSimpleCommand}" Content="Simple" />
                     <Button

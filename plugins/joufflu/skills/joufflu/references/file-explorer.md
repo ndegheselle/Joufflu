@@ -46,7 +46,9 @@ Explorer), shortcuts `F2` rename, `Ctrl+C`/`Ctrl+X`/`Ctrl+V`, `Delete`.
 
 ```csharp
 // toasts: an IToastService (null accepted)
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 await Source.Open();   // must be called to load the root
 ```
 
@@ -68,7 +70,8 @@ await Source.Open();   // must be called to load the root
 ## Nodes
 
 `IExplorerNode`: `Name`, `Path`, `ModifiedAt`, `Parent` (`IExplorerDirectory?`).
-`IExplorerDirectory` adds `Children`; `IExplorerFile` adds `Size`. Disk implementations:
+`IExplorerDirectory` adds `Children` and `DirectoryTree` (itself and its ancestors, for the
+breadcrumb); `IExplorerFile` adds `Size`. Disk implementations:
 `FileSystemFile`, `FileSystemDirectory`.
 
 Custom (virtual) nodes: implement `IExplorerNode` (or the file/directory interfaces) and add
@@ -92,8 +95,10 @@ public class VirtualFilesSource : FileSystemSource
 Node visuals are implicit `DataTemplate`s keyed by node type; redeclare one in a control's
 `Resources` to replace it there only. Context menus are `DataTemplate`s keyed with
 `{base:ContextMenuTemplateKey local:MyNode}`; their `DataContext` is an
-`ExplorerMenuContext` (`Source`, `Node`, `Nodes`). Lookup goes from the most specific type
-up to `object`, so types without a menu fall back to the defaults.
+`ExplorerMenuContext` (`Source`, `Node`, `Nodes`, `BeginRenameCommand`). Lookup goes from the
+most specific type up to `object`; the built-in single-node menus are keyed on
+`FileSystemDirectory`/`FileSystemFile`, so a single node of a custom type shows no menu until
+you key one on its type (multi-selection and empty-area menus are keyed on `object`).
 
 ```xml
 <fileExplorer:Explorer Source="{Binding Source}">

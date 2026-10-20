@@ -119,6 +119,7 @@ No runtime effect.
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
@@ -151,8 +152,12 @@ No runtime effect.
 </controls:ThemedWindow>
 ```
 
+Its code-behind (`ShellWindow.xaml.cs`) must derive from `ThemedWindow` too
+(`public partial class ShellWindow : ThemedWindow`), or the build fails on the
+mismatched base class.
+
 Create the window in code to pass the shell view model as its `DataContext`,
-e.g. in `App.xaml.cs`:
+e.g. in `App.xaml.cs` (`using Joufflu.Themes;` for `ThemeManager`):
 
 ```csharp
 protected override void OnStartup(StartupEventArgs e)

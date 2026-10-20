@@ -86,7 +86,8 @@ resources:
 ```
 
 When overriding a scalar, also override the composite built from it (`Radius` →
-`CornerRadius`, `Thickness` → `BorderThickness`, `Spacing` → `SpacingThickness`), since
+`CornerRadius`, `Thickness` → `BorderThickness`, `Spacing` → `SpacingThickness`,
+`TitleBarHeight` → `TitleBarHeightOffset`), since
 composites are baked at load. The `Joufflu.Samples` gallery page *Customize theme*
 generates a ready-to-merge dictionary interactively.
 
@@ -118,8 +119,8 @@ Use the brush in UI; the colour is for gradients and animations.
 | | `Border` | Default border of framed controls |
 | | `Border100` | Stronger border: hover/focus, separators |
 | Text | `Foreground` | Default text and icons |
-| | `Foreground100` | Muted text, placeholders, hints (`Muted` style) |
-| | `Foreground200` | Text on a selected row |
+| | `Foreground100` | Muted text, placeholders, hints (`Lead` style) |
+| | `Foreground200` | Dimmed text: inactive window title bar, disabled selected list item |
 | Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill), `X100` (hover/pressed fill), `XContent` (text/icons on the fill) |
 
 Also available, derived automatically from the accent colour (not per theme):

@@ -185,8 +185,8 @@ resizes every control inside it.
 
 ## Rules these recipes follow
 
-- Look changes are token overrides in a dictionary merged after Joufflu (or a registered
-  theme), never edits to control styles.
+- Look changes are token overrides in a dictionary merged after Joufflu (or, for colours
+  only, a registered theme), never edits to control styles.
 - Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}`),
   never from hex values, so Light / Dark and custom themes keep working.
 - Gaps between children use `Spacing.Gap`, not a `Margin` on each child.

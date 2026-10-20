@@ -10,6 +10,10 @@ A theme is a collection of the keys below. Every control style reads them
 through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
 leaves out keeps the built-in value.
 
+A theme registered with `ThemeManager` carries **colours** only: it is inserted ahead of
+`Resources.xaml`, so the `Dimensions` keys (and `Colors.DisabledOpacity`) it would define are
+shadowed by the built-in ones. Override those in a dictionary merged after `Resources.xaml`.
+
 Keys are `ComponentResourceKey` statics rather than strings, so a renamed key breaks the build
 instead of silently falling back at runtime:
 
@@ -57,8 +61,8 @@ The suffix says how much the text recedes.
 | Key | Used for |
 |---|---|
 | `Foreground` | Default text and icon colour, on `Background` or `Background100`. |
-| `Foreground100` | Muted text: placeholders, hints, secondary labels. What the `Muted` typography style uses. |
-| `Foreground200` | Text on a selected row, where the default foreground would lose contrast. |
+| `Foreground100` | Muted text: placeholders, hints, secondary labels. What the `Lead` typography style uses. |
+| `Foreground200` | Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item. |
 
 ### Accents
 
@@ -132,8 +136,8 @@ the default written in the base styles, so only `xs`/`sm`/`lg` appear in the siz
 
 ### Font sizes
 
-The [typography](../natives/typography.html) styles (`H1`…`H6`, `Muted`, …) are built on these, so
-restyling the scale restyles the text.
+The [typography](../natives/typography.html) styles `Lead` and `Small` read these keys; the
+headings `H1`…`H6` use fixed sizes (32, 26, 22, 18, 15, 13).
 
 | Key | Value |
 |---|---|

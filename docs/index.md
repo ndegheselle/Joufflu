@@ -68,8 +68,8 @@ can paste into your views.
    ```
 
 2. Merge the control styles in `App.xaml` so the themed styles and the
-   design-system keys (`joufflu:Brushes`, `joufflu:Dimensions`,
-   `toolkit:Spacing`, `toolkit:Sizing`) are available:
+   `joufflu:Dimensions` keys are available (the `joufflu:Brushes` come with the
+   theme, step 3):
 
    ```xml
    <Application.Resources>

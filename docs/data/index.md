@@ -68,7 +68,7 @@ New values start at `null` when nullable, else at the type's default (`""`, `0`,
 today, the first option).
 
 {: .note }
-> Not supported: arrays with a list of item schemas, and schemas without a type.
+> Not supported: arrays with a list of item schemas, or with no `items` schema. A schema with no type (`{}`) becomes a value filled in as free text.
 
 ## To a schema
 

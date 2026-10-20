@@ -123,8 +123,9 @@ at the top of the content equal to the bar's height, a fixed value shared throug
 </controls:ThemedWindow>
 ```
 
-The `Joufflu.Samples` gallery window uses this setup. Because the height is a shared
-resource, the offset always matches the title bar even if that height changes.
+The `Joufflu.Samples` gallery window uses this setup. The offset is built from
+`TitleBarHeight` when the resources load, so if you override `TitleBarHeight`, override
+`TitleBarHeightOffset` (`0,<height>,0,0`) with it.
 
 {: .note }
 > Offset only the panels whose top strip holds interactive content, a hosted page

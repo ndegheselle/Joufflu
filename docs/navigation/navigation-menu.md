@@ -15,7 +15,9 @@ reveal children, and groups can nest.
 
 When collapsed, each item and group hides its label and surfaces it as a
 right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
-rail discoverable.
+rail discoverable. `IsCollapsed` (bindable) collapses the menu from code. A group's
+`Icon` is what shows on the collapsed rail, and `IsExpanded` (closed by default)
+opens it; a group holding the selected item opens on its own.
 
 Under a `ThemedWindow` with `AllowContentOverTitleBar`, the menu's top strip (the
 `Header` and the space beside the collapse button) drags the window; the collapse
@@ -23,6 +25,10 @@ button and the items stay clickable. The `Header` is therefore not interactive.
 
 ```xml
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}">
+    <!-- Optional header slot, hidden when collapsed -->
+    <nav:NavigationMenu.Header>
+        <TextBlock FontWeight="SemiBold" Text="My app" />
+    </nav:NavigationMenu.Header>
     <nav:NavigationTitle>Demo</nav:NavigationTitle>
     <!-- An item targets the type of the page it navigates to -->
     <nav:NavigationItem TargetType="{x:Type vm:HomeViewModel}">
@@ -33,6 +39,9 @@ button and the items stay clickable. The `Header` is therefore not interactive.
     </nav:NavigationItem>
     <!-- A group displays like an item but expands to reveal children -->
     <nav:NavigationGroup Header="Parent">
+        <nav:NavigationGroup.Icon>
+            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
+        </nav:NavigationGroup.Icon>
         <nav:NavigationItem TargetType="{x:Type vm:Submenu1ViewModel}">Submenu 1</nav:NavigationItem>
         <nav:NavigationItem TargetType="{x:Type vm:Submenu2ViewModel}">Submenu 2</nav:NavigationItem>
         <!-- Groups can nest -->

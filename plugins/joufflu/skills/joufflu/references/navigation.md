@@ -82,8 +82,11 @@ overlay/toast containers full-bleed. A `NavigationMenu` at the top keeps its hea
 ## NavigationMenu
 
 - `NavigationItem` (`TargetType` = page view-model type, `Icon`, content = label),
-  `NavigationGroup` (`Header`, expands to children, nestable), `NavigationTitle` (section label).
-- A chevron collapses the menu to an icon rail; labels then show as right tooltips.
+  `NavigationGroup` (`Header`, `Icon` shown on the collapsed rail, `IsExpanded` closed by
+  default, nestable), `NavigationTitle` (section label), `NavigationMenu.Header` (hidden when
+  collapsed).
+- A chevron collapses the menu to an icon rail (`IsCollapsed`, bindable); labels then show as
+  right tooltips.
 - An item is selected while `CurrentPage` is of its `TargetType`: give each entry its own
   page type.
 
@@ -197,6 +200,7 @@ Page selector; it never touches the data.
 | `Total` | -1 | Items in the whole set; -1 = unknown (range label hidden, list grows one page ahead) |
 | `PageNumber` | 1 | 1-based, clamped. **Needs `Mode=TwoWay`** |
 | `Capacity` | 10 | Items per page from `AvailableCapacities` (5, 10, 25, 50, 100, 200). **Needs `Mode=TwoWay`** |
+| `IsTotalKnown` | read-only | `Total >= 0` |
 | `PageMax`, `IntervalMin`, `IntervalMax` | read-only | |
 
 Reload the slice from the view-model setters of `PageNumber`/`Capacity`

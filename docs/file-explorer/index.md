@@ -36,7 +36,9 @@ Every control binds a `Source`, an `IExplorerSource`: it holds the opened direct
 
 ```csharp
 // using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -55,7 +57,8 @@ your own displays whatever you hand over — see [sources](sources.md).
 ## Nodes
 
 A source hands over `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and the
-`Parent` directory. `IExplorerDirectory` adds its `Children`, `IExplorerFile` a `Size`.
+`Parent` directory. `IExplorerDirectory` adds its `Children` and its `DirectoryTree` (itself and its ancestors, for
+the breadcrumb), `IExplorerFile` a `Size`.
 `FileSystemFile` and `FileSystemDirectory` implement them for the disk, and a type of
 your own is displayed like the others — see
 [virtual nodes](sources.md#virtual-nodes).

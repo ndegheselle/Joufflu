@@ -64,8 +64,8 @@ the loop at runtime.
 ## Hidden elements and lifetime
 
 The hop pauses itself whenever the element is not visible — `Collapsed` or
-`Hidden`, under a collapsed ancestor, or out of the visual tree — and resumes
-where it left off when the element comes back, parked at rest in the meantime.
+`Hidden`, under a collapsed ancestor, or out of the visual tree — parks at rest,
+and starts again from the top of its cycle when the element comes back.
 A bounce left on a hidden element therefore costs no frames.
 
 Nothing has to be unhooked for the element to be collected: the helper keeps no
