@@ -1,6 +1,7 @@
 ---
 title: File explorer
-nav_order: 8
+parent: Joufflu controls
+nav_order: 5
 has_children: true
 ---
 
@@ -14,9 +15,10 @@ A themed file explorer from the optional
 - **Tree** — the loaded hierarchy, folders only by default.
 - **Sources** — what the controls display: the disk, the disk watched live, or a source of your own.
 
-Add the package (`dotnet add package Joufflu.FileExplorer`) and merge its
-`Resources.xaml` after the core one and after `Joufflu.Feedback` (the sources report
-their errors as toasts). The snippets use these namespaces:
+Add the package (`dotnet add package Joufflu.FileExplorer`; it brings
+`Joufflu.Feedback` along, the sources report their errors as toasts). Only the core
+`Resources.xaml` needs merging: the controls' styles load from each package's
+`Themes/Generic.xaml`. The snippets use these namespaces:
 
 ```xml
 xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"

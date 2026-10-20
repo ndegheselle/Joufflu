@@ -27,14 +27,14 @@ package.
    dotnet add package Joufflu.Feedback
    ```
 
-2. Merge the styles in `App.xaml`, after the core `Joufflu` resources:
+2. Merge the core `Joufflu` styles in `App.xaml`. The feedback controls' styles load
+   from the package's `Themes/Generic.xaml`, so nothing else needs merging:
 
    ```xml
    <Application.Resources>
        <ResourceDictionary>
            <ResourceDictionary.MergedDictionaries>
                <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
-               <ResourceDictionary Source="pack://application:,,,/Joufflu.Feedback;component/Resources.xaml" />
            </ResourceDictionary.MergedDictionaries>
        </ResourceDictionary>
    </Application.Resources>

@@ -1,6 +1,7 @@
 ---
 title: Overlays
 parent: Navigation
+grand_parent: Joufflu controls
 nav_order: 2
 ---
 

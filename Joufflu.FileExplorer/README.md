@@ -38,16 +38,15 @@ dependencies:
 dotnet add package Joufflu.FileExplorer
 ```
 
-Merge the styles in `App.xaml`, after the core ones, and initialize the theme manager
-once at startup:
+Merge the core `Joufflu` styles in `App.xaml` (the explorer and feedback styles load
+from each package's `Themes/Generic.xaml`) and initialize the theme manager once at
+startup:
 
 ```xml
 <Application.Resources>
     <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Resources.xaml" />
-            <ResourceDictionary Source="pack://application:,,,/Joufflu.Feedback;component/Resources.xaml" />
-            <ResourceDictionary Source="pack://application:,,,/Joufflu.FileExplorer;component/Resources.xaml" />
         </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
 </Application.Resources>

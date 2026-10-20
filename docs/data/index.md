@@ -1,6 +1,7 @@
 ---
 title: Data
-nav_order: 7
+parent: Joufflu controls
+nav_order: 4
 has_children: true
 ---
 

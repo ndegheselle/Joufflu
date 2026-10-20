@@ -1,7 +1,7 @@
-﻿---
+---
 title: Application shell
-parent: Toolkit
-nav_order: 8
+parent: Themes
+nav_order: 1
 ---
 
 # Application shell

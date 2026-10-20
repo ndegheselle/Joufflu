@@ -100,7 +100,9 @@ lets users add values not in the list.
                      SelectedItems="{Binding SelectedCountries}" />
 ```
 
-Bind `SelectedItems` to a mutable collection (`ObservableCollection<T>`).
+Bind `SelectedItems` to a mutable `IList` (e.g. `ObservableCollection<object>`; with `AllowAdd`
+the element type must accept `string`). The control edits it in place; changes made to its
+contents from the view model are not picked up, assign a new collection instead.
 
 ## TextEditable
 
@@ -155,7 +157,8 @@ stays a plain `ToggleButton` you style freely.
 |---|---|---|
 | `Dropdown.Popup` | null | Popup content; setting it makes the button a dropdown |
 | `Dropdown.Placement` | `BottomLeft` | `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight` |
-| `Dropdown.HorizontalOffset` / `VerticalOffset` | 0 | Extra offset |
+| `Dropdown.HorizontalOffset` | 0 | Extra horizontal offset |
+| `Dropdown.VerticalOffset` | 2 | Extra vertical offset (small gap from the button) |
 | `Dropdown.CloseOnClick` | false | Close when a `ButtonBase` inside is clicked (also CheckBox/RadioButton!) |
 | `Dropdown.PopupStyle` | null | Style for `inputs:DropdownPopupHost` (padding defaults to 0) |
 
@@ -167,7 +170,8 @@ stays a plain `ToggleButton` you style freely.
 </inputs:Dropdown.PopupStyle>
 ```
 
-Bindings in the popup: `DataContext`, `Foreground` and `Sizing.Size` flow in, so plain
+Bindings in the popup: `DataContext` and `Sizing.Size` flow in from the button and the host
+restates the theme `Foreground` (a `Foreground` set on the button does not flow in), so plain
 bindings work. `ElementName` and `RelativeSource AncestorType` lookups outside the popup
 do **not**; go through the host instead:
 

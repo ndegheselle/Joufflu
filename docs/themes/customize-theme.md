@@ -1,7 +1,7 @@
-﻿---
+---
 title: Customize theme
-parent: Toolkit
-nav_order: 7
+parent: Themes
+nav_order: 4
 ---
 
 # Customize theme

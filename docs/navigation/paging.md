@@ -1,6 +1,7 @@
 ---
 title: Paging
 parent: Navigation
+grand_parent: Joufflu controls
 nav_order: 3
 ---
 

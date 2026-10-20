@@ -86,14 +86,14 @@ ThemeManager.Instance.Register(
 ThemeManager.Instance.Initialize();
 ```
 
-The keys to override are listed in [Design tokens](toolkit/tokens.md) and the full
-flow in [Customize theme](toolkit/customize-theme.md) and [Theme](toolkit/theme.md).
+The keys to override are listed in [Design tokens](themes/tokens.md) and the full
+flow in [Customize theme](themes/customize-theme.md) and [Theme](themes/theme.md).
 
 ## A theme switcher
 
 `ThemeManager.Theme` takes `System`, `Light`, `Dark` or the name of a registered
 custom theme and re-themes the whole UI live. Persisting the choice is up to the app;
-see [Theme](toolkit/theme.md#persisting-the-theme).
+see [Theme](themes/theme.md#persisting-the-theme).
 
 ```csharp
 using Joufflu.Themes;

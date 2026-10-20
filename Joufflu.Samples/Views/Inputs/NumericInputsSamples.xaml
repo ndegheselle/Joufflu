@@ -29,7 +29,7 @@
             <c:CodeExample
                 Title="DecimalUpDown"
                 Code="{Binding DecimalCode}"
-                Description="Selects a double / decimal value using the decimal format.">
+                Description="Selects a decimal value through a single DecimalGroup.">
                 <StackPanel toolkit:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:DecimalUpDown Width="180" Value="{Binding DecimalValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding DecimalValue, StringFormat='Value: {0}'}" />

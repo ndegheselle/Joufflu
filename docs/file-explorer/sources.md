@@ -1,6 +1,7 @@
 ---
 title: Sources
 parent: File explorer
+grand_parent: Joufflu controls
 nav_order: 4
 ---
 

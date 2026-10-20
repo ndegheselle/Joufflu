@@ -1,6 +1,6 @@
 ---
 title: Joufflu vs other WPF UI libraries
-nav_order: 10
+nav_order: 8
 ---
 
 # Joufflu vs other WPF UI libraries
@@ -33,7 +33,7 @@ this page does not track their releases.
   Register a whole palette by name (`ThemeManager.Register`) to make it selectable next
   to Light and Dark. The gallery's **Customize theme** page edits the tokens live,
   starts from presets and generates the dictionary to paste into your app
-  ([Customize theme](toolkit/customize-theme.md)).
+  ([Customize theme](themes/customize-theme.md)).
 - **Restyled natives.** Buttons, text boxes, combo boxes, data grids and the rest of the
   built-in WPF controls pick up the style from the implicit styles, with no
   `Style=` needed on each one.

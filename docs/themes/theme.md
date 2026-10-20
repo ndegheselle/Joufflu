@@ -1,7 +1,7 @@
-﻿---
+---
 title: Theme
-parent: Toolkit
-nav_order: 5
+parent: Themes
+nav_order: 2
 ---
 
 # Theme

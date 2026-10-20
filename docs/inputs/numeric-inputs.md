@@ -1,6 +1,7 @@
 ---
 title: Numeric & format inputs
 parent: Inputs
+grand_parent: Joufflu controls
 nav_order: 1
 ---
 
@@ -25,7 +26,7 @@ Selects a `decimal?` value, through a single `DecimalGroup`.
 
 ## TimeSpanPicker
 
-Selects a `TimeSpan` through a days/hours/minutes/seconds format.
+Selects a `TimeSpan?` through a days/hours/minutes/seconds format.
 
 ```xml
 <inputs:TimeSpanPicker Value="{Binding Duration, Mode=TwoWay}" />

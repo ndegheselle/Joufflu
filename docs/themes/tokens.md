@@ -1,7 +1,7 @@
-﻿---
+---
 title: Design tokens
-parent: Toolkit
-nav_order: 6
+parent: Themes
+nav_order: 3
 ---
 
 # Design tokens
@@ -29,7 +29,7 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 ```
 
 See [Theme](theme.html) for swapping palettes at runtime, [Customize theme](customize-theme.html)
-for editing these values live, and [Derived dimensions](derived-dimensions.html) for scaling one
+for editing these values live, and [Derived dimensions](../toolkit/derived-dimensions.html) for scaling one
 per side or per corner.
 
 ## Colors
@@ -96,7 +96,7 @@ The sample gallery renders them live against whichever theme is selected.
 ### Shape
 
 A scalar plus the ready made `Thickness`/`CornerRadius` built from it. Bind the scalar through
-[`Derive`](derived-dimensions.html) when you need only some sides or corners, the composite one
+[`Derive`](../toolkit/derived-dimensions.html) when you need only some sides or corners, the composite one
 otherwise.
 
 | Key | Type | Used for |
@@ -112,14 +112,14 @@ Distances between things rather than inside them.
 
 | Key | Type | Used for |
 |---|---|---|
-| `Spacing` | `double` | Standard gap between sibling elements (`12`). Feed it to [`Spacing.Gap`](spacing.html). |
+| `Spacing` | `double` | Standard gap between sibling elements (`12`). Feed it to [`Spacing.Gap`](../toolkit/spacing.html). |
 | `SpacingThickness` | `Thickness` | `Spacing` on all four sides, the standard page padding. |
 | `TitleBarHeight` | `double` | Height of the custom window title bar (`30`). |
 | `TitleBarHeightOffset` | `Thickness` | `Top` only, used as a margin to push content below an overlapping title bar. |
 
 ### Control heights
 
-Vertical size of single line controls. [`Sizing.Size`](sizing.html) picks one of the four; `md` is
+Vertical size of single line controls. [`Sizing.Size`](../toolkit/sizing.html) picks one of the four; `md` is
 the default written in the base styles, so only `xs`/`sm`/`lg` appear in the size triggers.
 
 | Key | Value | Used for |

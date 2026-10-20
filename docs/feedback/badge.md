@@ -1,6 +1,7 @@
 ---
 title: Badge
 parent: Feedback
+grand_parent: Joufflu controls
 nav_order: 1
 ---
 
