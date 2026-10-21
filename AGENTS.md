@@ -51,4 +51,6 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
   regenerate `docs/llms-full.txt` (`pwsh docs/build-llms-full.ps1`), bump the plugin
   `version` in `plugins/joufflu/.claude-plugin/plugin.json`, and add an entry under the
   package's *unreleased* heading in `changelog.md`.
-- Packages are published by the workflows in `.github/workflows`; see `publishing.md`.
+- `.github/workflows/tests.yml` builds the solution and runs every test project on each push
+  and pull request (WPF only builds on Windows). Packages are published by the other workflows
+  in `.github/workflows`; see `publishing.md`.
