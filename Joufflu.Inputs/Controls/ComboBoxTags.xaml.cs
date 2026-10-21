@@ -174,11 +174,8 @@ namespace Joufflu.Inputs.Controls
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Back && string.IsNullOrEmpty(Text) && InternalSelectedItems.Count > 0)
-            {
-                InternalSelectedItems.RemoveAt(InternalSelectedItems.Count - 1);
-            }
-            else if (e.Key == Key.Enter)
+            // Backspace is handled in OnPreviewKeyDown alone : handling it here too removed two tags per key.
+            if (e.Key == Key.Enter)
             {
                 if (SelectedItem != null)
                 {
