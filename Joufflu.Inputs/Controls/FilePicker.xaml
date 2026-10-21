@@ -27,16 +27,10 @@
                             HorizontalAlignment="Right"
                             Orientation="Horizontal">
                             <!--  Clear button  -->
-                            <Button x:Name="ClearButton" Command="{Binding ClearCommand}">
-                                <Button.Style>
-                                    <Style BasedOn="{StaticResource EmbeddedButton}" TargetType="{x:Type Button}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding FilePath}" Value="">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
+                            <Button
+                                x:Name="ClearButton"
+                                Command="{Binding ClearCommand}"
+                                Style="{StaticResource EmbeddedButton}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
                             <Button Command="{Binding SelectCommand}" Style="{StaticResource EmbeddedButton}">
@@ -54,6 +48,13 @@
                         </Trigger>
                         <Trigger Property="toolkit:Sizing.Size" Value="lg">
                             <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingLg}}" />
+                        </Trigger>
+
+                        <Trigger Property="FilePath" Value="">
+                            <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="FilePath" Value="{x:Null}">
+                            <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>
 
                         <Trigger Property="Validation.HasError" Value="True">
