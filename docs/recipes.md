@@ -187,7 +187,7 @@ resizes every control inside it.
 
 - Look changes are token overrides in a dictionary merged after Joufflu (or a registered
   theme), never edits to control styles.
-- Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}`),
+- Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}`),
   never from hex values, so Light / Dark and custom themes keep working.
 - Gaps between children use `Spacing.Gap`, not a `Margin` on each child.
 - Roles are named styles (`PrimaryButton`, `DangerButton`, `Card`) and tokens (`Sizing.Size`

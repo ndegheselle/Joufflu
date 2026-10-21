@@ -36,7 +36,7 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                         Text="{Binding Parent.Name}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

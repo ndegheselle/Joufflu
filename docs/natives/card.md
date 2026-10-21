@@ -20,7 +20,7 @@ rounded corners and the standard spacing as padding.
     <StackPanel toolkit:Spacing.Gap="4">
         <TextBlock FontWeight="Bold" Text="Card" />
         <TextBlock
-            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
             Text="The primary surface for grouping content."
             TextWrapping="Wrap" />
     </StackPanel>

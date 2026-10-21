@@ -27,7 +27,7 @@
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="Desc"
-                                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                    Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                     Text="{TemplateBinding Description}"
                                     TextWrapping="Wrap" />
                             </StackPanel>

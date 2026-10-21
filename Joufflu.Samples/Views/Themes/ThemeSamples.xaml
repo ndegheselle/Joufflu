@@ -21,7 +21,7 @@
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Theme" />
             <TextBlock
-                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="System / Light / Dark, applied by swapping the active theme resource dictionary at runtime."
                 TextWrapping="Wrap" />
 
