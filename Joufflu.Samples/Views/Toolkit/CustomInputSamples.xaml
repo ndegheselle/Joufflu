@@ -14,8 +14,8 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Samples;component/Views/Toolkit/RatingInput.xaml" />
     </UserControl.Resources>
 
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Create custom input" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"

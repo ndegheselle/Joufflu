@@ -8,6 +8,7 @@
 - Declare the groups of a `FormatTextBox` as its content rather than in a format string : `IntegerGroup` and `DecimalGroup` the user types into, `FormatLiteral` text between them, with their options as properties checked by the XAML compiler and IntelliSense rather than parsed at runtime. The options take the names of an HTML number input and of .NET : `Min`, `Max`, `Step`, `StringFormat` (a standard numeric format string, `00` padding where `padded` and `length` did), `IsNullable`, `PromptChar` and `SelectsWhole`. No more `{}` escaping, nor `GlobalFormat` to repeat options across groups. **Breaking** : `Format` and `GlobalFormat` give way to `Parts`, so `Format="{}{max:23}h {max:59}m" GlobalFormat="numeric"` becomes `<format:IntegerGroup Max="23" />`, `<format:FormatLiteral Text="h " />`, `<format:IntegerGroup Max="59" />`, `<format:FormatLiteral Text="m" />` inside the box. `noGlobalSelection` becomes `SelectsWhole="False"`, `incrementDelta` `Step`, `nullable` `IsNullable`, `nullableChar` `PromptChar`, and `format:` a `StringFormat` without its leading colon
 - Let groups written in XAML replace the default group of `NumericUpDown`, `DecimalUpDown` and `TimeSpanPicker` rather than being added after it, so `<NumericUpDown><IntegerGroup Max="10" /></NumericUpDown>` bounds the number : their default groups are now `DefaultParts`, shown while `Parts` is empty, and `Parts` starts empty. Let Tab leave a `FormatTextBox` from its last group, and Shift+Tab from its first, instead of keeping the focus in the box
 - Remove `FormatTextBox.AllowSelectionOutsideGroups`, never set, and the `INotifyPropertyChanged` of `ComboBoxSearch`, which raised no change. **Breaking** for code setting the former or listening to the latter
+- Read the `ColorPicker` border thickness and spacing through `DynamicResource`, so they follow a theme or a runtime change of the `Dimensions` tokens
 
 # Joufflu.Navigation (unreleased)
 
@@ -16,10 +17,12 @@
 - Rename `OverlayService` / `IOverlayService` to `Overlayer` / `IOverlayer`, now in `Joufflu.Navigation`, and `Show` to `ShowAsync`. Content closes itself with `Validate`, `Cancel` or `Ignore`, handing `true`, `false` or `null` to the awaiting `ShowAsync`, in place of `Close(content, result)` and `CloseTop`; the close cross and a click away ignore. `OverlayViewModel` and `OverlayViewModel<TResult>` are gone : content implements `IOverlayContent` to carry its own options and `IOverlayContent<TResult>` for the `Result` the generic `ShowAsync` hands back when validated. **Breaking** for any code showing or closing overlays
 - Keep a `Paging` on its `Capacity` when its template loads : the page-size combo box also set `SelectedIndex="0"`, which could push the first available capacity (5) into a `Capacity` bound two-way, in place of the bound value or the default 10
 - Treat a `Paging` total of 0 as an empty set rather than an unknown one : a single page, Next disabled and "0-0 of 0", a negative `Total` alone leaving the size unknown, through a new `IsTotalKnown`. Keep the current page checked when its button is clicked again
+- Read the `NavigationMenu` title line thickness through `DynamicResource`, so it follows a theme or a runtime change of `Dimensions.Thickness`
 
 # Joufflu.Feedback (unreleased)
 
 - Start a toast's timer when `ToastService.Show` shows it rather than when the `ToastInstance` is built, so a toast built but not shown never closes itself
+- Read the `ToastContainer` title bar offset through `DynamicResource`, so it follows a theme overriding `Dimensions.TitleBarHeightOffset`
 
 # Joufflu.FileExplorer (unreleased)
 
@@ -40,6 +43,7 @@
 - Remove `ThemedWindow.ShrinkTitleBarWhenMaximized`, which did nothing : its trigger set a `MinHeight` below the fixed title bar height. **Breaking** for code setting it
 - Let a theme registered with `ThemeManager` override the `Dimensions` (and `Colors.DisabledOpacity`), as the docs promised : the theme is now merged right after the dictionary holding the default dimensions (`Resources.xaml`) rather than first, where those defaults shadowed it. A dictionary merged after `Resources.xaml` still overrides every theme
 - Remove `ClipboardManager`, a clipboard listener unrelated to a design system that never released its window hook, and the unused `ThemedWindow.TransformToWindowCoordinates(Size)` overload. **Breaking** for code using either
+- Read the `DataGrid` and `ListView` paddings through `DynamicResource` like every other token, so they follow a registered theme and a runtime change of the `Padding*` tokens, and stop merging `Dimensions.xaml` again into `DataGrid.xaml`, `ListView.xaml`, `TabControl.xaml` and `GroupBox.xaml` : `Resources.xaml` already holds it, and the extra copies could shadow a theme's dimensions
 
 # Joufflu.Data (unreleased)
 

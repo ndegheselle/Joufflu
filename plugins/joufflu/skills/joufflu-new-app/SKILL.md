@@ -185,7 +185,7 @@ public partial class ShellWindow : ThemedWindow
 
 Title bar over content variant: add `AllowContentOverTitleBar="True"`
 `TitleVisibility="Collapsed"` on the window, and give the page
-host `Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"`
+host `Margin="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"`
 (`xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"`). Never offset the Toast/Overlay containers.
 
 ## 6. A page: view model + view

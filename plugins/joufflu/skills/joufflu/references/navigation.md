@@ -52,7 +52,7 @@ With `AllowContentOverTitleBar="True"` the window is layered: title bar + drag a
 content, then title / `TitleBarContent` / caption buttons (top, never covered). Content with a
 `null` Background (no `Transparent`) lets the window be grabbed through it; the page is not laid
 out for you, so push it down with
-`Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"` and keep the
+`Margin="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"` and keep the
 overlay/toast containers full-bleed. A `NavigationMenu` at the top keeps its header strip draggable.
 
 ## Shell window

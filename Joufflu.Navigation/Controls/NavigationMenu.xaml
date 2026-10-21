@@ -159,7 +159,7 @@
 
                         <Border
                             x:Name="TitleLine"
-                            Height="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
+                            Height="{DynamicResource {x:Static joufflu:Dimensions.Thickness}}"
                             VerticalAlignment="Center"
                             Background="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
                             Visibility="Collapsed" />

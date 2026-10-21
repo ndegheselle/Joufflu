@@ -4,10 +4,6 @@
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
     <!--  Invisible drag handle used to resize columns  -->
     <Style x:Key="ListViewColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Width" Value="16" />
@@ -204,13 +200,13 @@
 
             <!--  Size variants (md is the default, no trigger needed)  -->
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingXs}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="sm">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingSm}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="lg">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

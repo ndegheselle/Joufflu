@@ -7,8 +7,8 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Application shell" />
 
             <TextBlock
@@ -39,7 +39,7 @@
 
             <c:CodeExample
                 Title="AllowContentOverTitleBar"
-                Code="&lt;controls:ThemedWindow ...&#x0a;    AllowContentOverTitleBar=&quot;True&quot;&gt;&#x0a;&#x0a;    &lt;DockPanel&gt;&#x0a;        &lt;nav:NavigationMenu DockPanel.Dock=&quot;Left&quot; ... /&gt;&#x0a;&#x0a;        &lt;!-- The page drops below the bar, the menu stays full height --&gt;&#x0a;        &lt;ContentControl&#x0a;            Margin=&quot;{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}&quot;&#x0a;            Content=&quot;{Binding Navigator.CurrentPage}&quot; /&gt;&#x0a;    &lt;/DockPanel&gt;&#x0a;&lt;/controls:ThemedWindow&gt;"
+                Code="&lt;controls:ThemedWindow ...&#x0a;    AllowContentOverTitleBar=&quot;True&quot;&gt;&#x0a;&#x0a;    &lt;DockPanel&gt;&#x0a;        &lt;nav:NavigationMenu DockPanel.Dock=&quot;Left&quot; ... /&gt;&#x0a;&#x0a;        &lt;!-- The page drops below the bar, the menu stays full height --&gt;&#x0a;        &lt;ContentControl&#x0a;            Margin=&quot;{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}&quot;&#x0a;            Content=&quot;{Binding Navigator.CurrentPage}&quot; /&gt;&#x0a;    &lt;/DockPanel&gt;&#x0a;&lt;/controls:ThemedWindow&gt;"
                 Description="Set AllowContentOverTitleBar to draw content over the title bar instead of below it, so a full height side panel reaches the top of the window. Layers, bottom to top: the bar and its drag area, the content, then the title, TitleBarContent and caption buttons, which content never covers. To keep the window grabbable, leave the containers around the page without a Background (null, not Transparent). The page itself is not laid out for you: reserve a gap with the shared Dimensions.TitleBarHeightOffset. NavigationMenu keeps its header strip draggable.">
                 <TextBlock
                     Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"

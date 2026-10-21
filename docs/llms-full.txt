@@ -852,7 +852,7 @@ at the top of the content equal to the bar's height, a fixed value shared throug
 
                 <!-- The page drops below the bar; overlays and toasts stay full-bleed. -->
                 <ContentControl
-                    Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"
+                    Margin="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"
                     Content="{Binding Navigator.CurrentPage}" />
             </DockPanel>
         </nav:OverlayContainer>
