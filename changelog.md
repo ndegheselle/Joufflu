@@ -53,6 +53,7 @@
 - Remove `ClipboardManager`, a clipboard listener unrelated to a design system that never released its window hook, and the unused `ThemedWindow.TransformToWindowCoordinates(Size)` overload. **Breaking** for code using either
 - Read the `DataGrid` and `ListView` paddings through `DynamicResource` like every other token, so they follow a registered theme and a runtime change of the `Padding*` tokens, and stop merging `Dimensions.xaml` again into `DataGrid.xaml`, `ListView.xaml`, `TabControl.xaml` and `GroupBox.xaml` : `Resources.xaml` already holds it, and the extra copies could shadow a theme's dimensions
 - Rename the attached `Tooltip` to `ThemedTooltip`, which read as the native `ToolTip` but for its case, and leave the show delays an element sets itself rather than overwriting them with 0. **Breaking** : `toolkit:Tooltip.Content` and `Tooltip.Placement` become `toolkit:ThemedTooltip.Content` and `ThemedTooltip.Placement`
+- Read whether Windows is in dark mode from its documented `AppsUseLightTheme` registry value, where `ThemeManager` called an undocumented UXTheme export by its ordinal. **Breaking** : the public `ThemeManager.ShouldSystemUseDarkMode()` is gone; `ThemeManager.Instance.IsDark` tells the theme on screen
 
 # Joufflu.Data (unreleased)
 
