@@ -16,41 +16,41 @@
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Tooltip" />
 
             <c:CodeExample
-                Title="Tooltip.Placement"
+                Title="ThemedTooltip.Placement"
                 Code="{Binding PlacementCode}"
-                Description="Set Tooltip.Content on any element to show a themed tooltip on hover. Tooltip.Placement chooses the side it sits on — Top, Bottom, Left or Right — and it still flips automatically near a screen edge.">
+                Description="Set ThemedTooltip.Content on any element to show a themed tooltip on hover. ThemedTooltip.Placement chooses the side it sits on — Top, Bottom, Left or Right — and it still flips automatically near a screen edge.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <Button
                         Content="Top"
-                        toolkit:Tooltip.Content="Placed above"
-                        toolkit:Tooltip.Placement="Top" />
+                        toolkit:ThemedTooltip.Content="Placed above"
+                        toolkit:ThemedTooltip.Placement="Top" />
                     <Button
                         Content="Bottom"
-                        toolkit:Tooltip.Content="Placed below"
-                        toolkit:Tooltip.Placement="Bottom" />
+                        toolkit:ThemedTooltip.Content="Placed below"
+                        toolkit:ThemedTooltip.Placement="Bottom" />
                     <Button
                         Content="Left"
-                        toolkit:Tooltip.Content="Placed left"
-                        toolkit:Tooltip.Placement="Left" />
+                        toolkit:ThemedTooltip.Content="Placed left"
+                        toolkit:ThemedTooltip.Placement="Left" />
                     <Button
                         Content="Right"
-                        toolkit:Tooltip.Content="Placed right"
-                        toolkit:Tooltip.Placement="Right" />
+                        toolkit:ThemedTooltip.Content="Placed right"
+                        toolkit:ThemedTooltip.Placement="Right" />
                 </WrapPanel>
             </c:CodeExample>
 
             <c:CodeExample
                 Title="Custom content"
                 Code="{Binding ContentCode}"
-                Description="Tooltip.Content is an object, so it accepts arbitrary XAML — not just text.">
+                Description="ThemedTooltip.Content is an object, so it accepts arbitrary XAML — not just text.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
-                    <Button Content="Rich tooltip" toolkit:Tooltip.Placement="Bottom">
-                        <toolkit:Tooltip.Content>
+                    <Button Content="Rich tooltip" toolkit:ThemedTooltip.Placement="Bottom">
+                        <toolkit:ThemedTooltip.Content>
                             <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
                                 <TextBlock Text="Arbitrary content, icons included." />
                             </StackPanel>
-                        </toolkit:Tooltip.Content>
+                        </toolkit:ThemedTooltip.Content>
                     </Button>
                 </WrapPanel>
             </c:CodeExample>

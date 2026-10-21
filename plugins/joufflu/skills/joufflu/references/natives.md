@@ -35,7 +35,7 @@ keep them for short labels.
 
 <!-- Icon-only button: IsSquare makes width = height; composes with any variant -->
 <Button toolkit:Sizing.IsSquare="True" Style="{StaticResource GhostButton}"
-        toolkit:Tooltip.Content="Add">
+        toolkit:ThemedTooltip.Content="Add">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
 </Button>
 

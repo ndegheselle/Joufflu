@@ -58,8 +58,8 @@
                             <Setter TargetName="ItemButton" Property="HorizontalContentAlignment" Value="Center" />
                             <Setter TargetName="ItemButton" Property="Padding" Value="0" />
                             <!--  Collapsed: the label is hidden, so surface it as a tooltip beside the icon  -->
-                            <Setter TargetName="ItemButton" Property="toolkit:Tooltip.Content" Value="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="ItemButton" Property="toolkit:Tooltip.Placement" Value="Right" />
+                            <Setter TargetName="ItemButton" Property="toolkit:ThemedTooltip.Content" Value="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="ItemButton" Property="toolkit:ThemedTooltip.Placement" Value="Right" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -137,8 +137,8 @@
                             <Setter TargetName="HeaderButton" Property="HorizontalContentAlignment" Value="Center" />
                             <Setter TargetName="HeaderButton" Property="Padding" Value="0" />
                             <!--  Collapsed: the header is hidden, so surface it as a tooltip beside the icon  -->
-                            <Setter TargetName="HeaderButton" Property="toolkit:Tooltip.Content" Value="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="HeaderButton" Property="toolkit:Tooltip.Placement" Value="Right" />
+                            <Setter TargetName="HeaderButton" Property="toolkit:ThemedTooltip.Content" Value="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="HeaderButton" Property="toolkit:ThemedTooltip.Placement" Value="Right" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

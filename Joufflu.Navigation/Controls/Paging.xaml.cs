@@ -145,7 +145,7 @@ namespace Joufflu.Navigation.Controls
 
         #region Commands
         [RelayCommand()]
-        private void GotTo(int pageNumber)
+        private void GoTo(int pageNumber)
         {
             // A click toggles the page button off ; on the current page nothing changes, so the buttons are built
             // again to show it checked.

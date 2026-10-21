@@ -32,7 +32,7 @@ public class DataIcon : FontIcon
     private void Refresh()
     {
         Text = GlyphOf(Type);
-        Tooltip.SetContent(this, Type?.ToString() ?? "null");
+        ThemedTooltip.SetContent(this, Type?.ToString() ?? "null");
     }
 
     /// <summary>The glyph [type] is read by.</summary>

@@ -22,6 +22,7 @@
 - Treat a `Paging` total of 0 as an empty set rather than an unknown one : a single page, Next disabled and "0-0 of 0", a negative `Total` alone leaving the size unknown, through a new `IsTotalKnown`. Keep the current page checked when its button is clicked again
 - Read the `NavigationMenu` title line thickness through `DynamicResource`, so it follows a theme or a runtime change of `Dimensions.Thickness`
 - Move what a `Paging` shows, its page buttons, interval, last page and whether Previous and Next are available, into a `PagingState` of its own, free of WPF, so the paging rules are tested without a control. The control refreshes everything in one place instead of three copies, and its behaviour is unchanged
+- Fix the typo in `Paging.GotToCommand`, now `GoToCommand`. **Breaking** for a template binding it
 
 # Joufflu.Feedback (unreleased)
 
@@ -51,6 +52,7 @@
 - Let a theme registered with `ThemeManager` override the `Dimensions` (and `Colors.DisabledOpacity`), as the docs promised : the theme is now merged right after the dictionary holding the default dimensions (`Resources.xaml`) rather than first, where those defaults shadowed it. A dictionary merged after `Resources.xaml` still overrides every theme
 - Remove `ClipboardManager`, a clipboard listener unrelated to a design system that never released its window hook, and the unused `ThemedWindow.TransformToWindowCoordinates(Size)` overload. **Breaking** for code using either
 - Read the `DataGrid` and `ListView` paddings through `DynamicResource` like every other token, so they follow a registered theme and a runtime change of the `Padding*` tokens, and stop merging `Dimensions.xaml` again into `DataGrid.xaml`, `ListView.xaml`, `TabControl.xaml` and `GroupBox.xaml` : `Resources.xaml` already holds it, and the extra copies could shadow a theme's dimensions
+- Rename the attached `Tooltip` to `ThemedTooltip`, which read as the native `ToolTip` but for its case, and leave the show delays an element sets itself rather than overwriting them with 0. **Breaking** : `toolkit:Tooltip.Content` and `Tooltip.Placement` become `toolkit:ThemedTooltip.Content` and `ThemedTooltip.Placement`
 
 # Joufflu.Data (unreleased)
 
