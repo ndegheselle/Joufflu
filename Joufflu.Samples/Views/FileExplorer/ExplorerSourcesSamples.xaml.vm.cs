@@ -85,9 +85,9 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
         // A source hands its own nodes over along with the ones it reads.
         public class VirtualFilesSource : FileSystemSource
         {
-            protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+            protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
             {
-                base.LoadDirectory(directory, depth);
+                base.ApplyDirectory(directory, read);
                 directory.Children.Add(GetVirtualFile(directory));
             }
 
@@ -119,7 +119,7 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
                     <ContextMenu>
                         <MenuItem Header="Pinned" IsCheckable="True"
                                   IsChecked="{Binding Node.IsPinned, Mode=TwoWay}" />
-                        <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                        <MenuItem Header="Copy path" Command="{Binding CopyPathCommand}"
                                   CommandParameter="{Binding Node}" />
                     </ContextMenu>
                 </DataTemplate>

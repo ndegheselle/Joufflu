@@ -9,7 +9,7 @@ description: >-
   Paging), feedback (`Joufflu.Feedback`: Badge, Spinner, toasts),
   the file explorer (`Joufflu.FileExplorer`), JSON data trees (`Joufflu.Data`:
   DataFill, DataEdit, DataDisplay, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
-  (Sizing, Spacing.Gap, Derive, Tooltip, Animate, DropTarget/DragSource),
+  (Sizing, Spacing.Gap, Derive, ThemedTooltip, Animate, DropTarget/DragSource),
   ThemedWindow, FontIcon/Lucide icons, named styles (PrimaryButton, Card…) and
   the design tokens (joufflu:Brushes / Colors / Dimensions). Use it whenever a
   project references Joufflu (a `PackageReference`/`ProjectReference` to Joufflu*,
@@ -110,7 +110,7 @@ Without step 1 controls render unstyled; without step 2 every themed brush is mi
 | Prefix | Holds |
 |---|---|
 | `joufflu` | `Brushes`, `Colors`, `Dimensions` resource keys |
-| `toolkit` | `Sizing`, `Spacing`, `Derive`, `Tooltip`, `Animate`, `DropTarget`, `DragSource` |
+| `toolkit` | `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`, `DragSource` |
 | `fonts` | `FontIcon`, `LucideFontIcons` |
 | `controls` | `ThemedWindow` |
 | `themes` | `ThemeManager` |
@@ -162,7 +162,7 @@ C# namespaces (these are the real ones; some doc snippets are off):
 - **Buttons**: `PrimaryButton`, `SecondaryButton`, `GhostButton`, `SuccessButton`,
   `InfoButton`, `WarningButton`, `DangerButton`, plus `Soft*` and `Outline*` variants.
 - **Icons**: `<fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />`.
-- **Tooltips**: `toolkit:Tooltip.Content="…"` (instant, themed) rather than `ToolTip`.
+- **Tooltips**: `toolkit:ThemedTooltip.Content="…"` (instant, themed) rather than `ToolTip`.
 - **Modals / notifications**: `IOverlayer` and `IToastService`, not `MessageBox`
   or a new `Window`.
 - **Drag and drop**: `toolkit:DropTarget.Command` / `toolkit:DragSource.Data`, not
@@ -181,7 +181,7 @@ Read the one matching the task before writing code:
 | File | Covers |
 |---|---|
 | [references/natives.md](references/natives.md) | Named styles: buttons, cards, typography, menu items; `FontIcon`; styled natives |
-| [references/toolkit.md](references/toolkit.md) | `Sizing`, `Spacing`, `Derive`, `Tooltip`, `Animate`, `DropTarget`/`DragSource`, converters, helpers |
+| [references/toolkit.md](references/toolkit.md) | `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`/`DragSource`, converters, helpers |
 | [references/theming.md](references/theming.md) | `ThemeManager`, custom themes, persistence, switcher, every design token |
 | [references/inputs.md](references/inputs.md) | All `Joufflu.Inputs` controls and `Dropdown` |
 | [references/navigation.md](references/navigation.md) | `ThemedWindow` shell, `NavigationMenu`, `Navigator`, overlays, `Paging` |

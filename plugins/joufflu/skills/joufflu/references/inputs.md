@@ -126,6 +126,7 @@ Shows a value that turns into a text box on demand (inline rename, outside a for
 ## ColorPicker
 
 Hex field plus a popup (saturation/brightness square, hue slider, alpha slider, opacity %).
+`#RRGGBB` keeps the opacity, a pasted `#AARRGGBB` sets it too.
 
 ```xml
 <inputs:ColorPicker Color="{Binding Color, Mode=TwoWay}" />

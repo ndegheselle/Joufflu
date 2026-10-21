@@ -21,9 +21,6 @@ internal static class SystemContextMenuInterop
     public static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
 
     [DllImport("user32.dll", CharSet = CharSet.None, ExactSpelling = false)]
-    public static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
-
-    [DllImport("user32.dll", CharSet = CharSet.None, ExactSpelling = false)]
     public static extern int TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
 
     public static void OpenSystemContextMenu(Window window, Point positionInWindow)

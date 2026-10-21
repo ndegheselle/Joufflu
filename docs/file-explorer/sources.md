@@ -68,6 +68,11 @@ directory, associated to a path no file of the disk stands behind. A node type o
 application is templated like the others — its visual and its context menu are keyed on
 its type, and an extra column shows the state it carries.
 
+Opening a directory reads the disk off the UI thread, so a slow or a network drive doesn't
+freeze the window, then hands what it read to `ApplyDirectory` on the UI thread, once for
+the directory and once for each sub directory read along with it. Override it to add nodes
+of your own next to the ones read.
+
 ```csharp
 // A node type of the application : it carries a path, and a state no file of the disk has.
 // An IExplorerNode and not an IExplorerFile : it has no size, so the size column stays empty on its row.
@@ -95,9 +100,9 @@ public class VirtualFilesSource : FileSystemSource
 {
     public VirtualFilesSource(string rootDirectoryPath, IToastService? toasts) : base(rootDirectoryPath, toasts) { }
 
-    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
     {
-        base.LoadDirectory(directory, depth);
+        base.ApplyDirectory(directory, read);
         directory.Children.Add(GetVirtualFile(directory));
     }
 
@@ -107,9 +112,14 @@ public class VirtualFilesSource : FileSystemSource
 ```
 
 The context menu of a node type is a `DataTemplate` keyed with
-`ContextMenuTemplateKey`. Its data context is an `ExplorerMenuContext`: `Source` for
-the commands, `BeginRenameCommand` to rename the node in the control the menu was opened
-in, `Node` for the node the menu was opened on, `Nodes` for the whole selection.
+`ContextMenuTemplateKey`. Its data context is an `ExplorerMenuContext`: `Node` for the
+node the menu was opened on, `Nodes` for the whole selection, `Source`, and the commands
+of the items — `OpenCommand`, `CopyCommand`, `CutCommand`, `PasteCommand`,
+`RemoveCommand` and `CreateDirectoryCommand` run on the source, `BeginRenameCommand`
+renames the node in the control the menu was opened in, and `OpenInExplorerCommand`,
+`OpenWithDefaultCommand` and `CopyPathCommand` act on the disk, disabled for a source
+that isn't a `FileSystemSource`. Copy, cut and remove act on `Nodes`; the others take the
+node as their `CommandParameter`.
 
 ```xml
 <fileExplorer:Explorer Source="{Binding VirtualSource}">
@@ -129,7 +139,7 @@ in, `Node` for the node the menu was opened on, `Nodes` for the whole selection.
             <ContextMenu>
                 <MenuItem Header="Pinned" IsCheckable="True"
                           IsChecked="{Binding Node.IsPinned, Mode=TwoWay}" />
-                <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                <MenuItem Header="Copy path" Command="{Binding CopyPathCommand}"
                           CommandParameter="{Binding Node}" />
             </ContextMenu>
         </DataTemplate>
@@ -170,10 +180,10 @@ in, `Node` for the node the menu was opened on, `Nodes` for the whole selection.
 
 A source that reads none of the disk implements `IExplorerSource` itself: `Root` and
 `Current`, `Open()` and `Open(node)`, `Transfer(paths, target, isMove)` for what is
-dropped or pasted into it, and the commands the menus and the shortcuts bind
-(`RenameCommand`, `RemoveCommand`, `CreateDirectoryCommand`, `CopyCommand`,
-`CutCommand`, `PasteCommand`, `OpenCommand`, `OpenInExplorerCommand`,
-`CopyPathCommand`, `OpenWithDefaultCommand`).
+dropped or pasted into it, and the plain operations the menus and the shortcuts run:
+`Rename(node, name)`, `Remove(nodes)`, `CreateDirectory(parent)`, `Copy(nodes)`,
+`Cut(nodes)`, `Paste(target)` and `CanPaste()`. The controls build the commands
+themselves, so a source holds no UI.
 
 The nodes it hands over are `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and
 the `Parent` directory, `IExplorerDirectory` adding its `Children` and its

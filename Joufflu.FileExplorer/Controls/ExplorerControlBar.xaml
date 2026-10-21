@@ -28,7 +28,7 @@
                         <!--  Opening the parent of the opened directory, nothing to go up to at the root.  -->
                         <Button
                             toolkit:Sizing.IsSquare="True"
-                            Command="{Binding Source.OpenCommand}"
+                            Command="{Binding OpenCommand}"
                             CommandParameter="{Binding Source.Current.Parent}"
                             ToolTip="Parent folder">
                             <Button.Style>
@@ -66,7 +66,7 @@
                                                 </fonts:FontIcon.Style>
                                             </fonts:FontIcon>
                                             <Button
-                                                Command="{Binding Source.OpenCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerControlBar}}}"
+                                                Command="{Binding OpenCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerControlBar}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{Binding Name}"
                                                 Style="{StaticResource GhostButton}" />

@@ -16,14 +16,14 @@ public enum TooltipPlacement { Top, Bottom, Left, Right }
 /// screen-edge flipping all keep working; this just wires it up and applies the placement.
 /// </para>
 /// </summary>
-public static class Tooltip
+public static class ThemedTooltip
 {
     /// <summary>Content shown in the tooltip. <c>null</c> removes the tooltip.</summary>
     public static readonly DependencyProperty ContentProperty =
         DependencyProperty.RegisterAttached(
             "Content",
             typeof(object),
-            typeof(Tooltip),
+            typeof(ThemedTooltip),
             new PropertyMetadata(null, OnChanged));
 
     public static object? GetContent(DependencyObject obj) => obj.GetValue(ContentProperty);
@@ -34,7 +34,7 @@ public static class Tooltip
         DependencyProperty.RegisterAttached(
             "Placement",
             typeof(TooltipPlacement),
-            typeof(Tooltip),
+            typeof(ThemedTooltip),
             new PropertyMetadata(TooltipPlacement.Bottom, OnChanged));
 
     public static TooltipPlacement GetPlacement(DependencyObject obj) => (TooltipPlacement)obj.GetValue(PlacementProperty);
@@ -56,9 +56,10 @@ public static class Tooltip
             return;
         }
 
-        // Show instantly, and stay instant on subsequent hovers (native default is ~400ms / 100ms).
-        ToolTipService.SetInitialShowDelay(d, 0);
-        ToolTipService.SetBetweenShowDelay(d, 0);
+        // Show instantly, and stay instant on subsequent hovers (native default is ~400ms / 100ms), unless the
+        // element sets its own delays : they are left as they are rather than overwritten.
+        ShowInstantlyUnlessSet(d, ToolTipService.InitialShowDelayProperty);
+        ShowInstantlyUnlessSet(d, ToolTipService.BetweenShowDelayProperty);
 
         if (ToolTipService.GetToolTip(d) is not ToolTip toolTip)
         {
@@ -70,6 +71,16 @@ public static class Tooltip
 
         toolTip.Content = content;
         toolTip.Placement = ToPlacementMode(GetPlacement(d));
+    }
+
+    /// <summary>
+    /// Sets a delay to 0 unless the element already has one of its own. A 0 set here by an earlier call counts as
+    /// set, which keeps rebuilding the tooltip idempotent.
+    /// </summary>
+    private static void ShowInstantlyUnlessSet(DependencyObject d, DependencyProperty delayProperty)
+    {
+        if (d.ReadLocalValue(delayProperty) == DependencyProperty.UnsetValue)
+            d.SetValue(delayProperty, 0);
     }
 
     // PlacementMode.Top/Bottom left-align the tooltip to the target, and none of the modes leave

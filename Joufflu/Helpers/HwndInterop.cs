@@ -54,8 +54,9 @@ public class HwndInterop : IDisposable
         if (msg != WM_WINDOWPOSCHANGING)
             return IntPtr.Zero;
 
-        object? data = Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
-        if (data is not WINDOWPOS windowPos) throw new Exception("Could not get window position.");
+        // Windows always hands WM_WINDOWPOSCHANGING a WINDOWPOS. Nothing may throw here : an exception in a message
+        // hook takes the message loop, and the application, down with it.
+        WINDOWPOS windowPos = Marshal.PtrToStructure<WINDOWPOS>(lParam);
         PositionChanging?.Invoke(this, new HwndInteropPositionChangingEventArgs((HwndInteropPositionChangingEventArgs.PositionChangeType)windowPos.flags));
 
         return IntPtr.Zero;

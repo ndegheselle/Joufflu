@@ -62,7 +62,8 @@ the first option. Object keys are unique and case-sensitive (errors on `Key` thr
 API: `DataObject.Add` / `Remove` / `UniqueKey`, `DataArray.AddFromTemplate()` / `Add(DataNode)` /
 `Remove`, `DataNode.Create(type, key)` for an empty node of a type, `DataValue.AddOption(string)` /
 `RemoveOption`, `DataNode.Clone()`.
-`DataNode.Changed` is raised when the node or anything under it changes (not on expand).
+`DataNode.Changed` is raised when the data of the node or anything under it changes (key, value,
+manual mode/entry, array template, children); not on expand, key validation or re-parenting.
 
 ## From JSON
 

@@ -17,7 +17,7 @@ public class ExplorerList : ExplorerNodesControl
 {
     #region Dependency Properties
 
-    public static readonly DependencyPropertyKey ViewPropertyKey = DependencyProperty.RegisterReadOnly(
+    private static readonly DependencyPropertyKey ViewPropertyKey = DependencyProperty.RegisterReadOnly(
         nameof(View),
         typeof(ICollectionView),
         typeof(ExplorerList),

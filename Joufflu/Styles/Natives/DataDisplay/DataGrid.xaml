@@ -5,7 +5,6 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
         <!--  Merged for the base Button style the select-all button is based on.  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.xaml" />
         <!--  Merged for the input styles the column cell elements use (see toolkit:DataGridEditing).  -->
@@ -197,7 +196,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
@@ -230,13 +229,13 @@
 
             <!--  Size variants (md is the default, no trigger needed)  -->
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingXs}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="sm">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingSm}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="lg">
-                <Setter Property="Padding" Value="{StaticResource {x:Static joufflu:Dimensions.PaddingLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

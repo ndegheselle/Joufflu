@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
@@ -44,8 +43,7 @@ public sealed class ThemeManager : ObservableObject
     private const string DarkSource = "pack://application:,,,/Joufflu;component/Themes/Dark.xaml";
     private const string BrushesSource = "pack://application:,,,/Joufflu;component/Styles/Brushes.xaml";
 
-    [DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
-    public static extern bool ShouldSystemUseDarkMode();
+    private const string PersonalizeKey = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
     public static ThemeManager Instance { get; } = new();
 
@@ -281,7 +279,18 @@ public sealed class ThemeManager : ObservableObject
             && _themes.TryGetValue(name, out Registration? registration))
             return registration;
 
-        return ShouldSystemUseDarkMode() ? _themes[Dark] : _themes[Light];
+        return IsSystemDark() ? _themes[Dark] : _themes[Light];
+    }
+
+    /// <summary>
+    /// Whether Windows asks the applications for a dark theme (Settings, Personalization, Colors, "Choose your
+    /// app mode"), read from its documented registry value rather than from an unnamed UXTheme export.
+    /// </summary>
+    private static bool IsSystemDark()
+    {
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(PersonalizeKey);
+        // Missing on the versions of Windows that predate the setting, which are light.
+        return key?.GetValue("AppsUseLightTheme") is int appsUseLightTheme && appsUseLightTheme == 0;
     }
 
     private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)

@@ -4,7 +4,6 @@ using Joufflu.FileExplorer.Nodes;
 using Joufflu.Helpers;
 using Joufflu.Toolkit;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -168,9 +167,27 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         if (Source == null)
             return false;
 
-        Source.Open(node);
+        OpenNode(node);
         return true;
     }
+
+    /// <summary>
+    /// Opens a node through the source without waiting for it, the source reading the disk off the UI thread. An
+    /// error the source raises still reaches the dispatcher rather than being lost with a task nobody awaits.
+    /// </summary>
+    protected async void OpenNode(IExplorerNode node)
+    {
+        if (Source == null)
+            return;
+
+        await Source.Open(node);
+    }
+
+    /// <summary>
+    /// Waits for an operation a shortcut started, which nothing else waits for, so that an error of the source
+    /// reaches the dispatcher rather than being lost with the task.
+    /// </summary>
+    private static async void Observe(Task operation) => await operation;
 
     #endregion
 
@@ -267,7 +284,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         if (rename == null)
             return;
 
-        Source?.RenameCommand.Execute(rename);
+        Source?.Rename(rename.Node, rename.Name);
     }
 
     #endregion
@@ -290,7 +307,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         // Paste goes to the current directory, whatever is selected
         if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V)
         {
-            Source.PasteCommand.Execute(Source.Current);
+            Observe(Source.Paste(Source.Current));
             e.Handled = true;
             return;
         }
@@ -301,15 +318,15 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         if (nodes.Count > 0)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C){
-                Source.CopyCommand.Execute(nodes); 
+                Source.Copy(nodes);
                 e.Handled = true;
             }
             else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.X){
-                Source.CutCommand.Execute(nodes); 
+                Source.Cut(nodes);
                 e.Handled = true;
             }
             else if(e.Key == Key.Delete){
-                Source.RemoveCommand.Execute(nodes); 
+                Observe(Source.Remove(nodes));
                 e.Handled = true;
             }
             else if(e.Key == Key.F2){
@@ -436,12 +453,12 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     }
 
     [RelayCommand(CanExecute = nameof(CanDropFiles))]
-    private void DropFiles(DropData data)
+    private async Task DropFiles(DropData data)
     {
         if (Source == null || !TryGetDrop(data, out IExplorerDirectory? target, out IReadOnlyList<string> files))
             return;
 
-        Source.Transfer(files, target, isMove: false);
+        await Source.Transfer(files, target, isMove: false);
     }
 
     private bool CanDropFiles(DropData data) => TryGetDrop(data, out _, out _);
@@ -473,27 +490,8 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
             return false;
 
         target = directory;
-        files = [.. paths.Where(path => !IsInDirectory(path, directory.Path))];
+        files = [.. paths.Where(path => !ExplorerPaths.IsDirectChild(path, directory.Path))];
         return files.Count > 0;
-    }
-
-    /// <summary>
-    /// Whether a path is a node of a directory, the file system of Windows being case insensitive.
-    /// </summary>
-    private static bool IsInDirectory(string path, string directoryPath)
-    {
-        try
-        {
-            return string.Equals(
-                Path.GetDirectoryName(Path.TrimEndingDirectorySeparator(Path.GetFullPath(path))),
-                Path.TrimEndingDirectorySeparator(Path.GetFullPath(directoryPath)),
-                StringComparison.OrdinalIgnoreCase);
-        }
-        catch (ArgumentException)
-        {
-            // An invalid path is left to the transfer, which ignores what doesn't exist.
-            return false;
-        }
     }
 
     private void ItemsHost_MouseMove(object sender, MouseEventArgs e)

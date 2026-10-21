@@ -13,8 +13,8 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     d:DataContext="{d:DesignInstance Type=local:ExplorerSourcesSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Sources" />
             <TextBlock
                 toolkit:Sizing.Size="lg"
@@ -33,8 +33,8 @@
                 Title="FileSystemWatcherSource"
                 Code="{Binding FileSystemWatcherSourceCode}"
                 Description="The same source, watching the disk : a node created, deleted, renamed or moved outside of the explorer shows up in it without a refresh. The buttons write into the watched folder behind its back, only the loaded directories being maintained.">
-                <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-                    <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                    <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                         <Button Command="{Binding CreateFileCommand}" Content="Create a file" />
                         <Button Command="{Binding CreateDirectoryCommand}" Content="Create a folder" />
                         <Button Command="{Binding ClearCommand}" Content="Empty the folder" />
@@ -87,7 +87,7 @@
                                 </MenuItem>
                                 <Separator />
                                 <MenuItem
-                                    Command="{Binding Source.OpenCommand}"
+                                    Command="{Binding OpenCommand}"
                                     CommandParameter="{Binding Node}"
                                     Header="Open">
                                     <MenuItem.Icon>
@@ -95,7 +95,7 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem
-                                    Command="{Binding Source.CopyPathCommand}"
+                                    Command="{Binding CopyPathCommand}"
                                     CommandParameter="{Binding Node}"
                                     Header="Copy path">
                                     <MenuItem.Icon>

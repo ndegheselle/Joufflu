@@ -37,9 +37,11 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
 
 ## If you are working on this repository
 
+- Follow [`CODING_GUIDELINES.md`](CODING_GUIDELINES.md).
 - Layout: one project per package (`Joufflu`, `Joufflu.Inputs`, `Joufflu.Navigation`,
   `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Data`), `Joufflu.Samples` (the
-  gallery), `Joufflu.Inputs.Tests`, `docs/` (Jekyll site, mirrors the gallery),
+  gallery), one `<Project>.Tests` project per tested project (`Joufflu.Samples.Tests` covers the
+  gallery's theme generator), `docs/` (Jekyll site, mirrors the gallery),
   `plugins/joufflu/` (Claude Code skills).
 - Styles: `Styles/Natives/<Category>` restyles built-in WPF controls,
   `Styles/Controls/<Category>` styles Joufflu's own controls. One control per file.
@@ -50,4 +52,6 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
   regenerate `docs/llms-full.txt` (`pwsh docs/build-llms-full.ps1`), bump the plugin
   `version` in `plugins/joufflu/.claude-plugin/plugin.json`, and add an entry under the
   package's *unreleased* heading in `changelog.md`.
-- Packages are published by the workflows in `.github/workflows`; see `publishing.md`.
+- `.github/workflows/tests.yml` builds the solution and runs every test project on each push
+  and pull request (WPF only builds on Windows). Packages are published by the other workflows
+  in `.github/workflows`; see `publishing.md`.

@@ -36,14 +36,14 @@ the gap is active. Put extra space on a wrapper instead.
 Themed tooltip shown instantly on hover (native `ToolTip` has a delay).
 
 ```xml
-<Button Content="Save" toolkit:Tooltip.Content="Save your changes" toolkit:Tooltip.Placement="Bottom" />
+<Button Content="Save" toolkit:ThemedTooltip.Content="Save your changes" toolkit:ThemedTooltip.Placement="Bottom" />
 <Button Content="Rich">
-    <toolkit:Tooltip.Content>
+    <toolkit:ThemedTooltip.Content>
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
             <TextBlock Text="Any content." />
         </StackPanel>
-    </toolkit:Tooltip.Content>
+    </toolkit:ThemedTooltip.Content>
 </Button>
 ```
 
@@ -176,4 +176,3 @@ Declare them in resources yourself; none are registered under a key by the libra
 
 - `MoreVisualTreeHelper.FindParent<T>(child)`, `GetChild<T>(element, recursive)`,
   `GetChildren<T>(element, recursive)`, `FindSelfOrParent(origin, type)`, `GetParent(element)`.
-- `ClipboardManager(window)` with a `ClipboardChanged` event.

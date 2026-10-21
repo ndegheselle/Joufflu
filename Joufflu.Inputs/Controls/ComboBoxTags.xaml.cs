@@ -24,11 +24,7 @@ namespace Joufflu.Inputs.Controls
             if (values[1] == DependencyProperty.UnsetValue)
                 return values[0].ToString();
 
-            string lDisplayMemberPath = (string)values[1];
-            if (!string.IsNullOrEmpty(lDisplayMemberPath))
-                return values[0].GetType().GetProperty(lDisplayMemberPath)?.GetValue(values[0])?.ToString();
-            else
-                return values[0].ToString();
+            return ItemSearch.TextOf(values[0], (string)values[1]);
         }
 
         public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
@@ -178,11 +174,8 @@ namespace Joufflu.Inputs.Controls
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Back && string.IsNullOrEmpty(Text) && InternalSelectedItems.Count > 0)
-            {
-                InternalSelectedItems.RemoveAt(InternalSelectedItems.Count - 1);
-            }
-            else if (e.Key == Key.Enter)
+            // Backspace is handled in OnPreviewKeyDown alone : handling it here too removed two tags per key.
+            if (e.Key == Key.Enter)
             {
                 if (SelectedItem != null)
                 {

@@ -17,8 +17,10 @@ namespace Joufflu.Inputs.Controls
         private const string PartSaturationArea = "PART_SaturationArea";
         private const string PartSaturationSelector = "PART_SaturationSelector";
 
-        // Guards against feedback loops while syncing Color <-> hex text <-> HSB <-> alpha.
-        private bool _isUpdating;
+        // Every edit goes to the model, then the model is shown back : the guard keeps showing it from counting as
+        // an edit.
+        private readonly ColorModel _model = new();
+        private bool _isShowingModel;
 
         private FrameworkElement? _saturationArea;
         private FrameworkElement? _saturationSelector;
@@ -31,7 +33,8 @@ namespace Joufflu.Inputs.Controls
 
         public ColorPicker()
         {
-            SyncFromColor(Color);
+            _model.SetColor(Color);
+            ShowModel();
         }
 
         #region Color
@@ -50,9 +53,10 @@ namespace Joufflu.Inputs.Controls
         private static void OnColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var picker = (ColorPicker)d;
-            if (picker._isUpdating)
+            if (picker._isShowingModel)
                 return;
-            picker.SyncFromColor((Color)e.NewValue);
+            picker._model.SetColor((Color)e.NewValue);
+            picker.ShowModel();
         }
         #endregion
 
@@ -126,7 +130,10 @@ namespace Joufflu.Inputs.Controls
             typeof(ColorPicker),
             new PropertyMetadata("#000000", OnHexTextChanged));
 
-        /// <summary>The colour as an editable <c>#RRGGBB</c> hex string (paste also accepts <c>#AARRGGBB</c>).</summary>
+        /// <summary>
+        /// The colour as an editable <c>#RRGGBB</c> hex string. Pasting <c>#AARRGGBB</c> also sets the alpha, while
+        /// <c>#RRGGBB</c> keeps it.
+        /// </summary>
         public string HexText
         {
             get => (string)GetValue(HexTextProperty);
@@ -136,14 +143,11 @@ namespace Joufflu.Inputs.Controls
         private static void OnHexTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var picker = (ColorPicker)d;
-            if (picker._isUpdating)
+            if (picker._isShowingModel)
                 return;
-
-            if (TryParse((string)e.NewValue, out Color color))
-                // Keep the current alpha: the hex box only edits RGB.
-                picker.Color = Color.FromArgb(picker.Color.A, color.R, color.G, color.B);
-            else
-                picker.SetGuarded(HexTextProperty, ToHex(picker.Color)); // revert invalid input
+            // Text spelling no colour leaves the model as it was, so showing it reverts the box.
+            picker._model.TrySetHex((string)e.NewValue);
+            picker.ShowModel();
         }
         #endregion
 
@@ -168,9 +172,10 @@ namespace Joufflu.Inputs.Controls
         {
             var picker = (ColorPicker)d;
             picker.UpdateSelectorPosition();
-            if (picker._isUpdating)
+            if (picker._isShowingModel)
                 return;
-            picker.SyncFromHsb();
+            picker._model.SetHsb(picker.Hue, picker.Saturation, picker.Brightness);
+            picker.ShowModel();
         }
         #endregion
 
@@ -189,19 +194,19 @@ namespace Joufflu.Inputs.Controls
         private static void OnAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var picker = (ColorPicker)d;
-            if (picker._isUpdating)
+            if (picker._isShowingModel)
                 return;
-            picker.SetGuarded(AlphaPercentProperty, Math.Round((double)e.NewValue * 100));
-            picker.SyncFromHsb();
+            picker._model.SetAlpha((double)e.NewValue);
+            picker.ShowModel();
         }
 
         private static void OnAlphaPercentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var picker = (ColorPicker)d;
-            if (picker._isUpdating)
+            if (picker._isShowingModel)
                 return;
-            double percent = Math.Clamp((double)e.NewValue, 0, 100);
-            picker.Alpha = percent / 100d; // drives OnAlphaChanged
+            picker._model.SetAlphaPercent((double)e.NewValue);
+            picker.ShowModel();
         }
         #endregion
 
@@ -273,50 +278,34 @@ namespace Joufflu.Inputs.Controls
         }
         #endregion
 
-        /// <summary>Pushes an externally-set colour into every derived value (hex, HSB, alpha, brushes).</summary>
-        private void SyncFromColor(Color color)
+        /// <summary>
+        /// Shows the model in every property : the colour, its hex, HSB and alpha, and the brushes previewing it.
+        /// </summary>
+        private void ShowModel()
         {
-            _isUpdating = true;
+            _isShowingModel = true;
             try
             {
-                RgbToHsv(color, out double h, out double s, out double v);
-                // Hue is undefined for greys/black; keep the slider where it was so it doesn't jump.
-                if (s > 0)
-                    Hue = h;
-                Saturation = s;
-                Brightness = v;
-
-                Alpha = color.A / 255d;
-                AlphaPercent = Math.Round(Alpha * 100);
-                UpdateDerived(color);
+                // SetCurrentValue keeps the bindings a host or the template set on these properties.
+                SetCurrentValue(ColorProperty, _model.Color);
+                SetCurrentValue(HexTextProperty, _model.Hex);
+                SetCurrentValue(HueProperty, _model.Hue);
+                SetCurrentValue(SaturationProperty, _model.Saturation);
+                SetCurrentValue(BrightnessProperty, _model.Brightness);
+                SetCurrentValue(AlphaProperty, _model.Alpha);
+                SetCurrentValue(AlphaPercentProperty, _model.AlphaPercent);
+                ShowBrushes();
             }
             finally
             {
-                _isUpdating = false;
+                _isShowingModel = false;
             }
             UpdateSelectorPosition();
         }
 
-        /// <summary>Rebuilds the colour from the current hue/saturation/brightness and alpha.</summary>
-        private void SyncFromHsb()
+        private void ShowBrushes()
         {
-            Color rgb = HsvToRgb(Hue, Saturation, Brightness);
-            var color = Color.FromArgb((byte)Math.Round(Math.Clamp(Alpha, 0, 1) * 255), rgb.R, rgb.G, rgb.B);
-            _isUpdating = true;
-            try
-            {
-                Color = color;
-                UpdateDerived(color);
-            }
-            finally
-            {
-                _isUpdating = false;
-            }
-        }
-
-        /// <summary>Refreshes the read-only brushes and hex text from a colour (caller owns the update guard).</summary>
-        private void UpdateDerived(Color color)
-        {
+            Color color = _model.Color;
             SwatchBrush = new SolidColorBrush(color);
             Color opaque = Color.FromRgb(color.R, color.G, color.B);
 
@@ -330,99 +319,7 @@ namespace Joufflu.Inputs.Controls
                     new GradientStop(opaque, 1),
                 },
                 new Point(0, 0), new Point(1, 0));
-            HueBrush = new SolidColorBrush(HsvToRgb(Hue, 1, 1));
-            HexText = ToHex(color);
+            HueBrush = new SolidColorBrush(_model.HueColor);
         }
-
-        /// <summary>Sets a dependency property without re-triggering the sync logic.</summary>
-        private void SetGuarded(DependencyProperty property, object value)
-        {
-            _isUpdating = true;
-            try
-            {
-                SetValue(property, value);
-            }
-            finally
-            {
-                _isUpdating = false;
-            }
-        }
-
-        private static string ToHex(Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
-
-        private static bool TryParse(string? text, out Color color)
-        {
-            color = System.Windows.Media.Colors.Black;
-            if (string.IsNullOrWhiteSpace(text))
-                return false;
-
-            try
-            {
-                object? parsed = ColorConverter.ConvertFromString(text.Trim());
-                if (parsed is Color c)
-                {
-                    color = c;
-                    return true;
-                }
-            }
-            catch
-            {
-                // fall through to false
-            }
-            return false;
-        }
-
-        #region HSV <-> RGB
-        private static void RgbToHsv(Color color, out double h, out double s, out double v)
-        {
-            double r = color.R / 255d, g = color.G / 255d, b = color.B / 255d;
-            double max = Math.Max(r, Math.Max(g, b));
-            double min = Math.Min(r, Math.Min(g, b));
-            double delta = max - min;
-
-            v = max;
-            s = max <= 0 ? 0 : delta / max;
-
-            if (delta <= 0)
-            {
-                h = 0;
-                return;
-            }
-
-            if (max == r)
-                h = 60 * (((g - b) / delta) % 6);
-            else if (max == g)
-                h = 60 * (((b - r) / delta) + 2);
-            else
-                h = 60 * (((r - g) / delta) + 4);
-
-            if (h < 0)
-                h += 360;
-        }
-
-        private static Color HsvToRgb(double h, double s, double v)
-        {
-            h = ((h % 360) + 360) % 360;
-            s = Math.Clamp(s, 0, 1);
-            v = Math.Clamp(v, 0, 1);
-
-            double c = v * s;
-            double x = c * (1 - Math.Abs((h / 60 % 2) - 1));
-            double m = v - c;
-
-            double r, g, b;
-            if (h < 60) { r = c; g = x; b = 0; }
-            else if (h < 120) { r = x; g = c; b = 0; }
-            else if (h < 180) { r = 0; g = c; b = x; }
-            else if (h < 240) { r = 0; g = x; b = c; }
-            else if (h < 300) { r = x; g = 0; b = c; }
-            else { r = c; g = 0; b = x; }
-
-            return Color.FromRgb(
-                (byte)Math.Round((r + m) * 255),
-                (byte)Math.Round((g + m) * 255),
-                (byte)Math.Round((b + m) * 255));
-        }
-        #endregion
     }
 }

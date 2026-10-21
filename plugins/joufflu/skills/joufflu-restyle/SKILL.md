@@ -41,7 +41,7 @@ Search the XAML (and code-behind that sets visuals) for:
 | `Margin` on every child of a panel | `Spacing.Gap` |
 | Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls or text | `Sizing.Size` |
 | `CornerRadius="4"`, `BorderThickness="1"` literals | Tokens |
-| `ToolTip="…"` | `toolkit:Tooltip.Content` |
+| `ToolTip="…"` | `toolkit:ThemedTooltip.Content` |
 | `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `IOverlayContent`) |
 | Status text / popups for success/errors | Toasts |
 | `AllowDrop` + `Drop`/`DragOver` handlers, `DoDragDrop` in `MouseMove` | `DropTarget` / `DragSource` |
@@ -96,7 +96,7 @@ Joufflu.Brushes.DangerBrush);`.
 Remove custom button styles/templates that only recolour. Pick by intent:
 main action `PrimaryButton`; neutral `SecondaryButton`; toolbar/low emphasis `GhostButton`;
 destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Icon-only:
-`toolkit:Sizing.IsSquare="True"` + a `FontIcon` + `toolkit:Tooltip.Content`.
+`toolkit:Sizing.IsSquare="True"` + a `FontIcon` + `toolkit:ThemedTooltip.Content`.
 
 ### Layout and sizes
 

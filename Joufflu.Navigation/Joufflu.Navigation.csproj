@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Joufflu.Navigation.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Controls\Paging.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

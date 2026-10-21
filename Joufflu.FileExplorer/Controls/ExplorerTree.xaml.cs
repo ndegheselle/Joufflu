@@ -78,7 +78,7 @@ namespace Joufflu.FileExplorer.Controls
             UpdateSelectedNodes();
 
             if (e.NewValue is IExplorerDirectory directory)
-                Source?.Open(directory);
+                OpenNode(directory);
         }
     }
 

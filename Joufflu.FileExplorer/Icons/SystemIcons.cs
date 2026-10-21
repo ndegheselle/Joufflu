@@ -146,17 +146,6 @@ namespace Joufflu.FileExplorer.Icons
             return icon;
         }
 
-        /// <summary>
-        /// Empties the cache, for the rare case where the icons of the system changed while the application runs.
-        /// </summary>
-        public static void ClearCache()
-        {
-            lock (_cacheLock)
-            {
-                _cache.Clear();
-            }
-        }
-
         private static ImageSource? ReadIcon(string path, bool isDirectory, bool isSmall)
         {
             Interop.FileAttribute attribute = isDirectory

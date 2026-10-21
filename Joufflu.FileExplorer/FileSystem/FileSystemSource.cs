@@ -2,9 +2,7 @@
 using System.IO;
 using System.Security;
 using System.Windows;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback;
 using Joufflu.FileExplorer.Nodes;
 
@@ -32,24 +30,13 @@ namespace Joufflu.FileExplorer.FileSystem
 
         private readonly string rootDirectoryPath;
         private readonly IToastService? toasts;
+        /// <summary>Opens started so far : an open finishing after a newer one doesn't make its directory current.</summary>
+        private int openCount;
 
         [ObservableProperty]
         private IExplorerDirectory? root;
         [ObservableProperty]
         private IExplorerDirectory? current;
-
-        ICommand IExplorerSource.RenameCommand => RenameCommand;
-        ICommand IExplorerSource.RemoveCommand => RemoveCommand;
-        ICommand IExplorerSource.CreateDirectoryCommand => CreateDirectoryCommand;
-
-        ICommand IExplorerSource.OpenCommand => OpenCommand;
-        ICommand IExplorerSource.OpenInExplorerCommand => OpenInExplorerCommand;
-        ICommand IExplorerSource.CopyPathCommand => CopyPathCommand;
-        ICommand IExplorerSource.OpenWithDefaultCommand => OpenWithDefaultCommand;
-
-        ICommand IExplorerSource.CopyCommand => CopyCommand;
-        ICommand IExplorerSource.CutCommand => CutCommand;
-        ICommand IExplorerSource.PasteCommand => PasteCommand;
 
         public FileSystemSource(string rootDirectoryPath, IToastService? toasts)
         {
@@ -69,7 +56,6 @@ namespace Joufflu.FileExplorer.FileSystem
         /// Open a node : a directory is loaded and made the <see cref="Current"/> one, a file is opened by the
         /// system. A derived source overrides it for the node types of its own, the other ones being left to it.
         /// </summary>
-        [RelayCommand]
         public virtual async Task Open(IExplorerNode node)
         {
             if (node is IExplorerDirectory directory)
@@ -82,14 +68,14 @@ namespace Joufflu.FileExplorer.FileSystem
             }
         }
 
-        [RelayCommand]
+        /// <summary>Shows a node in the Windows explorer, selected in the directory holding it.</summary>
         public void OpenInExplorer(IExplorerNode node)
         {
             // "/select," so that a directory is shown inside its parent instead of being opened.
             StartProcess(new ProcessStartInfo("explorer.exe", $"/select,\"{node.Path}\"") { UseShellExecute = true });
         }
 
-        [RelayCommand]
+        /// <summary>Opens a file with the application Windows associates with it.</summary>
         public void OpenWithDefault(IExplorerFile file)
         {
             // UseShellExecute resolves the application associated with the file
@@ -97,60 +83,103 @@ namespace Joufflu.FileExplorer.FileSystem
         }
 
         /// <summary>
-        /// Open a directory by loading all it's childrens and setting it as <see cref="Current"/>.
-        /// Recursif on <paramref name="depth"/> sub directories.
+        /// Open a directory : its children, and <paramref name="depth"/> levels of sub directories, are read off the
+        /// UI thread, then shown and the directory made the <see cref="Current"/> one.
         /// </summary>
-        protected virtual Task OpenDirectory(IExplorerDirectory directory, int depth)
+        protected virtual async Task OpenDirectory(IExplorerDirectory directory, int depth)
         {
+            // Opening another directory while this one is read makes this one stale : it is still shown, its read
+            // being as good as any, but it no longer becomes the current directory.
+            int open = ++openCount;
+            string path = directory.Path;
+
+            DirectoryRead read;
             try
             {
-                LoadDirectory(directory, depth);
+                // A slow or a network drive would freeze the window if read on the UI thread.
+                read = await Task.Run(() => ReadDirectory(path, depth));
             }
             catch (Exception exception) when (IsReadError(exception))
             {
                 // Unreadable : Current is left as it was, nothing is opened.
                 toasts?.Error(exception.Message);
-                return Task.CompletedTask;
+                return;
             }
 
-            Current = directory;
-            return Task.CompletedTask;
+            // Back on the thread Open was called from, the one the nodes are bound on.
+            ApplyDirectory(directory, read);
+            if (open == openCount)
+                Current = directory;
         }
 
         /// <summary>
-        /// Read a directory into its children, recursif on <paramref name="depth"/> sub directories, without making
-        /// it the <see cref="Current"/> one. Also used to reload a directory the shell just modified.
-        /// Throws when the directory itself can't be read, a sub directory that can't be read is left empty.
+        /// Reads a directory from the disk, and <paramref name="depth"/> levels of sub directories, so that the tree
+        /// shows an expander without reading again. Touches no node, so it runs on any thread. Throws when the
+        /// directory itself can't be read; a sub directory that can't be read is left out of the read.
         /// </summary>
-        protected virtual void LoadDirectory(IExplorerDirectory directory, int depth)
+        protected static DirectoryRead ReadDirectory(string path, int depth)
         {
-            // Read before touching the children : a directory that can't be read keeps the nodes it showed.
-            List<FileSystemInfo> entries = [.. new DirectoryInfo(directory.Path).EnumerateFileSystemInfos()];
+            List<FileSystemInfo> entries = [.. new DirectoryInfo(path).EnumerateFileSystemInfos()];
+            var subDirectories = new Dictionary<string, DirectoryRead>(StringComparer.OrdinalIgnoreCase);
+            if (depth <= 0)
+                return new DirectoryRead(entries, subDirectories);
 
+            foreach (DirectoryInfo subDirectory in entries.OfType<DirectoryInfo>())
+            {
+                try
+                {
+                    subDirectories[subDirectory.FullName] = ReadDirectory(subDirectory.FullName, depth - 1);
+                }
+                catch (Exception exception) when (IsReadError(exception))
+                {
+                    // Access denied, deleted meanwhile... : it keeps the nodes it showed.
+                }
+            }
+            return new DirectoryRead(entries, subDirectories);
+        }
+
+        /// <summary>
+        /// Shows what <see cref="ReadDirectory"/> read in a directory and in its sub directories, on the thread the
+        /// nodes are bound on. A derived source overrides it to show nodes of its own along with the ones read : it
+        /// is called for every directory of the read, sub directories included.
+        /// </summary>
+        protected virtual void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
+        {
             // The nodes still on the disk are kept rather than replaced, so a reload leaves the tree expanded below
             // them and the selection of a list where it was.
             var shown = new Dictionary<string, IExplorerNode>(StringComparer.OrdinalIgnoreCase);
             foreach (IExplorerNode node in directory.Children)
                 shown.TryAdd(node.Path, node);
 
-            List<IExplorerNode> read = [];
-            foreach (FileSystemInfo entry in entries)
+            List<IExplorerNode> nodes = [];
+            foreach (FileSystemInfo entry in read.Entries)
             {
                 IExplorerNode node = shown.TryGetValue(entry.FullName, out IExplorerNode? shownNode) && IsUnchanged(shownNode, entry)
                     ? shownNode
                     : CreateNode(entry, directory);
-                read.Add(node);
+                nodes.Add(node);
 
-                if (depth > 0 && node is IExplorerDirectory subDirectory)
-                    TryLoadDirectory(subDirectory, depth - 1);
+                if (node is IExplorerDirectory subDirectory && read.SubDirectories.TryGetValue(entry.FullName, out DirectoryRead? subRead))
+                    ApplyDirectory(subDirectory, subRead);
             }
 
-            List<IExplorerNode> removed = [.. directory.Children.Except(read)];
-            List<IExplorerNode> added = [.. read.Except(directory.Children)];
+            List<IExplorerNode> removed = [.. directory.Children.Except(nodes)];
+            List<IExplorerNode> added = [.. nodes.Except(directory.Children)];
             foreach (IExplorerNode node in removed)
                 directory.Children.Remove(node);
             foreach (IExplorerNode node in added)
                 directory.Children.Add(node);
+        }
+
+        /// <summary>
+        /// Reads a directory and shows it at once, without making it the <see cref="Current"/> one : for a directory
+        /// the source itself or the shell just modified. Throws when the directory itself can't be read, leaving
+        /// the nodes it showed.
+        /// </summary>
+        protected void LoadDirectory(IExplorerDirectory directory, int depth)
+        {
+            DirectoryRead read = ReadDirectory(directory.Path, depth);
+            ApplyDirectory(directory, read);
         }
 
         /// <summary>
@@ -208,11 +237,9 @@ namespace Joufflu.FileExplorer.FileSystem
 
         #region Copy / Paste
 
-        [RelayCommand]
-        public void Copy(IEnumerable<IExplorerNode> nodes) => SetClipboard(nodes, isMove: false);
+        public void Copy(IReadOnlyList<IExplorerNode> nodes) => SetClipboard(nodes, isMove: false);
 
-        [RelayCommand]
-        public void Cut(IEnumerable<IExplorerNode> nodes) => SetClipboard(nodes, isMove: true);
+        public void Cut(IReadOnlyList<IExplorerNode> nodes) => SetClipboard(nodes, isMove: true);
 
         /// <summary>
         /// Copy or move the nodes held by the clipboard into a directory, <see cref="Current"/> when none is given.
@@ -222,7 +249,6 @@ namespace Joufflu.FileExplorer.FileSystem
         /// <see cref="ExplorerClipboard"/> : the file explorer of Windows writes it there as well, so a cut made in
         /// one is pasted as a move in the other.
         /// </remarks>
-        [RelayCommand(CanExecute = nameof(CanPaste))]
         public async Task Paste(IExplorerDirectory? target)
         {
             IExplorerDirectory? directory = target ?? Current;
@@ -236,7 +262,7 @@ namespace Joufflu.FileExplorer.FileSystem
             await Transfer(paths, directory, isMove);
         }
 
-        public bool CanPaste(IExplorerDirectory? target)
+        public bool CanPaste()
         {
             IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out bool isMove);
             return paths.Count > 0;
@@ -270,7 +296,8 @@ namespace Joufflu.FileExplorer.FileSystem
 
                     // Pasted next to itself : the shell refuses to copy a node onto itself, so the copy is named
                     // "File - Copy.ext" the way Windows does.
-                    destination = Path.Combine(targetPath, GetCopyName(targetPath, name, destinations));
+                    string copyName = ExplorerPaths.CopyName(name, candidate => IsTaken(Path.Combine(targetPath, candidate), destinations));
+                    destination = Path.Combine(targetPath, copyName);
                 }
 
                 sources.Add(source);
@@ -328,7 +355,7 @@ namespace Joufflu.FileExplorer.FileSystem
 
         #region Misc
 
-        [RelayCommand]
+        /// <summary>Copies the path of a node to the clipboard.</summary>
         public void CopyPath(IExplorerNode node)
         {
             Clipboard.SetText(node.Path);
@@ -339,11 +366,10 @@ namespace Joufflu.FileExplorer.FileSystem
         /// Give a node the name it has been renamed to. An empty or an unchanged name does nothing, the edition having
         /// been given up.
         /// </summary>
-        [RelayCommand]
-        public void Rename(ExplorerNodeRename rename)
+        public void Rename(IExplorerNode node, string newName)
         {
-            string name = rename.Name.Trim();
-            if (string.IsNullOrEmpty(name) || name == rename.Node.Name)
+            string name = newName.Trim();
+            if (string.IsNullOrEmpty(name) || name == node.Name)
                 return;
 
             // Checked here, where the shell only reports a refusal as a code of its own.
@@ -358,8 +384,8 @@ namespace Joufflu.FileExplorer.FileSystem
                 // Moved onto its new path, the rename going through the shell as the other operations do : a name
                 // already taken displays the same prompt as in the Windows explorer.
                 ShellFileOperation.Transfer(
-                    [rename.Node.Path],
-                    [Path.Combine(Path.GetDirectoryName(rename.Node.Path) ?? "", name)],
+                    [node.Path],
+                    [Path.Combine(Path.GetDirectoryName(node.Path) ?? "", name)],
                     isMove: true);
             }
             catch (Exception exception)
@@ -367,19 +393,21 @@ namespace Joufflu.FileExplorer.FileSystem
                 toasts?.Error(exception.Message);
             }
 
-            Refresh([rename.Node.Parent]);
+            Refresh([node.Parent]);
         }
 
         /// <summary>
         /// Send nodes to the recycle bin, through the shell : the standard progress window and confirmation of
         /// Windows are displayed, and cancelling them leaves the nodes in place.
         /// </summary>
-        [RelayCommand]
-        public async Task Remove(IEnumerable<IExplorerNode> nodes)
+        /// <remarks>
+        /// Returns once the shell is done : its window is modal, so nothing here runs off the UI thread.
+        /// </remarks>
+        public Task Remove(IReadOnlyList<IExplorerNode> nodes)
         {
             List<IExplorerNode> removed = [.. nodes];
             if (removed.Count == 0)
-                return;
+                return Task.CompletedTask;
 
             try
             {
@@ -391,12 +419,12 @@ namespace Joufflu.FileExplorer.FileSystem
             }
 
             Refresh(removed.Select(node => node.Parent));
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// Create a "New folder" in a directory, <see cref="Current"/> when none is given.
         /// </summary>
-        [RelayCommand]
         public void CreateDirectory(IExplorerDirectory? parent)
         {
             parent ??= Current;
@@ -405,7 +433,9 @@ namespace Joufflu.FileExplorer.FileSystem
 
             try
             {
-                Directory.CreateDirectory(Path.Combine(parent.Path, GetNewDirectoryName(parent.Path)));
+                string parentPath = parent.Path;
+                string name = ExplorerPaths.NewDirectoryName(candidate => Exists(Path.Combine(parentPath, candidate)));
+                Directory.CreateDirectory(Path.Combine(parentPath, name));
             }
             catch (Exception exception)
             {
@@ -471,71 +501,33 @@ namespace Joufflu.FileExplorer.FileSystem
         }
 
         /// <summary>
-        /// "File - Copy.ext", then "File - Copy (2).ext" while the name is taken, the way Windows names a copy made
-        /// next to its source.
+        /// Whether a copy can't be made at <paramref name="path"/> : something is there already, or another copy of
+        /// the same batch is given that path. The whole batch is named before the shell creates any of it, so the
+        /// destinations given so far don't exist yet.
         /// </summary>
-        /// <param name="directoryPath">Directory the copy is made in.</param>
-        /// <param name="name">Name of the node being copied.</param>
-        /// <param name="taken">
-        /// Destinations of the same batch, none of which exists yet : the whole batch is named before the shell
-        /// creates any of it, so a name already given to another copy has to be skipped as well.
-        /// </param>
-        private static string GetCopyName(string directoryPath, string name, IReadOnlyList<string> taken)
-        {
-            string bareName = Path.GetFileNameWithoutExtension(name);
-            string extension = Path.GetExtension(name);
-
-            for (int index = 1; index < int.MaxValue; index++)
-            {
-                string number = index > 1 ? $" ({index})" : "";
-                string candidate = $"{bareName} - Copy{number}{extension}";
-                string candidatePath = Path.Combine(directoryPath, candidate);
-                if (!Exists(candidatePath) && !taken.Any(other => PathsEqual(other, candidatePath)))
-                    return candidate;
-            }
-
-            return name;
-        }
-
-        /// <summary>
-        /// "New folder", then "New folder (2)" while the name is taken, the way Windows does.
-        /// </summary>
-        private static string GetNewDirectoryName(string parentPath)
-        {
-            const string baseName = "New folder";
-
-            for (int index = 1; index < int.MaxValue; index++)
-            {
-                string candidate = index > 1 ? $"{baseName} ({index})" : baseName;
-                if (!Exists(Path.Combine(parentPath, candidate)))
-                    return candidate;
-            }
-
-            return baseName;
-        }
+        private static bool IsTaken(string path, IReadOnlyList<string> batchDestinations)
+            => Exists(path) || batchDestinations.Any(other => PathsEqual(other, path));
 
         private static bool Exists(string path) => File.Exists(path) || Directory.Exists(path);
 
         /// <summary>
         /// Whether two paths designate the same node, the file system of Windows being case insensitive.
         /// </summary>
-        protected static bool PathsEqual(string left, string right)
-            => string.Equals(Normalize(left), Normalize(right), StringComparison.OrdinalIgnoreCase);
+        protected static bool PathsEqual(string left, string right) => ExplorerPaths.AreEqual(left, right);
 
         /// <summary>
         /// Whether <paramref name="candidate"/> is <paramref name="path"/> itself or one of its parents.
         /// </summary>
-        /// <remarks>
-        /// Compared on whole segments, by ending both with a separator : a plain StartsWith would report "C:\foo2" as
-        /// being inside "C:\foo".
-        /// </remarks>
-        protected static bool IsSameOrAncestor(string candidate, string path)
-            => (Normalize(path) + Path.DirectorySeparatorChar).StartsWith(
-                Normalize(candidate) + Path.DirectorySeparatorChar,
-                StringComparison.OrdinalIgnoreCase);
-
-        private static string Normalize(string path) => Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+        protected static bool IsSameOrAncestor(string candidate, string path) => ExplorerPaths.IsSameOrAncestor(candidate, path);
 
         #endregion
     }
+
+    /// <summary>
+    /// What <see cref="FileSystemSource"/> read of a directory : its entries, and the read of each sub directory read
+    /// along with it, by full path. A sub directory that couldn't be read, or that was past the depth, has none.
+    /// </summary>
+    public sealed record DirectoryRead(
+        IReadOnlyList<FileSystemInfo> Entries,
+        IReadOnlyDictionary<string, DirectoryRead> SubDirectories);
 }

@@ -71,9 +71,9 @@ public class VirtualFilesSource : FileSystemSource
     }
 
     /// <summary>Adds the virtual file of a directory to the nodes read from the disk.</summary>
-    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
     {
-        base.LoadDirectory(directory, depth);
+        base.ApplyDirectory(directory, read);
         directory.Children.Add(GetVirtualFile(directory));
     }
 
