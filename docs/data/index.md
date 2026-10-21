@@ -101,8 +101,10 @@ Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, f
 Node = (DataObject)JObject.Parse(json).ToDataNode();
 ```
 
-`Changed` is raised when a node or anything under it changes, to react to an edit anywhere in
-the tree.
+`Changed` is raised when the data of a node or of anything under it changes, to react to an
+edit anywhere in the tree: a key, a value, the manual mode or entry, an array template,
+children added or removed. Expanding a node, flagging a duplicate key or moving a node to
+another parent change no data and raise nothing.
 
 ## Manual values
 

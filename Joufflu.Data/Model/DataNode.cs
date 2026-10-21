@@ -31,6 +31,7 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     {
         if (Parent is not null)
             ValidateKeys(Parent.Children);
+        OnChanged();
     }
 
     /// <summary>For DataNode with children and to prevent binding errors.</summary>
@@ -52,16 +53,30 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     public bool IsArrayItem => Parent is DataArray;
     public string? Description { get; set; }
 
-    /// <summary> Whether the node is forced from the manual list, an object or an array then leaving its children out. </summary>
+    /// <summary>
+    /// Whether the node is forced from the manual list, an object or an array then leaving its children out.
+    /// Leaving manual mode puts a <see cref="DataValue"/> its editor can't hold back to its default.
+    /// </summary>
     [ObservableProperty]
     private bool _isManual;
 
-    /// <summary>The entry picked while in manual mode.</summary>
+    /// <summary>
+    /// The entry picked while in manual mode. Picking one also sets <see cref="DataValue.Value"/> to it.
+    /// </summary>
     [ObservableProperty]
     private DataManualValue? _manualEntry;
 
-    partial void OnIsManualChanged(bool value) => OnManualModeChanged(value);
-    partial void OnManualEntryChanged(DataManualValue? value) => OnManualEntryPicked(value);
+    partial void OnIsManualChanged(bool value)
+    {
+        OnManualModeChanged(value);
+        OnChanged();
+    }
+
+    partial void OnManualEntryChanged(DataManualValue? value)
+    {
+        OnManualEntryPicked(value);
+        OnChanged();
+    }
 
     /// <summary>Called when [IsManual] changes.</summary>
     protected virtual void OnManualModeChanged(bool isManual) { }
@@ -85,15 +100,12 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
         ? null
         : DataValue.TokenOf(ManualEntry.Value);
 
-    /// <summary>Raised when the node or anything under it changes, whether it is expanded aside.</summary>
+    /// <summary>
+    /// Raised when the data of the node or of anything under it changes : a key, a value, the manual mode or entry,
+    /// an array template, children added or removed. Not when a node is expanded, flagged for a duplicate key or
+    /// moved to another parent, which change no data.
+    /// </summary>
     public event EventHandler? Changed;
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        if (e.PropertyName != nameof(IsExpanded))
-            OnChanged();
-    }
 
     /// <summary>Raises <see cref="Changed"/> on the node and on every parent up to the root.</summary>
     protected void OnChanged()

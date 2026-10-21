@@ -10,6 +10,8 @@ public partial class DataArray : DataNode, IDataParent
     [ObservableProperty]
     private DataNode? _template;
 
+    partial void OnTemplateChanged(DataNode? value) => OnChanged();
+
     /// <summary>The items. Whatever enters the collection is taken as a child, whatever leaves it is let go.</summary>
     public DataNodeCollection Values { get; } = [];
 

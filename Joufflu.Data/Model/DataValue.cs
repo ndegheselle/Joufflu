@@ -15,6 +15,8 @@ public partial class DataValue : DataNode
     [ObservableProperty]
     private object? _value;
 
+    partial void OnValueChanged(object? value) => OnChanged();
+
     /// <summary>
     /// Picking a manual entry forces <see cref="Value"/>, which stays the single thing a host
     /// reads: leaving manual mode keeps whatever was forced.

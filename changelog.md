@@ -61,6 +61,7 @@
 - Clone the items of a `DataArray` through `Add`, so a copied item keeps a key that can't be edited
 - Let `ToDataNode` read a schema property saying nothing of a type (`{}`) : it becomes an empty value, filled in as text and loading whatever JSON it is given, where building it threw `Can't set a default value for the type [Object]`
 - Remove the empty `Resources.xaml` and `Themes/Generic.xaml`, which held no style : only the core `Resources.xaml` needs merging, as documented
+- Raise `DataNode.Changed` for a change of data only, a key, a value, the manual mode or entry, an array template or children added or removed, each wired from its own property, where every property change raised it : a key flagged as a duplicate, or a node moved to another parent, no longer reports an edit. **Breaking** for code relying on `Changed` for those
 
 # Joufflu.Data 0.8.2
 
