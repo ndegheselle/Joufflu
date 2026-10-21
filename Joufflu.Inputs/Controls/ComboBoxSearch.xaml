@@ -34,7 +34,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Grid x:Name="TextArea" Margin="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}">
+                            <Grid x:Name="TextArea">
                                 <ContentPresenter
                                     x:Name="ContentSite"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -79,7 +79,6 @@
                             <Button
                                 x:Name="ClearButton"
                                 Grid.Column="1"
-
                                 Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                 Focusable="False"
                                 Style="{StaticResource EmbeddedButton}">
@@ -133,17 +132,17 @@
                         <!--  Text inputs carry their own padding key, and the clear button stays flush with it (md is the default set above).  -->
                         <Trigger Property="toolkit:Sizing.Size" Value="xs">
                             <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
-                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
                             <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
                         </Trigger>
                         <Trigger Property="toolkit:Sizing.Size" Value="sm">
                             <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingSm}}" />
-                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
                             <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
+                        </Trigger>
+                        <Trigger Property="toolkit:Sizing.Size" Value="md">
+                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
                         </Trigger>
                         <Trigger Property="toolkit:Sizing.Size" Value="lg">
                             <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingLg}}" />
-                            <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
                             <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
                         </Trigger>
 
@@ -153,6 +152,7 @@
                         <Trigger Property="Text" Value="{x:Null}">
                             <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>
+
                         <!--  Show the placeholder only while empty and unfocused (Text is "" initially, null after blur)  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

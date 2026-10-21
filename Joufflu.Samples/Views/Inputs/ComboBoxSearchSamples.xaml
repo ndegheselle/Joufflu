@@ -13,7 +13,29 @@
     mc:Ignorable="d">
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Search combo box" />
+            <TextBlock
+                toolkit:Sizing.Size="xl"
+                FontWeight="Bold"
+                Text="Search combo box"
+                TextWrapping="Wrap" />
+
+            <StackPanel>
+                <inputs:ComboBoxSearch toolkit:Sizing.Size="xs" />
+                <inputs:FilePicker toolkit:Sizing.Size="xs" />
+                <inputs:NumericUpDown toolkit:Sizing.Size="xs" />
+
+                <inputs:ComboBoxSearch toolkit:Sizing.Size="sm" />
+                <inputs:FilePicker toolkit:Sizing.Size="sm" />
+                <inputs:NumericUpDown toolkit:Sizing.Size="sm" />
+
+                <inputs:ComboBoxSearch toolkit:Sizing.Size="md" />
+                <inputs:FilePicker toolkit:Sizing.Size="md" />
+                <inputs:NumericUpDown toolkit:Sizing.Size="md" />
+
+                <inputs:ComboBoxSearch toolkit:Sizing.Size="lg" />
+                <inputs:FilePicker toolkit:Sizing.Size="lg" />
+                <inputs:NumericUpDown toolkit:Sizing.Size="lg" />
+            </StackPanel>
 
             <c:CodeExample
                 Title="ComboBoxSearch"
@@ -48,9 +70,9 @@
                     toolkit:Spacing.Gap="12">
                     <inputs:ComboBoxSearch ItemsSource="{Binding Countries}" SelectedItem="{Binding RequiredCountry, Mode=TwoWay}" />
                     <inputs:ComboBoxSearch
-                        Validation.ErrorTemplate="{x:Null}"
                         ItemsSource="{Binding Countries}"
-                        SelectedItem="{Binding RequiredCountry, Mode=TwoWay}" />
+                        SelectedItem="{Binding RequiredCountry, Mode=TwoWay}"
+                        Validation.ErrorTemplate="{x:Null}" />
                 </StackPanel>
             </c:CodeExample>
 
