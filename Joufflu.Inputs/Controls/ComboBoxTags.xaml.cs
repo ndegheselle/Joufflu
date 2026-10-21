@@ -24,11 +24,7 @@ namespace Joufflu.Inputs.Controls
             if (values[1] == DependencyProperty.UnsetValue)
                 return values[0].ToString();
 
-            string lDisplayMemberPath = (string)values[1];
-            if (!string.IsNullOrEmpty(lDisplayMemberPath))
-                return values[0].GetType().GetProperty(lDisplayMemberPath)?.GetValue(values[0])?.ToString();
-            else
-                return values[0].ToString();
+            return ItemSearch.TextOf(values[0], (string)values[1]);
         }
 
         public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)

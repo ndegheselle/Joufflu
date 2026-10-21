@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.ComponentModel;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -146,7 +145,7 @@ namespace Joufflu.Inputs.Controls
 
         void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (SelectedItem != null && Text == GetTextFromItem(SelectedItem))
+            if (SelectedItem != null && Text == TextOf(SelectedItem))
                 return;
 
             SelectedIndex = -1;
@@ -189,7 +188,7 @@ namespace Joufflu.Inputs.Controls
                 // Show italic text if no item is selected
                 if (SelectedItem != null)
                 {
-                    Text = GetTextFromItem(SelectedItem);
+                    Text = TextOf(SelectedItem);
                     _editableTextBox.FontStyle = FontStyles.Normal;
                     _editableTextBox.SelectAll();
                 }
@@ -234,51 +233,15 @@ namespace Joufflu.Inputs.Controls
 
         private void SelectFromFilter()
         {
-            if (Text == string.Empty)
-                return;
-
-            // Select item that matches user input exactly
-            for (int i = 0; i < Items.Count; i++)
-            {
-                if (Text == GetTextFromItem(Items[i]))
-                {
-                    SelectedIndex = i;
-                    return;
-                }
-            }
+            int exactMatch = ItemSearch.IndexOfExactMatch(Items, Text, DisplayMemberPath);
+            if (exactMatch >= 0)
+                SelectedIndex = exactMatch;
         }
 
         protected virtual bool DoesItemPassFilter(object value)
-        {
-            if (value == null)
-                return false;
-            if (string.IsNullOrEmpty(Text))
-                return true;
-            // Text left by a selection is not something the user searched for : the list stays whole
-            // so that the other choices remain reachable once an item has been picked.
-            if (SelectedItem != null && Text == GetTextFromItem(SelectedItem))
-                return true;
+            => ItemSearch.Passes(value, Text, SelectedItem, DisplayMemberPath);
 
-            return DoesValueContainSearch(value);
-        }
-
-        private bool DoesValueContainSearch(object value)
-        {
-            return GetTextFromItem(value)?.ToLower().Contains(Text.ToLower()) == true;
-        }
-
-        private string? GetTextFromItem(object item)
-        {
-            if (item == null)
-                return string.Empty;
-            if (string.IsNullOrEmpty(DisplayMemberPath))
-                return item.ToString();
-
-            PropertyInfo? displayMemberProperty = item.GetType().GetProperty(DisplayMemberPath);
-            if (displayMemberProperty != null)
-                return displayMemberProperty.GetValue(item)?.ToString();
-            return item.ToString();
-        }
+        private string TextOf(object? item) => ItemSearch.TextOf(item, DisplayMemberPath);
         #endregion
     }
 }

@@ -9,6 +9,7 @@
 - Let groups written in XAML replace the default group of `NumericUpDown`, `DecimalUpDown` and `TimeSpanPicker` rather than being added after it, so `<NumericUpDown><IntegerGroup Max="10" /></NumericUpDown>` bounds the number : their default groups are now `DefaultParts`, shown while `Parts` is empty, and `Parts` starts empty. Let Tab leave a `FormatTextBox` from its last group, and Shift+Tab from its first, instead of keeping the focus in the box
 - Remove `FormatTextBox.AllowSelectionOutsideGroups`, never set, and the `INotifyPropertyChanged` of `ComboBoxSearch`, which raised no change. **Breaking** for code setting the former or listening to the latter
 - Read the `ColorPicker` border thickness and spacing through `DynamicResource`, so they follow a theme or a runtime change of the `Dimensions` tokens
+- Move how a `ComboBoxSearch` reads its items as text and matches them against the search into an `ItemSearch` of its own, free of WPF and tested, shared with the tags of `ComboBoxTags`. This fixes a nested `DisplayMemberPath` (`Address.City`), which the search, the exact-match selection and the tags read as the item's `ToString()` instead of the value the list shows
 
 # Joufflu.Navigation (unreleased)
 
