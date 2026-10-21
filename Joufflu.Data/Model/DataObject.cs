@@ -43,7 +43,7 @@ public partial class DataObject : DataNode, IDataParent
     public void Remove(DataNode node) => Properties.Remove(node);
 
     /// <summary>
-    /// [baseKey] if no property uses it yet, otherwise the first of [baseKey]1, [baseKey]2... that is free.
+    /// [baseKey] if no property uses it yet, otherwise the first of "[baseKey] 1", "[baseKey] 2"... that is free.
     /// </summary>
     public string UniqueKey(string baseKey)
     {
