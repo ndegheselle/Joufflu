@@ -58,10 +58,9 @@ await Source.Open();   // must be called to load the root
 - `FileSystemWatcherSource`: same, watching the disk live. It is `IDisposable`: dispose it
   (e.g. when the page closes) to stop watching.
 - `IExplorerSource`: `Root`, `Current`, `Open()`, `Open(node)`,
-  `Transfer(paths, target, isMove)`, and the commands `RenameCommand`, `RemoveCommand`,
-  `CreateDirectoryCommand`, `CopyCommand`, `CutCommand`, `PasteCommand`, `OpenCommand`,
-  `OpenInExplorerCommand`, `CopyPathCommand`, `OpenWithDefaultCommand`. Implement it for a
-  non-disk source.
+  `Transfer(paths, target, isMove)`, and plain operations `Rename(node, name)`,
+  `Remove(nodes)`, `CreateDirectory(parent)`, `Copy(nodes)`, `Cut(nodes)`, `Paste(target)`,
+  `CanPaste()` — no commands, the controls build them. Implement it for a non-disk source.
 
 `FileSystemSource` extension points (protected virtual): `OpenDirectory`,
 `ApplyDirectory(directory, DirectoryRead)`, `CreateNode(FileSystemInfo, parent)`, `OpenFile`, plus
@@ -96,7 +95,10 @@ public class VirtualFilesSource : FileSystemSource
 Node visuals are implicit `DataTemplate`s keyed by node type; redeclare one in a control's
 `Resources` to replace it there only. Context menus are `DataTemplate`s keyed with
 `{base:ContextMenuTemplateKey local:MyNode}`; their `DataContext` is an
-`ExplorerMenuContext` (`Source`, `Node`, `Nodes`, `BeginRenameCommand`). Lookup goes from the
+`ExplorerMenuContext` (`Source`, `Node`, `Nodes`, and the item commands `OpenCommand`,
+`CopyCommand`, `CutCommand`, `PasteCommand`, `RemoveCommand`, `CreateDirectoryCommand`,
+`BeginRenameCommand`, plus the disk-only `OpenInExplorerCommand`, `OpenWithDefaultCommand`,
+`CopyPathCommand`). Lookup goes from the
 most specific type up to `object`; the built-in single-node menus are keyed on
 `FileSystemDirectory`/`FileSystemFile`, so a single node of a custom type shows no menu until
 you key one on its type (multi-selection and empty-area menus are keyed on `object`).
@@ -115,7 +117,7 @@ you key one on its type (multi-selection and empty-area menus are keyed on `obje
 
         <DataTemplate x:Key="{base:ContextMenuTemplateKey local:VirtualFile}">
             <ContextMenu>
-                <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                <MenuItem Header="Copy path" Command="{Binding CopyPathCommand}"
                           CommandParameter="{Binding Node}" />
             </ContextMenu>
         </DataTemplate>

@@ -1,6 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
+using CommunityToolkit.Mvvm.Input;
 using Joufflu.FileExplorer.Controls.Base;
+using Joufflu.FileExplorer.Nodes;
 
 namespace Joufflu.FileExplorer.Controls
 {
@@ -13,7 +15,7 @@ namespace Joufflu.FileExplorer.Controls
     /// source stay in sync whichever one navigates.
     /// </remarks>
     [TemplatePart(Name = PartBreadcrumb, Type = typeof(ScrollViewer))]
-    public class ExplorerControlBar : ExplorerControl
+    public partial class ExplorerControlBar : ExplorerControl
     {
         private const string PartBreadcrumb = "PART_Breadcrumb";
 
@@ -37,6 +39,14 @@ namespace Joufflu.FileExplorer.Controls
 
             if (_breadcrumb != null)
                 _breadcrumb.ScrollChanged += OnBreadcrumbScrollChanged;
+        }
+
+        /// <summary>Opens a directory of the breadcrumb, or the parent of the opened one.</summary>
+        [RelayCommand]
+        private async Task Open(IExplorerNode? directory)
+        {
+            if (Source != null && directory != null)
+                await Source.Open(directory);
         }
 
         /// <summary>

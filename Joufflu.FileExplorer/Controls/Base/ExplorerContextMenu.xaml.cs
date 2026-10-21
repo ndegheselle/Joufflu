@@ -1,6 +1,8 @@
 using System.Windows;
-﻿using System.Windows.Input;
+using System.Windows.Input;
 using System.Windows.Markup;
+using CommunityToolkit.Mvvm.Input;
+using Joufflu.FileExplorer.FileSystem;
 using Joufflu.FileExplorer.Nodes;
 
 namespace Joufflu.FileExplorer.Controls.Base
@@ -47,10 +49,10 @@ namespace Joufflu.FileExplorer.Controls.Base
     }
 
     /// <summary>
-    /// Data context of the context menus of an <see cref="ExplorerNodesControl"/>, gives access to the commands of
-    /// the source and to the nodes the menu was opened on.
+    /// Data context of the context menus of an <see cref="ExplorerNodesControl"/> : the commands of the menu items,
+    /// run on the source, and the nodes the menu was opened on.
     /// </summary>
-    public class ExplorerMenuContext
+    public partial class ExplorerMenuContext
     {
         public IExplorerSource? Source { get; }
 
@@ -76,5 +78,74 @@ namespace Joufflu.FileExplorer.Controls.Base
             Source = source;
             Nodes = nodes;
         }
+
+        #region Operations of the source
+
+        [RelayCommand]
+        private async Task Open(IExplorerNode? node)
+        {
+            if (Source != null && node != null)
+                await Source.Open(node);
+        }
+
+        /// <summary>Copies the nodes the menu was opened on.</summary>
+        [RelayCommand]
+        private void Copy() => Source?.Copy(Nodes);
+
+        /// <summary>Cuts the nodes the menu was opened on.</summary>
+        [RelayCommand]
+        private void Cut() => Source?.Cut(Nodes);
+
+        /// <summary>Removes the nodes the menu was opened on.</summary>
+        [RelayCommand]
+        private async Task Remove()
+        {
+            if (Source != null)
+                await Source.Remove(Nodes);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanPaste))]
+        private async Task Paste(IExplorerDirectory? target)
+        {
+            if (Source != null)
+                await Source.Paste(target);
+        }
+
+        private bool CanPaste() => Source?.CanPaste() == true;
+
+        [RelayCommand]
+        private void CreateDirectory(IExplorerDirectory? parent) => Source?.CreateDirectory(parent);
+
+        #endregion
+
+        #region Operations of the disk
+
+        // Only a disk source knows where its nodes are in the Windows explorer : the items are disabled for others.
+        private FileSystemSource? DiskSource => Source as FileSystemSource;
+
+        private bool IsOnDisk() => DiskSource != null;
+
+        [RelayCommand(CanExecute = nameof(IsOnDisk))]
+        private void OpenInExplorer(IExplorerNode? node)
+        {
+            if (node != null)
+                DiskSource?.OpenInExplorer(node);
+        }
+
+        [RelayCommand(CanExecute = nameof(IsOnDisk))]
+        private void OpenWithDefault(IExplorerFile? file)
+        {
+            if (file != null)
+                DiskSource?.OpenWithDefault(file);
+        }
+
+        [RelayCommand(CanExecute = nameof(IsOnDisk))]
+        private void CopyPath(IExplorerNode? node)
+        {
+            if (node != null)
+                DiskSource?.CopyPath(node);
+        }
+
+        #endregion
     }
 }

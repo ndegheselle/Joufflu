@@ -119,7 +119,7 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
                     <ContextMenu>
                         <MenuItem Header="Pinned" IsCheckable="True"
                                   IsChecked="{Binding Node.IsPinned, Mode=TwoWay}" />
-                        <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                        <MenuItem Header="Copy path" Command="{Binding CopyPathCommand}"
                                   CommandParameter="{Binding Node}" />
                     </ContextMenu>
                 </DataTemplate>

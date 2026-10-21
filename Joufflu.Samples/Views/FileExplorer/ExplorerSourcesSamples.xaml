@@ -87,7 +87,7 @@
                                 </MenuItem>
                                 <Separator />
                                 <MenuItem
-                                    Command="{Binding Source.OpenCommand}"
+                                    Command="{Binding OpenCommand}"
                                     CommandParameter="{Binding Node}"
                                     Header="Open">
                                     <MenuItem.Icon>
@@ -95,7 +95,7 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem
-                                    Command="{Binding Source.CopyPathCommand}"
+                                    Command="{Binding CopyPathCommand}"
                                     CommandParameter="{Binding Node}"
                                     Header="Copy path">
                                     <MenuItem.Icon>

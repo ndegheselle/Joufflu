@@ -2,9 +2,7 @@
 using System.IO;
 using System.Security;
 using System.Windows;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback;
 using Joufflu.FileExplorer.Nodes;
 
@@ -40,19 +38,6 @@ namespace Joufflu.FileExplorer.FileSystem
         [ObservableProperty]
         private IExplorerDirectory? current;
 
-        ICommand IExplorerSource.RenameCommand => RenameCommand;
-        ICommand IExplorerSource.RemoveCommand => RemoveCommand;
-        ICommand IExplorerSource.CreateDirectoryCommand => CreateDirectoryCommand;
-
-        ICommand IExplorerSource.OpenCommand => OpenCommand;
-        ICommand IExplorerSource.OpenInExplorerCommand => OpenInExplorerCommand;
-        ICommand IExplorerSource.CopyPathCommand => CopyPathCommand;
-        ICommand IExplorerSource.OpenWithDefaultCommand => OpenWithDefaultCommand;
-
-        ICommand IExplorerSource.CopyCommand => CopyCommand;
-        ICommand IExplorerSource.CutCommand => CutCommand;
-        ICommand IExplorerSource.PasteCommand => PasteCommand;
-
         public FileSystemSource(string rootDirectoryPath, IToastService? toasts)
         {
             this.rootDirectoryPath = rootDirectoryPath;
@@ -71,7 +56,6 @@ namespace Joufflu.FileExplorer.FileSystem
         /// Open a node : a directory is loaded and made the <see cref="Current"/> one, a file is opened by the
         /// system. A derived source overrides it for the node types of its own, the other ones being left to it.
         /// </summary>
-        [RelayCommand]
         public virtual async Task Open(IExplorerNode node)
         {
             if (node is IExplorerDirectory directory)
@@ -84,14 +68,14 @@ namespace Joufflu.FileExplorer.FileSystem
             }
         }
 
-        [RelayCommand]
+        /// <summary>Shows a node in the Windows explorer, selected in the directory holding it.</summary>
         public void OpenInExplorer(IExplorerNode node)
         {
             // "/select," so that a directory is shown inside its parent instead of being opened.
             StartProcess(new ProcessStartInfo("explorer.exe", $"/select,\"{node.Path}\"") { UseShellExecute = true });
         }
 
-        [RelayCommand]
+        /// <summary>Opens a file with the application Windows associates with it.</summary>
         public void OpenWithDefault(IExplorerFile file)
         {
             // UseShellExecute resolves the application associated with the file
@@ -253,11 +237,9 @@ namespace Joufflu.FileExplorer.FileSystem
 
         #region Copy / Paste
 
-        [RelayCommand]
-        public void Copy(IEnumerable<IExplorerNode> nodes) => SetClipboard(nodes, isMove: false);
+        public void Copy(IReadOnlyList<IExplorerNode> nodes) => SetClipboard(nodes, isMove: false);
 
-        [RelayCommand]
-        public void Cut(IEnumerable<IExplorerNode> nodes) => SetClipboard(nodes, isMove: true);
+        public void Cut(IReadOnlyList<IExplorerNode> nodes) => SetClipboard(nodes, isMove: true);
 
         /// <summary>
         /// Copy or move the nodes held by the clipboard into a directory, <see cref="Current"/> when none is given.
@@ -267,7 +249,6 @@ namespace Joufflu.FileExplorer.FileSystem
         /// <see cref="ExplorerClipboard"/> : the file explorer of Windows writes it there as well, so a cut made in
         /// one is pasted as a move in the other.
         /// </remarks>
-        [RelayCommand(CanExecute = nameof(CanPaste))]
         public async Task Paste(IExplorerDirectory? target)
         {
             IExplorerDirectory? directory = target ?? Current;
@@ -281,7 +262,7 @@ namespace Joufflu.FileExplorer.FileSystem
             await Transfer(paths, directory, isMove);
         }
 
-        public bool CanPaste(IExplorerDirectory? target)
+        public bool CanPaste()
         {
             IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out bool isMove);
             return paths.Count > 0;
@@ -374,7 +355,7 @@ namespace Joufflu.FileExplorer.FileSystem
 
         #region Misc
 
-        [RelayCommand]
+        /// <summary>Copies the path of a node to the clipboard.</summary>
         public void CopyPath(IExplorerNode node)
         {
             Clipboard.SetText(node.Path);
@@ -385,11 +366,10 @@ namespace Joufflu.FileExplorer.FileSystem
         /// Give a node the name it has been renamed to. An empty or an unchanged name does nothing, the edition having
         /// been given up.
         /// </summary>
-        [RelayCommand]
-        public void Rename(ExplorerNodeRename rename)
+        public void Rename(IExplorerNode node, string newName)
         {
-            string name = rename.Name.Trim();
-            if (string.IsNullOrEmpty(name) || name == rename.Node.Name)
+            string name = newName.Trim();
+            if (string.IsNullOrEmpty(name) || name == node.Name)
                 return;
 
             // Checked here, where the shell only reports a refusal as a code of its own.
@@ -404,8 +384,8 @@ namespace Joufflu.FileExplorer.FileSystem
                 // Moved onto its new path, the rename going through the shell as the other operations do : a name
                 // already taken displays the same prompt as in the Windows explorer.
                 ShellFileOperation.Transfer(
-                    [rename.Node.Path],
-                    [Path.Combine(Path.GetDirectoryName(rename.Node.Path) ?? "", name)],
+                    [node.Path],
+                    [Path.Combine(Path.GetDirectoryName(node.Path) ?? "", name)],
                     isMove: true);
             }
             catch (Exception exception)
@@ -413,19 +393,21 @@ namespace Joufflu.FileExplorer.FileSystem
                 toasts?.Error(exception.Message);
             }
 
-            Refresh([rename.Node.Parent]);
+            Refresh([node.Parent]);
         }
 
         /// <summary>
         /// Send nodes to the recycle bin, through the shell : the standard progress window and confirmation of
         /// Windows are displayed, and cancelling them leaves the nodes in place.
         /// </summary>
-        [RelayCommand]
-        public async Task Remove(IEnumerable<IExplorerNode> nodes)
+        /// <remarks>
+        /// Returns once the shell is done : its window is modal, so nothing here runs off the UI thread.
+        /// </remarks>
+        public Task Remove(IReadOnlyList<IExplorerNode> nodes)
         {
             List<IExplorerNode> removed = [.. nodes];
             if (removed.Count == 0)
-                return;
+                return Task.CompletedTask;
 
             try
             {
@@ -437,12 +419,12 @@ namespace Joufflu.FileExplorer.FileSystem
             }
 
             Refresh(removed.Select(node => node.Parent));
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// Create a "New folder" in a directory, <see cref="Current"/> when none is given.
         /// </summary>
-        [RelayCommand]
         public void CreateDirectory(IExplorerDirectory? parent)
         {
             parent ??= Current;

@@ -183,6 +183,12 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         await Source.Open(node);
     }
 
+    /// <summary>
+    /// Waits for an operation a shortcut started, which nothing else waits for, so that an error of the source
+    /// reaches the dispatcher rather than being lost with the task.
+    /// </summary>
+    private static async void Observe(Task operation) => await operation;
+
     #endregion
 
     #region On dependency property changed
@@ -278,7 +284,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         if (rename == null)
             return;
 
-        Source?.RenameCommand.Execute(rename);
+        Source?.Rename(rename.Node, rename.Name);
     }
 
     #endregion
@@ -301,7 +307,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         // Paste goes to the current directory, whatever is selected
         if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V)
         {
-            Source.PasteCommand.Execute(Source.Current);
+            Observe(Source.Paste(Source.Current));
             e.Handled = true;
             return;
         }
@@ -312,15 +318,15 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         if (nodes.Count > 0)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C){
-                Source.CopyCommand.Execute(nodes); 
+                Source.Copy(nodes);
                 e.Handled = true;
             }
             else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.X){
-                Source.CutCommand.Execute(nodes); 
+                Source.Cut(nodes);
                 e.Handled = true;
             }
             else if(e.Key == Key.Delete){
-                Source.RemoveCommand.Execute(nodes); 
+                Observe(Source.Remove(nodes));
                 e.Handled = true;
             }
             else if(e.Key == Key.F2){
