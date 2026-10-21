@@ -32,7 +32,7 @@
 
             <c:CodeExample
                 Title="AppIcon"
-                Code="&lt;controls:ThemedWindow ...&gt;&#x0a;    &lt;controls:ThemedWindow.TitleBarContent&gt;&#x0a;        &lt;controls:AppIcon Margin=&quot;5,0,0,0&quot; /&gt;&#x0a;    &lt;/controls:ThemedWindow.TitleBarContent&gt;&#x0a;&lt;/controls:ThemedWindow&gt;"
+                Code="&lt;controls:ThemedWindow ...&gt;&#x0a;    &lt;controls:ThemedWindow.TitleBarContent&gt;&#x0a;        &lt;controls:AppIcon /&gt;&#x0a;    &lt;/controls:ThemedWindow.TitleBarContent&gt;&#x0a;&lt;/controls:ThemedWindow&gt;"
                 Description="The title bar shows no icon by default. AppIcon shows the application icon, or the Source it is given; put it in TitleBarContent to bring it back. A click opens the system menu and a double click closes the window.">
                 <controls:AppIcon HorizontalAlignment="Left" IsHitTestVisible="False" />
             </c:CodeExample>

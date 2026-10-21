@@ -42,7 +42,7 @@ closes the window, like a native icon.
 ```xml
 <controls:ThemedWindow ... TitleVisibility="Collapsed">
     <controls:ThemedWindow.TitleBarContent>
-        <controls:AppIcon Margin="5,0,0,0" />
+        <controls:AppIcon />
     </controls:ThemedWindow.TitleBarContent>
     ...
 </controls:ThemedWindow>
