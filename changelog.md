@@ -18,6 +18,7 @@
 - Keep a `Paging` on its `Capacity` when its template loads : the page-size combo box also set `SelectedIndex="0"`, which could push the first available capacity (5) into a `Capacity` bound two-way, in place of the bound value or the default 10
 - Treat a `Paging` total of 0 as an empty set rather than an unknown one : a single page, Next disabled and "0-0 of 0", a negative `Total` alone leaving the size unknown, through a new `IsTotalKnown`. Keep the current page checked when its button is clicked again
 - Read the `NavigationMenu` title line thickness through `DynamicResource`, so it follows a theme or a runtime change of `Dimensions.Thickness`
+- Move what a `Paging` shows, its page buttons, interval, last page and whether Previous and Next are available, into a `PagingState` of its own, free of WPF, so the paging rules are tested without a control. The control refreshes everything in one place instead of three copies, and its behaviour is unchanged
 
 # Joufflu.Feedback (unreleased)
 
