@@ -15,7 +15,7 @@ public class SchemaToDataNodeTests
 
     private static async Task<DataNode> PropertyOf(string propertySchema)
     {
-        DataObject tree = await TreeOf($$"""{"type":"object","properties":{"Field":{{propertySchema}}}}""");
+        DataObject tree = await TreeOf("""{"type":"object","properties":{"Field":""" + propertySchema + "}}");
         return tree.Properties.Single();
     }
 
