@@ -19,16 +19,16 @@
     </UserControl.Resources>
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Theme" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Theme" />
             <TextBlock
-                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="System / Light / Dark, applied by swapping the active theme resource dictionary at runtime."
                 TextWrapping="Wrap" />
 
             <c:CodeExample
                 Title="Theme switcher"
                 Code="{Binding SwitcherCode}"
-                Description="A drop-in control bound to ThemeManager. Pick a theme by name and the whole gallery re-themes live; the choice is remembered across launches. 'Ocean' is a custom theme this app registered at startup — it sits alongside the built-ins.">
+                Description="Plain RadioButtons bound to ThemeManager. Pick a theme by name and the whole gallery re-themes live; this app remembers the choice across launches itself. 'Ocean' is a custom theme this app registered at startup — it sits alongside the built-ins.">
                 <StackPanel toolkit:Spacing.Gap="4">
 
                     <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=System, Mode=TwoWay}" ToolTip="Follow the system theme">
@@ -64,12 +64,12 @@
             <c:CodeExample
                 Title="ThemeManager"
                 Code="{Binding ManagerCode}"
-                Description="The manager owns the active theme. Initialize it once at startup, then set Mode from anywhere. In System mode it reads the Windows theme and keeps following it while the app runs." />
+                Description="The manager owns the active theme. Initialize it once at startup, then set Theme from anywhere. When Theme is System, it reads the Windows theme and keeps following it while the app runs." />
 
             <c:CodeExample
                 Title="App setup"
                 Code="{Binding SetupCode}"
-                Description="Merge only the control styles in App.xaml. Initialize() inserts the matching Light/Dark dictionary ahead of them at runtime — no theme dictionary is hardcoded." />
+                Description="Merge only the control styles in App.xaml. Initialize() inserts the matching Light/Dark dictionary right after them at runtime — no theme dictionary is hardcoded." />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

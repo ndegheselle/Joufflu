@@ -1,7 +1,7 @@
-﻿---
+---
 title: Theme
-parent: Toolkit
-nav_order: 5
+parent: Themes
+nav_order: 2
 ---
 
 # Theme
@@ -20,7 +20,7 @@ and you can register your own palettes so they become selectable alongside the b
 ## App setup
 
 Merge only the control styles in `App.xaml`. Do **not** hardcode a theme dictionary — the
-manager inserts the matching Light/Dark dictionary ahead of the styles at runtime.
+manager inserts the matching Light/Dark dictionary right after them at runtime.
 
 ```xml
 <!-- App.xaml -->
@@ -62,7 +62,9 @@ settings differently (see [Persisting the theme](#persisting-the-theme)).
 ## Registering a custom theme
 
 A custom theme is just a resource dictionary with the same keys as `Light.xaml` / `Dark.xaml`
-(see [Customize theme](customize-theme.html) to generate one). Register it by name — from a pack
+(see [Customize theme](customize-theme.html) to generate one). It can also override any
+[dimension](tokens.html#dimensions) — a denser or rounder theme — since the manager merges it right
+after `Resources.xaml`. Register it by name — from a pack
 `Uri` or an in-memory `ResourceDictionary` — and it becomes selectable through `Theme`, appearing
 in the `Themes` list next to the built-ins:
 

@@ -60,7 +60,7 @@ public interface IOverlayer
 
 /// <summary>
 /// Optional contract for overlay content that wants to provide its own options
-/// (title, action bar, ...) instead of having them supplied at <see cref="IOverlayer.ShowAsync"/> time.
+/// (title, close cross, click away, ...) instead of having them supplied at <see cref="IOverlayer.ShowAsync"/> time.
 /// </summary>
 public interface IOverlayContent : IPage
 {

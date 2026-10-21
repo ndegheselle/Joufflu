@@ -1,10 +1,10 @@
 ---
-title: Icons
+title: Font icon
 parent: Native controls
 nav_order: 2
 ---
 
-# Icons
+# Font icon
 
 `FontIcon` renders a glyph from the embedded [Lucide](https://lucide.dev) icon
 font. It derives from `TextBlock`, so it takes a foreground brush, aligns like

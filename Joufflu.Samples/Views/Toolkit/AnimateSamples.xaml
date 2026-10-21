@@ -14,9 +14,9 @@
     mc:Ignorable="d">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Animate" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Animate" />
             <TextBlock
-                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="Attached properties that animate any element without touching its template."
                 TextWrapping="Wrap" />
 

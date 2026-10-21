@@ -92,16 +92,6 @@ public class ThemedWindow : Window
     }
 
     /// <summary>
-    /// Controls whether to shrink the title bar height a little when the window is maximized.
-    /// The default is <see langword="true"/> as this is how native windows behave.
-    /// </summary>
-    public bool ShrinkTitleBarWhenMaximized
-    {
-        get => (bool)GetValue(ShrinkTitleBarWhenMaximizedProperty);
-        set => SetValue(ShrinkTitleBarWhenMaximizedProperty, value);
-    }
-
-    /// <summary>
     /// Controls whether the content can overflow over the title bar.
     /// </summary>
     public bool AllowContentOverTitleBar
@@ -125,8 +115,6 @@ public class ThemedWindow : Window
     protected internal static readonly DependencyPropertyKey MaximizeBorderThicknessPropertyKey = DependencyProperty.RegisterReadOnly("MaximizeBorderThickness", typeof(Thickness), typeof(ThemedWindow), new PropertyMetadata(new Thickness()));
 
     protected internal static readonly DependencyProperty MaximizeBorderThicknessProperty = MaximizeBorderThicknessPropertyKey.DependencyProperty;
-
-    public static readonly DependencyProperty ShrinkTitleBarWhenMaximizedProperty = DependencyProperty.Register("ShrinkTitleBarWhenMaximized", typeof(bool), typeof(ThemedWindow), new PropertyMetadata(true));
 
     public static readonly DependencyProperty AllowContentOverTitleBarProperty = DependencyProperty.Register("AllowContentOverTitleBar", typeof(bool), typeof(ThemedWindow), new PropertyMetadata(false));
 

@@ -1,6 +1,7 @@
 ---
 title: Sources
 parent: File explorer
+grand_parent: Joufflu controls
 nav_order: 4
 ---
 
@@ -13,7 +14,9 @@ tree, double clicking one in the list or using the breadcrumb opens it for all o
 
 ```csharp
 // using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -41,7 +44,9 @@ The same source, watching the disk: a file or a directory created, deleted, rena
 moved outside of the explorer shows up in it without a refresh.
 
 ```csharp
-public IExplorerSource Source { get; } = new FileSystemWatcherSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemWatcherSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -157,7 +162,9 @@ in, `Node` for the node the menu was opened on, `Nodes` for the whole selection.
 {: .note }
 > A context menu template is searched from the most specific type of the node up to
 > `object`, and on the scope of the menu (`Single`, `Multiple`, `None` outside of any
-> node), so a type without a menu of its own falls back on the default ones.
+> node). The built-in menus are keyed on `FileSystemDirectory` and `FileSystemFile` for a single
+> node and on `object` for a multi-selection or the empty area, so a single node of a type of
+> your own shows no menu until you key one on its type.
 
 ## A source of something else
 

@@ -1,6 +1,7 @@
 ---
 title: Search combo box
 parent: Inputs
+grand_parent: Joufflu controls
 nav_order: 3
 ---
 

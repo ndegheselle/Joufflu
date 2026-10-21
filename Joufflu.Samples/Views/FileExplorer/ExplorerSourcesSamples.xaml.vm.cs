@@ -32,7 +32,9 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
     public string FileSystemSourceCode =>
         """
         // toasts is an injected IToastService, null is accepted
-        public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+        public IExplorerSource Source { get; }
+        // in the constructor, where toasts is in scope
+        Source = new FileSystemSource(@"C:\Projects", toasts);
         // ...
         await Source.Open();
         """;
@@ -40,7 +42,9 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
     public string FileSystemWatcherSourceCode =>
         """
         // Same source, watching the disk : dispose it to stop watching.
-        public IExplorerSource Source { get; } = new FileSystemWatcherSource(@"C:\Projects", toasts);
+        public IExplorerSource Source { get; }
+        // in the constructor, where toasts is in scope
+        Source = new FileSystemWatcherSource(@"C:\Projects", toasts);
         // ...
         await Source.Open();
         """;

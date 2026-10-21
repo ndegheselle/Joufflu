@@ -1,6 +1,7 @@
 ---
 title: Dropdown
 parent: Inputs
+grand_parent: Joufflu controls
 nav_order: 8
 ---
 
@@ -29,7 +30,8 @@ so its `Style`, its content, its triggers and every attached property
 |---|---|---|---|
 | `Dropdown.Popup` | `object` | `null` | Content shown in the popup. Setting it is what turns the button into a dropdown. |
 | `Dropdown.Placement` | `DropdownPlacement` | `BottomLeft` | Corner of the popup anchored to the matching corner of the button: `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight`. |
-| `Dropdown.HorizontalOffset` / `Dropdown.VerticalOffset` | `double` | `0` | Extra offset applied on top of the placement. |
+| `Dropdown.HorizontalOffset` | `double` | `0` | Extra horizontal offset applied on top of the placement. |
+| `Dropdown.VerticalOffset` | `double` | `2` | Extra vertical offset applied on top of the placement, a small gap from the button by default. |
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
 | `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, background, border, corner radius. |
 
@@ -110,8 +112,10 @@ otherwise.
 ## Bindings inside the popup
 
 A `Popup` lives outside the button's logical tree, so nothing would normally flow
-into it. `DataContext`, `Foreground` and `Sizing.Size` are restored on the host for
-you, so ordinary command and value bindings need nothing special:
+into it. `DataContext` and `Sizing.Size` are relayed from the button and the host
+restates the theme `Foreground`, so ordinary command and value bindings need nothing
+special. A `Foreground` set on the button itself does not flow in; set it through
+`Dropdown.PopupStyle` instead:
 
 ```xml
 <ToggleButton Content="Actions">

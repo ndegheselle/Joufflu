@@ -15,9 +15,10 @@
     mc:Ignorable="d">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Sources" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Sources" />
             <TextBlock
-                Style="{StaticResource Lead}"
+                toolkit:Sizing.Size="lg"
+                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="Every control binds a Source, an IExplorerSource : it holds the opened directory (Current), the loaded hierarchy (Root) and the commands the menus and the shortcuts act with. Controls sharing the same source stay in sync."
                 TextWrapping="Wrap" />
 

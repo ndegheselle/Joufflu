@@ -17,6 +17,7 @@ public static class Colors
 
     // State
     public static ComponentResourceKey DisabledOpacity => new ComponentResourceKey(typeof(Colors), "DisabledOpacity");
+    public static ComponentResourceKey MutedOpacity => new ComponentResourceKey(typeof(Colors), "MutedOpacity");
 
     // Primary
     public static ComponentResourceKey PrimaryColor => new ComponentResourceKey(typeof(Colors), "PrimaryColor");

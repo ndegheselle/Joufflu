@@ -22,7 +22,7 @@ using DataObject = Joufflu.Data.Model.DataObject; // always alias: clashes with 
 |---|---|
 | `DataFill` | Values of a node built from a schema. Shape is fixed; only array items can be added (cloned from `Template`) or removed. |
 | `DataEdit` | Everything: properties and items of any type, keys, values, string options of a `Choice`. Starts from an empty object when no `Node` is bound. |
-| `DataDisplay` | Nothing: read only, key, type (`EnumDataType` name) and value of each node. `null` / undefined greyed italic, forced values flagged with a feather, `Choice` shown by option name. |
+| `DataDisplay` | Nothing: read only, key, type (an icon, its `EnumDataType` name in the tooltip) and value of each node. `null` / undefined greyed italic, forced values flagged with a feather, `Choice` shown by option name. |
 
 ```xml
 <data:DataFill Node="{Binding Node}" ManualValues="{Binding ManualValues}" />
@@ -53,7 +53,7 @@ string? json = Node.ToToken()?.ToString();
 | `array` | `Array` → `DataArray` (`Values`, `Template`) | tree | array |
 | `object` | `Object` → `DataObject` (`Properties`) | tree | object |
 
-Not supported: arrays with a list of item schemas, schemas without a type.
+Not supported: arrays with a list of item schemas, or with no `items` schema. A schema with no type (`{}`) becomes a value filled in as free text.
 
 Nullable values start at `null`, others at `""`, `0`, `false`, today, `TimeSpan.Zero` or
 the first option. Object keys are unique and case-sensitive (errors on `Key` through

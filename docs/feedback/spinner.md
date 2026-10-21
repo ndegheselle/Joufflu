@@ -1,6 +1,7 @@
 ---
 title: Spinner
 parent: Feedback
+grand_parent: Joufflu controls
 nav_order: 2
 ---
 

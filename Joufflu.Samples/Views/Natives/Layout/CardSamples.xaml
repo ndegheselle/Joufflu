@@ -10,7 +10,9 @@
 
             toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock
-                Style="{StaticResource H1}"
+                toolkit:Sizing.Size="xl"
+                FontWeight="Bold"
+                TextWrapping="Wrap"
                 Text="Card" />
 
             <c:CodeExample
@@ -22,7 +24,7 @@
                         <StackPanel toolkit:Spacing.Gap="4">
                             <TextBlock FontWeight="Bold" Text="Card" />
                             <TextBlock
-                                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                 Text="The primary surface for grouping content."
                                 TextWrapping="Wrap" />
                         </StackPanel>

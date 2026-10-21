@@ -47,13 +47,10 @@ can paste into your views.
 
 | Section | What's inside |
 |---|---|
-| [Native controls](natives/index.md) | Buttons (solid, soft & outline variants), `FontIcon`, the `Card` styles and the typography scale |
-| [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
-| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging` |
-| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
-| [Data](data/index.md) | `DataFill`, `DataEdit`, `DataDisplay` (`Joufflu.Data`) |
-| [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
-| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, the design tokens, theme customization, application shell, building a custom input |
+| [Themes](themes/index.md) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and the live theme customizer |
+| [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon`, the `Card` styles and buttons (solid, soft & outline variants) |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, building a custom input |
+| [Joufflu controls](controls/index.md) | The optional packages: [Feedback](feedback/index.md) (`Badge`, `Spinner`, toasts), [Inputs](inputs/index.md) (numeric, search, combo boxes, pickers, `Dropdown`…), [Navigation](navigation/index.md) (`NavigationMenu`, overlays, `Paging`), [Data](data/index.md) (`DataFill`, `DataEdit`, `DataDisplay`) and [File explorer](file-explorer/index.md) |
 
 ## Getting started
 
@@ -71,8 +68,8 @@ can paste into your views.
    ```
 
 2. Merge the control styles in `App.xaml` so the themed styles and the
-   design-system keys (`joufflu:Brushes`, `joufflu:Dimensions`,
-   `toolkit:Spacing`, `toolkit:Sizing`) are available:
+   `joufflu:Dimensions` keys are available (the `joufflu:Brushes` come with the
+   theme, step 3):
 
    ```xml
    <Application.Resources>

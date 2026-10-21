@@ -95,7 +95,7 @@ public class ConfirmViewModel : ObservableObject
 /// <summary>
 /// Overlay content with an editable field, used by the form overlay demo. Implementing
 /// <see cref="IOverlayContent{TResult}"/> gives it its own options and the result it is awaited for;
-/// the close cross dismisses it and Save validates it.
+/// the close cross dismisses it, Cancel cancels it and Save validates it.
 /// </summary>
 public partial class SampleFormViewModel : ObservableObject, IOverlayContent<string>
 {
@@ -115,4 +115,7 @@ public partial class SampleFormViewModel : ObservableObject, IOverlayContent<str
 
     [RelayCommand]
     private void Save() => overlays.Validate(this);
+
+    [RelayCommand]
+    private void Cancel() => overlays.Cancel(this);
 }

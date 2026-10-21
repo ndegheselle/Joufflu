@@ -17,7 +17,7 @@
     </UserControl.Resources>
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Data grid" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Data grid" />
 
             <c:CodeExample
                 Title="Editable grid"
@@ -126,7 +126,7 @@
                     <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
                             <StackPanel Margin="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-                                <TextBlock Style="{StaticResource H4}" Text="{Binding Name}" />
+                                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Name}" />
                                 <TextBlock Text="{Binding Role, StringFormat='Role: {0}'}" />
                                 <TextBlock Text="{Binding Age, StringFormat='Age: {0}'}" />
                             </StackPanel>

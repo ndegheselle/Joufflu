@@ -9,7 +9,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  ============================ NavigationItem ============================  -->
@@ -153,11 +152,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationTitle}">
                     <Grid Margin="0,12,0,4">
-                        <ContentPresenter x:Name="TitleText" TextBlock.Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}">
-                            <ContentPresenter.Resources>
-                                <Style BasedOn="{StaticResource Small}" TargetType="{x:Type TextBlock}" />
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
+                        <ContentPresenter
+                            x:Name="TitleText"
+                            TextBlock.FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}"
+                            TextBlock.Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
 
                         <Border
                             x:Name="TitleLine"

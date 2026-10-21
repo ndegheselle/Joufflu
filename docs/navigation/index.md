@@ -1,6 +1,7 @@
 ---
 title: Navigation
-nav_order: 5
+parent: Joufflu controls
+nav_order: 3
 has_children: true
 ---
 

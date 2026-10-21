@@ -70,7 +70,8 @@ Or a `ComboBox`:
 ## Overriding tokens without a new theme
 
 Tweak dimensions (or colours for every theme) in a dictionary merged **after** the core
-resources:
+resources (a registered theme may also carry dimensions of its own; this dictionary still
+wins over it):
 
 ```xml
 <ResourceDictionary.MergedDictionaries>
@@ -86,7 +87,8 @@ resources:
 ```
 
 When overriding a scalar, also override the composite built from it (`Radius` →
-`CornerRadius`, `Thickness` → `BorderThickness`, `Spacing` → `SpacingThickness`), since
+`CornerRadius`, `Thickness` → `BorderThickness`, `Spacing` → `SpacingThickness`,
+`TitleBarHeight` → `TitleBarHeightOffset`), since
 composites are baked at load. The `Joufflu.Samples` gallery page *Customize theme*
 generates a ready-to-merge dictionary interactively.
 
@@ -118,8 +120,8 @@ Use the brush in UI; the colour is for gradients and animations.
 | | `Border` | Default border of framed controls |
 | | `Border100` | Stronger border: hover/focus, separators |
 | Text | `Foreground` | Default text and icons |
-| | `Foreground100` | Muted text, placeholders, hints (`Muted` style) |
-| | `Foreground200` | Text on a selected row |
+| | `Foreground100` | Secondary colour of control labels (headers, inactive tabs); muted text uses `MutedOpacity` |
+| | `Foreground200` | Dimmed text: inactive window title bar, disabled selected list item |
 | Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill), `X100` (hover/pressed fill), `XContent` (text/icons on the fill) |
 
 Also available, derived automatically from the accent colour (not per theme):
@@ -127,6 +129,7 @@ Also available, derived automatically from the accent colour (not per theme):
 (≈24 %, its hover) for each accent.
 
 `Colors.DisabledOpacity` (double, `0.5`): opacity of a disabled control.
+`Colors.MutedOpacity` (double, `0.65`): opacity of muted text (placeholders, hints, descriptions).
 
 Pairing rule: text on an `X` fill uses `XContent`; text on surfaces uses `Foreground*`.
 `Danger` is also the colour of validation errors.

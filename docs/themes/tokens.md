@@ -1,7 +1,7 @@
-﻿---
+---
 title: Design tokens
-parent: Toolkit
-nav_order: 6
+parent: Themes
+nav_order: 3
 ---
 
 # Design tokens
@@ -9,6 +9,11 @@ nav_order: 6
 A theme is a collection of the keys below. Every control style reads them
 through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
 leaves out keeps the built-in value.
+
+A theme registered with `ThemeManager` can define both: it is merged right after
+`Resources.xaml`, so its `Dimensions` keys (and `Colors.DisabledOpacity` / `MutedOpacity`) override the built-in
+ones, and change with the theme. A dictionary merged after `Resources.xaml` still overrides
+every theme.
 
 Keys are `ComponentResourceKey` statics rather than strings, so a renamed key breaks the build
 instead of silently falling back at runtime:
@@ -29,7 +34,7 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 ```
 
 See [Theme](theme.html) for swapping palettes at runtime, [Customize theme](customize-theme.html)
-for editing these values live, and [Derived dimensions](derived-dimensions.html) for scaling one
+for editing these values live, and [Derived dimensions](../toolkit/derived-dimensions.html) for scaling one
 per side or per corner.
 
 ## Colors
@@ -57,8 +62,8 @@ The suffix says how much the text recedes.
 | Key | Used for |
 |---|---|
 | `Foreground` | Default text and icon colour, on `Background` or `Background100`. |
-| `Foreground100` | Muted text: placeholders, hints, secondary labels. What the `Muted` typography style uses. |
-| `Foreground200` | Text on a selected row, where the default foreground would lose contrast. |
+| `Foreground100` | Secondary colour the controls use for their own labels: column headers, inactive tabs, section titles. For muted text of your own, dim it with `MutedOpacity` instead. |
+| `Foreground200` | Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item. |
 
 ### Accents
 
@@ -88,6 +93,7 @@ The sample gallery renders them live against whichever theme is selected.
 | Key | Used for |
 |---|---|
 | `DisabledOpacity` | Opacity applied to a whole control while `IsEnabled` is `False` (`0.5`). Disabled controls fade rather than switch to a dedicated palette, so a single key covers every control. |
+| `MutedOpacity` | Opacity of muted text: placeholders, hints, descriptions, captions (`0.65`). Muted text is dimmed rather than given its own colour, so it follows the foreground it sits in. |
 
 ## Dimensions
 
@@ -96,7 +102,7 @@ The sample gallery renders them live against whichever theme is selected.
 ### Shape
 
 A scalar plus the ready made `Thickness`/`CornerRadius` built from it. Bind the scalar through
-[`Derive`](derived-dimensions.html) when you need only some sides or corners, the composite one
+[`Derive`](../toolkit/derived-dimensions.html) when you need only some sides or corners, the composite one
 otherwise.
 
 | Key | Type | Used for |
@@ -112,14 +118,14 @@ Distances between things rather than inside them.
 
 | Key | Type | Used for |
 |---|---|---|
-| `Spacing` | `double` | Standard gap between sibling elements (`12`). Feed it to [`Spacing.Gap`](spacing.html). |
+| `Spacing` | `double` | Standard gap between sibling elements (`12`). Feed it to [`Spacing.Gap`](../toolkit/spacing.html). |
 | `SpacingThickness` | `Thickness` | `Spacing` on all four sides, the standard page padding. |
 | `TitleBarHeight` | `double` | Height of the custom window title bar (`30`). |
 | `TitleBarHeightOffset` | `Thickness` | `Top` only, used as a margin to push content below an overlapping title bar. |
 
 ### Control heights
 
-Vertical size of single line controls. [`Sizing.Size`](sizing.html) picks one of the four; `md` is
+Vertical size of single line controls. [`Sizing.Size`](../toolkit/sizing.html) picks one of the four; `md` is
 the default written in the base styles, so only `xs`/`sm`/`lg` appear in the size triggers.
 
 | Key | Value | Used for |
@@ -132,8 +138,8 @@ the default written in the base styles, so only `xs`/`sm`/`lg` appear in the siz
 
 ### Font sizes
 
-The [typography](../natives/typography.html) styles (`H1`…`H6`, `Muted`, …) are built on these, so
-restyling the scale restyles the text.
+A `TextBlock` picks one through [`Sizing.Size`](../natives/typography.html) (`xs` to `xl`; `md` keeps
+the inherited body size), like the controls do, so restyling the scale restyles the text.
 
 | Key | Value |
 |---|---|

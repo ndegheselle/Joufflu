@@ -1,6 +1,7 @@
 ---
 title: Color picker
 parent: Inputs
+grand_parent: Joufflu controls
 nav_order: 7
 ---
 

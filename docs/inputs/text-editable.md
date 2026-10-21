@@ -1,6 +1,7 @@
 ---
 title: Text editable
 parent: Inputs
+grand_parent: Joufflu controls
 nav_order: 5
 ---
 

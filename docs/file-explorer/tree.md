@@ -1,7 +1,8 @@
 ---
 title: Tree
 parent: File explorer
-nav_order: 3
+grand_parent: Joufflu controls
+nav_order: 2
 ---
 
 # Tree

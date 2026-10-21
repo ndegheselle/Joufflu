@@ -63,4 +63,7 @@
     <!--  Opacity applied to controls when IsEnabled="False"  -->
     <system:Double x:Key="{x:Static joufflu:Colors.DisabledOpacity}">0.5</system:Double>
 
+    <!--  Opacity of secondary text (placeholders, hints, descriptions), dimmed from the foreground it sits in  -->
+    <system:Double x:Key="{x:Static joufflu:Colors.MutedOpacity}">0.65</system:Double>
+
 </ResourceDictionary>

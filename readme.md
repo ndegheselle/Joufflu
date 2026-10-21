@@ -57,16 +57,17 @@ existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
 
 | Section | Contents |
 |---|---|
+| **Themes** (`Joufflu`) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and live theme customization |
+| **Natives** (`Joufflu`) | WPF's built-in controls (buttons, text boxes, combo boxes, data grid, …) restyled to match the design system, plus text sizes through `Sizing.Size`, `FontIcon` and the `Card` styles |
+| **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, and the rules for building a custom input |
+| **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `Paging`, `OverlayContainer` and awaitable modal overlays shown by an `Overlayer` |
-| **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
-| **File explorer** (`Joufflu.FileExplorer`) | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar` and their `IExplorerSource` |
 | **Data** (`Joufflu.Data`) | `DataFill` filling a value in against a JSON Schema, `DataEdit` building one from scratch, `DataDisplay` showing one read only |
-| **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, `ThemeManager` and the design tokens, live theme customization, and the application shell (`ThemedWindow`) |
+| **File explorer** (`Joufflu.FileExplorer`) | `ExplorerList`, `ExplorerTree`, `Explorer`, `ExplorerControlBar` and their `IExplorerSource` |
 
-The **Natives** - WPF's built-in controls (buttons, text boxes, combo boxes,
-data grid, …) restyled to match the design system - come along with the core
-`Joufflu` styles.
+The last five are the optional Joufflu control packages, all built on the core
+`Joufflu` one.
 
 ## Getting started
 

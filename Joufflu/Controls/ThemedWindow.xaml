@@ -175,15 +175,6 @@
                             <Setter TargetName="PART_MaximizeRestoreIcon" Property="Text" Value="{x:Static fonts:LucideFontIcons.Copy}" />
                         </Trigger>
 
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="WindowState" Value="Maximized" />
-                                <Condition Property="ShrinkTitleBarWhenMaximized" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="TitleBar" Property="MinHeight" Value="22" />
-                            <Setter TargetName="TitleBarForegroundLayer" Property="MinHeight" Value="22" />
-                        </MultiTrigger>
-
                         <Trigger Property="WindowStyle" Value="ToolWindow">
                             <Setter TargetName="PART_MinimizeButton" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="PART_MaximizeRestoreButton" Property="Visibility" Value="Collapsed" />

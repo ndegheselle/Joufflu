@@ -2,7 +2,7 @@
 name: joufflu-theme
 description: >-
   Create, register and persist a custom Joufflu theme (a palette ResourceDictionary
-  of joufflu:Colors / joufflu:Brushes keys), tweak the design tokens (corner
+  of joufflu:Colors keys), tweak the design tokens (corner
   radius, spacing, control heights, font sizes, paddings), add a theme switcher
   bound to ThemeManager, or brand an app with its own colours. Use when the user
   asks for a custom theme, brand colours, a dark variant, a theme picker or
@@ -29,7 +29,9 @@ Ask for the missing inputs only: base colour(s), light or dark, theme name.
 
 ## 2. Write the palette — `Themes/<Name>.xaml`
 
-Every theme redefines the same 18 accent colours plus surfaces and text — colours only.
+Every theme redefines the same 18 accent colours plus surfaces and text. It may also
+override `Dimensions.*` keys (see §5) when its look includes them: `ThemeManager` merges
+it right after `Resources.xaml`, so they win over the defaults.
 The brushes are defined once and `ThemeManager` builds them from whichever theme it
 applies. Keys it leaves out keep the built-in value, but a complete palette avoids
 mismatches.
@@ -77,8 +79,8 @@ brush the theme defines.
   slightly darker in that order or `Background100` is white; in a dark theme
   `Background100` is lighter than `Background`.
 - **Text**: `Foreground` must reach at least 4.5:1 contrast on `Background` and
-  `Background100`; `Foreground100` is muted (≈ 3:1+); `Foreground200` is text on a selected
-  row (`Background200`).
+  `Background100`; `Foreground100` is muted (≈ 3:1+); `Foreground200` is dimmed text on inactive or
+  disabled-selected surfaces (inactive window title bar, disabled selected list item).
 - **Accents**: `X100` is the hover/pressed fill, about 8–12 % darker (light theme) or
   lighter (dark theme) than `X`. `XContent` is the text on `X`: pick near-white or a very
   dark shade of the same hue, whichever gives ≥ 4.5:1 on both `X` and `X100`.
@@ -137,7 +139,8 @@ ThemeManager.Instance.Initialize();
 
 ## 5. Token overrides (shape, spacing, sizes)
 
-For changes that apply whatever the palette, merge a dictionary **after** the core
+Put them in the theme file when they belong to that theme. For changes that apply
+whatever the palette, merge a dictionary **after** the core
 resources in `App.xaml`:
 
 ```xml

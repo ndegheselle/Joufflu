@@ -9,7 +9,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/TextBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type local:Search}">
@@ -41,7 +40,7 @@
                                 Margin="{TemplateBinding Padding}"
                                 VerticalAlignment="Center"
                                 IsHitTestVisible="False"
-                                Style="{StaticResource Muted}"
+                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                 Text="Search ..."
                                 Visibility="Collapsed" />
 

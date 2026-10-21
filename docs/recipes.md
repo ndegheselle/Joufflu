@@ -23,17 +23,17 @@ xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 
 ## A settings page
 
-A `Card` per group of settings, headings from the typography scale, `Spacing.Gap`
+A `Card` per group of settings, headings sized with `Sizing.Size`, `Spacing.Gap`
 instead of per-element margins, and a toast to confirm the save.
 
 ```xml
-<StackPanel Margin="24" toolkit:Spacing.Gap="16">
-    <TextBlock Style="{StaticResource H1}" Text="Settings" />
+<StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="16">
+    <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Settings" />
 
     <Border Style="{StaticResource Card}">
         <StackPanel toolkit:Spacing.Gap="12">
-            <TextBlock Style="{StaticResource H4}" Text="General" />
-            <TextBlock Style="{StaticResource Muted}" Text="Applies to every project." />
+            <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="General" />
+            <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="Applies to every project." />
 
             <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
             <inputs:NumericUpDown Value="{Binding MaxItems, Mode=TwoWay}" />
@@ -86,14 +86,14 @@ ThemeManager.Instance.Register(
 ThemeManager.Instance.Initialize();
 ```
 
-The keys to override are listed in [Design tokens](toolkit/tokens.md) and the full
-flow in [Customize theme](toolkit/customize-theme.md) and [Theme](toolkit/theme.md).
+The keys to override are listed in [Design tokens](themes/tokens.md) and the full
+flow in [Customize theme](themes/customize-theme.md) and [Theme](themes/theme.md).
 
 ## A theme switcher
 
 `ThemeManager.Theme` takes `System`, `Light`, `Dark` or the name of a registered
 custom theme and re-themes the whole UI live. Persisting the choice is up to the app;
-see [Theme](toolkit/theme.md#persisting-the-theme).
+see [Theme](themes/theme.md#persisting-the-theme).
 
 ```csharp
 using Joufflu.Themes;
@@ -107,17 +107,16 @@ ThemeManager.Instance.Theme = ThemeManager.Dark;
 model which slice to show. The view model filters, counts and slices.
 
 ```xml
-<DockPanel Margin="24">
-    <inputs:Search x:Name="Search" DockPanel.Dock="Top" Margin="0,0,0,12" />
+<Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="0,12">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
 
-    <nav:Paging
-        DockPanel.Dock="Bottom"
-        Margin="0,12,0,0"
-        Total="{Binding Total}"
-        PageNumber="{Binding PageNumber, Mode=TwoWay}"
-        Capacity="{Binding Capacity, Mode=TwoWay}" />
+    <inputs:Search x:Name="Search" />
 
-    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding PageItems}">
+    <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding PageItems}">
         <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
             <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
@@ -130,7 +129,13 @@ model which slice to show. The view model filters, counts and slices.
             </DataGridTemplateColumn>
         </DataGrid.Columns>
     </DataGrid>
-</DockPanel>
+
+    <nav:Paging
+        Grid.Row="2"
+        Total="{Binding Total}"
+        PageNumber="{Binding PageNumber, Mode=TwoWay}"
+        Capacity="{Binding Capacity, Mode=TwoWay}" />
+</Grid>
 ```
 
 ```csharp
@@ -187,10 +192,10 @@ resizes every control inside it.
 
 - Look changes are token overrides in a dictionary merged after Joufflu (or a registered
   theme), never edits to control styles.
-- Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}`),
+- Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}`),
   never from hex values, so Light / Dark and custom themes keep working.
 - Gaps between children use `Spacing.Gap`, not a `Margin` on each child.
-- Roles are named styles (`PrimaryButton`, `DangerButton`, `Card`, `H1`, `Muted`),
-  not local setters.
+- Roles are named styles (`PrimaryButton`, `DangerButton`, `Card`) and tokens (`Sizing.Size`
+  for text sizes, `Colors.MutedOpacity` for muted text), not literal values.
 - Modals and toasts go through the shared `Overlayer` and `ToastService`, never
   `MessageBox`.

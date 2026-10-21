@@ -163,7 +163,7 @@ public static class Animate
     }
 
     // Hidden, collapsed, or no longer in the tree: hold the clock rather than let it tick against
-    // nothing. It resumes mid-hop when the element comes back, which is invisible to the eye.
+    // nothing. It starts again from rest when the element comes back.
     private static void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
         if (sender is not UIElement element || element.GetValue(StateProperty) is not BounceState state)

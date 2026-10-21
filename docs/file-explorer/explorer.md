@@ -1,7 +1,8 @@
 ---
 title: Explorer
 parent: File explorer
-nav_order: 1
+grand_parent: Joufflu controls
+nav_order: 3
 ---
 
 # Explorer
