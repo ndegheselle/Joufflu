@@ -10,6 +10,7 @@
 - Remove `FormatTextBox.AllowSelectionOutsideGroups`, never set, and the `INotifyPropertyChanged` of `ComboBoxSearch`, which raised no change. **Breaking** for code setting the former or listening to the latter
 - Read the `ColorPicker` border thickness and spacing through `DynamicResource`, so they follow a theme or a runtime change of the `Dimensions` tokens
 - Move how a `ComboBoxSearch` reads its items as text and matches them against the search into an `ItemSearch` of its own, free of WPF and tested, shared with the tags of `ComboBoxTags`. This fixes a nested `DisplayMemberPath` (`Address.City`), which the search, the exact-match selection and the tags read as the item's `ToString()` instead of the value the list shows
+- Move what a `ColorPicker` makes of an edit, the colour seen as RGB, HSB, alpha and hex at once, into a `ColorModel` of its own, free of rendering and tested : every edit goes to the model and the control shows it back in one place, through `SetCurrentValue` so the bindings on its properties are kept. Pasting `#AARRGGBB` into the hex field now sets the alpha too, as its documentation said, where it was dropped; `#RRGGBB` still keeps the current alpha. Changing the alpha keeps the RGB as it was rather than rebuilding it from the HSB
 
 # Joufflu.Navigation (unreleased)
 
