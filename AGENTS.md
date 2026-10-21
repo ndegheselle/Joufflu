@@ -37,6 +37,7 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
 
 ## If you are working on this repository
 
+- Follow [`CODING_GUIDELINES.md`](CODING_GUIDELINES.md).
 - Layout: one project per package (`Joufflu`, `Joufflu.Inputs`, `Joufflu.Navigation`,
   `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Data`), `Joufflu.Samples` (the
   gallery), `Joufflu.Inputs.Tests`, `docs/` (Jekyll site, mirrors the gallery),
