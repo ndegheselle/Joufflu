@@ -220,8 +220,9 @@ Its view:
     x:Class="MyApp.Views.HomeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
-    <StackPanel Margin="24" toolkit:Spacing.Gap="12">
+    <StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="12">
         <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Home" />
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <Button Command="{Binding SayHelloCommand}" Content="Say hello" />
@@ -302,13 +303,14 @@ Its view (add a matching `DataTemplate` as in Step 2):
 <UserControl
     x:Class="MyApp.Views.DeleteConfirmView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel MinWidth="320">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
+    <StackPanel MinWidth="320" toolkit:Spacing.Gap="16">
         <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
-        <StackPanel Margin="0,16,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+        <StackPanel HorizontalAlignment="Right" toolkit:Spacing.Gap="8" Orientation="Horizontal">
             <Button Command="{Binding CancelCommand}" Content="Cancel"
                     Style="{StaticResource SecondaryButton}" />
-            <Button Margin="8,0,0,0" Command="{Binding DeleteCommand}" Content="Delete"
+            <Button Command="{Binding DeleteCommand}" Content="Delete"
                     Style="{StaticResource DangerButton}" />
         </StackPanel>
     </StackPanel>

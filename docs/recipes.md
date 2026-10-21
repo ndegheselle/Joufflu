@@ -27,7 +27,7 @@ A `Card` per group of settings, headings sized with `Sizing.Size`, `Spacing.Gap`
 instead of per-element margins, and a toast to confirm the save.
 
 ```xml
-<StackPanel Margin="24" toolkit:Spacing.Gap="16">
+<StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="16">
     <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Settings" />
 
     <Border Style="{StaticResource Card}">
@@ -107,17 +107,16 @@ ThemeManager.Instance.Theme = ThemeManager.Dark;
 model which slice to show. The view model filters, counts and slices.
 
 ```xml
-<DockPanel Margin="24">
-    <inputs:Search x:Name="Search" DockPanel.Dock="Top" Margin="0,0,0,12" />
+<Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="0,12">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
 
-    <nav:Paging
-        DockPanel.Dock="Bottom"
-        Margin="0,12,0,0"
-        Total="{Binding Total}"
-        PageNumber="{Binding PageNumber, Mode=TwoWay}"
-        Capacity="{Binding Capacity, Mode=TwoWay}" />
+    <inputs:Search x:Name="Search" />
 
-    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding PageItems}">
+    <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding PageItems}">
         <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
             <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
@@ -130,7 +129,13 @@ model which slice to show. The view model filters, counts and slices.
             </DataGridTemplateColumn>
         </DataGrid.Columns>
     </DataGrid>
-</DockPanel>
+
+    <nav:Paging
+        Grid.Row="2"
+        Total="{Binding Total}"
+        PageNumber="{Binding PageNumber, Mode=TwoWay}"
+        Capacity="{Binding Capacity, Mode=TwoWay}" />
+</Grid>
 ```
 
 ```csharp

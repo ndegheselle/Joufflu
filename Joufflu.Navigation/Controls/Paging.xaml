@@ -100,7 +100,6 @@
                             <ComboBox
                                 ItemStringFormat="{}{0} / page"
                                 ItemsSource="{Binding AvailableCapacities}"
-                                SelectedIndex="0"
                                 SelectedItem="{Binding Capacity}" />
                         </StackPanel>
                     </Grid>
