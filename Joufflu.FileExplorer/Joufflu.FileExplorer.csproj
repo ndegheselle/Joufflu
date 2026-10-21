@@ -33,4 +33,8 @@
     <ProjectReference Include="..\Joufflu\Joufflu.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Joufflu.FileExplorer.Tests" />
+  </ItemGroup>
+
 </Project>

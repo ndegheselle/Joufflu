@@ -36,6 +36,7 @@
 - Reload a directory in place : the nodes still on the disk are kept rather than replaced, so opening a folder again, or the reload after a rename, a paste or a delete, leaves the tree expanded and the list selection where they were. Only new entries are added, gone ones removed, and a file written meanwhile or renamed in case only is read again. The directory is read before its children are touched, so one that can't be read keeps what it showed
 - Remove `SystemIcons.ClearCache`, used nowhere. **Breaking** for code calling it
 - Make `ExplorerList.ViewPropertyKey` private : being public, it let any code set the read-only `View`. **Breaking** for code writing `View` through the key
+- Gather the path rules of the sources and the controls, comparing paths whatever their case, telling an ancestor or a direct child, and naming a copy or a new folder the way Windows does, in one place free of the disk and tested, where the drop target of `ExplorerNodesControl` had a copy of its own. Reopening the opened directory after one of its parents is renamed takes the path relative to the old name rather than cutting its length off, which relied on both paths being written alike
 
 # Joufflu (unreleased)
 

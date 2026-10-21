@@ -110,7 +110,7 @@ namespace Joufflu.FileExplorer.FileSystem
 
             // The opened directory was the renamed one or one of its children : it is opened again under its new path.
             if (Current != null && IsSameOrAncestor(e.OldFullPath, Current.Path))
-                OpenPath(e.FullPath + Current.Path[e.OldFullPath.Length..]);
+                OpenPath(ExplorerPaths.Rebase(Current.Path, e.OldFullPath, e.FullPath));
         });
 
         /// <summary>

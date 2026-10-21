@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu.Data.Tests", "Jouff
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu.Navigation.Tests", "Joufflu.Navigation.Tests\Joufflu.Navigation.Tests.csproj", "{272904B6-F3B7-47CB-9665-8CAC3053F1BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joufflu.FileExplorer.Tests", "Joufflu.FileExplorer.Tests\Joufflu.FileExplorer.Tests.csproj", "{66ADAF71-BF6E-44DE-8C09-946E9281BFB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{272904B6-F3B7-47CB-9665-8CAC3053F1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{272904B6-F3B7-47CB-9665-8CAC3053F1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{272904B6-F3B7-47CB-9665-8CAC3053F1BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66ADAF71-BF6E-44DE-8C09-946E9281BFB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66ADAF71-BF6E-44DE-8C09-946E9281BFB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66ADAF71-BF6E-44DE-8C09-946E9281BFB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66ADAF71-BF6E-44DE-8C09-946E9281BFB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +99,7 @@ Global
 		{A059FCB4-6A91-4B1B-935A-9EF2999EBC01} = {936FB544-0135-4B5B-A7F2-F4AAA2EB54A8}
 		{C4867518-88C9-4AC4-A749-5BB70F0D048C} = {936FB544-0135-4B5B-A7F2-F4AAA2EB54A8}
 		{272904B6-F3B7-47CB-9665-8CAC3053F1BB} = {936FB544-0135-4B5B-A7F2-F4AAA2EB54A8}
+		{66ADAF71-BF6E-44DE-8C09-946E9281BFB8} = {936FB544-0135-4B5B-A7F2-F4AAA2EB54A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0C9F7DF-8AFE-4B1A-BC6C-D18AA5E6D2DC}

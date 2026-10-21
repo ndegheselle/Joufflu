@@ -4,7 +4,6 @@ using Joufflu.FileExplorer.Nodes;
 using Joufflu.Helpers;
 using Joufflu.Toolkit;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -473,27 +472,8 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
             return false;
 
         target = directory;
-        files = [.. paths.Where(path => !IsInDirectory(path, directory.Path))];
+        files = [.. paths.Where(path => !ExplorerPaths.IsDirectChild(path, directory.Path))];
         return files.Count > 0;
-    }
-
-    /// <summary>
-    /// Whether a path is a node of a directory, the file system of Windows being case insensitive.
-    /// </summary>
-    private static bool IsInDirectory(string path, string directoryPath)
-    {
-        try
-        {
-            return string.Equals(
-                Path.GetDirectoryName(Path.TrimEndingDirectorySeparator(Path.GetFullPath(path))),
-                Path.TrimEndingDirectorySeparator(Path.GetFullPath(directoryPath)),
-                StringComparison.OrdinalIgnoreCase);
-        }
-        catch (ArgumentException)
-        {
-            // An invalid path is left to the transfer, which ignores what doesn't exist.
-            return false;
-        }
     }
 
     private void ItemsHost_MouseMove(object sender, MouseEventArgs e)

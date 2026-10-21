@@ -270,7 +270,8 @@ namespace Joufflu.FileExplorer.FileSystem
 
                     // Pasted next to itself : the shell refuses to copy a node onto itself, so the copy is named
                     // "File - Copy.ext" the way Windows does.
-                    destination = Path.Combine(targetPath, GetCopyName(targetPath, name, destinations));
+                    string copyName = ExplorerPaths.CopyName(name, candidate => IsTaken(Path.Combine(targetPath, candidate), destinations));
+                    destination = Path.Combine(targetPath, copyName);
                 }
 
                 sources.Add(source);
@@ -405,7 +406,9 @@ namespace Joufflu.FileExplorer.FileSystem
 
             try
             {
-                Directory.CreateDirectory(Path.Combine(parent.Path, GetNewDirectoryName(parent.Path)));
+                string parentPath = parent.Path;
+                string name = ExplorerPaths.NewDirectoryName(candidate => Exists(Path.Combine(parentPath, candidate)));
+                Directory.CreateDirectory(Path.Combine(parentPath, name));
             }
             catch (Exception exception)
             {
@@ -471,70 +474,24 @@ namespace Joufflu.FileExplorer.FileSystem
         }
 
         /// <summary>
-        /// "File - Copy.ext", then "File - Copy (2).ext" while the name is taken, the way Windows names a copy made
-        /// next to its source.
+        /// Whether a copy can't be made at <paramref name="path"/> : something is there already, or another copy of
+        /// the same batch is given that path. The whole batch is named before the shell creates any of it, so the
+        /// destinations given so far don't exist yet.
         /// </summary>
-        /// <param name="directoryPath">Directory the copy is made in.</param>
-        /// <param name="name">Name of the node being copied.</param>
-        /// <param name="taken">
-        /// Destinations of the same batch, none of which exists yet : the whole batch is named before the shell
-        /// creates any of it, so a name already given to another copy has to be skipped as well.
-        /// </param>
-        private static string GetCopyName(string directoryPath, string name, IReadOnlyList<string> taken)
-        {
-            string bareName = Path.GetFileNameWithoutExtension(name);
-            string extension = Path.GetExtension(name);
-
-            for (int index = 1; index < int.MaxValue; index++)
-            {
-                string number = index > 1 ? $" ({index})" : "";
-                string candidate = $"{bareName} - Copy{number}{extension}";
-                string candidatePath = Path.Combine(directoryPath, candidate);
-                if (!Exists(candidatePath) && !taken.Any(other => PathsEqual(other, candidatePath)))
-                    return candidate;
-            }
-
-            return name;
-        }
-
-        /// <summary>
-        /// "New folder", then "New folder (2)" while the name is taken, the way Windows does.
-        /// </summary>
-        private static string GetNewDirectoryName(string parentPath)
-        {
-            const string baseName = "New folder";
-
-            for (int index = 1; index < int.MaxValue; index++)
-            {
-                string candidate = index > 1 ? $"{baseName} ({index})" : baseName;
-                if (!Exists(Path.Combine(parentPath, candidate)))
-                    return candidate;
-            }
-
-            return baseName;
-        }
+        private static bool IsTaken(string path, IReadOnlyList<string> batchDestinations)
+            => Exists(path) || batchDestinations.Any(other => PathsEqual(other, path));
 
         private static bool Exists(string path) => File.Exists(path) || Directory.Exists(path);
 
         /// <summary>
         /// Whether two paths designate the same node, the file system of Windows being case insensitive.
         /// </summary>
-        protected static bool PathsEqual(string left, string right)
-            => string.Equals(Normalize(left), Normalize(right), StringComparison.OrdinalIgnoreCase);
+        protected static bool PathsEqual(string left, string right) => ExplorerPaths.AreEqual(left, right);
 
         /// <summary>
         /// Whether <paramref name="candidate"/> is <paramref name="path"/> itself or one of its parents.
         /// </summary>
-        /// <remarks>
-        /// Compared on whole segments, by ending both with a separator : a plain StartsWith would report "C:\foo2" as
-        /// being inside "C:\foo".
-        /// </remarks>
-        protected static bool IsSameOrAncestor(string candidate, string path)
-            => (Normalize(path) + Path.DirectorySeparatorChar).StartsWith(
-                Normalize(candidate) + Path.DirectorySeparatorChar,
-                StringComparison.OrdinalIgnoreCase);
-
-        private static string Normalize(string path) => Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+        protected static bool IsSameOrAncestor(string candidate, string path) => ExplorerPaths.IsSameOrAncestor(candidate, path);
 
         #endregion
     }
