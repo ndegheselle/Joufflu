@@ -34,6 +34,7 @@
 - Paste into the opened directory when `Paste` is given none, as its documentation said, rather than failing on a null target, and make `ExplorerControl.Source` nullable, every control doing nothing until a source is bound
 - Reload a directory in place : the nodes still on the disk are kept rather than replaced, so opening a folder again, or the reload after a rename, a paste or a delete, leaves the tree expanded and the list selection where they were. Only new entries are added, gone ones removed, and a file written meanwhile or renamed in case only is read again. The directory is read before its children are touched, so one that can't be read keeps what it showed
 - Remove `SystemIcons.ClearCache`, used nowhere. **Breaking** for code calling it
+- Make `ExplorerList.ViewPropertyKey` private : being public, it let any code set the read-only `View`. **Breaking** for code writing `View` through the key
 
 # Joufflu (unreleased)
 
