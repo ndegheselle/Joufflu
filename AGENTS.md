@@ -40,7 +40,8 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
 - Follow [`CODING_GUIDELINES.md`](CODING_GUIDELINES.md).
 - Layout: one project per package (`Joufflu`, `Joufflu.Inputs`, `Joufflu.Navigation`,
   `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Data`), `Joufflu.Samples` (the
-  gallery), one `<Package>.Tests` project per tested package, `docs/` (Jekyll site, mirrors the gallery),
+  gallery), one `<Project>.Tests` project per tested project (`Joufflu.Samples.Tests` covers the
+  gallery's theme generator), `docs/` (Jekyll site, mirrors the gallery),
   `plugins/joufflu/` (Claude Code skills).
 - Styles: `Styles/Natives/<Category>` restyles built-in WPF controls,
   `Styles/Controls/<Category>` styles Joufflu's own controls. One control per file.
