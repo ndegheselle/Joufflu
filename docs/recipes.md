@@ -23,17 +23,17 @@ xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 
 ## A settings page
 
-A `Card` per group of settings, headings from the typography scale, `Spacing.Gap`
+A `Card` per group of settings, headings sized with `Sizing.Size`, `Spacing.Gap`
 instead of per-element margins, and a toast to confirm the save.
 
 ```xml
 <StackPanel Margin="24" toolkit:Spacing.Gap="16">
-    <TextBlock Style="{StaticResource H1}" Text="Settings" />
+    <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Settings" />
 
     <Border Style="{StaticResource Card}">
         <StackPanel toolkit:Spacing.Gap="12">
-            <TextBlock Style="{StaticResource H4}" Text="General" />
-            <TextBlock Style="{StaticResource Muted}" Text="Applies to every project." />
+            <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="General" />
+            <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="Applies to every project." />
 
             <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
             <inputs:NumericUpDown Value="{Binding MaxItems, Mode=TwoWay}" />
@@ -190,7 +190,7 @@ resizes every control inside it.
 - Colours come from the theme (`{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}`),
   never from hex values, so Light / Dark and custom themes keep working.
 - Gaps between children use `Spacing.Gap`, not a `Margin` on each child.
-- Roles are named styles (`PrimaryButton`, `DangerButton`, `Card`, `H1`, `Muted`),
-  not local setters.
+- Roles are named styles (`PrimaryButton`, `DangerButton`, `Card`) and tokens (`Sizing.Size`
+  for text sizes, `Colors.MutedOpacity` for muted text), not literal values.
 - Modals and toasts go through the shared `Overlayer` and `ToastService`, never
   `MessageBox`.

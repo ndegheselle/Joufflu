@@ -9,7 +9,7 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Application shell" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Application shell" />
 
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"

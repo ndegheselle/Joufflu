@@ -65,7 +65,7 @@
         <!--  One size family: a base slider (two for paddings) + the value derived for each size  -->
         <DataTemplate x:Key="ScaleRowTemplate" DataType="{x:Type vm:ThemeScaleEntry}">
             <StackPanel Margin="0,3" toolkit:Spacing.Gap="0,6">
-                <TextBlock Style="{StaticResource H4}" Text="{Binding Label}" />
+                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Label}" />
                 <!--  Base value(s), the sliders every size is derived from  -->
                 <Grid toolkit:Spacing.Gap="10,0">
                     <Grid.ColumnDefinitions>
@@ -174,7 +174,7 @@
 
         <!--  Header  -->
         <StackPanel Grid.Row="0">
-            <TextBlock Style="{StaticResource H1}" Text="Customize theme" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Customize theme" />
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                 Text="Tweak colours and dimensions and watch the whole gallery update live. Copy or save the generated dictionary and merge it into your app after the Joufflu resources to apply it."
@@ -204,7 +204,7 @@
                         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                             <!--  Preset themes  -->
                             <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-                                <TextBlock Style="{StaticResource H2}" Text="Preset themes" />
+                                <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Preset themes" />
                                 <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ThemePreset}">
@@ -247,12 +247,12 @@
 
                             <!--  Colours  -->
                             <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-                                <TextBlock Style="{StaticResource H2}" Text="Colours" />
+                                <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Colours" />
                                 <ItemsControl ItemsSource="{Binding ColorGroups}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ThemeColorGroup}">
                                             <StackPanel Margin="0,0,0,10">
-                                                <TextBlock Style="{StaticResource H4}" Text="{Binding Header}" />
+                                                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Header}" />
                                                 <ItemsControl ItemTemplate="{StaticResource ColorRowTemplate}" ItemsSource="{Binding Colors}" />
                                             </StackPanel>
                                         </DataTemplate>
@@ -262,12 +262,12 @@
 
                             <!--  Dimensions  -->
                             <StackPanel toolkit:Spacing.Gap="0,10">
-                                <TextBlock Style="{StaticResource H2}" Text="Dimensions" />
+                                <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Dimensions" />
                                 <ItemsControl ItemsSource="{Binding DimensionGroups}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ThemeDimensionGroup}">
                                             <StackPanel Margin="0,0,0,10">
-                                                <TextBlock Style="{StaticResource H4}" Text="{Binding Header}" />
+                                                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Header}" />
                                                 <ItemsControl ItemTemplate="{StaticResource DimensionRowTemplate}" ItemsSource="{Binding Dimensions}" />
                                             </StackPanel>
                                         </DataTemplate>
@@ -293,7 +293,7 @@
                     <!--  Semantic swatches  -->
                     <Border Style="{StaticResource Card}">
                         <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock Style="{StaticResource H3}" Text="Palette" />
+                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Palette" />
                             <WrapPanel toolkit:Spacing.Gap="8,8">
                                 <Border
                                     Width="120"
@@ -368,7 +368,7 @@
                     <!--  Buttons  -->
                     <Border Style="{StaticResource Card}">
                         <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock Style="{StaticResource H3}" Text="Buttons" />
+                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Buttons" />
                             <WrapPanel toolkit:Spacing.Gap="8,8">
                                 <Button>Default</Button>
                                 <Button Style="{StaticResource PrimaryButton}">Primary</Button>
@@ -384,7 +384,7 @@
                     <!--  Sizes (one control per size variant so the height/font-size sliders have visible targets)  -->
                     <Border Style="{StaticResource Card}">
                         <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock Style="{StaticResource H3}" Text="Sizes" />
+                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Sizes" />
                             <WrapPanel VerticalAlignment="Center" toolkit:Spacing.Gap="8,8">
                                 <Button toolkit:Sizing.Size="xs" Style="{StaticResource PrimaryButton}">Extra small</Button>
                                 <Button toolkit:Sizing.Size="sm" Style="{StaticResource PrimaryButton}">Small</Button>
@@ -397,7 +397,7 @@
                     <!--  Inputs  -->
                     <Border Style="{StaticResource Card}">
                         <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock Style="{StaticResource H3}" Text="Inputs" />
+                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Inputs" />
                             <WrapPanel toolkit:Spacing.Gap="12,10">
                                 <TextBox Width="180" Text="Editable text" />
                                 <ComboBox Width="160" SelectedIndex="0">
@@ -431,7 +431,7 @@
                     <!--  Surface layers + badges  -->
                     <Border Style="{StaticResource Card}">
                         <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock Style="{StaticResource H3}" Text="Surfaces &amp; badges" />
+                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Surfaces &amp; badges" />
                             <Border Style="{StaticResource Card}">
                                 <StackPanel toolkit:Spacing.Gap="0,8">
                                     <TextBlock Text="Elevated surface (Background 100)" />
@@ -450,7 +450,7 @@
                     <!--  Generated dictionary  -->
                     <Border Style="{StaticResource Card}">
                         <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock Style="{StaticResource H3}" Text="Generated dictionary" />
+                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Generated dictionary" />
                             <Border Style="{StaticResource CardSecondary}">
                                 <TextBox
                                     MaxHeight="360"

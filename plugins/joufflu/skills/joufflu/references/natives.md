@@ -82,7 +82,7 @@ Named `Border` styles for padded, rounded surfaces:
 ```xml
 <Border Style="{StaticResource Card}">
     <StackPanel toolkit:Spacing.Gap="8">
-        <TextBlock Style="{StaticResource H4}" Text="Title" />
+        <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="Title" />
         <Border Style="{StaticResource CardSecondary}">
             <TextBlock Text="Nested" TextWrapping="Wrap" />
         </Border>
@@ -92,19 +92,28 @@ Named `Border` styles for padded, rounded surfaces:
 
 ## Typography
 
-Named `TextBlock` styles; an unstyled `TextBlock` is body text (`FontSizeMd`).
+No named text styles. A `TextBlock` takes its font size from `toolkit:Sizing.Size`
+(`xs`…`xl` → `Dimensions.FontSizeXs`…`FontSizeXl`; `md` keeps the inherited body size). The
+size is inherited, so a panel set to `sm`/`lg` sizes its text too. A heading is a size plus a
+`FontWeight`; muted text is dimmed with `Colors.MutedOpacity`, not given another colour.
 
-| Key | Role |
+| Role | Markup |
 |---|---|
-| `H1` … `H6` | Page title down to minor subheading |
-| `Lead` | Larger, lighter intro paragraph (`Foreground100`) |
-| `Muted` | Secondary text, dimmed (opacity 0.65) |
-| `Small` | Fine print, captions |
+| Page title | `toolkit:Sizing.Size="xl" FontWeight="Bold"` |
+| Section heading | `toolkit:Sizing.Size="lg" FontWeight="SemiBold"` |
+| Minor heading | `FontWeight="SemiBold"` |
+| Caption, fine print | `toolkit:Sizing.Size="xs"` |
+| Muted text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
 
 ```xml
-<TextBlock Style="{StaticResource H1}" Text="Settings" />
-<TextBlock Style="{StaticResource Muted}" Text="Changes apply immediately." />
+<TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Settings" />
+<TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+           Text="Changes apply immediately." />
 ```
+
+Inside a control template of your own, set `FontSize` from the token directly
+(`{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}`) rather than relying on the
+implicit `TextBlock` style.
 
 ## Icons — `FontIcon`
 

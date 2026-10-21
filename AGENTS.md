@@ -25,7 +25,7 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
   `ThemeManager.Instance.Initialize()` in `OnStartup`.
 - Never hardcode colours, margins or control heights. Use `joufflu:Brushes.*` /
   `joufflu:Dimensions.*` via `DynamicResource`, `toolkit:Spacing.Gap`,
-  `toolkit:Sizing.Size` and the named styles (`PrimaryButton`, `Card`, `H1`…).
+  `toolkit:Sizing.Size` (controls and text) and the named styles (`PrimaryButton`, `Card`…).
 - Customize through tokens, never by forking styles. Brand colours are `joufflu:Colors.*`
   (brushes follow), metrics are `joufflu:Dimensions.*`; override them in a dictionary
   merged after `Resources.xaml`, or register a whole palette with

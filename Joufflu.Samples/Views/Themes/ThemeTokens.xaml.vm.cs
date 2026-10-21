@@ -71,7 +71,7 @@ public class ThemeTokensViewModel : ObservableObject
                     Joufflu.Brushes.ForegroundBrush),
                 new TokenEntry(
                     "Foreground100",
-                    "Muted text: placeholders, hints, secondary labels. This is what the Lead typography style uses.",
+                    "Secondary colour the controls use for their own labels: column headers, inactive tabs, section titles. For muted text of your own, dim it with MutedOpacity instead.",
                     Joufflu.Brushes.Foreground100Brush),
                 new TokenEntry(
                     "Foreground200",
@@ -137,17 +137,22 @@ public class ThemeTokensViewModel : ObservableObject
             Joufflu.Brushes.DangerSoft100Brush),
     ];
 
-    /// <summary>The odd one out of <c>Joufflu.Colors</c>: a number rather than a colour.</summary>
+    /// <summary>The odd ones out of <c>Joufflu.Colors</c>: numbers rather than colours.</summary>
     public IReadOnlyList<TokenGroup> StateTokens { get; } =
     [
         new TokenGroup(
             "State",
-            "Not a colour, but it lives in Colors because it only exists to dim one.",
+            "Not colours, but they live in Colors because they only exist to dim one.",
             [
                 new TokenEntry(
                     "DisabledOpacity",
                     "Opacity applied to a whole control while IsEnabled is False (0.5). Disabled controls "
                     + "fade rather than switch to a dedicated palette, so a single key covers every control.",
+                    null),
+                new TokenEntry(
+                    "MutedOpacity",
+                    "Opacity of muted text: placeholders, hints, descriptions, captions (0.65). Muted text is "
+                    + "dimmed rather than given its own colour, so it follows the foreground it sits in.",
                     null),
             ]),
     ];
@@ -199,7 +204,8 @@ public class ThemeTokensViewModel : ObservableObject
 
         new TokenGroup(
             "Font sizes",
-            "The Lead and Small typography styles read these keys; the headings H1…H6 use fixed sizes (32, 26, 22, 18, 15, 13).",
+            "A TextBlock picks one through Sizing.Size (xs to xl; md keeps the inherited body size), like the controls do, "
+            + "so restyling the scale restyles the text.",
             [
                 new TokenEntry("FontSizeXs", "11"),
                 new TokenEntry("FontSizeSm", "12"),

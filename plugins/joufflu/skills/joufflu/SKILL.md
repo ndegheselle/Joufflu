@@ -10,7 +10,7 @@ description: >-
   the file explorer (`Joufflu.FileExplorer`), JSON data trees (`Joufflu.Data`:
   DataFill, DataEdit, DataDisplay, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
   (Sizing, Spacing.Gap, Derive, Tooltip, Animate, DropTarget/DragSource),
-  ThemedWindow, FontIcon/Lucide icons, named styles (PrimaryButton, Card, H1…) and
+  ThemedWindow, FontIcon/Lucide icons, named styles (PrimaryButton, Card…) and
   the design tokens (joufflu:Brushes / Colors / Dimensions). Use it whenever a
   project references Joufflu (a `PackageReference`/`ProjectReference` to Joufflu*,
   `xmlns:...="clr-namespace:Joufflu...;assembly=Joufflu..."`, `using Joufflu.*`,
@@ -152,9 +152,12 @@ C# namespaces (these are the real ones; some doc snippets are off):
   theme values.
 - **Spacing**: `toolkit:Spacing.Gap="8"` on the panel instead of margins on each child.
   Page padding: `{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}`.
-- **Size**: `toolkit:Sizing.Size="xs|sm|md|lg"` (inherited, `md` default); icon-only
+- **Size**: `toolkit:Sizing.Size="xs|sm|md|lg"` (`xl` too for text and icons; inherited, `md`
+  default); icon-only
   button: `toolkit:Sizing.IsSquare="True"`.
-- **Text**: `Style="{StaticResource H1}"`…`H6`, `Lead`, `Muted`, `Small`.
+- **Text**: size with `toolkit:Sizing.Size` (`xl` page title, `lg` section, `xs` caption) plus
+  `FontWeight` for headings; muted text with
+  `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"`. No named text styles.
 - **Surfaces**: `<Border Style="{StaticResource Card}">`, nested `CardSecondary`.
 - **Buttons**: `PrimaryButton`, `SecondaryButton`, `GhostButton`, `SuccessButton`,
   `InfoButton`, `WarningButton`, `DangerButton`, plus `Soft*` and `Outline*` variants.

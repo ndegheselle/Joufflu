@@ -20,7 +20,11 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel>
-                                <TextBlock Style="{StaticResource H2}" Text="{TemplateBinding Title}" />
+                                <TextBlock
+                                    FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}"
+                                    FontWeight="SemiBold"
+                                    Text="{TemplateBinding Title}"
+                                    TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="Desc"
                                     Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"

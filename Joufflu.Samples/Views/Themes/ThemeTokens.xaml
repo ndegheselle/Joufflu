@@ -158,7 +158,7 @@
         <!--  One family of keys: title, why it exists, then the keys themselves  -->
         <DataTemplate x:Key="TokenGroupTemplate" DataType="{x:Type vm:TokenGroup}">
             <StackPanel Margin="0,0,0,14" toolkit:Spacing.Gap="0,6">
-                <TextBlock Style="{StaticResource H4}" Text="{Binding Title}" />
+                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Title}" />
                 <TextBlock
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                     Text="{Binding Description}"
@@ -170,7 +170,7 @@
 
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Design tokens" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Design tokens" />
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                 Text="A theme is a collection of the keys below. Every control style reads them through DynamicResource, so a theme only has to redefine what it wants to change - anything it leaves out keeps the built-in value."
@@ -181,14 +181,14 @@
                 Code="{Binding UsageCode}"
                 Description="Keys are ComponentResourceKey statics, so they are typed rather than stringly named — a renamed key breaks the build instead of silently falling back at runtime." />
 
-            <TextBlock Style="{StaticResource H2}" Text="Colors" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Colors" />
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                 Text="Each colour exists twice: joufflu:Colors.XColor holds the Color, joufflu:Brushes.XBrush the SolidColorBrush built from it. Use the brush in the UI; the colour is there for gradients, animations and anything needing the raw value."
                 TextWrapping="Wrap" />
             <ItemsControl ItemTemplate="{StaticResource TokenGroupTemplate}" ItemsSource="{Binding ColorTokens}" />
 
-            <TextBlock Style="{StaticResource H4}" Text="Accents" />
+            <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="Accents" />
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                 Text="Six semantic families sharing one shape: the fill, the same fill for hover and pressed, and the content drawn on top of both. The first three tiles below are those three keys, the Aa showing the pairing each family exists for. The last two are brushes only, derived from the fill: the soft tint (soft buttons, selected rows) and its hover, drawn with the fill as text."
@@ -197,7 +197,7 @@
 
             <ItemsControl ItemTemplate="{StaticResource TokenGroupTemplate}" ItemsSource="{Binding StateTokens}" />
 
-            <TextBlock Style="{StaticResource H2}" Text="Dimensions" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Dimensions" />
             <TextBlock
                 Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
                 Text="joufflu:Dimensions holds the metrics. The values in parentheses are the built-in defaults — the Customize theme page edits them live, which is why styles must read them dynamically rather than baking a Thickness at parse time."

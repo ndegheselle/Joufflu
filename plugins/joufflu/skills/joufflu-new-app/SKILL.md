@@ -229,7 +229,7 @@ public partial class HomeViewModel : ObservableObject
              xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
              xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
     <StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="12">
-        <TextBlock Style="{StaticResource H1}" Text="Home" />
+        <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Home" />
         <Border Style="{StaticResource Card}">
             <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
                 <Button Command="{Binding SayHelloCommand}" Content="Say hello" Style="{StaticResource PrimaryButton}" />

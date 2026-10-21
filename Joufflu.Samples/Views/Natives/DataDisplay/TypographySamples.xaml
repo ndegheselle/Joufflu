@@ -12,32 +12,47 @@
     mc:Ignorable="d">
     <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Typography" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Typography" />
 
             <c:CodeExample
-                Title="Headings"
-                Code="{Binding HeadingsCode}"
-                Description="Named TextBlock styles form a heading scale from H1 down to H6. Apply them through the Style property.">
+                Title="Sizes"
+                Code="{Binding SizesCode}"
+                Description="A TextBlock takes its font size from Sizing.Size, like the controls: xs to xl read the FontSize tokens, md keeps the inherited body size. Sizing.Size is inherited, so a panel set to a size sizes the text inside it too.">
                 <StackPanel toolkit:Spacing.Gap="4">
-                    <TextBlock Style="{StaticResource H1}" Text="H1 — The quick brown fox" />
-                    <TextBlock Style="{StaticResource H2}" Text="H2 — The quick brown fox" />
-                    <TextBlock Style="{StaticResource H3}" Text="H3 — The quick brown fox" />
-                    <TextBlock Style="{StaticResource H4}" Text="H4 — The quick brown fox" />
-                    <TextBlock Style="{StaticResource H5}" Text="H5 — The quick brown fox" />
-                    <TextBlock Style="{StaticResource H6}" Text="H6 — The quick brown fox" />
+                    <TextBlock toolkit:Sizing.Size="xl" Text="xl — The quick brown fox" />
+                    <TextBlock toolkit:Sizing.Size="lg" Text="lg — The quick brown fox" />
+                    <TextBlock Text="md — The quick brown fox" />
+                    <TextBlock toolkit:Sizing.Size="sm" Text="sm — The quick brown fox" />
+                    <TextBlock toolkit:Sizing.Size="xs" Text="xs — The quick brown fox" />
                 </StackPanel>
             </c:CodeExample>
 
             <c:CodeExample
-                Title="Body text"
-                Code="{Binding BodyCode}"
-                Description="Lead introduces a section, Small is fine print, and Muted de-emphasizes secondary text. Plain text without a style is the default body size.">
+                Title="Headings"
+                Code="{Binding HeadingsCode}"
+                Description="A heading is a size and a weight: xl for a page title, lg for a section, the body size for a minor heading.">
+                <StackPanel toolkit:Spacing.Gap="4">
+                    <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Page title" />
+                    <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="Section" />
+                    <TextBlock FontWeight="SemiBold" Text="Minor heading" />
+                </StackPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Muted text"
+                Code="{Binding MutedCode}"
+                Description="Secondary text (hints, descriptions, captions) is dimmed with the MutedOpacity token rather than given a colour of its own, so it follows whatever foreground it sits in.">
                 <StackPanel toolkit:Spacing.Gap="8">
-                    <TextBlock Style="{StaticResource Lead}" Text="Lead — a larger, lighter introductory paragraph that sets up the content that follows." />
-                    <TextBlock Text="Default — the standard body text size used across the app." />
-                    <Separator />
-                    <TextBlock Style="{StaticResource Muted}" Text="Muted — secondary text, dimmed to sit quietly next to primary content." />
-                    <TextBlock Style="{StaticResource Small}" Text="Small — fine print, captions and footnotes." />
+                    <TextBlock Text="Default — the standard body text." />
+                    <TextBlock
+                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                        Text="Muted — secondary text, dimmed to sit quietly next to primary content."
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        toolkit:Sizing.Size="xs"
+                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                        Text="A muted caption: fine print, footnotes."
+                        TextWrapping="Wrap" />
                 </StackPanel>
             </c:CodeExample>
         </StackPanel>

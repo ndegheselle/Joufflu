@@ -39,7 +39,7 @@ Search the XAML (and code-behind that sets visuals) for:
 | `{StaticResource …}` pointing at a Joufflu token | Frozen at load; theme switch ignored |
 | Local `<Style TargetType="Button">` / `TextBox`… without `BasedOn` | Replaces the Joufflu style entirely |
 | `Margin` on every child of a panel | `Spacing.Gap` |
-| Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls | `Sizing.Size` / typography styles |
+| Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls or text | `Sizing.Size` |
 | `CornerRadius="4"`, `BorderThickness="1"` literals | Tokens |
 | `ToolTip="…"` | `toolkit:Tooltip.Content` |
 | `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `IOverlayContent`) |
@@ -71,7 +71,7 @@ Map by **role**, not by closest hue:
 | Inset panel inside a card | `CardSecondary` / `Brushes.BackgroundBrush` |
 | Hover / selected row | `Brushes.Background200Brush` (usually already done by the native style) |
 | Normal text | Remove (inherits `Foreground`) |
-| Grey/secondary text | `Style="{StaticResource Muted}"` or `Brushes.Foreground100Brush` |
+| Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
 | Borders, separators | `Brushes.BorderBrush` / `Brushes.Border100Brush` |
 | Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryContentBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
@@ -105,8 +105,8 @@ destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Ic
 - Page padding → `Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"`.
 - Control heights/font sizes/paddings → remove them; use `toolkit:Sizing.Size` on the
   control or its panel for a denser/larger area.
-- Headings → `H1`…`H6`, intro `Lead`, captions `Small`, secondary `Muted`; drop literal
-  `FontSize`/`FontWeight`.
+- Headings → `toolkit:Sizing.Size` (`xl` page title, `lg` section) plus `FontWeight`;
+  captions `Sizing.Size="xs"`; secondary text `Colors.MutedOpacity`; drop literal `FontSize`.
 - Literal `CornerRadius`/`BorderThickness` → `Dimensions.CornerRadius` /
   `Dimensions.BorderThickness` (DynamicResource), or `toolkit:Derive.*` for partial sides.
 

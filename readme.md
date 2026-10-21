@@ -58,7 +58,7 @@ existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
 | Section | Contents |
 |---|---|
 | **Themes** (`Joufflu`) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and live theme customization |
-| **Natives** (`Joufflu`) | WPF's built-in controls (buttons, text boxes, combo boxes, data grid, …) restyled to match the design system, plus the typography scale, `FontIcon` and the `Card` styles |
+| **Natives** (`Joufflu`) | WPF's built-in controls (buttons, text boxes, combo boxes, data grid, …) restyled to match the design system, plus text sizes through `Sizing.Size`, `FontIcon` and the `Card` styles |
 | **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, and the rules for building a custom input |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |

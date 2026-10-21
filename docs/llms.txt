@@ -21,7 +21,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 
 ## Native controls
 
-- [Typography](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/typography.md): the named text styles (`H1`, `H2`, ...).
+- [Typography](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/typography.md): text sized by `Sizing.Size` (`xs`…`xl` on the font-size tokens), headings as a size plus a weight, and muted text through `Colors.MutedOpacity`.
 - [Font icon](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/icons.md): `FontIcon` and the Lucide glyph set.
 - [Card](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/card.md): the `Card` and `CardSecondary` named `Border` styles.
 - [Buttons](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/buttons.md): default button plus named styles — solid, soft and outline variants, icon (`IsSquare`) buttons, and `Sizing.Size`.

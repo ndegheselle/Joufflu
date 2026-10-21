@@ -11,7 +11,7 @@ through `DynamicResource`, so a theme only has to redefine what it wants to chan
 leaves out keeps the built-in value.
 
 A theme registered with `ThemeManager` can define both: it is merged right after
-`Resources.xaml`, so its `Dimensions` keys (and `Colors.DisabledOpacity`) override the built-in
+`Resources.xaml`, so its `Dimensions` keys (and `Colors.DisabledOpacity` / `MutedOpacity`) override the built-in
 ones, and change with the theme. A dictionary merged after `Resources.xaml` still overrides
 every theme.
 
@@ -62,7 +62,7 @@ The suffix says how much the text recedes.
 | Key | Used for |
 |---|---|
 | `Foreground` | Default text and icon colour, on `Background` or `Background100`. |
-| `Foreground100` | Muted text: placeholders, hints, secondary labels. What the `Lead` typography style uses. |
+| `Foreground100` | Secondary colour the controls use for their own labels: column headers, inactive tabs, section titles. For muted text of your own, dim it with `MutedOpacity` instead. |
 | `Foreground200` | Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item. |
 
 ### Accents
@@ -93,6 +93,7 @@ The sample gallery renders them live against whichever theme is selected.
 | Key | Used for |
 |---|---|
 | `DisabledOpacity` | Opacity applied to a whole control while `IsEnabled` is `False` (`0.5`). Disabled controls fade rather than switch to a dedicated palette, so a single key covers every control. |
+| `MutedOpacity` | Opacity of muted text: placeholders, hints, descriptions, captions (`0.65`). Muted text is dimmed rather than given its own colour, so it follows the foreground it sits in. |
 
 ## Dimensions
 
@@ -137,8 +138,8 @@ the default written in the base styles, so only `xs`/`sm`/`lg` appear in the siz
 
 ### Font sizes
 
-The [typography](../natives/typography.html) styles `Lead` and `Small` read these keys; the
-headings `H1`…`H6` use fixed sizes (32, 26, 22, 18, 15, 13).
+A `TextBlock` picks one through [`Sizing.Size`](../natives/typography.html) (`xs` to `xl`; `md` keeps
+the inherited body size), like the controls do, so restyling the scale restyles the text.
 
 | Key | Value |
 |---|---|

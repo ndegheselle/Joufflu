@@ -8,7 +8,6 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  ==================== Overlay ====================  -->
@@ -61,8 +60,10 @@
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            Style="{StaticResource H4}"
-                            Text="{Binding Options.Title}" />
+                            FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}"
+                            FontWeight="SemiBold"
+                            Text="{Binding Options.Title}"
+                            TextWrapping="Wrap" />
 
                         <Button
                             x:Name="CloseButton"

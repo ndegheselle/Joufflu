@@ -4,18 +4,20 @@ namespace Joufflu.Samples.Views.Natives.DataDisplay;
 
 public class TypographySamplesViewModel : ObservableObject
 {
-    public string HeadingsCode =>
-        "<TextBlock Style=\"{StaticResource H1}\" Text=\"Heading 1\" />\n" +
-        "<TextBlock Style=\"{StaticResource H2}\" Text=\"Heading 2\" />\n" +
-        "<TextBlock Style=\"{StaticResource H3}\" Text=\"Heading 3\" />\n" +
-        "<TextBlock Style=\"{StaticResource H4}\" Text=\"Heading 4\" />\n" +
-        "<TextBlock Style=\"{StaticResource H5}\" Text=\"Heading 5\" />\n" +
-        "<TextBlock Style=\"{StaticResource H6}\" Text=\"Heading 6\" />";
+    public string SizesCode =>
+        "<TextBlock toolkit:Sizing.Size=\"xl\" Text=\"xl\" />\n" +
+        "<TextBlock toolkit:Sizing.Size=\"lg\" Text=\"lg\" />\n" +
+        "<TextBlock Text=\"md, the inherited body size\" />\n" +
+        "<TextBlock toolkit:Sizing.Size=\"sm\" Text=\"sm\" />\n" +
+        "<TextBlock toolkit:Sizing.Size=\"xs\" Text=\"xs\" />";
 
-    public string BodyCode =>
-        "<TextBlock Style=\"{StaticResource Lead}\" Text=\"Lead paragraph\" />\n" +
+    public string HeadingsCode =>
+        "<TextBlock toolkit:Sizing.Size=\"xl\" FontWeight=\"Bold\" Text=\"Page title\" />\n" +
+        "<TextBlock toolkit:Sizing.Size=\"lg\" FontWeight=\"SemiBold\" Text=\"Section\" />\n" +
+        "<TextBlock FontWeight=\"SemiBold\" Text=\"Minor heading\" />";
+
+    public string MutedCode =>
         "<TextBlock Text=\"Default body text\" />\n" +
-        "<Separator />\n" +
-        "<TextBlock Style=\"{StaticResource Muted}\" Text=\"Muted text\" />\n" +
-        "<TextBlock Style=\"{StaticResource Small}\" Text=\"Small text\" />";
+        "<TextBlock Opacity=\"{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}\"\n" +
+        "           Text=\"Muted text\" />";
 }
