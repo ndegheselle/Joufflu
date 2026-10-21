@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -14,17 +13,11 @@ namespace Joufflu.Inputs.Controls
     /// <summary>
     /// Inspired from : https://stackoverflow.com/a/41986141/10404482 
     /// </summary>
-    public partial class ComboBoxSearch : ComboBox, INotifyPropertyChanged
+    public partial class ComboBoxSearch : ComboBox
     {
         static ComboBoxSearch()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxSearch), new FrameworkPropertyMetadata(typeof(ComboBoxSearch)));
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public ICollectionView? SourceView { get; private set; }

@@ -7,6 +7,7 @@
 - Register `Value` once, on `SingleValueFormatTextBox<T>`, rather than on each of `NumericUpDown`, `DecimalUpDown` and `TimeSpanPicker`, and keep it in step with `Values` by comparing them rather than through flags : values already making the value are left as they are, so clearing one group of a `TimeSpanPicker` still keeps the others. The box writes `Value` and `Values` with `SetCurrentValue`, so typing no longer replaces a one-way binding a host set on them, which then stopped following its source. **Breaking** : `ConvertTo()` and `ConvertFrom()` become the protected `ToValues(value)` and `FromValues(values)`, and `Value` and `OnValueChanged` are no longer virtual
 - Declare the groups of a `FormatTextBox` as its content rather than in a format string : `IntegerGroup` and `DecimalGroup` the user types into, `FormatLiteral` text between them, with their options as properties checked by the XAML compiler and IntelliSense rather than parsed at runtime. The options take the names of an HTML number input and of .NET : `Min`, `Max`, `Step`, `StringFormat` (a standard numeric format string, `00` padding where `padded` and `length` did), `IsNullable`, `PromptChar` and `SelectsWhole`. No more `{}` escaping, nor `GlobalFormat` to repeat options across groups. **Breaking** : `Format` and `GlobalFormat` give way to `Parts`, so `Format="{}{max:23}h {max:59}m" GlobalFormat="numeric"` becomes `<format:IntegerGroup Max="23" />`, `<format:FormatLiteral Text="h " />`, `<format:IntegerGroup Max="59" />`, `<format:FormatLiteral Text="m" />` inside the box. `noGlobalSelection` becomes `SelectsWhole="False"`, `incrementDelta` `Step`, `nullable` `IsNullable`, `nullableChar` `PromptChar`, and `format:` a `StringFormat` without its leading colon
 - Let groups written in XAML replace the default group of `NumericUpDown`, `DecimalUpDown` and `TimeSpanPicker` rather than being added after it, so `<NumericUpDown><IntegerGroup Max="10" /></NumericUpDown>` bounds the number : their default groups are now `DefaultParts`, shown while `Parts` is empty, and `Parts` starts empty. Let Tab leave a `FormatTextBox` from its last group, and Shift+Tab from its first, instead of keeping the focus in the box
+- Remove `FormatTextBox.AllowSelectionOutsideGroups`, never set, and the `INotifyPropertyChanged` of `ComboBoxSearch`, which raised no change. **Breaking** for code setting the former or listening to the latter
 
 # Joufflu.Navigation (unreleased)
 
@@ -26,6 +27,7 @@
 - Name the two steps of a rename in the controls displaying nodes : `BeginRenameCommand` opens the editable name and `EndRenameCommand` closes it, handing a validated name over to the source's `RenameCommand`. They were `RenamingCommand` and `RenameCommand`, the latter easily mistaken for the source's. `IExplorerUi`, implemented by those controls alone, is gone : `ExplorerMenuContext` exposes `BeginRenameCommand` in place of `Ui`, so a context menu binds `{Binding BeginRenameCommand}`. **Breaking** for a context menu template binding `Ui.RenamingCommand`
 - Paste into the opened directory when `Paste` is given none, as its documentation said, rather than failing on a null target, and make `ExplorerControl.Source` nullable, every control doing nothing until a source is bound
 - Reload a directory in place : the nodes still on the disk are kept rather than replaced, so opening a folder again, or the reload after a rename, a paste or a delete, leaves the tree expanded and the list selection where they were. Only new entries are added, gone ones removed, and a file written meanwhile or renamed in case only is read again. The directory is read before its children are touched, so one that can't be read keeps what it showed
+- Remove `SystemIcons.ClearCache`, used nowhere. **Breaking** for code calling it
 
 # Joufflu (unreleased)
 
@@ -37,12 +39,14 @@
 - Size text like the controls : a `TextBlock` takes its font size from `Sizing.Size` (`xs` to `xl` on the `FontSize` tokens, `md` keeping the inherited size) through an implicit style, and muted text is dimmed with a new `Colors.MutedOpacity` token (0.65). The headings had fixed sizes that no font-size token reached. **Breaking** : the named `TextBlock` styles `H1` to `H6`, `Lead`, `Small` and `Muted` are gone, with `Typography.named.xaml`; a page title becomes `toolkit:Sizing.Size="xl" FontWeight="Bold"`, a section `Sizing.Size="lg" FontWeight="SemiBold"`, muted text `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"`
 - Remove `ThemedWindow.ShrinkTitleBarWhenMaximized`, which did nothing : its trigger set a `MinHeight` below the fixed title bar height. **Breaking** for code setting it
 - Let a theme registered with `ThemeManager` override the `Dimensions` (and `Colors.DisabledOpacity`), as the docs promised : the theme is now merged right after the dictionary holding the default dimensions (`Resources.xaml`) rather than first, where those defaults shadowed it. A dictionary merged after `Resources.xaml` still overrides every theme
+- Remove `ClipboardManager`, a clipboard listener unrelated to a design system that never released its window hook, and the unused `ThemedWindow.TransformToWindowCoordinates(Size)` overload. **Breaking** for code using either
 
 # Joufflu.Data (unreleased)
 
 - Start `Load` afresh on every node : a value or an object an earlier load forced to a manual value is no longer kept forced, and written back, when the new JSON doesn't call for it
 - Clone the items of a `DataArray` through `Add`, so a copied item keeps a key that can't be edited
 - Let `ToDataNode` read a schema property saying nothing of a type (`{}`) : it becomes an empty value, filled in as text and loading whatever JSON it is given, where building it threw `Can't set a default value for the type [Object]`
+- Remove the empty `Resources.xaml` and `Themes/Generic.xaml`, which held no style : only the core `Resources.xaml` needs merging, as documented
 
 # Joufflu.Data 0.8.2
 

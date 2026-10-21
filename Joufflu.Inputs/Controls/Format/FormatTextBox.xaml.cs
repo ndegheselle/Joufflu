@@ -58,8 +58,6 @@ namespace Joufflu.Inputs.Controls.Format
         #region Properties
 
         #region Options
-        public bool AllowSelectionOutsideGroups { get; set; } = false;
-
         private bool _showDeleteButton = true;
         public bool ShowDeleteButton
         {
@@ -180,7 +178,7 @@ namespace Joufflu.Inputs.Controls.Format
             base.OnSelectionChanged(e);
 
             _editor.Select(SelectionStart, SelectionLength);
-            if (_editor.SelectedGroupIndex < 0 && AllowSelectionOutsideGroups == false)
+            if (_editor.SelectedGroupIndex < 0)
             {
                 Keyboard.ClearFocus();
                 e.Handled = true;

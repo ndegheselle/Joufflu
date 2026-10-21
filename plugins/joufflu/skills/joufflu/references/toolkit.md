@@ -176,4 +176,3 @@ Declare them in resources yourself; none are registered under a key by the libra
 
 - `MoreVisualTreeHelper.FindParent<T>(child)`, `GetChild<T>(element, recursive)`,
   `GetChildren<T>(element, recursive)`, `FindSelfOrParent(origin, type)`, `GetParent(element)`.
-- `ClipboardManager(window)` with a `ClipboardChanged` event.
