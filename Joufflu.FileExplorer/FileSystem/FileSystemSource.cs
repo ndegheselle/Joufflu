@@ -32,6 +32,8 @@ namespace Joufflu.FileExplorer.FileSystem
 
         private readonly string rootDirectoryPath;
         private readonly IToastService? toasts;
+        /// <summary>Opens started so far : an open finishing after a newer one doesn't make its directory current.</summary>
+        private int openCount;
 
         [ObservableProperty]
         private IExplorerDirectory? root;
@@ -97,60 +99,103 @@ namespace Joufflu.FileExplorer.FileSystem
         }
 
         /// <summary>
-        /// Open a directory by loading all it's childrens and setting it as <see cref="Current"/>.
-        /// Recursif on <paramref name="depth"/> sub directories.
+        /// Open a directory : its children, and <paramref name="depth"/> levels of sub directories, are read off the
+        /// UI thread, then shown and the directory made the <see cref="Current"/> one.
         /// </summary>
-        protected virtual Task OpenDirectory(IExplorerDirectory directory, int depth)
+        protected virtual async Task OpenDirectory(IExplorerDirectory directory, int depth)
         {
+            // Opening another directory while this one is read makes this one stale : it is still shown, its read
+            // being as good as any, but it no longer becomes the current directory.
+            int open = ++openCount;
+            string path = directory.Path;
+
+            DirectoryRead read;
             try
             {
-                LoadDirectory(directory, depth);
+                // A slow or a network drive would freeze the window if read on the UI thread.
+                read = await Task.Run(() => ReadDirectory(path, depth));
             }
             catch (Exception exception) when (IsReadError(exception))
             {
                 // Unreadable : Current is left as it was, nothing is opened.
                 toasts?.Error(exception.Message);
-                return Task.CompletedTask;
+                return;
             }
 
-            Current = directory;
-            return Task.CompletedTask;
+            // Back on the thread Open was called from, the one the nodes are bound on.
+            ApplyDirectory(directory, read);
+            if (open == openCount)
+                Current = directory;
         }
 
         /// <summary>
-        /// Read a directory into its children, recursif on <paramref name="depth"/> sub directories, without making
-        /// it the <see cref="Current"/> one. Also used to reload a directory the shell just modified.
-        /// Throws when the directory itself can't be read, a sub directory that can't be read is left empty.
+        /// Reads a directory from the disk, and <paramref name="depth"/> levels of sub directories, so that the tree
+        /// shows an expander without reading again. Touches no node, so it runs on any thread. Throws when the
+        /// directory itself can't be read; a sub directory that can't be read is left out of the read.
         /// </summary>
-        protected virtual void LoadDirectory(IExplorerDirectory directory, int depth)
+        protected static DirectoryRead ReadDirectory(string path, int depth)
         {
-            // Read before touching the children : a directory that can't be read keeps the nodes it showed.
-            List<FileSystemInfo> entries = [.. new DirectoryInfo(directory.Path).EnumerateFileSystemInfos()];
+            List<FileSystemInfo> entries = [.. new DirectoryInfo(path).EnumerateFileSystemInfos()];
+            var subDirectories = new Dictionary<string, DirectoryRead>(StringComparer.OrdinalIgnoreCase);
+            if (depth <= 0)
+                return new DirectoryRead(entries, subDirectories);
 
+            foreach (DirectoryInfo subDirectory in entries.OfType<DirectoryInfo>())
+            {
+                try
+                {
+                    subDirectories[subDirectory.FullName] = ReadDirectory(subDirectory.FullName, depth - 1);
+                }
+                catch (Exception exception) when (IsReadError(exception))
+                {
+                    // Access denied, deleted meanwhile... : it keeps the nodes it showed.
+                }
+            }
+            return new DirectoryRead(entries, subDirectories);
+        }
+
+        /// <summary>
+        /// Shows what <see cref="ReadDirectory"/> read in a directory and in its sub directories, on the thread the
+        /// nodes are bound on. A derived source overrides it to show nodes of its own along with the ones read : it
+        /// is called for every directory of the read, sub directories included.
+        /// </summary>
+        protected virtual void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
+        {
             // The nodes still on the disk are kept rather than replaced, so a reload leaves the tree expanded below
             // them and the selection of a list where it was.
             var shown = new Dictionary<string, IExplorerNode>(StringComparer.OrdinalIgnoreCase);
             foreach (IExplorerNode node in directory.Children)
                 shown.TryAdd(node.Path, node);
 
-            List<IExplorerNode> read = [];
-            foreach (FileSystemInfo entry in entries)
+            List<IExplorerNode> nodes = [];
+            foreach (FileSystemInfo entry in read.Entries)
             {
                 IExplorerNode node = shown.TryGetValue(entry.FullName, out IExplorerNode? shownNode) && IsUnchanged(shownNode, entry)
                     ? shownNode
                     : CreateNode(entry, directory);
-                read.Add(node);
+                nodes.Add(node);
 
-                if (depth > 0 && node is IExplorerDirectory subDirectory)
-                    TryLoadDirectory(subDirectory, depth - 1);
+                if (node is IExplorerDirectory subDirectory && read.SubDirectories.TryGetValue(entry.FullName, out DirectoryRead? subRead))
+                    ApplyDirectory(subDirectory, subRead);
             }
 
-            List<IExplorerNode> removed = [.. directory.Children.Except(read)];
-            List<IExplorerNode> added = [.. read.Except(directory.Children)];
+            List<IExplorerNode> removed = [.. directory.Children.Except(nodes)];
+            List<IExplorerNode> added = [.. nodes.Except(directory.Children)];
             foreach (IExplorerNode node in removed)
                 directory.Children.Remove(node);
             foreach (IExplorerNode node in added)
                 directory.Children.Add(node);
+        }
+
+        /// <summary>
+        /// Reads a directory and shows it at once, without making it the <see cref="Current"/> one : for a directory
+        /// the source itself or the shell just modified. Throws when the directory itself can't be read, leaving
+        /// the nodes it showed.
+        /// </summary>
+        protected void LoadDirectory(IExplorerDirectory directory, int depth)
+        {
+            DirectoryRead read = ReadDirectory(directory.Path, depth);
+            ApplyDirectory(directory, read);
         }
 
         /// <summary>
@@ -495,4 +540,12 @@ namespace Joufflu.FileExplorer.FileSystem
 
         #endregion
     }
+
+    /// <summary>
+    /// What <see cref="FileSystemSource"/> read of a directory : its entries, and the read of each sub directory read
+    /// along with it, by full path. A sub directory that couldn't be read, or that was past the depth, has none.
+    /// </summary>
+    public sealed record DirectoryRead(
+        IReadOnlyList<FileSystemInfo> Entries,
+        IReadOnlyDictionary<string, DirectoryRead> SubDirectories);
 }

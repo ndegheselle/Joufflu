@@ -64,8 +64,9 @@ await Source.Open();   // must be called to load the root
   non-disk source.
 
 `FileSystemSource` extension points (protected virtual): `OpenDirectory`,
-`LoadDirectory(directory, depth)`, `CreateNode(FileSystemInfo, parent)`, `OpenFile`, plus
-`public virtual Open(node)`.
+`ApplyDirectory(directory, DirectoryRead)`, `CreateNode(FileSystemInfo, parent)`, `OpenFile`, plus
+`public virtual Open(node)`. Opening reads the disk off the UI thread (`ReadDirectory`), then
+calls `ApplyDirectory` on the UI thread for the directory and each sub directory read with it.
 
 ## Nodes
 
@@ -75,16 +76,16 @@ breadcrumb); `IExplorerFile` adds `Size`. Disk implementations:
 `FileSystemFile`, `FileSystemDirectory`.
 
 Custom (virtual) nodes: implement `IExplorerNode` (or the file/directory interfaces) and add
-them from an overridden `LoadDirectory`:
+them from an overridden `ApplyDirectory`:
 
 ```csharp
 public class VirtualFilesSource : FileSystemSource
 {
     public VirtualFilesSource(string root, IToastService? toasts) : base(root, toasts) { }
 
-    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
     {
-        base.LoadDirectory(directory, depth);
+        base.ApplyDirectory(directory, read);
         directory.Children.Add(new VirtualFile(directory, "notes.md"));
     }
 }

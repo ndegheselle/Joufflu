@@ -167,8 +167,20 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
         if (Source == null)
             return false;
 
-        Source.Open(node);
+        OpenNode(node);
         return true;
+    }
+
+    /// <summary>
+    /// Opens a node through the source without waiting for it, the source reading the disk off the UI thread. An
+    /// error the source raises still reaches the dispatcher rather than being lost with a task nobody awaits.
+    /// </summary>
+    protected async void OpenNode(IExplorerNode node)
+    {
+        if (Source == null)
+            return;
+
+        await Source.Open(node);
     }
 
     #endregion
@@ -435,12 +447,12 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     }
 
     [RelayCommand(CanExecute = nameof(CanDropFiles))]
-    private void DropFiles(DropData data)
+    private async Task DropFiles(DropData data)
     {
         if (Source == null || !TryGetDrop(data, out IExplorerDirectory? target, out IReadOnlyList<string> files))
             return;
 
-        Source.Transfer(files, target, isMove: false);
+        await Source.Transfer(files, target, isMove: false);
     }
 
     private bool CanDropFiles(DropData data) => TryGetDrop(data, out _, out _);

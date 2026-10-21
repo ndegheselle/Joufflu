@@ -37,6 +37,7 @@
 - Remove `SystemIcons.ClearCache`, used nowhere. **Breaking** for code calling it
 - Make `ExplorerList.ViewPropertyKey` private : being public, it let any code set the read-only `View`. **Breaking** for code writing `View` through the key
 - Gather the path rules of the sources and the controls, comparing paths whatever their case, telling an ancestor or a direct child, and naming a copy or a new folder the way Windows does, in one place free of the disk and tested, where the drop target of `ExplorerNodesControl` had a copy of its own. Reopening the opened directory after one of its parents is renamed takes the path relative to the old name rather than cutting its length off, which relied on both paths being written alike
+- Read a directory being opened off the UI thread, so a slow or a network drive no longer freezes the window : `FileSystemSource.OpenDirectory` reads with `ReadDirectory`, then shows what it read with `ApplyDirectory` on the UI thread, for the directory and each sub directory read with it. An open finishing after a newer one no longer makes its directory current. The controls and the watcher now wait for the opens and drops they start, so an error of a source reaches the dispatcher instead of being lost with the task. **Breaking** : `LoadDirectory` is no longer virtual, override `ApplyDirectory(directory, read)` instead to add nodes of your own, and `ExplorerNodesControl.DropFilesCommand` is an `IAsyncRelayCommand`
 
 # Joufflu (unreleased)
 

@@ -68,6 +68,11 @@ directory, associated to a path no file of the disk stands behind. A node type o
 application is templated like the others — its visual and its context menu are keyed on
 its type, and an extra column shows the state it carries.
 
+Opening a directory reads the disk off the UI thread, so a slow or a network drive doesn't
+freeze the window, then hands what it read to `ApplyDirectory` on the UI thread, once for
+the directory and once for each sub directory read along with it. Override it to add nodes
+of your own next to the ones read.
+
 ```csharp
 // A node type of the application : it carries a path, and a state no file of the disk has.
 // An IExplorerNode and not an IExplorerFile : it has no size, so the size column stays empty on its row.
@@ -95,9 +100,9 @@ public class VirtualFilesSource : FileSystemSource
 {
     public VirtualFilesSource(string rootDirectoryPath, IToastService? toasts) : base(rootDirectoryPath, toasts) { }
 
-    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
     {
-        base.LoadDirectory(directory, depth);
+        base.ApplyDirectory(directory, read);
         directory.Children.Add(GetVirtualFile(directory));
     }
 

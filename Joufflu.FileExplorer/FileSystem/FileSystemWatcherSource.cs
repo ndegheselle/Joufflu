@@ -182,7 +182,11 @@ namespace Joufflu.FileExplorer.FileSystem
         /// Opens the directory of a path, reading the disk down to it : a directory that has just appeared isn't
         /// loaded yet. Nothing is opened for a path outside of the root or that doesn't exist anymore.
         /// </summary>
-        private void OpenPath(string path)
+        /// <remarks>
+        /// Async void as it is called from the watcher's events : nothing waits for the open, and an error it raises
+        /// still reaches the dispatcher rather than being lost with the task.
+        /// </remarks>
+        private async void OpenPath(string path)
         {
             if (Root == null || !IsSameOrAncestor(Root.Path, path) || !Directory.Exists(path))
                 return;
@@ -204,7 +208,7 @@ namespace Joufflu.FileExplorer.FileSystem
                 directory = child;
             }
 
-            _ = Open(directory);
+            await Open(directory);
 
             IExplorerDirectory? FindChild(IExplorerDirectory parent)
                 => parent.Children.OfType<IExplorerDirectory>().FirstOrDefault(node => IsSameOrAncestor(node.Path, path));
