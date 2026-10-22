@@ -12,6 +12,7 @@
 - Move how a `ComboBoxSearch` reads its items as text and matches them against the search into an `ItemSearch` of its own, free of WPF and tested, shared with the tags of `ComboBoxTags`. This fixes a nested `DisplayMemberPath` (`Address.City`), which the search, the exact-match selection and the tags read as the item's `ToString()` instead of the value the list shows
 - Move what a `ColorPicker` makes of an edit, the colour seen as RGB, HSB, alpha and hex at once, into a `ColorModel` of its own, free of rendering and tested : every edit goes to the model and the control shows it back in one place, through `SetCurrentValue` so the bindings on its properties are kept. Pasting `#AARRGGBB` into the hex field now sets the alpha too, as its documentation said, where it was dropped; `#RRGGBB` still keeps the current alpha. Changing the alpha keeps the RGB as it was rather than rebuilding it from the HSB
 - Remove a single tag of a `ComboBoxTags` per Backspace : the key reaching the box itself went through two handlers, each removing the last tag
+- Give a `FilePicker` the height, font size and padding of its `Sizing.Size`, where only the padding followed it, and the hover, focus, disabled and error states of a `TextBox` : its border takes `Border100Brush` while the focus is within
 
 # Joufflu.Navigation (unreleased)
 
