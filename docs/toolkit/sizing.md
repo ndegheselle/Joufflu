@@ -9,7 +9,7 @@ nav_order: 1
 ## Sizing.Size
 
 The inherited `Size` attached property (`xs` / `sm` / `md` / `lg`) scales height,
-font size and padding. Since it inherits, setting it on a panel sizes every child.
+font size and padding. `xl` exists too, for icons only: it enlarges a `FontIcon`. Since it inherits, setting it on a panel sizes every child.
 
 ```xml
 <!-- Attached property drives height, font size and padding -->

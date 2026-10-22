@@ -11,10 +11,10 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Feedback"
     d:DataContext="{d:DesignInstance Type=vm:SpinnerSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
 
-            <TextBlock Style="{StaticResource H1}" Text="Spinner" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Spinner" />
             <c:CodeExample
                 Title="Loading indicator"
                 Code="{Binding Code}"

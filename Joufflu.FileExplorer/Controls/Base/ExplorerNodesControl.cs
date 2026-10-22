@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.Nodes;
 using Joufflu.Helpers;
+using Joufflu.Toolkit;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -41,7 +40,7 @@ public static class ExplorerNodeKindsExtensions
 /// </summary>
 [ObservableObject]
 [TemplatePart(Name = PartItemsHost, Type = typeof(ItemsControl))]
-public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerUi
+public abstract partial class ExplorerNodesControl : ExplorerControl
 {
     #region Dependency Properties
 
@@ -57,13 +56,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         typeof(ExplorerNodeKinds),
         typeof(ExplorerNodesControl),
         new FrameworkPropertyMetadata(ExplorerNodeKinds.All, OnVisibleNodesChanged));
-
-    public static readonly DependencyPropertyKey IsDragOverKey = DependencyProperty.RegisterReadOnly(
-        nameof(IsDragOver),
-        typeof(bool),
-        typeof(ExplorerNodesControl),
-        new FrameworkPropertyMetadata(false));
-    public static readonly DependencyProperty IsDragOverProperty = IsDragOverKey.DependencyProperty;
 
     #endregion
 
@@ -84,12 +76,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         set => SetValue(VisibleNodesProperty, value);
     }
 
-    public bool IsDragOver
-    {
-        get => (bool)GetValue(IsDragOverProperty);
-        private set => SetValue(IsDragOverKey, value);
-    }
-
     protected const string PartItemsHost = "PART_ItemsHost";
 
     /// <summary>
@@ -105,7 +91,10 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     [ObservableProperty]
     private IExplorerNode? renamedNode;
 
-    ICommand IExplorerUi.RenamingCommand => RenamingCommand;
+    /// <summary>
+    /// Source whose changes the control is listening to, see <see cref="TrackSource"/>.
+    /// </summary>
+    private IExplorerSource? trackedSource;
 
     protected ExplorerNodesControl()
     {
@@ -113,6 +102,10 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         this.ContextMenu = new ContextMenu();
         ContextMenuOpening += ExplorerNodesControl_ContextMenuOpening;
         MouseDoubleClick += ExplorerNodesControl_MouseDoubleClick;
+        Loaded += ExplorerNodesControl_Loaded;
+        Unloaded += ExplorerNodesControl_Unloaded;
+        // Files dropped anywhere on the control, its template lighting up on DropTarget.IsDragOver
+        DropTarget.SetCommand(this, DropFilesCommand);
     }
 
     public override void OnApplyTemplate()
@@ -121,30 +114,20 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
 
         if (ItemsHost != null)
         {
-            ItemsHost.Drop -= ItemsHost_Drop;
             ItemsHost.MouseMove -= ItemsHost_MouseMove;
             ItemsHost.PreviewMouseLeftButtonDown -= ItemsHost_PreviewMouseLeftButtonDown;
             ItemsHost.PreviewMouseLeftButtonUp -= ItemsHost_PreviewMouseLeftButtonUp;
             ItemsHost.QueryContinueDrag -= ItemsHost_QueryContinueDrag;
-
-            ItemsHost.DragEnter -= ItemsHost_DragEnter;
-            ItemsHost.DragOver -= ItemsHost_DragOver;
-            ItemsHost.DragLeave -= ItemsHost_DragLeave;
         }
 
         ItemsHost = GetTemplateChild(PartItemsHost) as ItemsControl;
 
         if (ItemsHost != null)
         {
-            ItemsHost.Drop += ItemsHost_Drop;
             ItemsHost.MouseMove += ItemsHost_MouseMove;
             ItemsHost.PreviewMouseLeftButtonDown += ItemsHost_PreviewMouseLeftButtonDown;
             ItemsHost.PreviewMouseLeftButtonUp += ItemsHost_PreviewMouseLeftButtonUp;
             ItemsHost.QueryContinueDrag += ItemsHost_QueryContinueDrag;
-
-            ItemsHost.DragEnter += ItemsHost_DragEnter;
-            ItemsHost.DragOver += ItemsHost_DragOver;
-            ItemsHost.DragLeave += ItemsHost_DragLeave;
         }
 
         UpdateSelectedNodes();
@@ -181,9 +164,30 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     /// <param name="container">Item container displaying <paramref name="node"/>.</param>
     protected virtual bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
     {
-        Source.Open(node);
+        if (Source == null)
+            return false;
+
+        OpenNode(node);
         return true;
     }
+
+    /// <summary>
+    /// Opens a node through the source without waiting for it, the source reading the disk off the UI thread. An
+    /// error the source raises still reaches the dispatcher rather than being lost with a task nobody awaits.
+    /// </summary>
+    protected async void OpenNode(IExplorerNode node)
+    {
+        if (Source == null)
+            return;
+
+        await Source.Open(node);
+    }
+
+    /// <summary>
+    /// Waits for an operation a shortcut started, which nothing else waits for, so that an error of the source
+    /// reaches the dispatcher rather than being lost with the task.
+    /// </summary>
+    private static async void Observe(Task operation) => await operation;
 
     #endregion
 
@@ -194,27 +198,50 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
     /// </summary>
     protected override void OnSourceChanged(IExplorerSource? previous, IExplorerSource? source)
     {
-        void OnSourcePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != nameof(IExplorerSource.Current))
-                return;
-
-            // Navigating away gives up the edition in progress, its node not being displayed anymore.
-            RenamedNode = null;
-            OnCurrentChanged();
-        }
-
         // The nodes of the previous source are gone, so is any edition of one of them.
         RenamedNode = null;
 
-        // Update the displayed nodes and track then source change
-        if (previous != null)
-            previous.PropertyChanged -= OnSourcePropertyChanged;
+        if (IsLoaded)
+            TrackSource(source);
         if (source != null)
-        {
-            source.PropertyChanged += OnSourcePropertyChanged;
             OnCurrentChanged();
-        }
+    }
+
+    // The source usually outlives the control (held by a view model) : it is only listened to while the control is
+    // loaded, so that it doesn't keep an unloaded control alive.
+    private void ExplorerNodesControl_Loaded(object sender, RoutedEventArgs e)
+    {
+        TrackSource(Source);
+        // The source may have navigated while the control was unloaded.
+        if (Source != null)
+            OnCurrentChanged();
+    }
+
+    private void ExplorerNodesControl_Unloaded(object sender, RoutedEventArgs e) => TrackSource(null);
+
+    /// <summary>
+    /// Listens to <paramref name="source"/> instead of the source listened to so far, null to stop listening.
+    /// </summary>
+    private void TrackSource(IExplorerSource? source)
+    {
+        if (trackedSource == source)
+            return;
+
+        if (trackedSource != null)
+            trackedSource.PropertyChanged -= OnSourcePropertyChanged;
+        trackedSource = source;
+        if (trackedSource != null)
+            trackedSource.PropertyChanged += OnSourcePropertyChanged;
+    }
+
+    private void OnSourcePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(IExplorerSource.Current))
+            return;
+
+        // Navigating away gives up the edition in progress, its node not being displayed anymore.
+        RenamedNode = null;
+        OnCurrentChanged();
     }
 
     /// <summary>
@@ -236,25 +263,28 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
 
     #region Rename
 
+    // The rest of the rename lives in Rename/ : the editable name (ExplorerRename.xaml), the behaviour of its box
+    // (ExplorerRename) and the trigger showing it (IsRenamedConverter).
+
     /// <summary>
     /// Starts the edition of the name of a node, null giving up the one in progress : the control displays an editable
-    /// name in place of that node until <see cref="Rename"/> ends it.
+    /// name in place of that node until <see cref="EndRename"/> ends it.
     /// </summary>
     [RelayCommand]
-    private void Renaming(IExplorerNode? node) => RenamedNode = node;
+    private void BeginRename(IExplorerNode? node) => RenamedNode = node;
 
     /// <summary>
     /// Ends the edition, <paramref name="rename"/> being null when it has been given up : the control closes its
     /// editable name in either case, and only hands a validated one over to the <see cref="ExplorerControl.Source"/>.
     /// </summary>
     [RelayCommand]
-    private void Rename(ExplorerNodeRename? rename)
+    private void EndRename(ExplorerNodeRename? rename)
     {
         RenamedNode = null;
         if (rename == null)
             return;
 
-        Source?.RenameCommand.Execute(rename);
+        Source?.Rename(rename.Node, rename.Name);
     }
 
     #endregion
@@ -271,35 +301,38 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
 
         // An already handled key has been acted on by the host (the navigation keys of a list for instance), and the
         // keys typed in a name being edited belong to that edition.
-        if (e.Handled || IsInRenameBox(e.OriginalSource))
+        if (e.Handled || Source == null || IsInRenameBox(e.OriginalSource))
             return;
 
-        // Shortcuts
+        // Paste goes to the current directory, whatever is selected
+        if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V)
+        {
+            Observe(Source.Paste(Source.Current));
+            e.Handled = true;
+            return;
+        }
+
+        // Shortcuts acting on the selection
         IReadOnlyList<IExplorerNode> nodes = GetSelectedNodes();
 
         if (nodes.Count > 0)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C){
-                Source.CopyCommand.Execute(nodes); 
+                Source.Copy(nodes);
                 e.Handled = true;
             }
             else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.X){
-                Source.CutCommand.Execute(nodes); 
+                Source.Cut(nodes);
                 e.Handled = true;
             }
             else if(e.Key == Key.Delete){
-                Source.RemoveCommand.Execute(nodes); 
+                Observe(Source.Remove(nodes));
                 e.Handled = true;
             }
             else if(e.Key == Key.F2){
-                Renaming(nodes.First()); 
+                BeginRename(nodes.First()); 
                 e.Handled = true;
             }
-
-        }
-        else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V){
-            Source.PasteCommand.Execute(Source.Current); 
-            e.Handled = true;
         }
     }
     #endregion
@@ -343,7 +376,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         else
         {
             // Outside of any node : the menu of the opened folder itself.
-            target = Source.Current;
+            target = Source?.Current;
             nodes = target == null ? [] : [target];
             scope = MenuScope.None;
         }
@@ -363,7 +396,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         }
 
         var element = (FrameworkElement)sender;
-        menu.DataContext = new ExplorerMenuContext(Source, this, nodes);
+        menu.DataContext = new ExplorerMenuContext(Source, BeginRenameCommand, nodes);
         element.ContextMenu = menu;
     }
     #endregion
@@ -419,62 +452,46 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
         _isCanceled = false;
     }
 
-    private void ItemsHost_Drop(object sender, DragEventArgs e)
+    [RelayCommand(CanExecute = nameof(CanDropFiles))]
+    private async Task DropFiles(DropData data)
     {
-        if (!TryGetDrop(e, out IExplorerDirectory? target, out IReadOnlyList<string> files))
+        if (Source == null || !TryGetDrop(data, out IExplorerDirectory? target, out IReadOnlyList<string> files))
             return;
 
-        Source.Transfer(files, target, isMove: false);
+        await Source.Transfer(files, target, isMove: false);
     }
+
+    private bool CanDropFiles(DropData data) => TryGetDrop(data, out _, out _);
 
     /// <summary>
     /// Directory a drop would land in : the one under the pointer, or the opened one anywhere else.
     /// </summary>
-    private IExplorerDirectory? GetDropTarget(DragEventArgs e)
-        => (e.OriginalSource as FrameworkElement)?.DataContext as IExplorerDirectory ?? Source.Current;
+    private IExplorerDirectory? GetDropTarget(DropData data)
+        => (data.Target.InputHitTest(data.Position) as FrameworkElement)?.DataContext as IExplorerDirectory ?? Source?.Current;
 
     /// <summary>
     /// Target and dropped paths of a drag, false when it has nothing to transfer : the paths already in the target
     /// directory are left out, so that dragging a node around the folder it is displayed in doesn't copy it next to
     /// itself.
     /// </summary>
-    private bool TryGetDrop(DragEventArgs e, [NotNullWhen(true)] out IExplorerDirectory? target, out IReadOnlyList<string> files)
+    private bool TryGetDrop(DropData data, [NotNullWhen(true)] out IExplorerDirectory? target, out IReadOnlyList<string> files)
     {
         target = null;
         files = [];
 
-        if (e.Data.GetDataPresent(DataFormats.FileDrop) == false)
+        if (data.GetDataPresent(DataFormats.FileDrop) == false)
             return false;
 
-        IExplorerDirectory? directory = GetDropTarget(e);
+        IExplorerDirectory? directory = GetDropTarget(data);
         if (directory == null)
             return false;
 
-        if (e.Data.GetData(DataFormats.FileDrop) is not string[] paths)
+        if (data.GetData(DataFormats.FileDrop) is not string[] paths)
             return false;
 
         target = directory;
-        files = [.. paths.Where(path => !IsInDirectory(path, directory.Path))];
+        files = [.. paths.Where(path => !ExplorerPaths.IsDirectChild(path, directory.Path))];
         return files.Count > 0;
-    }
-
-    /// <summary>
-    /// Whether a path is a node of a directory, the file system of Windows being case insensitive.
-    /// </summary>
-    private static bool IsInDirectory(string path, string directoryPath)
-    {
-        try
-        {
-            return string.Equals(
-                Path.GetDirectoryName(Path.TrimEndingDirectorySeparator(Path.GetFullPath(path))),
-                Path.TrimEndingDirectorySeparator(Path.GetFullPath(directoryPath)),
-                StringComparison.OrdinalIgnoreCase);
-        }
-        catch (ArgumentException)
-        {
-            // An invalid path is left to the transfer, which ignores what doesn't exist.
-            return false;
-        }
     }
 
     private void ItemsHost_MouseMove(object sender, MouseEventArgs e)
@@ -503,31 +520,6 @@ public abstract partial class ExplorerNodesControl : ExplorerControl, IExplorerU
             _isCanceled = true;
             e.Action = DragAction.Cancel;
         }
-    }
-
-    private int _enterCount;
-    private void ItemsHost_DragEnter(object sender, DragEventArgs e)
-    {
-        _enterCount++;
-        ItemsHost_DragOver(sender, e);
-    }
-    private void ItemsHost_DragOver(object sender, DragEventArgs e)
-    {
-        if (!TryGetDrop(e, out _, out _))
-        {
-            e.Effects = DragDropEffects.None;
-            e.Handled = true;
-            IsDragOver = false;
-            return;
-        }
-
-        IsDragOver = true;
-    }
-    private void ItemsHost_DragLeave(object sender, DragEventArgs e)
-    {
-        _enterCount = Math.Max(0, _enterCount - 1);
-        if (_enterCount == 0)
-            IsDragOver = false;
     }
 
     /// <summary>

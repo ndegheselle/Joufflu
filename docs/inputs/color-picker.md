@@ -1,6 +1,7 @@
 ---
 title: Color picker
 parent: Inputs
+grand_parent: Joufflu controls
 nav_order: 7
 ---
 
@@ -21,4 +22,5 @@ The popup provides:
 - a **saturation / brightness** square you can drag,
 - a **hue** slider,
 - an **alpha** slider (checkerboard behind a transparent → opaque ramp),
-- an editable **hex** field and an **opacity** percentage.
+- an editable **hex** field and an **opacity** percentage. A `#RRGGBB` hex keeps the
+  opacity, a pasted `#AARRGGBB` sets it too.

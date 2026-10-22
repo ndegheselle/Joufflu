@@ -3,11 +3,12 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.FileSystem;
+using Joufflu.FileExplorer.Nodes;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
-public class ExplorerSourcesSamplesViewModel : ObservableObject
+public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
 {
     /// <summary>Directory the watched sample writes into, emptied by the button of the sample.</summary>
     private readonly string watchedDirectoryPath = Path.Combine(Path.GetTempPath(), "Joufflu.Samples.Watcher");
@@ -18,7 +19,7 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
     public IExplorerSource Source { get; private set; }
 
     /// <summary>The disk, kept in step with it : what the buttons write shows up without a refresh.</summary>
-    public IExplorerSource WatcherSource { get; private set; }
+    public FileSystemWatcherSource WatcherSource { get; private set; }
 
     /// <summary>A source of the application, see <see cref="VirtualFilesSource"/>.</summary>
     public IExplorerSource VirtualSource { get; private set; }
@@ -31,7 +32,9 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
     public string FileSystemSourceCode =>
         """
         // toasts is an injected IToastService, null is accepted
-        public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+        public IExplorerSource Source { get; }
+        // in the constructor, where toasts is in scope
+        Source = new FileSystemSource(@"C:\Projects", toasts);
         // ...
         await Source.Open();
         """;
@@ -39,7 +42,9 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
     public string FileSystemWatcherSourceCode =>
         """
         // Same source, watching the disk : dispose it to stop watching.
-        public IExplorerSource Source { get; } = new FileSystemWatcherSource(@"C:\Projects", toasts);
+        public IExplorerSource Source { get; }
+        // in the constructor, where toasts is in scope
+        Source = new FileSystemWatcherSource(@"C:\Projects", toasts);
         // ...
         await Source.Open();
         """;
@@ -80,9 +85,9 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
         // A source hands its own nodes over along with the ones it reads.
         public class VirtualFilesSource : FileSystemSource
         {
-            protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+            protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
             {
-                base.LoadDirectory(directory, depth);
+                base.ApplyDirectory(directory, read);
                 directory.Children.Add(GetVirtualFile(directory));
             }
 
@@ -114,7 +119,7 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
                     <ContextMenu>
                         <MenuItem Header="Pinned" IsCheckable="True"
                                   IsChecked="{Binding Node.IsPinned, Mode=TwoWay}" />
-                        <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                        <MenuItem Header="Copy path" Command="{Binding CopyPathCommand}"
                                   CommandParameter="{Binding Node}" />
                     </ContextMenu>
                 </DataTemplate>
@@ -155,4 +160,6 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject
                 Directory.Delete(path, true);
         });
     }
+
+    public void Dispose() => WatcherSource.Dispose();
 }

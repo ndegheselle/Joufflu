@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Joufflu.Feedback;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.FileSystem;
+using Joufflu.FileExplorer.Nodes;
 
 namespace Joufflu.Samples.Views.FileExplorer;
 
@@ -22,8 +22,8 @@ public class VirtualFile : ObservableObject, IExplorerNode
     public DateTime ModifiedAt { get; }
 
     /// <summary>
-    /// Directory the virtual file belongs to. Settable : a directory is read again into new instances whenever its
-    /// parent is reloaded, and the virtual file outlives that reload.
+    /// Directory the virtual file belongs to. Settable : a directory changed on the disk is read again into a new
+    /// instance, and the virtual file outlives it.
     /// </summary>
     public IExplorerDirectory? Parent { get; set; }
 
@@ -71,9 +71,9 @@ public class VirtualFilesSource : FileSystemSource
     }
 
     /// <summary>Adds the virtual file of a directory to the nodes read from the disk.</summary>
-    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
     {
-        base.LoadDirectory(directory, depth);
+        base.ApplyDirectory(directory, read);
         directory.Children.Add(GetVirtualFile(directory));
     }
 

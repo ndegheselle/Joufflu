@@ -10,9 +10,9 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     d:DataContext="{d:DesignInstance Type=local:TreeViewSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Tree view" />
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Tree view" />
 
             <c:CodeExample
                 Title="Hierarchy"
@@ -31,7 +31,7 @@
                 Title="Sizes"
                 Code="{Binding SizesCode}"
                 Description="The inherited Sizing.Size attached property scales the expander, indentation and text together.">
-                <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" Orientation="Horizontal">
+                <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Orientation="Horizontal">
                     <TreeView
                         Height="140"
                         toolkit:Sizing.Size="xs"

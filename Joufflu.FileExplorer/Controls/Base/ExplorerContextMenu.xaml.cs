@@ -1,8 +1,9 @@
 using System.Windows;
-﻿using System.Windows.Input;
+using System.Windows.Input;
 using System.Windows.Markup;
-using Joufflu.FileExplorer.Data;
-using Joufflu.FileExplorer.Sources;
+using CommunityToolkit.Mvvm.Input;
+using Joufflu.FileExplorer.FileSystem;
+using Joufflu.FileExplorer.Nodes;
 
 namespace Joufflu.FileExplorer.Controls.Base
 {
@@ -48,37 +49,18 @@ namespace Joufflu.FileExplorer.Controls.Base
     }
 
     /// <summary>
-    /// A control displaying explorer nodes, for what belongs to it rather than to its <see cref="IExplorerSource"/> :
-    /// the edition of a name happens in the control the user started it in, so that another control displaying the
-    /// same node doesn't open a box of its own.
+    /// Data context of the context menus of an <see cref="ExplorerNodesControl"/> : the commands of the menu items,
+    /// run on the source, and the nodes the menu was opened on.
     /// </summary>
-    public interface IExplorerUi
-    {
-        /// <summary>
-        /// Node whose name is being edited, null while none is. The control replaces the name of that node with an
-        /// editable one, so that a rename is typed where the node is displayed.
-        /// </summary>
-        IExplorerNode? RenamedNode { get; }
-
-        /// <summary>
-        /// Starts the edition of the name of the node given as a parameter, null giving up the one in progress. Ended
-        /// by the control itself, which hands a validated name over to <see cref="IExplorerSource.RenameCommand"/>.
-        /// </summary>
-        ICommand RenamingCommand { get; }
-    }
-
-    /// <summary>
-    /// Data context of the context menus of an <see cref="ExplorerList"/>, gives access to the commands of the
-    /// loader and to the nodes the menu was opened on.
-    /// </summary>
-    public class ExplorerMenuContext
+    public partial class ExplorerMenuContext
     {
         public IExplorerSource? Source { get; }
 
         /// <summary>
-        /// Control the menu was opened in, null for one that has no rename UI of its own.
+        /// Starts renaming the node given as a parameter in the control the menu was opened in : the name is typed
+        /// where the node is displayed, see <see cref="ExplorerNodesControl.BeginRenameCommand"/>.
         /// </summary>
-        public IExplorerUi? Ui { get; }
+        public ICommand BeginRenameCommand { get; }
 
         /// <summary>
         /// Every selected node, the menu was opened on the first one.
@@ -90,11 +72,80 @@ namespace Joufflu.FileExplorer.Controls.Base
         /// </summary>
         public IExplorerNode? Node => Nodes.Count == 1 ? Nodes[0] : null;
 
-        public ExplorerMenuContext(IExplorerSource? source, IExplorerUi? ui, IReadOnlyList<IExplorerNode> nodes)
+        public ExplorerMenuContext(IExplorerSource? source, ICommand beginRenameCommand, IReadOnlyList<IExplorerNode> nodes)
         {
-            Ui = ui;
+            BeginRenameCommand = beginRenameCommand;
             Source = source;
             Nodes = nodes;
         }
+
+        #region Operations of the source
+
+        [RelayCommand]
+        private async Task Open(IExplorerNode? node)
+        {
+            if (Source != null && node != null)
+                await Source.Open(node);
+        }
+
+        /// <summary>Copies the nodes the menu was opened on.</summary>
+        [RelayCommand]
+        private void Copy() => Source?.Copy(Nodes);
+
+        /// <summary>Cuts the nodes the menu was opened on.</summary>
+        [RelayCommand]
+        private void Cut() => Source?.Cut(Nodes);
+
+        /// <summary>Removes the nodes the menu was opened on.</summary>
+        [RelayCommand]
+        private async Task Remove()
+        {
+            if (Source != null)
+                await Source.Remove(Nodes);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanPaste))]
+        private async Task Paste(IExplorerDirectory? target)
+        {
+            if (Source != null)
+                await Source.Paste(target);
+        }
+
+        private bool CanPaste() => Source?.CanPaste() == true;
+
+        [RelayCommand]
+        private void CreateDirectory(IExplorerDirectory? parent) => Source?.CreateDirectory(parent);
+
+        #endregion
+
+        #region Operations of the disk
+
+        // Only a disk source knows where its nodes are in the Windows explorer : the items are disabled for others.
+        private FileSystemSource? DiskSource => Source as FileSystemSource;
+
+        private bool IsOnDisk() => DiskSource != null;
+
+        [RelayCommand(CanExecute = nameof(IsOnDisk))]
+        private void OpenInExplorer(IExplorerNode? node)
+        {
+            if (node != null)
+                DiskSource?.OpenInExplorer(node);
+        }
+
+        [RelayCommand(CanExecute = nameof(IsOnDisk))]
+        private void OpenWithDefault(IExplorerFile? file)
+        {
+            if (file != null)
+                DiskSource?.OpenWithDefault(file);
+        }
+
+        [RelayCommand(CanExecute = nameof(IsOnDisk))]
+        private void CopyPath(IExplorerNode? node)
+        {
+            if (node != null)
+                DiskSource?.CopyPath(node);
+        }
+
+        #endregion
     }
 }

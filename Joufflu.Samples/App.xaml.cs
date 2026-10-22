@@ -1,10 +1,10 @@
-﻿using Joufflu.Samples.ViewModels;
-using Joufflu.Themes;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
+using Joufflu.Samples.ViewModels;
+using Joufflu.Themes;
 
 namespace Joufflu.Samples
 {
@@ -13,7 +13,7 @@ namespace Joufflu.Samples
     /// </summary>
     public partial class App : Application
     {
-        private AppViewModel? appViewModel;
+        private ShellViewModel? shellViewModel;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -32,6 +32,7 @@ namespace Joufflu.Samples
             RegisterTheme("Nord", isDark: false);
             RegisterTheme("Synthwave", isDark: true);
             RegisterTheme("Dracula", isDark: true);
+            RegisterTheme("Debug", isDark: true);
 
             // The ThemeManager does not persist the selection itself — each app saves the parameters it cares
             // about however it likes. Here: restore the saved theme name, then keep it in sync on every change.
@@ -43,10 +44,18 @@ namespace Joufflu.Samples
             // Insert the current theme's dictionary before any window is shown.
             ThemeManager.Instance.Initialize();
 
-            appViewModel = new AppViewModel();
+            shellViewModel = new ShellViewModel();
+            // Draws each page and overlay content with its view, wherever it is shown.
+            Resources.MergedDictionaries.Add(shellViewModel.ViewTemplates);
 
-            MainWindow mainWindow = new MainWindow(appViewModel);
+            MainWindow mainWindow = new MainWindow(shellViewModel);
             mainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            shellViewModel?.Dispose();
+            base.OnExit(e);
         }
 
         /// <summary>Registers a theme dictionary shipped under <c>Themes/&lt;name&gt;.xaml</c>.</summary>
@@ -124,10 +133,10 @@ namespace Joufflu.Samples
         {
             try
             {
-                appViewModel?.Toasts.Error("An unexpected error happend ...", "Ooops");
+                shellViewModel?.Toasts.Error("An unexpected error happend ...", "Ooops");
             }
             catch
-            {}
+            { }
         }
     }
 }

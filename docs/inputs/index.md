@@ -1,6 +1,7 @@
 ---
 title: Inputs
-nav_order: 4
+parent: Joufflu controls
+nav_order: 2
 has_children: true
 ---
 
@@ -20,9 +21,11 @@ inputs.
   sliders.
 - **Dropdown** — attached properties opening a popup of any content off a `ToggleButton`.
 
-All snippets assume the `inputs` and `joufflu` XML namespaces:
+All snippets assume these XML namespaces:
 
 ```xml
 xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
 ```

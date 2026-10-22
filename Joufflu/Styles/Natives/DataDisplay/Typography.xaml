@@ -1,7 +1,30 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:joufflu="clr-namespace:Joufflu">
+    xmlns:joufflu="clr-namespace:Joufflu"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
+
+    <!--
+        Text sizes follow the inherited Sizing.Size, like the controls do. md sets nothing, so a TextBlock
+        keeps the font size it inherits (the body size, or the size of the control showing it).
+    -->
+    <Style TargetType="{x:Type TextBlock}">
+        <Style.Triggers>
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="xl">
+                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXl}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="{x:Type Separator}">
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
     </Style>

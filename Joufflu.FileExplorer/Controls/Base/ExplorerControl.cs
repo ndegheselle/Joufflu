@@ -1,4 +1,4 @@
-using Joufflu.FileExplorer.Sources;
+using Joufflu.FileExplorer.Nodes;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -25,11 +25,11 @@ public abstract class ExplorerControl : Control
     #endregion
 
     /// <summary>
-    /// Source of the explorer
+    /// The source whose nodes the control shows, null until one is bound.
     /// </summary>
-    public IExplorerSource Source
+    public IExplorerSource? Source
     {
-        get => (IExplorerSource)GetValue(SourceProperty);
+        get => (IExplorerSource?)GetValue(SourceProperty);
         set => SetValue(SourceProperty, value);
     }
 

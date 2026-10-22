@@ -1,38 +1,54 @@
 ---
 title: Typography
 parent: Native controls
-nav_order: 4
+nav_order: 1
 ---
 
 # Typography
 
-Named `TextBlock` styles form a small typographic scale. A plain `<TextBlock>`
-without a style is the default body size; apply a named style through the `Style`
-property to give text a role.
+There are no named text styles: a `TextBlock` takes its size from the same
+`Sizing.Size` the controls use, and muted text is dimmed with a token rather than
+given a colour of its own. A plain `<TextBlock>` is the default body size.
+
+## Sizes
+
+A `TextBlock` takes its font size from `Sizing.Size`, like the controls: `xs` to
+`xl` read the `FontSize` [tokens](../themes/tokens.md#font-sizes), `md` keeps the
+inherited body size. `Sizing.Size` is inherited, so a panel set to a size sizes
+the text inside it too.
+
+```xml
+<TextBlock toolkit:Sizing.Size="xl" Text="xl" />
+<TextBlock toolkit:Sizing.Size="lg" Text="lg" />
+<TextBlock Text="md, the inherited body size" />
+<TextBlock toolkit:Sizing.Size="sm" Text="sm" />
+<TextBlock toolkit:Sizing.Size="xs" Text="xs" />
+```
 
 ## Headings
 
-`H1` down to `H6` step the font size and weight from a page title to a minor
-subheading.
+A heading is a size and a weight: `xl` for a page title, `lg` for a section, the
+body size for a minor heading.
 
 ```xml
-<TextBlock Style="{StaticResource H1}" Text="H1 — The quick brown fox" />
-<TextBlock Style="{StaticResource H2}" Text="H2 — The quick brown fox" />
-<TextBlock Style="{StaticResource H3}" Text="H3 — The quick brown fox" />
-<TextBlock Style="{StaticResource H4}" Text="H4 — The quick brown fox" />
-<TextBlock Style="{StaticResource H5}" Text="H5 — The quick brown fox" />
-<TextBlock Style="{StaticResource H6}" Text="H6 — The quick brown fox" />
+<TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Page title" />
+<TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="Section" />
+<TextBlock FontWeight="SemiBold" Text="Minor heading" />
 ```
 
-## Body text
+## Muted text
 
-`Lead` introduces a section with a larger, lighter paragraph. `Muted`
-de-emphasizes secondary text at the default size, and `Small` is for fine print,
-captions and footnotes.
+Secondary text (hints, descriptions, captions) is dimmed with the `MutedOpacity`
+token rather than given a colour of its own, so it follows whatever foreground it
+sits in.
 
 ```xml
-<TextBlock Style="{StaticResource Lead}" Text="Lead — a larger, lighter introductory paragraph." />
-<TextBlock Text="Default — the standard body text size used across the app." />
-<TextBlock Style="{StaticResource Muted}" Text="Muted — secondary text, dimmed to sit quietly next to primary content." />
-<TextBlock Style="{StaticResource Small}" Text="Small — fine print, captions and footnotes." />
+<TextBlock Text="Default body text" />
+<TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+           Text="Muted text" />
 ```
+
+{: .note }
+> The sizes come from an implicit `TextBlock` style. Inside a control template of
+> your own, set `FontSize` from the token directly
+> (`{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}`).

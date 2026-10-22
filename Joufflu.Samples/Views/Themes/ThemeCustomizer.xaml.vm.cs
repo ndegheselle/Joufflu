@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -142,8 +141,8 @@ public class ThemeScaleStep : ObservableObject
     /// <summary>Derives this step from <paramref name="value"/> (and <paramref name="vertical"/> when paired).</summary>
     internal void Derive(double value, double? vertical, string unit)
     {
-        Value = Math.Round(value * Ratio);
-        Vertical = vertical is null ? 0 : Math.Round(vertical.Value * Ratio);
+        Value = ThemeScales.Derive(value, Ratio);
+        Vertical = vertical is null ? 0 : ThemeScales.Derive(vertical.Value, Ratio);
         Display = vertical is null ? $"{Num(Value)} {unit}" : $"{Num(Value)},{Num(Vertical)} {unit}";
     }
 
@@ -290,6 +289,12 @@ public class ThemeCustomizerViewModel : ObservableObject
     private readonly List<ThemeDimensionEntry> _allDimensions = new();
     private readonly List<ThemeScaleEntry> _allScales = new();
 
+    // Kept by name, rather than recognised by the names of their steps : some resources follow a scale on top of its
+    // own steps, and the generated dictionary needs each one's base.
+    private ThemeScaleEntry _heightScale = null!;
+    private ThemeScaleEntry _fontSizeScale = null!;
+    private ThemeScaleEntry _paddingScale = null!;
+
     public ObservableCollection<ThemeColorGroup> ColorGroups { get; } = new();
     public ObservableCollection<ThemeDimensionGroup> DimensionGroups { get; } = new();
     /// <summary>Size families driven by a single base value (control height, font size, control padding).</summary>
@@ -419,40 +424,27 @@ public class ThemeCustomizerViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Declares the size families. Each is driven by its <c>md</c> value; the other steps keep a fixed
-    /// ratio to it, chosen so the shipped defaults come out exactly at the shipped base.
-    /// Height and padding stop at <c>lg</c> — the toolkit defines no <c>xl</c> key for them.
+    /// Declares the size families, each driven by its <c>md</c> value, the other steps keeping the ratio
+    /// <see cref="ThemeScales"/> gives them.
     /// </summary>
     private void BuildScales()
     {
-        void Scale(string label, string baseLabel, double min, double max, double @base, double? verticalBase, string unit, params ThemeScaleStep[] steps)
+        ThemeScaleEntry Scale(string label, double min, double max, double @base, double? verticalBase, IReadOnlyList<ThemeScaleSize> sizes)
         {
-            var entry = new ThemeScaleEntry(label, baseLabel, min, max, @base, verticalBase, OnScaleChanged, unit, steps);
+            ThemeScaleStep[] steps = [.. sizes.Select(size => new ThemeScaleStep(size.Label, size.ResourceName, size.Ratio))];
+            var entry = new ThemeScaleEntry(label, "md", min, max, @base, verticalBase, OnScaleChanged, "px", steps);
             Scales.Add(entry);
             _allScales.Add(entry);
+            return entry;
         }
 
-        Scale("Control height", "md", 16, 72, ReadDouble(JDimensions.HeightMd), null, "px",
-            new ThemeScaleStep("xs", "HeightXs", 0.75),
-            new ThemeScaleStep("sm", "HeightSm", 0.875),
-            new ThemeScaleStep("md", "HeightMd", 1),
-            new ThemeScaleStep("lg", "HeightLg", 1.25));
-
-        Scale("Font size", "md", 8, 32, ReadDouble(JDimensions.FontSizeMd), null, "px",
-            new ThemeScaleStep("xs", "FontSizeXs", 0.85),
-            new ThemeScaleStep("sm", "FontSizeSm", 0.92),
-            new ThemeScaleStep("md", "FontSizeMd", 1),
-            new ThemeScaleStep("lg", "FontSizeLg", 1.23),
-            new ThemeScaleStep("xl", "FontSizeXl", 1.85));
+        _heightScale = Scale("Control height", 16, 72, ReadDouble(JDimensions.HeightMd), null, ThemeScales.Height);
+        _fontSizeScale = Scale("Font size", 8, 32, ReadDouble(JDimensions.FontSizeMd), null, ThemeScales.FontSize);
 
         // ControlPadding thicknesses are symmetric (Left==Right, Top==Bottom), so one base per axis.
         // The text input paddings are derived from these at half the horizontal, not edited on their own.
         Thickness padding = ReadThickness(JDimensions.PaddingMd);
-        Scale("Control padding", "md", 0, 40, padding.Left, padding.Top, "px",
-            new ThemeScaleStep("xs", "PaddingXs", 0.5),
-            new ThemeScaleStep("sm", "PaddingSm", 0.75),
-            new ThemeScaleStep("md", "PaddingMd", 1),
-            new ThemeScaleStep("lg", "PaddingLg", 1.5));
+        _paddingScale = Scale("Control padding", 0, 40, padding.Left, padding.Top, ThemeScales.Padding);
     }
 
     /// <summary>
@@ -519,9 +511,8 @@ public class ThemeCustomizerViewModel : ObservableObject
         SetProperty(ref _selectedPreset, null, nameof(SelectedPreset));
         var res = Application.Current.Resources;
         res[entry.Key] = entry.Color;
-        // The semantic brushes bind their Color via DynamicResource, but each brush lives in the
-        // same merged theme dictionary as its colour and resolves it there before reaching this
-        // app-level override. Override the derived brush explicitly so the preview moves
+        // A brush resolves its DynamicResource colour once, when first used, so overriding the colour
+        // alone leaves it as it was. Override the brush too so the preview moves
         // (same reason ApplyDimension overrides the derived Thickness/CornerRadius keys).
         res[BrushKey(entry.ResourceName)] = new SolidColorBrush(entry.Color);
         RegenerateXaml();
@@ -543,14 +534,8 @@ public class ThemeCustomizerViewModel : ObservableObject
         RegenerateXaml();
     }
 
-    /// <summary>Horizontal ratio the text input paddings keep to the control paddings they follow.</summary>
-    private const double InputPaddingHorizontalFactor = 0.5;
-
-    /// <summary>Ratio of <see cref="Dimensions.HeightEmbedded"/> to the control height scale's base (md) value.</summary>
-    private const double CloseHeightFactor = 0.625;
-
     /// <summary>Pushes every derived step of a scale to its live resource.</summary>
-    private static void ApplyScale(ThemeScaleEntry entry)
+    private void ApplyScale(ThemeScaleEntry entry)
     {
         var res = Application.Current.Resources;
         foreach (var step in entry.Steps)
@@ -562,26 +547,13 @@ public class ThemeCustomizerViewModel : ObservableObject
         }
 
         // The input paddings are not edited on their own: they follow the control paddings at half the horizontal.
-        if (IsControlPadding(entry))
+        if (entry == _paddingScale)
             foreach (var step in entry.Steps)
-                res[InputPaddingKey(step.ResourceName)] = InputPaddingFrom(step);
+                res[InputPaddingKey(step.ResourceName)] = ThemeScales.InputPadding(step.Value, step.Vertical);
 
         // The close-button height is not edited on its own: it follows the control height's base value.
-        if (IsControlHeight(entry))
-            res[JDimensions.HeightEmbedded] = Math.Round(entry.Base * CloseHeightFactor);
-    }
-
-    private static bool IsControlPadding(ThemeScaleEntry entry)
-        => entry.Steps.Count > 0 && entry.Steps[0].ResourceName.StartsWith("Padding", StringComparison.Ordinal);
-
-    private static bool IsControlHeight(ThemeScaleEntry entry)
-        => entry.Steps.Count > 0 && entry.Steps[0].ResourceName.StartsWith("Height", StringComparison.Ordinal);
-
-    /// <summary>The input padding thickness derived from a control padding step.</summary>
-    private static Thickness InputPaddingFrom(ThemeScaleStep controlPaddingStep)
-    {
-        double h = controlPaddingStep.Value * InputPaddingHorizontalFactor;
-        return new Thickness(h, controlPaddingStep.Vertical, h, controlPaddingStep.Vertical);
+        if (entry == _heightScale)
+            res[JDimensions.HeightEmbedded] = ThemeScales.Derive(entry.Base, ThemeScales.EmbeddedHeightRatio);
     }
 
     /// <summary>The input padding key a control padding step feeds (e.g. <c>PaddingSm</c> → <c>InputPaddingSm</c>).</summary>
@@ -636,7 +608,7 @@ public class ThemeCustomizerViewModel : ObservableObject
             foreach (var step in _allScales.SelectMany(scale => scale.Steps))
                 res.Remove(ScaleKey(step.ResourceName));
             // Input paddings are derived from the control paddings, so drop their overrides too.
-            foreach (var step in _allScales.Where(IsControlPadding).SelectMany(scale => scale.Steps))
+            foreach (var step in _paddingScale.Steps)
                 res.Remove(InputPaddingKey(step.ResourceName));
 
             // …then re-seed the editors from those restored values.
@@ -770,93 +742,17 @@ public class ThemeCustomizerViewModel : ObservableObject
 
     private double DimValue(string name) => _allDimensions.First(d => d.ResourceName == name).Value;
 
-    private void RegenerateXaml()
-    {
-        var sb = new StringBuilder();
-        sb.AppendLine("<ResourceDictionary");
-        sb.AppendLine("    xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"");
-        sb.AppendLine("    xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"");
-        sb.AppendLine("    xmlns:joufflu=\"clr-namespace:Joufflu;assembly=Joufflu\"");
-        sb.AppendLine("    xmlns:system=\"clr-namespace:System;assembly=mscorlib\">");
-        sb.AppendLine();
+    private void RegenerateXaml() => GeneratedXaml = ThemeDictionaryWriter.Write(CurrentValues());
 
-        // Colors
-        sb.AppendLine("    <!--  Colors  -->");
-        foreach (var entry in _allColors)
-            sb.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{entry.ResourceName}}}\">{ToHex(entry.Color)}</Color>");
-        sb.AppendLine();
-
-        // Brushes (one per colour; brush name mirrors the colour name)
-        sb.AppendLine("    <!--  Brushes  -->");
-        foreach (var entry in _allColors)
-        {
-            string brushName = entry.ResourceName.Replace("Color", "Brush");
-            sb.AppendLine(
-                $"    <SolidColorBrush x:Key=\"{{x:Static joufflu:Brushes.{brushName}}}\" Color=\"{{DynamicResource {{x:Static joufflu:Colors.{entry.ResourceName}}}}}\" />");
-        }
-        sb.AppendLine();
-
-        AppendDimensions(sb);
-
-        sb.Append("</ResourceDictionary>");
-        GeneratedXaml = sb.ToString();
-    }
-
-    private void AppendDimensions(StringBuilder sb)
-    {
-        double thickness = DimValue("Thickness");
-        double radius = DimValue("Radius");
-        double spacing = DimValue("Spacing");
-
-        sb.AppendLine("    <!--  Dimensions  -->");
-        sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.Thickness}}\">{Num(thickness)}</system:Double>");
-        sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.BorderThickness}}\">{Num(thickness)}</Thickness>");
-        sb.AppendLine();
-        sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.Radius}}\">{Num(radius)}</system:Double>");
-        sb.AppendLine($"    <CornerRadius x:Key=\"{{x:Static joufflu:Dimensions.CornerRadius}}\">{Num(radius)}</CornerRadius>");
-        sb.AppendLine();
-        sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.Spacing}}\">{Num(spacing)}</system:Double>");
-        sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.SpacingThickness}}\">{Num(spacing)}</Thickness>");
-        sb.AppendLine();
-
-        // Every size step is emitted with its derived value, so the dictionary stays a drop-in.
-        foreach (var scale in _allScales)
-        {
-            sb.AppendLine($"    <!--  {scale.Label}  -->");
-            foreach (var step in scale.Steps)
-            {
-                sb.AppendLine(scale.HasVertical
-                    ? $"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{step.ResourceName}}}\">{Num(step.Value)},{Num(step.Vertical)}</Thickness>"
-                    : $"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.{step.ResourceName}}}\">{Num(step.Value)}</system:Double>");
-            }
-            sb.AppendLine();
-
-            // The input paddings ride along with the control paddings, at half the horizontal.
-            if (IsControlPadding(scale))
-            {
-                sb.AppendLine("    <!--  Input padding (control padding at half the horizontal)  -->");
-                foreach (var step in scale.Steps)
-                {
-                    Thickness input = InputPaddingFrom(step);
-                    sb.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{"Input" + step.ResourceName}}}\">{Num(input.Left)},{Num(input.Top)}</Thickness>");
-                }
-                sb.AppendLine();
-            }
-
-            // The close-button height rides along with the control height's base value.
-            if (IsControlHeight(scale))
-            {
-                sb.AppendLine("    <!--  Close button height (0.625 of the control height's base value)  -->");
-                sb.AppendLine($"    <system:Double x:Key=\"{{x:Static joufflu:Dimensions.HeightEmbedded}}\">{Num(Math.Round(scale.Base * CloseHeightFactor))}</system:Double>");
-                sb.AppendLine();
-            }
-        }
-    }
-
-    private static string ToHex(Color color) => $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
-
-    private static string Num(double value)
-        => value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
+    private ThemeValues CurrentValues() => new(
+        [.. _allColors.Select(entry => KeyValuePair.Create(entry.ResourceName, entry.Color))],
+        Thickness: DimValue("Thickness"),
+        Radius: DimValue("Radius"),
+        Spacing: DimValue("Spacing"),
+        HeightMd: _heightScale.Base,
+        FontSizeMd: _fontSizeScale.Base,
+        PaddingMdHorizontal: _paddingScale.Base,
+        PaddingMdVertical: _paddingScale.VerticalBase);
 
     #endregion
 }

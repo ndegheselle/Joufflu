@@ -20,16 +20,19 @@ can paste into your views.
 {: .note }
 > **Using an LLM agent?** Point it at the machine-readable
 > [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt)
-> index — a single file linking every page's raw Markdown source. Use that raw URL rather
+> index — a single file linking every page's raw Markdown source, or
+> [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
+> for every page in one file. Use those raw URLs rather
 > than the rendered site, which can return `403` to automated fetchers.
 
 ## Highlights
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
+- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys; the gallery's **Customize theme** page edits them live and generates the dictionary.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
+- 🧾 **JSON data trees** — fill a value in against a JSON Schema, or build one from scratch.
 - 🪟 **Custom-chrome window & natives** — a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
@@ -44,21 +47,20 @@ can paste into your views.
 
 | Section | What's inside |
 |---|---|
-| [Native controls](natives/index.md) | Buttons (solid, soft & outline variants), `FontIcon`, the `Card` styles and the typography scale |
-| [Inputs](inputs/index.md) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
-| [Navigation](navigation/index.md) | `NavigationMenu`, overlays (modal dialogs), `Paging`, `FullContainer` |
-| [Feedback](feedback/index.md) | `Badge`, `Spinner`, toasts (`Joufflu.Feedback`) |
-| [File explorer](file-explorer/index.md) | `Explorer`, `ExplorerList`, `ExplorerTree` and their sources (`Joufflu.FileExplorer`) |
-| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, the design tokens, theme customization, application shell, building a custom input |
+| [Themes](themes/index.md) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and the live theme customizer |
+| [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon`, the `Card` styles and buttons (solid, soft & outline variants) |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, building a custom input |
+| [Joufflu controls](controls/index.md) | The optional packages: [Feedback](feedback/index.md) (`Badge`, `Spinner`, toasts), [Inputs](inputs/index.md) (numeric, search, combo boxes, pickers, `Dropdown`…), [Navigation](navigation/index.md) (`NavigationMenu`, overlays, `Paging`), [Data](data/index.md) (`DataFill`, `DataEdit`, `DataDisplay`) and [File explorer](file-explorer/index.md) |
 
 ## Getting started
 
 1. Add the packages you need. `Joufflu` is the core (styles & theming);
-   `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Inputs` and
+   `Joufflu.Data`, `Joufflu.Feedback`, `Joufflu.FileExplorer`, `Joufflu.Inputs` and
    `Joufflu.Navigation` are optional and all build on it:
 
    ```sh
    dotnet add package Joufflu
+   dotnet add package Joufflu.Data          # optional: JSON data trees (needs Joufflu.Inputs)
    dotnet add package Joufflu.Feedback      # optional: badges, spinner, toasts
    dotnet add package Joufflu.FileExplorer  # optional: file explorer (needs Joufflu.Feedback)
    dotnet add package Joufflu.Inputs        # optional: input controls
@@ -66,8 +68,8 @@ can paste into your views.
    ```
 
 2. Merge the control styles in `App.xaml` so the themed styles and the
-   design-system keys (`joufflu:Brushes`, `joufflu:Dimensions`,
-   `toolkit:Spacing`, `toolkit:Sizing`) are available:
+   `joufflu:Dimensions` keys are available (the `joufflu:Brushes` come with the
+   theme, step 3):
 
    ```xml
    <Application.Resources>
@@ -89,6 +91,8 @@ can paste into your views.
 4. Use the controls as shown in the pages above.
 
 New to the library? The [Tutorial](tutorial.md) builds a full
-navigable app shell — side menu, pages, modals and toasts — from scratch.
+navigable app shell — side menu, pages, modals and toasts — from scratch, and the
+[Recipes](recipes.md) give copy-paste screens. Choosing between UI libraries? See
+[Joufflu vs other WPF UI libraries](comparison.md).
 
 To explore everything interactively, run the **`Joufflu.Samples`** project.

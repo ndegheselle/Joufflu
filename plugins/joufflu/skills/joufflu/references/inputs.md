@@ -12,7 +12,7 @@ All inputs are two-way bindable like WPF's own and honour `toolkit:Sizing.Size`.
 | Whole number | `NumericUpDown` | `Value` (`long?`) |
 | Decimal number | `DecimalUpDown` | `Value` (`decimal?`) |
 | Duration | `TimeSpanPicker` | `Value` (`TimeSpan?`) |
-| Custom segmented format (time, codes…) | `format:FormatTextBox` | `Format`, `GlobalFormat`, `Values` |
+| Custom segmented format (time, codes…) | `format:FormatTextBox` | `Parts` (content), `Values` |
 | Debounced search box | `Search` | `SearchText`, `SearchCommand`, `SearchChanged` |
 | Combo filtering as you type | `ComboBoxSearch` | `ItemsSource`, `SelectedItem`, `DisplayMemberPath` |
 | Multi-selection as tags | `ComboBoxTags` | `SelectedItems` (`IList`), `AllowAdd` |
@@ -36,21 +36,34 @@ Built on `FormatTextBox`, with clear and increment/decrement buttons.
 View-model properties should be the nullable types above (`long?`, `decimal?`, `TimeSpan?`)
 or convertible to them. A `ValueChanged` event is also raised.
 
+To bound or format a `NumericUpDown` / `DecimalUpDown`, give it its group as content: it
+replaces the default one (nullable, own caret — set those back if wanted).
+
+```xml
+<inputs:NumericUpDown Value="{Binding Quantity, Mode=TwoWay}">
+    <format:IntegerGroup Min="0" Max="99" IsNullable="True" SelectsWhole="False" />
+</inputs:NumericUpDown>
+```
+
 ## FormatTextBox
 
-A text box split into groups described by a format string; <kbd>Tab</kbd> / arrows move
+A text box split into groups, declared as its content; <kbd>Tab</kbd> / arrows move
 between groups, arrows up/down increment.
 
 ```xml
-<format:FormatTextBox Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
+<format:FormatTextBox>
+    <format:IntegerGroup Max="23" StringFormat="00" />
+    <format:FormatLiteral Text="h " />
+    <format:IntegerGroup Max="59" StringFormat="00" />
+    <format:FormatLiteral Text="m" />
+</format:FormatTextBox>
 ```
 
-- Each `{…}` is a group; options are `|`-separated `key` or `key:value`.
-- `GlobalFormat` options apply to every group (prefixed to each).
-- A group needs a type: `numeric` or `decimal`.
-- Options: `min:`, `max:`, `length:`, `padded`, `nullable`, `nullableChar:`, `format:`
-  (string format), `incrementDelta:`, `noGlobalSelection`. An unknown option throws.
-- The `{}` prefix escapes the braces in XAML.
+- Parts: `IntegerGroup` (`long`), `DecimalGroup` (`decimal`), `FormatLiteral` (`Text`, not typed into).
+- Group properties: `Min`, `Max` (also the group's width), `Step` (default `1` / `0.1`),
+  `StringFormat` (.NET numeric format: `00` pads, `N0` separates thousands), `IsNullable`,
+  `PromptChar` (default `-`), `SelectsWhole` (default `true`; `false` keeps a caret in the group).
+- From code: `box.Parts.Add(new IntegerGroup { Max = 59 });`
 - Values: `Values` (list, one per group), `ValuesChanged` event.
 
 ## Search
@@ -87,7 +100,9 @@ lets users add values not in the list.
                      SelectedItems="{Binding SelectedCountries}" />
 ```
 
-Bind `SelectedItems` to a mutable collection (`ObservableCollection<T>`).
+Bind `SelectedItems` to a mutable `IList` (e.g. `ObservableCollection<object>`; with `AllowAdd`
+the element type must accept `string`). The control edits it in place; changes made to its
+contents from the view model are not picked up, assign a new collection instead.
 
 ## TextEditable
 
@@ -111,6 +126,7 @@ Shows a value that turns into a text box on demand (inline rename, outside a for
 ## ColorPicker
 
 Hex field plus a popup (saturation/brightness square, hue slider, alpha slider, opacity %).
+`#RRGGBB` keeps the opacity, a pasted `#AARRGGBB` sets it too.
 
 ```xml
 <inputs:ColorPicker Color="{Binding Color, Mode=TwoWay}" />
@@ -142,7 +158,8 @@ stays a plain `ToggleButton` you style freely.
 |---|---|---|
 | `Dropdown.Popup` | null | Popup content; setting it makes the button a dropdown |
 | `Dropdown.Placement` | `BottomLeft` | `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight` |
-| `Dropdown.HorizontalOffset` / `VerticalOffset` | 0 | Extra offset |
+| `Dropdown.HorizontalOffset` | 0 | Extra horizontal offset |
+| `Dropdown.VerticalOffset` | 2 | Extra vertical offset (small gap from the button) |
 | `Dropdown.CloseOnClick` | false | Close when a `ButtonBase` inside is clicked (also CheckBox/RadioButton!) |
 | `Dropdown.PopupStyle` | null | Style for `inputs:DropdownPopupHost` (padding defaults to 0) |
 
@@ -154,7 +171,8 @@ stays a plain `ToggleButton` you style freely.
 </inputs:Dropdown.PopupStyle>
 ```
 
-Bindings in the popup: `DataContext`, `Foreground` and `Sizing.Size` flow in, so plain
+Bindings in the popup: `DataContext` and `Sizing.Size` flow in from the button and the host
+restates the theme `Foreground` (a `Foreground` set on the button does not flow in), so plain
 bindings work. `ElementName` and `RelativeSource AncestorType` lookups outside the popup
 do **not**; go through the host instead:
 

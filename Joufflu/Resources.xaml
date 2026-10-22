@@ -3,7 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Brushes.xaml" />
 
         <!--  == Joufflu controls ==  -->
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Controls/DataDisplay/FontIcon.xaml" />
@@ -27,7 +26,6 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataInput/DatePicker.xaml" />
 
         <!--  Data display  -->
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Label.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />

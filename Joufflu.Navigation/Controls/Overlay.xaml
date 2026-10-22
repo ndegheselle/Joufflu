@@ -4,17 +4,14 @@
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation"
-    xmlns:controls="clr-namespace:Joufflu.Navigation.Controls"
-    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
-    >
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  ==================== Overlay ====================  -->
-    <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type controls:OverlayInstance}">
+    <DataTemplate x:Key="OverlayTemplate" DataType="{x:Type nav:OverlayInstance}">
         <Grid Background="{x:Null}">
             <Grid Background="{x:Null}">
                 <Grid.RowDefinitions>
@@ -63,15 +60,18 @@
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            Style="{StaticResource H4}"
-                            Text="{Binding Options.Title}" />
+                            FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}"
+                            FontWeight="SemiBold"
+                            Text="{Binding Options.Title}"
+                            TextWrapping="Wrap" />
 
                         <Button
                             x:Name="CloseButton"
                             Grid.Column="1"
                             VerticalAlignment="Top"
                             toolkit:Sizing.IsSquare="True"
-                            Command="{Binding CloseCommand}"
+                            toolkit:Sizing.Size="xs"
+                            Command="{Binding IgnoreCommand}"
                             Style="{StaticResource GhostButton}">
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                         </Button>
@@ -109,8 +109,8 @@
     </DataTemplate>
 
     <!--  ==================== Confirmation ====================  -->
-    <!--  Implicit template: the standard content shown by IOverlayService.Confirm().  -->
-    <DataTemplate DataType="{x:Type controls:ConfirmationContent}">
+    <!--  Implicit template: the standard content shown by IOverlayer.Confirm().  -->
+    <DataTemplate DataType="{x:Type nav:ConfirmationContent}">
         <Grid toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />

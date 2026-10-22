@@ -32,7 +32,7 @@ Three services drive everything, shared between the shell window and the pages:
 | Service | Role |
 |---|---|
 | `Navigator` | Holds the current page (a view model) and switches between pages. Built with a resolver turning a page type into the page instance. |
-| `OverlayService` | Shows modal overlays on top of the current page. |
+| `Overlayer` | Shows modal overlays on top of the current page. |
 | `ToastService` | Shows stacking, auto-dismissing notifications. |
 
 Navigation is **view-model-first**: navigate to a *view model* and WPF resolves
@@ -50,7 +50,7 @@ Step 4.
 
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
-using Joufflu.Feedback.Controls;
+using Joufflu.Feedback;
 using Joufflu.Navigation;
 
 public class ShellViewModel : ObservableObject
@@ -58,7 +58,7 @@ public class ShellViewModel : ObservableObject
     // Shared with the shell window's page container, NavigationMenu and the
     // overlay/toast containers, and injected into the pages that need them.
     public Navigator Navigator { get; }
-    public OverlayService Overlays { get; } = new();
+    public Overlayer Overlays { get; } = new();
     public ToastService Toasts { get; } = new();
 
     // Pages keyed by their own type, which is what the menu's NavigationItems
@@ -119,6 +119,7 @@ No runtime effect.
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Joufflu.Controls;assembly=Joufflu"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
@@ -151,8 +152,12 @@ No runtime effect.
 </controls:ThemedWindow>
 ```
 
+Its code-behind (`ShellWindow.xaml.cs`) must derive from `ThemedWindow` too
+(`public partial class ShellWindow : ThemedWindow`), or the build fails on the
+mismatched base class.
+
 Create the window in code to pass the shell view model as its `DataContext`,
-e.g. in `App.xaml.cs`:
+e.g. in `App.xaml.cs` (`using Joufflu.Themes;` for `ThemeManager`):
 
 ```csharp
 protected override void OnStartup(StartupEventArgs e)
@@ -184,17 +189,18 @@ services to open overlays and raise toasts:
 ```csharp
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Joufflu.Feedback;
 using Joufflu.Navigation;
 
 public class HomeViewModel : ObservableObject
 {
-    private readonly IOverlayService _overlays;
+    private readonly IOverlayer _overlays;
     private readonly IToastService _toasts;
 
     public IRelayCommand SayHelloCommand { get; }
     public IAsyncRelayCommand DeleteCommand { get; }
 
-    public HomeViewModel(IOverlayService overlays, IToastService toasts)
+    public HomeViewModel(IOverlayer overlays, IToastService toasts)
     {
         _overlays = overlays;
         _toasts = toasts;
@@ -214,9 +220,10 @@ Its view:
     x:Class="MyApp.Views.HomeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
-    <StackPanel Margin="24" toolkit:Spacing.Gap="12">
-        <TextBlock Style="{StaticResource H1}" Text="Home" />
+    <StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="12">
+        <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Home" />
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <Button Command="{Binding SayHelloCommand}" Content="Say hello" />
             <Button Command="{Binding DeleteCommand}" Content="Delete…"
@@ -263,28 +270,29 @@ private void SayHello() => _toasts.Success("Hello!", "Greetings");
 
 ### A modal overlay, then a toast with the result
 
-`OverlayService.Show` returns a `Task<bool?>` that completes when the overlay
-closes: `true`/`false` from the action buttons, `null` when dismissed. The
-overlay content owns its buttons and closes itself through the service.
+`Overlayer.ShowAsync` returns a `Task<bool?>` that completes when the overlay
+closes: `true` when the content validates it, `false` when it cancels it, `null`
+when the user dismisses it with the close cross. The overlay content owns its
+buttons and closes itself through the overlayer.
 
 Overlay content view model:
 
 ```csharp
 public class DeleteConfirmViewModel : ObservableObject
 {
-    private readonly IOverlayService _overlays;
+    private readonly IOverlayer _overlays;
 
     public string Message { get; }
     public IRelayCommand CancelCommand { get; }
     public IRelayCommand DeleteCommand { get; }
 
-    public DeleteConfirmViewModel(IOverlayService overlays, string message)
+    public DeleteConfirmViewModel(IOverlayer overlays, string message)
     {
         _overlays = overlays;
         Message = message;
-        // CloseTop passes the result back to the awaiting Show() call.
-        CancelCommand = new RelayCommand(() => _overlays.CloseTop(false));
-        DeleteCommand = new RelayCommand(() => _overlays.CloseTop(true));
+        // Cancel and Validate close this overlay and hand false / true to the awaiting ShowAsync.
+        CancelCommand = new RelayCommand(() => _overlays.Cancel(this));
+        DeleteCommand = new RelayCommand(() => _overlays.Validate(this));
     }
 }
 ```
@@ -295,13 +303,14 @@ Its view (add a matching `DataTemplate` as in Step 2):
 <UserControl
     x:Class="MyApp.Views.DeleteConfirmView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel MinWidth="320">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
+    <StackPanel MinWidth="320" toolkit:Spacing.Gap="16">
         <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
-        <StackPanel Margin="0,16,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+        <StackPanel HorizontalAlignment="Right" toolkit:Spacing.Gap="8" Orientation="Horizontal">
             <Button Command="{Binding CancelCommand}" Content="Cancel"
                     Style="{StaticResource SecondaryButton}" />
-            <Button Margin="8,0,0,0" Command="{Binding DeleteCommand}" Content="Delete"
+            <Button Command="{Binding DeleteCommand}" Content="Delete"
                     Style="{StaticResource DangerButton}" />
         </StackPanel>
     </StackPanel>
@@ -316,7 +325,7 @@ private async Task DeleteAsync()
     var content = new DeleteConfirmViewModel(_overlays, "Delete this item? This can't be undone.");
     var options = new OverlayOptions { Title = "Please confirm", CloseOnClickAway = false };
 
-    bool? result = await _overlays.Show(content, options);
+    bool? result = await _overlays.ShowAsync(content, options);
 
     if (result == true)
         _toasts.Success("Item deleted.", "Confirmed");
@@ -326,7 +335,7 @@ private async Task DeleteAsync()
 ```
 
 The full loop: the menu navigates the `Navigator`, the page opens a modal through
-the shared `OverlayService`, awaits its result, and confirms with the shared
+the shared `Overlayer`, awaits its result, and confirms with the shared
 `ToastService`.
 
 {: .note }

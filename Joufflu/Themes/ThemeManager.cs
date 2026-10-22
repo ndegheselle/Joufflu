@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
@@ -9,9 +8,11 @@ namespace Joufflu.Themes;
 /// <summary>
 /// Applies and tracks the active Joufflu colour theme application-wide.
 /// <para>
-/// A theme is a single <see cref="ResourceDictionary"/> kept at the front of
-/// <see cref="Application"/>.<c>Resources.MergedDictionaries</c>. Switching swaps that one dictionary;
-/// because every control references colours through <c>DynamicResource</c>, the whole UI re-themes live.
+/// A theme is a single <see cref="ResourceDictionary"/> in <see cref="Application"/>.<c>Resources.MergedDictionaries</c>,
+/// right after the dictionary holding the default dimensions (Joufflu's <c>Resources.xaml</c>): it overrides those
+/// defaults, while a dictionary merged after <c>Resources.xaml</c> still overrides the theme. Switching swaps that
+/// one dictionary; because every control references the tokens through <c>DynamicResource</c>, the whole UI
+/// re-themes live.
 /// </para>
 /// <para>
 /// Themes are selected by name. Three are always available: <see cref="Light"/> and <see cref="Dark"/>
@@ -40,9 +41,9 @@ public sealed class ThemeManager : ObservableObject
 
     private const string LightSource = "pack://application:,,,/Joufflu;component/Themes/Light.xaml";
     private const string DarkSource = "pack://application:,,,/Joufflu;component/Themes/Dark.xaml";
+    private const string BrushesSource = "pack://application:,,,/Joufflu;component/Styles/Brushes.xaml";
 
-    [DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
-    public static extern bool ShouldSystemUseDarkMode();
+    private const string PersonalizeKey = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
     public static ThemeManager Instance { get; } = new();
 
@@ -191,7 +192,7 @@ public sealed class ThemeManager : ObservableObject
     }
 
     /// <summary>
-    /// Builds the resource dictionary for a concrete registered theme (its colours, brushes, …) so its
+    /// Builds the resource dictionary for a concrete registered theme (its colours) so its
     /// palette can be inspected without selecting it. Returns <c>null</c> for <see cref="System"/> (a
     /// resolver, not a concrete theme) or an unknown name.
     /// </summary>
@@ -225,27 +226,47 @@ public sealed class ThemeManager : ObservableObject
     {
         Registration registration = Resolve(_theme);
 
-        var next = registration.CreateDictionary();
+        ResourceDictionary theme = registration.CreateDictionary();
+        ResourceDictionary next = WithBrushes(theme);
 
         var merged = Application.Current.Resources.MergedDictionaries;
-        if (_themeDictionary is not null)
-        {
-            // Swap in place so the theme keeps its position ahead of the control styles.
-            int index = merged.IndexOf(_themeDictionary);
-            if (index >= 0)
-                merged[index] = next;
-            else
-                merged.Insert(0, next);
-        }
+        int index = _themeDictionary is null ? -1 : merged.IndexOf(_themeDictionary);
+        if (index >= 0)
+            merged[index] = next;
         else
-        {
-            merged.Insert(0, next);
-        }
+            merged.Insert(IndexAfterDefaultDimensions(merged), next);
 
         _themeDictionary = next;
 
         IsDark = registration.IsDark;
         OnPropertyChanged(nameof(IsDark));
+    }
+
+    /// <summary>
+    /// Where a theme goes: right after the dictionary defining the default dimensions, so the dimensions a theme
+    /// defines win over them (later merged dictionaries take precedence), or first when there is none.
+    /// </summary>
+    private static int IndexAfterDefaultDimensions(IList<ResourceDictionary> merged)
+    {
+        for (int i = 0; i < merged.Count; i++)
+        {
+            // Contains also searches the nested merged dictionaries, where Resources.xaml keeps Dimensions.xaml.
+            if (merged[i].Contains(Dimensions.Radius))
+                return i + 1;
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// Pairs a theme, which defines the colours and may override dimensions, with a fresh copy of the
+    /// brushes built from them.
+    /// A brush resolves its <c>DynamicResource</c> colour once, the first time it is used, and never
+    /// again: shared across themes, it would keep the colours of the first one.
+    /// </summary>
+    private static ResourceDictionary WithBrushes(ResourceDictionary theme)
+    {
+        var brushes = new ResourceDictionary { Source = new Uri(BrushesSource) };
+        return new ResourceDictionary { MergedDictionaries = { theme, brushes } };
     }
 
     /// <summary>
@@ -258,7 +279,18 @@ public sealed class ThemeManager : ObservableObject
             && _themes.TryGetValue(name, out Registration? registration))
             return registration;
 
-        return ShouldSystemUseDarkMode() ? _themes[Dark] : _themes[Light];
+        return IsSystemDark() ? _themes[Dark] : _themes[Light];
+    }
+
+    /// <summary>
+    /// Whether Windows asks the applications for a dark theme (Settings, Personalization, Colors, "Choose your
+    /// app mode"), read from its documented registry value rather than from an unnamed UXTheme export.
+    /// </summary>
+    private static bool IsSystemDark()
+    {
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(PersonalizeKey);
+        // Missing on the versions of Windows that predate the setting, which are light.
+        return key?.GetValue("AppsUseLightTheme") is int appsUseLightTheme && appsUseLightTheme == 0;
     }
 
     private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)

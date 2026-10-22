@@ -11,12 +11,14 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Natives.Actions"
     d:DataContext="{d:DesignInstance Type=vm:ToggleButtonSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
             <TextBlock
-                Style="{StaticResource H1}"
+                toolkit:Sizing.Size="xl"
+                FontWeight="Bold"
+                TextWrapping="Wrap"
                 Text="Toggle button" />
 
             <c:CodeExample

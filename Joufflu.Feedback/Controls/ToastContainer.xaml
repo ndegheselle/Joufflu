@@ -38,7 +38,7 @@
                         <ContentPresenter Margin="{TemplateBinding Padding}" />
 
                         <!--  Toast stack (always on top)  -->
-                        <Border Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}">
+                        <Border Margin="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}">
                             <ItemsControl
                                 x:Name="ToastStack"
                                 Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"

@@ -9,8 +9,7 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 ```
 
 ```csharp
-using Joufflu.Navigation;              // Navigator, IOverlayService, OverlayOptions, OverlayViewModel, EnumConfirmationType, IPage
-using Joufflu.Navigation.Controls;     // OverlayService
+using Joufflu.Navigation;              // Navigator, Overlayer, IOverlayer, OverlayOptions, IOverlayContent, EnumConfirmationType, IPage
 using Joufflu.Feedback;                // ToastService, IToastService
 ```
 
@@ -21,7 +20,7 @@ Three services, owned by a shell view model and shared with every page:
 | Service | Role | Host control |
 |---|---|---|
 | `Navigator` | Holds `CurrentPage` (a view model) | `ContentControl Content="{Binding Navigator.CurrentPage}"` + `nav:NavigationMenu` |
-| `OverlayService` (`IOverlayService`) | Stack of modal overlays | `nav:OverlayContainer Overlays="…"` |
+| `Overlayer` (`IOverlayer`) | Stack of modal overlays | `nav:OverlayContainer Overlays="…"` |
 | `ToastService` (`IToastService`) | Notifications | `feedback:ToastContainer Toasts="…"` |
 
 Navigation is **view-model-first**: navigate to a view model, and an implicit
@@ -39,17 +38,22 @@ themed implicitly.
 
 ```xml
 <controls:ThemedWindow x:Class="MyApp.ShellWindow" … Title="My App"
-                       AllowContentOverTitleBar="True"
-                       IconVisibility="Collapsed" TitleVisibility="Collapsed">
+                       AllowContentOverTitleBar="True" TitleVisibility="Collapsed">
 ```
+
+The title bar has no icon by default: put `<controls:AppIcon />` in
+`ThemedWindow.TitleBarContent` (application icon or `Source`; click opens the system menu,
+double click closes).
 
 The code-behind class must derive from `ThemedWindow` too
 (`public partial class ShellWindow : ThemedWindow`).
 
-With `AllowContentOverTitleBar="True"` the transparent, draggable title bar covers the top
-strip of content: anything interactive there is unclickable. Push pages down with
-`Margin="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"` or host
-pages in `FullContainer`; keep the overlay/toast containers full-bleed.
+With `AllowContentOverTitleBar="True"` the window is layered: title bar + drag area (bottom),
+content, then title / `TitleBarContent` / caption buttons (top, never covered). Content with a
+`null` Background (no `Transparent`) lets the window be grabbed through it; the page is not laid
+out for you, so push it down with
+`Margin="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}"` and keep the
+overlay/toast containers full-bleed. A `NavigationMenu` at the top keeps its header strip draggable.
 
 ## Shell window
 
@@ -78,8 +82,11 @@ pages in `FullContainer`; keep the overlay/toast containers full-bleed.
 ## NavigationMenu
 
 - `NavigationItem` (`TargetType` = page view-model type, `Icon`, content = label),
-  `NavigationGroup` (`Header`, expands to children, nestable), `NavigationTitle` (section label).
-- A chevron collapses the menu to an icon rail; labels then show as right tooltips.
+  `NavigationGroup` (`Header`, `Icon` shown on the collapsed rail, `IsExpanded` closed by
+  default, nestable), `NavigationTitle` (section label), `NavigationMenu.Header` (hidden when
+  collapsed).
+- A chevron collapses the menu to an icon rail (`IsCollapsed`, bindable); labels then show as
+  right tooltips.
 - An item is selected while `CurrentPage` is of its `TargetType`: give each entry its own
   page type.
 
@@ -104,26 +111,16 @@ public ShellViewModel()
 - A page implementing `IPage` gets `OnNavigatedTo()` / `OnNavigatedFrom()` (default no-op
   interface methods; implement only what you need).
 
-## FullContainer
-
-Page host that puts `Header` in the title-bar strip and scrolls content below it (for
-`AllowContentOverTitleBar` windows). `Header` is rendered as `H1`; use `HeaderTemplate`
-for a title + toolbar.
-
-```xml
-<nav:FullContainer Header="Profile"> … page content … </nav:FullContainer>
-```
-
 ## Overlays (modals)
 
-`IOverlayService`:
+`IOverlayer`:
 
 | Member | Purpose |
 |---|---|
-| `Task<bool?> Show(object content, OverlayOptions? options = null)` | Push content; completes when closed (`null` = dismissed) |
+| `Task<bool?> ShowAsync(object content, OverlayOptions? options = null)` | Push content; completes when closed: `true` validated, `false` cancelled, `null` ignored |
+| `Task<TResult?> ShowAsync<TResult>(IOverlayContent<TResult> content, OverlayOptions? options = null)` | Same, handing back `content.Result` when validated, `default` otherwise |
 | `Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = Neutral)` | Built-in Cancel/Confirm dialog |
-| `Close(object content, bool? result = null)` | Close that content (prefer over `CloseTop`) |
-| `CloseTop(bool? result = null)` | Close the top overlay |
+| `Validate(object content)` / `Cancel(object content)` / `Ignore(object content)` | Close the overlay showing that content (not whichever is on top) with `true` / `false` / `null`. The close cross and a click away ignore. |
 
 `OverlayOptions`: `Title`, `ShowCloseButton` (true), `CloseOnClickAway` (true; set false
 to force the action buttons), `FullScreen` (false).
@@ -137,30 +134,40 @@ if (await _overlays.Confirm("Delete this item? This can't be undone.", "Please c
     Delete();
 ```
 
-### Custom overlay content: `OverlayViewModel`
+### Custom overlay content: `IOverlayContent`
 
-Derive from `OverlayViewModel` (yes/no) or `OverlayViewModel<TResult>` (returns a value).
-It carries its own `Options` (set in the constructor), a `CancelCommand`, and
-`Close(result)`. Add a `DataTemplate` for it like any page.
+Any object works as content, with `OverlayOptions` passed to `ShowAsync`. Content
+implementing `IOverlayContent` supplies its own `Options` instead;
+`IOverlayContent<TResult>` adds the `Result` handed back when validated. The content owns
+its buttons and closes itself through the overlayer. Add a `DataTemplate` for it like any
+page.
 
 ```csharp
-public partial class EditNameViewModel : OverlayViewModel<string>
+public partial class EditNameViewModel : ObservableObject, IOverlayContent<string>
 {
-    public EditNameViewModel(IOverlayService overlays, string name) : base(overlays)
+    private readonly IOverlayer _overlays;
+
+    public EditNameViewModel(IOverlayer overlays, string name)
     {
-        Options.Title = "Rename";
-        Options.CloseOnClickAway = false;
-        Name = name;
+        _overlays = overlays;
+        _name = name;
     }
+
+    public OverlayOptions Options { get; } = new() { Title = "Rename", CloseOnClickAway = false };
 
     [ObservableProperty] private string _name;
 
+    public string? Result => Name;
+
     [RelayCommand]
-    private void Save() => Close(Name);   // Close(TResult) validates with a result
+    private void Save() => _overlays.Validate(this);
+
+    [RelayCommand]
+    private void Cancel() => _overlays.Cancel(this);
 }
 
-// Caller — default(TResult) when cancelled/dismissed
-string? name = await OverlayViewModel<string>.ShowAsync(new EditNameViewModel(_overlays, current));
+// Caller — null (default of TResult) when cancelled or ignored
+string? name = await _overlays.ShowAsync(new EditNameViewModel(_overlays, current));
 ```
 
 ```xml
@@ -174,9 +181,8 @@ string? name = await OverlayViewModel<string>.ShowAsync(new EditNameViewModel(_o
 </StackPanel>
 ```
 
-Any object also works as content: pass `OverlayOptions` to `Show` and close it with
-`overlays.Close(content, result)`. Content implementing `IOverlayContent` supplies its own
-`Options`.
+`IOverlayContent` derives from `IPage`, so content gets `OnNavigatedTo` / `OnNavigatedFrom`
+when shown and closed.
 
 ## Paging
 
@@ -194,6 +200,7 @@ Page selector; it never touches the data.
 | `Total` | -1 | Items in the whole set; -1 = unknown (range label hidden, list grows one page ahead) |
 | `PageNumber` | 1 | 1-based, clamped. **Needs `Mode=TwoWay`** |
 | `Capacity` | 10 | Items per page from `AvailableCapacities` (5, 10, 25, 50, 100, 200). **Needs `Mode=TwoWay`** |
+| `IsTotalKnown` | read-only | `Total >= 0` |
 | `PageMax`, `IntervalMin`, `IntervalMax` | read-only | |
 
 Reload the slice from the view-model setters of `PageNumber`/`Capacity`

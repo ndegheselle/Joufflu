@@ -34,7 +34,10 @@
 
                             <ScrollViewer x:Name="PART_ContentHost" Padding="{TemplateBinding Padding}" />
                             <!--  Actions buttons  -->
-                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <StackPanel
+                                Grid.Column="1"
+                                Margin="{TemplateBinding Padding}"
+                                Orientation="Horizontal">
                                 <Button x:Name="PART_ClearButton" Style="{StaticResource EmbeddedButton}">
                                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                 </Button>
@@ -46,18 +49,16 @@
                                     <Button
                                         x:Name="PART_UpButton"
                                         Height="auto"
-                                        Padding="4,0"
                                         Focusable="False"
-                                        Style="{StaticResource GhostButton}">
+                                        Style="{StaticResource EmbeddedButton}">
                                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronUp}" />
                                     </Button>
                                     <Button
                                         x:Name="PART_DownButton"
                                         Grid.Row="1"
                                         Height="auto"
-                                        Padding="4,0"
                                         Focusable="False"
-                                        Style="{StaticResource GhostButton}">
+                                        Style="{StaticResource EmbeddedButton}">
                                         <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
                                     </Button>
                                 </Grid>

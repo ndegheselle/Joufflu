@@ -1,12 +1,7 @@
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Joufflu.Helpers;
 using Brush = System.Windows.Media.Brush;
@@ -19,14 +14,12 @@ namespace Joufflu.Controls;
 /// Window with custom chrome supporting theming of non-client areas
 /// </summary>
 [TemplatePart(Name = PART_DragMoveThumb, Type = typeof(FrameworkElement))]
-[TemplatePart(Name = PART_IconPresenter, Type = typeof(FrameworkElement))]
 [TemplatePart(Name = PART_MinimizeButton, Type = typeof(Button))]
 [TemplatePart(Name = PART_MaximizeRestoreButton, Type = typeof(Button))]
 [TemplatePart(Name = PART_CloseButton, Type = typeof(Button))]
 public class ThemedWindow : Window
 {
     private const string PART_DragMoveThumb = "PART_DragMoveThumb";
-    private const string PART_IconPresenter = "PART_IconPresenter";
     private const string PART_MinimizeButton = "PART_MinimizeButton";
     private const string PART_MaximizeRestoreButton = "PART_MaximizeRestoreButton";
     private const string PART_CloseButton = "PART_CloseButton";
@@ -35,8 +28,6 @@ public class ThemedWindow : Window
 
     public FrameworkElement? DragMoveThumb { get; protected set; }
 
-    public FrameworkElement? IconPresenter { get; protected set; }
-
     public Button? MinimizeButton { get; protected set; }
 
     public Button? MaximizeRestoreButton { get; protected set; }
@@ -44,25 +35,6 @@ public class ThemedWindow : Window
     public Button? CloseButton { get; protected set; }
 
     #region Properties
-    /// <summary>
-    /// Gets or sets the visibility of the icon component of the window.
-    /// </summary>
-    public Visibility IconVisibility
-    {
-        get => (Visibility)GetValue(IconVisibilityProperty);
-        set => SetValue(IconVisibilityProperty, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the window's icon as <see cref="ImageSource">ImageSource</see>.
-    /// When the <see cref="Window.IconProperty">IconProperty</see> property changes, this is updated accordingly.
-    /// </summary>
-    protected internal ImageSource? IconSource
-    {
-        get => (ImageSource?)GetValue(IconSourceProperty);
-        set => SetValue(IconSourceProperty, value);
-    }
-
     /// <summary>
     /// Gets or sets the content of the window's title bar
     /// between the title and the window buttons.
@@ -120,16 +92,6 @@ public class ThemedWindow : Window
     }
 
     /// <summary>
-    /// Controls whether to shrink the title bar height a little when the window is maximized.
-    /// The default is <see langword="true"/> as this is how native windows behave.
-    /// </summary>
-    public bool ShrinkTitleBarWhenMaximized
-    {
-        get => (bool)GetValue(ShrinkTitleBarWhenMaximizedProperty);
-        set => SetValue(ShrinkTitleBarWhenMaximizedProperty, value);
-    }
-
-    /// <summary>
     /// Controls whether the content can overflow over the title bar.
     /// </summary>
     public bool AllowContentOverTitleBar
@@ -140,10 +102,6 @@ public class ThemedWindow : Window
     #endregion
 
     #region Dependency properties
-    public static readonly DependencyProperty IconVisibilityProperty = DependencyProperty.Register("IconVisibility", typeof(Visibility), typeof(ThemedWindow), new PropertyMetadata(Visibility.Visible));
-
-    protected internal static readonly DependencyProperty IconSourceProperty = DependencyProperty.Register("IconSource", typeof(ImageSource), typeof(ThemedWindow), new PropertyMetadata(null));
-
     public static readonly DependencyProperty TitleBarContentProperty = DependencyProperty.Register("TitleBarContent", typeof(object), typeof(ThemedWindow), new PropertyMetadata(null));
 
     public static readonly DependencyProperty TitleBarForegroundProperty = DependencyProperty.Register("TitleBarForeground", typeof(Brush), typeof(ThemedWindow), new PropertyMetadata(null));
@@ -158,8 +116,6 @@ public class ThemedWindow : Window
 
     protected internal static readonly DependencyProperty MaximizeBorderThicknessProperty = MaximizeBorderThicknessPropertyKey.DependencyProperty;
 
-    public static readonly DependencyProperty ShrinkTitleBarWhenMaximizedProperty = DependencyProperty.Register("ShrinkTitleBarWhenMaximized", typeof(bool), typeof(ThemedWindow), new PropertyMetadata(true));
-
     public static readonly DependencyProperty AllowContentOverTitleBarProperty = DependencyProperty.Register("AllowContentOverTitleBar", typeof(bool), typeof(ThemedWindow), new PropertyMetadata(false));
 
     #endregion
@@ -167,44 +123,12 @@ public class ThemedWindow : Window
     static ThemedWindow()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ThemedWindow), new FrameworkPropertyMetadata(typeof(ThemedWindow)));
-        IconProperty.OverrideMetadata(typeof(ThemedWindow), new FrameworkPropertyMetadata(OnIconPropertyChanged));
-    }
-
-    private static void OnIconPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        if (!(d is ThemedWindow sourceWindow))
-            return;
-
-        if (e.NewValue is ImageSource image)
-        {
-            sourceWindow.IconSource = image;
-            return;
-        }
-
-        string? newIcon = e.NewValue.ToString();
-
-        sourceWindow.IconSource = String.IsNullOrEmpty(newIcon) ? null : new BitmapImage(new Uri(newIcon));
     }
 
     /// <inheritdoc/>
     public ThemedWindow()
     {
-        IconSource = GetApplicationIcon();
         MaximizeBorderThickness = GetSystemMaximizeBorderThickness();
-    }
-
-    private BitmapSource? GetApplicationIcon()
-    {
-        string? appFilePath = Process.GetCurrentProcess().MainModule?.FileName;
-        if (!File.Exists(appFilePath))
-            return null;
-
-        Icon? appIcon = System.Drawing.Icon.ExtractAssociatedIcon(appFilePath);
-
-        if (appIcon == null)
-            return null;
-
-        return Imaging.CreateBitmapSourceFromHIcon(appIcon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
     }
 
     private Thickness GetSystemMaximizeBorderThickness()
@@ -234,15 +158,12 @@ public class ThemedWindow : Window
         }
 
         DragMoveThumb = GetTemplateChild(PART_DragMoveThumb) as FrameworkElement;
-        IconPresenter = GetTemplateChild(PART_IconPresenter) as FrameworkElement;
         MinimizeButton = GetTemplateChild(PART_MinimizeButton) as Button;
         MaximizeRestoreButton = GetTemplateChild(PART_MaximizeRestoreButton) as Button;
         CloseButton = GetTemplateChild(PART_CloseButton) as Button;
 
         if (DragMoveThumb != null)
             InitDragMoveThumb(DragMoveThumb);
-        if (IconPresenter != null)
-            InitIconPresenter(IconPresenter);
         if (MinimizeButton != null)
             InitMinimizeButton(MinimizeButton);
         if (MaximizeRestoreButton != null)
@@ -319,29 +240,6 @@ public class ThemedWindow : Window
     protected virtual void InitCloseButton(Button closeButton)
     {
         closeButton.Click += CloseClick;
-    }
-
-    /// <summary>
-    /// Initializes functionality of the icon presenter component of the window's title bar.
-    /// </summary>
-    /// <param name="iconPresenter">The icon presenter component of the window</param>
-    protected virtual void InitIconPresenter(FrameworkElement iconPresenter)
-    {
-        iconPresenter.MouseLeftButtonDown += (s, e) =>
-        {
-            if (e.ClickCount == 2)
-            {
-                Close();
-                return;
-            }
-
-            var anchorElement = DragMoveThumb ?? IconPresenter;
-            if (anchorElement == null)
-                return;
-
-            var menuPosition = anchorElement.TranslatePoint(new Point(0, anchorElement.ActualHeight), this);
-            OpenSystemContextMenu(menuPosition);
-        };
     }
 
     /// <summary>
@@ -434,16 +332,6 @@ public class ThemedWindow : Window
     }
 
     /// <summary>
-    /// Converts a <see cref="Size"/> that represents the native coordinate system of the screen
-    /// into a <see cref="Size"/> in device independent coordinates.
-    /// </summary>
-    protected Size TransformToWindowCoordinates(Size size)
-    {
-        Point transformedCoordinates = TransformToWindowCoordinates(new Point(size.Width, size.Height));
-        return new Size(transformedCoordinates.X, transformedCoordinates.Y);
-    }
-
-    /// <summary>
     /// Converts a Point that represents the native coordinate system of the screen
     /// into a Point in device independent coordinates.
     /// </summary>
@@ -493,7 +381,7 @@ public class ThemedWindow : Window
     /// </summary>
     private void DisableSizeToContentWhenMaximizing(object? sender, HwndInteropPositionChangingEventArgs e)
     {
-        if (e.Type == HwndInteropPositionChangingEventArgs.PositionChangeType.MAXIMIZERESTORE)
+        if (e.Type.HasFlag(HwndInteropPositionChangingEventArgs.PositionChangeType.MAXIMIZERESTORE))
         {
             SizeToContent = SizeToContent.Manual;
         }

@@ -54,7 +54,7 @@ namespace Joufflu.Navigation.Controls
                 nameof(PageNumber),
                 typeof(int),
                 typeof(Paging),
-                new PropertyMetadata(1, (o, value) => ((Paging)o).OnPageNumberChange()));
+                new PropertyMetadata(1, (o, value) => ((Paging)o).OnPageNumberChange(), (o, value) => ((Paging)o).CoercePageNumber((int)value)));
 
         public static readonly DependencyProperty CapacityProperty =
             DependencyProperty.Register(
@@ -72,30 +72,16 @@ namespace Joufflu.Navigation.Controls
         public List<int> AvailableCapacities { get; set; } = new List<int>() { 5, 10, 25, 50, 100, 200 };
         public ObservableCollection<PagingSelectionItem> AvailablePages { get; set; } = [];
 
-        public int PageMax
-        {
-            get
-            {
-                // If there is no total we set the max page to the current
-                if (Total <= 0)
-                    return PageNumber + 1;
-                int max = (int)Math.Ceiling(Total / (double)Capacity);
-                return Math.Max(1, max);
-            }
-        }
+        private PagingState State => new(Total, Capacity, PageNumber);
 
-        public int IntervalMin { get { return Capacity * (PageNumber - 1) + 1; } }
-
-        public int IntervalMax
-        {
-            get
-            {
-                if (IntervalMin + Capacity > Total)
-                    return Total;
-                else
-                    return IntervalMin + Capacity - 1;
-            }
-        }
+        /// <summary>
+        /// Whether the size of the set is known : a negative <see cref="Total"/> leaves it unknown, while 0 is an
+        /// empty set.
+        /// </summary>
+        public bool IsTotalKnown => State.IsTotalKnown;
+        public int PageMax => State.PageMax;
+        public int IntervalMin => State.IntervalMin;
+        public int IntervalMax => State.IntervalMax;
         #endregion
 
         public Paging()
@@ -105,80 +91,68 @@ namespace Joufflu.Navigation.Controls
         #region Change Events
         private void OnTotalChanged()
         {
-            UpdateAvailablesPages();
-            NotifyPropertyChanged(nameof(PageMax));
-            NotifyPropertyChanged(nameof(IntervalMin));
-            NotifyPropertyChanged(nameof(IntervalMax));
-            RaiseCommandsChanged();
+            // A page the new total no longer reaches is clamped, which goes through OnPageNumberChange.
+            CoerceValue(PageNumberProperty);
+            Refresh();
         }
+
+        private int CoercePageNumber(int value) => State.Clamp(value);
 
         private void OnPageNumberChange()
         {
-            int value = (int)GetValue(PageNumberProperty);
-            if (value > PageMax)
-                value = PageMax;
-            if (value < 1)
-                value = 1;
-
-            UpdateAvailablesPages();
-            SetValue(PageNumberProperty, value);
-
+            Refresh();
             PagingChange?.Invoke(PageNumber, Capacity);
-            NotifyPropertyChanged(nameof(IntervalMin));
-            NotifyPropertyChanged(nameof(IntervalMax));
-            RaiseCommandsChanged();
         }
 
         private void OnCapacityChanged()
         {
-            if (PageNumber > PageMax && PageMax != 0)
-                PageNumber = PageMax;
+            int previous = PageNumber;
+            CoerceValue(PageNumberProperty);
+            // A clamped page already went through OnPageNumberChange : refreshing and raising again would repeat it.
+            if (previous != PageNumber)
+                return;
 
+            Refresh();
             PagingChange?.Invoke(PageNumber, Capacity);
+        }
+
+        /// <summary>
+        /// Shows the current state : the page buttons, the interval and whether Previous and Next are available.
+        /// </summary>
+        private void Refresh()
+        {
+            UpdateAvailablePages();
+            NotifyPropertyChanged(nameof(IsTotalKnown));
             NotifyPropertyChanged(nameof(PageMax));
             NotifyPropertyChanged(nameof(IntervalMin));
             NotifyPropertyChanged(nameof(IntervalMax));
-            RaiseCommandsChanged();
-        }
-
-        private void RaiseCommandsChanged()
-        {
             PreviousCommand.NotifyCanExecuteChanged();
             NextCommand.NotifyCanExecuteChanged();
         }
         #endregion
 
-        private void UpdateAvailablesPages()
+        private void UpdateAvailablePages()
         {
             AvailablePages.Clear();
-
-            // Few enough pages -> show them all
-            if (PageMax < 8)
+            foreach (int? page in State.VisiblePages())
             {
-                for (int i = 0; i < Math.Min(PageMax, 7); i++)
-                    AvailablePages.Add(new PagingSelectionItem(i + 1, PageNumber));
-                return;
+                PagingSelectionItem item = page is int target
+                    ? new PagingSelectionItem(target, PageNumber)
+                    : new PagingSelectionSeparator();
+                AvailablePages.Add(item);
             }
-
-            int middlePage = Math.Clamp(PageNumber, 4, PageMax - 3);
-            AvailablePages.Add(new PagingSelectionItem(1, PageNumber));
-
-            AvailablePages.Add(PageNumber > 3 ? new PagingSelectionSeparator() : new PagingSelectionItem(2, PageNumber));
-
-            AvailablePages.Add(new PagingSelectionItem(middlePage - 1, PageNumber));
-            AvailablePages.Add(new PagingSelectionItem(middlePage, PageNumber));
-            AvailablePages.Add(new PagingSelectionItem(middlePage + 1, PageNumber));
-
-            AvailablePages.Add(PageNumber < PageMax - 3 ? new PagingSelectionSeparator() : new PagingSelectionItem(PageMax - 1, PageNumber));
-
-            AvailablePages.Add(new PagingSelectionItem(PageMax, PageNumber));
         }
 
         #region Commands
         [RelayCommand()]
-        private void GotTo(int pageNumber)
+        private void GoTo(int pageNumber)
         {
-            PageNumber = pageNumber;
+            // A click toggles the page button off ; on the current page nothing changes, so the buttons are built
+            // again to show it checked.
+            if (pageNumber == PageNumber)
+                UpdateAvailablePages();
+            else
+                PageNumber = pageNumber;
         }
 
         [RelayCommand(CanExecute = nameof(CanGoBack))]
@@ -187,8 +161,8 @@ namespace Joufflu.Navigation.Controls
         [RelayCommand(CanExecute = nameof(CanGoForward))]
         private void Next() { PageNumber += 1; }
 
-        private bool CanGoBack() => PageNumber > 1;
-        private bool CanGoForward() => PageNumber < PageMax;
+        private bool CanGoBack() => State.CanGoBack;
+        private bool CanGoForward() => State.CanGoForward;
         #endregion
     }
 }

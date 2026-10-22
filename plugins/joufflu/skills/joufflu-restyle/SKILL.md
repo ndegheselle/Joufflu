@@ -7,7 +7,9 @@ description: >-
   (custom numeric boxes, search boxes, tooltips, MessageBox dialogs, drag-and-drop
   handlers, icon images) for their Joufflu equivalents. Use when the user asks to
   restyle, clean up, modernise, "make theme-aware", fix dark mode, or audit a view
-  in a project that references Joufflu, or when a control doesn't follow the theme
+  in a project that references Joufflu, or when the user wants an old-looking WPF
+  view to look modern and Joufflu is not referenced yet (add it first with
+  `joufflu-new-app`), or when a control doesn't follow the theme
   switch; or says "/joufflu-restyle".
 ---
 
@@ -37,10 +39,10 @@ Search the XAML (and code-behind that sets visuals) for:
 | `{StaticResource …}` pointing at a Joufflu token | Frozen at load; theme switch ignored |
 | Local `<Style TargetType="Button">` / `TextBox`… without `BasedOn` | Replaces the Joufflu style entirely |
 | `Margin` on every child of a panel | `Spacing.Gap` |
-| Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls | `Sizing.Size` / typography styles |
+| Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls or text | `Sizing.Size` |
 | `CornerRadius="4"`, `BorderThickness="1"` literals | Tokens |
-| `ToolTip="…"` | `toolkit:Tooltip.Content` |
-| `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `OverlayViewModel`) |
+| `ToolTip="…"` | `toolkit:ThemedTooltip.Content` |
+| `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `IOverlayContent`) |
 | Status text / popups for success/errors | Toasts |
 | `AllowDrop` + `Drop`/`DragOver` handlers, `DoDragDrop` in `MouseMove` | `DropTarget` / `DragSource` |
 | `Image` icons or Segoe MDL2/Fluent glyphs | `fonts:FontIcon` + `LucideFontIcons` |
@@ -69,7 +71,7 @@ Map by **role**, not by closest hue:
 | Inset panel inside a card | `CardSecondary` / `Brushes.BackgroundBrush` |
 | Hover / selected row | `Brushes.Background200Brush` (usually already done by the native style) |
 | Normal text | Remove (inherits `Foreground`) |
-| Grey/secondary text | `Style="{StaticResource Muted}"` or `Brushes.Foreground100Brush` |
+| Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
 | Borders, separators | `Brushes.BorderBrush` / `Brushes.Border100Brush` |
 | Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryContentBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
@@ -94,7 +96,7 @@ Joufflu.Brushes.DangerBrush);`.
 Remove custom button styles/templates that only recolour. Pick by intent:
 main action `PrimaryButton`; neutral `SecondaryButton`; toolbar/low emphasis `GhostButton`;
 destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Icon-only:
-`toolkit:Sizing.IsSquare="True"` + a `FontIcon` + `toolkit:Tooltip.Content`.
+`toolkit:Sizing.IsSquare="True"` + a `FontIcon` + `toolkit:ThemedTooltip.Content`.
 
 ### Layout and sizes
 
@@ -103,8 +105,8 @@ destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Ic
 - Page padding → `Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"`.
 - Control heights/font sizes/paddings → remove them; use `toolkit:Sizing.Size` on the
   control or its panel for a denser/larger area.
-- Headings → `H1`…`H6`, intro `Lead`, captions `Small`, secondary `Muted`; drop literal
-  `FontSize`/`FontWeight`.
+- Headings → `toolkit:Sizing.Size` (`xl` page title, `lg` section) plus `FontWeight`;
+  captions `Sizing.Size="xs"`; secondary text `Colors.MutedOpacity`; drop literal `FontSize`.
 - Literal `CornerRadius`/`BorderThickness` → `Dimensions.CornerRadius` /
   `Dimensions.BorderThickness` (DynamicResource), or `toolkit:Derive.*` for partial sides.
 
@@ -122,7 +124,7 @@ Delete `ControlTemplate`s that only reimplemented the default look.
 ### Behaviour swaps (confirm with the user when it changes the view model)
 
 - `MessageBox.Show("Sure?", …, YesNo)` → `await _overlays.Confirm(message, title,
-  EnumConfirmationType.Danger) == true` (needs an `IOverlayService` and an
+  EnumConfirmationType.Danger) == true` (needs an `IOverlayer` and an
   `OverlayContainer` in the shell — see the `joufflu-new-app` skill).
 - Transient success/error messages → `_toasts.Success(...)` / `_toasts.Error(...)`.
 - Drag/drop code-behind → `toolkit:DropTarget.Command` with `CanExecute` as the filter,

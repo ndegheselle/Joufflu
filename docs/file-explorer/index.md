@@ -1,6 +1,7 @@
 ---
 title: File explorer
-nav_order: 7
+parent: Joufflu controls
+nav_order: 5
 has_children: true
 ---
 
@@ -14,15 +15,16 @@ A themed file explorer from the optional
 - **Tree** — the loaded hierarchy, folders only by default.
 - **Sources** — what the controls display: the disk, the disk watched live, or a source of your own.
 
-Add the package (`dotnet add package Joufflu.FileExplorer`) and merge its
-`Resources.xaml` after the core one and after `Joufflu.Feedback` (the sources report
-their errors as toasts). The snippets use these namespaces:
+Add the package (`dotnet add package Joufflu.FileExplorer`; it brings
+`Joufflu.Feedback` along, the sources report their errors as toasts). Only the core
+`Resources.xaml` needs merging: the controls' styles load from each package's
+`Themes/Generic.xaml`. The snippets use these namespaces:
 
 ```xml
 xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
 xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base;assembly=Joufflu.FileExplorer"
-xmlns:data="clr-namespace:Joufflu.FileExplorer.Data;assembly=Joufflu.FileExplorer"
-xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters;assembly=Joufflu.FileExplorer"
+xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu.FileExplorer"
+xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 ```
 
@@ -33,8 +35,10 @@ Every control binds a `Source`, an `IExplorerSource`: it holds the opened direct
 `FileSystemSource` reads a folder of this machine:
 
 ```csharp
-// using Joufflu.FileExplorer.Sources; — toasts is an injected IToastService, null is accepted
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+// using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -53,7 +57,8 @@ your own displays whatever you hand over — see [sources](sources.md).
 ## Nodes
 
 A source hands over `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and the
-`Parent` directory. `IExplorerDirectory` adds its `Children`, `IExplorerFile` a `Size`.
+`Parent` directory. `IExplorerDirectory` adds its `Children` and its `DirectoryTree` (itself and its ancestors, for
+the breadcrumb), `IExplorerFile` a `Size`.
 `FileSystemFile` and `FileSystemDirectory` implement them for the disk, and a type of
 your own is displayed like the others — see
 [virtual nodes](sources.md#virtual-nodes).

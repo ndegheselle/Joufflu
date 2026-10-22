@@ -1,0 +1,125 @@
+---
+title: Data
+parent: Joufflu controls
+nav_order: 4
+has_children: true
+---
+
+# Data
+
+JSON values edited as a tree, from the optional
+[`Joufflu.Data`](https://www.nuget.org/packages/Joufflu.Data) package.
+
+- **Data fill** — fills in a value against a JSON Schema.
+- **Data edit** — builds a value from scratch.
+- **Data display** — shows a value read only.
+
+Add the package (`dotnet add package Joufflu.Data`). Only the core `Resources.xaml` needs
+merging. The snippets use:
+
+```xml
+xmlns:data="clr-namespace:Joufflu.Data.Controls;assembly=Joufflu.Data"
+```
+
+```csharp
+using Joufflu.Data.Model;
+using NJsonSchema;
+using DataObject = Joufflu.Data.Model.DataObject; // System.Windows has one too
+```
+
+## Nodes
+
+The controls take a `Node`, a `DataObject` root: `DataFill` and `DataEdit` edit it in place,
+`DataDisplay` only shows it.
+
+| Node | Holds |
+|---|---|
+| `DataObject` | `Properties`, keyed by unique, case-sensitive keys |
+| `DataArray` | `Values`, keyed `[0]`, `[1]`…, and the `Template` new items are cloned from |
+| `DataValue` | a `Value`, or the `Options` of an enum |
+
+`ToToken()` returns the JSON:
+
+```csharp
+string? json = Node.ToToken()?.ToString();
+```
+
+## From a schema
+
+`ToDataNode()` builds the tree of an [NJsonSchema](https://github.com/RicoSuter/NJsonSchema)
+`JsonSchema`:
+
+```csharp
+Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode();
+```
+
+| Schema | Editor | Written as |
+|---|---|---|
+| `string` | `TextBox` | string |
+| `string`, format `date` / `date-time` | `DatePicker` | ISO 8601 string |
+| `string`, format `time-span` / `duration` | `TimeSpanPicker` | `[d.]hh:mm:ss` string |
+| `integer` | `NumericUpDown` | number |
+| `number` | `DecimalUpDown` | number |
+| `boolean` | `CheckBox` | `true` / `false` |
+| `enum` | `ComboBox`, named by `x-enumNames` | the option's value |
+| `array` / `object` | tree | array / object |
+
+New values start at `null` when nullable, else at the type's default (`""`, `0`, `false`,
+today, the first option).
+
+{: .note }
+> Not supported: arrays with a list of item schemas, or with no `items` schema. A schema with no type (`{}`) becomes a value filled in as free text.
+
+## To a schema
+
+`ToJsonSchema()` does the reverse: the schema of a tree, built from a schema or with
+`DataEdit`, following the table above (time spans get the `time-span` format):
+
+```csharp
+JsonSchema schema = Node.ToJsonSchema();
+string json = schema.ToJson();
+```
+
+Keys, `Description`, `IsNullable`, `IsRequired` and the enum `Options` are kept; values are not.
+
+## From JSON
+
+`Load()` fills a tree with a JSON value, the reverse of `ToToken()`, to edit a value again:
+
+```csharp
+Node = (DataObject)schema.ToDataNode();
+Node.Load(JToken.Parse(json), ManualValues);
+```
+
+The tree keeps its shape. A node matching one of the [manual values](#manual-values), or one its
+editor can't hold (an object given a string, say), is forced to it rather than lost; a property
+the JSON leaves out is forced to **undefined** when not required.
+
+Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, for `DataEdit`:
+
+```csharp
+Node = (DataObject)JObject.Parse(json).ToDataNode();
+```
+
+`Changed` is raised when the data of a node or of anything under it changes, to react to an
+edit anywhere in the tree: a key, a value, the manual mode or entry, an array template,
+children added or removed. Expanding a node, flagging a duplicate key or moving a node to
+another parent change no data and raise nothing.
+
+## Manual values
+
+`ManualValues` lists what a field can be forced to instead of its editor, like a
+placeholder resolved later. Each entry names the type it fits (`null` fits any):
+
+```csharp
+public IReadOnlyList<DataManualValue> ManualValues { get; } =
+[
+    new(EnumDataType.String, "TBD"),
+    new(EnumDataType.Integer, -1L),
+];
+```
+
+The feather toggle swaps a field's editor for the entries that fit it, plus **undefined**
+(the property is left out) when not required and **null** when nullable. It is disabled
+when nothing fits. Objects and arrays have it too: forced, their properties or items are
+hidden and the entry is written in their place, and they come back as they were once released.

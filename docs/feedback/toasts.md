@@ -1,13 +1,14 @@
 ---
 title: Toasts
 parent: Feedback
+grand_parent: Joufflu controls
 nav_order: 3
 ---
 
 # Toasts
 
 Transient notifications stacked in a corner of the window, above page content and
-overlays, auto-dismissed after a few seconds unless sticky.
+overlays, auto-dismissed after 5 seconds by default (`ToastOptions.Duration`) unless sticky.
 
 ## Hosting the toasts
 
@@ -48,7 +49,7 @@ gallery's **Toasts** page does exactly that.
 
 ## Showing a toast
 
-Show them from an injected `IToastService` (in `Joufflu.Feedback.Controls`):
+Show them from an injected `IToastService` (in `Joufflu.Feedback`):
 
 ```csharp
 toasts.Info("A neutral message.", "Heads up");

@@ -1,13 +1,19 @@
-﻿using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 
 namespace Joufflu.Inputs.Controls.Format
 {
+    /// <summary>
+    /// A text box typed into group by group, as its <see cref="Parts"/> say. What it shows and
+    /// how it answers the keyboard is the <see cref="FormatEditor"/>'s: the box forwards its input
+    /// there and shows the outcome.
+    /// </summary>
+    [ContentProperty(nameof(Parts))]
     [TemplatePart(Name = "PART_ClearButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_UpButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_DownButton", Type = typeof(Button))]
@@ -43,12 +49,8 @@ namespace Joufflu.Inputs.Controls.Format
 
         protected virtual void OnValuesChanged()
         {
-            if (!_isParsed)
-                ParseGroups(Format, GlobalFormat);
-            else if (_isValuesFromGroups == false)
-                UpdateGroups();
+            LoadValuesIntoEditor();
             ValuesChanged?.Invoke(this, Values);
-            FormatText();
         }
 
         #endregion
@@ -56,8 +58,6 @@ namespace Joufflu.Inputs.Controls.Format
         #region Properties
 
         #region Options
-        public bool AllowSelectionOutsideGroups { get; set; } = false;
-
         private bool _showDeleteButton = true;
         public bool ShowDeleteButton
         {
@@ -72,56 +72,29 @@ namespace Joufflu.Inputs.Controls.Format
             set { _showIncrementsButtons = value; OnPropertyChanged(); }
         }
 
-        public static readonly DependencyProperty GlobalFormatProperty = DependencyProperty.Register(
-            nameof(GlobalFormat),
-            typeof(string),
-            typeof(FormatTextBox),
-            new FrameworkPropertyMetadata(null, (o, e) => ((FormatTextBox)o).InvalidateFormat()));
-
-        public string? GlobalFormat
-        {
-            get => (string?)GetValue(GlobalFormatProperty);
-            set => SetValue(GlobalFormatProperty, value);
-        }
-
-        public static readonly DependencyProperty FormatProperty = DependencyProperty.Register(
-            nameof(Format),
-            typeof(string),
-            typeof(FormatTextBox),
-            new FrameworkPropertyMetadata("", (o, e) => ((FormatTextBox)o).InvalidateFormat()));
-
-        public string Format
-        {
-            get => (string)GetValue(FormatProperty);
-            set => SetValue(FormatProperty, value);
-        }
+        /// <summary>
+        /// What the box shows, in order: <see cref="IntegerGroup"/>s and <see cref="DecimalGroup"/>s
+        /// the user types into, and <see cref="FormatLiteral"/> text between them. The content of
+        /// the box in XAML. Empty, the box shows its <see cref="DefaultParts"/>.
+        /// </summary>
+        public ObservableCollection<FormatPart> Parts { get; } = new ObservableCollection<FormatPart>();
         #endregion
 
-        private int _selectedGroupIndex = -1;
+        /// <summary>
+        /// What a derived box shows while no <see cref="Parts"/> are written for it, the single number
+        /// of a <c>NumericUpDown</c> for instance. Kept apart from <see cref="Parts"/> so that parts
+        /// written in XAML replace them rather than being added after them.
+        /// </summary>
+        protected virtual IReadOnlyList<FormatPart> DefaultParts => [];
 
-        public int SelectedGroupIndex
-        {
-            get { return _selectedGroupIndex; }
-            set
-            {
-                _selectedGroupIndex = value;
-                SelectedGroup = (value >= 0 && value < _groups.Count) ? _groups[value] : null;
-            }
-        }
+        // Empty until the control is initialized, see OnPartsChanged.
+        private FormatEditor _editor = new FormatEditor([]);
 
-        public BaseGroup? SelectedGroup { get; set; }
-
-        private readonly List<BaseGroup> _groups = new List<BaseGroup>();
-        public IReadOnlyList<BaseGroup> Groups => _groups;
-
-        // Ordered format parts: BaseGroup for a group, string for literal text between groups.
-        private List<object> _parts = new List<object>();
-        private bool _isSelectionChanging = false;
-        private bool _isParsed = false;
-
-        // Matches the content inside curly braces, ignoring escaped ones
-        private static readonly Regex _formatRegex =
-            new Regex(@"(?<!\\)\{(.*?)(?<!\\)\}|[^{}]+", RegexOptions.Compiled);
+        /// <summary>
+        /// Set while the box writes the editor's text and selection back to itself, which is no
+        /// selection of the user's.
+        /// </summary>
+        private bool _isShowingEditor;
 
         // UI Parts
         private Button? _clearButton;
@@ -169,16 +142,13 @@ namespace Joufflu.Inputs.Controls.Format
         public FormatTextBox()
         {
             IsUndoEnabled = false;
-            this.Loaded += OnLoaded;
+            Parts.CollectionChanged += (sender, e) => OnPartsChanged();
         }
 
-        protected virtual void OnLoaded(object sender, RoutedEventArgs e)
+        protected override void OnInitialized(EventArgs e)
         {
-            // Parse only once: Loaded fires again whenever the control re-enters the
-            // visual tree (tab switches, virtualization) and re-parsing would reset groups.
-            if (!_isParsed)
-                ParseGroups(Format, GlobalFormat);
-            FormatText();
+            base.OnInitialized(e);
+            CreateEditor();
         }
 
         public override void OnApplyTemplate()
@@ -195,50 +165,27 @@ namespace Joufflu.Inputs.Controls.Format
         {
             base.OnPreviewTextInput(e);
 
-            // If no group is selected default to the first one
-            if (SelectedGroup == null)
-                ChangeSelectedGroup(1);
-
-            // Get the new text based on the input and the current selection
-
-            bool validInput = SelectedGroup?.OnInput(e.Text) ?? false;
-            if (validInput)
-            {
-                UpdateCurrentValue();
-                SelectedGroup?.OnAfterInput();
-            }
-
             e.Handled = true;
+            _editor.Type(e.Text);
+            ShowUserEdit();
         }
 
         protected override void OnSelectionChanged(RoutedEventArgs e)
         {
-            if (_isSelectionChanging)
+            if (_isShowingEditor)
                 return;
 
             base.OnSelectionChanged(e);
 
-            int currentRegexGroupIndex = -1;
-            for (int i = 0; i < Groups.Count; i++)
-            {
-                if (SelectionStart >= Groups[i].Index && SelectionStart <= Groups[i].Index + Groups[i].RenderedLength)
-                {
-                    currentRegexGroupIndex = i;
-                    break;
-                }
-            }
-            // Index of the group minus the first group (the global match)
-            SelectedGroupIndex = currentRegexGroupIndex;
-
-            if (SelectedGroupIndex < 0 && AllowSelectionOutsideGroups == false)
+            _editor.Select(SelectionStart, SelectionLength);
+            if (_editor.SelectedGroupIndex < 0)
             {
                 Keyboard.ClearFocus();
                 e.Handled = true;
             }
 
-            _isSelectionChanging = true;
-            SelectedGroup?.OnSelection();
-            _isSelectionChanging = false;
+            // The editor may have widened the selection to the whole group.
+            ShowEditor();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
@@ -249,35 +196,42 @@ namespace Joufflu.Inputs.Controls.Format
                 Keyboard.ClearFocus();
                 e.Handled = true;
             }
-            // If tab select next group
+            // Tab moves to the next group; past the last one (or before the first with Shift) it
+            // is left to WPF, so the focus can leave the box.
             else if (e.Key == Key.Tab)
             {
-                ChangeSelectedGroup(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1);
-                e.Handled = true;
+                bool moved = _editor.MoveToGroup(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1);
+                if (moved)
+                    ShowEditor();
+                e.Handled = moved;
             }
             // Left and right walk the text, by group or by character depending on the group
             else if (e.Key == Key.Left)
             {
-                e.Handled = MoveCaret(-1);
+                e.Handled = _editor.MoveCaret(-1);
+                ShowEditor();
             }
             else if (e.Key == Key.Right)
             {
-                e.Handled = MoveCaret(+1);
+                e.Handled = _editor.MoveCaret(+1);
+                ShowEditor();
             }
-            // Up/Down arrows increment or decrement the selected numeric group
+            // Up/Down arrows increment or decrement the selected group
             else if (e.Key == Key.Up)
             {
-                if (SelectedGroup is IBaseNumericGroup)
+                if (_editor.SelectedGroup != null)
                 {
-                    Spin(1);
+                    _editor.Spin(1);
+                    ShowUserEdit();
                     e.Handled = true;
                 }
             }
             else if (e.Key == Key.Down)
             {
-                if (SelectedGroup is IBaseNumericGroup)
+                if (_editor.SelectedGroup != null)
                 {
-                    Spin(-1);
+                    _editor.Spin(-1);
+                    ShowUserEdit();
                     e.Handled = true;
                 }
             }
@@ -285,16 +239,8 @@ namespace Joufflu.Inputs.Controls.Format
             // by the groups, so the key is always handled to prevent raw text editing.
             else if (e.Key == Key.Delete || e.Key == Key.Back)
             {
-                if (SelectedGroup != null)
-                {
-                    // A group keeping its own caret takes out the character the key points at; a
-                    // group selected whole is selected as one thing, so it is emptied as one.
-                    if (SelectedGroup.OnDeleteCharacter(e.Key == Key.Back) == false)
-                        SelectedGroup.OnDelete();
-
-                    UpdateCurrentValue();
-                    SelectedGroup.OnAfterInput();
-                }
+                _editor.Delete(backwards: e.Key == Key.Back);
+                ShowUserEdit();
                 e.Handled = true;
             }
         }
@@ -304,289 +250,155 @@ namespace Joufflu.Inputs.Controls.Format
             base.OnMouseWheel(e);
 
             // Only spin when focused so we don't hijack scrolling of a parent container
-            if (IsKeyboardFocusWithin && SelectedGroup is IBaseNumericGroup)
+            if (IsKeyboardFocusWithin && _editor.SelectedGroup != null)
             {
-                Spin(e.Delta > 0 ? 1 : -1);
+                _editor.Spin(e.Delta > 0 ? 1 : -1);
+                ShowUserEdit();
                 e.Handled = true;
             }
         }
 
-        /// <summary>
-        /// Increment (direction &gt; 0) or decrement the selected numeric group.
-        /// </summary>
-        private void Spin(int direction)
+        private void UpButton_Click(object sender, RoutedEventArgs e) => SpinFromButton(1);
+
+        private void DownButton_Click(object sender, RoutedEventArgs e) => SpinFromButton(-1);
+
+        // The box takes the focus, so that the group being spun shows as selected.
+        private void SpinFromButton(int direction)
         {
-            if (SelectedGroup == null)
-                ChangeSelectedGroup(1);
-
-            if (SelectedGroup is IBaseNumericGroup numericGroup)
-            {
-                if (direction >= 0)
-                    numericGroup.Increment();
-                else
-                    numericGroup.Decrement();
-
-                UpdateCurrentValue();
-                SelectedGroup?.OnAfterInput();
-            }
+            Focus();
+            _editor.Spin(direction);
+            ShowUserEdit();
         }
-
-        private void UpButton_Click(object sender, RoutedEventArgs e) => Spin(1);
-
-        private void DownButton_Click(object sender, RoutedEventArgs e) => Spin(-1);
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var group in Groups)
-                group.OnDelete();
-            UpdateValues();
+            _editor.Clear();
+            ShowUserEdit();
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// How an arrow key pointing in the direction [delta] is handled. A group using NoGlobalSelection
-        /// will allow the carret to move inside the group.
+        /// A new editor for the new parts. Before the control is initialized XAML is still adding
+        /// them one by one, so the editor waits for all of them, in OnInitialized.
         /// </summary>
-        /// <returns>true if the carret is handled</returns>
-        private bool MoveCaret(int delta)
+        private void OnPartsChanged()
         {
-            if (SelectedGroup is not IBaseNumericGroup numericGroup)
-                return false;
+            if (!IsInitialized)
+                return;
+            CreateEditor();
+        }
 
-            if (numericGroup.NoGlobalSelection == false)
-            {
-                ChangeSelectedGroup(delta);
-                return true;
-            }
-
-            bool isAtEdge = delta < 0
-                ? CaretIndex <= SelectedGroup.Index
-                : CaretIndex >= SelectedGroup.Index + SelectedGroup.RenderedLength;
-            if (isAtEdge == false)
-                return false;
-
-            ChangeSelectedGroup(delta);
-            return true;
+        private void CreateEditor()
+        {
+            IReadOnlyList<FormatPart> shownParts = Parts.Count > 0 ? Parts : DefaultParts;
+            _editor = new FormatEditor(shownParts);
+            _editor.Load(Values);
+            ShowEditor();
         }
 
         /// <summary>
-        /// Move [delta] groups along, and tell whether there was one to move to.
+        /// Show values set from outside. Values the editor already holds, those the box hands out
+        /// itself among them, are already shown.
         /// </summary>
-        /// <returns>true if the group is selected</returns>
-        public bool ChangeSelectedGroup(int delta)
+        private void LoadValuesIntoEditor()
         {
-            int newindex = SelectedGroupIndex + delta;
-            if (newindex < 0 || newindex >= Groups.Count)
-                return false;
-
-            if (IsFocused == false)
-                Focus();
-
-            Select(Groups[newindex].Index, 0);
-            return true;
-        }
-
-        private void FormatText()
-        {
-            // Change text and prevent selection from changing
-            _isSelectionChanging = true;
-            int selectionStart = SelectionStart;
-            int selectionLength = SelectionLength;
-
-            // Build the text from the ordered parts, recording each group's actual
-            // start index and rendered length. Groups can render fewer characters than
-            // their max Length (e.g. an unpadded "0"), so positions must come from the
-            // real text, not from the max width, otherwise selection drifts.
-            StringBuilder builder = new StringBuilder();
-            foreach (object part in _parts)
-            {
-                if (part is BaseGroup group)
-                {
-                    string rendered = group.ToString() ?? "";
-                    group.Index = builder.Length;
-                    group.RenderedLength = rendered.Length;
-                    builder.Append(rendered);
-                }
-                else if (part is string literal)
-                {
-                    builder.Append(literal);
-                }
-            }
-
-            string text = builder.ToString();
-            if (text != Text)
-            {
-                this.Text = text;
-                Select(selectionStart, selectionLength);
-            }
-
-            _isSelectionChanging = false;
-        }
-
-        private void UpdateCurrentValue()
-        {
-            if (SelectedGroup == null)
+            List<object?> editorValues = _editor.GetValues();
+            if (Values != null && Values.SequenceEqual(editorValues))
                 return;
 
-            if (Values == null)
-            {
-                UpdateValues();
-                return;
-            }
-
-            object? oldValue = Values[SelectedGroupIndex];
-            // Values are boxed (int/decimal), so compare by value, not reference.
-            if (!Equals(oldValue, SelectedGroup.Value))
-            {
-                UpdateValues();
-                return;
-            }
-
-            // The value is what it was, but may have changed (separator)
-            FormatText();
+            _editor.Load(Values);
+            ShowEditor();
         }
 
         /// <summary>
-        /// Prevent recursive updates
+        /// Show what the user's edit made of the editor, and hand its values out.
         /// </summary>
-        private bool _isValuesFromGroups;
-
-        private void UpdateValues()
+        private void ShowUserEdit()
         {
-            // Trigger DP change
-            _isValuesFromGroups = true;
+            ShowEditor();
+            PushValues();
+        }
+
+        /// <summary>
+        /// Write the editor's text and selection to the box: the only place they are written.
+        /// </summary>
+        private void ShowEditor()
+        {
+            _isShowingEditor = true;
             try
             {
-                Values = Groups.Select(x => x.Value).ToList();
+                if (Text != _editor.Text)
+                    Text = _editor.Text;
+                Select(_editor.SelectionStart, _editor.SelectionLength);
             }
             finally
             {
-                _isValuesFromGroups = false;
+                _isShowingEditor = false;
             }
         }
 
-        /// <summary>
-        /// Take the groups from <see cref="Values"/>, the other way round from
-        /// <see cref="UpdateValues"/>, so that a value set from outside shows instead of leaving
-        /// the text on what was there before.
-        /// <para>
-        /// A list that does not answer the format is left alone: there is no telling which group
-        /// each of its values would belong to.
-        /// </para>
-        /// </summary>
-        private void UpdateGroups()
+        private void PushValues()
         {
-            if (Values == null || Values.Count != Groups.Count)
+            List<object?> values = _editor.GetValues();
+            // Values are boxed (long/decimal), so compare by value, not reference.
+            if (Values != null && Values.SequenceEqual(values))
                 return;
 
-            for (int i = 0; i < Groups.Count; i++)
-                _groups[i].SetValueFrom(Values[i]);
-        }
-        #endregion
-
-        #region Parsing
-        /// <summary>
-        /// Reset the parsed state after <see cref="Format"/> or <see cref="GlobalFormat"/> change.
-        /// Re-parses immediately when the control is loaded, otherwise defers to <see cref="OnLoaded"/>.
-        /// </summary>
-        private void InvalidateFormat()
-        {
-            SelectedGroupIndex = -1;
-            _isParsed = false;
-            if (IsLoaded)
-            {
-                ParseGroups(Format, GlobalFormat);
-                FormatText();
-            }
-        }
-
-        public void ParseGroups(string format, string? globalFormat)
-        {
-            _groups.Clear();
-            _parts = ParseFormatString(format, globalFormat);
-
-            foreach (object part in _parts)
-            {
-                if (part is BaseGroup group)
-                    _groups.Add(group);
-            }
-
-            _isParsed = true;
-
-            UpdateGroups();
-        }
-
-        /// <summary>
-        /// Parse the format string
-        /// </summary>
-        /// <param name="format">Format string</param>
-        /// <param name="globalFormat">Global format string</param>
-        /// <returns></returns>
-        private List<object> ParseFormatString(string format, string? globalFormat)
-        {
-            GroupsFactory groupsFactory = new GroupsFactory();
-            List<object> groups = new List<object>();
-            int index = 0;
-
-            MatchCollection matches = _formatRegex.Matches(format);
-
-            foreach (Match match in matches)
-            {
-                if (match.Value.StartsWith("{") && match.Value.EndsWith("}"))
-                {
-                    // Extract the content inside the curly braces
-                    string groupContent = match.Groups[1].Value;
-                    BaseGroup group = groupsFactory.CreateGroupFromParams(this, groupContent, globalFormat);
-
-                    group.Index = index;
-                    groups.Add(group);
-                    index += group.Length;
-                }
-                else
-                {
-                    // CreateValue the literal text to the groups
-                    groups.Add(match.Value);
-                    index += match.Value.Length;
-                }
-            }
-
-            return groups;
+            // Not SetValue, which would replace a binding the host set on Values.
+            SetCurrentValue(ValuesProperty, values);
         }
         #endregion
     }
 
+
+    /// <summary>
+    /// A format text box standing for a single <see cref="Value"/>, made of its
+    /// <see cref="FormatTextBox.Values"/> and read back from them.
+    /// </summary>
     public abstract class SingleValueFormatTextBox<T> : FormatTextBox
     {
         public event EventHandler<T?>? ValueChanged;
 
-        private T? _previousValue = default;
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
+            nameof(Value),
+            typeof(T),
+            typeof(SingleValueFormatTextBox<T>),
+            new FrameworkPropertyMetadata(
+                default(T),
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                (o, e) => ((SingleValueFormatTextBox<T>)o).OnValueChanged()));
 
-        public virtual T? Value { get; set; } = default;
-
-        public virtual List<object?> ConvertTo() { return new List<object?>() { Value }; }
-
-        public virtual T? ConvertFrom()
+        public T? Value
         {
-            if (Values.Any(x => x == null))
-                return default;
-            return (T?)Values.FirstOrDefault();
+            get => (T?)GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         /// <summary>
-        /// Prevent recursive updates.
+        /// The values of the groups making [value].
         /// </summary>
-        private bool _isValueFromGroups;
+        protected virtual List<object?> ToValues(T? value) => new List<object?>() { value };
 
-        protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// The value the groups' [values] make, the default while any of them is missing.
+        /// </summary>
+        protected virtual T? FromValues(IReadOnlyList<object?> values)
         {
-            if (EqualityComparer<T>.Default.Equals(Value, _previousValue))
-                return;
+            if (values.Any(x => x == null))
+                return default;
+            return (T?)values.FirstOrDefault();
+        }
 
-            if (_isValueFromGroups == false)
-                Values = ConvertTo();
+        private void OnValueChanged()
+        {
+            // Values already making this value are left as they are: either the value was read
+            // from them, or rewriting them would wipe what the user typed in some groups and not
+            // others yet, which makes no value at all.
+            T? valueFromValues = ReadValueFromValues();
+            if (!EqualityComparer<T?>.Default.Equals(valueFromValues, Value))
+                SetCurrentValue(ValuesProperty, ToValues(Value));
 
-            _previousValue = Value;
             ValueChanged?.Invoke(this, Value);
         }
 
@@ -594,20 +406,11 @@ namespace Joufflu.Inputs.Controls.Format
         {
             base.OnValuesChanged();
 
-            var newValue = ConvertFrom();
-
-            if (EqualityComparer<T>.Default.Equals(Value, newValue))
-                return;
-
-            _isValueFromGroups = true;
-            try
-            {
-                Value = newValue;
-            }
-            finally
-            {
-                _isValueFromGroups = false;
-            }
+            T? valueFromValues = ReadValueFromValues();
+            // Not SetValue, which would replace a binding the host set on Value.
+            SetCurrentValue(ValueProperty, valueFromValues);
         }
+
+        private T? ReadValueFromValues() => Values == null ? default : FromValues(Values);
     }
 }

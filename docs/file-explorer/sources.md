@@ -1,6 +1,7 @@
 ---
 title: Sources
 parent: File explorer
+grand_parent: Joufflu controls
 nav_order: 4
 ---
 
@@ -12,8 +13,10 @@ act with. Controls sharing the same source stay in sync — selecting a folder i
 tree, double clicking one in the list or using the breadcrumb opens it for all of them.
 
 ```csharp
-// using Joufflu.FileExplorer.Sources; — toasts is an injected IToastService, null is accepted
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+// using Joufflu.FileExplorer.Nodes; and Joufflu.FileExplorer.FileSystem; — toasts is an injected IToastService, null is accepted
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -41,7 +44,9 @@ The same source, watching the disk: a file or a directory created, deleted, rena
 moved outside of the explorer shows up in it without a refresh.
 
 ```csharp
-public IExplorerSource Source { get; } = new FileSystemWatcherSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemWatcherSource(@"C:\Projects", toasts);
 // ...
 await Source.Open();
 ```
@@ -62,6 +67,11 @@ A source hands over the nodes it wants: this one adds a `notes.md` of its own in
 directory, associated to a path no file of the disk stands behind. A node type of the
 application is templated like the others — its visual and its context menu are keyed on
 its type, and an extra column shows the state it carries.
+
+Opening a directory reads the disk off the UI thread, so a slow or a network drive doesn't
+freeze the window, then hands what it read to `ApplyDirectory` on the UI thread, once for
+the directory and once for each sub directory read along with it. Override it to add nodes
+of your own next to the ones read.
 
 ```csharp
 // A node type of the application : it carries a path, and a state no file of the disk has.
@@ -88,9 +98,11 @@ public class VirtualFile : ObservableObject, IExplorerNode
 // A source hands its own nodes over along with the ones it reads.
 public class VirtualFilesSource : FileSystemSource
 {
-    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    public VirtualFilesSource(string rootDirectoryPath, IToastService? toasts) : base(rootDirectoryPath, toasts) { }
+
+    protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
     {
-        base.LoadDirectory(directory, depth);
+        base.ApplyDirectory(directory, read);
         directory.Children.Add(GetVirtualFile(directory));
     }
 
@@ -100,9 +112,14 @@ public class VirtualFilesSource : FileSystemSource
 ```
 
 The context menu of a node type is a `DataTemplate` keyed with
-`ContextMenuTemplateKey`. Its data context is an `ExplorerMenuContext`: `Source` for
-the commands, `Node` for the node the menu was opened on, `Nodes` for the whole
-selection.
+`ContextMenuTemplateKey`. Its data context is an `ExplorerMenuContext`: `Node` for the
+node the menu was opened on, `Nodes` for the whole selection, `Source`, and the commands
+of the items — `OpenCommand`, `CopyCommand`, `CutCommand`, `PasteCommand`,
+`RemoveCommand` and `CreateDirectoryCommand` run on the source, `BeginRenameCommand`
+renames the node in the control the menu was opened in, and `OpenInExplorerCommand`,
+`OpenWithDefaultCommand` and `CopyPathCommand` act on the disk, disabled for a source
+that isn't a `FileSystemSource`. Copy, cut and remove act on `Nodes`; the others take the
+node as their `CommandParameter`.
 
 ```xml
 <fileExplorer:Explorer Source="{Binding VirtualSource}">
@@ -122,7 +139,7 @@ selection.
             <ContextMenu>
                 <MenuItem Header="Pinned" IsCheckable="True"
                           IsChecked="{Binding Node.IsPinned, Mode=TwoWay}" />
-                <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                <MenuItem Header="Copy path" Command="{Binding CopyPathCommand}"
                           CommandParameter="{Binding Node}" />
             </ContextMenu>
         </DataTemplate>
@@ -155,17 +172,20 @@ selection.
 {: .note }
 > A context menu template is searched from the most specific type of the node up to
 > `object`, and on the scope of the menu (`Single`, `Multiple`, `None` outside of any
-> node), so a type without a menu of its own falls back on the default ones.
+> node). The built-in menus are keyed on `FileSystemDirectory` and `FileSystemFile` for a single
+> node and on `object` for a multi-selection or the empty area, so a single node of a type of
+> your own shows no menu until you key one on its type.
 
 ## A source of something else
 
 A source that reads none of the disk implements `IExplorerSource` itself: `Root` and
 `Current`, `Open()` and `Open(node)`, `Transfer(paths, target, isMove)` for what is
-dropped or pasted into it, and the commands the menus and the shortcuts bind
-(`RenameCommand`, `RemoveCommand`, `CreateDirectoryCommand`, `CopyCommand`,
-`CutCommand`, `PasteCommand`, `OpenCommand`, `OpenInExplorerCommand`,
-`CopyPathCommand`, `OpenWithDefaultCommand`).
+dropped or pasted into it, and the plain operations the menus and the shortcuts run:
+`Rename(node, name)`, `Remove(nodes)`, `CreateDirectory(parent)`, `Copy(nodes)`,
+`Cut(nodes)`, `Paste(target)` and `CanPaste()`. The controls build the commands
+themselves, so a source holds no UI.
 
 The nodes it hands over are `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt` and
-the `Parent` directory, `IExplorerDirectory` adding its `Children` and `IExplorerFile`
-a `Size`.
+the `Parent` directory, `IExplorerDirectory` adding its `Children` and its
+`DirectoryTree` (itself and its ancestors, from the root, which the breadcrumb shows),
+and `IExplorerFile` a `Size`.

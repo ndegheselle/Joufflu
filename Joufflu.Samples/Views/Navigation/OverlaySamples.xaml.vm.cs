@@ -7,7 +7,7 @@ namespace Joufflu.Samples.Views.Navigation;
 
 public class OverlaySamplesViewModel : ObservableObject
 {
-    private readonly IOverlayService _overlays;
+    private readonly IOverlayer _overlays;
     private readonly IToastService _toasts;
 
     public IRelayCommand OpenSimpleCommand { get; }
@@ -20,7 +20,7 @@ public class OverlaySamplesViewModel : ObservableObject
 
     public IRelayCommand OpenStackedCommand { get; }
 
-    public OverlaySamplesViewModel(IOverlayService overlays, IToastService toasts)
+    public OverlaySamplesViewModel(IOverlayer overlays, IToastService toasts)
     {
         _overlays = overlays;
         _toasts = toasts;
@@ -35,7 +35,7 @@ public class OverlaySamplesViewModel : ObservableObject
     private void OpenSimple()
     {
         var content = new ConfirmViewModel("This is a simple overlay. Click the cross or the dimmed background to dismiss it.");
-        _overlays.Show(content, new OverlayOptions { Title = "Simple overlay" });
+        _overlays.ShowAsync(content, new OverlayOptions { Title = "Simple overlay" });
     }
 
     private async Task OpenConfirmAsync()
@@ -49,8 +49,8 @@ public class OverlaySamplesViewModel : ObservableObject
 
     private async Task OpenFormAsync()
     {
-        // The form carries its own options and hands back what was typed, being an OverlayViewModel.
-        string? name = await OverlayViewModel<string>.ShowAsync(new SampleFormViewModel(_overlays));
+        // The form carries its own options and hands back what was typed, being an IOverlayContent<string>.
+        string? name = await _overlays.ShowAsync(new SampleFormViewModel(_overlays));
         if (name != null)
             _toasts.Success($"Saved name: {name}", "Profile");
     }
@@ -58,28 +58,27 @@ public class OverlaySamplesViewModel : ObservableObject
     private void OpenFullScreen()
     {
         var content = new ConfirmViewModel("This overlay fills the whole surface. Use the close cross to dismiss it.");
-        _overlays.Show(content, new OverlayOptions { Title = "Full screen overlay", FullScreen = true });
+        _overlays.ShowAsync(content, new OverlayOptions { Title = "Full screen overlay", FullScreen = true });
     }
 
     private void OpenStacked()
     {
-        _overlays.Show(
+        _overlays.ShowAsync(
             new ConfirmViewModel("First overlay. Open another one on top to see overlays stack."),
             new OverlayOptions { Title = "Overlay 1" });
 
-        _overlays.Show(
+        _overlays.ShowAsync(
             new ConfirmViewModel("Second overlay, stacked above the first. Close me to reveal it."),
             new OverlayOptions { Title = "Overlay 2" });
     }
 
     public string Code =>
-        "// Content deriving from OverlayViewModel<T> owns its buttons and its\n" +
-        "// options, closes itself, and hands back what it was validated with.\n" +
-        "var form = new SampleFormViewModel(overlays);\n" +
-        "string? name = await OverlayViewModel<string>.ShowAsync(form);\n" +
+        "// Content implementing IOverlayContent<T> owns its buttons and its options,\n" +
+        "// closes itself with overlays.Validate(this), and hands back its Result.\n" +
+        "string? name = await overlays.ShowAsync(new SampleFormViewModel(overlays));\n" +
         "\n" +
         "// Any object works too, its options being given at show time\n" +
-        "bool? result = await overlays.Show(content, new OverlayOptions { Title = \"...\" });\n" +
+        "bool? result = await overlays.ShowAsync(content,new OverlayOptions { Title = \"...\" });\n" +
         "\n" +
         "// Standard confirmation, no content of your own\n" +
         "bool? confirmed = await overlays.Confirm(\"Delete the selected item?\", \"Please confirm\");";
@@ -94,25 +93,29 @@ public class ConfirmViewModel : ObservableObject
 }
 
 /// <summary>
-/// Overlay content with an editable field, used by the form overlay demo. Deriving from
-/// <see cref="OverlayViewModel{TResult}"/> gives it its options, its cancel command and the result
-/// it is awaited for, so it only writes the save.
+/// Overlay content with an editable field, used by the form overlay demo. Implementing
+/// <see cref="IOverlayContent{TResult}"/> gives it its own options and the result it is awaited for;
+/// the close cross dismisses it, Cancel cancels it and Save validates it.
 /// </summary>
-public partial class SampleFormViewModel : OverlayViewModel<string>
+public partial class SampleFormViewModel : ObservableObject, IOverlayContent<string>
 {
+    private readonly IOverlayer overlays;
+    [ObservableProperty]
     private string _name = "Ada Lovelace";
+    [ObservableProperty]
     private bool _subscribe = true;
 
-    public SampleFormViewModel(IOverlayService overlays) : base(overlays)
+    public string? Result => Name;
+    public OverlayOptions Options => new OverlayOptions() { Title = "Edit profile" };
+
+    public SampleFormViewModel(IOverlayer overlays)
     {
-        Options.Title = "Edit profile";
-        Options.CloseOnClickAway = false;
+        this.overlays = overlays;
     }
 
-    public string Name { get => _name; set => SetProperty(ref _name, value); }
-
-    public bool Subscribe { get => _subscribe; set => SetProperty(ref _subscribe, value); }
+    [RelayCommand]
+    private void Save() => overlays.Validate(this);
 
     [RelayCommand]
-    private void Save() => Close(Name);
+    private void Cancel() => overlays.Cancel(this);
 }

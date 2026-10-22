@@ -2,36 +2,39 @@
 
 > WPF inputs and reusable controls for .NET, built on a small design system of themed brushes, dimensions, sizing and spacing helpers. Every control reads its colours through `DynamicResource`, so the whole UI re-themes live between Light and Dark with no restart.
 
-Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu and modal overlays). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
+Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core styles, theming, restyled native WPF controls and themed tooltips), `Joufflu.Data` (JSON values edited as a tree), `Joufflu.Feedback` (badges, spinner and toasts), `Joufflu.FileExplorer` (a file explorer built on a replaceable source), `Joufflu.Inputs` (input controls), and `Joufflu.Navigation` (navigation menu, modal overlays and paging). These docs mirror the `Joufflu.Samples` gallery app: same titles, descriptions and code snippets. All links below point to the raw Markdown source.
 
 ## Start here
 
-- [Overview and getting started](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/index.md): what the library is, package layout, and the four-step setup (add packages, merge `Resources.xaml`, initialize `ThemeManager`).
+- [Overview and getting started](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/index.md): what the library is, package layout, and the three-step setup (add packages, merge `Resources.xaml`, initialize `ThemeManager`).
 - [Tutorial: a navigable app shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/tutorial.md): builds an MVVM app on `Joufflu.Navigation` — shared shell view model, view-model-first navigation, an example page, a modal overlay and a toast.
+
+- [Recipes](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/recipes.md): copy-paste screens — settings page, brand/custom theme, theme switcher, searchable paged table, delete confirmation, status row, size density.
+- [Joufflu vs other WPF UI libraries](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/comparison.md): when to pick Joufflu, when another library (Material, Fluent, Metro) fits better, and how to mix.
+
+## Themes (`Joufflu`)
+
+- [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/application-shell.md): `ThemedWindow`, and `AllowContentOverTitleBar`, plus the `OverlayContainer` / `ToastContainer` wrappers.
+- [Theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
+- [Design tokens](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/tokens.md): reference of every `Colors`, `Brushes` and `Dimensions` key a theme is made of, with the role each plays in the control styles — surfaces, text, the six accent families (`X` / `X100` / `XContent`), shape, layout, control heights, font sizes and paddings.
+- [Customize theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/customize-theme.md): the live theme editor, presets and override resource keys.
 
 ## Native controls
 
-- [Buttons](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/buttons.md): default button plus named styles — solid, soft and outline variants, icon (`IsSquare`) buttons, and `Sizing.Size`.
-- [Icons](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/icons.md): `FontIcon` and the Lucide glyph set.
+- [Typography](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/typography.md): text sized by `Sizing.Size` (`xs`…`xl` on the font-size tokens), headings as a size plus a weight, and muted text through `Colors.MutedOpacity`.
+- [Font icon](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/icons.md): `FontIcon` and the Lucide glyph set.
 - [Card](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/card.md): the `Card` and `CardSecondary` named `Border` styles.
-- [Typography](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/typography.md): the named text styles (`H1`, `H2`, ...).
+- [Buttons](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/buttons.md): default button plus named styles — solid, soft and outline variants, icon (`IsSquare`) buttons, and `Sizing.Size`.
 
-## Inputs (`Joufflu.Inputs`)
+## Toolkit (`Joufflu`, namespace `Joufflu.Toolkit`)
 
-- [Numeric & format inputs](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/numeric-inputs.md): `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, and the underlying `FormatTextBox`.
-- [Search](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/search.md): debounced `Search` box, raising `SearchChanged` after a delay.
-- [Search combo box](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/combo-box-search.md): `ComboBoxSearch`, an editable combo box filtering its items as you type.
-- [Combo box tags](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/combo-box-tags.md): multi-selection `ComboBoxTags` with removable tags and optional free entry.
-- [Text editable](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/text-editable.md): `TextEditable`, a value that becomes an editable text box on demand.
-- [File picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/file-picker.md): `FilePicker`, selects a file through the system dialog.
-- [Color picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/color-picker.md): `ColorPicker` with hex field and a saturation/hue/alpha popup.
-- [Dropdown](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/dropdown.md): `Dropdown`, a toggle button opening a popup of any content, with corner placement.
-
-## Navigation (`Joufflu.Navigation`)
-
-- [Navigation menu](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/navigation-menu.md): collapsible side menu driven by a `Navigator`, with groups, nesting and items targeting a page type.
-- [Overlays](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md): the `OverlayContainer` host, stacking modal overlays, `OverlayOptions`, awaiting a result from `Show`, and the standard confirmation from `Confirm` with `EnumConfirmationType`.
-- [Paging](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, usage without a known total, and the `PagingChange` event.
+- [Sizing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/sizing.md): `Sizing.Size` and `IsSquare` attached properties.
+- [Spacing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
+- [Derived dimensions](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/derived-dimensions.md): `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` with their per-side and per-corner factors, scaling a theme dimension live.
+- [Tooltip](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md): `ThemedTooltip.Content` and `ThemedTooltip.Placement` for themed tooltips on any element.
+- [Animate](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md): `Animate.Bounce` looping a vertical hop on any element, with `BounceHeight` and `BounceDuration`.
+- [Drag and drop](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/drop-target.md): `DropTarget.Command` turning any element into a drop target, the `CanExecute` filter, the `DropData` parameter carrying the dragged data and where the drop landed, the `IsDragOver` highlight and the reported `Effect`; and `DragSource.Data`, `AllowedEffects` and `IsDragging` turning any element into a drag source.
+- [Custom input](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/custom-input.md): building an input that matches the Joufflu ones — required background, border and height tokens; optional size triggers with `InputPadding`, hover/focus/disabled states, the `Validation.HasError` border plus `ValidationErrorTemplate` badge, and `EmbeddedButton` for inner buttons.
 
 ## Feedback (`Joufflu.Feedback`)
 
@@ -39,33 +42,45 @@ Joufflu ships as five NuGet packages that build on each other: `Joufflu` (core s
 - [Spinner](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/spinner.md): indeterminate loading indicator.
 - [Toasts](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/toasts.md): transient notifications from `IToastService`, including sticky toasts.
 
+## Inputs (`Joufflu.Inputs`)
+
+- [Numeric & format inputs](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/numeric-inputs.md): `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, and the underlying `FormatTextBox`.
+- [Search](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/search.md): debounced `Search` box — `SearchText`, `SearchCommand` and `SearchChanged`, reported once typing settles.
+- [Search combo box](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/combo-box-search.md): `ComboBoxSearch`, an editable combo box filtering its items as you type.
+- [Combo box tags](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/combo-box-tags.md): multi-selection `ComboBoxTags` with removable tags and optional free entry.
+- [Text editable](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/text-editable.md): `TextEditable`, a value that becomes an editable text box on demand.
+- [File picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/file-picker.md): `FilePicker`, selects a file through the system dialog.
+- [Color picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/color-picker.md): `ColorPicker` with hex field and a saturation/hue/alpha popup.
+- [Dropdown](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/dropdown.md): `Dropdown` attached properties turning any `ToggleButton` into a dropdown — popup content, corner placement, offsets, `CloseOnClick` and `PopupStyle`.
+
+## Navigation (`Joufflu.Navigation`)
+
+- [Navigation menu](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/navigation-menu.md): collapsible side menu driven by a `Navigator`, with groups, nesting and items targeting a page type.
+- [Overlays](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/overlays.md): the `OverlayContainer` host, stacking modal overlays, `OverlayOptions`, awaiting a result from `ShowAsync` and `IOverlayContent<TResult>`, and the standard confirmation from `Confirm` with `EnumConfirmationType`.
+- [Paging](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/paging.md): `Paging` page selector — `Total`, `PageNumber`, `Capacity`, two-way bindings to page a `DataGrid`, usage without a known total, and the `PagingChange` event.
+
+## Data (`Joufflu.Data`)
+
+- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree, `ToToken()`, `ToDataNode()` from an NJsonSchema `JsonSchema` (editor and JSON per type), and `ManualValues`.
+- [Data fill](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md): `DataFill`, filling in a node built from a schema.
+- [Data edit](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md): `DataEdit`, building a node from scratch.
+- [Data display](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-display.md): `DataDisplay`, showing a node read only with the key, type and value of each node.
+
 ## File explorer (`Joufflu.FileExplorer`)
 
 - [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/index.md): `IExplorerSource` / `IExplorerNode`, `FileSystemSource`, shell-backed file operations, context menus, drag and drop, shortcuts and `VisibleNodes`.
-- [Explorer](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/explorer.md): the complete `Explorer` (control bar, tree, list, status bar) and replacing the node templates.
 - [List](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/list.md): `ExplorerList`, its `ExtraColumns` and the `VisibleNodes` filter.
 - [Tree](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/tree.md): `ExplorerTree` of the loaded hierarchy, folders only by default.
+- [Explorer](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/explorer.md): the complete `Explorer` (control bar, tree, list, status bar) and replacing the node templates.
 - [Sources](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/file-explorer/sources.md): `IExplorerSource`, `FileSystemSource`, the live `FileSystemWatcherSource`, and a source handing over node types of your own with their context menu and columns.
-
-## Toolkit (`Joufflu`, namespace `Joufflu.Toolkit`)
-
-- [Sizing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/sizing.md): `Sizing.Size` and `IsSquare` attached properties.
-- [Spacing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
-- [Tooltip](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md): `Tooltip.Content` and `Tooltip.Placement` for themed tooltips on any element.
-- [Drag and drop](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/drop-target.md): `DropTarget.Command` turning any element into a drop target, the `CanExecute` filter, the `DropData` parameter carrying the dragged data and where the drop landed, the `IsDragOver` highlight and the reported `Effect`; and `DragSource.Data`, `AllowedEffects` and `IsDragging` turning any element into a drag source.
-- [Theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
-- [Design tokens](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tokens.md): reference of every `Colors`, `Brushes` and `Dimensions` key a theme is made of, with the role each plays in the control styles — surfaces, text, the six accent families (`X` / `X100` / `XContent`), shape, layout, control heights, font sizes and paddings.
-- [Customize theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/customize-theme.md): the live theme editor, presets and override resource keys.
-- [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/application-shell.md): `ThemedWindow`, `AllowContentOverTitleBar` and the `FullContainer` page host, plus the `OverlayContainer` / `ToastContainer` wrappers.
-- [Derived dimensions](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/derived-dimensions.md): `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` with their per-side and per-corner factors, scaling a theme dimension live.
-- [Animate](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md): `Animate.Bounce` looping a vertical hop on any element, with `BounceHeight` and `BounceDuration`.
-- [Custom input](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/custom-input.md): building an input that matches the Joufflu ones — required background, border and height tokens; optional size triggers with `InputPadding`, hover/focus/disabled states, the `Validation.HasError` border plus `ValidationErrorTemplate` badge, and `EmbeddedButton` for inner buttons.
 
 ## Optional
 
+- [Everything in one file](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt): every page above concatenated, for agents that prefer a single fetch.
 - [Documentation site](https://ndegheselle.github.io/Joufflu/): the rendered docs.
 - [GitHub repository](https://github.com/ndegheselle/Joufflu/): source, samples and issues.
 - [Joufflu on NuGet](https://www.nuget.org/packages/Joufflu): core package (styles, theming & tooltips).
+- [Joufflu.Data on NuGet](https://www.nuget.org/packages/Joufflu.Data): JSON data trees.
 - [Joufflu.Feedback on NuGet](https://www.nuget.org/packages/Joufflu.Feedback): badges, spinner & toasts.
 - [Joufflu.FileExplorer on NuGet](https://www.nuget.org/packages/Joufflu.FileExplorer): file explorer controls.
 - [Joufflu.Inputs on NuGet](https://www.nuget.org/packages/Joufflu.Inputs): input controls.

@@ -11,8 +11,8 @@ namespace Joufflu.Inputs.Controls
     /// <para>
     /// The debounced query is exposed three ways so it fits any style: the <see cref="SearchChanged"/>
     /// event (code-behind), the two-way bindable <see cref="SearchText"/> property, and the
-    /// <see cref="SearchCommand"/> (MVVM). <see cref="TextBox.Text"/> still updates on every keystroke;
-    /// the three members above only fire once typing settles.
+    /// <see cref="SearchCommand"/> (MVVM). <see cref="TextBox.Text"/> still updates on every change;
+    /// the three members above only fire once it settles, whether typed, pasted or set from code.
     /// </para>
     /// </summary>
     public partial class Search : TextBox
@@ -53,10 +53,13 @@ namespace Joufflu.Inputs.Controls
         }
 
         private readonly DispatcherTimer _searchTimer;
+
+        /// <summary>Text of the last search raised, so that a text settling back to it doesn't search again.</summary>
+        private string _lastSearch = string.Empty;
+
         public Search()
         {
             _searchTimer = InitSearchTimer();
-            this.KeyUp += OnKeyUp;
             // Stop the debounce timer when leaving the visual tree: a running timer would
             // otherwise keep this control alive (and could fire SearchChanged after unload).
             this.Unloaded += (_, _) => _searchTimer.Stop();
@@ -69,16 +72,24 @@ namespace Joufflu.Inputs.Controls
             return timer;
         }
 
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        protected override void OnTextChanged(TextChangedEventArgs e)
+        {
+            base.OnTextChanged(e);
+            // Any change, typed, pasted or set from code, restarts the debounce.
+            _searchTimer.Stop();
+            _searchTimer.Start();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
                 ClearSearch();
+                e.Handled = true;
                 return;
             }
 
-            _searchTimer.Stop();
-            _searchTimer.Start();
+            base.OnKeyDown(e);
         }
 
         private void FilterTimer_Tick(object? sender, EventArgs e)
@@ -91,12 +102,19 @@ namespace Joufflu.Inputs.Controls
         public void ClearSearch()
         {
             Clear();
+            // Clear() restarted the debounce through OnTextChanged, the search is raised right away instead.
+            _searchTimer.Stop();
             RaiseSearch();
         }
 
         /// <summary>Publishes the current text through the event, the bindable property and the command.</summary>
         private void RaiseSearch()
         {
+            // The text settled back to the last searched one (typed then erased for instance).
+            if (Text == _lastSearch)
+                return;
+            _lastSearch = Text;
+
             SearchText = Text;
             SearchChanged?.Invoke(Text);
             if (SearchCommand?.CanExecute(Text) == true)

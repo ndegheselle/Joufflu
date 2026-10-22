@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ndegheselle.github.io/Joufflu/sitemap.xml

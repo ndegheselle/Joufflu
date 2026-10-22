@@ -11,7 +11,7 @@
     {
       "name": "joufflu",
       "source": "./plugins/joufflu",
-      "description": "Skills to use Joufflu in a WPF app: API reference for every package, app shell scaffolding, custom themes and restyling existing views onto the design system.",
+      "description": "Build a modern, themed (Light/Dark) WPF UI with Joufflu: skills for the API of every package, app shell scaffolding, custom themes and restyling existing views onto the design system.",
       "category": "development"
     }
   ]

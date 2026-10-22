@@ -1,7 +1,7 @@
-﻿---
+---
 title: Derived dimensions
 parent: Toolkit
-nav_order: 9
+nav_order: 3
 ---
 
 # Derived dimensions
@@ -20,7 +20,7 @@ from:
 
 `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` build the
 value on the element instead, from a real `DynamicResource`. A scalar edited at
-runtime — by the [theme customizer](customize-theme.html), for instance — flows
+runtime — by the [theme customizer](../themes/customize-theme.html), for instance — flows
 straight through, and no derived resource key has to be declared or re-pushed by
 hand.
 

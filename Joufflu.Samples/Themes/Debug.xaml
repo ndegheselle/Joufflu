@@ -1,0 +1,58 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+
+    <!--
+        A high contrast "Debug" palette: every token gets its own loud, unrelated colour so you can tell
+        at a glance which token paints which part of a control. Not meant to look good.
+        Legend: Foreground white, Foreground100 cyan, Foreground200 teal | Border magenta, Border100 pink |
+        Background black, Background100 navy, Background200 dark green | Primary orange, Secondary purple,
+        Success lime, Info blue, Warning yellow, Danger red (each: base, 100 = lighter/different hue, Content = text on it).
+    -->
+
+    <!--  Foreground  -->
+    <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#FFFFFFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Foreground100Color}">#FF00FFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Foreground200Color}">#FF00A08A</Color>
+
+    <!--  Border  -->
+    <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#FFFF00FF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#FFFF80C0</Color>
+
+    <!--  Background  -->
+    <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#FF000000</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Background100Color}">#FF000080</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Background200Color}">#FF005000</Color>
+
+    <!--  Primary: orange, black content  -->
+    <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#FFFF8000</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Primary100Color}">#FFFFC080</Color>
+    <Color x:Key="{x:Static joufflu:Colors.PrimaryContentColor}">#FF000000</Color>
+
+    <!--  Secondary: purple, white content  -->
+    <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#FF8000FF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Secondary100Color}">#FFC080FF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SecondaryContentColor}">#FFFFFFFF</Color>
+
+    <!--  Success: lime, black content  -->
+    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#FF80FF00</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Success100Color}">#FF00FF80</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessContentColor}">#FF000000</Color>
+
+    <!--  Info: blue, white content  -->
+    <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#FF0080FF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Info100Color}">#FF00C0FF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.InfoContentColor}">#FFFFFFFF</Color>
+
+    <!--  Warning: yellow, black content  -->
+    <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#FFFFFF00</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Warning100Color}">#FFC0A000</Color>
+    <Color x:Key="{x:Static joufflu:Colors.WarningContentColor}">#FF000000</Color>
+
+    <!--  Danger: red, white content  -->
+    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#FFFF0000</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Danger100Color}">#FFFF6060</Color>
+    <Color x:Key="{x:Static joufflu:Colors.DangerContentColor}">#FFFFFFFF</Color>
+
+</ResourceDictionary>

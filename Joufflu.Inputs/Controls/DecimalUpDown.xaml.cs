@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using Joufflu.Inputs.Controls.Format;
 
 namespace Joufflu.Inputs.Controls
@@ -10,22 +10,7 @@ namespace Joufflu.Inputs.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DecimalUpDown), new FrameworkPropertyMetadata(typeof(DecimalUpDown)));
         }
 
-        public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register(
-            nameof(Value),
-            typeof(decimal?),
-            typeof(DecimalUpDown),
-            new FrameworkPropertyMetadata(default(decimal?), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((DecimalUpDown)o).OnValueChanged(e)));
-
-        public override decimal? Value
-        {
-            get { return (decimal?)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
-        }
-
-        public DecimalUpDown()
-        {
-            Format = "{decimal|noGlobalSelection|nullable}";
-        }
+        protected override IReadOnlyList<FormatPart> DefaultParts { get; } =
+            [new DecimalGroup { IsNullable = true, SelectsWhole = false }];
     }
 }

@@ -12,9 +12,9 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Inputs"
     d:DataContext="{d:DesignInstance Type=vm:NumericInputsSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Numeric &amp; format inputs" />
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Numeric &amp; format inputs" />
 
             <c:CodeExample
                 Title="NumericUpDown"
@@ -29,7 +29,7 @@
             <c:CodeExample
                 Title="DecimalUpDown"
                 Code="{Binding DecimalCode}"
-                Description="Selects a double / decimal value using the decimal format.">
+                Description="Selects a decimal value through a single DecimalGroup.">
                 <StackPanel toolkit:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:DecimalUpDown Width="180" Value="{Binding DecimalValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding DecimalValue, StringFormat='Value: {0}'}" />
@@ -49,12 +49,32 @@
             <c:CodeExample
                 Title="FormatTextBox"
                 Code="{Binding FormatCode}"
-                Description="The base input: a format string describes groups that are parsed into individual values and navigated with Tab / arrows.">
+                Description="The base input: groups the user types into, with literal text between them, each group read into its own value and navigated with Tab / arrows.">
                 <StackPanel toolkit:Spacing.Gap="4">
-                    <format:FormatTextBox toolkit:Sizing.Size="xs" Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
-                    <format:FormatTextBox toolkit:Sizing.Size="sm" Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
-                    <format:FormatTextBox Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
-                    <format:FormatTextBox toolkit:Sizing.Size="lg" Format="{}{max:23}h {max:59}m {max:59}s" GlobalFormat="numeric" />
+                    <format:FormatTextBox toolkit:Sizing.Size="xs">
+                        <format:IntegerGroup Max="23" StringFormat="00" />
+                        <format:FormatLiteral Text="h " />
+                        <format:IntegerGroup Max="59" StringFormat="00" />
+                        <format:FormatLiteral Text="m" />
+                    </format:FormatTextBox>
+                    <format:FormatTextBox toolkit:Sizing.Size="sm">
+                        <format:IntegerGroup Max="23" StringFormat="00" />
+                        <format:FormatLiteral Text="h " />
+                        <format:IntegerGroup Max="59" StringFormat="00" />
+                        <format:FormatLiteral Text="m" />
+                    </format:FormatTextBox>
+                    <format:FormatTextBox>
+                        <format:IntegerGroup Max="23" StringFormat="00" />
+                        <format:FormatLiteral Text="h " />
+                        <format:IntegerGroup Max="59" StringFormat="00" />
+                        <format:FormatLiteral Text="m" />
+                    </format:FormatTextBox>
+                    <format:FormatTextBox toolkit:Sizing.Size="lg">
+                        <format:IntegerGroup Max="23" StringFormat="00" />
+                        <format:FormatLiteral Text="h " />
+                        <format:IntegerGroup Max="59" StringFormat="00" />
+                        <format:FormatLiteral Text="m" />
+                    </format:FormatTextBox>
                 </StackPanel>
             </c:CodeExample>
             <c:CodeExample

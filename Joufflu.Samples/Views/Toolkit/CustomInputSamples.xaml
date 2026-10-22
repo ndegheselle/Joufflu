@@ -14,11 +14,11 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Samples;component/Views/Toolkit/RatingInput.xaml" />
     </UserControl.Resources>
 
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Create custom input" />
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Create custom input" />
             <TextBlock
-                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="How to build an input of your own that sits with the Joufflu ones. The RatingInput below derives from a bare Control, so it follows every rule by hand; an input derived from a native control (TextBox, ComboBox…) gets them all by basing its style on the native one."
                 TextWrapping="Wrap" />
 

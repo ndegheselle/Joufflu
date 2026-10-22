@@ -26,6 +26,11 @@ This is the **core package**. Three optional packages build on it:
 - [`Joufflu.Inputs`](https://www.nuget.org/packages/Joufflu.Inputs) — input controls.
 - [`Joufflu.Navigation`](https://www.nuget.org/packages/Joufflu.Navigation) — navigation, overlays & paging.
 
+> **Using an AI coding agent?** Point it at
+> [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt)
+> (or [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt),
+> every page in one file) before it writes any XAML.
+
 ## Getting started
 
 1. Add the package:

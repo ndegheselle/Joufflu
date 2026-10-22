@@ -5,13 +5,13 @@ Needs `Joufflu.Feedback` too (sources report errors as toasts).
 ```xml
 xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu.FileExplorer"
 xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base;assembly=Joufflu.FileExplorer"
-xmlns:data="clr-namespace:Joufflu.FileExplorer.Data;assembly=Joufflu.FileExplorer"
-xmlns:converters="clr-namespace:Joufflu.FileExplorer.Converters;assembly=Joufflu.FileExplorer"
+xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu.FileExplorer"
+xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
 ```
 
 ```csharp
-using Joufflu.FileExplorer.Sources;   // IExplorerSource, FileSystemSource, FileSystemWatcherSource
-using Joufflu.FileExplorer.Data;      // IExplorerNode, IExplorerDirectory, IExplorerFile, FileSystemFile, FileSystemDirectory
+using Joufflu.FileExplorer.Nodes;       // IExplorerSource, IExplorerNode, IExplorerDirectory, IExplorerFile
+using Joufflu.FileExplorer.FileSystem;  // FileSystemSource, FileSystemWatcherSource, FileSystemFile, FileSystemDirectory
 ```
 
 ## Controls
@@ -46,7 +46,9 @@ Explorer), shortcuts `F2` rename, `Ctrl+C`/`Ctrl+X`/`Ctrl+V`, `Delete`.
 
 ```csharp
 // toasts: an IToastService (null accepted)
-public IExplorerSource Source { get; } = new FileSystemSource(@"C:\Projects", toasts);
+public IExplorerSource Source { get; }
+// in the constructor, where toasts is in scope
+Source = new FileSystemSource(@"C:\Projects", toasts);
 await Source.Open();   // must be called to load the root
 ```
 
@@ -56,32 +58,33 @@ await Source.Open();   // must be called to load the root
 - `FileSystemWatcherSource`: same, watching the disk live. It is `IDisposable`: dispose it
   (e.g. when the page closes) to stop watching.
 - `IExplorerSource`: `Root`, `Current`, `Open()`, `Open(node)`,
-  `Transfer(paths, target, isMove)`, and the commands `RenameCommand`, `RemoveCommand`,
-  `CreateDirectoryCommand`, `CopyCommand`, `CutCommand`, `PasteCommand`, `OpenCommand`,
-  `OpenInExplorerCommand`, `CopyPathCommand`, `OpenWithDefaultCommand`. Implement it for a
-  non-disk source.
+  `Transfer(paths, target, isMove)`, and plain operations `Rename(node, name)`,
+  `Remove(nodes)`, `CreateDirectory(parent)`, `Copy(nodes)`, `Cut(nodes)`, `Paste(target)`,
+  `CanPaste()` — no commands, the controls build them. Implement it for a non-disk source.
 
 `FileSystemSource` extension points (protected virtual): `OpenDirectory`,
-`LoadDirectory(directory, depth)`, `CreateNode(FileSystemInfo, parent)`, `OpenFile`, plus
-`public virtual Open(node)`.
+`ApplyDirectory(directory, DirectoryRead)`, `CreateNode(FileSystemInfo, parent)`, `OpenFile`, plus
+`public virtual Open(node)`. Opening reads the disk off the UI thread (`ReadDirectory`), then
+calls `ApplyDirectory` on the UI thread for the directory and each sub directory read with it.
 
 ## Nodes
 
 `IExplorerNode`: `Name`, `Path`, `ModifiedAt`, `Parent` (`IExplorerDirectory?`).
-`IExplorerDirectory` adds `Children`; `IExplorerFile` adds `Size`. Disk implementations:
+`IExplorerDirectory` adds `Children` and `DirectoryTree` (itself and its ancestors, for the
+breadcrumb); `IExplorerFile` adds `Size`. Disk implementations:
 `FileSystemFile`, `FileSystemDirectory`.
 
 Custom (virtual) nodes: implement `IExplorerNode` (or the file/directory interfaces) and add
-them from an overridden `LoadDirectory`:
+them from an overridden `ApplyDirectory`:
 
 ```csharp
 public class VirtualFilesSource : FileSystemSource
 {
     public VirtualFilesSource(string root, IToastService? toasts) : base(root, toasts) { }
 
-    protected override void LoadDirectory(IExplorerDirectory directory, int depth)
+    protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
     {
-        base.LoadDirectory(directory, depth);
+        base.ApplyDirectory(directory, read);
         directory.Children.Add(new VirtualFile(directory, "notes.md"));
     }
 }
@@ -92,24 +95,29 @@ public class VirtualFilesSource : FileSystemSource
 Node visuals are implicit `DataTemplate`s keyed by node type; redeclare one in a control's
 `Resources` to replace it there only. Context menus are `DataTemplate`s keyed with
 `{base:ContextMenuTemplateKey local:MyNode}`; their `DataContext` is an
-`ExplorerMenuContext` (`Source`, `Node`, `Nodes`). Lookup goes from the most specific type
-up to `object`, so types without a menu fall back to the defaults.
+`ExplorerMenuContext` (`Source`, `Node`, `Nodes`, and the item commands `OpenCommand`,
+`CopyCommand`, `CutCommand`, `PasteCommand`, `RemoveCommand`, `CreateDirectoryCommand`,
+`BeginRenameCommand`, plus the disk-only `OpenInExplorerCommand`, `OpenWithDefaultCommand`,
+`CopyPathCommand`). Lookup goes from the
+most specific type up to `object`; the built-in single-node menus are keyed on
+`FileSystemDirectory`/`FileSystemFile`, so a single node of a custom type shows no menu until
+you key one on its type (multi-selection and empty-area menus are keyed on `object`).
 
 ```xml
 <fileExplorer:Explorer Source="{Binding Source}">
     <fileExplorer:Explorer.Resources>
         <!-- System icons instead of font icons -->
-        <DataTemplate DataType="{x:Type data:FileSystemFile}">
+        <DataTemplate DataType="{x:Type fileSystem:FileSystemFile}">
             <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="4">
                 <Image Width="16" Height="16"
-                       Source="{Binding Converter={x:Static converters:ExplorerIconConverter.Small}}" />
+                       Source="{Binding Converter={x:Static icons:ExplorerIconConverter.Small}}" />
                 <TextBlock Text="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="{base:ContextMenuTemplateKey local:VirtualFile}">
             <ContextMenu>
-                <MenuItem Header="Copy path" Command="{Binding Source.CopyPathCommand}"
+                <MenuItem Header="Copy path" Command="{Binding CopyPathCommand}"
                           CommandParameter="{Binding Node}" />
             </ContextMenu>
         </DataTemplate>

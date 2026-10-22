@@ -14,15 +14,17 @@ public sealed record TokenEntry(string Key, string Usage, ComponentResourceKey? 
 public sealed record TokenGroup(string Title, string Description, IReadOnlyList<TokenEntry> Entries);
 
 /// <summary>
-/// One accent family, the three keys it is made of shown side by side rather than described: the
-/// fill, the hover and pressed fill, and the content drawn on top of both.
+/// One accent family, the keys it is made of shown side by side rather than described: the fill, the
+/// hover and pressed fill, the content drawn on top of both, then the soft tint and its hover.
 /// </summary>
 public sealed record AccentEntry(
     string Name,
     string Usage,
     ComponentResourceKey Fill,
     ComponentResourceKey Hover,
-    ComponentResourceKey Content);
+    ComponentResourceKey Content,
+    ComponentResourceKey Soft,
+    ComponentResourceKey Soft100);
 
 /// <summary>
 /// Reference of every key a theme is made of. The descriptions are the roles the keys actually play
@@ -69,18 +71,18 @@ public class ThemeTokensViewModel : ObservableObject
                     Joufflu.Brushes.ForegroundBrush),
                 new TokenEntry(
                     "Foreground100",
-                    "Muted text: placeholders, hints, secondary labels. This is what the Muted typography style uses.",
+                    "Secondary colour the controls use for their own labels: column headers, inactive tabs, section titles. For muted text of your own, dim it with MutedOpacity instead.",
                     Joufflu.Brushes.Foreground100Brush),
                 new TokenEntry(
                     "Foreground200",
-                    "Text on a selected row, where the default foreground would lose contrast.",
+                    "Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item.",
                     Joufflu.Brushes.Foreground200Brush),
             ]),
 
     ];
 
     /// <summary>
-    /// The six accent families. Each one is rendered as its three swatches so the relationship
+    /// The six accent families. Each one is rendered as its swatches so the relationship
     /// between them is seen rather than read.
     /// </summary>
     public IReadOnlyList<AccentEntry> AccentTokens { get; } =
@@ -90,50 +92,67 @@ public class ThemeTokensViewModel : ObservableObject
             "Main call to action: the default filled button, the selected tab or navigation entry.",
             Joufflu.Brushes.PrimaryBrush,
             Joufflu.Brushes.Primary100Brush,
-            Joufflu.Brushes.PrimaryContentBrush),
+            Joufflu.Brushes.PrimaryContentBrush,
+            Joufflu.Brushes.PrimarySoftBrush,
+            Joufflu.Brushes.PrimarySoft100Brush),
         new AccentEntry(
             "Secondary",
             "Neutral filled action, for a button that must read as a button without competing with Primary.",
             Joufflu.Brushes.SecondaryBrush,
             Joufflu.Brushes.Secondary100Brush,
-            Joufflu.Brushes.SecondaryContentBrush),
+            Joufflu.Brushes.SecondaryContentBrush,
+            Joufflu.Brushes.SecondarySoftBrush,
+            Joufflu.Brushes.SecondarySoft100Brush),
         new AccentEntry(
             "Success",
             "Confirmation: success toast, valid state, positive badge.",
             Joufflu.Brushes.SuccessBrush,
             Joufflu.Brushes.Success100Brush,
-            Joufflu.Brushes.SuccessContentBrush),
+            Joufflu.Brushes.SuccessContentBrush,
+            Joufflu.Brushes.SuccessSoftBrush,
+            Joufflu.Brushes.SuccessSoft100Brush),
         new AccentEntry(
             "Info",
             "Neutral information: info toast, informative badge.",
             Joufflu.Brushes.InfoBrush,
             Joufflu.Brushes.Info100Brush,
-            Joufflu.Brushes.InfoContentBrush),
+            Joufflu.Brushes.InfoContentBrush,
+            Joufflu.Brushes.InfoSoftBrush,
+            Joufflu.Brushes.InfoSoft100Brush),
         new AccentEntry(
             "Warning",
             "Something needs attention but nothing is broken yet.",
             Joufflu.Brushes.WarningBrush,
             Joufflu.Brushes.Warning100Brush,
-            Joufflu.Brushes.WarningContentBrush),
+            Joufflu.Brushes.WarningContentBrush,
+            Joufflu.Brushes.WarningSoftBrush,
+            Joufflu.Brushes.WarningSoft100Brush),
         new AccentEntry(
             "Danger",
             "Destructive action and validation errors - a delete button, the border of a field in error.",
             Joufflu.Brushes.DangerBrush,
             Joufflu.Brushes.Danger100Brush,
-            Joufflu.Brushes.DangerContentBrush),
+            Joufflu.Brushes.DangerContentBrush,
+            Joufflu.Brushes.DangerSoftBrush,
+            Joufflu.Brushes.DangerSoft100Brush),
     ];
 
-    /// <summary>The odd one out of <c>Joufflu.Colors</c>: a number rather than a colour.</summary>
+    /// <summary>The odd ones out of <c>Joufflu.Colors</c>: numbers rather than colours.</summary>
     public IReadOnlyList<TokenGroup> StateTokens { get; } =
     [
         new TokenGroup(
             "State",
-            "Not a colour, but it lives in Colors because it only exists to dim one.",
+            "Not colours, but they live in Colors because they only exist to dim one.",
             [
                 new TokenEntry(
                     "DisabledOpacity",
                     "Opacity applied to a whole control while IsEnabled is False (0.5). Disabled controls "
                     + "fade rather than switch to a dedicated palette, so a single key covers every control.",
+                    null),
+                new TokenEntry(
+                    "MutedOpacity",
+                    "Opacity of muted text: placeholders, hints, descriptions, captions (0.65). Muted text is "
+                    + "dimmed rather than given its own colour, so it follows the foreground it sits in.",
                     null),
             ]),
     ];
@@ -185,7 +204,8 @@ public class ThemeTokensViewModel : ObservableObject
 
         new TokenGroup(
             "Font sizes",
-            "The typography styles (H1…H6, Muted, …) are built on these, so restyling the scale restyles the text.",
+            "A TextBlock picks one through Sizing.Size (xs to xl; md keeps the inherited body size), like the controls do, "
+            + "so restyling the scale restyles the text.",
             [
                 new TokenEntry("FontSizeXs", "11"),
                 new TokenEntry("FontSizeSm", "12"),

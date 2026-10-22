@@ -11,9 +11,9 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Toolkit"
     d:DataContext="{d:DesignInstance Type=vm:DropTargetSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{StaticResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock Style="{StaticResource H1}" Text="Drag and drop" />
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Drag and drop" />
 
             <c:CodeExample
                 Title="DropTarget.Command"
@@ -73,7 +73,7 @@
                             <TextBlock HorizontalAlignment="Center" Text="Drop .pdf files here" />
                             <TextBlock
                                 HorizontalAlignment="Center"
-                                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                 Text="Any other file is refused: the cursor shows a no-drop sign and the zone stays plain."
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -154,7 +154,7 @@
                         </Border.Style>
 
                         <StackPanel toolkit:Spacing.Gap="4">
-                            <TextBlock Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="Drag the tags here" />
+                            <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="Drag the tags here" />
                             <ItemsControl ItemsSource="{Binding TakenTags}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>

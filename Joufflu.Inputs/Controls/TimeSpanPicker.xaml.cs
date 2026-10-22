@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using Joufflu.Inputs.Controls.Format;
 
 namespace Joufflu.Inputs.Controls
@@ -10,36 +10,32 @@ namespace Joufflu.Inputs.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TimeSpanPicker), new FrameworkPropertyMetadata(typeof(TimeSpanPicker)));
         }
 
-        public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register(
-            nameof(Value),
-            typeof(TimeSpan?),
-            typeof(TimeSpanPicker),
-            new FrameworkPropertyMetadata(default(TimeSpan?), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (o, e) => ((TimeSpanPicker)o).OnValueChanged(e)));
+        protected override IReadOnlyList<FormatPart> DefaultParts { get; } =
+        [
+            TimeGroup(max: 365, stringFormat: "000"),
+            new FormatLiteral { Text = "d " },
+            TimeGroup(max: 23, stringFormat: "00"),
+            new FormatLiteral { Text = "h " },
+            TimeGroup(max: 59, stringFormat: "00"),
+            new FormatLiteral { Text = "m " },
+            TimeGroup(max: 59, stringFormat: "00"),
+            new FormatLiteral { Text = "s" },
+        ];
 
-        public override TimeSpan? Value
-        {
-            get { return (TimeSpan?)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
-        }
+        private static IntegerGroup TimeGroup(long max, string stringFormat)
+            => new IntegerGroup { Min = 0, Max = max, StringFormat = stringFormat, IsNullable = true };
 
-        public TimeSpanPicker()
+        protected override TimeSpan? FromValues(IReadOnlyList<object?> values)
         {
-            GlobalFormat = "numeric|min:0|padded|nullable";
-            Format = "{max:365}d {max:23}h {max:59}m {max:59}s";
-        }
-
-        public override TimeSpan? ConvertFrom()
-        {
-            if (Values.Count < 4)
+            if (values.Count < 4)
                 return null;
 
-            // Groups are days / hours / minutes / seconds (see the Format above). A numeric group
+            // Groups are days / hours / minutes / seconds (see the DefaultParts above). An integer group
             // counts in long, and a boxed value only comes back out as the very type it went in as.
-            long? days = Values[0] as long?;
-            long? hours = Values[1] as long?;
-            long? minutes = Values[2] as long?;
-            long? seconds = Values[3] as long?;
+            long? days = values[0] as long?;
+            long? hours = values[1] as long?;
+            long? minutes = values[2] as long?;
+            long? seconds = values[3] as long?;
 
             if (!days.HasValue || !hours.HasValue || !minutes.HasValue || !seconds.HasValue)
                 return null;
@@ -47,9 +43,9 @@ namespace Joufflu.Inputs.Controls
             return new TimeSpan((int)days.Value, (int)hours.Value, (int)minutes.Value, (int)seconds.Value);
         }
 
-        public override List<object?> ConvertTo()
+        protected override List<object?> ToValues(TimeSpan? value)
         {
-            if (Value is TimeSpan date)
+            if (value is TimeSpan date)
                 return new List<object?>() { (long)date.Days, (long)date.Hours, (long)date.Minutes, (long)date.Seconds };
             else
                 return new List<object?>() { null, null, null, null };

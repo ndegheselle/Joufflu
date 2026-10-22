@@ -49,38 +49,4 @@
     <Color x:Key="{x:Static joufflu:Colors.Danger100Color}">#D94848</Color>
     <Color x:Key="{x:Static joufflu:Colors.DangerContentColor}">#2E0707</Color>
 
-    <!--  Foreground Brushes  -->
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ForegroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Foreground100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Foreground100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Foreground200Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Foreground200Color}}" />
-
-    <!--  Border Brushes  -->
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BorderBrush}" Color="{DynamicResource {x:Static joufflu:Colors.BorderColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Border100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Border100Color}}" />
-
-    <!--  Background Brushes  -->
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BackgroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.BackgroundColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Background100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Background100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Background200Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Background200Color}}" />
-
-    <!--  Semantic Brushes  -->
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.PrimaryBrush}" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Primary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Primary100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.PrimaryContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryContentColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Secondary100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Secondary100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SecondaryContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SecondaryContentColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SuccessBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SuccessColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Success100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Success100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.SuccessContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.SuccessContentColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InfoBrush}" Color="{DynamicResource {x:Static joufflu:Colors.InfoColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Info100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Info100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InfoContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.InfoContentColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.WarningBrush}" Color="{DynamicResource {x:Static joufflu:Colors.WarningColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Warning100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Warning100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.WarningContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.WarningContentColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DangerBrush}" Color="{DynamicResource {x:Static joufflu:Colors.DangerColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Danger100Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Danger100Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DangerContentBrush}" Color="{DynamicResource {x:Static joufflu:Colors.DangerContentColor}}" />
-
 </ResourceDictionary>

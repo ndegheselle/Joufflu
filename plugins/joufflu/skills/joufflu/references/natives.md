@@ -2,8 +2,8 @@
 
 Merging the core `Resources.xaml` styles every built-in WPF control implicitly:
 `Button`, `ToggleButton`, `CheckBox`, `RadioButton`, `Slider`, `TextBox`, `ListBox`,
-`Calendar`, `ComboBox`, `DatePicker`, `TextBlock`, `Label`, `TreeView`, `ListView`,
-`DataGrid`, `Hyperlink`, `Menu`, `MenuItem`, `TabControl`, `ToolBar`, `ProgressBar`,
+`Calendar`, `ComboBox`, `DatePicker`, `PasswordBox`, `Separator`, `Label`, `TreeView`, `ListView`,
+`DataGrid`, `Hyperlink`, `Menu`, `MenuItem`, `ContextMenu`, `TabControl`, `ToolBar`, `ProgressBar`,
 `StatusBar`, `ToolTip`, `ScrollBar`, `ScrollViewer`, `Window`, `GridSplitter`, `GroupBox`,
 `Expander`. Use them as-is. A local style must be based on the default one:
 
@@ -35,7 +35,7 @@ keep them for short labels.
 
 <!-- Icon-only button: IsSquare makes width = height; composes with any variant -->
 <Button toolkit:Sizing.IsSquare="True" Style="{StaticResource GhostButton}"
-        toolkit:Tooltip.Content="Add">
+        toolkit:ThemedTooltip.Content="Add">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
 </Button>
 
@@ -82,7 +82,7 @@ Named `Border` styles for padded, rounded surfaces:
 ```xml
 <Border Style="{StaticResource Card}">
     <StackPanel toolkit:Spacing.Gap="8">
-        <TextBlock Style="{StaticResource H4}" Text="Title" />
+        <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="Title" />
         <Border Style="{StaticResource CardSecondary}">
             <TextBlock Text="Nested" TextWrapping="Wrap" />
         </Border>
@@ -92,25 +92,35 @@ Named `Border` styles for padded, rounded surfaces:
 
 ## Typography
 
-Named `TextBlock` styles; an unstyled `TextBlock` is body text (`FontSizeMd`).
+No named text styles. A `TextBlock` takes its font size from `toolkit:Sizing.Size`
+(`xs`…`xl` → `Dimensions.FontSizeXs`…`FontSizeXl`; `md` keeps the inherited body size). The
+size is inherited, so a panel set to `sm`/`lg` sizes its text too. A heading is a size plus a
+`FontWeight`; muted text is dimmed with `Colors.MutedOpacity`, not given another colour.
 
-| Key | Role |
+| Role | Markup |
 |---|---|
-| `H1` … `H6` | Page title down to minor subheading |
-| `Lead` | Larger, lighter intro paragraph |
-| `Muted` | Secondary text (`Foreground100`) |
-| `Small` | Fine print, captions |
+| Page title | `toolkit:Sizing.Size="xl" FontWeight="Bold"` |
+| Section heading | `toolkit:Sizing.Size="lg" FontWeight="SemiBold"` |
+| Minor heading | `FontWeight="SemiBold"` |
+| Caption, fine print | `toolkit:Sizing.Size="xs"` |
+| Muted text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
 
 ```xml
-<TextBlock Style="{StaticResource H1}" Text="Settings" />
-<TextBlock Style="{StaticResource Muted}" Text="Changes apply immediately." />
+<TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Settings" />
+<TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+           Text="Changes apply immediately." />
 ```
+
+Inside a control template of your own, set `FontSize` from the token directly
+(`{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}`) rather than relying on the
+implicit `TextBlock` style.
 
 ## Icons — `FontIcon`
 
 `FontIcon` (in `Joufflu.Assets.Fonts`) derives from `TextBlock` and renders a glyph
 of the embedded [Lucide](https://lucide.dev) font. Glyphs are constants on
-`LucideFontIcons` named in PascalCase after the Lucide icon name (`Home`, `Plus`,
+`LucideFontIcons` named, mostly in PascalCase, after the Lucide icon name (the close
+glyph is the lowercase `x`) (`Home`, `Plus`,
 `Trash`, `Save`, `Search`, `Settings`, `Bell`, `Info`, `Leaf`, `EllipsisVertical`,
 `StickyNote`, …). If unsure a glyph exists, grep `LucideFontIcons.cs` in the package
 source or check IntelliSense; don't guess.
