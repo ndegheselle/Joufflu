@@ -19,24 +19,6 @@
                 Text="Search combo box"
                 TextWrapping="Wrap" />
 
-            <StackPanel>
-                <inputs:ComboBoxSearch toolkit:Sizing.Size="xs" />
-                <inputs:FilePicker toolkit:Sizing.Size="xs" />
-                <inputs:NumericUpDown toolkit:Sizing.Size="xs" />
-
-                <inputs:ComboBoxSearch toolkit:Sizing.Size="sm" />
-                <inputs:FilePicker toolkit:Sizing.Size="sm" />
-                <inputs:NumericUpDown toolkit:Sizing.Size="sm" />
-
-                <inputs:ComboBoxSearch toolkit:Sizing.Size="md" />
-                <inputs:FilePicker toolkit:Sizing.Size="md" />
-                <inputs:NumericUpDown toolkit:Sizing.Size="md" />
-
-                <inputs:ComboBoxSearch toolkit:Sizing.Size="lg" />
-                <inputs:FilePicker toolkit:Sizing.Size="lg" />
-                <inputs:NumericUpDown toolkit:Sizing.Size="lg" />
-            </StackPanel>
-
             <c:CodeExample
                 Title="ComboBoxSearch"
                 Code="{Binding ComboSearchCode}"
