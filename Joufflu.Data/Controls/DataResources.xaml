@@ -79,8 +79,20 @@
                 <MultiBinding Converter="{StaticResource ManualValuesConverter}">
                     <Binding />
                     <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataControlBase}}" />
+                    <Binding Path="Text" RelativeSource="{RelativeSource Self}" />
                 </MultiBinding>
             </jnputs:ComboBoxSearch.ItemsSource>
+            <!--  A pattern's hint shows what to type, it is never written as it is.  -->
+            <jnputs:ComboBoxSearch.ItemContainerStyle>
+                <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsPickable}" Value="False">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="FontStyle" Value="Italic" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </jnputs:ComboBoxSearch.ItemContainerStyle>
             <jnputs:ComboBoxSearch.ItemTemplate>
                 <DataTemplate>
                     <StackPanel joolkit:Spacing.Gap="4" Orientation="Horizontal">

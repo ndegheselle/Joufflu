@@ -22,6 +22,7 @@ public partial class DataFillSamplesViewModel : ObservableObject
     [
         new(EnumDataType.String, "TBD"),
         new(EnumDataType.Integer, -1L),
+        new DataManualPattern(null, "$row.columns['{column name}']"),
     ];
 
     public string FillCode =>

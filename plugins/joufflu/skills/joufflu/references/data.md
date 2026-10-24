@@ -91,3 +91,7 @@ public IReadOnlyList<DataManualValue> ManualValues { get; } =
 
 Also offered: `DataManualValue.Undefined` (property not written) when not required,
 `DataManualValue.Null` when nullable.
+
+An entry taking any name: `new DataManualPattern(null, "$row.columns['{column name}']")`. Shown as
+the hint `$row.columns['column name']` (not pickable); typing `unit price` offers
+`$row.columns['unit price']`. `Load` matches values the pattern writes.

@@ -64,6 +64,7 @@
 - Let `ToDataNode` read a schema property saying nothing of a type (`{}`) : it becomes an empty value, filled in as text and loading whatever JSON it is given, where building it threw `Can't set a default value for the type [Object]`
 - Remove the empty `Resources.xaml` and `Themes/Generic.xaml`, which held no style : only the core `Resources.xaml` needs merging, as documented
 - Raise `DataNode.Changed` for a change of data only, a key, a value, the manual mode or entry, an array template or children added or removed, each wired from its own property, where every property change raised it : a key flagged as a duplicate, or a node moved to another parent, no longer reports an edit. **Breaking** for code relying on `Changed` for those
+- Add `DataManualPattern`, a manual value made of a fixed text around a name the user types : `new DataManualPattern(null, "$row.columns['{column name}']")` is shown as the hint `$row.columns['column name']`, which can't be picked, and typing `unit price` offers `$row.columns['unit price']`. `Load` forces a value the pattern writes back to it. A host no longer has to list every such reference up front
 
 # Joufflu.Data 0.8.2
 
