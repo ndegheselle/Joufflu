@@ -139,6 +139,22 @@ property in the same style, move triggers onto the `Derive` property, and don't 
 properties consumers must override. `BorderThickness` works on `Border` and any `Control`,
 `CornerRadius` on `Border`, `Margin` on any `FrameworkElement`.
 
+## SharedWidth
+
+Lines up inputs that get different room (rows of a tree at different depths): every element
+with `SharedWidth.IsShared="True"` takes the width of the narrowest one in its group and is
+right aligned. The group is the closest ancestor with `SharedWidth.IsScope="True"`.
+
+```xml
+<TreeView toolkit:SharedWidth.IsScope="True">
+    <!-- in the item template, the input sits in a * column -->
+    <TextBox Grid.Column="1" toolkit:SharedWidth.IsShared="True" />
+</TreeView>
+```
+
+Only visible members count. It sets `HorizontalAlignment` and `Width` on members: don't set
+them yourself. `DataFill` and `DataEdit` already use it for their editors.
+
 ## Animate
 
 ```xml

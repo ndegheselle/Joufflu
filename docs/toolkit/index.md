@@ -8,8 +8,8 @@ has_children: true
 
 Design-system helpers that shape controls and layouts rather than being controls
 themselves. They all live in the `Joufflu.Toolkit` namespace of the core
-`Joufflu` package — `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget` and
-`DragSource`. The theme manager, tokens and window have their own section, see
+`Joufflu` package — `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`,
+`DragSource` and `SharedWidth`. The theme manager, tokens and window have their own section, see
 [Themes](../themes/index.md).
 
 - **Sizing** — the `Sizing.Size` and `IsSquare` attached properties.
@@ -18,6 +18,7 @@ themselves. They all live in the `Joufflu.Toolkit` namespace of the core
 - **Tooltip** — the `ThemedTooltip.Content` and `ThemedTooltip.Placement` attached properties for themed tooltips on any element.
 - **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it.
 - **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
+- **Shared width**: the `SharedWidth.IsShared` and `IsScope` attached properties, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
 - **Custom input** — the rules an input of your own follows to sit with the Joufflu ones: background, border and height, then sizes and padding, states, the validation error style and embedded buttons.
 
 Snippets use the `toolkit` XML namespace for those helpers and `joufflu` for the

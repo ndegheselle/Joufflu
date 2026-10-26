@@ -213,7 +213,7 @@
                 <Grid
                     Margin="0,0,2,0"
                     VerticalAlignment="Center"
-                    toolkit:Spacing.Gap="4">
+                    toolkit:Spacing.Gap="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />

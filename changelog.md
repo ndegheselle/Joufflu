@@ -56,9 +56,11 @@
 - Read the `DataGrid` and `ListView` paddings through `DynamicResource` like every other token, so they follow a registered theme and a runtime change of the `Padding*` tokens, and stop merging `Dimensions.xaml` again into `DataGrid.xaml`, `ListView.xaml`, `TabControl.xaml` and `GroupBox.xaml` : `Resources.xaml` already holds it, and the extra copies could shadow a theme's dimensions
 - Rename the attached `Tooltip` to `ThemedTooltip`, which read as the native `ToolTip` but for its case, and leave the show delays an element sets itself rather than overwriting them with 0. **Breaking** : `toolkit:Tooltip.Content` and `Tooltip.Placement` become `toolkit:ThemedTooltip.Content` and `ThemedTooltip.Placement`
 - Read whether Windows is in dark mode from its documented `AppsUseLightTheme` registry value, where `ThemeManager` called an undocumented UXTheme export by its ordinal. **Breaking** : the public `ThemeManager.ShouldSystemUseDarkMode()` is gone; `ThemeManager.Instance.IsDark` tells the theme on screen
+- Add `SharedWidth.IsShared` and `SharedWidth.IsScope`, giving every element of a group the width of the narrowest one, right aligned, so inputs line up across the depths of a tree
 
 # Joufflu.Data (unreleased)
 
+- Line up the editors of `DataFill` and `DataEdit` : each takes the width of the narrowest one through `SharedWidth`, where the rows nested deeper had narrower editors starting further right
 - Start `Load` afresh on every node : a value or an object an earlier load forced to a manual value is no longer kept forced, and written back, when the new JSON doesn't call for it
 - Clone the items of a `DataArray` through `Add`, so a copied item keeps a key that can't be edited
 - Let `ToDataNode` read a schema property saying nothing of a type (`{}`) : it becomes an empty value, filled in as text and loading whatever JSON it is given, where building it threw `Can't set a default value for the type [Object]`

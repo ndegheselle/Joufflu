@@ -16,7 +16,8 @@ using DataObject = Joufflu.Data.Model.DataObject; // always alias: clashes with 
 ## Controls
 
 `DataFill` and `DataEdit` edit a `Node` (`DataObject`, two-way) in place and take an optional
-`ManualValues`. `DataDisplay` only takes a `Node` (one-way).
+`ManualValues`. `DataDisplay` only takes a `Node` (one-way). The editors of `DataFill` and
+`DataEdit` all take the width of the narrowest one (`SharedWidth`), so they line up across depths.
 
 | Control | Edits |
 |---|---|

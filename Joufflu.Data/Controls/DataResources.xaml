@@ -109,6 +109,7 @@
         the schema's editor out for the manual list and clearing it brings the editor back.
     -->
     <Style x:Key="DataValueEditorHost" TargetType="ContentControl">
+        <Setter Property="joolkit:SharedWidth.IsShared" Value="True" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsManual}" Value="True">
                 <Setter Property="ContentTemplate" Value="{StaticResource ManualEditor}" />
@@ -121,6 +122,7 @@
         set while forced: left to the tree's own templates, the node would show itself again.
     -->
     <Style x:Key="DataManualEditorHost" TargetType="ContentControl">
+        <Setter Property="joolkit:SharedWidth.IsShared" Value="True" />
         <Setter Property="Visibility" Value="Collapsed" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsManual}" Value="True">
