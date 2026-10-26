@@ -27,7 +27,7 @@
                 <Grid toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <jata:DataIcon Type="{Binding Type}" />
                     <TextBox
@@ -64,6 +64,7 @@
         <TreeView.ItemContainerStyle>
             <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="Padding" Value="0" />
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>

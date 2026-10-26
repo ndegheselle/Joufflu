@@ -99,7 +99,7 @@ public class ConfirmViewModel : ObservableObject
 /// </summary>
 public partial class SampleFormViewModel : ObservableObject, IOverlayContent<string>
 {
-    private readonly IOverlayer overlays;
+    private readonly IOverlayer overlayer;
     [ObservableProperty]
     private string _name = "Ada Lovelace";
     [ObservableProperty]
@@ -108,14 +108,14 @@ public partial class SampleFormViewModel : ObservableObject, IOverlayContent<str
     public string? Result => Name;
     public OverlayOptions Options => new OverlayOptions() { Title = "Edit profile" };
 
-    public SampleFormViewModel(IOverlayer overlays)
+    public SampleFormViewModel(IOverlayer overlayer)
     {
-        this.overlays = overlays;
+        this.overlayer = overlayer;
     }
 
     [RelayCommand]
-    private void Save() => overlays.Validate(this);
+    private void Save() => overlayer.Validate(this);
 
     [RelayCommand]
-    private void Cancel() => overlays.Cancel(this);
+    private void Cancel() => overlayer.Cancel(this);
 }

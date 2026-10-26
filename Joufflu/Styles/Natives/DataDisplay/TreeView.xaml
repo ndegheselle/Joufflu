@@ -11,12 +11,12 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
-        <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TreeViewItem">
@@ -36,7 +36,7 @@
                             CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
 
 
-                        <Grid Margin="{TemplateBinding Padding}">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
@@ -69,6 +69,8 @@
                                 Grid.Column="1"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                toolkit:Derive.Margin="{TemplateBinding Padding}"
+                                toolkit:Derive.MarginFactor="0,1,1,1"
                                 ContentSource="Header" />
                         </Grid>
 
@@ -190,12 +192,15 @@
             <!--  Size variants (md is the default, no trigger needed)  -->
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingXs}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="sm">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingSm}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="lg">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
