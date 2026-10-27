@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Joufflu.Feedback;
 using Joufflu.Navigation;
 using Joufflu.Navigation.Controls;
+using Joufflu.Samples.Views;
 using Joufflu.Samples.Views.Data;
 using Joufflu.Samples.Views.Feedback;
 using Joufflu.Samples.Views.FileExplorer;
@@ -58,6 +59,8 @@ public class ShellViewModel : ObservableObject, IDisposable
     public ShellViewModel()
     {
         ToastSamples = new ToastSamplesViewModel(Toasts);
+
+        Register(() => new HomeSamples());
 
         // Native controls
         Register<ButtonSamplesViewModel, ButtonSamples>(() => new());
@@ -143,7 +146,7 @@ public class ShellViewModel : ObservableObject, IDisposable
 
         Navigator = new Navigator(ResolvePage);
 
-        Navigator.Navigate(typeof(ShellSamples));
+        Navigator.Navigate(typeof(HomeSamples));
     }
 
     /// <summary>Registers a page that is its own view, keyed by the type its factory returns so key and instance cannot disagree.</summary>

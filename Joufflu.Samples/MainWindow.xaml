@@ -25,6 +25,7 @@
     xmlns:themesSamples="clr-namespace:Joufflu.Samples.Views.Themes"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     xmlns:toolkitSamples="clr-namespace:Joufflu.Samples.Views.Toolkit"
+    xmlns:views="clr-namespace:Joufflu.Samples.Views"
     xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels"
     Width="1100"
     Height="790"
@@ -75,6 +76,13 @@
                                 Text="Joufflu" />
                         </StackPanel>
                     </nav:NavigationMenu.Header>
+
+                    <nav:NavigationItem TargetType="{x:Type views:HomeSamples}">
+                        <nav:NavigationItem.Icon>
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+                        </nav:NavigationItem.Icon>
+                        Home
+                    </nav:NavigationItem>
 
                     <nav:NavigationTitle>Themes</nav:NavigationTitle>
                     <nav:NavigationItem TargetType="{x:Type themesSamples:ShellSamples}">

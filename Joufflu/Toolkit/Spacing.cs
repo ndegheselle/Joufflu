@@ -157,3 +157,4 @@ public static class Spacing
         if (child.Margin != margin)
             child.Margin = margin;
     }
+}
