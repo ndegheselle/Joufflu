@@ -17,6 +17,7 @@
 
 # Joufflu.Navigation (unreleased)
 
+- Give the collapsed `NavigationMenu` items their tooltip through `ToolTip` rather than `ThemedTooltip.Content`, gone
 - Restyle `Overlay`, `NavigationMenu` and `Paging` with the Display and Action category tokens of `Joufflu` : the modal panel and the menu are displays, the menu entries and the page buttons ghost actions without the pressed translation (new keyed styles `NavigationEntryButton` and `PagingPageButton`)
 - Let the header of a `NavigationMenu` drag the window under a `ThemedWindow` title bar : the menu background no longer takes part in hit testing, nor does the `Header`, the items area still does. The default `Background` is `null` instead of `Transparent`
 - Remove `FullContainer`. **Breaking** : with `AllowContentOverTitleBar`, offset the hosted page with `Dimensions.TitleBarHeightOffset` yourself
@@ -48,6 +49,7 @@
 
 # Joufflu (unreleased)
 
+- Theme every native `ToolTip` rather than only those set through `ThemedTooltip` : its style places it with a custom placement, centred on the `ThemedTooltip.Placement` side of its element (bottom by default) and kept clear of it, with the opposite side as the fallback WPF flips to at a screen edge, where the gap used to be pushed the wrong way. Add `ThemedTooltip.MaxWidth`, the width past which the text of a tooltip wraps, 320 by default. **Breaking** : `ThemedTooltip.Content` is gone, set `ToolTip` instead (`<Button.ToolTip>` for XAML content); tooltips show after the native delay rather than instantly; `ToolTipService.Placement` on an element no longer moves its tooltip
 - Read the neutrals of the controls through three categories rather than the global `Base`, `Surface1`, `Surface2` and `Stroke` : **Display** (card, popup, tooltip, expander, group box, the frame of a list, tree, grid, menu or tab control), **Input** (text box, combo box, check box, radio button, slider) and **Action** (button, toggle button). Each has a `Surface1`, a `Surface2` and a `Border` colour (`Colors.DisplaySurface1Color`, `InputBorderColor`, `ActionSurface1Color`…) and brush, optional in a theme : one left out falls back to `Surface1`, `Surface2` and `Stroke`, or `Base`, `Surface2` and `Stroke` for an action, so a theme sets a category apart by defining its colour alone. The fallback is a new public `ColorFallback` freezable, usable for optional colours of your own. The global brushes stay, for an app's own layout
 - Give each category its own shape : `Dimensions.DisplayRadius`, `InputRadius` and `ActionRadius` (a `double` the controls clamp to half their height, so a large one gives a pill), their `…CornerRadius` and `…BorderThickness`, and `DisplayPadding` for the inside of a card. An action keeps `ActionPaddingXs`..`Lg`, an input `InputPaddingXs`..`Lg`. The controls no longer read the global `Radius`, `CornerRadius`, `Thickness` and `BorderThickness`, kept for an app's own layout; the theme customizer writes its radius, thickness and spacing into the category keys too
 - Rename the action paddings like the other category keys : `Dimensions.PaddingXs`..`Lg` become `ActionPaddingXs`..`Lg`, next to `InputPaddingXs`..`Lg` and `DisplayPadding`. **Breaking** for a style or a theme reading or overriding `PaddingXs`..`Lg`
@@ -72,6 +74,7 @@
 
 # Joufflu.Data (unreleased)
 
+- Set the tooltips of the data controls through `ToolTip` rather than `ThemedTooltip.Content`, gone
 - Line up the editors of `DataFill` and `DataEdit` : each takes the width of the narrowest one through `SharedWidth`, where the rows nested deeper had narrower editors starting further right
 - Start `Load` afresh on every node : a value or an object an earlier load forced to a manual value is no longer kept forced, and written back, when the new JSON doesn't call for it
 - Clone the items of a `DataArray` through `Add`, so a copied item keeps a key that can't be edited

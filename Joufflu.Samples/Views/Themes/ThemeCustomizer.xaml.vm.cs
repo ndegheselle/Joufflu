@@ -381,7 +381,11 @@ public class ThemeCustomizerViewModel : ObservableObject
     private readonly ThemeCategoryEditor _input;
     private readonly ThemeCategoryEditor _action;
 
-    public ObservableCollection<ThemeColorGroup> ColorGroups { get; } = new();
+    /// <summary>The neutrals: the surfaces, the text and the border.</summary>
+    public ObservableCollection<ThemeColorGroup> NeutralColorGroups { get; } = new();
+
+    /// <summary>The accents, a fill and the content drawn on it each.</summary>
+    public ObservableCollection<ThemeColorGroup> AccentColorGroups { get; } = new();
 
     /// <summary>The categories edited on their own in the complete mode.</summary>
     public IReadOnlyList<ThemeCategoryEditor> Categories { get; }
@@ -398,7 +402,7 @@ public class ThemeCustomizerViewModel : ObservableObject
         {
             if (!SetProperty(ref _isComplete, value))
                 return;
-            OnPropertyChanged(nameof(IsSimple));
+
             // Each category has its own padding in the complete mode.
             _paddingScale.IsShown = !value;
             if (_suppress)
@@ -407,16 +411,9 @@ public class ThemeCustomizerViewModel : ObservableObject
                 SeedCategories();
             ApplyColors();
             ApplyShape();
-            RegenerateXaml();
         }
     }
 
-    /// <summary>The opposite of <see cref="IsComplete"/>, for the mode switch.</summary>
-    public bool IsSimple
-    {
-        get => !_isComplete;
-        set => IsComplete = !value;
-    }
     public ObservableCollection<ThemeDimensionGroup> DimensionGroups { get; } = new();
     /// <summary>Size families driven by a single base value (control height, font size, control padding).</summary>
     public ObservableCollection<ThemeScaleEntry> Scales { get; } = new();
@@ -434,13 +431,6 @@ public class ThemeCustomizerViewModel : ObservableObject
             if (SetProperty(ref _selectedPreset, value) && value is not null && !_suppress)
                 ApplyPreset(value);
         }
-    }
-
-    private string _generatedXaml = "";
-    public string GeneratedXaml
-    {
-        get => _generatedXaml;
-        private set => SetProperty(ref _generatedXaml, value);
     }
 
     public ICommand ResetCommand { get; }
@@ -477,8 +467,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         ResetCommand = new RelayCommand(Reset);
         CopyCommand = new RelayCommand(Copy);
         SaveCommand = new RelayCommand(Save);
-
-        RegenerateXaml();
     }
 
     #region Definitions
@@ -497,36 +485,36 @@ public class ThemeCustomizerViewModel : ObservableObject
             return new ThemeColorGroup(header, colors);
         }
 
-        ColorGroups.Add(Group("Surface",
+        NeutralColorGroups.Add(Group("Surface",
             ("Base", "BaseColor", JColors.BaseColor),
             ("Surface 1", "Surface1Color", JColors.Surface1Color),
-            ("Surface 2", "Surface2Color", JColors.Surface2Color),
+            ("Surface 2", "Surface2Color", JColors.Surface2Color)));
+
+        NeutralColorGroups.Add(Group("Text and border",
+            ("Foreground", "ForegroundColor", JColors.ForegroundColor),
             ("Stroke", "StrokeColor", JColors.StrokeColor)));
 
-        ColorGroups.Add(Group("Text",
-            ("Foreground", "ForegroundColor", JColors.ForegroundColor)));
-
-        ColorGroups.Add(Group("Primary",
+        AccentColorGroups.Add(Group("Primary",
             ("Primary", "PrimaryColor", JColors.PrimaryColor),
             ("Primary content", "PrimaryContentColor", JColors.PrimaryContentColor)));
 
-        ColorGroups.Add(Group("Secondary",
+        AccentColorGroups.Add(Group("Secondary",
             ("Secondary", "SecondaryColor", JColors.SecondaryColor),
             ("Secondary content", "SecondaryContentColor", JColors.SecondaryContentColor)));
 
-        ColorGroups.Add(Group("Success",
+        AccentColorGroups.Add(Group("Success",
             ("Success", "SuccessColor", JColors.SuccessColor),
             ("Success content", "SuccessContentColor", JColors.SuccessContentColor)));
 
-        ColorGroups.Add(Group("Info",
+        AccentColorGroups.Add(Group("Info",
             ("Info", "InfoColor", JColors.InfoColor),
             ("Info content", "InfoContentColor", JColors.InfoContentColor)));
 
-        ColorGroups.Add(Group("Warning",
+        AccentColorGroups.Add(Group("Warning",
             ("Warning", "WarningColor", JColors.WarningColor),
             ("Warning content", "WarningContentColor", JColors.WarningContentColor)));
 
-        ColorGroups.Add(Group("Danger",
+        AccentColorGroups.Add(Group("Danger",
             ("Danger", "DangerColor", JColors.DangerColor),
             ("Danger content", "DangerContentColor", JColors.DangerContentColor)));
     }
@@ -631,7 +619,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         }
 
         ApplyColors();
-        RegenerateXaml();
     }
 
     private void OnColorChanged(ThemeColorEntry entry)
@@ -641,7 +628,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         // A manual edit no longer matches any preset — drop the highlight without re-applying.
         SetProperty(ref _selectedPreset, null, nameof(SelectedPreset));
         ApplyColors();
-        RegenerateXaml();
     }
 
     private void OnCategoryColorChanged(ThemeColorEntry entry)
@@ -650,7 +636,6 @@ public class ThemeCustomizerViewModel : ObservableObject
             return;
         SetProperty(ref _selectedPreset, null, nameof(SelectedPreset));
         ApplyColors();
-        RegenerateXaml();
     }
 
     private void OnCategoryDimensionChanged(ThemeDimensionEntry entry)
@@ -658,7 +643,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         if (_suppress)
             return;
         ApplyShape();
-        RegenerateXaml();
     }
 
     /// <summary>
@@ -787,7 +771,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         if (_suppress)
             return;
         ApplyDimension(entry);
-        RegenerateXaml();
     }
 
     private void OnScaleChanged(ThemeScaleEntry entry)
@@ -795,7 +778,6 @@ public class ThemeCustomizerViewModel : ObservableObject
         if (_suppress)
             return;
         ApplyScale(entry);
-        RegenerateXaml();
     }
 
     /// <summary>Pushes every derived step of a scale to its live resource.</summary>
@@ -892,14 +874,13 @@ public class ThemeCustomizerViewModel : ObservableObject
         }
 
         SelectedPreset = null;
-        RegenerateXaml();
     }
 
     private void Copy()
     {
         try
         {
-            Clipboard.SetText(GeneratedXaml);
+            Clipboard.SetText(ThemeDictionaryWriter.Write(CurrentValues()));
         }
         catch
         {
@@ -919,7 +900,7 @@ public class ThemeCustomizerViewModel : ObservableObject
         };
 
         if (dialog.ShowDialog() == true)
-            File.WriteAllText(dialog.FileName, GeneratedXaml);
+            File.WriteAllText(dialog.FileName, ThemeDictionaryWriter.Write(CurrentValues()));
     }
 
     #endregion
@@ -1022,8 +1003,6 @@ public class ThemeCustomizerViewModel : ObservableObject
     #region XAML generation
 
     private double DimValue(string name) => _allDimensions.First(d => d.ResourceName == name).Value;
-
-    private void RegenerateXaml() => GeneratedXaml = ThemeDictionaryWriter.Write(CurrentValues());
 
     private ThemeValues CurrentValues() => new(
         [.. _allColors.Select(entry => KeyValuePair.Create(entry.ResourceName, entry.Color))],

@@ -30,7 +30,7 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
   (brushes follow), metrics are `joufflu:Dimensions.*`; override them in a dictionary
   merged after `Resources.xaml`, or register a whole palette with
   `ThemeManager.Instance.Register(name, uri, isDark)`. The `Joufflu.Samples` gallery's
-  *Customize theme* page edits them live and generates the dictionary; presets included.
+  *Customize theme* window (palette button in its title bar) edits them live and generates the dictionary; presets included.
   When asked for a "custom look", "brand colours", "rounder / denser UI", do this.
 - Reuse before writing: modal dialogs (`Overlayer`), toasts (`ToastService`), side menu
   (`NavigationMenu`), paging, badges, search/combo/numeric inputs, file explorer.

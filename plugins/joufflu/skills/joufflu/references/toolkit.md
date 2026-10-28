@@ -33,22 +33,24 @@ the gap is active. Put extra space on a wrapper instead.
 
 ## Tooltip
 
-Themed tooltip shown instantly on hover (native `ToolTip` has a delay).
+Every native `ToolTip` is themed: its style centres it on a side of the element with a small gap
+(not at the mouse) and flips it at screen edges. Set it the usual way.
 
 ```xml
-<Button Content="Save" toolkit:ThemedTooltip.Content="Save your changes" toolkit:ThemedTooltip.Placement="Bottom" />
-<Button Content="Rich">
-    <toolkit:ThemedTooltip.Content>
+<Button Content="Save" ToolTip="Save your changes" toolkit:ThemedTooltip.Placement="Top" />
+<Button Content="Rich" toolkit:ThemedTooltip.MaxWidth="200">
+    <Button.ToolTip>
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
             <TextBlock Text="Any content." />
         </StackPanel>
-    </toolkit:ThemedTooltip.Content>
+    </Button.ToolTip>
 </Button>
 ```
 
-`Placement`: `Top`, `Bottom` (default), `Left`, `Right`; flips at screen edges. Setting
-`Content` to `null` removes it (usable from triggers).
+`ThemedTooltip.Placement` (on the element): `Top`, `Bottom` (default), `Left`, `Right`.
+`ThemedTooltip.MaxWidth` (on the element): width past which the text wraps, `320` by default.
+`ToolTipService.Placement` is overridden by the style; the show delay is the native one.
 
 ## Drag and drop
 

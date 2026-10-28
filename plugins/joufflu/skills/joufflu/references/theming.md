@@ -93,7 +93,7 @@ The controls read the per-category shape (`DisplayRadius`/`InputRadius`/`ActionR
 overrides the three categories. When overriding a scalar, also override the composite built from
 it (`XRadius` → `XCornerRadius`, `Spacing` → `SpacingThickness`, `TitleBarHeight` →
 `TitleBarHeightOffset`), since composites are baked at load. A large radius gives a pill: the
-controls clamp it to half their height. The `Joufflu.Samples` gallery page *Customize theme*
+controls clamp it to half their height. The `Joufflu.Samples` gallery's *Customize theme* window (palette button in its title bar)
 generates a ready-to-merge dictionary interactively.
 
 ## Using tokens

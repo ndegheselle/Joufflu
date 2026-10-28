@@ -142,7 +142,6 @@ public class ShellViewModel : ObservableObject, IDisposable
         Register(() => new ShellSamples());
         Register<ThemeSamplesViewModel, ThemeSamples>(() => new());
         Register<ThemeTokensViewModel, ThemeTokens>(() => new());
-        Register<ThemeCustomizerViewModel, ThemeCustomizer>(() => new());
 
         Navigator = new Navigator(ResolvePage);
 

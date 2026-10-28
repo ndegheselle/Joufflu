@@ -234,7 +234,7 @@
                         Grid.Column="2"
                         toolkit:Sizing.IsSquare="True"
                         toolkit:Sizing.Size="sm"
-                        toolkit:ThemedTooltip.Content="Edit the options">
+                        ToolTip="Edit the options">
                         <ToggleButton.Style>
                             <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
                                 <Setter Property="Visibility" Value="Collapsed" />

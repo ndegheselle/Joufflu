@@ -18,23 +18,23 @@
             <c:CodeExample
                 Title="ThemedTooltip.Placement"
                 Code="{Binding PlacementCode}"
-                Description="Set ThemedTooltip.Content on any element to show a themed tooltip on hover. ThemedTooltip.Placement chooses the side it sits on — Top, Bottom, Left or Right — and it still flips automatically near a screen edge.">
+                Description="Set ToolTip as usual: every tooltip is themed. ThemedTooltip.Placement chooses the side it sits on, centred on the element — Top, Bottom (the default), Left or Right — and it flips to the opposite side near a screen edge.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <Button
                         Content="Top"
-                        toolkit:ThemedTooltip.Content="Placed above"
+                        ToolTip="Placed above"
                         toolkit:ThemedTooltip.Placement="Top" />
                     <Button
                         Content="Bottom"
-                        toolkit:ThemedTooltip.Content="Placed below"
+                        ToolTip="Placed below"
                         toolkit:ThemedTooltip.Placement="Bottom" />
                     <Button
                         Content="Left"
-                        toolkit:ThemedTooltip.Content="Placed left"
+                        ToolTip="Placed left"
                         toolkit:ThemedTooltip.Placement="Left" />
                     <Button
                         Content="Right"
-                        toolkit:ThemedTooltip.Content="Placed right"
+                        ToolTip="Placed right"
                         toolkit:ThemedTooltip.Placement="Right" />
                 </WrapPanel>
             </c:CodeExample>
@@ -42,16 +42,29 @@
             <c:CodeExample
                 Title="Custom content"
                 Code="{Binding ContentCode}"
-                Description="ThemedTooltip.Content is an object, so it accepts arbitrary XAML — not just text.">
+                Description="ToolTip is an object, so it accepts arbitrary XAML — not just text.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <Button Content="Rich tooltip" toolkit:ThemedTooltip.Placement="Bottom">
-                        <toolkit:ThemedTooltip.Content>
+                        <Button.ToolTip>
                             <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
                                 <TextBlock Text="Arbitrary content, icons included." />
                             </StackPanel>
-                        </toolkit:ThemedTooltip.Content>
+                        </Button.ToolTip>
                     </Button>
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Max width"
+                Code="{Binding MaxWidthCode}"
+                Description="A tooltip is no wider than ThemedTooltip.MaxWidth (320 by default), past which its text wraps.">
+                <WrapPanel toolkit:Spacing.Gap="8,8">
+                    <Button Content="Default width" ToolTip="A long description of what this button does, wrapped once it reaches the default max width of a tooltip rather than running across the screen." />
+                    <Button
+                        Content="Narrow"
+                        toolkit:ThemedTooltip.MaxWidth="160"
+                        ToolTip="The same long description, wrapped at a narrower max width set on the element." />
                 </WrapPanel>
             </c:CodeExample>
         </StackPanel>

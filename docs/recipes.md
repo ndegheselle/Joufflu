@@ -63,7 +63,7 @@ private void Save()
 Customizing is overriding tokens, not restyling controls. Create a dictionary with
 the keys you want to change, merge it **after** the Joufflu resources, and every
 control, restyled native and Joufflu control picks the change up. Use the gallery's
-**Customize theme** page to pick colours and dimensions live and copy the generated
+**Customize theme** window (the palette button in its title bar) to pick colours and dimensions live and copy the generated
 dictionary rather than writing it by hand.
 
 ```xml

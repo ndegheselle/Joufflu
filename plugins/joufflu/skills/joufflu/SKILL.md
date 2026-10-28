@@ -168,7 +168,8 @@ C# namespaces (these are the real ones; some doc snippets are off):
 - **Buttons**: `PrimaryButton`, `SecondaryButton`, `GhostButton`, `SuccessButton`,
   `InfoButton`, `WarningButton`, `DangerButton`, plus `Soft*` and `Outline*` variants.
 - **Icons**: `<fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />`.
-- **Tooltips**: `toolkit:ThemedTooltip.Content="…"` (instant, themed) rather than `ToolTip`.
+- **Tooltips**: plain `ToolTip="…"` is themed; `toolkit:ThemedTooltip.Placement` picks the side and
+  `toolkit:ThemedTooltip.MaxWidth` where the text wraps.
 - **Modals / notifications**: `IOverlayer` and `IToastService`, not `MessageBox`
   or a new `Window`.
 - **Drag and drop**: `toolkit:DropTarget.Command` / `toolkit:DragSource.Data`, not

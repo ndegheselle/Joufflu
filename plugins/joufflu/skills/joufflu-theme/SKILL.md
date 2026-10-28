@@ -181,7 +181,8 @@ category `XBorderThickness`, `DisplayPadding`,
 `Spacing`/`SpacingThickness`, `TitleBarHeight`/`TitleBarHeightOffset` (`0,<height>,0,0`),
 `HeightEmbedded` ≈ 0.625 × `HeightMd`.
 
-The `Joufflu.Samples` gallery has a *Customize theme* page that edits all of this live and
+The `Joufflu.Samples` gallery has a *Customize theme* window, opened from the palette button in its
+title bar, that edits all of this live and
 exports a ready-to-merge dictionary; suggest it when the user wants to experiment visually.
 
 ## 6. Verify

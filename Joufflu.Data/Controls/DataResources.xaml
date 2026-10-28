@@ -140,7 +140,7 @@
         TargetType="ToggleButton">
         <Setter Property="joolkit:Sizing.IsSquare" Value="True" />
         <Setter Property="joolkit:Sizing.Size" Value="sm" />
-        <Setter Property="joolkit:ThemedTooltip.Content" Value="Force the value" />
+        <Setter Property="ToolTip" Value="Force the value" />
         <Setter Property="IsChecked" Value="{Binding IsManual}" />
         <Setter Property="IsEnabled">
             <Setter.Value>

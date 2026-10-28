@@ -38,7 +38,7 @@
                     <jonts:FontIcon
                         Grid.Column="2"
                         HorizontalAlignment="Right"
-                        toolkit:ThemedTooltip.Content="{Binding Description}"
+                        ToolTip="{Binding Description}"
                         Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
                         Text="{x:Static jonts:LucideFontIcons.Info}"
                         Visibility="{Binding Description, Converter={x:Static converters:VisibilityConverter.Default}}" />
@@ -75,7 +75,7 @@
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                     <jonts:FontIcon
                         Grid.Column="1"
-                        toolkit:ThemedTooltip.Content="Forced value"
+                        ToolTip="Forced value"
                         Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
@@ -134,7 +134,7 @@
                     <!--  A forced value is flagged the way the toggle forcing it reads.  -->
                     <jonts:FontIcon
                         Grid.Column="1"
-                        toolkit:ThemedTooltip.Content="Forced value"
+                        ToolTip="Forced value"
                         Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />

@@ -7,7 +7,9 @@ nav_order: 4
 # Customize theme
 
 The gallery's theme customizer tweaks colours and dimensions with the whole
-gallery updating live. Start from a **preset theme**, then copy or save the
+gallery updating live. It opens in a window of its own, from the palette button
+next to the light / dark switch in the gallery's title bar, so the gallery behind
+it is the preview. Start from a **preset theme**, then copy or save the
 generated resource dictionary and merge it into your app **after** the Joufflu
 resources to apply it.
 
@@ -44,5 +46,5 @@ longer reaches the controls.
 </ResourceDictionary.MergedDictionaries>
 ```
 
-Run the **`Joufflu.Samples`** app and open *Customize theme* to generate a
-dictionary interactively.
+Run the **`Joufflu.Samples`** app and click the palette button in the title bar to
+generate a dictionary interactively.

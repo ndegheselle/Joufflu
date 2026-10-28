@@ -31,7 +31,7 @@ this page does not track their releases.
   and font sizes are all tokens: override a few in a dictionary merged after the Joufflu
   resources and every control follows, with no `ControlTemplate` copied or edited.
   Register a whole palette by name (`ThemeManager.Register`) to make it selectable next
-  to Light and Dark. The gallery's **Customize theme** page edits the tokens live,
+  to Light and Dark. The gallery's **Customize theme** window edits the tokens live,
   starts from presets and generates the dictionary to paste into your app
   ([Customize theme](themes/customize-theme.md)).
 - **Restyled natives.** Buttons, text boxes, combo boxes, data grids and the rest of the

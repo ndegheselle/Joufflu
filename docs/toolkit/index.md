@@ -15,7 +15,7 @@ themselves. They all live in the `Joufflu.Toolkit` namespace of the core
 - **Sizing** — the `Sizing.Size` and `IsSquare` attached properties.
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.
 - **Derived dimensions** — the `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` attached properties, with their factors scaling the value side by side, for thicknesses, radii and margins that follow the theme live.
-- **Tooltip** — the `ThemedTooltip.Content` and `ThemedTooltip.Placement` attached properties for themed tooltips on any element.
+- **Tooltip** — every `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side and `ThemedTooltip.MaxWidth` where its text wraps.
 - **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it.
 - **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
 - **Shared width**: the `SharedWidth.IsShared` and `IsScope` attached properties, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.

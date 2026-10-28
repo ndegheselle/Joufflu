@@ -34,28 +34,42 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <controls:ThemedWindow.TitleBarContent>
-        <!--  Light / dark switch: the icon shows the theme a click switches to. No Background on the host, so the bar stays draggable around it.  -->
-        <Button
+        <!--  No Background on the host, so the bar stays draggable around the buttons.  -->
+        <StackPanel
             Margin="0,0,4,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            toolkit:Sizing.IsSquare="True"
-            toolkit:Sizing.Size="sm"
-            Click="ThemeSwitch_Click"
-            Style="{StaticResource GhostButton}">
-            <fonts:FontIcon>
-                <fonts:FontIcon.Style>
-                    <Style TargetType="{x:Type fonts:FontIcon}" BasedOn="{StaticResource {x:Type fonts:FontIcon}}">
-                        <Setter Property="Text" Value="{x:Static fonts:LucideFontIcons.Moon}" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsDark, Source={x:Static themes:ThemeManager.Instance}}" Value="True">
-                                <Setter Property="Text" Value="{x:Static fonts:LucideFontIcons.Sun}" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </fonts:FontIcon.Style>
-            </fonts:FontIcon>
-        </Button>
+            toolkit:Spacing.Gap="2,0"
+            Orientation="Horizontal">
+            <!--  The theme customizer, in a window of its own so the gallery behind it is the preview  -->
+            <Button
+                toolkit:Sizing.IsSquare="True"
+                toolkit:Sizing.Size="sm"
+                Click="ThemeCustomizer_Click"
+                Style="{StaticResource GhostButton}"
+                ToolTip="Customize theme">
+                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
+            </Button>
+            <!--  Light / dark switch: the icon shows the theme a click switches to  -->
+            <Button
+                toolkit:Sizing.IsSquare="True"
+                toolkit:Sizing.Size="sm"
+                Click="ThemeSwitch_Click"
+                Style="{StaticResource GhostButton}">
+                <fonts:FontIcon>
+                    <fonts:FontIcon.Style>
+                        <Style TargetType="{x:Type fonts:FontIcon}" BasedOn="{StaticResource {x:Type fonts:FontIcon}}">
+                            <Setter Property="Text" Value="{x:Static fonts:LucideFontIcons.Moon}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsDark, Source={x:Static themes:ThemeManager.Instance}}" Value="True">
+                                    <Setter Property="Text" Value="{x:Static fonts:LucideFontIcons.Sun}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </fonts:FontIcon.Style>
+                </fonts:FontIcon>
+            </Button>
+        </StackPanel>
     </controls:ThemedWindow.TitleBarContent>
     <!--  Toasts sit above everything, modal overlays included.  -->
     <feedbackControls:ToastContainer Position="{Binding ToastSamples.Position}" Toasts="{Binding Toasts}">
@@ -102,12 +116,6 @@
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Ruler}" />
                         </nav:NavigationItem.Icon>
                         Design tokens
-                    </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type themesSamples:ThemeCustomizerViewModel}">
-                        <nav:NavigationItem.Icon>
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Palette}" />
-                        </nav:NavigationItem.Icon>
-                        Customize theme
                     </nav:NavigationItem>
 
                     <!--  Featured native controls (kept at top level)  -->
