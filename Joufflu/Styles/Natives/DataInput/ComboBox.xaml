@@ -217,7 +217,7 @@
                         </Trigger>
 
                         <Trigger Property="IsDropDownOpen" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeFocusBrush}}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
                         </Trigger>
 
                         <Trigger Property="Validation.HasError" Value="True">
@@ -240,12 +240,11 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
 
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeFocusBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">

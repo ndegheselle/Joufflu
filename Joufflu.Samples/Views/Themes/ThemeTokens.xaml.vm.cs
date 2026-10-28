@@ -71,10 +71,6 @@ public class ThemeTokensViewModel : ObservableObject
                     "StrokeStrongBrush",
                     "Derived from Stroke: the border of a control that is hovered or pressed.",
                     Joufflu.Brushes.StrokeStrongBrush),
-                new TokenEntry(
-                    "StrokeFocusBrush",
-                    "Derived from Stroke, stronger still: the border of a control that has the focus.",
-                    Joufflu.Brushes.StrokeFocusBrush),
             ]),
 
         new TokenGroup(

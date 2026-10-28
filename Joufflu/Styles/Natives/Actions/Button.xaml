@@ -98,14 +98,10 @@
         <Style.Triggers>
             <!--  A button is filled with the base colour: focus takes a stronger border, hover and pressed a stronger fill and border.  -->
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeFocusBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BaseHoverBrush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BasePressedBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">

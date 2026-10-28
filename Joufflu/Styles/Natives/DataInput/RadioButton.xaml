@@ -16,9 +16,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <BulletDecorator
-                        Background="Transparent"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <BulletDecorator VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Background="Transparent">
                         <BulletDecorator.Bullet>
                             <Grid Width="16" Height="16">
                                 <Ellipse
@@ -54,7 +52,6 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">

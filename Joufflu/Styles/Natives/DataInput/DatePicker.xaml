@@ -112,7 +112,7 @@
             </Trigger>
 
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeFocusBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">

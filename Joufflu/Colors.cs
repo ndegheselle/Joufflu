@@ -47,19 +47,15 @@ public static class Brushes
 
     public static ComponentResourceKey BaseBrush => new ComponentResourceKey(typeof(Brushes), "BaseBrush");
     public static ComponentResourceKey BaseHoverBrush => new ComponentResourceKey(typeof(Brushes), "BaseHoverBrush");
-    public static ComponentResourceKey BasePressedBrush => new ComponentResourceKey(typeof(Brushes), "BasePressedBrush");
 
     public static ComponentResourceKey Surface1Brush => new ComponentResourceKey(typeof(Brushes), "Surface1Brush");
     public static ComponentResourceKey Surface1HoverBrush => new ComponentResourceKey(typeof(Brushes), "Surface1HoverBrush");
-    public static ComponentResourceKey Surface1PressedBrush => new ComponentResourceKey(typeof(Brushes), "Surface1PressedBrush");
 
     public static ComponentResourceKey Surface2Brush => new ComponentResourceKey(typeof(Brushes), "Surface2Brush");
     public static ComponentResourceKey Surface2HoverBrush => new ComponentResourceKey(typeof(Brushes), "Surface2HoverBrush");
-    public static ComponentResourceKey Surface2PressedBrush => new ComponentResourceKey(typeof(Brushes), "Surface2PressedBrush");
 
     public static ComponentResourceKey StrokeBrush => new ComponentResourceKey(typeof(Brushes), "StrokeBrush");
     public static ComponentResourceKey StrokeStrongBrush => new ComponentResourceKey(typeof(Brushes), "StrokeStrongBrush");
-    public static ComponentResourceKey StrokeFocusBrush => new ComponentResourceKey(typeof(Brushes), "StrokeFocusBrush");
 
     // Primary
     public static ComponentResourceKey PrimaryBrush => new ComponentResourceKey(typeof(Brushes), "PrimaryBrush");
