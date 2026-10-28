@@ -161,7 +161,8 @@ otherwise.
 | `DisplayRadius`, `InputRadius`, `ActionRadius` | `double` | The radius of each category (`4`). The controls clamp it to half their height, so a large one gives a pill. |
 | `DisplayCornerRadius`, `InputCornerRadius`, `ActionCornerRadius` | `CornerRadius` | The radius of each category on all four corners. |
 | `DisplayBorderThickness`, `InputBorderThickness`, `ActionBorderThickness` | `Thickness` | The border of each category (`1`). |
-| `DisplayPadding` | `Thickness` | The padding inside a display (`12`). An action is padded by `ActionPaddingXs`…`ActionPaddingLg`, an input by `InputPaddingXs`…`InputPaddingLg`. |
+| `DisplayPadding` | `Thickness` | The padding inside a display (`12`). An action is padded by `ActionPaddingXs`…`ActionPaddingLg`, an input by `InputPaddingXs`…`InputPaddingLg`; a button or an input takes only their horizontal part, its height coming from its size, while a row, a menu item or a tab takes both. |
+| `DisplayPaddingSm` | `Thickness` | The padding inside a compact display: a popup, a menu, a tooltip, a badge (`4`, a third of `DisplayPadding` in the customizer). |
 
 The global `Radius`, `CornerRadius`, `Thickness` and `BorderThickness` are for an app's own layout:
 the controls read the category keys. Override a category key in a dictionary merged after

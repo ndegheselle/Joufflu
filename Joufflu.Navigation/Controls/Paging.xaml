@@ -59,7 +59,11 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <!--  Clipped to its column: short of room, the pages are cut at the edge rather than drawn over the interval  -->
+                        <StackPanel
+                            Grid.Column="0"
+                            ClipToBounds="True"
+                            Orientation="Horizontal">
 
                             <Button
                                 toolkit:Sizing.IsSquare="True"

@@ -92,15 +92,17 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
+                            <!--  The guide line is the left side of a border, so it is as thick as a display border  -->
                             <Border
                                 x:Name="VerticalLine"
                                 Grid.Column="0"
-                                Width="{DynamicResource {x:Static joufflu:Dimensions.Thickness}}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
+                                toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+                                toolkit:Derive.BorderThicknessFactor="1,0,0,0"
                                 toolkit:Derive.Margin="{x:Static joufflu:Dimensions.HeightMd}"
                                 toolkit:Derive.MarginFactor="0.5,0,0,0"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+                                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
 
                             <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" />
                         </Grid>
@@ -157,16 +159,6 @@
         </Setter>
 
         <Style.Triggers>
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-                    <Condition Binding="{Binding Items.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="1" />
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="IsExpanded" Value="True" />
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsMouseOver" Value="True" />
@@ -181,25 +173,12 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
             </Trigger>
 
-            <!--
-                Selection is a tint, not a fill: the foreground stays put so that anything hosted in
-                the header (buttons, icons, inputs) keeps its own colours. A style setter on a child
-                always beats the Foreground inherited from this item, so a contrasting selected
-                foreground could never reach them anyway.
-            -->
+            <!--  After the focus, so a selected item stays plain primary  -->
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
             </Trigger>
-
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsMouseOver" Value="True" />
-                    <Condition Property="IsSelected" Value="True" />
-                </MultiTrigger.Conditions>
-                <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftElevatedBrush}}" />
-                </MultiTrigger.Setters>
-            </MultiTrigger>
 
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

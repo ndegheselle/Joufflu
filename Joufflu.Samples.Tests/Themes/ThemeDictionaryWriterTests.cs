@@ -108,6 +108,7 @@ public class ThemeDictionaryWriterTests
             Assert.That(generated[JDimensions.ActionBorderThickness], Is.EqualTo(new Thickness(0)));
             Assert.That(generated[JDimensions.DisplayCornerRadius], Is.EqualTo(new CornerRadius(12)));
             Assert.That(generated[JDimensions.DisplayPadding], Is.EqualTo(new Thickness(20, 14, 20, 14)));
+            Assert.That(generated[JDimensions.DisplayPaddingSm], Is.EqualTo(new Thickness(7, 5, 7, 5)), "a third of the display padding");
             Assert.That(generated[JDimensions.InputPaddingLg], Is.EqualTo(new Thickness(15, 6, 15, 6)), "the input's own md padding at the lg ratio");
             Assert.That(generated[JDimensions.ActionPaddingLg], Is.EqualTo(new Thickness(30, 12, 30, 12)), "the action's own, not the control padding");
             Assert.That(generated[JDimensions.Radius], Is.EqualTo(8d), "the global shape stays, for an app's own layout");

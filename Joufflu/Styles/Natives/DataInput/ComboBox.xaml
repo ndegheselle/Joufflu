@@ -7,20 +7,23 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <!--
         An item of the drop-down, a ghost action: no fill at rest, a stronger one when highlighted, a strong border on
         keyboard focus, the primary when selected (after the focus, so the selected item stays plain primary).
+        At least the height of its size, so a short item lines up with the field; a taller one grows.
     -->
     <Style x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -31,8 +34,8 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        Tag="{DynamicResource {x:Static joufflu:Dimensions.ActionRadius}}"
-                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                        Tag="{DynamicResource {x:Static joufflu:Dimensions.ActionRadius}}">
                         <Border.CornerRadius>
                             <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
                                 <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
@@ -74,14 +77,17 @@
 
             <!--  Size variants (md is the default, no trigger needed)  -->
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
                 <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
                 <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingSm}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
                 <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingLg}}" />
             </Trigger>
@@ -104,7 +110,8 @@
 
     <!--
         An input: no hover, a strong border on focus or while open. The whole field is the toggle, so the chevron is
-        only an icon. The drop-down is a display.
+        only an icon. The height comes from the size, so the field takes only the horizontal part of its padding and
+        centres its content. The drop-down is a compact display.
     -->
     <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
         <Setter Property="ItemContainerStyle" Value="{StaticResource {x:Type ComboBoxItem}}" />
@@ -114,7 +121,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -160,23 +167,28 @@
                             <ContentPresenter
                                 x:Name="ContentSite"
                                 Grid.Column="0"
-                                Margin="{TemplateBinding Padding}"
+                                Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                VerticalAlignment="Center"
                                 Content="{TemplateBinding ComboBox.SelectionBoxItem}"
                                 ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                 IsHitTestVisible="False" />
 
-                            <!--  Editable text entry (shown only when IsEditable)  -->
+                            <!--
+                                Editable text entry (shown only when IsEditable). Height and FontSize are set here so
+                                the TextBox style, made for a field of its own, does not size it.
+                            -->
                             <TextBox
                                 x:Name="PART_EditableTextBox"
                                 Grid.Column="0"
-                                Padding="{TemplateBinding Padding}"
+                                Height="Auto"
+                                Padding="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                VerticalContentAlignment="Center"
                                 Background="Transparent"
                                 Focusable="True"
+                                FontSize="{TemplateBinding FontSize}"
                                 Foreground="{TemplateBinding Foreground}"
                                 IsReadOnly="{TemplateBinding IsReadOnly}"
                                 Visibility="Collapsed">
@@ -185,6 +197,7 @@
                                         <ScrollViewer
                                             Name="PART_ContentHost"
                                             Margin="{TemplateBinding Padding}"
+                                            VerticalAlignment="Center"
                                             Focusable="False"
                                             HorizontalScrollBarVisibility="Hidden"
                                             Template="{DynamicResource TextBoxScrollViewerTemplate}"
@@ -217,6 +230,7 @@
                                     MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
                                     MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}"
                                     Margin="0,1,0,0"
+                                    Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
                                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
@@ -247,10 +261,6 @@
 
                         <Trigger Property="IsDropDownOpen" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
-                        </Trigger>
-
-                        <Trigger Property="Validation.HasError" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                         </Trigger>
 
                         <Trigger Property="toolkit:Sizing.Size" Value="xs">
@@ -284,17 +294,17 @@
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
                 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="sm">
                 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingSm}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="lg">
                 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -8,7 +8,6 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -51,7 +50,7 @@
     <!--  ============================ NavigationItem ============================  -->
     <Style TargetType="{x:Type nav:NavigationItem}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
+        <!--  No font size of its own: the entry button carries the one of its size.  -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationItem}">
@@ -224,6 +223,8 @@
         <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
         <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
         <Setter Property="Width" Value="220" />
+        <!--  A compact display: the header and the items sit at this inset from the menu edges.  -->
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationMenu}">
@@ -249,15 +250,15 @@
                                 <ContentPresenter
                                     x:Name="HeaderPresenter"
                                     Grid.Column="0"
-                                    Margin="8"
                                     VerticalAlignment="Center"
+                                    toolkit:Derive.Margin="{x:Static joufflu:Dimensions.ActionPaddingMd}"
+                                    toolkit:Derive.MarginFactor="1,0,0,0"
                                     Content="{TemplateBinding Header}"
                                     IsHitTestVisible="False" />
 
                                 <Button
                                     x:Name="CollapseButton"
                                     Grid.Column="1"
-                                    Margin="2"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
                                     toolkit:Sizing.IsSquare="True"
@@ -273,7 +274,7 @@
                                 Background="Transparent"
                                 HorizontalScrollBarVisibility="Disabled"
                                 VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter Margin="8,0,8,8" />
+                                <ItemsPresenter />
                             </ScrollViewer>
                         </DockPanel>
                     </Grid>

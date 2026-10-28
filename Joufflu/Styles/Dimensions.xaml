@@ -36,6 +36,7 @@
     <CornerRadius x:Key="{x:Static joufflu:Dimensions.DisplayCornerRadius}">4</CornerRadius>
     <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayBorderThickness}">1</Thickness>
     <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayPadding}">12</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayPaddingSm}">4</Thickness>
 
     <system:Double x:Key="{x:Static joufflu:Dimensions.InputRadius}">4</system:Double>
     <CornerRadius x:Key="{x:Static joufflu:Dimensions.InputCornerRadius}">4</CornerRadius>

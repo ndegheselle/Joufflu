@@ -44,6 +44,17 @@ public static class ThemeScales
     /// <summary>Ratio of <c>Dimensions.HeightEmbedded</c> to the control height's md value.</summary>
     public const double EmbeddedHeightRatio = 0.625;
 
+    /// <summary>Ratio of <c>Dimensions.DisplayPaddingSm</c>, the inside of a compact display, to <c>DisplayPadding</c>.</summary>
+    public const double DisplayPaddingSmRatio = 1d / 3;
+
+    /// <summary>The inside of a compact display (a popup, a tooltip), from the inside of a display.</summary>
+    public static Thickness DisplayPaddingSm(double horizontal, double vertical)
+    {
+        double smHorizontal = Derive(horizontal, DisplayPaddingSmRatio);
+        double smVertical = Derive(vertical, DisplayPaddingSmRatio);
+        return new Thickness(smHorizontal, smVertical, smHorizontal, smVertical);
+    }
+
     /// <summary>Horizontal ratio of the text input paddings to the control paddings they follow.</summary>
     public const double InputPaddingHorizontalRatio = 0.5;
 
@@ -201,9 +212,11 @@ public static class ThemeDictionaryWriter
             xaml.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{category}BorderThickness}}\">{Num(thickness)}</Thickness>");
         }
         ThemeCategoryValues? display = values.Categories?.Display;
-        xaml.AppendLine(display is null
-            ? $"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.DisplayPadding}}\">{Num(values.Spacing)}</Thickness>"
-            : ThicknessEntry("DisplayPadding", display.PaddingHorizontal, display.PaddingVertical));
+        double displayHorizontal = display?.PaddingHorizontal ?? values.Spacing;
+        double displayVertical = display?.PaddingVertical ?? values.Spacing;
+        xaml.AppendLine(ThicknessEntry("DisplayPadding", displayHorizontal, displayVertical));
+        Thickness displaySm = ThemeScales.DisplayPaddingSm(displayHorizontal, displayVertical);
+        xaml.AppendLine(ThicknessEntry("DisplayPaddingSm", displaySm.Left, displaySm.Top));
         xaml.AppendLine();
     }
 

@@ -167,6 +167,7 @@ Pairing rule: text on an `X` fill uses `XContent`; text on surfaces uses `Foregr
 | `DisplayCornerRadius` / `InputCornerRadius` / `ActionCornerRadius` | CornerRadius | 4 | Category radius on all corners |
 | `DisplayBorderThickness` / `InputBorderThickness` / `ActionBorderThickness` | Thickness | 1 | Category border |
 | `DisplayPadding` | Thickness | 12 | Padding inside a display (card) |
+| `DisplayPaddingSm` | Thickness | 4 | Padding inside a compact display (popup, menu, tooltip, badge) |
 | `Spacing` | double | 12 | Standard gap between siblings |
 | `SpacingThickness` | Thickness | 12 | Standard page padding |
 | `TitleBarHeight` | double | 30 | Custom title bar height |

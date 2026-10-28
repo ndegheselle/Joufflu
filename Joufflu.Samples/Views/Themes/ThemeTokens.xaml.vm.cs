@@ -200,7 +200,10 @@ public class ThemeTokensViewModel : ObservableObject
                     "Thickness - the border of each category (BorderThickness)."),
                 new TokenEntry(
                     "DisplayPadding",
-                    "Thickness - the padding inside a display (SpacingThickness). An action is padded by ActionPaddingXs..Lg, an input by InputPaddingXs..Lg."),
+                    "Thickness - the padding inside a display (SpacingThickness). An action is padded by ActionPaddingXs..Lg, an input by InputPaddingXs..Lg, horizontally only : their height comes from the size."),
+                new TokenEntry(
+                    "DisplayPaddingSm",
+                    "Thickness - the padding inside a compact display: a popup, a menu, a tooltip, a badge (a third of DisplayPadding, 4)."),
             ]),
 
         new TokenGroup(

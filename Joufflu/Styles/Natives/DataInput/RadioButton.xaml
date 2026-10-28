@@ -5,7 +5,8 @@
 
     <!--
         An input for its circle, as the check box: no hover, a strong border on focus (after the checked trigger, so it
-        also shows when checked), the primary when checked.
+        also shows when checked), the primary when checked, a danger border on a validation error. The label sits 6
+        from the circle (the Padding, as CheckBox) and inherits its font size.
     -->
     <Style x:Key="{x:Type RadioButton}" TargetType="RadioButton">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
@@ -51,6 +52,9 @@
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

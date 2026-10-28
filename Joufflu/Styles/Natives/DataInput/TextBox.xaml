@@ -6,6 +6,7 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <ControlTemplate x:Key="TextBoxScrollViewerTemplate" TargetType="{x:Type ScrollViewer}">
         <Grid Background="{TemplateBinding Background}">
@@ -51,7 +52,10 @@
         </Grid>
     </ControlTemplate>
 
-    <!--  An input. No hover, a strong border on focus.  -->
+    <!--
+        An input. No hover, a strong border on focus. The height comes from the size, so only the horizontal part of
+        the padding applies and the text is centred vertically.
+    -->
     <Style x:Key="TextBoxDefaultStyle" TargetType="Control">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
@@ -85,15 +89,17 @@
 
                         <ScrollViewer
                             x:Name="PART_ContentHost"
-                            Margin="{TemplateBinding Padding}"
+                            Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            VerticalAlignment="Center"
                             Template="{StaticResource TextBoxScrollViewerTemplate}" />
                     </Border>
 
                     <ControlTemplate.Triggers>
-                        <Trigger Property="Validation.HasError" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                        <!--  A multi-line text box is not of fixed height: it keeps its whole padding and alignment  -->
+                        <Trigger Property="TextBox.AcceptsReturn" Value="True">
+                            <Setter TargetName="PART_ContentHost" Property="Margin" Value="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="PART_ContentHost" Property="VerticalAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -8,10 +8,12 @@
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
+    <!--  The header is an item of the display: no fill at rest, a transparent border so the keyboard focus can show.  -->
     <Style x:Key="ExpanderHeaderStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -45,7 +47,6 @@
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
                                 VerticalAlignment="Center"
-                                FontSize="16"
                                 RenderTransformOrigin="0.5,0.5"
                                 Text="{x:Static fonts:LucideFontIcons.ChevronDown}">
                                 <fonts:FontIcon.RenderTransform>
@@ -84,12 +85,32 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+            </Trigger>
+
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+            </Trigger>
+
+            <!--  Size variants (md is the default, no trigger needed)  -->
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingSm}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingLg}}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!--  A display. No frame by default (the border thickness is 0), so it sits in a card; set one to frame it.  -->
     <Style x:Key="{x:Type Expander}" TargetType="{x:Type Expander}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Top" />

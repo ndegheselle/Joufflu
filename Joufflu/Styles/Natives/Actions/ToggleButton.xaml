@@ -6,8 +6,9 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
-    <!--  An action, as Button; checked is filled with the primary.  -->
+    <!--  An action, as Button (horizontal padding only, content centred); checked is filled with the primary.  -->
     <Style x:Key="{x:Type ToggleButton}" TargetType="ToggleButton">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionSurface1Brush}}" />
@@ -43,7 +44,7 @@
                         </Border.RenderTransform>
 
                         <ContentPresenter
-                            Margin="{TemplateBinding Padding}"
+                            Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"

@@ -115,7 +115,7 @@
                                         Grid.Column="1"
                                         Margin="5,0,0,0"
                                         VerticalAlignment="Center"
-                                        FontSize="11.5"
+                                        FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}"
                                         IsHitTestVisible="False"
                                         RenderOptions.ClearTypeHint="Auto"
                                         Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
@@ -152,7 +152,7 @@
                                             x:Name="PART_CloseButton"
                                             Foreground="{TemplateBinding TitleBarForeground}"
                                             Style="{StaticResource WindowCloseButtonStyle}">
-                                            <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>

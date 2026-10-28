@@ -15,6 +15,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <Style
         x:Key="{x:Type local:ComboBoxTags}"
@@ -23,14 +24,15 @@
         <Style.Resources>
             <local:DisplayMemberPathConverter x:Key="DisplayMemberPathConverter" />
         </Style.Resources>
+        <!--  Grows with its tags: the size sets a minimum height, not a height (see the size triggers below).  -->
         <Setter Property="Height" Value="auto" />
+        <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ComboBoxTags}">
                     <Grid>
                         <Border
                             x:Name="Border"
-                            MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -62,7 +64,7 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <!--  Xs height + 2px tag margin + 2px presenter margin = HeightMd on a single row  -->
+                                            <!--  HeightSm tags + 1px tag margin + 2px presenter margin: a row of tags is a bit taller than HeightMd, the control grows with it  -->
                                             <ContentControl Height="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}">
                                                 <Border
                                                     Margin="1"
@@ -75,8 +77,13 @@
                                                             <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
                                                         </MultiBinding>
                                                     </Border.CornerRadius>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">
+                                                    <!--  Padded like an xs action, the remove button tighter on its side  -->
+                                                    <StackPanel
+                                                        toolkit:Derive.Margin="{x:Static joufflu:Dimensions.ActionPaddingXs}"
+                                                        toolkit:Derive.MarginFactor="1,0,0.5,0"
+                                                        toolkit:Spacing.Gap="3,0"
+                                                        Orientation="Horizontal">
+                                                        <TextBlock VerticalAlignment="Center">
                                                             <TextBlock.Text>
                                                                 <MultiBinding Converter="{StaticResource DisplayMemberPathConverter}">
                                                                     <Binding />
@@ -85,7 +92,6 @@
                                                             </TextBlock.Text>
                                                         </TextBlock>
                                                         <Button
-                                                            Margin="3"
                                                             Command="{Binding RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=local:ComboBoxTags}}"
                                                             CommandParameter="{Binding}"
                                                             Style="{StaticResource EmbeddedButton}">
@@ -98,9 +104,10 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
 
+                                <!--  Input padding, horizontal only (like ComboBoxSearch), the row height centres it  -->
                                 <Grid
                                     x:Name="SearchContainer"
-                                    Margin="4"
+                                    Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center">
                                     <TextBox
@@ -126,7 +133,6 @@
                                         </TextBox.Template>
                                     </TextBox>
 
-
                                     <TextBlock
                                         x:Name="PlaceholderText"
                                         IsHitTestVisible="False"
@@ -143,7 +149,7 @@
                                 Width="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
                                 Height="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
                                 VerticalAlignment="Center"
-                                toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
+                                toolkit:Derive.Margin="{TemplateBinding Padding}"
                                 toolkit:Derive.MarginFactor="0,0,1,0"
                                 ClickMode="Press"
                                 Focusable="False"
@@ -168,6 +174,7 @@
                                 <Border
                                     x:Name="DropDownBorder"
                                     Margin="0,1,0,0"
+                                    Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
                                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
@@ -180,10 +187,6 @@
                         </Popup>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <!--  No tag : the search area carries the control Padding, otherwise the tags provide the spacing  -->
-                        <DataTrigger Binding="{Binding InternalSelectedItems.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
-                            <Setter TargetName="SearchContainer" Property="Margin" Value="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </DataTrigger>
                         <!--  Show the placeholder only while empty and unfocused (Text is "" initially, null after blur)  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -209,9 +212,28 @@
                             <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
                             <Setter TargetName="PART_EditableTextBox" Property="UIElement.Visibility" Value="Visible" />
                         </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <!--  The base size triggers set a fixed Height: re-declared here (later triggers win) so the tags can wrap at every size.  -->
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="Height" Value="auto" />
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="Height" Value="auto" />
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="Height" Value="auto" />
+                <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

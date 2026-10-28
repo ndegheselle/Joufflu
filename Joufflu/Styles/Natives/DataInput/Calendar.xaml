@@ -100,12 +100,12 @@
         TargetType="{x:Type Button}">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Padding" Value="8,2" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
     </Style>
 
     <Style x:Key="{x:Type CalendarItem}" TargetType="{x:Type CalendarItem}">
         <Setter Property="Margin" Value="0,3,0,3" />
-        <Setter Property="Padding" Value="4" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CalendarItem}">
@@ -114,7 +114,7 @@
                             <TextBlock
                                 Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=CalendarItem}}"
                                 FontWeight="Bold"
-                                FontSize="9.5"
+                                FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}"
                                 Margin="0,6,0,6"
                                 Text="{Binding}"
                                 HorizontalAlignment="Center"
@@ -144,7 +144,7 @@
                                     Style="{StaticResource ChangeTimeRangeButtonStyle}"
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Height="20"
+                                    Height="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
                                     Width="28"
                                     HorizontalAlignment="Left"
                                     Focusable="False">
@@ -166,7 +166,7 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     FontWeight="Bold"
-                                    FontSize="10.5"
+                                    FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}"
                                     HorizontalAlignment="Center"
                                     Focusable="False" />
 
@@ -175,7 +175,7 @@
                                     Style="{StaticResource ChangeTimeRangeButtonStyle}"
                                     Grid.Row="0"
                                     Grid.Column="2"
-                                    Height="20"
+                                    Height="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
                                     Width="28"
                                     HorizontalAlignment="Right"
                                     Focusable="False">

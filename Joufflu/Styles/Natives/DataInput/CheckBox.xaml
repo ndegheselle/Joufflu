@@ -8,7 +8,8 @@
 
     <!--
         An input for its box: no hover, a strong border on focus, the primary when checked. The focus is a template
-        trigger, after the checked ones, so it also shows on a checked box.
+        trigger, after the checked ones, so it also shows on a checked box. The label sits 6 from the box (the Padding,
+        as RadioButton) and inherits its font size.
     -->
     <Style x:Key="{x:Type CheckBox}" TargetType="CheckBox">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
@@ -78,13 +79,13 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                             <Setter TargetName="CheckMark" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                             <Setter TargetName="IndeterminateMark" Property="Fill" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
                             <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
                         </Trigger>

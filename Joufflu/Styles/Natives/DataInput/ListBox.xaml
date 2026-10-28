@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:Joufflu.Converters"
-    xmlns:joufflu="clr-namespace:Joufflu">
+    xmlns:joufflu="clr-namespace:Joufflu"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
@@ -15,7 +16,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
-        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -69,6 +70,17 @@
 
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
+            </Trigger>
+
+            <!--  Size variants (md is the default, no trigger needed)  -->
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingSm}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -64,6 +64,7 @@
             <!--  Row of an object or an array: forced, the entry stands for its children, which are left out.  -->
             <DataTemplate x:Key="DataParentRow">
                 <Grid
+                    MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}"
                     Margin="0,0,2,0"
                     VerticalAlignment="Center"
                     toolkit:Spacing.Gap="4">
@@ -99,6 +100,11 @@
         <TreeView.ItemContainerStyle>
             <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <!--
+                    Same rows as DataEdit and DataFill: no item padding, a row as tall as their sm inputs (the MinHeight
+                    of the row templates), so the three read alike side by side.
+                -->
+                <Setter Property="Padding" Value="0" />
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
@@ -122,6 +128,7 @@
             </HierarchicalDataTemplate>
             <DataTemplate DataType="{x:Type jodels:DataValue}">
                 <Grid
+                    MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}"
                     Margin="0,0,2,0"
                     VerticalAlignment="Center"
                     toolkit:Spacing.Gap="4">

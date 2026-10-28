@@ -13,6 +13,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -28,7 +29,7 @@
                             BorderBrush="{TemplateBinding BorderBrush}">
                             <ContentPresenter
                                 x:Name="ContentSite"
-                                Margin="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}"
+                                Margin="{TemplateBinding Padding}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 ContentSource="Header"
@@ -36,15 +37,26 @@
                         </Border>
                     </Grid>
 
+                    <!--
+                        Both states go through Derive.Margin: mixing it with a plain Margin setter would let the
+                        trigger order decide which one wins.
+                    -->
                     <ControlTemplate.Triggers>
+                        <!--  Overlaps the page's top border by its thickness, so the tab and the page join  -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="OuterGrid" Property="Margin" Value="0,0,0,-1" />
+                            <Setter TargetName="OuterGrid" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
+                            <Setter TargetName="OuterGrid" Property="toolkit:Derive.MarginFactor" Value="0,0,0,-1" />
                             <Setter TargetName="Border" Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
                             <Setter TargetName="Border" Property="toolkit:Derive.CornerRadius" Value="{x:Static joufflu:Dimensions.DisplayRadius}" />
                         </Trigger>
 
+                        <!--  Unselected tabs sit a little lower, so the selected one stands out; a fixed offset, not a token  -->
                         <Trigger Property="IsSelected" Value="False">
-                            <Setter TargetName="OuterGrid" Property="Margin" Value="0,2,0,0" />
+                            <Setter TargetName="OuterGrid" Property="toolkit:Derive.Margin">
+                                <Setter.Value>
+                                    <Thickness>0,2,0,0</Thickness>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -71,6 +83,17 @@
 
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
+            </Trigger>
+
+            <!--  Size variants (md is the default, no trigger needed)  -->
+            <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingSm}}" />
+            </Trigger>
+            <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

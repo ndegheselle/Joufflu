@@ -14,6 +14,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <Style
         x:Key="{x:Type local:ComboBoxSearch}"
@@ -45,7 +46,8 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Grid x:Name="TextArea">
+                            <!--  Fixed height: only the horizontal padding (an input padding, from the base ComboBox) applies.  -->
+                            <Grid x:Name="TextArea" Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}">
                                 <ContentPresenter
                                     x:Name="ContentSite"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -66,6 +68,7 @@
 
                                 <TextBox
                                     x:Name="PART_EditableTextBox"
+                                    Height="auto"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -102,7 +105,7 @@
                                 Grid.Column="2"
                                 Width="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
                                 Height="{DynamicResource {x:Static joufflu:Dimensions.HeightEmbedded}}"
-                                toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
+                                toolkit:Derive.Margin="{TemplateBinding Padding}"
                                 toolkit:Derive.MarginFactor="0,0,1,0"
                                 ClickMode="Press"
                                 Focusable="False"
@@ -127,6 +130,7 @@
                                 <Border
                                     x:Name="DropDownBorder"
                                     Margin="0,1,0,0"
+                                    Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
                                     Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
                                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
@@ -140,23 +144,6 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
-                        <!--  Text inputs carry their own padding key, and the clear button stays flush with it (md is the default set above).  -->
-                        <Trigger Property="toolkit:Sizing.Size" Value="xs">
-                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
-                            <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
-                        </Trigger>
-                        <Trigger Property="toolkit:Sizing.Size" Value="sm">
-                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingSm}}" />
-                            <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
-                        </Trigger>
-                        <Trigger Property="toolkit:Sizing.Size" Value="md">
-                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
-                        </Trigger>
-                        <Trigger Property="toolkit:Sizing.Size" Value="lg">
-                            <Setter TargetName="TextArea" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingLg}}" />
-                            <Setter TargetName="ToggleButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
-                        </Trigger>
-
                         <Trigger Property="Text" Value="">
                             <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>

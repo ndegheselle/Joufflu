@@ -5,7 +5,6 @@
 
     <!--  A grip, as a scroll bar thumb: a separator at rest, strong while hovered or dragged.  -->
     <Style x:Key="{x:Type GridSplitter}" TargetType="GridSplitter">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
         <Style.Triggers>

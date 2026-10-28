@@ -9,7 +9,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
-        <Setter Property="Padding" Value="8" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="Template">
@@ -34,8 +34,10 @@
                                 toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
                                 toolkit:Derive.CornerRadiusFactor="1,1,0,0"
                                 Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}">
+                                <!--  Same horizontal inset as the content so both line up, half the vertical one: a band, not a section  -->
                                 <ContentPresenter
-                                    Margin="{TemplateBinding Padding}"
+                                    toolkit:Derive.Margin="{TemplateBinding Padding}"
+                                    toolkit:Derive.MarginFactor="1,0.5,1,0.5"
                                     ContentSource="Header"
                                     RecognizesAccessKey="True" />
                             </Border>

@@ -16,6 +16,8 @@ public static class Dimensions
     public static ComponentResourceKey DisplayCornerRadius => new(typeof(Dimensions), "DisplayCornerRadius");
     public static ComponentResourceKey DisplayBorderThickness => new(typeof(Dimensions), "DisplayBorderThickness");
     public static ComponentResourceKey DisplayPadding => new(typeof(Dimensions), "DisplayPadding");
+    // The inside of a compact display : a popup, a menu, a tooltip, a badge. A third of DisplayPadding by default.
+    public static ComponentResourceKey DisplayPaddingSm => new(typeof(Dimensions), "DisplayPaddingSm");
 
     public static ComponentResourceKey InputRadius => new(typeof(Dimensions), "InputRadius");
     public static ComponentResourceKey InputCornerRadius => new(typeof(Dimensions), "InputCornerRadius");

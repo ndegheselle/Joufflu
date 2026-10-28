@@ -12,6 +12,8 @@
     </ResourceDictionary.MergedDictionaries>
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <!--  Fixed height: only the horizontal padding applies, so the embedded buttons fit at xs.  -->
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <Style TargetType="{x:Type local:FilePicker}">
         <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
@@ -29,7 +31,7 @@
                 <ControlTemplate TargetType="{x:Type local:FilePicker}">
                     <Border
                         x:Name="ErrorBorder"
-                        Padding="{TemplateBinding Padding}"
+                        Padding="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"

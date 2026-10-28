@@ -4,6 +4,11 @@
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
+    <!--  Merged for the implicit TextBlock style the wrapped text is based on.  -->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/Typography.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <!--
         A display. Placed on the ThemedTooltip.Placement side of its element (bottom by default), centred, and no
         wider than its ThemedTooltip.MaxWidth, past which its text wraps.
@@ -15,7 +20,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
         <Setter Property="HasDropShadow" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -29,9 +34,9 @@
                         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
                         SnapsToDevicePixels="True">
                         <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center">
-                            <!--  The text of a string content, wrapped at the max width  -->
+                            <!--  The text of a string content, wrapped at the max width; based on the implicit style so it still follows Sizing.Size  -->
                             <ContentPresenter.Resources>
-                                <Style TargetType="TextBlock">
+                                <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
                                     <Setter Property="TextWrapping" Value="Wrap" />
                                 </Style>
                             </ContentPresenter.Resources>

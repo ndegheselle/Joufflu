@@ -49,7 +49,8 @@
         TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Padding" Value="4,2" />
+        <!--  A toolbar is compact: its buttons take the xs padding  -->
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
@@ -61,7 +62,8 @@
         TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Padding" Value="4,2" />
+        <!--  A toolbar is compact: its buttons take the xs padding  -->
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
@@ -72,6 +74,7 @@
         x:Key="{x:Static ToolBar.CheckBoxStyleKey}"
         BasedOn="{StaticResource {x:Type CheckBox}}"
         TargetType="{x:Type CheckBox}">
+        <!--  A gap from the neighbouring items, the toolbar panel has none  -->
         <Setter Property="Margin" Value="4,2" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -81,6 +84,7 @@
         x:Key="{x:Static ToolBar.RadioButtonStyleKey}"
         BasedOn="{StaticResource {x:Type RadioButton}}"
         TargetType="{x:Type RadioButton}">
+        <!--  A gap from the neighbouring items, the toolbar panel has none  -->
         <Setter Property="Margin" Value="4,2" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -90,7 +94,7 @@
         x:Key="{x:Static ToolBar.TextBoxStyleKey}"
         BasedOn="{StaticResource {x:Type TextBox}}"
         TargetType="{x:Type TextBox}">
-        <Setter Property="Padding" Value="4,2" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
     </Style>
@@ -157,6 +161,7 @@
         TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
+        <!--  Tighter than an xs button: the button only holds a small arrow  -->
         <Setter Property="Padding" Value="2" />
         <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
         <Setter Property="ContentTemplate">
@@ -223,6 +228,7 @@
                                         Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
                                         BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                                         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+                                        Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
                                         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
                                         <ToolBarOverflowPanel
                                             x:Name="PART_ToolBarOverflowPanel"

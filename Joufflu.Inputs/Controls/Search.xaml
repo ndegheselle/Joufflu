@@ -13,6 +13,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type local:Search}">
         <Setter Property="Template">
@@ -36,33 +37,41 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
                             <fonts:FontIcon
-                                Margin="6,0,0,0"
+                                x:Name="SearchIcon"
                                 HorizontalAlignment="Right"
-                                Opacity="0.5"
+                                toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
+                                toolkit:Derive.MarginFactor="1,0,0,0"
+                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                 Text="{x:Static fonts:LucideFontIcons.Search}" />
 
+                            <!--  Fixed height: only the horizontal padding applies, the text is centred vertically.  -->
                             <TextBlock
                                 Name="PlaceholderText"
                                 Grid.Column="1"
-                                Margin="{TemplateBinding Padding}"
+                                Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                                 VerticalAlignment="Center"
                                 IsHitTestVisible="False"
                                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                 Text="Search ..."
                                 Visibility="Collapsed" />
 
-                            <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" />
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                Grid.Column="1"
+                                Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Template="{StaticResource TextBoxScrollViewerTemplate}" />
 
-                            <!--  Clear button  -->
+                            <!--  Clear button, in its own column so a long text never runs under it  -->
                             <Button
                                 Name="ClearButton"
-                                Grid.Column="1"
-                                HorizontalAlignment="Right"
+                                Grid.Column="2"
                                 toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
-                                toolkit:Derive.MarginFactor="1,0"
+                                toolkit:Derive.MarginFactor="0,0,1,0"
                                 Command="{Binding ClearSearchCommand}"
                                 Style="{StaticResource EmbeddedButton}">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
@@ -70,14 +79,17 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!--  Keeps the clear button flush with the text padding (md is the default set above).  -->
+                        <!--  Keeps the icon and the clear button flush with the text padding (md is the default set above).  -->
                         <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                            <Setter TargetName="SearchIcon" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
                             <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
                         </Trigger>
                         <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                            <Setter TargetName="SearchIcon" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
                             <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
                         </Trigger>
                         <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                            <Setter TargetName="SearchIcon" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
                             <Setter TargetName="ClearButton" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
                         </Trigger>
 

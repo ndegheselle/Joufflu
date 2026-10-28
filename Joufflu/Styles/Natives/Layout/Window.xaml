@@ -6,6 +6,8 @@
     <!--  The window is the page, so it keeps the global Base: a display on it (a card) reads as raised.  -->
     <Style x:Key="{x:Type Window}" TargetType="Window">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
+        <!--  The body size, inherited by every text that sets none : it follows the font size scale  -->
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BaseBrush}}" />
     </Style>
 

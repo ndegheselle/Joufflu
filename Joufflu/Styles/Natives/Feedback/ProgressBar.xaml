@@ -60,17 +60,28 @@
                                     <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
                                 </MultiBinding>
                             </Border.CornerRadius>
+                            <!--
+                                The slider is a band of the opacity mask, a quarter of the bar wide. A brush's
+                                RelativeTransform is in fractions of the element, so the band crosses the whole bar
+                                at any width (a storyboard in a template cannot bind its To to ActualWidth).
+                            -->
                             <Rectangle
                                 x:Name="IndeterminateRect"
-                                Width="80"
                                 Fill="{TemplateBinding Foreground}"
-                                HorizontalAlignment="Left"
                                 Opacity="0.85"
                                 RadiusX="{Binding CornerRadius.TopLeft, ElementName=IndeterminateRoot}"
                                 RadiusY="{Binding CornerRadius.TopLeft, ElementName=IndeterminateRoot}">
-                                <Rectangle.RenderTransform>
-                                    <TranslateTransform x:Name="IndeterminateTransform" X="-80" />
-                                </Rectangle.RenderTransform>
+                                <Rectangle.OpacityMask>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <LinearGradientBrush.RelativeTransform>
+                                            <TranslateTransform X="-0.25" />
+                                        </LinearGradientBrush.RelativeTransform>
+                                        <GradientStop Offset="0" Color="Transparent" />
+                                        <GradientStop Offset="0" Color="Black" />
+                                        <GradientStop Offset="0.25" Color="Black" />
+                                        <GradientStop Offset="0.25" Color="Transparent" />
+                                    </LinearGradientBrush>
+                                </Rectangle.OpacityMask>
                             </Rectangle>
                         </Border>
                     </Grid>
@@ -83,10 +94,10 @@
                                 <BeginStoryboard>
                                     <Storyboard RepeatBehavior="Forever">
                                         <DoubleAnimation
-                                            Storyboard.TargetName="IndeterminateTransform"
-                                            Storyboard.TargetProperty="X"
-                                            From="-80"
-                                            To="800"
+                                            Storyboard.TargetName="IndeterminateRect"
+                                            Storyboard.TargetProperty="(UIElement.OpacityMask).(Brush.RelativeTransform).(TranslateTransform.X)"
+                                            From="-0.25"
+                                            To="1"
                                             Duration="0:0:1.4">
                                             <DoubleAnimation.EasingFunction>
                                                 <CubicEase EasingMode="EaseInOut" />

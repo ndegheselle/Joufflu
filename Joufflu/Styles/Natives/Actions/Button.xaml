@@ -7,10 +7,12 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <!--
         An action. Filled with the action background, a stronger one on hover, a strong border on focus, moved down
-        while pressed. The radius is clamped to half the height, so a large one gives a pill.
+        while pressed. The radius is clamped to half the height, so a large one gives a pill. The height comes from the
+        size, so only the horizontal part of the padding applies and the content is centred vertically.
     -->
     <Style x:Key="{x:Type Button}" TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
@@ -49,7 +51,7 @@
                         </Border.RenderTransform>
 
                         <ContentPresenter
-                            Margin="{TemplateBinding Padding}"
+                            Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             ContentTemplate="{TemplateBinding ContentTemplate}" />

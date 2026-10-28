@@ -6,10 +6,6 @@
     xmlns:local="clr-namespace:Joufflu.Inputs.Controls"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <!--  Checkerboard shown behind translucent colours (alpha slider + swatches).  -->
@@ -114,11 +110,8 @@
     </Style>
 
     <Style TargetType="{x:Type local:ColorPicker}">
-        <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
+        <!--  No size of its own: the hex box and the swatch button follow the inherited Sizing.Size.  -->
         <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ColorPicker}">
@@ -276,6 +269,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
                                         <TextBox
@@ -285,20 +279,18 @@
                                             MaxLength="9"
                                             Text="{Binding HexText, UpdateSourceTrigger=LostFocus}" />
 
-                                        <Grid Grid.Column="1" MinWidth="56">
-                                            <TextBox
-                                                Padding="6,0,18,0"
-                                                VerticalContentAlignment="Center"
-                                                Text="{Binding AlphaPercent, StringFormat={}{0:0}, UpdateSourceTrigger=LostFocus}"
-                                                TextAlignment="Right" />
-                                            <TextBlock
-                                                Margin="0,0,6,0"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center"
-                                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                                                IsHitTestVisible="False"
-                                                Text="%" />
-                                        </Grid>
+                                        <!--  The input padding comes from the TextBox size, the unit sits next to the field  -->
+                                        <TextBox
+                                            Grid.Column="1"
+                                            MinWidth="56"
+                                            VerticalContentAlignment="Center"
+                                            Text="{Binding AlphaPercent, StringFormat={}{0:0}, UpdateSourceTrigger=LostFocus}"
+                                            TextAlignment="Right" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                            Text="%" />
                                     </Grid>
                                 </StackPanel>
                             </Border>
@@ -314,24 +306,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
-        <Style.Triggers>
-            <!--  Size variants  -->
-            <Trigger Property="toolkit:Sizing.Size" Value="xs">
-                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
-            </Trigger>
-            <Trigger Property="toolkit:Sizing.Size" Value="sm">
-                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingSm}}" />
-            </Trigger>
-            <Trigger Property="toolkit:Sizing.Size" Value="lg">
-                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingLg}}" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 </ResourceDictionary>

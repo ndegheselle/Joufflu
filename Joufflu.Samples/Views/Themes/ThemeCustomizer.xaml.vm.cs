@@ -748,6 +748,7 @@ public class ThemeCustomizerViewModel : ObservableObject
         }
         ThemeCategoryValues display = CurrentCategories().First(c => c.Category == _display).Values;
         res[JDimensions.DisplayPadding] = new Thickness(display.PaddingHorizontal, display.PaddingVertical, display.PaddingHorizontal, display.PaddingVertical);
+        res[JDimensions.DisplayPaddingSm] = ThemeScales.DisplayPaddingSm(display.PaddingHorizontal, display.PaddingVertical);
         ApplyPaddings();
     }
 
@@ -990,6 +991,7 @@ public class ThemeCustomizerViewModel : ObservableObject
         foreach (ComponentResourceKey borderThickness in CategoryBorderThicknessKeys)
             yield return borderThickness;
         yield return JDimensions.DisplayPadding;
+        yield return JDimensions.DisplayPaddingSm;
         foreach (var dim in _allDimensions)
         {
             if (dim.ResourceName is "Radius" or "Thickness" or "Spacing")
