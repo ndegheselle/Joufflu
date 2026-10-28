@@ -146,9 +146,8 @@ C# namespaces (these are the real ones; some doc snippets are off):
 ## 5. Rules of thumb for new UI
 
 - **Colours**: never hardcode. Use `{DynamicResource {x:Static joufflu:Brushes.XBrush}}`
-  (`Background`, `Background100`, `Background200`, `Border`, `Border100`, `Foreground`,
-  `Foreground100`, `Foreground200`, and `Primary|Secondary|Success|Info|Warning|Danger`
-  with `X`, `X100`, `XContent`). Always `DynamicResource`, never `StaticResource`, for
+  (`Background`, `Middleground`, `Stroke`, `Foreground`, and `Primary|Secondary|Success|Info|Warning|Danger`
+  with `X`, `XContent`, and the derived `XElevated`). Always `DynamicResource`, never `StaticResource`, for
   theme values.
 - **Spacing**: `toolkit:Spacing.Gap="8"` on the panel instead of margins on each child.
   Page padding: `{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}`.

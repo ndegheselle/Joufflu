@@ -26,7 +26,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
@@ -44,7 +44,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
@@ -60,7 +60,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
@@ -76,7 +76,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
@@ -94,7 +94,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
@@ -111,7 +111,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
@@ -135,7 +135,7 @@
                                     Opacity="0.5">
                                     <DrawingBrush.Drawing>
                                         <DrawingGroup>
-                                            <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}">
+                                            <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}">
                                                 <GeometryDrawing.Geometry>
                                                     <GeometryGroup>
                                                         <RectangleGeometry Rect="0,0,1,1" />
@@ -224,7 +224,7 @@
                                     StaysOpen="False">
                                     <Border
                                         Background="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}"
-                                        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                                        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                                         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
                                         <ToolBarOverflowPanel
                                             x:Name="PART_ToolBarOverflowPanel"

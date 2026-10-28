@@ -4,12 +4,12 @@
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <Style x:Key="{x:Type Menu}" TargetType="{x:Type Menu}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
     </Style>
 
     <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="Padding" Value="-1" />
         <Setter Property="HasDropShadow" Value="True" />

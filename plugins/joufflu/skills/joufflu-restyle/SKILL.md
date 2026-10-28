@@ -67,12 +67,12 @@ Map by **role**, not by closest hue:
 | Original role | Token |
 |---|---|
 | Window/page background | Remove it (the `Window` style sets it) or `Brushes.BackgroundBrush` |
-| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.Background100Brush` |
+| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.MiddlegroundBrush` |
 | Inset panel inside a card | `CardSecondary` / `Brushes.BackgroundBrush` |
-| Hover / selected row | `Brushes.Background200Brush` (usually already done by the native style) |
+| Hover / selected row | `Brushes.BackgroundHoverBrush` (usually already done by the native style) |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
-| Borders, separators | `Brushes.BorderBrush` / `Brushes.Border100Brush` |
+| Borders, separators | `Brushes.StrokeBrush` (`Brushes.StrokeStrongBrush` on hover, focus, selected) |
 | Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryContentBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
 | Light tinted highlight | `Brushes.XSoftBrush` |

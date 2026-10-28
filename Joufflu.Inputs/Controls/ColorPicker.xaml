@@ -90,7 +90,7 @@
                             Height="12"
                             VerticalAlignment="Center"
                             Background="{TemplateBinding Background}"
-                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                             BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                             CornerRadius="6" />
                         <Track x:Name="PART_Track">
@@ -145,7 +145,7 @@
                             HorizontalContentAlignment="Stretch"
                             VerticalContentAlignment="Stretch"
                             toolkit:Sizing.IsSquare="True"
-                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                             BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
                             <Grid Margin="2">
                                 <Border
@@ -165,8 +165,8 @@
                             <!--  DataContext doesn't reliably inherit into a templated Popup's separate visual tree, so flow it in explicitly.  -->
                             <Border
                                 Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
-                                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                                Background="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}"
+                                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                                 BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
                                 DataContext="{Binding DataContext, ElementName=Root}">
@@ -278,7 +278,7 @@
                                                 Margin="0,0,6,0"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Center"
-                                                Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
+                                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                                 IsHitTestVisible="False"
                                                 Text="%" />
                                         </Grid>

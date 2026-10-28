@@ -18,7 +18,7 @@
         <Style x:Key="AccentSwatch" TargetType="{x:Type Border}">
             <Setter Property="Width" Value="78" />
             <Setter Property="Height" Value="34" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
             <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
         </Style>
@@ -44,7 +44,7 @@
                     Height="18"
                     VerticalAlignment="Top"
                     c:ResourceSwatch.BackgroundKey="{Binding Swatch}"
-                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}"
+                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}"
                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
                     Visibility="{Binding Swatch, Converter={StaticResource NullToVis}}" />
@@ -80,14 +80,14 @@
                 <!--  The fill, with "Aa" over it in the content colour: the pairing the family exists for  -->
                 <StackPanel toolkit:Spacing.Gap="0,3">
                     <Border
-                            HorizontalAlignment="Left"
-                            c:ResourceSwatch.BackgroundKey="{Binding Fill}"
-                            Style="{StaticResource AccentSwatch}">
+                        HorizontalAlignment="Left"
+                        c:ResourceSwatch.BackgroundKey="{Binding Fill}"
+                        Style="{StaticResource AccentSwatch}">
                         <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Content}"
-                                Text="Aa" />
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            c:ResourceSwatch.ForegroundKey="{Binding Content}"
+                            Text="Aa" />
                     </Border>
                     <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name}" />
                 </StackPanel>
@@ -95,38 +95,38 @@
                 <!--  The same fill as it is drawn while hovered or pressed  -->
                 <StackPanel Grid.Column="1" toolkit:Spacing.Gap="0,3">
                     <Border
-                            HorizontalAlignment="Left"
-                            c:ResourceSwatch.BackgroundKey="{Binding Hover}"
-                            Style="{StaticResource AccentSwatch}">
+                        HorizontalAlignment="Left"
+                        c:ResourceSwatch.BackgroundKey="{Binding Hover}"
+                        Style="{StaticResource AccentSwatch}">
                         <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Content}"
-                                Text="Aa" />
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            c:ResourceSwatch.ForegroundKey="{Binding Content}"
+                            Text="Aa" />
                     </Border>
-                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}100}" />
+                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Elevated}" />
                 </StackPanel>
 
                 <!--  The content colour on its own  -->
                 <StackPanel Grid.Column="2" toolkit:Spacing.Gap="0,3">
                     <Border
-                            HorizontalAlignment="Left"
-                            c:ResourceSwatch.BackgroundKey="{Binding Content}"
-                            Style="{StaticResource AccentSwatch}" />
+                        HorizontalAlignment="Left"
+                        c:ResourceSwatch.BackgroundKey="{Binding Content}"
+                        Style="{StaticResource AccentSwatch}" />
                     <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Content}" />
                 </StackPanel>
 
                 <!--  The soft tint, with "Aa" in the fill colour as a soft button draws it; set apart as it is a brush only  -->
                 <StackPanel Grid.Column="3" toolkit:Spacing.Gap="0,3">
                     <Border
-                            HorizontalAlignment="Left"
-                            c:ResourceSwatch.BackgroundKey="{Binding Soft}"
-                            Style="{StaticResource AccentSwatch}">
+                        HorizontalAlignment="Left"
+                        c:ResourceSwatch.BackgroundKey="{Binding Soft}"
+                        Style="{StaticResource AccentSwatch}">
                         <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Fill}"
-                                Text="Aa" />
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            c:ResourceSwatch.ForegroundKey="{Binding Fill}"
+                            Text="Aa" />
                     </Border>
                     <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Soft}" />
                 </StackPanel>
@@ -134,16 +134,16 @@
                 <!--  The same tint while hovered  -->
                 <StackPanel Grid.Column="4" toolkit:Spacing.Gap="0,3">
                     <Border
-                            HorizontalAlignment="Left"
-                            c:ResourceSwatch.BackgroundKey="{Binding Soft100}"
-                            Style="{StaticResource AccentSwatch}">
+                        HorizontalAlignment="Left"
+                        c:ResourceSwatch.BackgroundKey="{Binding SoftElevated}"
+                        Style="{StaticResource AccentSwatch}">
                         <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Fill}"
-                                Text="Aa" />
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            c:ResourceSwatch.ForegroundKey="{Binding Fill}"
+                            Text="Aa" />
                     </Border>
-                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Soft100}" />
+                    <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}SoftElevated}" />
                 </StackPanel>
 
                 <TextBlock
@@ -158,7 +158,11 @@
         <!--  One family of keys: title, why it exists, then the keys themselves  -->
         <DataTemplate x:Key="TokenGroupTemplate" DataType="{x:Type vm:TokenGroup}">
             <StackPanel Margin="0,0,0,14" toolkit:Spacing.Gap="0,6">
-                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Title}" />
+                <TextBlock
+                    toolkit:Sizing.Size="lg"
+                    FontWeight="SemiBold"
+                    Text="{Binding Title}"
+                    TextWrapping="Wrap" />
                 <TextBlock
                     Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                     Text="{Binding Description}"
@@ -170,7 +174,14 @@
 
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Design tokens" />
+
+            <vm:ColorSystemPreview />
+
+            <TextBlock
+                toolkit:Sizing.Size="xl"
+                FontWeight="Bold"
+                Text="Design tokens"
+                TextWrapping="Wrap" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="A theme is a collection of the keys below. Every control style reads them through DynamicResource, so a theme only has to redefine what it wants to change - anything it leaves out keeps the built-in value."
@@ -181,23 +192,35 @@
                 Code="{Binding UsageCode}"
                 Description="Keys are ComponentResourceKey statics, so they are typed rather than stringly named — a renamed key breaks the build instead of silently falling back at runtime." />
 
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Colors" />
+            <TextBlock
+                toolkit:Sizing.Size="xl"
+                FontWeight="SemiBold"
+                Text="Colors"
+                TextWrapping="Wrap" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="Each colour exists twice: joufflu:Colors.XColor holds the Color, joufflu:Brushes.XBrush the SolidColorBrush built from it. Use the brush in the UI; the colour is there for gradients, animations and anything needing the raw value."
                 TextWrapping="Wrap" />
             <ItemsControl ItemTemplate="{StaticResource TokenGroupTemplate}" ItemsSource="{Binding ColorTokens}" />
 
-            <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="Accents" />
+            <TextBlock
+                toolkit:Sizing.Size="lg"
+                FontWeight="SemiBold"
+                Text="Accents"
+                TextWrapping="Wrap" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                Text="Six semantic families sharing one shape: the fill, the same fill for hover and pressed, and the content drawn on top of both. The first three tiles below are those three keys, the Aa showing the pairing each family exists for. The last two are brushes only, derived from the fill: the soft tint (soft buttons, selected rows) and its hover, drawn with the fill as text."
+                Text="Six semantic families sharing one shape: the fill, the same fill for hover and pressed, and the content drawn on top of both. Only the fill and the content are colours a theme defines. The hover is the fill at a slightly lower opacity, so it drifts toward the surface behind it, and the soft tint (soft buttons, selected rows) and its hover are the fill at a low opacity, drawn with the fill as text."
                 TextWrapping="Wrap" />
             <ItemsControl ItemTemplate="{StaticResource AccentEntryTemplate}" ItemsSource="{Binding AccentTokens}" />
 
             <ItemsControl ItemTemplate="{StaticResource TokenGroupTemplate}" ItemsSource="{Binding StateTokens}" />
 
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Dimensions" />
+            <TextBlock
+                toolkit:Sizing.Size="xl"
+                FontWeight="SemiBold"
+                Text="Dimensions"
+                TextWrapping="Wrap" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                 Text="joufflu:Dimensions holds the metrics. The values in parentheses are the built-in defaults — the Customize theme page edits them live, which is why styles must read them dynamically rather than baking a Thickness at parse time."

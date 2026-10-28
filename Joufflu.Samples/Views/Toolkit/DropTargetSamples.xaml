@@ -42,7 +42,7 @@
                                             ViewportUnits="Absolute">
                                             <DrawingBrush.Drawing>
                                                 <DrawingGroup>
-                                                    <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}">
+                                                    <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}">
                                                         <GeometryDrawing.Geometry>
                                                             <GeometryGroup>
                                                                 <RectangleGeometry Rect="0,0,50,50" />
@@ -115,7 +115,7 @@
                                     Padding="8,4"
                                     toolkit:DragSource.AllowedEffects="Move"
                                     toolkit:DragSource.Data="{Binding}"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}"
                                     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <Border.Style>
                                         <Style TargetType="Border">
@@ -144,7 +144,7 @@
                         toolkit:DropTarget.Effect="Move">
                         <Border.Style>
                             <Style TargetType="Border" BasedOn="{StaticResource Card}">
-                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
                                 <Style.Triggers>
                                     <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
                                         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />

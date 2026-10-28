@@ -16,7 +16,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 
 - [Application shell](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/application-shell.md): `ThemedWindow`, and `AllowContentOverTitleBar`, plus the `OverlayContainer` / `ToastContainer` wrappers.
 - [Theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/theme.md): `ThemeManager` (System/Light/Dark plus registering custom themes by name) and binding a theme switcher.
-- [Design tokens](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/tokens.md): reference of every `Colors`, `Brushes` and `Dimensions` key a theme is made of, with the role each plays in the control styles — surfaces, text, the six accent families (`X` / `X100` / `XContent`), shape, layout, control heights, font sizes and paddings.
+- [Design tokens](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/tokens.md): reference of every `Colors`, `Brushes` and `Dimensions` key a theme is made of, with the role each plays in the control styles — surfaces, text, the six accent families (`X` / `XElevated` / `XContent`), shape, layout, control heights, font sizes and paddings.
 - [Customize theme](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/customize-theme.md): the live theme editor, presets and override resource keys.
 
 ## Native controls

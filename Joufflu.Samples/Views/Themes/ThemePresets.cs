@@ -29,11 +29,11 @@ public class ThemePreset
         Colors = colors;
         Background = Swatch(colors["BackgroundColor"]);
         Foreground = Swatch(colors["ForegroundColor"]);
-        Border = Swatch(colors["BorderColor"]);
+        Border = Swatch(colors["StrokeColor"]);
         Primary = Swatch(colors["PrimaryColor"]);
         Secondary = Swatch(colors["SecondaryColor"]);
         Accent = Swatch(colors["InfoColor"]);
-        Neutral = Swatch(colors["Background200Color"]);
+        Neutral = Swatch(colors["MiddlegroundColor"]);
     }
 
     private static SolidColorBrush Swatch(Color color)

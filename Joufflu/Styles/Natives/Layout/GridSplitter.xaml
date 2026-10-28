@@ -5,7 +5,7 @@
 
     <Style x:Key="{x:Type GridSplitter}" TargetType="GridSplitter">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
     </Style>
 

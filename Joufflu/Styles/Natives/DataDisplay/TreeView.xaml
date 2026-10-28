@@ -88,7 +88,7 @@
                                 VerticalAlignment="Stretch"
                                 toolkit:Derive.Margin="{x:Static joufflu:Dimensions.HeightMd}"
                                 toolkit:Derive.MarginFactor="0.5,0,0,0"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                                Background="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
 
                             <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" />
                         </Grid>
@@ -161,7 +161,7 @@
                     <Condition Property="IsSelected" Value="False" />
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}" />
                 </MultiTrigger.Setters>
             </MultiTrigger>
 
@@ -181,12 +181,12 @@
                     <Condition Property="IsSelected" Value="True" />
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoft100Brush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftElevatedBrush}}" />
                 </MultiTrigger.Setters>
             </MultiTrigger>
 
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>
 
             <!--  Size variants (md is the default, no trigger needed)  -->
@@ -208,7 +208,7 @@
     <Style x:Key="{x:Type TreeView}" TargetType="TreeView">
         <Setter Property="ItemContainerStyle" Value="{StaticResource TreeViewItemStyle}" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />

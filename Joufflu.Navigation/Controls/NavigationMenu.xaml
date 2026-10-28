@@ -112,7 +112,7 @@
                             x:Name="ChildrenHost"
                             Margin="16,0,0,0"
                             Padding="8,0,0,0"
-                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                             BorderThickness="1,0,0,0"
                             Visibility="Collapsed">
                             <ItemsPresenter />
@@ -155,13 +155,13 @@
                         <ContentPresenter
                             x:Name="TitleText"
                             TextBlock.FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}"
-                            TextBlock.Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
 
                         <Border
                             x:Name="TitleLine"
                             Height="{DynamicResource {x:Static joufflu:Dimensions.Thickness}}"
                             VerticalAlignment="Center"
-                            Background="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                            Background="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                             Visibility="Collapsed" />
                     </Grid>
 
@@ -179,8 +179,8 @@
     <!--  ============================ NavigationMenu ============================  -->
     <Style TargetType="{x:Type nav:NavigationMenu}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <!--  Right edge only: the menu just separates itself from the content beside it.  -->
         <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
         <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />

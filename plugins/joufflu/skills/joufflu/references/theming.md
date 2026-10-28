@@ -97,15 +97,15 @@ generates a ready-to-merge dictionary interactively.
 Keys are `ComponentResourceKey` statics (typos fail the build). Always `DynamicResource`:
 
 ```xml
-<Border Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
-        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+<Border Background="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}"
+        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
         Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" />
 <GradientStop Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" Offset="0" />
 ```
 
-From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.Background100Brush);`
+From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.MiddlegroundBrush);`
 (`SetResourceReference` keeps it dynamic; `FindResource` would freeze the current value).
 
 ## Colours — `joufflu:Colors.XColor` (Color) / `joufflu:Brushes.XBrush` (SolidColorBrush)
@@ -115,17 +115,14 @@ Use the brush in UI; the colour is for gradients and animations.
 | Group | X | Used for |
 |---|---|---|
 | Surfaces | `Background` | Window/page background (furthest back) |
-| | `Background100` | Elevated: cards, popups, drop-downs, rows |
-| | `Background200` | Transient: hovered ghost button, hovered/selected row, slider track |
-| | `Border` | Default border of framed controls |
-| | `Border100` | Stronger border: hover/focus, separators |
+| | `Middleground` | What sits on the page: cards, popups, drop-downs, a hovered input |
+| | `Stroke` | Borders, separators, icon strokes |
+| | derived | `BackgroundHoverBrush`, `BackgroundSelectedBrush`, `MiddlegroundHoverBrush`, `MiddlegroundSelectedBrush`, `StrokeStrongBrush`: the colour mixed 10-15 % toward `Foreground`, never defined by a theme |
 | Text | `Foreground` | Default text and icons |
-| | `Foreground100` | Secondary colour of control labels (headers, inactive tabs); muted text uses `MutedOpacity` |
-| | `Foreground200` | Dimmed text: inactive window title bar, disabled selected list item |
-| Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill), `X100` (hover/pressed fill), `XContent` (text/icons on the fill) |
+| Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XContent` (text/icons on the fill) as colours, and the brush `XElevatedBrush` (hover/pressed fill), `X` mixed 10 % toward `XContent` |
 
 Also available, derived automatically from the accent colour (not per theme):
-`Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoft100Brush`
+`Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoftElevatedBrush`
 (≈24 %, its hover) for each accent.
 
 `Colors.DisabledOpacity` (double, `0.5`): opacity of a disabled control.

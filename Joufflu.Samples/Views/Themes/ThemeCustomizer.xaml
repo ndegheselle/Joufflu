@@ -167,7 +167,7 @@
                                 <TextBlock Grid.Column="1" Text="{Binding Display, Mode=OneWay}" />
                                 <TextBlock
                                     Grid.Column="2"
-                                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
+                                    Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                                     Text="{Binding Ratio, StringFormat=×{0}}" />
                             </Grid>
                         </DataTemplate>

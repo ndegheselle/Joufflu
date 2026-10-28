@@ -43,7 +43,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Background="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}"
-                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                 BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                 <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">

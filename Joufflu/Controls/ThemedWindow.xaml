@@ -44,11 +44,11 @@
     <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:ThemedWindow}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="TitleBarForeground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" />
+        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundHoverBrush}}" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
@@ -163,10 +163,10 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsActive" Value="False">
-                            <Setter TargetName="TitleBarForegroundLayer" Property="TextElement.Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
-                            <Setter TargetName="PART_MinimizeButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
-                            <Setter TargetName="PART_MaximizeRestoreButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
-                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                            <Setter TargetName="TitleBarForegroundLayer" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                            <Setter TargetName="PART_MinimizeButton" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                            <Setter TargetName="PART_MaximizeRestoreButton" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                            <Setter TargetName="PART_CloseButton" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                         </Trigger>
 
                         <Trigger Property="WindowState" Value="Maximized">

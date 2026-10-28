@@ -24,7 +24,7 @@ public sealed record AccentEntry(
     ComponentResourceKey Hover,
     ComponentResourceKey Content,
     ComponentResourceKey Soft,
-    ComponentResourceKey Soft100);
+    ComponentResourceKey SoftElevated);
 
 /// <summary>
 /// Reference of every key a theme is made of. The descriptions are the roles the keys actually play
@@ -37,46 +37,50 @@ public class ThemeTokensViewModel : ObservableObject
     [
         new TokenGroup(
             "Surfaces",
-            "The neutral ground every control is drawn on, from the furthest back to the closest.",
+            "Four colours a theme defines: the page, what sits on it, the lines between them and the text. Every hover and selected state below is derived from them, by mixing a colour toward the Foreground.",
             [
                 new TokenEntry(
                     "Background",
                     "Window and page background, the furthest back surface.",
                     Joufflu.Brushes.BackgroundBrush),
                 new TokenEntry(
-                    "Background100",
-                    "Elevated surface sitting on top of the background: cards, popups, drop-downs, data rows.",
-                    Joufflu.Brushes.Background100Brush),
+                    "Middleground",
+                    "What sits on the page: cards, popups, drop-downs, and the background of a hovered input.",
+                    Joufflu.Brushes.MiddlegroundBrush),
                 new TokenEntry(
-                    "Background200",
-                    "Transient surface: hovered ghost button, hovered or selected row, slider track.",
-                    Joufflu.Brushes.Background200Brush),
+                    "Stroke",
+                    "Borders, separators and the strokes of icons: default border of every framed control (text box, card, drop-down).",
+                    Joufflu.Brushes.StrokeBrush),
                 new TokenEntry(
-                    "Border",
-                    "Default border of every framed control (text box, card, drop-down).",
-                    Joufflu.Brushes.BorderBrush),
+                    "BackgroundHoverBrush",
+                    "Derived: Background mixed 10% toward Foreground. Hovered ghost button, list item or window caption button.",
+                    Joufflu.Brushes.BackgroundHoverBrush),
                 new TokenEntry(
-                    "Border100",
-                    "Stronger border, used when a control is hovered or focused and for separator lines.",
-                    Joufflu.Brushes.Border100Brush),
+                    "BackgroundSelectedBrush",
+                    "Derived: Background mixed 15% toward Foreground.",
+                    Joufflu.Brushes.BackgroundSelectedBrush),
+                new TokenEntry(
+                    "MiddlegroundHoverBrush",
+                    "Derived: Middleground mixed 10% toward Foreground.",
+                    Joufflu.Brushes.MiddlegroundHoverBrush),
+                new TokenEntry(
+                    "MiddlegroundSelectedBrush",
+                    "Derived: Middleground mixed 15% toward Foreground. Slider track, badge, progress bar track.",
+                    Joufflu.Brushes.MiddlegroundSelectedBrush),
+                new TokenEntry(
+                    "StrokeStrongBrush",
+                    "Derived: Stroke mixed 10% toward Foreground. The border of a control that is hovered, focused or selected.",
+                    Joufflu.Brushes.StrokeStrongBrush),
             ]),
 
         new TokenGroup(
             "Text",
-            "Foreground of text and icons. The suffix says how much the text recedes.",
+            "Foreground of text and icons. Dim it with MutedOpacity or DisabledOpacity rather than a lighter colour.",
             [
                 new TokenEntry(
                     "Foreground",
-                    "Default text and icon colour, on Background or Background100.",
+                    "Default text and icon colour, on Background or Middleground.",
                     Joufflu.Brushes.ForegroundBrush),
-                new TokenEntry(
-                    "Foreground100",
-                    "Secondary colour the controls use for their own labels: column headers, inactive tabs, section titles. For muted text of your own, dim it with MutedOpacity instead.",
-                    Joufflu.Brushes.Foreground100Brush),
-                new TokenEntry(
-                    "Foreground200",
-                    "Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item.",
-                    Joufflu.Brushes.Foreground200Brush),
             ]),
 
     ];
@@ -91,50 +95,50 @@ public class ThemeTokensViewModel : ObservableObject
             "Primary",
             "Main call to action: the default filled button, the selected tab or navigation entry.",
             Joufflu.Brushes.PrimaryBrush,
-            Joufflu.Brushes.Primary100Brush,
+            Joufflu.Brushes.PrimaryElevatedBrush,
             Joufflu.Brushes.PrimaryContentBrush,
             Joufflu.Brushes.PrimarySoftBrush,
-            Joufflu.Brushes.PrimarySoft100Brush),
+            Joufflu.Brushes.PrimarySoftElevatedBrush),
         new AccentEntry(
             "Secondary",
             "Neutral filled action, for a button that must read as a button without competing with Primary.",
             Joufflu.Brushes.SecondaryBrush,
-            Joufflu.Brushes.Secondary100Brush,
+            Joufflu.Brushes.SecondaryElevatedBrush,
             Joufflu.Brushes.SecondaryContentBrush,
             Joufflu.Brushes.SecondarySoftBrush,
-            Joufflu.Brushes.SecondarySoft100Brush),
+            Joufflu.Brushes.SecondarySoftElevatedBrush),
         new AccentEntry(
             "Success",
             "Confirmation: success toast, valid state, positive badge.",
             Joufflu.Brushes.SuccessBrush,
-            Joufflu.Brushes.Success100Brush,
+            Joufflu.Brushes.SuccessElevatedBrush,
             Joufflu.Brushes.SuccessContentBrush,
             Joufflu.Brushes.SuccessSoftBrush,
-            Joufflu.Brushes.SuccessSoft100Brush),
+            Joufflu.Brushes.SuccessSoftElevatedBrush),
         new AccentEntry(
             "Info",
             "Neutral information: info toast, informative badge.",
             Joufflu.Brushes.InfoBrush,
-            Joufflu.Brushes.Info100Brush,
+            Joufflu.Brushes.InfoElevatedBrush,
             Joufflu.Brushes.InfoContentBrush,
             Joufflu.Brushes.InfoSoftBrush,
-            Joufflu.Brushes.InfoSoft100Brush),
+            Joufflu.Brushes.InfoSoftElevatedBrush),
         new AccentEntry(
             "Warning",
             "Something needs attention but nothing is broken yet.",
             Joufflu.Brushes.WarningBrush,
-            Joufflu.Brushes.Warning100Brush,
+            Joufflu.Brushes.WarningElevatedBrush,
             Joufflu.Brushes.WarningContentBrush,
             Joufflu.Brushes.WarningSoftBrush,
-            Joufflu.Brushes.WarningSoft100Brush),
+            Joufflu.Brushes.WarningSoftElevatedBrush),
         new AccentEntry(
             "Danger",
             "Destructive action and validation errors - a delete button, the border of a field in error.",
             Joufflu.Brushes.DangerBrush,
-            Joufflu.Brushes.Danger100Brush,
+            Joufflu.Brushes.DangerElevatedBrush,
             Joufflu.Brushes.DangerContentBrush,
             Joufflu.Brushes.DangerSoftBrush,
-            Joufflu.Brushes.DangerSoft100Brush),
+            Joufflu.Brushes.DangerSoftElevatedBrush),
     ];
 
     /// <summary>The odd ones out of <c>Joufflu.Colors</c>: numbers rather than colours.</summary>
@@ -235,8 +239,8 @@ public class ThemeTokensViewModel : ObservableObject
         "<!-- Always DynamicResource: a theme swap, or the customizer editing a -->\n" +
         "<!-- dimension, has to reach controls already on screen.               -->\n" +
         "<Border\n" +
-        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}\"\n" +
-        "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}\"\n" +
+        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}\"\n" +
+        "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}\"\n" +
         "    BorderThickness=\"{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}\"\n" +
         "    CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}\" />\n\n" +
         "<!-- The raw Color is there for what a brush cannot express -->\n" +

@@ -6,7 +6,7 @@
     <Style x:Key="{x:Type CheckBox}" TargetType="CheckBox">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="Padding" Value="6,0,0,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -64,13 +64,13 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
                             <Setter TargetName="CheckMark" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
                             <Setter TargetName="IndeterminateMark" Property="Fill" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
                             <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
                         </Trigger>
@@ -84,8 +84,8 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

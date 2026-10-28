@@ -52,11 +52,11 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding ManualEntry}" Value="{x:Null}">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding ManualEntry.Value}" Value="{x:Null}">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -76,7 +76,7 @@
                     <jonts:FontIcon
                         Grid.Column="1"
                         toolkit:ThemedTooltip.Content="Forced value"
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
+                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
                     <TextBlock
@@ -135,7 +135,7 @@
                     <jonts:FontIcon
                         Grid.Column="1"
                         toolkit:ThemedTooltip.Content="Forced value"
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
+                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
                     <TextBlock
@@ -157,7 +157,7 @@
                                     <!--  Null and undefined are no value: they read apart from a text saying "null".  -->
                                     <DataTrigger Binding="{Binding Value}" Value="{x:Null}">
                                         <Setter Property="FontStyle" Value="Italic" />
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                                     </DataTrigger>
                                     <!--  Forced to nothing yet, which writes nothing: read as undefined.  -->
                                     <MultiDataTrigger>
@@ -166,7 +166,7 @@
                                             <Condition Binding="{Binding ManualEntry}" Value="{x:Null}" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="FontStyle" Value="Italic" />
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                                     </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>

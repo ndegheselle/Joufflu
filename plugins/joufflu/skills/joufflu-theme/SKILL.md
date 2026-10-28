@@ -46,18 +46,13 @@ Template (fill every colour):
 
     <!-- Text -->
     <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#2E3440</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Foreground100Color}">#70757F</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Foreground200Color}">#969BA3</Color>
-    <!-- Borders -->
-    <Color x:Key="{x:Static joufflu:Colors.BorderColor}">#D8DEE9</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Border100Color}">#E2E6EE</Color>
+    <!-- Strokes: borders, separators, icon strokes -->
+    <Color x:Key="{x:Static joufflu:Colors.StrokeColor}">#D8DEE9</Color>
     <!-- Surfaces -->
     <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#ECEFF4</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Background100Color}">#E5E9F0</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Background200Color}">#D8DEE9</Color>
-    <!-- Accents: X / X100 / XContent for Primary, Secondary, Success, Info, Warning, Danger -->
+    <Color x:Key="{x:Static joufflu:Colors.MiddlegroundColor}">#E5E9F0</Color>
+    <!-- Accents: X / XContent for Primary, Secondary, Success, Info, Warning, Danger -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#5E81AC</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Primary100Color}">#506E92</Color>
     <Color x:Key="{x:Static joufflu:Colors.PrimaryContentColor}">#FFFFFF</Color>
     <!-- … Secondary, Success, Info, Warning, Danger the same way … -->
 </ResourceDictionary>
@@ -68,22 +63,21 @@ Joufflu repository or the package source is available, copy `Joufflu/Themes/Ligh
 (or `Dark.xaml`) as the starting point so no key is missed. The sample themes in
 `Joufflu.Samples/Themes/` (Nord, Ocean, Dracula, …) follow this layout.
 
-Do **not** define brushes (`XBrush`, `XSoftBrush`, `XSoft100Brush`): `ThemeManager`
+Do **not** define brushes (`XBrush`, `XSoftBrush`, `XSoftElevatedBrush`): `ThemeManager`
 builds them from the colours of every theme it applies, and those take precedence over any
 brush the theme defines.
 
 ### Choosing the colours
 
-- **Surfaces**: `Background` is furthest back; `Background100` (cards, popups) is one step
-  closer to the viewer; `Background200` is hover/selection. In a light theme they get
-  slightly darker in that order or `Background100` is white; in a dark theme
-  `Background100` is lighter than `Background`.
+- **Surfaces**: `Background` is furthest back; `Middleground` (cards, popups, a hovered input) sits
+  on it. Hover and selected are not colours you define: they are `Background` or `Middleground`
+  mixed 10-15 % toward `Foreground`, so the direction is right in a light and in a dark theme.
 - **Text**: `Foreground` must reach at least 4.5:1 contrast on `Background` and
-  `Background100`; `Foreground100` is muted (≈ 3:1+); `Foreground200` is dimmed text on inactive or
-  disabled-selected surfaces (inactive window title bar, disabled selected list item).
-- **Accents**: `X100` is the hover/pressed fill, about 8–12 % darker (light theme) or
-  lighter (dark theme) than `X`. `XContent` is the text on `X`: pick near-white or a very
-  dark shade of the same hue, whichever gives ≥ 4.5:1 on both `X` and `X100`.
+  `Middleground`. Muted and disabled text is not a colour: it dims `Foreground` with
+  `MutedOpacity` and `DisabledOpacity`.
+- **Accents**: `XContent` is the text on `X`: pick near-white or a very dark shade of the same
+  hue, whichever gives ≥ 4.5:1 on `X`. The hover, `XElevatedBrush`, is not a colour you define: it is
+  `X` mixed 10 % toward `XContent`, so a dark fill with light content lightens and a pale one darkens.
 - Keep semantics recognisable: Success green, Info blue, Warning amber, Danger red.
   `Secondary` is a neutral, low-emphasis fill.
 - Compute contrast ratios instead of eyeballing when the user cares about accessibility,

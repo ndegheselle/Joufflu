@@ -12,7 +12,7 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content: a `Background100` fill, a themed border,
+The primary surface for grouping content: a `Middleground` fill, a themed border,
 rounded corners and the standard spacing as padding.
 
 ```xml

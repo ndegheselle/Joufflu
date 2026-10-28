@@ -26,8 +26,14 @@
             </Grid.ColumnDefinitions>
 
             <!--  ============================ Column 1 ============================  -->
-            <StackPanel Grid.Column="0" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <Grid Grid.Column="0" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
 
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                
                 <!--  Buttons, inputs, badges, toggles  -->
                 <Border Style="{StaticResource Card}">
                     <StackPanel toolkit:Spacing.Gap="12">
@@ -74,7 +80,7 @@
                 </Border>
 
                 <!--  Two menu-like lists  -->
-                <Border Style="{StaticResource Card}">
+                <Border Style="{StaticResource Card}" Grid.Row="1">
                     <StackPanel toolkit:Spacing.Gap="4">
                         <TextBlock Style="{StaticResource TextMuted}" toolkit:Sizing.Size="xs" Text="Planning" />
                         <ListBox SelectedIndex="0">
@@ -113,7 +119,7 @@
                 </Border>
 
                 <!--  Tabs  -->
-                <Border Style="{StaticResource Card}">
+                <Border Style="{StaticResource Card}" Grid.Row="2">
                     <TabControl>
                         <TabItem Header="Account">
                             <StackPanel Margin="0,12,0,0" toolkit:Spacing.Gap="8">
@@ -130,11 +136,106 @@
                         </TabItem>
                     </TabControl>
                 </Border>
-            </StackPanel>
+            </Grid>
+
+
+            <!--  ============================ Column 3 ============================  -->
+            <Grid Grid.Column="1" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <!--  Empty state  -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel HorizontalAlignment="Center"  VerticalAlignment="Center" toolkit:Spacing.Gap="8">
+                        <Button HorizontalAlignment="Center" toolkit:Sizing.IsSquare="True" Style="{StaticResource GhostButton}">
+                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
+                        </Button>
+                        <TextBlock HorizontalAlignment="Center" Style="{StaticResource Title}" Text="Distribute Track" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource TextMuted}"
+                            TextAlignment="Center"
+                            toolkit:Sizing.Size="sm"
+                            Text="Upload your first master to start reaching listeners on Spotify, Apple Music, and more." />
+                        <Button HorizontalAlignment="Center" Style="{StaticResource PrimaryButton}">Create Release</Button>
+                    </StackPanel>
+                </Border>
+
+                <!--  Stat with badge and spinner  -->
+                <Border Style="{StaticResource Card}" Grid.Row="1">
+                    <DockPanel toolkit:Spacing.Gap="8">
+                        <Grid DockPanel.Dock="Top">
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource Title}" Text="Analytics" />
+                            <Button HorizontalAlignment="Right" toolkit:Sizing.Size="sm" Style="{StaticResource OutlineSecondaryButton}">View Analytics</Button>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8,0" DockPanel.Dock="Top">
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource TextMuted}" Text="418.2K Visitors" />
+                            <feedback:Badge Variant="Primary">+10%</feedback:Badge>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Center" toolkit:Spacing.Gap="8">
+                            <ProgressBar Height="8" Maximum="100" Value="68" />
+                            <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8,0"  VerticalAlignment="Center">
+                                <feedback:Spinner toolkit:Sizing.Size="xs" />
+                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextMuted}" toolkit:Sizing.Size="sm" Text="Syncing latest data…" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!--  Chat  -->
+                <Border Style="{StaticResource Card}" Grid.Row="2">
+                    <StackPanel toolkit:Spacing.Gap="12">
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource Title}" Text="New Chat" />
+                                <TextBlock Style="{StaticResource TextMuted}" toolkit:Sizing.Size="sm" Text="How can I help you today?" />
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Top" toolkit:Sizing.IsSquare="True" Style="{StaticResource OutlineSecondaryButton}">
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.RefreshCw}" />
+                            </Button>
+                        </Grid>
+                        <Separator />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource TextMuted}"
+                            TextAlignment="Center"
+                            toolkit:Sizing.Size="sm"
+                            Text="What are we working on today? Press send to start a new conversation." />
+                        <inputs:Search />
+                    </StackPanel>
+                </Border>
+
+                <!--  Notifications  -->
+                <Border Style="{StaticResource Card}" Grid.Row="3">
+                    <StackPanel toolkit:Spacing.Gap="12">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Title}" Text="Notifications" />
+                            <TextBlock Style="{StaticResource TextMuted}" toolkit:Sizing.Size="sm" Text="Choose which email and push alerts you want to receive." />
+                        </StackPanel>
+                        <StackPanel toolkit:Spacing.Gap="8">
+                            <CheckBox Content="Transaction alerts" IsChecked="True" />
+                            <CheckBox Content="Security alerts" IsChecked="True" />
+                            <CheckBox Content="Product updates" />
+                        </StackPanel>
+                        <Expander Header="Advanced">
+                            <TextBlock Style="{StaticResource TextMuted}" Text="Alerts are batched and sent once a day." />
+                        </Expander>
+                    </StackPanel>
+                </Border>
+            </Grid>
 
             <!--  ============================ Column 2 ============================  -->
-            <StackPanel Grid.Column="1" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <Grid Grid.Column="2" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
 
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                
                 <!--  Chart made of borders, stat tiles  -->
                 <Border Style="{StaticResource Card}">
                     <StackPanel toolkit:Spacing.Gap="12">
@@ -184,19 +285,25 @@
                 </Border>
 
                 <!--  Form  -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel toolkit:Spacing.Gap="12">
+                <Border Style="{StaticResource Card}" Grid.Row="1">
+                    <Grid toolkit:Spacing.Gap="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
                         <StackPanel>
                             <TextBlock Style="{StaticResource Title}" Text="Set a new milestone" />
                             <TextBlock Style="{StaticResource TextMuted}" toolkit:Sizing.Size="sm" Text="Define your financial target and we'll help you pace your savings." />
                         </StackPanel>
 
-                        <StackPanel toolkit:Spacing.Gap="4">
+                        <StackPanel toolkit:Spacing.Gap="4" Grid.Row="1">
                             <TextBlock FontWeight="Medium" Text="Goal Name" />
                             <TextBox Text="New Car" />
                         </StackPanel>
 
-                        <Grid>
+                        <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
@@ -211,13 +318,15 @@
                             </StackPanel>
                         </Grid>
 
-                        <Button Style="{StaticResource PrimaryButton}">Create Goal</Button>
-                        <Button Style="{StaticResource OutlineSecondaryButton}">Cancel</Button>
-                    </StackPanel>
+                        <StackPanel  toolkit:Spacing.Gap="4" Grid.Row="3">
+                            <Button Style="{StaticResource PrimaryButton}">Create Goal</Button>
+                            <Button Style="{StaticResource OutlineSecondaryButton}">Cancel</Button>
+                        </StackPanel>
+                    </Grid>
                 </Border>
 
                 <!--  Select, progress, slider  -->
-                <Border Style="{StaticResource Card}">
+                <Border Style="{StaticResource Card}" Grid.Row="2">
                     <StackPanel toolkit:Spacing.Gap="12">
                         <StackPanel>
                             <TextBlock Style="{StaticResource Title}" Text="Payout Threshold" />
@@ -246,88 +355,8 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
-            </StackPanel>
+            </Grid>
 
-            <!--  ============================ Column 3 ============================  -->
-            <StackPanel Grid.Column="2" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-
-                <!--  Empty state  -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel HorizontalAlignment="Center" toolkit:Spacing.Gap="8">
-                        <Button HorizontalAlignment="Center" toolkit:Sizing.IsSquare="True" Style="{StaticResource GhostButton}">
-                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
-                        </Button>
-                        <TextBlock HorizontalAlignment="Center" Style="{StaticResource Title}" Text="Distribute Track" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            Style="{StaticResource TextMuted}"
-                            TextAlignment="Center"
-                            toolkit:Sizing.Size="sm"
-                            Text="Upload your first master to start reaching listeners on Spotify, Apple Music, and more." />
-                        <Button HorizontalAlignment="Center" Style="{StaticResource PrimaryButton}">Create Release</Button>
-                    </StackPanel>
-                </Border>
-
-                <!--  Stat with badge and spinner  -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel toolkit:Spacing.Gap="8">
-                        <Grid>
-                            <TextBlock VerticalAlignment="Center" Style="{StaticResource Title}" Text="Analytics" />
-                            <Button HorizontalAlignment="Right" toolkit:Sizing.Size="sm" Style="{StaticResource OutlineSecondaryButton}">View Analytics</Button>
-                        </Grid>
-                        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8,0">
-                            <TextBlock VerticalAlignment="Center" Style="{StaticResource TextMuted}" Text="418.2K Visitors" />
-                            <feedback:Badge Variant="Primary">+10%</feedback:Badge>
-                        </StackPanel>
-                        <ProgressBar Height="8" Maximum="100" Value="68" />
-                        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8,0">
-                            <feedback:Spinner toolkit:Sizing.Size="xs" />
-                            <TextBlock VerticalAlignment="Center" Style="{StaticResource TextMuted}" toolkit:Sizing.Size="sm" Text="Syncing latest data…" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!--  Chat  -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel toolkit:Spacing.Gap="12">
-                        <Grid>
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource Title}" Text="New Chat" />
-                                <TextBlock Style="{StaticResource TextMuted}" toolkit:Sizing.Size="sm" Text="How can I help you today?" />
-                            </StackPanel>
-                            <Button HorizontalAlignment="Right" VerticalAlignment="Top" toolkit:Sizing.IsSquare="True" Style="{StaticResource OutlineSecondaryButton}">
-                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.RefreshCw}" />
-                            </Button>
-                        </Grid>
-                        <Separator />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            Style="{StaticResource TextMuted}"
-                            TextAlignment="Center"
-                            toolkit:Sizing.Size="sm"
-                            Text="What are we working on today? Press send to start a new conversation." />
-                        <inputs:Search />
-                    </StackPanel>
-                </Border>
-
-                <!--  Notifications  -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel toolkit:Spacing.Gap="12">
-                        <StackPanel>
-                            <TextBlock Style="{StaticResource Title}" Text="Notifications" />
-                            <TextBlock Style="{StaticResource TextMuted}" toolkit:Sizing.Size="sm" Text="Choose which email and push alerts you want to receive." />
-                        </StackPanel>
-                        <StackPanel toolkit:Spacing.Gap="8">
-                            <CheckBox Content="Transaction alerts" IsChecked="True" />
-                            <CheckBox Content="Security alerts" IsChecked="True" />
-                            <CheckBox Content="Product updates" />
-                        </StackPanel>
-                        <Expander Header="Advanced">
-                            <TextBlock Style="{StaticResource TextMuted}" Text="Alerts are batched and sent once a day." />
-                        </Expander>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
         </Grid>
     </ScrollViewer>
 </UserControl>

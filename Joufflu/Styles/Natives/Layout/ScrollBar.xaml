@@ -13,7 +13,7 @@
     <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}">16</system:Double>
 
     <Style x:Key="ScrollBarButton" TargetType="{x:Type RepeatButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollBar}}}" />
         <Setter Property="BorderBrush" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollBar}}}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -53,9 +53,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -87,7 +85,7 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -192,7 +190,7 @@
     </ControlTemplate>
 
     <Style TargetType="{x:Type ScrollBar}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="SnapsToDevicePixels" Value="False" />

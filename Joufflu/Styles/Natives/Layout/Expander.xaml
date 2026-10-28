@@ -67,43 +67,29 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ExpanderHeaderFocusVisual">
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border>
-                        <Rectangle
-                            Margin="0"
-                            SnapsToDevicePixels="True"
-                            Stroke="Black"
-                            StrokeDashArray="1 2"
-                            StrokeThickness="1" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style x:Key="{x:Type Expander}" TargetType="{x:Type Expander}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-                    <Border>
-                        <DockPanel>
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                            
+                                Margin="{TemplateBinding Padding}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
                             <ToggleButton
                                 x:Name="HeaderSite"
-                                DockPanel.Dock="Top"
                                 BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 Content="{TemplateBinding Header}"
                                 ContentTemplate="{TemplateBinding HeaderTemplate}"
                                 ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}"
                                 FontFamily="{TemplateBinding FontFamily}"
                                 FontSize="{TemplateBinding FontSize}"
                                 FontStretch="{TemplateBinding FontStretch}"
@@ -116,13 +102,12 @@
                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
 
                             <Border
+                                Grid.Row="1"
                                 x:Name="ExpandSiteContainerWrapper"
-                                DockPanel.Dock="Bottom"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <ScrollViewer
                                     x:Name="ExpandSiteContainer"
-                                    Margin="{TemplateBinding Padding}"
                                     Padding="0"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     HorizontalContentAlignment="Stretch"
@@ -138,7 +123,7 @@
                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                                 </ScrollViewer>
                             </Border>
-                        </DockPanel>
+                        </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
@@ -180,13 +165,8 @@
         </Setter>
 
         <Style.Triggers>
-            <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-            </Trigger>
-
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

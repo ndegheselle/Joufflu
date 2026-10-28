@@ -360,44 +360,34 @@ public class ThemeCustomizerViewModel : ObservableObject
 
         ColorGroups.Add(Group("Surface",
             ("Background", "BackgroundColor", JColors.BackgroundColor),
-            ("Background 100 (elevated)", "Background100Color", JColors.Background100Color),
-            ("Background 200 (selected)", "Background200Color", JColors.Background200Color),
-            ("Border", "BorderColor", JColors.BorderColor),
-            ("Border 100", "Border100Color", JColors.Border100Color)));
+            ("Middleground", "MiddlegroundColor", JColors.MiddlegroundColor),
+            ("Stroke", "StrokeColor", JColors.StrokeColor)));
 
         ColorGroups.Add(Group("Text",
-            ("Foreground", "ForegroundColor", JColors.ForegroundColor),
-            ("Foreground 100", "Foreground100Color", JColors.Foreground100Color),
-            ("Foreground 200", "Foreground200Color", JColors.Foreground200Color)));
+            ("Foreground", "ForegroundColor", JColors.ForegroundColor)));
 
         ColorGroups.Add(Group("Primary",
             ("Primary", "PrimaryColor", JColors.PrimaryColor),
-            ("Primary 100 (hover)", "Primary100Color", JColors.Primary100Color),
             ("Primary content", "PrimaryContentColor", JColors.PrimaryContentColor)));
 
         ColorGroups.Add(Group("Secondary",
             ("Secondary", "SecondaryColor", JColors.SecondaryColor),
-            ("Secondary 100 (hover)", "Secondary100Color", JColors.Secondary100Color),
             ("Secondary content", "SecondaryContentColor", JColors.SecondaryContentColor)));
 
         ColorGroups.Add(Group("Success",
             ("Success", "SuccessColor", JColors.SuccessColor),
-            ("Success 100 (hover)", "Success100Color", JColors.Success100Color),
             ("Success content", "SuccessContentColor", JColors.SuccessContentColor)));
 
         ColorGroups.Add(Group("Info",
             ("Info", "InfoColor", JColors.InfoColor),
-            ("Info 100 (hover)", "Info100Color", JColors.Info100Color),
             ("Info content", "InfoContentColor", JColors.InfoContentColor)));
 
         ColorGroups.Add(Group("Warning",
             ("Warning", "WarningColor", JColors.WarningColor),
-            ("Warning 100 (hover)", "Warning100Color", JColors.Warning100Color),
             ("Warning content", "WarningContentColor", JColors.WarningContentColor)));
 
         ColorGroups.Add(Group("Danger",
             ("Danger", "DangerColor", JColors.DangerColor),
-            ("Danger 100 (hover)", "Danger100Color", JColors.Danger100Color),
             ("Danger content", "DangerContentColor", JColors.DangerContentColor)));
     }
 
