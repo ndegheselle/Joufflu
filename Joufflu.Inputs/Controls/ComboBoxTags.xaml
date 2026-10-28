@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Inputs.Controls"
@@ -12,6 +13,8 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Inputs;component/Controls/ComboBoxSearch.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <Style
         x:Key="{x:Type local:ComboBoxTags}"
@@ -31,7 +34,15 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
+                            <Border.CornerRadius>
+                                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Border.CornerRadius>
+                        </Border>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -55,8 +66,15 @@
                                             <ContentControl Height="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}">
                                                 <Border
                                                     Margin="1"
-                                                    Background="{Binding BorderBrush, ElementName=Border}"
-                                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                                    Background="{DynamicResource {x:Static joufflu:Brushes.InputSurface2Brush}}"
+                                                    Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
+                                                    <Border.CornerRadius>
+                                                        <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                            <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                                        </MultiBinding>
+                                                    </Border.CornerRadius>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">
                                                             <TextBlock.Text>
@@ -150,10 +168,10 @@
                                 <Border
                                     x:Name="DropDownBorder"
                                     Margin="0,1,0,0"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
                                     <ScrollViewer SnapsToDevicePixels="True">
                                         <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>

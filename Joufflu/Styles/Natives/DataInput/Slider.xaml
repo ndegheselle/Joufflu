@@ -6,6 +6,10 @@
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
+    <!--
+        An input: the track is its elevated part, the part before the thumb the primary. The thumb is an action, a
+        stronger fill on hover, a strong border while dragged or when the slider has the keyboard focus.
+    -->
     <Style x:Key="SliderButtonStyle" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -20,16 +24,16 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
+    <!--  The filled part, before the thumb; its cross size (Height or Width) is set where it is used  -->
+    <Style x:Key="SliderFillButtonStyle" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border
-                        x:Name="ThumbBorder"
-                        Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}"
-                        Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
                         <Border.CornerRadius>
                             <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
                                 <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
@@ -38,17 +42,46 @@
                             </MultiBinding>
                         </Border.CornerRadius>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
-                        </Trigger>
-                        <Trigger Property="IsDragging" Value="True">
-                            <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionSurface1Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border
+                        x:Name="ThumbBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Tag="{DynamicResource {x:Static joufflu:Dimensions.ActionRadius}}">
+                        <Border.CornerRadius>
+                            <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </Border.CornerRadius>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+            </Trigger>
+            <Trigger Property="IsDragging" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
@@ -76,7 +109,7 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
                 <Border.CornerRadius>
                     <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
                         <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
@@ -88,10 +121,14 @@
 
             <Track x:Name="PART_Track" Grid.Row="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderButtonStyle}" />
+                    <RepeatButton
+                        Height="4"
+                        Command="Slider.DecreaseLarge"
+                        Style="{StaticResource SliderFillButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb
+                        x:Name="Thumb"
                         Width="10"
                         VerticalAlignment="Stretch"
                         Style="{StaticResource SliderThumbStyle}" />
@@ -113,6 +150,9 @@
         </Grid>
 
         <ControlTemplate.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+            </Trigger>
             <Trigger Property="TickPlacement" Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
             </Trigger>
@@ -151,7 +191,7 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
                 <Border.CornerRadius>
                     <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
                         <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
@@ -163,10 +203,14 @@
 
             <Track x:Name="PART_Track" Grid.Column="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderButtonStyle}" />
+                    <RepeatButton
+                        Width="4"
+                        Command="Slider.DecreaseLarge"
+                        Style="{StaticResource SliderFillButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb
+                        x:Name="Thumb"
                         Height="10"
                         HorizontalAlignment="Stretch"
                         Style="{StaticResource SliderThumbStyle}" />
@@ -188,6 +232,9 @@
         </Grid>
 
         <ControlTemplate.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+            </Trigger>
             <Trigger Property="TickPlacement" Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
             </Trigger>
@@ -203,8 +250,8 @@
 
     <Style x:Key="{x:Type Slider}" TargetType="Slider">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface2Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface2Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="16" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />

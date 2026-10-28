@@ -1085,10 +1085,10 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <!-- Always DynamicResource: a theme swap, or the customizer editing a
      dimension, has to reach controls already on screen. -->
 <Border
-    Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
-    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
-    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
 
 <!-- The raw Color is there for what a brush cannot express -->
 <GradientStop Offset="0" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
@@ -1106,24 +1106,65 @@ animations and anything that needs the raw value.
 
 ### Surfaces
 
-Five colours a theme defines for the neutrals, by where a control sits. Every state is derived from
-them by mixing a colour toward the `Foreground`, so the direction is right in a light and in a dark
-theme; no theme defines a hover or a pressed colour.
+The global neutrals a theme defines. The controls do not read them directly but through the three
+categories below, which fall back to them unless the theme gives a category colour of its own. Use
+them for an app's own layout.
 
 | Key | Used for |
 |---|---|
-| `Base` | The page, and what a button is filled with, so on a card it reads as set into it. A button is not put directly on the page. |
-| `Surface1` | The card and what rests on it: inputs (told from the card by their stroke), popups, rows. |
-| `Surface2` | Only the contrast inside a control: a table or group header, a card secondary, a track, a badge. |
-| `Stroke` | Borders, separators and the strokes of icons: default border of every framed control. |
-| `BaseHoverBrush`, `BasePressedBrush` | Derived from `Base` (10%, 15% toward `Foreground`): a button hovered or pressed. |
-| `Surface1HoverBrush`, `Surface1PressedBrush` | Derived from `Surface1`: a hovered input, a row, a menu item. |
-| `Surface2HoverBrush`, `Surface2PressedBrush` | Derived from `Surface2`: a row inside a header or a card secondary. |
-| `StrokeStrongBrush` | Derived from `Stroke` (15%): the border of a control that is hovered or pressed. |
-| `StrokeFocusBrush` | Derived from `Stroke` (40%): the border of a control that has the focus. |
+| `Base` | The page, and by default what an action is filled with, so on a display it reads as set into it. An action is not put directly on the page. |
+| `Surface1` | A card, and by default the background of a display and of an input. |
+| `Surface2` | An elevated part inside a card, and by default the `Surface2` of every category. |
+| `Stroke` | A border or a separator, and by default the border of every category. |
 
-States: focus takes the focus stroke, hover and pressed a stronger fill and the strong stroke, disabled
-is `DisabledOpacity`.
+### Categories
+
+Every control belongs to one of three categories, each with a background (`Surface1`), an elevated
+background (`Surface2`) and a `Border`. The category colours are optional: a theme that leaves one
+out gets the global colour in brackets, through a `ColorFallback`. The states are always the same,
+derived by mixing a colour toward the `Foreground`, so no theme defines a hover colour. Disabled is
+`DisabledOpacity`, selected and checked are the primary.
+
+**Display**: what shows content without being interacted with: card, popup, tooltip, expander,
+group box, and the frame of a list, tree, grid, menu or tab control. No states. Its items (rows,
+menu items, tabs, navigation entries) are actions without a fill at rest.
+
+| Key | Used for |
+|---|---|
+| `DisplaySurface1` | The background (`Surface1`). |
+| `DisplaySurface2` | An elevated part: a header, a nested area (`Surface2`). |
+| `DisplayBorder` | The border and the separators (`Stroke`). |
+
+**Input**: what takes a value: text box, combo box, check box, radio button, slider. No hover;
+focus is a strong border.
+
+| Key | Used for |
+|---|---|
+| `InputSurface1` | The background (`Surface1`). |
+| `InputSurface2` | An elevated part inside: a tag, a track (`Surface2`). |
+| `InputBorder` | The border (`Stroke`). |
+| `InputBorderStrongBrush` | Derived, the border mixed 40% toward `Foreground`: the border of a focused input. |
+
+**Action**: what runs something: button, toggle button. Hover is a stronger background, focus a
+strong border, pressed a translation down rather than a colour.
+
+| Key | Used for |
+|---|---|
+| `ActionSurface1` | The background (`Base`). |
+| `ActionSurface2` | An elevated part inside (`Surface2`). |
+| `ActionBorder` | The border (`Stroke`). |
+| `ActionHoverBrush` | Derived, the fill mixed 10% toward `Foreground`: a hovered action or display item. |
+| `ActionBorderStrongBrush` | Derived: the border of a focused action or display item. |
+
+A theme overrides a category by defining its colour, for example inputs set apart from the cards:
+
+```xml
+<Color x:Key="{x:Static joufflu:Colors.InputSurface1Color}">#FFFFFF</Color>
+<Color x:Key="{x:Static joufflu:Colors.ActionBorderColor}">#A1A1AA</Color>
+```
+
+`ColorFallback` is public: a library of your own can declare an optional colour the same way (see
+`Joufflu/Styles/Brushes.xaml`).
 
 ### Text
 
@@ -1178,6 +1219,19 @@ otherwise.
 | `BorderThickness` | `Thickness` | `Thickness` on all four sides, for a uniform border. |
 | `Radius` | `double` | Base corner radius (`4`). |
 | `CornerRadius` | `CornerRadius` | `Radius` on all four corners, for a uniformly rounded border. |
+| `DisplayRadius`, `InputRadius`, `ActionRadius` | `double` | The radius of each category (`4`). The controls clamp it to half their height, so a large one gives a pill. |
+| `DisplayCornerRadius`, `InputCornerRadius`, `ActionCornerRadius` | `CornerRadius` | The radius of each category on all four corners. |
+| `DisplayBorderThickness`, `InputBorderThickness`, `ActionBorderThickness` | `Thickness` | The border of each category (`1`). |
+| `DisplayPadding` | `Thickness` | The padding inside a display (`12`). An action is padded by `ActionPaddingXs`…`ActionPaddingLg`, an input by `InputPaddingXs`…`InputPaddingLg`. |
+
+The global `Radius`, `CornerRadius`, `Thickness` and `BorderThickness` are for an app's own layout:
+the controls read the category keys. Override a category key in a dictionary merged after
+`Resources.xaml` (or in a registered theme) to reshape that category alone:
+
+```xml
+<CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">16</CornerRadius>
+<system:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</system:Double>
+```
 
 ### Layout
 
@@ -1224,12 +1278,12 @@ the border.
 
 | Key | Value | Input key | Value |
 |---|---|---|---|
-| `PaddingXs` | `6,2` | `InputPaddingXs` | `3,2` |
-| `PaddingSm` | `9,3` | `InputPaddingSm` | `4.5,3` |
-| `PaddingMd` | `12,4` | `InputPaddingMd` | `6,4` |
-| `PaddingLg` | `18,6` | `InputPaddingLg` | `9,6` |
+| `ActionPaddingXs` | `6,2` | `InputPaddingXs` | `3,2` |
+| `ActionPaddingSm` | `9,3` | `InputPaddingSm` | `4.5,3` |
+| `ActionPaddingMd` | `12,4` | `InputPaddingMd` | `6,4` |
+| `ActionPaddingLg` | `18,6` | `InputPaddingLg` | `9,6` |
 
-`PaddingMd` and `InputPaddingMd` are the defaults.
+`ActionPaddingMd` and `InputPaddingMd` are the defaults.
 
 See the **Design tokens** page in the sample gallery for the same reference with live swatches.
 
@@ -1249,6 +1303,25 @@ The design system is exposed as resource keys you override in a dictionary:
 `joufflu:Brushes.*` are built from the colours by the core resources, so overriding a
 colour is enough for every brush to follow. [Design tokens](tokens.html) lists them all, with the role each one
 plays in the control styles.
+
+The controls read the category tokens (`Display*`, `Input*`, `Action*`), not the global ones. The
+customizer has two modes:
+
+- **Simple**: you set the surfaces (Base, Surface 1, Surface 2, Stroke, Foreground) and the shape
+  (corner radius, border thickness, spacing) once, and displays, inputs and actions follow them. The
+  generated dictionary leaves the category colours out, so they fall back to the global ones, and
+  writes the global radius, thickness and spacing into the category keys (`DisplayRadius`,
+  `InputCornerRadius`, `ActionBorderThickness`, `DisplayPadding`…).
+- **Complete**: each category gets its own Surface 1, Surface 2, Border, corner radius, border
+  thickness and padding (horizontal and vertical), starting from the simple values. The padding is
+  the inside of a display (`DisplayPadding`), and the md padding of an input or an action, the
+  other sizes (`InputPaddingXs`..`Lg`, `ActionPaddingXs`..`Lg`) following it with the ratios of the
+  control padding, which is only edited in the simple mode. The generated dictionary writes the
+  category colours (`ActionSurface1Color`…) and shapes. Going back to the simple mode drops them.
+
+The states are derived either way: hover and the strong focus border follow the category colours.
+A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.BorderThickness` no
+longer reaches the controls.
 
 ```xml
 <!-- Merge your overrides AFTER the Joufflu resources -->
@@ -1392,8 +1465,8 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content: a `Surface1` fill, a themed border,
-rounded corners and the standard spacing as padding.
+The primary surface for grouping content, a display: a `DisplaySurface1` fill, a
+`DisplayBorder` border, `DisplayCornerRadius` corners and `DisplayPadding` as padding.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -1409,8 +1482,8 @@ rounded corners and the standard spacing as padding.
 
 ## CardSecondary
 
-A subtly inset panel meant to sit **inside** a `Card`. It uses the `Surface2`
-fill, the contrast inside a control, so it reads as a distinct area of the card.
+A subtly inset panel meant to sit **inside** a `Card`. It uses the `DisplaySurface2`
+fill, the elevated part of a display, so it reads as a distinct area of the card.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -1424,8 +1497,9 @@ fill, the contrast inside a control, so it reads as a distinct area of the card.
 ```
 
 {: .note }
-> Both styles derive their fill, border, corner radius and padding from the theme
-> resources, so they follow Light / Dark and any custom theme automatically.
+> Both styles read the display tokens (see [Design tokens](../themes/tokens.html)), so
+> they follow Light / Dark and any custom theme automatically, and a theme restyles every
+> card by overriding the `Display*` colours or dimensions.
 
 ---
 
@@ -1616,6 +1690,11 @@ runtime — by the [theme customizer](../themes/customize-theme.html), for insta
 straight through, and no derived resource key has to be declared or re-pushed by
 hand.
 
+Point it at the key of the category the element belongs to (`DisplayBorderThickness`,
+`DisplayRadius`, `InputRadius`, `ActionRadius`…, see [Design tokens](../themes/tokens.html)), so the
+part follows the rest of the control when a theme reshapes that category. The global `Thickness` and
+`Radius` are for an app's own layout.
+
 ## Factors
 
 Each of the three properties has a matching factor, a `Thickness` (or a
@@ -1635,12 +1714,12 @@ Point `Derive.BorderThickness` at a resource key and pick the sides with
 `Derive.BorderThicknessFactor`, in the usual `Left,Top,Right,Bottom` order.
 
 ```xml
-<!-- Right edge only, following Dimensions.Thickness live -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<!-- Right edge only, following Dimensions.DisplayBorderThickness live -->
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 
 <!-- Open at the bottom, with a doubled top edge -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
 ```
 
@@ -1649,7 +1728,7 @@ without a keyed `Thickness`:
 
 ```xml
 <Style TargetType="{x:Type nav:NavigationMenu}">
-    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
+    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
     <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
 </Style>
 ```
@@ -1669,7 +1748,7 @@ Same shape, with `Derive.CornerRadiusFactor` in the
 
 ```xml
 <!-- Top corners only, matching the border it sits in -->
-<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
         toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
 ```
 
@@ -1847,7 +1926,7 @@ be dropped — the cursor shows a no-drop sign — and never lights the zone up.
 ```xml
 <!-- AllowDrop and the drag events are handled by the behavior -->
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
     <TextBlock VerticalAlignment="Center" Text="Drop .pdf files here" />
 </Border>
 ```
@@ -2044,17 +2123,19 @@ Each group is the closest ancestor marked `SharedWidth.IsScope`:
 
 # Custom input
 
-An input of your own sits with the Joufflu ones when it reads the same design tokens.
+An input of your own sits with the Joufflu ones when it reads the same design tokens: the
+**Input** category of [Design tokens](../themes/tokens.html), so a theme restyling the inputs
+restyles it too.
 The gallery's **Custom input** page builds a star `RatingInput` from a bare `Control`
 step by step; this page lists the rules it follows.
 
 | | Rule | Tokens |
 |---|---|---|
-| **Required** | Background, the card colour: only the stroke tells an input from its card | `Brushes.Surface1Brush` |
-| **Required** | Border colour and thickness | `Brushes.StrokeBrush`, `Dimensions.BorderThickness`, `Dimensions.CornerRadius` |
+| **Required** | Background | `Brushes.InputSurface1Brush` (`InputSurface2Brush` for an elevated part inside: a tag, a track) |
+| **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputBorderThickness`, `Dimensions.InputCornerRadius` |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Hover, focus and disabled states | `Surface1HoverBrush`, `StrokeStrongBrush` (hover), `StrokeFocusBrush` (focus), `Colors.DisabledOpacity` |
+| Optional | Focus and disabled states (an input has no hover) | `InputBorderStrongBrush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -2084,9 +2165,9 @@ template read them from the control:
 
 ```xml
 <Style TargetType="{x:Type local:RatingInput}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
-    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
     <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
     <Setter Property="Template">
         <Setter.Value>
@@ -2095,7 +2176,7 @@ template read them from the control:
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.InputCornerRadius}}" />
                     <!-- content -->
                 </Grid>
             </ControlTemplate>
@@ -2147,15 +2228,12 @@ of the native inputs:
 
 ## States
 
-The native inputs lighten their background on hover and their border on focus, and fade
+An input has no hover state: the native inputs strengthen their border on focus, and fade
 when disabled:
 
 ```xml
-<Trigger Property="IsMouseOver" Value="True">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
-</Trigger>
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
@@ -2172,7 +2250,7 @@ border red:
 ```xml
 <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
 
-<!-- In Style.Triggers, after the hover and focus triggers so it wins over them -->
+<!-- In Style.Triggers, after the focus trigger so it wins over it -->
 <Trigger Property="Validation.HasError" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
 </Trigger>
@@ -2217,7 +2295,7 @@ Put the input next to a `TextBox` and compare them:
 
 - in each size, with `Sizing.Size` on a parent panel;
 - after switching between Light and Dark, and to a custom theme;
-- hovered, focused and disabled;
+- focused and disabled;
 - with a binding error, with and without `Validation.ErrorTemplate="{x:Null}"`.
 
 ---

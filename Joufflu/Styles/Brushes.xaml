@@ -4,66 +4,99 @@
     xmlns:joufflu="clr-namespace:Joufflu">
 
     <!--
-        One brush per palette colour, so a theme only defines the colours: Foreground, Base, Surface1, Surface2 and
-        Stroke, then a fill and a content colour per accent. Every state is derived from them by a ColorShade, which
-        mixes a colour toward the one drawn on top of it (the Foreground for a neutral, the accent's content colour
-        for a fill), so the direction is right in a light and in a dark theme without the theme saying so.
+        One brush per palette colour, so a theme only defines the colours, and every state is derived from them by a
+        ColorShade, which mixes a colour toward the one drawn on top of it (the Foreground for a neutral, the accent's
+        content colour for a fill), so the direction is right in a light and in a dark theme without the theme saying so.
         Not merged in Resources.xaml: ThemeManager pairs a fresh copy of this dictionary with every theme it applies,
         because a brush resolves its DynamicResource colour once and never again; a copy shared across themes would
         keep the colours of the first one.
-        
-        The neutrals follow where a control sits:
-        - Base is the page, and what a button is filled with, so on a card it reads as set into it. A button is not
-        put directly on the page.
-        - Surface1 is the card and what rests on it: inputs, popups, rows.
-        - Surface2 is only the contrast inside a control: a table or group header, a card secondary, a track.
-        - Stroke is the border. The states: hover and pressed step the fill (10 %, 15 %) and take the strong stroke
-        (15 %), focus takes the focus stroke (40 %), disabled is an opacity.
+
+        The global neutrals: Base is the page, Surface1 a card, Surface2 an elevated part inside it, Stroke a border.
+        The controls do not read them directly but through three categories, each with its own Surface1 (background),
+        Surface2 (elevated background) and Border. A theme may define a category colour; if it does not, a
+        ColorFallback gives the global one (an action is filled with Base, so on a display it reads as set into it).
+        The states are always the same:
+        - Display: none.
+        - Input: no hover; focus is a strong border (the border 40 % toward the foreground).
+        - Action: hover is a stronger background (10 % toward the foreground); focus a strong border; pressed a
+        translation, not a colour. The items of a display (rows, menu items, tabs) are actions without a fill at rest.
+        - Disabled is DisabledOpacity, selected and checked the primary.
     -->
 
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ForegroundBrush}" Color="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}" />
-
-    <joufflu:ColorShade
-        x:Key="BaseHoverShade"
-        Amount="0.08"
-        Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{DynamicResource {x:Static joufflu:Colors.BaseColor}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BaseBrush}" Color="{DynamicResource {x:Static joufflu:Colors.BaseColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.BaseHoverBrush}" Color="{Binding Result, Source={StaticResource BaseHoverShade}}" />
-
-    <joufflu:ColorShade
-        x:Key="Surface1HoverShade"
-        Amount="0.1"
-        Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{DynamicResource {x:Static joufflu:Colors.Surface1Color}}" />
-    <joufflu:ColorShade
-        x:Key="Surface1PressedShade"
-        Amount="0.15"
-        Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{DynamicResource {x:Static joufflu:Colors.Surface1Color}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Surface1Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Surface1Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Surface1HoverBrush}" Color="{Binding Result, Source={StaticResource Surface1HoverShade}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Surface2Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Surface2Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.StrokeBrush}" Color="{DynamicResource {x:Static joufflu:Colors.StrokeColor}}" />
 
+    <!--  Display  -->
+    <joufflu:ColorFallback
+        x:Key="DisplaySurface1Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.DisplaySurface1Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.Surface1Color}}" />
+    <joufflu:ColorFallback
+        x:Key="DisplaySurface2Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.DisplaySurface2Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.Surface2Color}}" />
+    <joufflu:ColorFallback
+        x:Key="DisplayBorderFallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.DisplayBorderColor}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.StrokeColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplaySurface1Brush}" Color="{Binding Result, Source={StaticResource DisplaySurface1Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplaySurface2Brush}" Color="{Binding Result, Source={StaticResource DisplaySurface2Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplayBorderBrush}" Color="{Binding Result, Source={StaticResource DisplayBorderFallback}}" />
+
+    <!--  Input  -->
+    <joufflu:ColorFallback
+        x:Key="InputSurface1Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.InputSurface1Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.Surface1Color}}" />
+    <joufflu:ColorFallback
+        x:Key="InputSurface2Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.InputSurface2Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.Surface2Color}}" />
+    <joufflu:ColorFallback
+        x:Key="InputBorderFallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.InputBorderColor}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.StrokeColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputSurface1Brush}" Color="{Binding Result, Source={StaticResource InputSurface1Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputSurface2Brush}" Color="{Binding Result, Source={StaticResource InputSurface2Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBorderBrush}" Color="{Binding Result, Source={StaticResource InputBorderFallback}}" />
     <joufflu:ColorShade
-        x:Key="Surface2HoverShade"
+        x:Key="InputBorderStrongShade"
+        Amount="0.4"
+        Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
+        Color="{Binding Result, Source={StaticResource InputBorderFallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBorderStrongBrush}" Color="{Binding Result, Source={StaticResource InputBorderStrongShade}}" />
+
+    <!--  Action  -->
+    <joufflu:ColorFallback
+        x:Key="ActionSurface1Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.ActionSurface1Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.BaseColor}}" />
+    <joufflu:ColorFallback
+        x:Key="ActionSurface2Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.ActionSurface2Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.Surface2Color}}" />
+    <joufflu:ColorFallback
+        x:Key="ActionBorderFallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.ActionBorderColor}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.StrokeColor}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionSurface1Brush}" Color="{Binding Result, Source={StaticResource ActionSurface1Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionSurface2Brush}" Color="{Binding Result, Source={StaticResource ActionSurface2Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBorderBrush}" Color="{Binding Result, Source={StaticResource ActionBorderFallback}}" />
+    <joufflu:ColorShade
+        x:Key="ActionHoverShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{DynamicResource {x:Static joufflu:Colors.Surface2Color}}" />
+        Color="{Binding Result, Source={StaticResource ActionSurface1Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionHoverBrush}" Color="{Binding Result, Source={StaticResource ActionHoverShade}}" />
     <joufflu:ColorShade
-        x:Key="Surface2PressedShade"
-        Amount="0.15"
+        x:Key="ActionBorderStrongShade"
+        Amount="0.4"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{DynamicResource {x:Static joufflu:Colors.Surface2Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Surface2Brush}" Color="{DynamicResource {x:Static joufflu:Colors.Surface2Color}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.Surface2HoverBrush}" Color="{Binding Result, Source={StaticResource Surface2HoverShade}}" />
-
-    <joufflu:ColorShade
-        x:Key="StrokeStrongShade"
-        Amount="0.25"
-        Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{DynamicResource {x:Static joufflu:Colors.StrokeColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.StrokeBrush}" Color="{DynamicResource {x:Static joufflu:Colors.StrokeColor}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.StrokeStrongBrush}" Color="{Binding Result, Source={StaticResource StrokeStrongShade}}" />
+        Color="{Binding Result, Source={StaticResource ActionBorderFallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBorderStrongBrush}" Color="{Binding Result, Source={StaticResource ActionBorderStrongShade}}" />
 
     <joufflu:ColorShade
         x:Key="PrimaryElevatedShade"

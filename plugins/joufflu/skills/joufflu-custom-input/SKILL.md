@@ -3,7 +3,7 @@ name: joufflu-custom-input
 description: >-
   Build a custom WPF input control (a new Control, UserControl or templated control
   that takes a value) so it matches the Joufflu inputs: background, border and height
-  from the design tokens, then Sizing.Size variants with input padding, hover/focus/
+  from the Input category tokens, then Sizing.Size variants with input padding, focus/
   disabled states, the validation error style and EmbeddedButton inner buttons. Use
   when the user asks to create, write or style an input, picker, field or editor of
   their own in a project that references Joufflu, when a custom input doesn't look like
@@ -30,16 +30,19 @@ show the finished result.
 
 ## 2. Required: background, border, height
 
-In the style (not hard-coded in the template), always with `DynamicResource`:
+From the **Input** category tokens (a theme restyling the inputs then restyles yours), in the
+style (not hard-coded in the template), always with `DynamicResource`. Never the global
+`Surface1Brush`/`StrokeBrush`/`Dimensions.CornerRadius`: the controls no longer read them.
 
 ```xml
-<Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
-<Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
-<Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+<Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+<Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+<Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />  <!-- one-line inputs only -->
 ```
 
-The template's surface reads them from the control, with the token corner radius:
+The template's surface reads them from the control, with the input corner radius (an elevated
+part inside, a tag or a track, takes `InputSurface2Brush`):
 
 ```xml
 <ControlTemplate TargetType="{x:Type local:MyInput}">
@@ -47,7 +50,7 @@ The template's surface reads them from the control, with the token corner radius
         <Border Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.InputCornerRadius}}" />
         <Grid Margin="{TemplateBinding Padding}"> <!-- content --> </Grid>
     </Grid>
 </ControlTemplate>
@@ -78,14 +81,12 @@ inside it), so it lines up with the text of a `TextBox`.
 
 ## 4. Optional: states and validation
 
-Add, in this order, to `Style.Triggers` (the error must come after hover and focus):
+An input has **no hover** state. Add, in this order, to `Style.Triggers` (the error must come
+after focus):
 
 ```xml
-<Trigger Property="IsMouseOver" Value="True">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
-</Trigger>
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
@@ -130,5 +131,5 @@ ones it merges, so the dictionary holding the style merges what it references:
 - Value properties bind two-way by default (`FrameworkPropertyMetadataOptions.BindsTwoWayByDefault`),
   like the native inputs.
 - Check next to a `TextBox`, and say what you checked: each `Sizing.Size` set on a parent
-  panel, Light and Dark, hover, focus, disabled, and a binding error with and without
+  panel, Light and Dark, focus, disabled, and a binding error with and without
   `Validation.ErrorTemplate="{x:Null}"`.

@@ -67,12 +67,13 @@ Map by **role**, not by closest hue:
 | Original role | Token |
 |---|---|
 | Window/page background | Remove it (the `Window` style sets it) or `Brushes.BaseBrush` |
-| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.Surface1Brush` |
-| Inset panel inside a card | `CardSecondary` / `Brushes.Surface2Brush` |
-| Hover / selected row | `Brushes.Surface1HoverBrush` (usually already done by the native style) |
+| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplaySurface1Brush` |
+| Inset panel inside a card | `CardSecondary` / `Brushes.DisplaySurface2Brush` |
+| Background of a custom input / button | `Brushes.InputSurface1Brush` / `Brushes.ActionSurface1Brush` |
+| Hover of a row or custom clickable item | `Brushes.ActionHoverBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
-| Borders, separators | `Brushes.StrokeBrush` (`Brushes.StrokeStrongBrush` on hover, focus, selected) |
+| Borders, separators | The category's border: `Brushes.DisplayBorderBrush` (panels, separators), `InputBorderBrush` (`InputBorderStrongBrush` on focus), `ActionBorderBrush` (`ActionBorderStrongBrush` on focus) |
 | Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryContentBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
 | Light tinted highlight | `Brushes.XSoftBrush` |
@@ -107,8 +108,10 @@ destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Ic
   control or its panel for a denser/larger area.
 - Headings → `toolkit:Sizing.Size` (`xl` page title, `lg` section) plus `FontWeight`;
   captions `Sizing.Size="xs"`; secondary text `Colors.MutedOpacity`; drop literal `FontSize`.
-- Literal `CornerRadius`/`BorderThickness` → `Dimensions.CornerRadius` /
-  `Dimensions.BorderThickness` (DynamicResource), or `toolkit:Derive.*` for partial sides.
+- Literal `CornerRadius`/`BorderThickness` → the category keys, `Dimensions.DisplayCornerRadius` /
+  `DisplayBorderThickness` for a panel (`Input*` for an input, `Action*` for a button), as
+  DynamicResource, or `toolkit:Derive.*` on `DisplayRadius`… for partial sides. The global
+  `Dimensions.CornerRadius`/`BorderThickness` only suit app layout the controls never draw.
 
 ### Local styles
 

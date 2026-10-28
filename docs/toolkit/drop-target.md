@@ -18,7 +18,7 @@ be dropped — the cursor shows a no-drop sign — and never lights the zone up.
 ```xml
 <!-- AllowDrop and the drag events are handled by the behavior -->
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
     <TextBlock VerticalAlignment="Center" Text="Drop .pdf files here" />
 </Border>
 ```

@@ -18,9 +18,9 @@
         <Style x:Key="AccentSwatch" TargetType="{x:Type Border}">
             <Setter Property="Width" Value="78" />
             <Setter Property="Height" Value="34" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
-            <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+            <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
         </Style>
 
         <Style x:Key="AccentCaption" TargetType="{x:Type TextBlock}">
@@ -44,9 +44,9 @@
                     Height="18"
                     VerticalAlignment="Top"
                     c:ResourceSwatch.BackgroundKey="{Binding Swatch}"
-                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}"
-                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
                     Visibility="{Binding Swatch, Converter={StaticResource NullToVis}}" />
 
                 <TextBlock
@@ -174,9 +174,6 @@
 
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-
-            <vm:ColorSystemPreview />
-
             <TextBlock
                 toolkit:Sizing.Size="xl"
                 FontWeight="Bold"

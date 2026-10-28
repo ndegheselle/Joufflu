@@ -6,17 +6,19 @@ nav_order: 8
 
 # Custom input
 
-An input of your own sits with the Joufflu ones when it reads the same design tokens.
+An input of your own sits with the Joufflu ones when it reads the same design tokens: the
+**Input** category of [Design tokens](../themes/tokens.html), so a theme restyling the inputs
+restyles it too.
 The gallery's **Custom input** page builds a star `RatingInput` from a bare `Control`
 step by step; this page lists the rules it follows.
 
 | | Rule | Tokens |
 |---|---|---|
-| **Required** | Background, the card colour: only the stroke tells an input from its card | `Brushes.Surface1Brush` |
-| **Required** | Border colour and thickness | `Brushes.StrokeBrush`, `Dimensions.BorderThickness`, `Dimensions.CornerRadius` |
+| **Required** | Background | `Brushes.InputSurface1Brush` (`InputSurface2Brush` for an elevated part inside: a tag, a track) |
+| **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputBorderThickness`, `Dimensions.InputCornerRadius` |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Hover, focus and disabled states | `Surface1HoverBrush`, `StrokeStrongBrush` (hover), `StrokeFocusBrush` (focus), `Colors.DisabledOpacity` |
+| Optional | Focus and disabled states (an input has no hover) | `InputBorderStrongBrush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -46,9 +48,9 @@ template read them from the control:
 
 ```xml
 <Style TargetType="{x:Type local:RatingInput}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
-    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
     <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
     <Setter Property="Template">
         <Setter.Value>
@@ -57,7 +59,7 @@ template read them from the control:
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.InputCornerRadius}}" />
                     <!-- content -->
                 </Grid>
             </ControlTemplate>
@@ -109,15 +111,12 @@ of the native inputs:
 
 ## States
 
-The native inputs lighten their background on hover and their border on focus, and fade
+An input has no hover state: the native inputs strengthen their border on focus, and fade
 when disabled:
 
 ```xml
-<Trigger Property="IsMouseOver" Value="True">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
-</Trigger>
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
@@ -134,7 +133,7 @@ border red:
 ```xml
 <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
 
-<!-- In Style.Triggers, after the hover and focus triggers so it wins over them -->
+<!-- In Style.Triggers, after the focus trigger so it wins over it -->
 <Trigger Property="Validation.HasError" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
 </Trigger>
@@ -179,5 +178,5 @@ Put the input next to a `TextBox` and compare them:
 
 - in each size, with `Sizing.Size` on a parent panel;
 - after switching between Light and Dark, and to a custom theme;
-- hovered, focused and disabled;
+- focused and disabled;
 - with a binding error, with and without `Validation.ErrorTemplate="{x:Null}"`.

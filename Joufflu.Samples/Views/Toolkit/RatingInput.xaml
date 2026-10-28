@@ -19,7 +19,7 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.InputCornerRadius}}" />
 
             <!--
                 The content sits over the surface, inside Padding. The input paddings are sized so that
@@ -80,10 +80,10 @@
     <!--  ============================ Minimum ============================  -->
     <!--  Background, border colour and thickness, and a one-line height: enough to sit next to native inputs.  -->
     <Style x:Key="RatingInputMinimal" TargetType="{x:Type local:RatingInput}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="Template" Value="{StaticResource RatingInputTemplate}" />
     </Style>
@@ -92,9 +92,9 @@
     <!--  The minimum, plus states, sizes and padding, and the validation badge.  -->
     <Style x:Key="{x:Type local:RatingInput}" TargetType="{x:Type local:RatingInput}">
         <!--  Minimum  -->
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
 
         <!--  Font size and padding, md by default  -->
@@ -111,17 +111,14 @@
         <Setter Property="Template" Value="{StaticResource RatingInputTemplate}" />
 
         <Style.Triggers>
-            <!--  States, as the native inputs have them  -->
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
-            </Trigger>
+            <!--  States, as the native inputs have them: no hover, a strong border on focus  -->
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>
-            <!--  After hover and focus, so the error colour wins over them  -->
+            <!--  After focus, so the error colour wins over it  -->
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
             </Trigger>

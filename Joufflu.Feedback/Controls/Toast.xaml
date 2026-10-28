@@ -20,10 +20,10 @@
             MinWidth="280"
             MaxWidth="380"
             Margin="0,0,0,4"
-            Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
-            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
-            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+            Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="4" />
@@ -42,7 +42,7 @@
 
                 <Grid
                     Grid.Row="1"
-                    Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
+                    Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}"
                     toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />

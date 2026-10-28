@@ -42,11 +42,11 @@
                 x:Name="Panel"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
-                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
-                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -112,7 +112,8 @@
                 <Setter TargetName="Panel" Property="BorderThickness" Value="0" />
                 <Setter TargetName="Panel" Property="CornerRadius" Value="0" />
                 <Setter TargetName="TransparentBackdrop" Property="Opacity" Value="1" />
-                <Setter TargetName="TransparentBackdrop" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BaseBrush}}" />
+                <!--  Gives the title bar back the window's own background  -->
+                <Setter TargetName="TransparentBackdrop" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=Window}}" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

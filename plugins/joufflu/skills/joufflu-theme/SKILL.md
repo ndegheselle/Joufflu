@@ -70,11 +70,18 @@ brush the theme defines.
 
 ### Choosing the colours
 
-- **Surfaces**: `Base` is the page and what a button is filled with; `Surface1` (cards, popups, inputs,
-  rows) sits on it; `Surface2` is only the contrast inside a control (a table or group header, a
-  card secondary, a track). Hover, pressed and the strong and focus strokes are not colours you
-  define: they are a colour mixed 10-40 % toward `Foreground`, so the direction is right in a light
-  and in a dark theme.
+- **Surfaces**: `Base` is the page and, by default, what an action (button) is filled with;
+  `Surface1` is a card and, by default, the background of displays and inputs; `Surface2` an
+  elevated part inside (a header, a card secondary, a track); `Stroke` every border. Hover and the
+  focus borders are not colours you define: they are a colour mixed 10-40 % toward `Foreground`, so
+  the direction is right in a light and in a dark theme.
+- **Categories (optional)**: the controls read three categories, each falling back to the
+  globals when the theme leaves it out: Display (`DisplaySurface1Color`, `DisplaySurface2Color`,
+  `DisplayBorderColor` → `Surface1`/`Surface2`/`Stroke`), Input (`InputSurface1Color`,
+  `InputSurface2Color`, `InputBorderColor` → `Surface1`/`Surface2`/`Stroke`) and Action
+  (`ActionSurface1Color`, `ActionSurface2Color`, `ActionBorderColor` → `Base`/`Surface2`/`Stroke`).
+  Define one only to set a category apart, e.g. white inputs on grey cards:
+  `<Color x:Key="{x:Static joufflu:Colors.InputSurface1Color}">#FFFFFF</Color>`.
 - **Text**: `Foreground` must reach at least 4.5:1 contrast on `Base`, `Surface1` and
   `Surface2`. Muted and disabled text is not a colour: it dims `Foreground` with
   `MutedOpacity` and `DisabledOpacity`.
@@ -152,18 +159,25 @@ resources in `App.xaml`:
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
-    <!-- Rounder: override the scalar AND the composite built from it -->
-    <sys:Double x:Key="{x:Static joufflu:Dimensions.Radius}">8</sys:Double>
-    <CornerRadius x:Key="{x:Static joufflu:Dimensions.CornerRadius}">8</CornerRadius>
+    <!-- Rounder: the controls read the category keys; override the scalar AND the composite -->
+    <sys:Double x:Key="{x:Static joufflu:Dimensions.DisplayRadius}">8</sys:Double>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.DisplayCornerRadius}">8</CornerRadius>
+    <sys:Double x:Key="{x:Static joufflu:Dimensions.InputRadius}">8</sys:Double>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.InputCornerRadius}">8</CornerRadius>
+    <!-- Pill buttons: a radius of half the height or more (clamped by the buttons) -->
+    <sys:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</sys:Double>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">16</CornerRadius>
 
     <!-- Denser controls -->
     <sys:Double x:Key="{x:Static joufflu:Dimensions.HeightMd}">28</sys:Double>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.PaddingMd}">10,3</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionPaddingMd}">10,3</Thickness>
     <Thickness x:Key="{x:Static joufflu:Dimensions.InputPaddingMd}">5,3</Thickness>
 </ResourceDictionary>
 ```
 
-Pairs to keep in sync: `Radius`/`CornerRadius`, `Thickness`/`BorderThickness`,
+Pairs to keep in sync: `XRadius`/`XCornerRadius` per category (`Display`, `Input`, `Action`),
+`Radius`/`CornerRadius` and `Thickness`/`BorderThickness` (global, app layout only), the
+category `XBorderThickness`, `DisplayPadding`,
 `Spacing`/`SpacingThickness`, `TitleBarHeight`/`TitleBarHeightOffset` (`0,<height>,0,0`),
 `HeightEmbedded` ≈ 0.625 × `HeightMd`.
 

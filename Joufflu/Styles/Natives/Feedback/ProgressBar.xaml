@@ -8,8 +8,8 @@
 
     <Style x:Key="{x:Type ProgressBar}" TargetType="ProgressBar">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface2Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="8" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -23,7 +23,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                             <Border.CornerRadius>
                                 <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
                                     <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
@@ -37,7 +37,7 @@
                             x:Name="PART_Indicator"
                             Background="{TemplateBinding Foreground}"
                             HorizontalAlignment="Left"
-                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                             <Border.CornerRadius>
                                 <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
                                     <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
@@ -51,7 +51,7 @@
                         <Border
                             x:Name="IndeterminateRoot"
                             ClipToBounds="True"
-                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}"
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
                             Visibility="Collapsed">
                             <Border.CornerRadius>
                                 <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
@@ -66,8 +66,8 @@
                                 Fill="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Left"
                                 Opacity="0.85"
-                                RadiusX="8"
-                                RadiusY="8">
+                                RadiusX="{Binding CornerRadius.TopLeft, ElementName=IndeterminateRoot}"
+                                RadiusY="{Binding CornerRadius.TopLeft, ElementName=IndeterminateRoot}">
                                 <Rectangle.RenderTransform>
                                     <TranslateTransform x:Name="IndeterminateTransform" X="-80" />
                                 </Rectangle.RenderTransform>

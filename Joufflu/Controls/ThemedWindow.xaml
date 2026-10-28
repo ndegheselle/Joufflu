@@ -33,22 +33,22 @@
         </Setter>
     </Style>
 
-    <!--  Close button: same flat template, but a red hover highlight.  -->
+    <!--  Close button: same flat template, but a danger hover highlight.  -->
     <Style
         x:Key="WindowCloseButtonStyle"
         BasedOn="{StaticResource WindowCaptionButtonStyle}"
         TargetType="{x:Type Button}">
-        <Setter Property="Tag" Value="#E81123" />
+        <Setter Property="Tag" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
     </Style>
 
     <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:ThemedWindow}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BaseBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
         <Setter Property="TitleBarForeground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.BaseBrush}}" />
-        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BaseHoverBrush}}" />
+        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
@@ -181,7 +181,7 @@
                         </Trigger>
 
                         <Trigger SourceName="PART_CloseButton" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="#ffffff" />
+                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
                         </Trigger>
 
                         <Trigger Property="ResizeMode" Value="NoResize">

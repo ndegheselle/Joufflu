@@ -24,7 +24,7 @@
                 Margin="0,-6,-6,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
+                Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
                 Tag="{Binding AdornedElement.(Validation.Errors), ElementName=Adorner}"
                 ToolTipService.BetweenShowDelay="0"
                 ToolTipService.InitialShowDelay="0">

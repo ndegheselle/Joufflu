@@ -214,6 +214,26 @@
 
                     <ScrollViewer Margin="0,12,0,0" VerticalScrollBarVisibility="Auto">
                         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                            <!--  Mode: the simple one edits the global tokens, every category following them; the complete one each category on its own  -->
+                            <StackPanel toolkit:Spacing.Gap="0,6">
+                                <StackPanel toolkit:Spacing.Gap="4,0" Orientation="Horizontal">
+                                    <RadioButton
+                                        Content="Simple"
+                                        GroupName="CustomizerMode"
+                                        IsChecked="{Binding IsSimple, Mode=TwoWay}"
+                                        Style="{StaticResource GhostToggleButton}" />
+                                    <RadioButton
+                                        Content="Complete"
+                                        GroupName="CustomizerMode"
+                                        IsChecked="{Binding IsComplete, Mode=TwoWay}"
+                                        Style="{StaticResource GhostToggleButton}" />
+                                </StackPanel>
+                                <TextBlock
+                                    Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                    Text="Simple: the surfaces and the shape are set once, displays, inputs and actions follow them. Complete: each category gets its own colours, radius, border and padding, starting from the simple values."
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
                             <!--  Preset themes  -->
                             <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
                                 <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Preset themes" />
@@ -272,9 +292,35 @@
                                 </ItemsControl>
                             </StackPanel>
 
+                            <!--  Categories, complete mode only  -->
+                            <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Visibility="{Binding IsComplete, Converter={StaticResource BoolToVis}}">
+                                <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Categories" />
+                                <ItemsControl ItemsSource="{Binding Categories}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type vm:ThemeCategoryEditor}">
+                                            <StackPanel Margin="0,0,0,10">
+                                                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Name}" />
+                                                <TextBlock
+                                                    Margin="0,0,0,4"
+                                                    Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                                    Text="{Binding Description}"
+                                                    TextWrapping="Wrap" />
+                                                <ItemsControl ItemTemplate="{StaticResource ColorRowTemplate}" ItemsSource="{Binding Colors}" />
+                                                <ItemsControl ItemTemplate="{StaticResource DimensionRowTemplate}" ItemsSource="{Binding Dimensions}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
                             <!--  Dimensions  -->
                             <StackPanel toolkit:Spacing.Gap="0,10">
                                 <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Dimensions" />
+                                <TextBlock
+                                    Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                    Text="In the complete mode, the shape below is the one of an app's own layout: the controls take the radius, border and padding of their category, and the control padding gives way to them."
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding IsComplete, Converter={StaticResource BoolToVis}}" />
                                 <ItemsControl ItemsSource="{Binding DimensionGroups}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ThemeDimensionGroup}">
@@ -287,8 +333,10 @@
                                 </ItemsControl>
                                 <ItemsControl ItemTemplate="{StaticResource ScaleRowTemplate}" ItemsSource="{Binding Scales}">
                                     <ItemsControl.ItemContainerStyle>
+                                        <!--  The control padding is hidden in the complete mode, where each category has its own  -->
                                         <Style TargetType="ContentPresenter">
                                             <Setter Property="Margin" Value="0,0,0,10" />
+                                            <Setter Property="Visibility" Value="{Binding IsShown, Converter={StaticResource BoolToVis}}" />
                                         </Style>
                                     </ItemsControl.ItemContainerStyle>
                                 </ItemsControl>
@@ -446,10 +494,16 @@
                             <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Surfaces &amp; badges" />
                             <Border Style="{StaticResource Card}">
                                 <StackPanel toolkit:Spacing.Gap="0,8">
-                                    <TextBlock Text="Elevated surface (Background 100)" />
+                                    <TextBlock Text="Display surface 1" />
                                     <Border Style="{StaticResource CardSecondary}">
-                                        <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="Selected surface (Background 200)" />
+                                        <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="Display surface 2" />
                                     </Border>
+                                    <!--  The items of a display are actions without a fill at rest  -->
+                                    <ListBox SelectedIndex="1">
+                                        <ListBoxItem>First item</ListBoxItem>
+                                        <ListBoxItem>Selected item</ListBoxItem>
+                                        <ListBoxItem>Third item</ListBoxItem>
+                                    </ListBox>
                                     <WrapPanel toolkit:Spacing.Gap="8,8">
                                         <feedback:Badge>Default</feedback:Badge>
                                         <feedback:Badge toolkit:Sizing.Size="xs">Small</feedback:Badge>

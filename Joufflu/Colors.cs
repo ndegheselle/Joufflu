@@ -12,6 +12,25 @@ public static class Colors
 
     public static ComponentResourceKey StrokeColor => new ComponentResourceKey(typeof(Colors), "StrokeColor"); // Borders, separators, icon strokes
 
+    // Categories. Optional: a theme that does not define one gets the global colour it falls back to (in brackets).
+    // Display: what shows content without being interacted with (card, popup, expander, group box, the frame of a
+    // list, tree, grid, menu or tab control). Surface1 is its background, Surface2 an elevated part (a header).
+    public static ComponentResourceKey DisplaySurface1Color => new ComponentResourceKey(typeof(Colors), "DisplaySurface1Color"); // (Surface1)
+    public static ComponentResourceKey DisplaySurface2Color => new ComponentResourceKey(typeof(Colors), "DisplaySurface2Color"); // (Surface2)
+    public static ComponentResourceKey DisplayBorderColor => new ComponentResourceKey(typeof(Colors), "DisplayBorderColor"); // (Stroke)
+
+    // Input: what takes a value (text box, combo box, check box, radio button, slider). Surface2 is an elevated part
+    // inside it (a tag, a track).
+    public static ComponentResourceKey InputSurface1Color => new ComponentResourceKey(typeof(Colors), "InputSurface1Color"); // (Surface1)
+    public static ComponentResourceKey InputSurface2Color => new ComponentResourceKey(typeof(Colors), "InputSurface2Color"); // (Surface2)
+    public static ComponentResourceKey InputBorderColor => new ComponentResourceKey(typeof(Colors), "InputBorderColor"); // (Stroke)
+
+    // Action: what runs something (button, toggle button). The items of a display (rows, menu items, tabs) are
+    // actions without a fill at rest. Filled with the page colour by default, so on a display it reads as set into it.
+    public static ComponentResourceKey ActionSurface1Color => new ComponentResourceKey(typeof(Colors), "ActionSurface1Color"); // (Base)
+    public static ComponentResourceKey ActionSurface2Color => new ComponentResourceKey(typeof(Colors), "ActionSurface2Color"); // (Surface2)
+    public static ComponentResourceKey ActionBorderColor => new ComponentResourceKey(typeof(Colors), "ActionBorderColor"); // (Stroke)
+
     // Primary
     public static ComponentResourceKey PrimaryColor => new ComponentResourceKey(typeof(Colors), "PrimaryColor");
     public static ComponentResourceKey PrimaryContentColor => new ComponentResourceKey(typeof(Colors), "PrimaryContentColor");
@@ -45,17 +64,29 @@ public static class Brushes
 {
     public static ComponentResourceKey ForegroundBrush => new ComponentResourceKey(typeof(Brushes), "ForegroundBrush");
 
+    // The global neutrals, for an app's own layout. The controls use the category brushes below.
     public static ComponentResourceKey BaseBrush => new ComponentResourceKey(typeof(Brushes), "BaseBrush");
-    public static ComponentResourceKey BaseHoverBrush => new ComponentResourceKey(typeof(Brushes), "BaseHoverBrush");
-
     public static ComponentResourceKey Surface1Brush => new ComponentResourceKey(typeof(Brushes), "Surface1Brush");
-    public static ComponentResourceKey Surface1HoverBrush => new ComponentResourceKey(typeof(Brushes), "Surface1HoverBrush");
-
     public static ComponentResourceKey Surface2Brush => new ComponentResourceKey(typeof(Brushes), "Surface2Brush");
-    public static ComponentResourceKey Surface2HoverBrush => new ComponentResourceKey(typeof(Brushes), "Surface2HoverBrush");
-
     public static ComponentResourceKey StrokeBrush => new ComponentResourceKey(typeof(Brushes), "StrokeBrush");
-    public static ComponentResourceKey StrokeStrongBrush => new ComponentResourceKey(typeof(Brushes), "StrokeStrongBrush");
+
+    // Display: no states.
+    public static ComponentResourceKey DisplaySurface1Brush => new ComponentResourceKey(typeof(Brushes), "DisplaySurface1Brush");
+    public static ComponentResourceKey DisplaySurface2Brush => new ComponentResourceKey(typeof(Brushes), "DisplaySurface2Brush");
+    public static ComponentResourceKey DisplayBorderBrush => new ComponentResourceKey(typeof(Brushes), "DisplayBorderBrush");
+
+    // Input: no hover, a strong border on focus.
+    public static ComponentResourceKey InputSurface1Brush => new ComponentResourceKey(typeof(Brushes), "InputSurface1Brush");
+    public static ComponentResourceKey InputSurface2Brush => new ComponentResourceKey(typeof(Brushes), "InputSurface2Brush");
+    public static ComponentResourceKey InputBorderBrush => new ComponentResourceKey(typeof(Brushes), "InputBorderBrush");
+    public static ComponentResourceKey InputBorderStrongBrush => new ComponentResourceKey(typeof(Brushes), "InputBorderStrongBrush");
+
+    // Action: a stronger background on hover, a strong border on focus, a translation when pressed.
+    public static ComponentResourceKey ActionSurface1Brush => new ComponentResourceKey(typeof(Brushes), "ActionSurface1Brush");
+    public static ComponentResourceKey ActionSurface2Brush => new ComponentResourceKey(typeof(Brushes), "ActionSurface2Brush");
+    public static ComponentResourceKey ActionBorderBrush => new ComponentResourceKey(typeof(Brushes), "ActionBorderBrush");
+    public static ComponentResourceKey ActionHoverBrush => new ComponentResourceKey(typeof(Brushes), "ActionHoverBrush");
+    public static ComponentResourceKey ActionBorderStrongBrush => new ComponentResourceKey(typeof(Brushes), "ActionBorderStrongBrush");
 
     // Primary
     public static ComponentResourceKey PrimaryBrush => new ComponentResourceKey(typeof(Brushes), "PrimaryBrush");

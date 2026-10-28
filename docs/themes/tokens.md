@@ -24,10 +24,10 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <!-- Always DynamicResource: a theme swap, or the customizer editing a
      dimension, has to reach controls already on screen. -->
 <Border
-    Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
-    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
-    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
 
 <!-- The raw Color is there for what a brush cannot express -->
 <GradientStop Offset="0" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
@@ -45,24 +45,65 @@ animations and anything that needs the raw value.
 
 ### Surfaces
 
-Five colours a theme defines for the neutrals, by where a control sits. Every state is derived from
-them by mixing a colour toward the `Foreground`, so the direction is right in a light and in a dark
-theme; no theme defines a hover or a pressed colour.
+The global neutrals a theme defines. The controls do not read them directly but through the three
+categories below, which fall back to them unless the theme gives a category colour of its own. Use
+them for an app's own layout.
 
 | Key | Used for |
 |---|---|
-| `Base` | The page, and what a button is filled with, so on a card it reads as set into it. A button is not put directly on the page. |
-| `Surface1` | The card and what rests on it: inputs (told from the card by their stroke), popups, rows. |
-| `Surface2` | Only the contrast inside a control: a table or group header, a card secondary, a track, a badge. |
-| `Stroke` | Borders, separators and the strokes of icons: default border of every framed control. |
-| `BaseHoverBrush`, `BasePressedBrush` | Derived from `Base` (10%, 15% toward `Foreground`): a button hovered or pressed. |
-| `Surface1HoverBrush`, `Surface1PressedBrush` | Derived from `Surface1`: a hovered input, a row, a menu item. |
-| `Surface2HoverBrush`, `Surface2PressedBrush` | Derived from `Surface2`: a row inside a header or a card secondary. |
-| `StrokeStrongBrush` | Derived from `Stroke` (15%): the border of a control that is hovered or pressed. |
-| `StrokeFocusBrush` | Derived from `Stroke` (40%): the border of a control that has the focus. |
+| `Base` | The page, and by default what an action is filled with, so on a display it reads as set into it. An action is not put directly on the page. |
+| `Surface1` | A card, and by default the background of a display and of an input. |
+| `Surface2` | An elevated part inside a card, and by default the `Surface2` of every category. |
+| `Stroke` | A border or a separator, and by default the border of every category. |
 
-States: focus takes the focus stroke, hover and pressed a stronger fill and the strong stroke, disabled
-is `DisabledOpacity`.
+### Categories
+
+Every control belongs to one of three categories, each with a background (`Surface1`), an elevated
+background (`Surface2`) and a `Border`. The category colours are optional: a theme that leaves one
+out gets the global colour in brackets, through a `ColorFallback`. The states are always the same,
+derived by mixing a colour toward the `Foreground`, so no theme defines a hover colour. Disabled is
+`DisabledOpacity`, selected and checked are the primary.
+
+**Display**: what shows content without being interacted with: card, popup, tooltip, expander,
+group box, and the frame of a list, tree, grid, menu or tab control. No states. Its items (rows,
+menu items, tabs, navigation entries) are actions without a fill at rest.
+
+| Key | Used for |
+|---|---|
+| `DisplaySurface1` | The background (`Surface1`). |
+| `DisplaySurface2` | An elevated part: a header, a nested area (`Surface2`). |
+| `DisplayBorder` | The border and the separators (`Stroke`). |
+
+**Input**: what takes a value: text box, combo box, check box, radio button, slider. No hover;
+focus is a strong border.
+
+| Key | Used for |
+|---|---|
+| `InputSurface1` | The background (`Surface1`). |
+| `InputSurface2` | An elevated part inside: a tag, a track (`Surface2`). |
+| `InputBorder` | The border (`Stroke`). |
+| `InputBorderStrongBrush` | Derived, the border mixed 40% toward `Foreground`: the border of a focused input. |
+
+**Action**: what runs something: button, toggle button. Hover is a stronger background, focus a
+strong border, pressed a translation down rather than a colour.
+
+| Key | Used for |
+|---|---|
+| `ActionSurface1` | The background (`Base`). |
+| `ActionSurface2` | An elevated part inside (`Surface2`). |
+| `ActionBorder` | The border (`Stroke`). |
+| `ActionHoverBrush` | Derived, the fill mixed 10% toward `Foreground`: a hovered action or display item. |
+| `ActionBorderStrongBrush` | Derived: the border of a focused action or display item. |
+
+A theme overrides a category by defining its colour, for example inputs set apart from the cards:
+
+```xml
+<Color x:Key="{x:Static joufflu:Colors.InputSurface1Color}">#FFFFFF</Color>
+<Color x:Key="{x:Static joufflu:Colors.ActionBorderColor}">#A1A1AA</Color>
+```
+
+`ColorFallback` is public: a library of your own can declare an optional colour the same way (see
+`Joufflu/Styles/Brushes.xaml`).
 
 ### Text
 
@@ -117,6 +158,19 @@ otherwise.
 | `BorderThickness` | `Thickness` | `Thickness` on all four sides, for a uniform border. |
 | `Radius` | `double` | Base corner radius (`4`). |
 | `CornerRadius` | `CornerRadius` | `Radius` on all four corners, for a uniformly rounded border. |
+| `DisplayRadius`, `InputRadius`, `ActionRadius` | `double` | The radius of each category (`4`). The controls clamp it to half their height, so a large one gives a pill. |
+| `DisplayCornerRadius`, `InputCornerRadius`, `ActionCornerRadius` | `CornerRadius` | The radius of each category on all four corners. |
+| `DisplayBorderThickness`, `InputBorderThickness`, `ActionBorderThickness` | `Thickness` | The border of each category (`1`). |
+| `DisplayPadding` | `Thickness` | The padding inside a display (`12`). An action is padded by `ActionPaddingXs`…`ActionPaddingLg`, an input by `InputPaddingXs`…`InputPaddingLg`. |
+
+The global `Radius`, `CornerRadius`, `Thickness` and `BorderThickness` are for an app's own layout:
+the controls read the category keys. Override a category key in a dictionary merged after
+`Resources.xaml` (or in a registered theme) to reshape that category alone:
+
+```xml
+<CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">16</CornerRadius>
+<system:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</system:Double>
+```
 
 ### Layout
 
@@ -163,11 +217,11 @@ the border.
 
 | Key | Value | Input key | Value |
 |---|---|---|---|
-| `PaddingXs` | `6,2` | `InputPaddingXs` | `3,2` |
-| `PaddingSm` | `9,3` | `InputPaddingSm` | `4.5,3` |
-| `PaddingMd` | `12,4` | `InputPaddingMd` | `6,4` |
-| `PaddingLg` | `18,6` | `InputPaddingLg` | `9,6` |
+| `ActionPaddingXs` | `6,2` | `InputPaddingXs` | `3,2` |
+| `ActionPaddingSm` | `9,3` | `InputPaddingSm` | `4.5,3` |
+| `ActionPaddingMd` | `12,4` | `InputPaddingMd` | `6,4` |
+| `ActionPaddingLg` | `18,6` | `InputPaddingLg` | `9,6` |
 
-`PaddingMd` and `InputPaddingMd` are the defaults.
+`ActionPaddingMd` and `InputPaddingMd` are the defaults.
 
 See the **Design tokens** page in the sample gallery for the same reference with live swatches.

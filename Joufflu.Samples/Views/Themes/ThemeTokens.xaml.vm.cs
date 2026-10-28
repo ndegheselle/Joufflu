@@ -37,40 +37,54 @@ public class ThemeTokensViewModel : ObservableObject
     [
         new TokenGroup(
             "Surfaces",
-            "Five colours a theme defines for the neutrals, by where a control sits. Every state is derived from them by mixing a colour toward the Foreground: hover 10%, pressed 15%, the strong stroke 15%, the focus stroke 40%. Disabled is an opacity.",
+            "Five colours a theme defines for the neutrals. The controls do not read them directly but through the three categories below, which fall back to them unless the theme gives a category colour of its own.",
             [
                 new TokenEntry(
                     "Base",
-                    "The page, and what a button is filled with, so on a card it reads as set into it. A button is not put directly on the page.",
+                    "The page, and by default what an action is filled with, so on a display it reads as set into it. An action is not put directly on the page.",
                     Joufflu.Brushes.BaseBrush),
                 new TokenEntry(
                     "Surface1",
-                    "The card and what rests on it: inputs (told from the card by their stroke), popups, rows.",
+                    "A card, and by default the background of a display and of an input.",
                     Joufflu.Brushes.Surface1Brush),
                 new TokenEntry(
                     "Surface2",
-                    "Only the contrast inside a control: a table or group header, a card secondary, a track, a badge.",
+                    "An elevated part inside a card, and by default the Surface2 of every category.",
                     Joufflu.Brushes.Surface2Brush),
                 new TokenEntry(
                     "Stroke",
-                    "Borders, separators and the strokes of icons: default border of every framed control.",
+                    "A border or a separator, and by default the border of every category.",
                     Joufflu.Brushes.StrokeBrush),
-                new TokenEntry(
-                    "BaseHoverBrush, BasePressedBrush",
-                    "Derived from Base: a button hovered or pressed.",
-                    Joufflu.Brushes.BaseHoverBrush),
-                new TokenEntry(
-                    "Surface1HoverBrush, Surface1PressedBrush",
-                    "Derived from Surface1: a hovered input, a row, a menu item.",
-                    Joufflu.Brushes.Surface1HoverBrush),
-                new TokenEntry(
-                    "Surface2HoverBrush, Surface2PressedBrush",
-                    "Derived from Surface2: a row inside a header or a card secondary.",
-                    Joufflu.Brushes.Surface2HoverBrush),
-                new TokenEntry(
-                    "StrokeStrongBrush",
-                    "Derived from Stroke: the border of a control that is hovered or pressed.",
-                    Joufflu.Brushes.StrokeStrongBrush),
+            ]),
+
+        new TokenGroup(
+            "Display",
+            "What shows content without being interacted with: card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. No states. Its items (rows, menu items, tabs) are actions without a fill at rest.",
+            [
+                new TokenEntry("DisplaySurface1", "The background (falls back to Surface1).", Joufflu.Brushes.DisplaySurface1Brush),
+                new TokenEntry("DisplaySurface2", "An elevated part: a header, a nested area (falls back to Surface2).", Joufflu.Brushes.DisplaySurface2Brush),
+                new TokenEntry("DisplayBorder", "The border and the separators (falls back to Stroke).", Joufflu.Brushes.DisplayBorderBrush),
+            ]),
+
+        new TokenGroup(
+            "Input",
+            "What takes a value: text box, combo box, check box, radio button, slider. No hover; focus is a strong border, the border mixed 40% toward the Foreground. Checked is the primary.",
+            [
+                new TokenEntry("InputSurface1", "The background (falls back to Surface1).", Joufflu.Brushes.InputSurface1Brush),
+                new TokenEntry("InputSurface2", "An elevated part inside: a tag, a track (falls back to Surface2).", Joufflu.Brushes.InputSurface2Brush),
+                new TokenEntry("InputBorder", "The border (falls back to Stroke).", Joufflu.Brushes.InputBorderBrush),
+                new TokenEntry("InputBorderStrongBrush", "Derived: the border of a focused input.", Joufflu.Brushes.InputBorderStrongBrush),
+            ]),
+
+        new TokenGroup(
+            "Action",
+            "What runs something: button, toggle button. Hover is a stronger background, the fill mixed 10% toward the Foreground; focus a strong border; pressed a translation down, not a colour. Checked and selected are the primary.",
+            [
+                new TokenEntry("ActionSurface1", "The background (falls back to Base).", Joufflu.Brushes.ActionSurface1Brush),
+                new TokenEntry("ActionSurface2", "An elevated part inside (falls back to Surface2).", Joufflu.Brushes.ActionSurface2Brush),
+                new TokenEntry("ActionBorder", "The border (falls back to Stroke).", Joufflu.Brushes.ActionBorderBrush),
+                new TokenEntry("ActionHoverBrush", "Derived: a hovered action or display item.", Joufflu.Brushes.ActionHoverBrush),
+                new TokenEntry("ActionBorderStrongBrush", "Derived: the border of a focused action or display item.", Joufflu.Brushes.ActionBorderStrongBrush),
             ]),
 
         new TokenGroup(
@@ -175,6 +189,18 @@ public class ThemeTokensViewModel : ObservableObject
                 new TokenEntry(
                     "CornerRadius",
                     "CornerRadius - Radius on all four corners, for a uniformly rounded border."),
+                new TokenEntry(
+                    "DisplayRadius, InputRadius, ActionRadius",
+                    "double - the radius of each category (Radius). The controls clamp it to half their height, so a large one gives a pill."),
+                new TokenEntry(
+                    "DisplayCornerRadius, InputCornerRadius, ActionCornerRadius",
+                    "CornerRadius - the radius of each category on all four corners."),
+                new TokenEntry(
+                    "DisplayBorderThickness, InputBorderThickness, ActionBorderThickness",
+                    "Thickness - the border of each category (BorderThickness)."),
+                new TokenEntry(
+                    "DisplayPadding",
+                    "Thickness - the padding inside a display (SpacingThickness). An action is padded by ActionPaddingXs..Lg, an input by InputPaddingXs..Lg."),
             ]),
 
         new TokenGroup(
@@ -224,10 +250,10 @@ public class ThemeTokensViewModel : ObservableObject
             + "shaped use Padding*, text inputs use InputPadding*, whose halved horizontal keeps the caret "
             + "closer to the border.",
             [
-                new TokenEntry("PaddingXs", "6,2"),
-                new TokenEntry("PaddingSm", "9,3"),
-                new TokenEntry("PaddingMd", "12,4 - the default."),
-                new TokenEntry("PaddingLg", "18,6"),
+                new TokenEntry("ActionPaddingXs", "6,2"),
+                new TokenEntry("ActionPaddingSm", "9,3"),
+                new TokenEntry("ActionPaddingMd", "12,4 - the default."),
+                new TokenEntry("ActionPaddingLg", "18,6"),
                 new TokenEntry("InputPaddingXs", "3,2"),
                 new TokenEntry("InputPaddingSm", "4.5,3"),
                 new TokenEntry("InputPaddingMd", "6,4 - the default."),

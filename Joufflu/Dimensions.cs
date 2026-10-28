@@ -10,6 +10,21 @@ public static class Dimensions
 
     public static ComponentResourceKey BorderThickness => new(typeof(Dimensions), "BorderThickness");
 
+    // Categories, defaulting to the global radius and thickness. Radius is the number, CornerRadius and
+    // BorderThickness what a Border takes. The padding of an action is ActionPaddingXs..Lg, of an input InputPaddingXs..Lg.
+    public static ComponentResourceKey DisplayRadius => new(typeof(Dimensions), "DisplayRadius");
+    public static ComponentResourceKey DisplayCornerRadius => new(typeof(Dimensions), "DisplayCornerRadius");
+    public static ComponentResourceKey DisplayBorderThickness => new(typeof(Dimensions), "DisplayBorderThickness");
+    public static ComponentResourceKey DisplayPadding => new(typeof(Dimensions), "DisplayPadding");
+
+    public static ComponentResourceKey InputRadius => new(typeof(Dimensions), "InputRadius");
+    public static ComponentResourceKey InputCornerRadius => new(typeof(Dimensions), "InputCornerRadius");
+    public static ComponentResourceKey InputBorderThickness => new(typeof(Dimensions), "InputBorderThickness");
+
+    public static ComponentResourceKey ActionRadius => new(typeof(Dimensions), "ActionRadius");
+    public static ComponentResourceKey ActionCornerRadius => new(typeof(Dimensions), "ActionCornerRadius");
+    public static ComponentResourceKey ActionBorderThickness => new(typeof(Dimensions), "ActionBorderThickness");
+
     public static ComponentResourceKey Spacing => new(typeof(Dimensions), "Spacing");
     public static ComponentResourceKey SpacingThickness => new(typeof(Dimensions), "SpacingThickness");
 
@@ -31,10 +46,10 @@ public static class Dimensions
     public static ComponentResourceKey FontSizeLg => new(typeof(Dimensions), "FontSizeLg");
     public static ComponentResourceKey FontSizeXl => new(typeof(Dimensions), "FontSizeXl");
 
-    public static ComponentResourceKey PaddingXs => new(typeof(Dimensions), "PaddingXs");
-    public static ComponentResourceKey PaddingSm => new(typeof(Dimensions), "PaddingSm");
-    public static ComponentResourceKey PaddingMd => new(typeof(Dimensions), "PaddingMd");
-    public static ComponentResourceKey PaddingLg => new(typeof(Dimensions), "PaddingLg");
+    public static ComponentResourceKey ActionPaddingXs => new(typeof(Dimensions), "ActionPaddingXs");
+    public static ComponentResourceKey ActionPaddingSm => new(typeof(Dimensions), "ActionPaddingSm");
+    public static ComponentResourceKey ActionPaddingMd => new(typeof(Dimensions), "ActionPaddingMd");
+    public static ComponentResourceKey ActionPaddingLg => new(typeof(Dimensions), "ActionPaddingLg");
 
     // Text inputs read tighter than a button, the horizontal padding is half a button padding so
     // that the text is more flused against the border

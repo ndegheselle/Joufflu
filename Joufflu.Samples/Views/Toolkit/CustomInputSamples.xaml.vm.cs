@@ -19,10 +19,10 @@ public class CustomInputSamplesViewModel : ObservableValidator
 
     public string MinimumCode =>
         "<Style x:Key=\"RatingInputMinimal\" TargetType=\"{x:Type local:RatingInput}\">\n" +
-        "    <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}\" />\n" +
+        "    <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}\" />\n" +
         "    <Setter Property=\"Padding\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}\" />\n" +
-        "    <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}\" />\n" +
-        "    <Setter Property=\"BorderThickness\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}\" />\n" +
+        "    <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}\" />\n" +
+        "    <Setter Property=\"BorderThickness\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}\" />\n" +
         "    <Setter Property=\"Height\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}\" />\n" +
         "    <Setter Property=\"Template\" Value=\"{StaticResource RatingInputTemplate}\" />\n" +
         "</Style>\n\n" +
@@ -30,17 +30,14 @@ public class CustomInputSamplesViewModel : ObservableValidator
         "<Border Background=\"{TemplateBinding Background}\"\n" +
         "        BorderBrush=\"{TemplateBinding BorderBrush}\"\n" +
         "        BorderThickness=\"{TemplateBinding BorderThickness}\"\n" +
-        "        CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}\" />";
+        "        CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.InputCornerRadius}}\" />";
 
     public string SizesCode =>
         "<Setter Property=\"FontSize\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}\" />\n" +
         "<Setter Property=\"Padding\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}\" />\n\n" +
         "<Style.Triggers>\n" +
-        "    <Trigger Property=\"IsMouseOver\" Value=\"True\">\n" +
-        "        <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}\" />\n" +
-        "    </Trigger>\n" +
         "    <Trigger Property=\"IsKeyboardFocusWithin\" Value=\"True\">\n" +
-        "        <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}\" />\n" +
+        "        <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}\" />\n" +
         "    </Trigger>\n" +
         "    <Trigger Property=\"toolkit:Sizing.Size\" Value=\"xs\">\n" +
         "        <Setter Property=\"Height\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}\" />\n" +
@@ -54,7 +51,7 @@ public class CustomInputSamplesViewModel : ObservableValidator
 
     public string ValidationCode =>
         "<Setter Property=\"Validation.ErrorTemplate\" Value=\"{DynamicResource ValidationErrorTemplate}\" />\n\n" +
-        "<!-- In Style.Triggers, after hover and focus so it wins over them -->\n" +
+        "<!-- In Style.Triggers, after focus so it wins over it -->\n" +
         "<Trigger Property=\"Validation.HasError\" Value=\"True\">\n" +
         "    <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}\" />\n" +
         "</Trigger>\n\n" +

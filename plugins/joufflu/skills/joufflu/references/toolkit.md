@@ -61,12 +61,12 @@ it cheap (look at paths, not file contents).
 
 ```xml
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
     <Border.Style>
         <Style TargetType="Border">
             <!-- Set Background/BorderBrush in the style, not on the element, so the trigger can override -->
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
             <Style.Triggers>
                 <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
                     <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
@@ -123,17 +123,19 @@ builds it on the element from a live `DynamicResource`, with a per-side factor
 
 ```xml
 <!-- Right border only; order Left,Top,Right,Bottom -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 <!-- Top corners only; order TopLeft,TopRight,BottomRight,BottomLeft -->
-<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
         toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
 <!-- Margin everywhere but the top -->
 <Border toolkit:Derive.Margin="{x:Static joufflu:Dimensions.Spacing}"
         toolkit:Derive.MarginFactor="1,0,1,1" />
 ```
 
-The value is the resource **key** (`{x:Static …}`), not a `DynamicResource`. It is written
+Point it at the key of the element's category (`DisplayRadius`, `InputRadius`, `ActionRadius`,
+`DisplayBorderThickness`…) so it follows a theme reshaping that category. The value is the
+resource **key** (`{x:Static …}`), not a `DynamicResource`. It is written
 with `SetCurrentValue`, which beats style setters and local values: don't also set the fed
 property in the same style, move triggers onto the `Derive` property, and don't use it for
 properties consumers must override. `BorderThickness` works on `Border` and any `Control`,

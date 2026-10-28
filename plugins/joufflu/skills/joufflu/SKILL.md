@@ -146,9 +146,16 @@ C# namespaces (these are the real ones; some doc snippets are off):
 ## 5. Rules of thumb for new UI
 
 - **Colours**: never hardcode. Use `{DynamicResource {x:Static joufflu:Brushes.XBrush}}`
-  (`Base`, `Surface1`, `Surface2`, `Stroke`, `Foreground`, and `Primary|Secondary|Success|Info|Warning|Danger`
-  with `X`, `XContent`, and the derived `XElevated`). Always `DynamicResource`, never `StaticResource`, for
-  theme values.
+  (`Foreground`, and `Primary|Secondary|Success|Info|Warning|Danger` with `X`, `XContent`, and the
+  derived `XElevated`). Always `DynamicResource`, never `StaticResource`, for theme values.
+- **Neutrals by category**: a control of your own reads the brushes and shape of its category,
+  not the global `Base`/`Surface1`/`Surface2`/`Stroke` (kept for an app's own layout).
+  Display (card, panel, popup): `DisplaySurface1|DisplaySurface2|DisplayBorder` +
+  `Dimensions.DisplayCornerRadius|DisplayBorderThickness|DisplayPadding`. Input (takes a value):
+  `InputSurface1|InputSurface2|InputBorder`, `InputBorderStrongBrush` on focus, no hover, +
+  `InputCornerRadius|InputBorderThickness`. Action (runs something): `ActionSurface1|ActionSurface2|ActionBorder`,
+  `ActionHoverBrush` on hover, `ActionBorderStrongBrush` on focus, + `ActionCornerRadius|ActionBorderThickness`.
+  See [references/theming.md](references/theming.md).
 - **Spacing**: `toolkit:Spacing.Gap="8"` on the panel instead of margins on each child.
   Page padding: `{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}`.
 - **Size**: `toolkit:Sizing.Size="xs|sm|md|lg"` (`xl` too for text and icons; inherited, `md`

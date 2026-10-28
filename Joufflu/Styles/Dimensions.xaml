@@ -28,6 +28,23 @@
         Right="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
         Top="{StaticResource {x:Static joufflu:Dimensions.Spacing}}" />
 
+    <!--
+        The categories, from the global radius, thickness and spacing. A theme or the customizer overrides one to
+        give a category its own (rounder actions, borderless inputs, roomier cards).
+    -->
+    <system:Double x:Key="{x:Static joufflu:Dimensions.DisplayRadius}">4</system:Double>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.DisplayCornerRadius}">4</CornerRadius>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayBorderThickness}">1</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayPadding}">12</Thickness>
+
+    <system:Double x:Key="{x:Static joufflu:Dimensions.InputRadius}">4</system:Double>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.InputCornerRadius}">4</CornerRadius>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.InputBorderThickness}">1</Thickness>
+
+    <system:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">4</system:Double>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">4</CornerRadius>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionBorderThickness}">1</Thickness>
+
     <!--  Height of the window title bar  -->
     <system:Double x:Key="{x:Static joufflu:Dimensions.TitleBarHeight}">30</system:Double>
     <Thickness x:Key="{x:Static joufflu:Dimensions.TitleBarHeightOffset}" Top="{StaticResource {x:Static joufflu:Dimensions.TitleBarHeight}}" />
@@ -49,10 +66,10 @@
     <system:Double x:Key="{x:Static joufflu:Dimensions.FontSizeXl}">24</system:Double>
 
     <!--  Control paddings  -->
-    <Thickness x:Key="{x:Static joufflu:Dimensions.PaddingXs}">6,2</Thickness>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.PaddingSm}">9,3</Thickness>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.PaddingMd}">12,4</Thickness>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.PaddingLg}">18,6</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionPaddingXs}">6,2</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionPaddingSm}">9,3</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionPaddingMd}">12,4</Thickness>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionPaddingLg}">18,6</Thickness>
 
     <!--  Text input paddings (half the control padding's horizontal, tighter than a button)  -->
     <Thickness x:Key="{x:Static joufflu:Dimensions.InputPaddingXs}">3,2</Thickness>
