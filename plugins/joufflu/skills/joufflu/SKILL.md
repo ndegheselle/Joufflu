@@ -154,7 +154,7 @@ C# namespaces (these are the real ones; some doc snippets are off):
   `Dimensions.DisplayCornerRadius|DisplayBorderThickness|DisplayPadding`. Input (takes a value):
   `InputSurface1|InputSurface2|InputBorder`, `InputBorderStrongBrush` on focus, no hover, +
   `InputCornerRadius|InputBorderThickness`. Action (runs something): `ActionSurface1|ActionSurface2|ActionBorder`,
-  `ActionHoverBrush` on hover, `ActionBorderStrongBrush` on focus, + `ActionCornerRadius|ActionBorderThickness`.
+  `ActionHoverBrush` on hover, no focus border, + `ActionCornerRadius|ActionBorderThickness`.
   See [references/theming.md](references/theming.md).
 - **Spacing**: `toolkit:Spacing.Gap="8"` on the panel instead of margins on each child.
   Page padding: `{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}`.

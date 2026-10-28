@@ -73,7 +73,7 @@ Map by **role**, not by closest hue:
 | Hover of a row or custom clickable item | `Brushes.ActionHoverBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
-| Borders, separators | The category's border: `Brushes.DisplayBorderBrush` (panels, separators), `InputBorderBrush` (`InputBorderStrongBrush` on focus), `ActionBorderBrush` (`ActionBorderStrongBrush` on focus) |
+| Borders, separators | The category's border: `Brushes.DisplayBorderBrush` (panels, separators), `InputBorderBrush` (`InputBorderStrongBrush` on focus), `ActionBorderBrush` (no focus border) |
 | Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryContentBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
 | Light tinted highlight | `Brushes.XSoftBrush` |

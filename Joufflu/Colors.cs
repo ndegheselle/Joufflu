@@ -81,7 +81,8 @@ public static class Brushes
     public static ComponentResourceKey InputBorderBrush => new ComponentResourceKey(typeof(Brushes), "InputBorderBrush");
     public static ComponentResourceKey InputBorderStrongBrush => new ComponentResourceKey(typeof(Brushes), "InputBorderStrongBrush");
 
-    // Action: a stronger background on hover, a strong border on focus, a translation when pressed.
+    // Action: a stronger background on hover, a translation when pressed, no focus border. The strong border is a
+    // dragged grip's (a scroll bar thumb, a grid splitter, a slider thumb).
     public static ComponentResourceKey ActionSurface1Brush => new ComponentResourceKey(typeof(Brushes), "ActionSurface1Brush");
     public static ComponentResourceKey ActionSurface2Brush => new ComponentResourceKey(typeof(Brushes), "ActionSurface2Brush");
     public static ComponentResourceKey ActionBorderBrush => new ComponentResourceKey(typeof(Brushes), "ActionBorderBrush");

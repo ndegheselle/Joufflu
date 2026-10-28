@@ -127,7 +127,7 @@ Use the brush in UI; the colour is for gradients and animations.
 | Input | `InputSurface1`, `InputSurface2`, `InputBorder` | Text box, combo box, check box, radio button, slider (`Surface2`: a tag, a track). Fall back to `Surface1`, `Surface2`, `Stroke` |
 | | derived | `InputBorderStrongBrush`: the border 40 % toward `Foreground`, a focused input |
 | Action | `ActionSurface1`, `ActionSurface2`, `ActionBorder` | Button, toggle button. Fall back to `Base`, `Surface2`, `Stroke` |
-| | derived | `ActionHoverBrush` (fill 10 % toward `Foreground`, hover), `ActionBorderStrongBrush` (focus) |
+| | derived | `ActionHoverBrush` (fill 10 % toward `Foreground`, hover), `ActionBorderStrongBrush` (a hovered or dragged grip) |
 | Text | `Foreground` | Default text and icons |
 | Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XContent` (text/icons on the fill) as colours, and the brush `XElevatedBrush` (hover/pressed fill), `X` mixed 10 % toward `XContent` |
 
@@ -138,7 +138,7 @@ global one through a `ColorFallback` (public, in `Joufflu`). A theme overrides o
 
 State rules, the same for every control: a display has none; an input has no hover and a strong
 border (`InputBorderStrongBrush`) on focus; an action takes `ActionHoverBrush` on hover,
-`ActionBorderStrongBrush` on focus and translates down when pressed (no colour); the items of a
+no focus border and translates down when pressed (no colour); the items of a
 display (rows, menu items, tabs, nav entries) are ghost actions (no fill at rest); disabled is
 `DisabledOpacity`; selected and checked are `Primary`. No theme defines a hover colour.
 

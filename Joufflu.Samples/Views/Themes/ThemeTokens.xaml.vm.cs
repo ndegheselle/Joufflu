@@ -78,13 +78,13 @@ public class ThemeTokensViewModel : ObservableObject
 
         new TokenGroup(
             "Action",
-            "What runs something: button, toggle button. Hover is a stronger background, the fill mixed 10% toward the Foreground; focus a strong border; pressed a translation down, not a colour. Checked and selected are the primary.",
+            "What runs something: button, toggle button. Hover is a stronger background, the fill mixed 10% toward the Foreground; pressed a translation down, not a colour; no focus border. Checked and selected are the primary.",
             [
                 new TokenEntry("ActionSurface1", "The background (falls back to Base).", Joufflu.Brushes.ActionSurface1Brush),
                 new TokenEntry("ActionSurface2", "An elevated part inside (falls back to Surface2).", Joufflu.Brushes.ActionSurface2Brush),
                 new TokenEntry("ActionBorder", "The border (falls back to Stroke).", Joufflu.Brushes.ActionBorderBrush),
                 new TokenEntry("ActionHoverBrush", "Derived: a hovered action or display item.", Joufflu.Brushes.ActionHoverBrush),
-                new TokenEntry("ActionBorderStrongBrush", "Derived: the border of a focused action or display item.", Joufflu.Brushes.ActionBorderStrongBrush),
+                new TokenEntry("ActionBorderStrongBrush", "Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb).", Joufflu.Brushes.ActionBorderStrongBrush),
             ]),
 
         new TokenGroup(

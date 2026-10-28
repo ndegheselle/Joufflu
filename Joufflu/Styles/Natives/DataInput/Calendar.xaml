@@ -31,7 +31,7 @@
 
     <!--
         The buttons of the calendar (days, months, previous / next / header) are items of a display, ghost actions:
-        no fill at rest, a stronger one on hover, a strong border on keyboard focus, no press translation. The states
+        no fill at rest, a stronger one on hover, no focus border, no press translation. The states
         are style triggers rather than template ones, so the selected state of a derived style wins over the hover.
     -->
     <Style x:Key="CalendarButtonBaseStyle" TargetType="ContentControl">
@@ -46,9 +46,6 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
-            </Trigger>
-            <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

@@ -18,8 +18,9 @@
         The states are always the same:
         - Display: none.
         - Input: no hover; focus is a strong border (the border 40 % toward the foreground).
-        - Action: hover is a stronger background (10 % toward the foreground); focus a strong border; pressed a
-        translation, not a colour. The items of a display (rows, menu items, tabs) are actions without a fill at rest.
+        - Action: hover is a stronger background (10 % toward the foreground); pressed a translation, not a colour; no
+        focus border. The items of a display (rows, menu items, tabs) are actions without a fill at rest. The strong
+        action border is left to a grip being hovered or dragged (a scroll bar thumb, a grid splitter, a slider thumb).
         - Disabled is DisabledOpacity, selected and checked the primary.
     -->
 

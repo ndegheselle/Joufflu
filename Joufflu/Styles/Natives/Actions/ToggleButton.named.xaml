@@ -13,7 +13,7 @@
         not type-scoped, so they must not collide with the Button keys).
         The default ToggleButton checked state is Primary: every coloured variant redefines
         IsChecked so it keeps its own hue. Every variant keeps the action border thickness with a transparent border,
-        and none sets the border in a trigger, so the strong focus border of the base style still shows.
+        so it is the size of the other actions.
     -->
 
     <Style

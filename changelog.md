@@ -53,6 +53,7 @@
 
 # Joufflu (unreleased)
 
+- Drop the focus border of an action and of an item of a display (button, toggle button, list box, combo box, list view, tree, data grid, menu, tab, expander and calendar items) : an input keeps its strong border on focus. `ActionBorderStrongBrush` stays, for a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb)
 - Pad a button, a toggle button, a text box, a combo box and a date picker with the horizontal part of their padding only, their content centred in the height of their size, so a large vertical padding no longer crushes their text; a multi-line text box (`AcceptsReturn`) keeps its whole padding. The new `HorizontalThicknessConverter` does it in a template. Pad a combo box and a date picker field with `InputPaddingXs`..`Lg`, as an input, rather than the action padding
 - Add `Dimensions.DisplayPaddingSm` (4), the inside of a compact display : the drop-down of a combo box, a context menu and its submenus, the overflow of a tool bar, a calendar, a tooltip and a status bar take it, a card keeps `DisplayPadding`. The theme customizer writes it at a third of the display padding
 - Give the body text the font size scale : the `Window` style sets `FontSize` to `FontSizeMd`, inherited by every text that sets none, and a `Menu`, a `ContextMenu` and a `StatusBar` take it too rather than the system menu and status font sizes their WPF theme gives them

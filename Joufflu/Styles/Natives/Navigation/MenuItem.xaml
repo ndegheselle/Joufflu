@@ -33,7 +33,7 @@
     </DataTemplate>
 
     <!--
-        An item of the display: no fill at rest, a transparent border so the keyboard focus can show. Its submenu
+        An item of the display: no fill at rest, a transparent border, no focus border. Its submenu
         popup is a display of its own, so it reads the display tokens rather than the item's brushes.
     -->
     <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
@@ -186,10 +186,6 @@
 
                         <Trigger Property="IsHighlighted" Value="True">
                             <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
-                        </Trigger>
-
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
                         </Trigger>
 
                         <Trigger Property="IsEnabled" Value="False">

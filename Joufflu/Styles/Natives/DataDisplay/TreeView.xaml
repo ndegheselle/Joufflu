@@ -8,7 +8,7 @@
 
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
-    <!--  An item of the display: no fill at rest, a transparent border so the keyboard focus can show.  -->
+    <!--  An item of the display: no fill at rest, a transparent border, no focus border.  -->
     <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
@@ -169,11 +169,6 @@
                 </MultiTrigger.Setters>
             </MultiTrigger>
 
-            <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
-            </Trigger>
-
-            <!--  After the focus, so a selected item stays plain primary  -->
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />

@@ -18,7 +18,7 @@
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <!--
-        The buttons of a toolbar are items of the display: no fill and a transparent border at rest. Hover, focus,
+        The buttons of a toolbar are items of the display: no fill and a transparent border at rest. Hover,
         checked and disabled come from the base styles' triggers; the template only drops their press translation
         and their pill radius.
     -->

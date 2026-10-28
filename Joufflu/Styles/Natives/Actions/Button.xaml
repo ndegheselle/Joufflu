@@ -10,7 +10,7 @@
     <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <!--
-        An action. Filled with the action background, a stronger one on hover, a strong border on focus, moved down
+        An action. Filled with the action background, a stronger one on hover, no focus border, moved down
         while pressed. The radius is clamped to half the height, so a large one gives a pill. The height comes from the
         size, so only the horizontal part of the padding applies and the content is centred vertically.
     -->
@@ -112,9 +112,6 @@
         </Setter>
 
         <Style.Triggers>
-            <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
-            </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
             </Trigger>

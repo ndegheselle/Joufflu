@@ -8,8 +8,8 @@
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <!--
-        An item of a display, a ghost action: no fill at rest, a stronger one on hover, a strong border on keyboard
-        focus, the primary when selected (after the focus, so a selected row stays plain primary).
+        An item of a display, a ghost action: no fill at rest, a stronger one on hover, no focus border, the primary
+        when selected.
     -->
     <Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
@@ -57,10 +57,6 @@
                     <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
-
-            <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
-            </Trigger>
 
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />

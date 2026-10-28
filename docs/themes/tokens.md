@@ -84,8 +84,8 @@ focus is a strong border.
 | `InputBorder` | The border (`Stroke`). |
 | `InputBorderStrongBrush` | Derived, the border mixed 40% toward `Foreground`: the border of a focused input. |
 
-**Action**: what runs something: button, toggle button. Hover is a stronger background, focus a
-strong border, pressed a translation down rather than a colour.
+**Action**: what runs something: button, toggle button. Hover is a stronger background, pressed a
+translation down rather than a colour; an action and an item of a display have no focus border.
 
 | Key | Used for |
 |---|---|
@@ -93,7 +93,7 @@ strong border, pressed a translation down rather than a colour.
 | `ActionSurface2` | An elevated part inside (`Surface2`). |
 | `ActionBorder` | The border (`Stroke`). |
 | `ActionHoverBrush` | Derived, the fill mixed 10% toward `Foreground`: a hovered action or display item. |
-| `ActionBorderStrongBrush` | Derived: the border of a focused action or display item. |
+| `ActionBorderStrongBrush` | Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb). |
 
 A theme overrides a category by defining its colour, for example inputs set apart from the cards:
 

@@ -10,8 +10,8 @@
     <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <!--
-        An item of the drop-down, a ghost action: no fill at rest, a stronger one when highlighted, a strong border on
-        keyboard focus, the primary when selected (after the focus, so the selected item stays plain primary).
+        An item of the drop-down, a ghost action: no fill at rest, a stronger one when highlighted, no focus border,
+        the primary when selected.
         At least the height of its size, so a short item lines up with the field; a taller one grows.
     -->
     <Style x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
@@ -60,10 +60,6 @@
                 </MultiTrigger.Conditions>
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
             </MultiTrigger>
-
-            <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
-            </Trigger>
 
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />

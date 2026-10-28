@@ -38,8 +38,7 @@
     </Style>
 
     <!--
-        A cell is an item of the display: no fill at rest, a strong border when it has the keyboard focus. Hover and
-        selection are the row's.
+        A cell is an item of the display: no fill at rest, no focus border. Hover and selection are the row's.
     -->
     <Style TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent" />
@@ -54,7 +53,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
-                    <!--  The padding is inside the border, so the content never touches the keyboard focus  -->
+                    <!--  The padding is inside the border, so the content keeps clear of it  -->
                     <Border
                         Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"
@@ -76,9 +75,6 @@
         </Setter>
 
         <Style.Triggers>
-            <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
-            </Trigger>
             <!--
                 Every cell of a selected row is selected too: the cell gives the content colour (its own Foreground
                 setter would beat the row's), the row draws the fill. A cell selected alone fills itself.
