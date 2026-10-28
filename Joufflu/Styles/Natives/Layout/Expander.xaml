@@ -44,8 +44,8 @@
                                         <DoubleAnimation
                                             Storyboard.TargetName="Chevron"
                                             Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(RotateTransform.Angle)"
-                                            Duration="0:0:0.2"
-                                            To="-180" />
+                                            To="-180"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -55,8 +55,8 @@
                                         <DoubleAnimation
                                             Storyboard.TargetName="Chevron"
                                             Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(RotateTransform.Angle)"
-                                            Duration="0:0:0.2"
-                                            To="0" />
+                                            To="0"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -69,15 +69,17 @@
 
     <Style x:Key="{x:Type Expander}" TargetType="{x:Type Expander}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
-                            
-                                Margin="{TemplateBinding Padding}">
+                    <Border
+                        Margin="{TemplateBinding Padding}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
@@ -85,6 +87,8 @@
                             </Grid.RowDefinitions>
                             <ToggleButton
                                 x:Name="HeaderSite"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Content="{TemplateBinding Header}"
@@ -96,31 +100,29 @@
                                 FontStyle="{TemplateBinding FontStyle}"
                                 FontWeight="{TemplateBinding FontWeight}"
                                 Foreground="{TemplateBinding Foreground}"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                Style="{StaticResource ExpanderHeaderStyle}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                Style="{StaticResource ExpanderHeaderStyle}" />
 
                             <Border
-                                Grid.Row="1"
                                 x:Name="ExpandSiteContainerWrapper"
+                                Grid.Row="1"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <ScrollViewer
                                     x:Name="ExpandSiteContainer"
+                                    MaxHeight="0"
                                     Padding="0"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    HorizontalContentAlignment="Stretch"
-                                    HorizontalScrollBarVisibility="Hidden"
-                                    MaxHeight="0"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalContentAlignment="Stretch"
                                     VerticalContentAlignment="Bottom"
+                                    HorizontalScrollBarVisibility="Hidden"
                                     VerticalScrollBarVisibility="Hidden">
                                     <ContentPresenter
                                         x:Name="ExpandSite"
-                                        Focusable="False"
                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Focusable="False" />
                                 </ScrollViewer>
                             </Border>
                         </Grid>
@@ -134,8 +136,8 @@
                                         <DoubleAnimation
                                             Storyboard.TargetName="ExpandSiteContainer"
                                             Storyboard.TargetProperty="MaxHeight"
-                                            Duration="0:0:0.2"
-                                            To="10000" />
+                                            To="10000"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -145,8 +147,8 @@
                                         <DoubleAnimation
                                             Storyboard.TargetName="ExpandSiteContainer"
                                             Storyboard.TargetProperty="MaxHeight"
-                                            Duration="0:0:0.2"
-                                            To="0" />
+                                            To="0"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -156,9 +158,6 @@
                             <Setter TargetName="ExpandSite" Property="KeyboardNavigation.TabNavigation" Value="None" />
                         </Trigger>
 
-                        <Trigger SourceName="HeaderSite" Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

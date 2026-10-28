@@ -97,7 +97,7 @@ generates a ready-to-merge dictionary interactively.
 Keys are `ComponentResourceKey` statics (typos fail the build). Always `DynamicResource`:
 
 ```xml
-<Border Background="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}"
+<Border Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
         BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
@@ -105,7 +105,7 @@ Keys are `ComponentResourceKey` statics (typos fail the build). Always `DynamicR
 <GradientStop Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" Offset="0" />
 ```
 
-From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.MiddlegroundBrush);`
+From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.Surface1Brush);`
 (`SetResourceReference` keeps it dynamic; `FindResource` would freeze the current value).
 
 ## Colours — `joufflu:Colors.XColor` (Color) / `joufflu:Brushes.XBrush` (SolidColorBrush)
@@ -114,10 +114,11 @@ Use the brush in UI; the colour is for gradients and animations.
 
 | Group | X | Used for |
 |---|---|---|
-| Surfaces | `Background` | Window/page background (furthest back) |
-| | `Middleground` | What sits on the page: cards, popups, drop-downs, a hovered input |
+| Surfaces | `Base` | The page, and what a button is filled with |
+| | `Surface1` | The card and what rests on it: inputs, popups, rows |
+| | `Surface2` | Only the contrast inside a control: a table or group header, a card secondary, a track |
 | | `Stroke` | Borders, separators, icon strokes |
-| | derived | `BackgroundHoverBrush`, `BackgroundSelectedBrush`, `MiddlegroundHoverBrush`, `MiddlegroundSelectedBrush`, `StrokeStrongBrush`: the colour mixed 10-15 % toward `Foreground`, never defined by a theme |
+| | derived | `BaseHoverBrush`, `Surface1HoverBrush`, `Surface2HoverBrush` (and `Pressed`), `StrokeStrongBrush`, `StrokeFocusBrush`: the colour mixed 10-40 % toward `Foreground`, never defined by a theme |
 | Text | `Foreground` | Default text and icons |
 | Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XContent` (text/icons on the fill) as colours, and the brush `XElevatedBrush` (hover/pressed fill), `X` mixed 10 % toward `XContent` |
 

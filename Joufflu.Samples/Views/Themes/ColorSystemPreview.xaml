@@ -15,11 +15,11 @@
             palette picker.
         -->
         <Color x:Key="PreviewForeground">Orange</Color>
-        
-        <Color x:Key="PreviewBackground">Red</Color>
+
+        <Color x:Key="PreviewBase">Red</Color>
         <Color x:Key="PreviewSurface1">Blue</Color>
         <Color x:Key="PreviewSurface2">Cyan</Color>
-        
+
         <Color x:Key="PreviewStroke">DarkCyan</Color>
 
         <!--
@@ -32,51 +32,51 @@
         <joufflu:ColorShade
             x:Key="Surface3Shade"
             Amount="0.06"
-            Color="{DynamicResource PreviewSurface2}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewSurface2}" />
         <joufflu:ColorShade
             x:Key="Surface2HoverShade"
             Amount="0.1"
-            Color="{DynamicResource PreviewSurface2}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewSurface2}" />
         <joufflu:ColorShade
             x:Key="Surface2PressedShade"
             Amount="0.15"
-            Color="{DynamicResource PreviewSurface2}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewSurface2}" />
         <joufflu:ColorShade
             x:Key="Surface1PressedShade"
             Amount="0.15"
-            Color="{DynamicResource PreviewSurface1}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewSurface1}" />
         <joufflu:ColorShade
             x:Key="Surface1HoverShade"
             Amount="0.1"
-            Color="{DynamicResource PreviewSurface1}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewSurface1}" />
         <joufflu:ColorShade
             x:Key="ControlHoverShade"
             Amount="0.1"
-            Color="{DynamicResource PreviewBackground}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewBase}" />
         <joufflu:ColorShade
             x:Key="ControlPressedShade"
             Amount="0.15"
-            Color="{DynamicResource PreviewBackground}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewBase}" />
         <joufflu:ColorShade
             x:Key="StrokeStrongShade"
             Amount="0.15"
-            Color="{DynamicResource PreviewStroke}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewStroke}" />
         <joufflu:ColorShade
             x:Key="StrokeFocusShade"
             Amount="0.4"
-            Color="{DynamicResource PreviewStroke}"
-            Toward="{DynamicResource PreviewForeground}" />
+            Toward="{DynamicResource PreviewForeground}"
+            Color="{DynamicResource PreviewStroke}" />
 
         <SolidColorBrush x:Key="PreviewForegroundBrush" Color="{DynamicResource PreviewForeground}" />
-        <SolidColorBrush x:Key="PreviewBackgroundBrush" Color="{DynamicResource PreviewBackground}" />
+        <SolidColorBrush x:Key="PreviewBaseBrush" Color="{DynamicResource PreviewBase}" />
         <SolidColorBrush x:Key="PreviewSurface1Brush" Color="{DynamicResource PreviewSurface1}" />
         <SolidColorBrush x:Key="PreviewSurface2Brush" Color="{DynamicResource PreviewSurface2}" />
         <SolidColorBrush x:Key="PreviewStrokeBrush" Color="{DynamicResource PreviewStroke}" />
@@ -93,7 +93,10 @@
             <Setter Property="Foreground" Value="{StaticResource PreviewForegroundBrush}" />
         </Style>
 
-        <Style x:Key="PreviewMuted" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource PreviewText}">
+        <Style
+            x:Key="PreviewMuted"
+            BasedOn="{StaticResource PreviewText}"
+            TargetType="{x:Type TextBlock}">
             <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
         </Style>
 
@@ -101,63 +104,87 @@
         <Style x:Key="PreviewControl" TargetType="{x:Type Border}">
             <Setter Property="Width" Value="76" />
             <Setter Property="Height" Value="26" />
-            <Setter Property="Background" Value="{StaticResource PreviewBackgroundBrush}" />
+            <Setter Property="Background" Value="{StaticResource PreviewBaseBrush}" />
             <Setter Property="BorderBrush" Value="{StaticResource PreviewStrokeBrush}" />
             <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
             <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
         </Style>
 
-        <Style x:Key="PreviewControlHover" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewControl}">
+        <Style
+            x:Key="PreviewControlHover"
+            BasedOn="{StaticResource PreviewControl}"
+            TargetType="{x:Type Border}">
             <Setter Property="Background" Value="{StaticResource PreviewControlHoverBrush}" />
             <Setter Property="BorderBrush" Value="{StaticResource PreviewStrokeStrongBrush}" />
         </Style>
 
-        <Style x:Key="PreviewControlPressed" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewControl}">
+        <Style
+            x:Key="PreviewControlPressed"
+            BasedOn="{StaticResource PreviewControl}"
+            TargetType="{x:Type Border}">
             <Setter Property="Background" Value="{StaticResource PreviewControlPressedBrush}" />
             <Setter Property="BorderBrush" Value="{StaticResource PreviewStrokeStrongBrush}" />
         </Style>
 
-        <Style x:Key="PreviewControlFocus" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewControl}">
+        <Style
+            x:Key="PreviewControlFocus"
+            BasedOn="{StaticResource PreviewControl}"
+            TargetType="{x:Type Border}">
             <Setter Property="BorderBrush" Value="{StaticResource PreviewStrokeFocusBrush}" />
         </Style>
 
-        <Style x:Key="PreviewControlDisabled" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewControl}">
+        <Style
+            x:Key="PreviewControlDisabled"
+            BasedOn="{StaticResource PreviewControl}"
+            TargetType="{x:Type Border}">
             <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
         </Style>
 
         <!--
-            An input: the card colour, so on a card only its stroke sets it apart, and the elevated surface where it
-            needs contrast. Its states are the stroke (hover, focus) and, for the hover, one step on its fill.
+            An input: the card colour, so on a card only its stroke sets it apart. Its states are the stroke (hover,
+            focus) and, for the hover, one step on its fill. Surface2 is never an input's: it is the contrast inside a
+            control, a table or group header, a card secondary.
         -->
-        <Style x:Key="PreviewInput" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewControl}">
+        <Style
+            x:Key="PreviewInput"
+            BasedOn="{StaticResource PreviewControl}"
+            TargetType="{x:Type Border}">
             <Setter Property="Background" Value="{StaticResource PreviewSurface1Brush}" />
         </Style>
 
-        <Style x:Key="PreviewInputHover" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewInput}">
+        <Style
+            x:Key="PreviewInputHover"
+            BasedOn="{StaticResource PreviewInput}"
+            TargetType="{x:Type Border}">
             <Setter Property="Background" Value="{StaticResource PreviewSurface1HoverBrush}" />
             <Setter Property="BorderBrush" Value="{StaticResource PreviewStrokeStrongBrush}" />
         </Style>
 
-        <Style x:Key="PreviewInputFocus" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewInput}">
+        <Style
+            x:Key="PreviewInputFocus"
+            BasedOn="{StaticResource PreviewInput}"
+            TargetType="{x:Type Border}">
             <Setter Property="BorderBrush" Value="{StaticResource PreviewStrokeFocusBrush}" />
         </Style>
 
-        <Style x:Key="PreviewInputDisabled" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewInput}">
+        <Style
+            x:Key="PreviewInputDisabled"
+            BasedOn="{StaticResource PreviewInput}"
+            TargetType="{x:Type Border}">
             <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
         </Style>
 
-        <Style x:Key="PreviewInputContrast" TargetType="{x:Type Border}" BasedOn="{StaticResource PreviewInput}">
-            <Setter Property="Background" Value="{StaticResource PreviewSurface2Brush}" />
-        </Style>
-
-        <Style x:Key="PreviewLabel" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource PreviewText}">
+        <Style
+            x:Key="PreviewLabel"
+            BasedOn="{StaticResource PreviewText}"
+            TargetType="{x:Type TextBlock}">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
         <!--  One parent surface: its name, then a button in each state on it.  -->
         <DataTemplate x:Key="StatesTemplate">
-            <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8,0">
+            <StackPanel toolkit:Spacing.Gap="8,0" Orientation="Horizontal">
                 <TextBlock
                     Width="110"
                     VerticalAlignment="Center"
@@ -178,15 +205,12 @@
                 <Border Style="{StaticResource PreviewControlDisabled}">
                     <TextBlock Style="{StaticResource PreviewLabel}" Text="Disabled" />
                 </Border>
-                <Border Style="{StaticResource PreviewInner}">
-                    <TextBlock Style="{StaticResource PreviewLabel}" Text="Inner" />
-                </Border>
             </StackPanel>
         </DataTemplate>
 
-        <!--  One parent surface: its name, then an input in each state on it, and one that needs contrast.  -->
+        <!--  One parent surface: its name, then an input in each state on it.  -->
         <DataTemplate x:Key="InputStatesTemplate">
-            <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8,0">
+            <StackPanel toolkit:Spacing.Gap="8,0" Orientation="Horizontal">
                 <TextBlock
                     Width="110"
                     VerticalAlignment="Center"
@@ -204,16 +228,13 @@
                 <Border Style="{StaticResource PreviewInputDisabled}">
                     <TextBlock Style="{StaticResource PreviewLabel}" Text="Disabled" />
                 </Border>
-                <Border Style="{StaticResource PreviewInputContrast}">
-                    <TextBlock Style="{StaticResource PreviewLabel}" Text="Contrast" />
-                </Border>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
 
     <StackPanel toolkit:Spacing.Gap="12">
 
-        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8,0">
+        <StackPanel toolkit:Spacing.Gap="8,0" Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" Text="Palette" />
             <ComboBox
                 x:Name="PaletteChoice"
@@ -226,7 +247,7 @@
         <Grid Height="400">
             <Border
                 Margin="16,16,0,0"
-                Background="{StaticResource PreviewBackgroundBrush}"
+                Background="{StaticResource PreviewBaseBrush}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
 
             <!--  A card holding an elevated nested card (header, rows) and two buttons.  -->
@@ -237,6 +258,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Background="{StaticResource PreviewSurface1Brush}"
+                BorderBrush="{StaticResource PreviewStrokeBrush}"
+                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                 <StackPanel Margin="12" toolkit:Spacing.Gap="8">
                     <TextBlock Style="{StaticResource PreviewText}" Text="Card" />
@@ -276,10 +299,16 @@
                         </StackPanel>
                     </Border>
                     <StackPanel toolkit:Spacing.Gap="4,0" Orientation="Horizontal">
-                        <Border Width="60" Height="24" Style="{StaticResource PreviewControl}">
+                        <Border
+                            Width="60"
+                            Height="24"
+                            Style="{StaticResource PreviewControl}">
                             <TextBlock Style="{StaticResource PreviewLabel}" Text="Text" />
                         </Border>
-                        <Border Width="60" Height="24" Style="{StaticResource PreviewControl}">
+                        <Border
+                            Width="60"
+                            Height="24"
+                            Style="{StaticResource PreviewControl}">
                             <TextBlock Style="{StaticResource PreviewLabel}" Text="Text" />
                         </Border>
                     </StackPanel>
@@ -294,6 +323,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Background="{StaticResource PreviewSurface1Brush}"
+                BorderBrush="{StaticResource PreviewStrokeBrush}"
+                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                 <StackPanel Margin="12" toolkit:Spacing.Gap="8">
                     <TextBlock Style="{StaticResource PreviewText}" Text="Card" />
@@ -304,14 +335,6 @@
                             VerticalAlignment="Center"
                             Style="{StaticResource PreviewMuted}"
                             Text="Input" />
-                    </Border>
-                    <Border Width="204" Style="{StaticResource PreviewInputContrast}">
-                        <TextBlock
-                            Margin="8,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource PreviewMuted}"
-                            Text="Input needing contrast" />
                     </Border>
                     <Border
                         Width="60"
@@ -369,9 +392,7 @@
                             Style="{StaticResource PreviewText}"
                             Text="An input inside the popup" />
                     </Border>
-                    <Border
-                        HorizontalAlignment="Left"
-                        Style="{StaticResource PreviewControlHover}">
+                    <Border HorizontalAlignment="Left" Style="{StaticResource PreviewControlHover}">
                         <TextBlock Style="{StaticResource PreviewLabel}" Text="Hover" />
                     </Border>
                 </StackPanel>
@@ -380,19 +401,28 @@
 
         <!--  Every state of a button, then of an input, on each surface it can sit on. A button on the page vanishes: the case to avoid.  -->
         <StackPanel toolkit:Spacing.Gap="0,8">
-            <Border Padding="12" Background="{StaticResource PreviewSurface1Brush}" CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+            <Border
+                Padding="12"
+                Background="{StaticResource PreviewSurface1Brush}"
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                 <StackPanel toolkit:Spacing.Gap="0,8">
                     <ContentControl Content="Button, Surface1" ContentTemplate="{StaticResource StatesTemplate}" />
                     <ContentControl Content="Input, Surface1" ContentTemplate="{StaticResource InputStatesTemplate}" />
                 </StackPanel>
             </Border>
-            <Border Padding="12" Background="{StaticResource PreviewSurface2Brush}" CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+            <Border
+                Padding="12"
+                Background="{StaticResource PreviewSurface2Brush}"
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                 <StackPanel toolkit:Spacing.Gap="0,8">
                     <ContentControl Content="Button, Surface2" ContentTemplate="{StaticResource StatesTemplate}" />
                     <ContentControl Content="Input, Surface2" ContentTemplate="{StaticResource InputStatesTemplate}" />
                 </StackPanel>
             </Border>
-            <Border Padding="12" Background="{StaticResource PreviewBackgroundBrush}" CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+            <Border
+                Padding="12"
+                Background="{StaticResource PreviewBaseBrush}"
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                 <ContentControl Content="Button, page (avoid)" ContentTemplate="{StaticResource StatesTemplate}" />
             </Border>
         </StackPanel>

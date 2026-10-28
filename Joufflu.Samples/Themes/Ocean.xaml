@@ -9,8 +9,9 @@
 
     <Color x:Key="{x:Static joufflu:Colors.StrokeColor}">#1B4250</Color>
 
-    <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#0B1E27</Color>
-    <Color x:Key="{x:Static joufflu:Colors.MiddlegroundColor}">#12303B</Color>
+    <Color x:Key="{x:Static joufflu:Colors.BaseColor}">#0B1E27</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface1Color}">#12303B</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface2Color}">#1f3c46</Color>
 
     <!--  Primary: teal  -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#2DD4BF</Color>

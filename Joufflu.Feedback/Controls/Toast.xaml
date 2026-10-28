@@ -20,7 +20,7 @@
             MinWidth="280"
             MaxWidth="380"
             Margin="0,0,0,4"
-            Background="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}"
+            Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
             BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
             CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">

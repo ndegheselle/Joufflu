@@ -203,7 +203,7 @@
 
     <Style x:Key="{x:Type Slider}" TargetType="Slider">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundSelectedBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface2Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="16" />

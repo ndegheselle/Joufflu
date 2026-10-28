@@ -24,7 +24,7 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <!-- Always DynamicResource: a theme swap, or the customizer editing a
      dimension, has to reach controls already on screen. -->
 <Border
-    Background="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}"
+    Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
@@ -45,26 +45,30 @@ animations and anything that needs the raw value.
 
 ### Surfaces
 
-Three colours a theme defines for the ground every control is drawn on, plus the foreground below. The
-hover and selected states are not colours of their own: each is derived by mixing a colour toward the
-`Foreground`, so the direction is right in a light and in a dark theme.
+Five colours a theme defines for the neutrals, by where a control sits. Every state is derived from
+them by mixing a colour toward the `Foreground`, so the direction is right in a light and in a dark
+theme; no theme defines a hover or a pressed colour.
 
 | Key | Used for |
 |---|---|
-| `Background` | Window and page background, the furthest back surface. |
-| `Middleground` | What sits on the page: cards, popups, drop-downs, and the background of a hovered input. |
-| `Stroke` | Borders, separators and the strokes of icons: default border of every framed control (text box, card, drop-down). |
-| `BackgroundHoverBrush` | Derived, `Background` mixed 10% toward `Foreground`: hovered ghost button, list item, window caption button. |
-| `BackgroundSelectedBrush` | Derived, `Background` mixed 15% toward `Foreground`. |
-| `MiddlegroundHoverBrush` | Derived, `Middleground` mixed 10% toward `Foreground`. |
-| `MiddlegroundSelectedBrush` | Derived, `Middleground` mixed 15% toward `Foreground`: slider track, badge, progress bar track. |
-| `StrokeStrongBrush` | Derived, `Stroke` mixed 10% toward `Foreground`: the border of a control that is hovered, focused or selected. |
+| `Base` | The page, and what a button is filled with, so on a card it reads as set into it. A button is not put directly on the page. |
+| `Surface1` | The card and what rests on it: inputs (told from the card by their stroke), popups, rows. |
+| `Surface2` | Only the contrast inside a control: a table or group header, a card secondary, a track, a badge. |
+| `Stroke` | Borders, separators and the strokes of icons: default border of every framed control. |
+| `BaseHoverBrush`, `BasePressedBrush` | Derived from `Base` (10%, 15% toward `Foreground`): a button hovered or pressed. |
+| `Surface1HoverBrush`, `Surface1PressedBrush` | Derived from `Surface1`: a hovered input, a row, a menu item. |
+| `Surface2HoverBrush`, `Surface2PressedBrush` | Derived from `Surface2`: a row inside a header or a card secondary. |
+| `StrokeStrongBrush` | Derived from `Stroke` (15%): the border of a control that is hovered or pressed. |
+| `StrokeFocusBrush` | Derived from `Stroke` (40%): the border of a control that has the focus. |
+
+States: focus takes the focus stroke, hover and pressed a stronger fill and the strong stroke, disabled
+is `DisabledOpacity`.
 
 ### Text
 
 | Key | Used for |
 |---|---|
-| `Foreground` | Default text and icon colour, on `Background` or `Middleground`. |
+| `Foreground` | Default text and icon colour, on `Base`, `Surface1` or `Surface2`. |
 
 ### Accents
 

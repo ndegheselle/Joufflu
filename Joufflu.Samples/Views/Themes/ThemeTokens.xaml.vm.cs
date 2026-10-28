@@ -37,40 +37,44 @@ public class ThemeTokensViewModel : ObservableObject
     [
         new TokenGroup(
             "Surfaces",
-            "Four colours a theme defines: the page, what sits on it, the lines between them and the text. Every hover and selected state below is derived from them, by mixing a colour toward the Foreground.",
+            "Five colours a theme defines for the neutrals, by where a control sits. Every state is derived from them by mixing a colour toward the Foreground: hover 10%, pressed 15%, the strong stroke 15%, the focus stroke 40%. Disabled is an opacity.",
             [
                 new TokenEntry(
-                    "Background",
-                    "Window and page background, the furthest back surface.",
-                    Joufflu.Brushes.BackgroundBrush),
+                    "Base",
+                    "The page, and what a button is filled with, so on a card it reads as set into it. A button is not put directly on the page.",
+                    Joufflu.Brushes.BaseBrush),
                 new TokenEntry(
-                    "Middleground",
-                    "What sits on the page: cards, popups, drop-downs, and the background of a hovered input.",
-                    Joufflu.Brushes.MiddlegroundBrush),
+                    "Surface1",
+                    "The card and what rests on it: inputs (told from the card by their stroke), popups, rows.",
+                    Joufflu.Brushes.Surface1Brush),
+                new TokenEntry(
+                    "Surface2",
+                    "Only the contrast inside a control: a table or group header, a card secondary, a track, a badge.",
+                    Joufflu.Brushes.Surface2Brush),
                 new TokenEntry(
                     "Stroke",
-                    "Borders, separators and the strokes of icons: default border of every framed control (text box, card, drop-down).",
+                    "Borders, separators and the strokes of icons: default border of every framed control.",
                     Joufflu.Brushes.StrokeBrush),
                 new TokenEntry(
-                    "BackgroundHoverBrush",
-                    "Derived: Background mixed 10% toward Foreground. Hovered ghost button, list item or window caption button.",
-                    Joufflu.Brushes.BackgroundHoverBrush),
+                    "BaseHoverBrush, BasePressedBrush",
+                    "Derived from Base: a button hovered or pressed.",
+                    Joufflu.Brushes.BaseHoverBrush),
                 new TokenEntry(
-                    "BackgroundSelectedBrush",
-                    "Derived: Background mixed 15% toward Foreground.",
-                    Joufflu.Brushes.BackgroundSelectedBrush),
+                    "Surface1HoverBrush, Surface1PressedBrush",
+                    "Derived from Surface1: a hovered input, a row, a menu item.",
+                    Joufflu.Brushes.Surface1HoverBrush),
                 new TokenEntry(
-                    "MiddlegroundHoverBrush",
-                    "Derived: Middleground mixed 10% toward Foreground.",
-                    Joufflu.Brushes.MiddlegroundHoverBrush),
-                new TokenEntry(
-                    "MiddlegroundSelectedBrush",
-                    "Derived: Middleground mixed 15% toward Foreground. Slider track, badge, progress bar track.",
-                    Joufflu.Brushes.MiddlegroundSelectedBrush),
+                    "Surface2HoverBrush, Surface2PressedBrush",
+                    "Derived from Surface2: a row inside a header or a card secondary.",
+                    Joufflu.Brushes.Surface2HoverBrush),
                 new TokenEntry(
                     "StrokeStrongBrush",
-                    "Derived: Stroke mixed 10% toward Foreground. The border of a control that is hovered, focused or selected.",
+                    "Derived from Stroke: the border of a control that is hovered or pressed.",
                     Joufflu.Brushes.StrokeStrongBrush),
+                new TokenEntry(
+                    "StrokeFocusBrush",
+                    "Derived from Stroke, stronger still: the border of a control that has the focus.",
+                    Joufflu.Brushes.StrokeFocusBrush),
             ]),
 
         new TokenGroup(
@@ -79,7 +83,7 @@ public class ThemeTokensViewModel : ObservableObject
             [
                 new TokenEntry(
                     "Foreground",
-                    "Default text and icon colour, on Background or Middleground.",
+                    "Default text and icon colour, on Base, Surface1 or Surface2.",
                     Joufflu.Brushes.ForegroundBrush),
             ]),
 
@@ -239,7 +243,7 @@ public class ThemeTokensViewModel : ObservableObject
         "<!-- Always DynamicResource: a theme swap, or the customizer editing a -->\n" +
         "<!-- dimension, has to reach controls already on screen.               -->\n" +
         "<Border\n" +
-        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}\"\n" +
+        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}\"\n" +
         "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}\"\n" +
         "    BorderThickness=\"{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}\"\n" +
         "    CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}\" />\n\n" +

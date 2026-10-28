@@ -49,8 +49,9 @@ Template (fill every colour):
     <!-- Strokes: borders, separators, icon strokes -->
     <Color x:Key="{x:Static joufflu:Colors.StrokeColor}">#D8DEE9</Color>
     <!-- Surfaces -->
-    <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#ECEFF4</Color>
-    <Color x:Key="{x:Static joufflu:Colors.MiddlegroundColor}">#E5E9F0</Color>
+    <Color x:Key="{x:Static joufflu:Colors.BaseColor}">#ECEFF4</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface1Color}">#E5E9F0</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface2Color}">#DADEE5</Color>
     <!-- Accents: X / XContent for Primary, Secondary, Success, Info, Warning, Danger -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#5E81AC</Color>
     <Color x:Key="{x:Static joufflu:Colors.PrimaryContentColor}">#FFFFFF</Color>
@@ -69,11 +70,13 @@ brush the theme defines.
 
 ### Choosing the colours
 
-- **Surfaces**: `Background` is furthest back; `Middleground` (cards, popups, a hovered input) sits
-  on it. Hover and selected are not colours you define: they are `Background` or `Middleground`
-  mixed 10-15 % toward `Foreground`, so the direction is right in a light and in a dark theme.
-- **Text**: `Foreground` must reach at least 4.5:1 contrast on `Background` and
-  `Middleground`. Muted and disabled text is not a colour: it dims `Foreground` with
+- **Surfaces**: `Base` is the page and what a button is filled with; `Surface1` (cards, popups, inputs,
+  rows) sits on it; `Surface2` is only the contrast inside a control (a table or group header, a
+  card secondary, a track). Hover, pressed and the strong and focus strokes are not colours you
+  define: they are a colour mixed 10-40 % toward `Foreground`, so the direction is right in a light
+  and in a dark theme.
+- **Text**: `Foreground` must reach at least 4.5:1 contrast on `Base`, `Surface1` and
+  `Surface2`. Muted and disabled text is not a colour: it dims `Foreground` with
   `MutedOpacity` and `DisabledOpacity`.
 - **Accents**: `XContent` is the text on `X`: pick near-white or a very dark shade of the same
   hue, whichever gives ≥ 4.5:1 on `X`. The hover, `XElevatedBrush`, is not a colour you define: it is

@@ -12,8 +12,9 @@
     <Color x:Key="{x:Static joufflu:Colors.StrokeColor}">#E5E9F0</Color>
 
     <!--  Background Colors  -->
-    <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#FFFFFF</Color>
-    <Color x:Key="{x:Static joufflu:Colors.MiddlegroundColor}">#F7F9FC</Color>
+    <Color x:Key="{x:Static joufflu:Colors.BaseColor}">#FFFFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface1Color}">#F7F9FC</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface2Color}">#eaecef</Color>
 
     <!--  Primary  -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#4B6BFB</Color>

@@ -68,9 +68,46 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Lightness(Resolve(light, Brushes.MiddlegroundHoverBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.MiddlegroundBrush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.MiddlegroundHoverBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.MiddlegroundBrush))), "dark");
+            Assert.That(Lightness(Resolve(light, Brushes.Surface1HoverBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.Surface1Brush))), "light");
+            Assert.That(Lightness(Resolve(dark, Brushes.Surface1HoverBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.Surface1Brush))), "dark");
         });
+    }
+
+    [Test]
+    public void A_button_filled_with_the_base_colour_darkens_on_hover_in_the_light_theme_and_lightens_in_the_dark_one()
+    {
+        ResourceDictionary light = BuiltIn("Light");
+        ResourceDictionary dark = BuiltIn("Dark");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Lightness(Resolve(light, Brushes.BaseHoverBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.BaseBrush))), "light");
+            Assert.That(Lightness(Resolve(dark, Brushes.BaseHoverBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.BaseBrush))), "dark");
+        });
+    }
+
+    [Test]
+    public void The_pressed_fill_is_further_from_the_base_than_the_hover_one()
+    {
+        ResourceDictionary light = BuiltIn("Light");
+
+        double rest = Lightness(Resolve(light, Brushes.BaseBrush));
+        double hover = Math.Abs(rest - Lightness(Resolve(light, Brushes.BaseHoverBrush)));
+        double pressed = Math.Abs(rest - Lightness(Resolve(light, Brushes.BasePressedBrush)));
+
+        Assert.That(pressed, Is.GreaterThan(hover));
+    }
+
+    [Test]
+    public void The_focus_stroke_is_stronger_than_the_hover_one()
+    {
+        ResourceDictionary light = BuiltIn("Light");
+
+        double rest = Lightness(Resolve(light, Brushes.StrokeBrush));
+        double hover = Math.Abs(rest - Lightness(Resolve(light, Brushes.StrokeStrongBrush)));
+        double focus = Math.Abs(rest - Lightness(Resolve(light, Brushes.StrokeFocusBrush)));
+
+        Assert.That(focus, Is.GreaterThan(hover));
     }
 
     [Test]
@@ -107,7 +144,7 @@ public class ColorShadeTests
         Color stroke = Resolve(light, Brushes.StrokeBrush);
         Color foreground = Resolve(light, Brushes.ForegroundBrush);
 
-        Assert.That(Resolve(light, Brushes.StrokeStrongBrush), Is.EqualTo(ColorShade.Mix(stroke, foreground, 0.1)));
+        Assert.That(Resolve(light, Brushes.StrokeStrongBrush), Is.EqualTo(ColorShade.Mix(stroke, foreground, 0.15)));
     }
 
     /// <summary>The theme customizer redefines a colour while the app runs: the derived brushes must follow it.</summary>
@@ -117,11 +154,11 @@ public class ColorShadeTests
         var theme = new ResourceDictionary { Source = new Uri("/Joufflu;component/Themes/Light.xaml", UriKind.Relative) };
         ResourceDictionary resources = WithBrushes(theme);
         var hover = new Border { Resources = resources };
-        hover.SetResourceReference(Border.BackgroundProperty, Brushes.MiddlegroundHoverBrush);
+        hover.SetResourceReference(Border.BackgroundProperty, Brushes.Surface1HoverBrush);
         hover.Measure(new Size(10, 10));
         var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
 
-        theme[Colors.MiddlegroundColor] = pink;
+        theme[Colors.Surface1Color] = pink;
 
         Assert.That(((SolidColorBrush)hover.Background).Color, Is.EqualTo(ColorShade.Mix(pink, Black, 0.1)));
     }

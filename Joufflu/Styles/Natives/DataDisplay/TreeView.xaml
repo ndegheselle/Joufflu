@@ -161,7 +161,7 @@
                     <Condition Property="IsSelected" Value="False" />
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
                 </MultiTrigger.Setters>
             </MultiTrigger>
 

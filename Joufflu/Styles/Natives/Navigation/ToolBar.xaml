@@ -186,7 +186,7 @@
     </Style>
 
     <Style x:Key="{x:Type ToolBar}" TargetType="{x:Type ToolBar}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BaseBrush}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
@@ -223,7 +223,7 @@
                                     PopupAnimation="Slide"
                                     StaysOpen="False">
                                     <Border
-                                        Background="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}"
+                                        Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
                                         BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                                         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
                                         <ToolBarOverflowPanel

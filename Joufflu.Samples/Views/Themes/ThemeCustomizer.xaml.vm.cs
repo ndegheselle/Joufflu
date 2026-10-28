@@ -359,8 +359,9 @@ public class ThemeCustomizerViewModel : ObservableObject
         }
 
         ColorGroups.Add(Group("Surface",
-            ("Background", "BackgroundColor", JColors.BackgroundColor),
-            ("Middleground", "MiddlegroundColor", JColors.MiddlegroundColor),
+            ("Base", "BaseColor", JColors.BaseColor),
+            ("Surface 1", "Surface1Color", JColors.Surface1Color),
+            ("Surface 2", "Surface2Color", JColors.Surface2Color),
             ("Stroke", "StrokeColor", JColors.StrokeColor)));
 
         ColorGroups.Add(Group("Text",

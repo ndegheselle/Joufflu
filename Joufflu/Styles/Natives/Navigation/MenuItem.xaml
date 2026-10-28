@@ -5,7 +5,7 @@
 
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
         <Setter Property="Height" Value="3" />
         <Setter Property="Padding" Value="8,1" />
         <Setter Property="Template">
@@ -30,7 +30,7 @@
 
     <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
         <Setter Property="Padding" Value="8,6" />
@@ -156,7 +156,7 @@
                         </Trigger>
 
                         <Trigger Property="IsHighlighted" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
                         </Trigger>
 
                         <MultiTrigger>

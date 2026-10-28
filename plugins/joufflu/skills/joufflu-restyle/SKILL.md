@@ -66,10 +66,10 @@ Map by **role**, not by closest hue:
 
 | Original role | Token |
 |---|---|
-| Window/page background | Remove it (the `Window` style sets it) or `Brushes.BackgroundBrush` |
-| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.MiddlegroundBrush` |
-| Inset panel inside a card | `CardSecondary` / `Brushes.BackgroundBrush` |
-| Hover / selected row | `Brushes.BackgroundHoverBrush` (usually already done by the native style) |
+| Window/page background | Remove it (the `Window` style sets it) or `Brushes.BaseBrush` |
+| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.Surface1Brush` |
+| Inset panel inside a card | `CardSecondary` / `Brushes.Surface2Brush` |
+| Hover / selected row | `Brushes.Surface1HoverBrush` (usually already done by the native style) |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
 | Borders, separators | `Brushes.StrokeBrush` (`Brushes.StrokeStrongBrush` on hover, focus, selected) |

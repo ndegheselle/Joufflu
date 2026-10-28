@@ -12,7 +12,7 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content: a `Middleground` fill, a themed border,
+The primary surface for grouping content: a `Surface1` fill, a themed border,
 rounded corners and the standard spacing as padding.
 
 ```xml
@@ -29,8 +29,8 @@ rounded corners and the standard spacing as padding.
 
 ## CardSecondary
 
-A subtly inset panel meant to sit **inside** a `Card`. It uses the deeper
-`Background` fill so it reads as a recessed area against the card surface.
+A subtly inset panel meant to sit **inside** a `Card`. It uses the `Surface2`
+fill, the contrast inside a control, so it reads as a distinct area of the card.
 
 ```xml
 <Border Style="{StaticResource Card}">

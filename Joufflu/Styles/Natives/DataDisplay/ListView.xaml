@@ -20,7 +20,7 @@
     <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" TargetType="{x:Type ScrollViewer}">
         <Setter Property="CanContentScroll" Value="True" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -40,7 +40,7 @@
                                 Padding="{TemplateBinding Padding}"
                                 toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
                                 toolkit:Derive.CornerRadiusFactor="1,1,0,0"
-                                Background="{TemplateBinding Background}"
+                                Background="{DynamicResource {x:Static joufflu:Brushes.Surface2Brush}}"
                                 DockPanel.Dock="Top">
                                 <ScrollViewer
                                     Padding="0"
@@ -176,7 +176,7 @@
                     <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundHoverBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
 

@@ -12,11 +12,11 @@ step by step; this page lists the rules it follows.
 
 | | Rule | Tokens |
 |---|---|---|
-| **Required** | Background | `Brushes.BackgroundBrush` |
+| **Required** | Background, the card colour: only the stroke tells an input from its card | `Brushes.Surface1Brush` |
 | **Required** | Border colour and thickness | `Brushes.StrokeBrush`, `Dimensions.BorderThickness`, `Dimensions.CornerRadius` |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Hover, focus and disabled states | `MiddlegroundBrush`, `StrokeStrongBrush`, `Colors.DisabledOpacity` |
+| Optional | Hover, focus and disabled states | `Surface1HoverBrush`, `StrokeStrongBrush` (hover), `StrokeFocusBrush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -46,7 +46,7 @@ template read them from the control:
 
 ```xml
 <Style TargetType="{x:Type local:RatingInput}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}" />
     <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
     <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
@@ -114,7 +114,7 @@ when disabled:
 
 ```xml
 <Trigger Property="IsMouseOver" Value="True">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Surface1HoverBrush}}" />
 </Trigger>
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.StrokeStrongBrush}}" />

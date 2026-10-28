@@ -115,7 +115,7 @@
                                     Padding="8,4"
                                     toolkit:DragSource.AllowedEffects="Move"
                                     toolkit:DragSource.Data="{Binding}"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.MiddlegroundBrush}}"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
                                     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                                     <Border.Style>
                                         <Style TargetType="Border">

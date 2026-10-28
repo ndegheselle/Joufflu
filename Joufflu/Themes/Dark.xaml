@@ -7,8 +7,9 @@
 
     <Color x:Key="{x:Static joufflu:Colors.StrokeColor}">#2b2b2b</Color>
 
-    <Color x:Key="{x:Static joufflu:Colors.BackgroundColor}">#0a0a0a</Color>
-    <Color x:Key="{x:Static joufflu:Colors.MiddlegroundColor}">#171717</Color>
+    <Color x:Key="{x:Static joufflu:Colors.BaseColor}">#0a0a0a</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface1Color}">#171717</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Surface2Color}">#252525</Color>
 
     <!--  Primary: white background, zinc-900 content  -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#FFFAFAFA</Color>

@@ -6,8 +6,9 @@ public static class Colors
 {
     public static ComponentResourceKey ForegroundColor => new ComponentResourceKey(typeof(Colors), "ForegroundColor");
 
-    public static ComponentResourceKey BackgroundColor => new ComponentResourceKey(typeof(Colors), "BackgroundColor");
-    public static ComponentResourceKey MiddlegroundColor => new ComponentResourceKey(typeof(Colors), "MiddlegroundColor"); // Cards, popups, inputs on hover
+    public static ComponentResourceKey BaseColor => new ComponentResourceKey(typeof(Colors), "BaseColor"); // The page, and what a button is filled with
+    public static ComponentResourceKey Surface1Color => new ComponentResourceKey(typeof(Colors), "Surface1Color"); // Cards, popups, inputs
+    public static ComponentResourceKey Surface2Color => new ComponentResourceKey(typeof(Colors), "Surface2Color"); // The contrast inside a control: a header, a card secondary, a track
 
     public static ComponentResourceKey StrokeColor => new ComponentResourceKey(typeof(Colors), "StrokeColor"); // Borders, separators, icon strokes
 
@@ -44,16 +45,21 @@ public static class Brushes
 {
     public static ComponentResourceKey ForegroundBrush => new ComponentResourceKey(typeof(Brushes), "ForegroundBrush");
 
-    public static ComponentResourceKey BackgroundBrush => new ComponentResourceKey(typeof(Brushes), "BackgroundBrush");
-    public static ComponentResourceKey BackgroundHoverBrush => new ComponentResourceKey(typeof(Brushes), "BackgroundHoverBrush");
-    public static ComponentResourceKey BackgroundSelectedBrush => new ComponentResourceKey(typeof(Brushes), "BackgroundSelectedBrush");
+    public static ComponentResourceKey BaseBrush => new ComponentResourceKey(typeof(Brushes), "BaseBrush");
+    public static ComponentResourceKey BaseHoverBrush => new ComponentResourceKey(typeof(Brushes), "BaseHoverBrush");
+    public static ComponentResourceKey BasePressedBrush => new ComponentResourceKey(typeof(Brushes), "BasePressedBrush");
 
-    public static ComponentResourceKey MiddlegroundBrush => new ComponentResourceKey(typeof(Brushes), "MiddlegroundBrush");
-    public static ComponentResourceKey MiddlegroundHoverBrush => new ComponentResourceKey(typeof(Brushes), "MiddlegroundHoverBrush");
-    public static ComponentResourceKey MiddlegroundSelectedBrush => new ComponentResourceKey(typeof(Brushes), "MiddlegroundSelectedBrush");
+    public static ComponentResourceKey Surface1Brush => new ComponentResourceKey(typeof(Brushes), "Surface1Brush");
+    public static ComponentResourceKey Surface1HoverBrush => new ComponentResourceKey(typeof(Brushes), "Surface1HoverBrush");
+    public static ComponentResourceKey Surface1PressedBrush => new ComponentResourceKey(typeof(Brushes), "Surface1PressedBrush");
+
+    public static ComponentResourceKey Surface2Brush => new ComponentResourceKey(typeof(Brushes), "Surface2Brush");
+    public static ComponentResourceKey Surface2HoverBrush => new ComponentResourceKey(typeof(Brushes), "Surface2HoverBrush");
+    public static ComponentResourceKey Surface2PressedBrush => new ComponentResourceKey(typeof(Brushes), "Surface2PressedBrush");
 
     public static ComponentResourceKey StrokeBrush => new ComponentResourceKey(typeof(Brushes), "StrokeBrush");
     public static ComponentResourceKey StrokeStrongBrush => new ComponentResourceKey(typeof(Brushes), "StrokeStrongBrush");
+    public static ComponentResourceKey StrokeFocusBrush => new ComponentResourceKey(typeof(Brushes), "StrokeFocusBrush");
 
     // Primary
     public static ComponentResourceKey PrimaryBrush => new ComponentResourceKey(typeof(Brushes), "PrimaryBrush");

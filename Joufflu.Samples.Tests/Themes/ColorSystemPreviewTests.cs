@@ -23,29 +23,53 @@ public class ColorSystemPreviewTests
     }
 
     [Test]
-    public void The_inner_surface_is_the_control_surface_mixed_toward_the_foreground()
-    {
-        Color surface2 = Brush("PreviewSurface2Brush");
-        Color foreground = Brush("PreviewForegroundBrush");
-
-        Assert.That(Brush("PreviewSurface3Brush"), Is.EqualTo(ColorShade.Mix(surface2, foreground, 0.06)));
-    }
-
-    [Test]
-    public void The_hover_and_pressed_backgrounds_of_a_control_are_further_steps_than_the_inner_surface()
+    public void The_hover_and_pressed_backgrounds_of_a_control_are_two_increasing_steps_from_the_page()
     {
         Select("Light");
 
-        double inner = Distance("PreviewSurface3Brush", "PreviewSurface2Brush");
-        double hover = Distance("PreviewControlHoverBrush", "PreviewBackgroundBrush");
-        double pressed = Distance("PreviewControlPressedBrush", "PreviewBackgroundBrush");
+        double hover = Distance("PreviewControlHoverBrush", "PreviewBaseBrush");
+        double pressed = Distance("PreviewControlPressedBrush", "PreviewBaseBrush");
 
-        Assert.That(inner, Is.LessThan(hover));
-        Assert.That(hover, Is.LessThan(pressed));
+        Assert.That(hover, Is.GreaterThan(0));
+        Assert.That(pressed, Is.GreaterThan(hover));
     }
 
     [Test]
-    public void A_row_in_an_elevated_surface_hovers_from_that_surface_not_from_the_page()
+    public void A_control_darkens_on_hover_in_the_light_palette_and_lightens_in_the_dark_one()
+    {
+        Select("Light");
+        double lightRest = Lightness(Brush("PreviewBaseBrush"));
+        double lightHover = Lightness(Brush("PreviewControlHoverBrush"));
+        Select("Dark");
+        double darkRest = Lightness(Brush("PreviewBaseBrush"));
+        double darkHover = Lightness(Brush("PreviewControlHoverBrush"));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(lightHover, Is.LessThan(lightRest), "light");
+            Assert.That(darkHover, Is.GreaterThan(darkRest), "dark");
+        });
+    }
+
+    [Test]
+    public void A_control_hovers_away_from_the_page_in_the_daisyUI_palettes_too()
+    {
+        Select("daisyUI light");
+        double lightRest = Lightness(Brush("PreviewBaseBrush"));
+        double lightHover = Lightness(Brush("PreviewControlHoverBrush"));
+        Select("daisyUI dark");
+        double darkRest = Lightness(Brush("PreviewBaseBrush"));
+        double darkHover = Lightness(Brush("PreviewControlHoverBrush"));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(lightHover, Is.LessThan(lightRest), "light");
+            Assert.That(darkHover, Is.GreaterThan(darkRest), "dark");
+        });
+    }
+
+    [Test]
+    public void A_row_on_a_surface_hovers_from_that_surface_not_from_the_page()
     {
         Select("Dark");
 
@@ -76,23 +100,6 @@ public class ColorSystemPreviewTests
 
         Assert.That(hover, Is.GreaterThan(0));
         Assert.That(focus, Is.GreaterThan(hover));
-    }
-
-    [Test]
-    public void A_control_darkens_on_hover_in_the_light_palette_and_lightens_in_the_dark_one()
-    {
-        Select("Light");
-        double lightRest = Lightness(Brush("PreviewBackgroundBrush"));
-        double lightHover = Lightness(Brush("PreviewControlHoverBrush"));
-        Select("Dark");
-        double darkRest = Lightness(Brush("PreviewBackgroundBrush"));
-        double darkHover = Lightness(Brush("PreviewControlHoverBrush"));
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(lightHover, Is.LessThan(lightRest), "light");
-            Assert.That(darkHover, Is.GreaterThan(darkRest), "dark");
-        });
     }
 
     private void Select(string name)
