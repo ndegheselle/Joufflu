@@ -15,7 +15,7 @@ live between Light and Dark - no restart, no flicker.
 [![Joufflu.Data on NuGet](https://img.shields.io/nuget/v/Joufflu.Data?label=Joufflu.Data&logo=nuget)](https://www.nuget.org/packages/Joufflu.Data)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
-![preview](./images/preview.png)
+![preview](./images/preview.PNG)
 
 ## Highlights
 
