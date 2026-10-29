@@ -114,7 +114,7 @@ ThemeManager.Instance.Initialize();
 `Settings.settings`, …). The sample app persists a small JSON file under `%AppData%` — see its
 `App.xaml.cs` for the full working example.
 
-## Building a theme switcher
+## Theme switcher
 
 No dedicated switcher control — bind any UI directly to `ThemeManager.Instance.Theme`. Map each
 theme name to a `RadioButton` with the enum-to-boolean converter (it compares by value, so it works

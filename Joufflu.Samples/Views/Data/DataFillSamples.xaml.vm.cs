@@ -22,12 +22,13 @@ public partial class DataFillSamplesViewModel : ObservableObject
     [
         new(EnumDataType.String, "TBD"),
         new(EnumDataType.Integer, -1L),
+        new DataManualPattern(null, "$row.columns['{column name}']"),
     ];
 
     public string FillCode =>
         "var schema = JsonSchema.FromType<Order>();\n" +
         "Node = (DataObject)schema.ToDataNode();\n\n" +
-        "<jata:DataFill Node=\"{Binding Node}\" ManualValues=\"{Binding ManualValues}\" />\n\n" +
+        "<data:DataFill Node=\"{Binding Node}\" ManualValues=\"{Binding ManualValues}\" />\n\n" +
         "Json = Node?.ToToken()?.ToString();";
 
     public DataFillSamplesViewModel() => Generate();

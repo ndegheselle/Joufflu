@@ -12,8 +12,8 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content: a `Background100` fill, a themed border,
-rounded corners and the standard spacing as padding.
+The primary surface for grouping content, a display: a `DisplaySurface1` fill, a
+`DisplayBorder` border, `DisplayCornerRadius` corners and `DisplayPadding` as padding.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -29,8 +29,8 @@ rounded corners and the standard spacing as padding.
 
 ## CardSecondary
 
-A subtly inset panel meant to sit **inside** a `Card`. It uses the deeper
-`Background` fill so it reads as a recessed area against the card surface.
+A subtly inset panel meant to sit **inside** a `Card`. It uses the `DisplaySurface2`
+fill, the elevated part of a display, so it reads as a distinct area of the card.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -44,5 +44,6 @@ A subtly inset panel meant to sit **inside** a `Card`. It uses the deeper
 ```
 
 {: .note }
-> Both styles derive their fill, border, corner radius and padding from the theme
-> resources, so they follow Light / Dark and any custom theme automatically.
+> Both styles read the display tokens (see [Design tokens](../themes/tokens.html)), so
+> they follow Light / Dark and any custom theme automatically, and a theme restyles every
+> card by overriding the `Display*` colours or dimensions.

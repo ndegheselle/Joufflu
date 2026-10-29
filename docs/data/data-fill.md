@@ -18,6 +18,8 @@ and shape are fixed, only values and array items change.
 
 - A property's `description` shows as an info tooltip.
 - **Add** on an array clones its `Template`; array items can be removed.
+- Every editor takes the width of the narrowest one, so they line up whatever their depth
+  (see [shared width](../toolkit/shared-width.md)).
 - The feather toggle forces a field, object or array to one of the
   [manual values](index.md#manual-values), hiding the properties or items of an object or an array.
 

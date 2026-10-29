@@ -1,6 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Samples.Views.Toolkit"
@@ -11,21 +12,35 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
+
     <ControlTemplate x:Key="RatingInputTemplate" TargetType="{x:Type local:RatingInput}">
         <Grid>
-            <!--  The surface: background and border come from the control, so the style (and its triggers) drive them.  -->
+            <!--
+                The surface: background and border come from the control, so the style (and its triggers) drive them.
+                The radius is the input one, clamped to half the height like the native inputs, so a large one gives a pill.
+            -->
             <Border
                 x:Name="Border"
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
+                <Border.CornerRadius>
+                    <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </Border.CornerRadius>
+            </Border>
 
             <!--
-                The content sits over the surface, inside Padding. The input paddings are sized so that
-                an embedded button fills exactly what is left of the smallest height (24 - 2 x 2 = 20).
+                The content sits over the surface. The height comes from the size, so like the native inputs it takes
+                only the horizontal part of Padding and is centred: the embedded buttons (HeightEmbedded) fit at every size.
             -->
-            <Grid Margin="{TemplateBinding Padding}">
+            <Grid VerticalAlignment="Center" Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
@@ -53,7 +68,8 @@
                                     <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsFilled}" Value="False">
-                                    <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                                    <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
+                                    <Setter TargetName="Icon" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
@@ -79,10 +95,10 @@
     <!--  ============================ Minimum ============================  -->
     <!--  Background, border colour and thickness, and a one-line height: enough to sit next to native inputs.  -->
     <Style x:Key="RatingInputMinimal" TargetType="{x:Type local:RatingInput}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="Template" Value="{StaticResource RatingInputTemplate}" />
     </Style>
@@ -91,9 +107,9 @@
     <!--  The minimum, plus states, sizes and padding, and the validation badge.  -->
     <Style x:Key="{x:Type local:RatingInput}" TargetType="{x:Type local:RatingInput}">
         <!--  Minimum  -->
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
 
         <!--  Font size and padding, md by default  -->
@@ -110,17 +126,14 @@
         <Setter Property="Template" Value="{StaticResource RatingInputTemplate}" />
 
         <Style.Triggers>
-            <!--  States, as the native inputs have them  -->
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-            </Trigger>
+            <!--  States, as the native inputs have them: no hover, a strong border on focus  -->
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>
-            <!--  After hover and focus, so the error colour wins over them  -->
+            <!--  After focus, so the error colour wins over it  -->
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
             </Trigger>

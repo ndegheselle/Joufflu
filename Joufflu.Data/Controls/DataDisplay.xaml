@@ -25,8 +25,8 @@
                 <Grid toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <jata:DataIcon Type="{Binding Type}" />
                     <TextBlock
@@ -38,7 +38,7 @@
                     <jonts:FontIcon
                         Grid.Column="2"
                         HorizontalAlignment="Right"
-                        toolkit:ThemedTooltip.Content="{Binding Description}"
+                        ToolTip="{Binding Description}"
                         Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
                         Text="{x:Static jonts:LucideFontIcons.Info}"
                         Visibility="{Binding Description, Converter={x:Static converters:VisibilityConverter.Default}}" />
@@ -52,11 +52,11 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding ManualEntry}" Value="{x:Null}">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding ManualEntry.Value}" Value="{x:Null}">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -64,6 +64,7 @@
             <!--  Row of an object or an array: forced, the entry stands for its children, which are left out.  -->
             <DataTemplate x:Key="DataParentRow">
                 <Grid
+                    MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}"
                     Margin="0,0,2,0"
                     VerticalAlignment="Center"
                     toolkit:Spacing.Gap="4">
@@ -75,8 +76,8 @@
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                     <jonts:FontIcon
                         Grid.Column="1"
-                        toolkit:ThemedTooltip.Content="Forced value"
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
+                        ToolTip="Forced value"
+                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
                     <TextBlock
@@ -99,6 +100,11 @@
         <TreeView.ItemContainerStyle>
             <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <!--
+                    Same rows as DataEdit and DataFill: no item padding, a row as tall as their sm inputs (the MinHeight
+                    of the row templates), so the three read alike side by side.
+                -->
+                <Setter Property="Padding" Value="0" />
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
@@ -122,6 +128,7 @@
             </HierarchicalDataTemplate>
             <DataTemplate DataType="{x:Type jodels:DataValue}">
                 <Grid
+                    MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}"
                     Margin="0,0,2,0"
                     VerticalAlignment="Center"
                     toolkit:Spacing.Gap="4">
@@ -134,12 +141,13 @@
                     <!--  A forced value is flagged the way the toggle forcing it reads.  -->
                     <jonts:FontIcon
                         Grid.Column="1"
-                        toolkit:ThemedTooltip.Content="Forced value"
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
+                        ToolTip="Forced value"
+                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
                     <TextBlock
                         Grid.Column="2"
+                        HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         TextTrimming="CharacterEllipsis">
                         <TextBlock.Text>
@@ -156,7 +164,7 @@
                                     <!--  Null and undefined are no value: they read apart from a text saying "null".  -->
                                     <DataTrigger Binding="{Binding Value}" Value="{x:Null}">
                                         <Setter Property="FontStyle" Value="Italic" />
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                                     </DataTrigger>
                                     <!--  Forced to nothing yet, which writes nothing: read as undefined.  -->
                                     <MultiDataTrigger>
@@ -165,7 +173,7 @@
                                             <Condition Binding="{Binding ManualEntry}" Value="{x:Null}" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="FontStyle" Value="Italic" />
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                                     </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>

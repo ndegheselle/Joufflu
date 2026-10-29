@@ -24,6 +24,11 @@ runtime — by the [theme customizer](../themes/customize-theme.html), for insta
 straight through, and no derived resource key has to be declared or re-pushed by
 hand.
 
+Point it at the key of the category the element belongs to (`DisplayBorderThickness`,
+`DisplayRadius`, `InputRadius`, `ActionRadius`…, see [Design tokens](../themes/tokens.html)), so the
+part follows the rest of the control when a theme reshapes that category. The global `Thickness` and
+`Radius` are for an app's own layout.
+
 ## Factors
 
 Each of the three properties has a matching factor, a `Thickness` (or a
@@ -43,12 +48,12 @@ Point `Derive.BorderThickness` at a resource key and pick the sides with
 `Derive.BorderThicknessFactor`, in the usual `Left,Top,Right,Bottom` order.
 
 ```xml
-<!-- Right edge only, following Dimensions.Thickness live -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<!-- Right edge only, following Dimensions.DisplayBorderThickness live -->
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 
 <!-- Open at the bottom, with a doubled top edge -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
 ```
 
@@ -57,7 +62,7 @@ without a keyed `Thickness`:
 
 ```xml
 <Style TargetType="{x:Type nav:NavigationMenu}">
-    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
+    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
     <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
 </Style>
 ```
@@ -77,7 +82,7 @@ Same shape, with `Derive.CornerRadiusFactor` in the
 
 ```xml
 <!-- Top corners only, matching the border it sits in -->
-<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
         toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
 ```
 

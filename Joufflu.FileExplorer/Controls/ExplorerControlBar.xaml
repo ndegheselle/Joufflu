@@ -53,7 +53,7 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type nodes:IExplorerDirectory}">
                                         <StackPanel Orientation="Horizontal">
-                                            <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" Text="{x:Static fonts:LucideFontIcons.ChevronRight}">
+                                            <fonts:FontIcon Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="{x:Static fonts:LucideFontIcons.ChevronRight}">
                                                 <fonts:FontIcon.Style>
                                                     <Style BasedOn="{StaticResource {x:Type fonts:FontIcon}}" TargetType="{x:Type fonts:FontIcon}">
                                                         <Style.Triggers>

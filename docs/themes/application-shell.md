@@ -32,7 +32,7 @@ buttons.
 </controls:ThemedWindow>
 ```
 
-### Application icon
+### AppIcon
 
 The title bar shows no icon by default. Add an `AppIcon` to
 `ThemedWindow.TitleBarContent` to bring it back: it shows the application's icon (or
@@ -51,7 +51,7 @@ closes the window, like a native icon.
 `TitleBarContent` shares its cell with the title text, so collapse the title or pad it
 when both are shown.
 
-### Title bar over content
+### AllowContentOverTitleBar
 
 Set `AllowContentOverTitleBar="True"` to draw content beneath a transparent title
 bar instead of below it. A full-height side panel's background then reaches the

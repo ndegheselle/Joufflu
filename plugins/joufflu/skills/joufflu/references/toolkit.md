@@ -7,7 +7,8 @@ Attached properties that shape controls and layouts. Prefix `toolkit:`
 
 - `Sizing.Size`: `xs` / `sm` / `md` (default) / `lg`. **Inherited**: set on a panel to size
   every child. Scales height (`Dimensions.Height*`), font size and padding. Honoured by
-  buttons, inputs, `TreeView`, `FontIcon` (also `xl`), `Badge`, `Spinner`, the Joufflu inputs.
+  buttons, inputs, `TreeView`, `FontIcon`, `Badge`, `Spinner`, the Joufflu inputs. `xl` is for text
+  (`TextBlock`) and `FontIcon` only; controls fall back to `md`.
 - `Sizing.IsSquare="True"`: width = height, for icon-only buttons.
 
 ```xml
@@ -33,22 +34,24 @@ the gap is active. Put extra space on a wrapper instead.
 
 ## Tooltip
 
-Themed tooltip shown instantly on hover (native `ToolTip` has a delay).
+Every native `ToolTip` is themed: its style centres it on a side of the element with a small gap
+(not at the mouse) and flips it at screen edges. Set it the usual way.
 
 ```xml
-<Button Content="Save" toolkit:ThemedTooltip.Content="Save your changes" toolkit:ThemedTooltip.Placement="Bottom" />
-<Button Content="Rich">
-    <toolkit:ThemedTooltip.Content>
+<Button Content="Save" ToolTip="Save your changes" toolkit:ThemedTooltip.Placement="Top" />
+<Button Content="Rich" toolkit:ThemedTooltip.MaxWidth="200">
+    <Button.ToolTip>
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
             <TextBlock Text="Any content." />
         </StackPanel>
-    </toolkit:ThemedTooltip.Content>
+    </Button.ToolTip>
 </Button>
 ```
 
-`Placement`: `Top`, `Bottom` (default), `Left`, `Right`; flips at screen edges. Setting
-`Content` to `null` removes it (usable from triggers).
+`ThemedTooltip.Placement` (on the element): `Top`, `Bottom` (default), `Left`, `Right`.
+`ThemedTooltip.MaxWidth` (on the element): width past which the text wraps, `320` by default.
+`ToolTipService.Placement` is overridden by the style; the show delay is the native one.
 
 ## Drag and drop
 
@@ -61,15 +64,15 @@ it cheap (look at paths, not file contents).
 
 ```xml
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
     <Border.Style>
         <Style TargetType="Border">
             <!-- Set Background/BorderBrush in the style, not on the element, so the trigger can override -->
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
             <Style.Triggers>
                 <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
                     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 </Trigger>
             </Style.Triggers>
@@ -123,21 +126,39 @@ builds it on the element from a live `DynamicResource`, with a per-side factor
 
 ```xml
 <!-- Right border only; order Left,Top,Right,Bottom -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 <!-- Top corners only; order TopLeft,TopRight,BottomRight,BottomLeft -->
-<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
         toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
 <!-- Margin everywhere but the top -->
 <Border toolkit:Derive.Margin="{x:Static joufflu:Dimensions.Spacing}"
         toolkit:Derive.MarginFactor="1,0,1,1" />
 ```
 
-The value is the resource **key** (`{x:Static …}`), not a `DynamicResource`. It is written
+Point it at the key of the element's category (`DisplayRadius`, `InputRadius`, `ActionRadius`,
+`DisplayBorderThickness`…) so it follows a theme reshaping that category. The value is the
+resource **key** (`{x:Static …}`), not a `DynamicResource`. It is written
 with `SetCurrentValue`, which beats style setters and local values: don't also set the fed
 property in the same style, move triggers onto the `Derive` property, and don't use it for
 properties consumers must override. `BorderThickness` works on `Border` and any `Control`,
 `CornerRadius` on `Border`, `Margin` on any `FrameworkElement`.
+
+## SharedWidth
+
+Lines up inputs that get different room (rows of a tree at different depths): every element
+with `SharedWidth.IsShared="True"` takes the width of the narrowest one in its group and is
+right aligned. The group is the closest ancestor with `SharedWidth.IsScope="True"`.
+
+```xml
+<TreeView toolkit:SharedWidth.IsScope="True">
+    <!-- in the item template, the input sits in a * column -->
+    <TextBox Grid.Column="1" toolkit:SharedWidth.IsShared="True" />
+</TreeView>
+```
+
+Only visible members count. It sets `HorizontalAlignment` and `Width` on members: don't set
+them yourself. `DataFill` and `DataEdit` already use it for their editors.
 
 ## Animate
 

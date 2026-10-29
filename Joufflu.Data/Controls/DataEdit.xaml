@@ -27,7 +27,7 @@
                 <Grid toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <jata:DataIcon Type="{Binding Type}" />
                     <TextBox
@@ -64,6 +64,7 @@
         <TreeView.ItemContainerStyle>
             <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="Padding" Value="0" />
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
@@ -212,7 +213,7 @@
                 <Grid
                     Margin="0,0,2,0"
                     VerticalAlignment="Center"
-                    toolkit:Spacing.Gap="4">
+                    toolkit:Spacing.Gap="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
@@ -233,7 +234,7 @@
                         Grid.Column="2"
                         toolkit:Sizing.IsSquare="True"
                         toolkit:Sizing.Size="sm"
-                        toolkit:ThemedTooltip.Content="Edit the options">
+                        ToolTip="Edit the options">
                         <ToggleButton.Style>
                             <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
                                 <Setter Property="Visibility" Value="Collapsed" />

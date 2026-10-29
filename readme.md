@@ -20,7 +20,7 @@ live between Light and Dark - no restart, no flicker.
 ## Highlights
 
 - 🌗 **Live Light / Dark theming** - flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system, built to be customized** - semantic colours, dimensions, sizing and spacing exposed as override-able resource keys. Change a token and every control follows; the gallery's **Customize theme** page edits them live, offers presets and generates the dictionary to merge.
+- 🎨 **A real design system, built to be customized** - semantic colours, dimensions, sizing and spacing exposed as override-able resource keys. Change a token and every control follows; the gallery's **Customize theme** window (palette button in its title bar) edits them live, offers presets and generates the dictionary to merge.
 - 🪟 **Custom-chrome window & natives** - a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** - take just the core styles, or add inputs and navigation only where you need them.
 
@@ -59,7 +59,7 @@ existing views (see [`plugins/joufflu`](./plugins/joufflu/README.md)):
 |---|---|
 | **Themes** (`Joufflu`) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and live theme customization |
 | **Natives** (`Joufflu`) | WPF's built-in controls (buttons, text boxes, combo boxes, data grid, …) restyled to match the design system, plus text sizes through `Sizing.Size`, `FontIcon` and the `Card` styles |
-| **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation and drag and drop attached properties, and the rules for building a custom input |
+| **Toolkit** (`Joufflu`, namespace `Joufflu.Toolkit`) | Sizing, spacing, derived dimensions, tooltip, animation, drag and drop and shared width attached properties, and the rules for creating a custom control |
 | **Feedback** (`Joufflu.Feedback`) | `Badge`, `Spinner`, `Toasts` and their `ToastContainer` |
 | **Inputs** (`Joufflu.Inputs`) | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
 | **Navigation** (`Joufflu.Navigation`) | `NavigationMenu`, `Paging`, `OverlayContainer` and awaitable modal overlays shown by an `Overlayer` |
@@ -115,7 +115,7 @@ dictionary (merged **after** the Joufflu resources):
 - **Dimensions** - `joufflu:Dimensions.*` (corner radius, border thickness,
   spacing, control heights, font sizes and padding per size).
 
-Run the gallery and open **Customize theme** to tweak these interactively and
+Run the gallery and open **Customize theme** (palette button in the title bar) to tweak these interactively and
 generate a ready-to-merge dictionary.
 
 ## Running the samples

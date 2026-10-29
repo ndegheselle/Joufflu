@@ -19,7 +19,7 @@
                 toolkit:Sizing.Size="xl"
                 FontWeight="Bold"
                 TextWrapping="Wrap"
-                Text="Toggle button" />
+                Text="Toggle buttons" />
 
             <c:CodeExample
                 Title="Variants"

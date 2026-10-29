@@ -33,22 +33,22 @@
         </Setter>
     </Style>
 
-    <!--  Close button: same flat template, but a red hover highlight.  -->
+    <!--  Close button: same flat template, but a danger hover highlight.  -->
     <Style
         x:Key="WindowCloseButtonStyle"
         BasedOn="{StaticResource WindowCaptionButtonStyle}"
         TargetType="{x:Type Button}">
-        <Setter Property="Tag" Value="#E81123" />
+        <Setter Property="Tag" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
     </Style>
 
     <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:ThemedWindow}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BaseBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
         <Setter Property="TitleBarForeground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Background200Brush}}" />
+        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
@@ -115,7 +115,7 @@
                                         Grid.Column="1"
                                         Margin="5,0,0,0"
                                         VerticalAlignment="Center"
-                                        FontSize="11.5"
+                                        FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}"
                                         IsHitTestVisible="False"
                                         RenderOptions.ClearTypeHint="Auto"
                                         Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
@@ -152,7 +152,7 @@
                                             x:Name="PART_CloseButton"
                                             Foreground="{TemplateBinding TitleBarForeground}"
                                             Style="{StaticResource WindowCloseButtonStyle}">
-                                            <fonts:FontIcon FontSize="16" Text="{x:Static fonts:LucideFontIcons.x}" />
+                                            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -163,10 +163,10 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsActive" Value="False">
-                            <Setter TargetName="TitleBarForegroundLayer" Property="TextElement.Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
-                            <Setter TargetName="PART_MinimizeButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
-                            <Setter TargetName="PART_MaximizeRestoreButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
-                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}" />
+                            <Setter TargetName="TitleBarForegroundLayer" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                            <Setter TargetName="PART_MinimizeButton" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                            <Setter TargetName="PART_MaximizeRestoreButton" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                            <Setter TargetName="PART_CloseButton" Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
                         </Trigger>
 
                         <Trigger Property="WindowState" Value="Maximized">
@@ -181,7 +181,7 @@
                         </Trigger>
 
                         <Trigger SourceName="PART_CloseButton" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="#ffffff" />
+                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
                         </Trigger>
 
                         <Trigger Property="ResizeMode" Value="NoResize">

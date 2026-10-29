@@ -1,5 +1,5 @@
 <UserControl
-    x:Class="Joufflu.Samples.Views.Toolkit.CustomInputSamples"
+    x:Class="Joufflu.Samples.Views.Toolkit.CustomControlSamples"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:Joufflu.Samples.Views.Toolkit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
-    d:DataContext="{d:DesignInstance Type=local:CustomInputSamplesViewModel}"
+    d:DataContext="{d:DesignInstance Type=local:CustomControlSamplesViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Samples;component/Views/Toolkit/RatingInput.xaml" />
@@ -16,16 +16,69 @@
 
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Create custom input" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Create a custom control" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                Text="How to build an input of your own that sits with the Joufflu ones. The RatingInput below derives from a bare Control, so it follows every rule by hand; an input derived from a native control (TextBox, ComboBox…) gets them all by basing its style on the native one."
+                Text="A control of your own sits with the Joufflu ones when it reads the tokens of its category, so a theme restyling that category restyles it too. Pick the category the control belongs to, then follow its rules. A control derived from a native one (TextBox, Button, ListBox…) gets them all by basing its style on the native one."
+                TextWrapping="Wrap" />
+
+            <!--  The three categories, what each is for, the tokens it reads and its states  -->
+            <UniformGrid toolkit:Spacing.Gap="8" Columns="3">
+                <Border Style="{StaticResource Card}">
+                    <StackPanel toolkit:Spacing.Gap="0,6">
+                        <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="Display" />
+                        <TextBlock Text="Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list." TextWrapping="Wrap" />
+                        <TextBlock
+                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                            Text="DisplaySurface1/2Brush, DisplayBorderBrush, DisplayCornerRadius, DisplayBorderThickness, DisplayPadding (DisplayPaddingSm when compact)."
+                            TextWrapping="Wrap" />
+                        <TextBlock Text="No states. Its items (rows, entries) are actions without a fill at rest." TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}">
+                    <StackPanel toolkit:Spacing.Gap="0,6">
+                        <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="Input" />
+                        <TextBlock Text="Takes a value: a text field, a picker, a rating, a check." TextWrapping="Wrap" />
+                        <TextBlock
+                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                            Text="InputSurface1/2Brush, InputBorderBrush, InputRadius, InputBorderThickness, InputPaddingXs..Lg, HeightXs..Lg."
+                            TextWrapping="Wrap" />
+                        <TextBlock Text="No hover; a strong border on focus (InputBorderElevatedBrush). The example below builds one." TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}">
+                    <StackPanel toolkit:Spacing.Gap="0,6">
+                        <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" Text="Action" />
+                        <TextBlock Text="Runs something: a button, a toggle, an item of a display." TextWrapping="Wrap" />
+                        <TextBlock
+                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                            Text="ActionSurface1/2Brush, ActionBorderBrush, ActionRadius, ActionBorderThickness, ActionPaddingXs..Lg, HeightXs..Lg."
+                            TextWrapping="Wrap" />
+                        <TextBlock Text="A stronger background on hover (ActionElevatedBrush), moved down when pressed, no focus border." TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+            <TextBlock TextWrapping="Wrap">
+                <Run Text="Every category: disabled is DisabledOpacity, selected and checked the primary, sizes follow Sizing.Size. The" />
+                <Hyperlink Command="{Binding OpenDesignTokensCommand}">Design tokens</Hyperlink>
+                <Run Text="page lists each key with its role and fallback." />
+            </TextBlock>
+
+            <TextBlock
+                Margin="0,8,0,0"
+                toolkit:Sizing.Size="lg"
+                FontWeight="Bold"
+                Text="Example: an input"
+                TextWrapping="Wrap" />
+            <TextBlock
+                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                Text="The RatingInput below derives from a bare Control, so it follows every rule of the Input category by hand. A display or an action follows the same steps with the keys of its own category."
                 TextWrapping="Wrap" />
 
             <c:CodeExample
                 Title="Minimum"
                 Code="{Binding MinimumCode}"
-                Description="Background, border colour and thickness, and a one-line height, all from the design tokens: the input matches the text box next to it and follows the theme. Without the optional part it keeps its size whatever Sizing.Size says (second row, lg), has no padding and no hover or focus state.">
+                Description="Background, border colour and thickness, radius, the md padding and a one-line height, all from the input tokens: the input matches the text box next to it and follows the theme. Without the optional part it keeps its md size whatever Sizing.Size says (second row, lg) and has no focus state.">
                 <Grid toolkit:Spacing.Gap="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
@@ -56,7 +109,7 @@
             <c:CodeExample
                 Title="Sizes, padding and states"
                 Code="{Binding SizesCode}"
-                Description="Optional: the Sizing.Size triggers set the height, font size and input padding of each size, and the hover and focus triggers match the native inputs. The content sits inside Padding, so the stars line up with the text of the text box.">
+                Description="Optional: the Sizing.Size triggers set the height, font size and input padding of each size, and the focus trigger matches the native inputs: no hover, a strong border on focus. The height comes from the size, so the content takes only the horizontal part of Padding and is centred: the stars line up with the text of the text box.">
                 <Grid toolkit:Spacing.Gap="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
@@ -115,7 +168,7 @@
             <c:CodeExample
                 Title="Embedded buttons"
                 Code="{Binding EmbeddedCode}"
-                Description="Optional: buttons inside the input use EmbeddedButton, a transparent square of HeightEmbedded that fits inside the padding of every size. Here the stars and the clear button, which shows once a star is given.">
+                Description="Optional: buttons inside the input use EmbeddedButton, a transparent square of HeightEmbedded, centred in the height of every size. Here the stars and the clear button, which shows once a star is given.">
                 <local:RatingInput
                     Width="200"
                     HorizontalAlignment="Left"

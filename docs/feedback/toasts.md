@@ -34,20 +34,7 @@ When the app also uses an
 </feedback:ToastContainer>
 ```
 
-### Position
-
-`Position` picks the corner the stack sits in: `TopRight` (the default), `TopLeft`,
-`BottomRight` or `BottomLeft`. The newest toast always sits closest to that corner,
-so the stack grows away from it. Bind it to change corners at runtime — the
-gallery's **Toasts** page does exactly that.
-
-```xml
-<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
-    <!-- the whole app -->
-</feedback:ToastContainer>
-```
-
-## Showing a toast
+## Toast types
 
 Show them from an injected `IToastService` (in `Joufflu.Feedback`):
 
@@ -61,3 +48,16 @@ toasts.Show(new ToastOptions { Message = "Sticky", Duration = TimeSpan.Zero });
 
 A `Duration` of `TimeSpan.Zero` makes a toast sticky: it stays until the user
 closes it.
+
+## Position
+
+The `ToastContainer`'s `Position` picks the corner the stack sits in: `TopRight` (the default), `TopLeft`,
+`BottomRight` or `BottomLeft`. The newest toast always sits closest to that corner,
+so the stack grows away from it. Bind it to change corners at runtime — the
+gallery's **Toasts** page does exactly that.
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
+    <!-- the whole app -->
+</feedback:ToastContainer>
+```

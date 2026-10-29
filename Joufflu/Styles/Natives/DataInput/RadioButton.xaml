@@ -3,11 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu">
 
+    <!--
+        An input for its circle, as the check box: no hover, a strong border on focus (after the checked trigger, so it
+        also shows when checked), the primary when checked, a danger border on a validation error. The label sits 6
+        from the circle (the Padding, as CheckBox) and inherits its font size.
+    -->
     <Style x:Key="{x:Type RadioButton}" TargetType="RadioButton">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
         <Setter Property="Padding" Value="6,0,0,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -16,16 +21,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <BulletDecorator
-                        Background="Transparent"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <BulletDecorator VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Background="Transparent">
                         <BulletDecorator.Bullet>
                             <Grid Width="16" Height="16">
                                 <Ellipse
                                     x:Name="OuterCircle"
                                     Fill="{TemplateBinding Background}"
                                     Stroke="{TemplateBinding BorderBrush}"
-                                    StrokeThickness="1" />
+                                    StrokeThickness="{Binding BorderThickness.Left, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <Ellipse
                                     x:Name="InnerCircle"
                                     Margin="4"
@@ -47,16 +50,18 @@
                             <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                             <Setter TargetName="InnerCircle" Property="Visibility" Value="Visible" />
                         </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
 
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
-            </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>

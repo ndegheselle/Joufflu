@@ -10,9 +10,9 @@ has_children: true
 A themed file explorer from the optional
 [`Joufflu.FileExplorer`](https://www.nuget.org/packages/Joufflu.FileExplorer) package.
 
-- **Explorer** — everything together: control bar, tree, list and a status bar.
 - **List** — the nodes of the opened folder, with extra columns of your own.
 - **Tree** — the loaded hierarchy, folders only by default.
+- **Explorer** — everything together: control bar, tree, list and a status bar.
 - **Sources** — what the controls display: the disk, the disk watched live, or a source of your own.
 
 Add the package (`dotnet add package Joufflu.FileExplorer`; it brings
@@ -26,6 +26,8 @@ xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base;assembly=Joufflu.Fi
 xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu.FileExplorer"
 xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
 ```
 
 ## Sources

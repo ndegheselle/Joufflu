@@ -3,18 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu">
     <Style x:Key="Card" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
     </Style>
 
     <Style x:Key="CardSecondary" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
     </Style>
 </ResourceDictionary>

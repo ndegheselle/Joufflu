@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 
 namespace Joufflu.Toolkit;
 
@@ -8,119 +9,99 @@ namespace Joufflu.Toolkit;
 public enum TooltipPlacement { Top, Bottom, Left, Right }
 
 /// <summary>
-/// Attaches a themed <see cref="ToolTip"/> to any element from a single pair of properties:
-/// set <see cref="ContentProperty"/> to the content to show (a string or arbitrary XAML) and,
-/// optionally, <see cref="PlacementProperty"/> to the side it sits on.
+/// Places and sizes the native <see cref="ToolTip"/>, set the usual way (<c>ToolTip="…"</c> or <c>&lt;Button.ToolTip&gt;</c>).
+/// On the element: <see cref="PlacementProperty"/> picks the side the tooltip sits on, centred on it with a small gap,
+/// and <see cref="MaxWidthProperty"/> the width past which its text wraps.
 /// <para>
-/// The native <see cref="ToolTip"/> is reused under the hood, so hover delay, fade-in and
-/// screen-edge flipping all keep working; this just wires it up and applies the placement.
+/// The ToolTip style places every tooltip through <see cref="IsPlacedProperty"/> : a custom placement centred on the
+/// chosen side, with the opposite side as a fallback, so WPF flips it at the edge of the screen.
 /// </para>
 /// </summary>
 public static class ThemedTooltip
 {
-    /// <summary>Content shown in the tooltip. <c>null</c> removes the tooltip.</summary>
-    public static readonly DependencyProperty ContentProperty =
-        DependencyProperty.RegisterAttached(
-            "Content",
-            typeof(object),
-            typeof(ThemedTooltip),
-            new PropertyMetadata(null, OnChanged));
-
-    public static object? GetContent(DependencyObject obj) => obj.GetValue(ContentProperty);
-    public static void SetContent(DependencyObject obj, object? value) => obj.SetValue(ContentProperty, value);
-
-    /// <summary>Side of the element the tooltip is placed on (defaults to <see cref="TooltipPlacement.Bottom"/>).</summary>
+    /// <summary>Side of the element its tooltip is placed on (defaults to <see cref="TooltipPlacement.Bottom"/>).</summary>
     public static readonly DependencyProperty PlacementProperty =
         DependencyProperty.RegisterAttached(
             "Placement",
             typeof(TooltipPlacement),
             typeof(ThemedTooltip),
-            new PropertyMetadata(TooltipPlacement.Bottom, OnChanged));
+            new PropertyMetadata(TooltipPlacement.Bottom));
 
     public static TooltipPlacement GetPlacement(DependencyObject obj) => (TooltipPlacement)obj.GetValue(PlacementProperty);
     public static void SetPlacement(DependencyObject obj, TooltipPlacement value) => obj.SetValue(PlacementProperty, value);
 
+    /// <summary>Width of the element's tooltip past which its text wraps (defaults to 320).</summary>
+    public static readonly DependencyProperty MaxWidthProperty =
+        DependencyProperty.RegisterAttached(
+            "MaxWidth",
+            typeof(double),
+            typeof(ThemedTooltip),
+            new PropertyMetadata(320d));
+
+    public static double GetMaxWidth(DependencyObject obj) => (double)obj.GetValue(MaxWidthProperty);
+    public static void SetMaxWidth(DependencyObject obj, double value) => obj.SetValue(MaxWidthProperty, value);
+
+    /// <summary>
+    /// Set on a <see cref="ToolTip"/> by its style : places it on the <see cref="PlacementProperty"/> side of its
+    /// target and bounds it to the target's <see cref="MaxWidthProperty"/>. Done in code : the callback is handed sizes
+    /// alone, not the tooltip, and a binding to an attached property of the target written in the style never resolves.
+    /// </summary>
+    public static readonly DependencyProperty IsPlacedProperty =
+        DependencyProperty.RegisterAttached(
+            "IsPlaced",
+            typeof(bool),
+            typeof(ThemedTooltip),
+            new PropertyMetadata(false, OnIsPlacedChanged));
+
+    public static bool GetIsPlaced(DependencyObject obj) => (bool)obj.GetValue(IsPlacedProperty);
+    public static void SetIsPlaced(DependencyObject obj, bool value) => obj.SetValue(IsPlacedProperty, value);
+
     /// <summary>Gap in DIPs kept between the element and the tooltip.</summary>
     private const double Gap = 2;
 
-    // Content and Placement can be set in any order in XAML, so both handlers funnel here
-    // and (re)build the tooltip from whatever the current values are.
-    private static void OnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => Apply(d);
-
-    private static void Apply(DependencyObject d)
+    private static void OnIsPlacedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        object? content = GetContent(d);
-        if (content is null)
-        {
-            ToolTipService.SetToolTip(d, null);
+        if (d is not ToolTip toolTip)
             return;
-        }
 
-        // Show instantly, and stay instant on subsequent hovers (native default is ~400ms / 100ms), unless the
-        // element sets its own delays : they are left as they are rather than overwritten.
-        ShowInstantlyUnlessSet(d, ToolTipService.InitialShowDelayProperty);
-        ShowInstantlyUnlessSet(d, ToolTipService.BetweenShowDelayProperty);
-
-        if (ToolTipService.GetToolTip(d) is not ToolTip toolTip)
+        if ((bool)e.NewValue)
         {
-            toolTip = new ToolTip();
-            // Center/space the tooltip once it is measured — sizes aren't known before it opens.
-            toolTip.Opened += OnToolTipOpened;
-            ToolTipService.SetToolTip(d, toolTip);
+            toolTip.Placement = PlacementMode.Custom;
+            toolTip.CustomPopupPlacementCallback = (popup, target, _) =>
+                Place(toolTip.PlacementTarget is { } element ? GetPlacement(element) : TooltipPlacement.Bottom, popup, target);
+            toolTip.SetBinding(FrameworkElement.MaxWidthProperty, new Binding
+            {
+                Path = new PropertyPath("PlacementTarget.(0)", MaxWidthProperty),
+                RelativeSource = RelativeSource.Self,
+            });
         }
-
-        toolTip.Content = content;
-        toolTip.Placement = ToPlacementMode(GetPlacement(d));
+        else
+        {
+            toolTip.ClearValue(ToolTip.PlacementProperty);
+            toolTip.ClearValue(ToolTip.CustomPopupPlacementCallbackProperty);
+            toolTip.ClearValue(FrameworkElement.MaxWidthProperty);
+        }
     }
 
     /// <summary>
-    /// Sets a delay to 0 unless the element already has one of its own. A 0 set here by an earlier call counts as
-    /// set, which keeps rebuilding the tooltip idempotent.
+    /// The tooltip centred on the <paramref name="placement"/> side of the target and <see cref="Gap"/> clear of it,
+    /// then on the opposite side, which WPF takes when the first does not fit on the screen.
     /// </summary>
-    private static void ShowInstantlyUnlessSet(DependencyObject d, DependencyProperty delayProperty)
+    public static CustomPopupPlacement[] Place(TooltipPlacement placement, Size popup, Size target)
     {
-        if (d.ReadLocalValue(delayProperty) == DependencyProperty.UnsetValue)
-            d.SetValue(delayProperty, 0);
-    }
+        double centerX = (target.Width - popup.Width) / 2;
+        double centerY = (target.Height - popup.Height) / 2;
+        var top = new CustomPopupPlacement(new Point(centerX, -popup.Height - Gap), PopupPrimaryAxis.Horizontal);
+        var bottom = new CustomPopupPlacement(new Point(centerX, target.Height + Gap), PopupPrimaryAxis.Horizontal);
+        var left = new CustomPopupPlacement(new Point(-popup.Width - Gap, centerY), PopupPrimaryAxis.Vertical);
+        var right = new CustomPopupPlacement(new Point(target.Width + Gap, centerY), PopupPrimaryAxis.Vertical);
 
-    // PlacementMode.Top/Bottom left-align the tooltip to the target, and none of the modes leave
-    // a gap. Once the tooltip is open we know both sizes, so we translate it into place: center it
-    // on the shared edge and push it Gap DIPs clear of the element. Popup offsets are screen-space
-    // (positive = right / down) and update live, so setting them here repositions the open tooltip.
-    private static void OnToolTipOpened(object sender, RoutedEventArgs e)
-    {
-        if (sender is not ToolTip toolTip || toolTip.PlacementTarget is not FrameworkElement target)
-            return;
-
-        double dx = (target.ActualWidth - toolTip.ActualWidth) / 2;
-        double dy = (target.ActualHeight - toolTip.ActualHeight) / 2;
-
-        switch (GetPlacement(target))
+        return placement switch
         {
-            case TooltipPlacement.Top:
-                toolTip.HorizontalOffset = dx;
-                toolTip.VerticalOffset = -Gap;
-                break;
-            case TooltipPlacement.Bottom:
-                toolTip.HorizontalOffset = dx;
-                toolTip.VerticalOffset = Gap;
-                break;
-            case TooltipPlacement.Left:
-                toolTip.HorizontalOffset = -Gap;
-                toolTip.VerticalOffset = dy;
-                break;
-            case TooltipPlacement.Right:
-                toolTip.HorizontalOffset = Gap;
-                toolTip.VerticalOffset = dy;
-                break;
-        }
+            TooltipPlacement.Top => [top, bottom],
+            TooltipPlacement.Left => [left, right],
+            TooltipPlacement.Right => [right, left],
+            _ => [bottom, top],
+        };
     }
-
-    private static PlacementMode ToPlacementMode(TooltipPlacement placement) => placement switch
-    {
-        TooltipPlacement.Bottom => PlacementMode.Bottom,
-        TooltipPlacement.Left => PlacementMode.Left,
-        TooltipPlacement.Right => PlacementMode.Right,
-        _ => PlacementMode.Top,
-    };
 }

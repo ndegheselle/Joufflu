@@ -1,20 +1,56 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Dimensions.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Actions/Button.named.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+
+    <!--
+        An entry of the menu: a ghost action (hover and focus from the Button style) without the pressed
+        translation, the menu being a display and its entries the items of it.
+    -->
+    <Style
+        x:Key="NavigationEntryButton"
+        BasedOn="{StaticResource GhostButton}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Tag="{DynamicResource {x:Static joufflu:Dimensions.ActionRadius}}">
+                        <Border.CornerRadius>
+                            <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </Border.CornerRadius>
+                        <ContentPresenter
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!--  ============================ NavigationItem ============================  -->
     <Style TargetType="{x:Type nav:NavigationItem}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
+        <!--  No font size of its own: the entry button carries the one of its size.  -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationItem}">
@@ -24,7 +60,7 @@
                         HorizontalContentAlignment="Stretch"
                         Command="{Binding SelectCommand, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}"
                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        Style="{DynamicResource GhostButton}">
+                        Style="{StaticResource NavigationEntryButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -58,7 +94,7 @@
                             <Setter TargetName="ItemButton" Property="HorizontalContentAlignment" Value="Center" />
                             <Setter TargetName="ItemButton" Property="Padding" Value="0" />
                             <!--  Collapsed: the label is hidden, so surface it as a tooltip beside the icon  -->
-                            <Setter TargetName="ItemButton" Property="toolkit:ThemedTooltip.Content" Value="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="ItemButton" Property="ToolTip" Value="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter TargetName="ItemButton" Property="toolkit:ThemedTooltip.Placement" Value="Right" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -78,7 +114,7 @@
                             x:Name="HeaderButton"
                             HorizontalContentAlignment="Stretch"
                             Command="{Binding ToggleCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                            Style="{DynamicResource GhostButton}">
+                            Style="{StaticResource NavigationEntryButton}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -112,8 +148,9 @@
                             x:Name="ChildrenHost"
                             Margin="16,0,0,0"
                             Padding="8,0,0,0"
-                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                            BorderThickness="1,0,0,0"
+                            toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+                            toolkit:Derive.BorderThicknessFactor="1,0,0,0"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                             Visibility="Collapsed">
                             <ItemsPresenter />
                         </Border>
@@ -129,15 +166,15 @@
                             <Setter TargetName="Chevron" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="ChildrenHost" Property="Margin" Value="0" />
                             <Setter TargetName="ChildrenHost" Property="Padding" Value="0" />
-                            <Setter TargetName="ChildrenHost" Property="BorderThickness" Value="0" />
+                            <Setter TargetName="ChildrenHost" Property="toolkit:Derive.BorderThicknessFactor" Value="0" />
                             <!--  Collapsed: no indent to show nesting, so shade the children to keep them visually grouped  -->
-                            <Setter TargetName="ChildrenHost" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-                            <Setter TargetName="ChildrenHost" Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            <Setter TargetName="ChildrenHost" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+                            <Setter TargetName="ChildrenHost" Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
                             <Setter TargetName="HeaderButton" Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
                             <Setter TargetName="HeaderButton" Property="HorizontalContentAlignment" Value="Center" />
                             <Setter TargetName="HeaderButton" Property="Padding" Value="0" />
                             <!--  Collapsed: the header is hidden, so surface it as a tooltip beside the icon  -->
-                            <Setter TargetName="HeaderButton" Property="toolkit:ThemedTooltip.Content" Value="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="HeaderButton" Property="ToolTip" Value="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter TargetName="HeaderButton" Property="toolkit:ThemedTooltip.Placement" Value="Right" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -155,13 +192,14 @@
                         <ContentPresenter
                             x:Name="TitleText"
                             TextBlock.FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}"
-                            TextBlock.Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
 
                         <Border
                             x:Name="TitleLine"
-                            Height="{DynamicResource {x:Static joufflu:Dimensions.Thickness}}"
                             VerticalAlignment="Center"
-                            Background="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                            toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+                            toolkit:Derive.BorderThicknessFactor="0,1,0,0"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                             Visibility="Collapsed" />
                     </Grid>
 
@@ -179,12 +217,14 @@
     <!--  ============================ NavigationMenu ============================  -->
     <Style TargetType="{x:Type nav:NavigationMenu}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <!--  Right edge only: the menu just separates itself from the content beside it.  -->
-        <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
+        <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
         <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
         <Setter Property="Width" Value="220" />
+        <!--  A compact display: the header and the items sit at this inset from the menu edges.  -->
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationMenu}">
@@ -210,15 +250,15 @@
                                 <ContentPresenter
                                     x:Name="HeaderPresenter"
                                     Grid.Column="0"
-                                    Margin="8"
                                     VerticalAlignment="Center"
+                                    toolkit:Derive.Margin="{x:Static joufflu:Dimensions.ActionPaddingMd}"
+                                    toolkit:Derive.MarginFactor="1,0,0,0"
                                     Content="{TemplateBinding Header}"
                                     IsHitTestVisible="False" />
 
                                 <Button
                                     x:Name="CollapseButton"
                                     Grid.Column="1"
-                                    Margin="2"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
                                     toolkit:Sizing.IsSquare="True"
@@ -234,7 +274,7 @@
                                 Background="Transparent"
                                 HorizontalScrollBarVisibility="Disabled"
                                 VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter Margin="8,0,8,8" />
+                                <ItemsPresenter />
                             </ScrollViewer>
                         </DockPanel>
                     </Grid>

@@ -21,7 +21,7 @@
                 Code="&lt;Grid&gt;&#x0a;    &lt;Grid.ColumnDefinitions&gt;&#x0a;        &lt;ColumnDefinition /&gt;&#x0a;        &lt;ColumnDefinition Width=&quot;Auto&quot; /&gt;&#x0a;        &lt;ColumnDefinition /&gt;&#x0a;    &lt;/Grid.ColumnDefinitions&gt;&#x0a;    &lt;GridSplitter Grid.Column=&quot;1&quot; Width=&quot;6&quot; /&gt;&#x0a;&lt;/Grid&gt;">
                 <Border
                     Height="180"
-                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
+                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
                     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
                     <Grid>

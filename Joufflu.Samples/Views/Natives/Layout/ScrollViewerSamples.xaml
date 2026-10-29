@@ -26,6 +26,7 @@
                     VerticalScrollBarVisibility="Auto">
                     <TextBlock
                         Width="500"
+                        Height="300"
                         Text="This content is deliberately larger than its container so both the vertical and horizontal scroll bars appear. Line one.&#x0a;Line two.&#x0a;Line three.&#x0a;Line four.&#x0a;Line five.&#x0a;Line six.&#x0a;Line seven.&#x0a;Line eight." />
                 </ScrollViewer>
             </c:CodeExample>

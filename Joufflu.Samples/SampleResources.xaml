@@ -35,7 +35,7 @@
                             <Border
                                 x:Name="ContentArea"
                                 Grid.Row="1"
-                                Style="{StaticResource CardSecondary}">
+                                Style="{StaticResource Card}">
                                 <ContentPresenter />
                             </Border>
 

@@ -13,7 +13,7 @@
     mc:Ignorable="d">
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Button" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Buttons" />
 
             <c:CodeExample
                 Title="Variants"

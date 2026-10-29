@@ -3,7 +3,7 @@ name: joufflu-custom-input
 description: >-
   Build a custom WPF input control (a new Control, UserControl or templated control
   that takes a value) so it matches the Joufflu inputs: background, border and height
-  from the design tokens, then Sizing.Size variants with input padding, hover/focus/
+  from the Input category tokens, then Sizing.Size variants with input padding, focus/
   disabled states, the validation error style and EmbeddedButton inner buttons. Use
   when the user asks to create, write or style an input, picker, field or editor of
   their own in a project that references Joufflu, when a custom input doesn't look like
@@ -13,8 +13,8 @@ description: >-
 # Build a custom input on Joufflu
 
 Goal: the new input is indistinguishable from the Joufflu inputs next to it, in every
-size, theme and state. The `joufflu` skill has the full API; `docs/toolkit/custom-input.md`
-and the gallery's **Toolkit > Custom input** page (`Joufflu.Samples/Views/Toolkit/RatingInput.*`)
+size, theme and state. The `joufflu` skill has the full API; `docs/toolkit/custom-control.md`
+and the gallery's **Toolkit > Create a custom control** page (`Joufflu.Samples/Views/Toolkit/RatingInput.*`)
 show the finished result.
 
 ## 1. Check it doesn't exist, then pick the base
@@ -30,16 +30,21 @@ show the finished result.
 
 ## 2. Required: background, border, height
 
-In the style (not hard-coded in the template), always with `DynamicResource`:
+From the **Input** category tokens (a theme restyling the inputs then restyles yours), in the
+style (not hard-coded in the template), always with `DynamicResource`. Never the global
+`Surface1Brush`/`StrokeBrush`/`Dimensions.CornerRadius`: the controls no longer read them.
 
 ```xml
-<Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-<Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-<Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+<Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+<Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+<Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />  <!-- one-line inputs only -->
 ```
 
-The template's surface reads them from the control, with the token corner radius:
+The template's surface reads them from the control, with the input radius clamped to half the
+height like the native inputs (an elevated part inside, a tag or a track, takes
+`InputSurface2Brush`). The height comes from the size, so the content takes only the horizontal
+part of `Padding` and is centred:
 
 ```xml
 <ControlTemplate TargetType="{x:Type local:MyInput}">
@@ -47,8 +52,19 @@ The template's surface reads them from the control, with the token corner radius
         <Border Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
-        <Grid Margin="{TemplateBinding Padding}"> <!-- content --> </Grid>
+                Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
+            <Border.CornerRadius>
+                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                </MultiBinding>
+            </Border.CornerRadius>
+        </Border>
+        <Grid VerticalAlignment="Center"
+              Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}">
+            <!-- content -->
+        </Grid>
     </Grid>
 </ControlTemplate>
 ```
@@ -58,7 +74,7 @@ No `#RRGGBB`, no literal thickness, radius or height anywhere.
 ## 3. Optional: sizes and padding
 
 Default to `md`, one `Sizing.Size` trigger per other size. Inputs use the `InputPadding*`
-keys (not the button `Padding*` keys):
+keys (not the button `ActionPadding*` keys):
 
 ```xml
 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
@@ -73,19 +89,18 @@ keys (not the button `Padding*` keys):
 </Style.Triggers>
 ```
 
-Put the content inside `Margin="{TemplateBinding Padding}"`, laid over the border (not
-inside it), so it lines up with the text of a `TextBox`.
+Put the content inside the horizontal part of `Padding` (`HorizontalThicknessConverter`),
+centred and laid over the border (not inside it), so it lines up with the text of a `TextBox`
+and a large vertical padding never crushes it.
 
 ## 4. Optional: states and validation
 
-Add, in this order, to `Style.Triggers` (the error must come after hover and focus):
+An input has **no hover** state. Add, in this order, to `Style.Triggers` (the error must come
+after focus):
 
 ```xml
-<Trigger Property="IsMouseOver" Value="True">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-</Trigger>
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
@@ -110,8 +125,8 @@ inner element rather than the control's `BorderBrush`, use a `ControlTemplate` t
 
 Buttons inside the input (clear, open, step…) use `Style="{StaticResource EmbeddedButton}"`
 with a `fonts:FontIcon` as content, inside the padded content grid, usually in an `Auto`
-column on the right. Don't size them: `HeightEmbedded` is chosen to fit the smallest input
-inside its padding. Hide a clear button when there is nothing to clear.
+column on the right. Don't size them: centred in a row without vertical padding,
+`HeightEmbedded` fits the smallest input. Hide a clear button when there is nothing to clear.
 
 A `StaticResource` in a `ResourceDictionary` only resolves against that dictionary and the
 ones it merges, so the dictionary holding the style merges what it references:
@@ -130,5 +145,5 @@ ones it merges, so the dictionary holding the style merges what it references:
 - Value properties bind two-way by default (`FrameworkPropertyMetadataOptions.BindsTwoWayByDefault`),
   like the native inputs.
 - Check next to a `TextBox`, and say what you checked: each `Sizing.Size` set on a parent
-  panel, Light and Dark, hover, focus, disabled, and a binding error with and without
+  panel, Light and Dark, focus, disabled, and a binding error with and without
   `Validation.ErrorTemplate="{x:Null}"`.

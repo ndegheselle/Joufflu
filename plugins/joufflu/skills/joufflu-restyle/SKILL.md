@@ -41,7 +41,7 @@ Search the XAML (and code-behind that sets visuals) for:
 | `Margin` on every child of a panel | `Spacing.Gap` |
 | Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls or text | `Sizing.Size` |
 | `CornerRadius="4"`, `BorderThickness="1"` literals | Tokens |
-| `ToolTip="…"` | `toolkit:ThemedTooltip.Content` |
+| `ToolTipService.Placement` | `toolkit:ThemedTooltip.Placement` (the `ToolTip` itself stays) |
 | `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `IOverlayContent`) |
 | Status text / popups for success/errors | Toasts |
 | `AllowDrop` + `Drop`/`DragOver` handlers, `DoDragDrop` in `MouseMove` | `DropTarget` / `DragSource` |
@@ -66,13 +66,14 @@ Map by **role**, not by closest hue:
 
 | Original role | Token |
 |---|---|
-| Window/page background | Remove it (the `Window` style sets it) or `Brushes.BackgroundBrush` |
-| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.Background100Brush` |
-| Inset panel inside a card | `CardSecondary` / `Brushes.BackgroundBrush` |
-| Hover / selected row | `Brushes.Background200Brush` (usually already done by the native style) |
+| Window/page background | Remove it (the `Window` style sets it) or `Brushes.BaseBrush` |
+| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplaySurface1Brush` |
+| Inset panel inside a card | `CardSecondary` / `Brushes.DisplaySurface2Brush` |
+| Background of a custom input / button | `Brushes.InputSurface1Brush` / `Brushes.ActionSurface1Brush` |
+| Hover of a row or custom clickable item | `Brushes.ActionElevatedBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
-| Borders, separators | `Brushes.BorderBrush` / `Brushes.Border100Brush` |
+| Borders, separators | The category's border: `Brushes.DisplayBorderBrush` (panels, separators), `InputBorderBrush` (`InputBorderElevatedBrush` on focus), `ActionBorderBrush` (no focus border) |
 | Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryContentBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
 | Light tinted highlight | `Brushes.XSoftBrush` |
@@ -96,7 +97,7 @@ Joufflu.Brushes.DangerBrush);`.
 Remove custom button styles/templates that only recolour. Pick by intent:
 main action `PrimaryButton`; neutral `SecondaryButton`; toolbar/low emphasis `GhostButton`;
 destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Icon-only:
-`toolkit:Sizing.IsSquare="True"` + a `FontIcon` + `toolkit:ThemedTooltip.Content`.
+`toolkit:Sizing.IsSquare="True"` + a `FontIcon` + a `ToolTip`.
 
 ### Layout and sizes
 
@@ -107,8 +108,10 @@ destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Ic
   control or its panel for a denser/larger area.
 - Headings → `toolkit:Sizing.Size` (`xl` page title, `lg` section) plus `FontWeight`;
   captions `Sizing.Size="xs"`; secondary text `Colors.MutedOpacity`; drop literal `FontSize`.
-- Literal `CornerRadius`/`BorderThickness` → `Dimensions.CornerRadius` /
-  `Dimensions.BorderThickness` (DynamicResource), or `toolkit:Derive.*` for partial sides.
+- Literal `CornerRadius`/`BorderThickness` → the category keys, `Dimensions.DisplayCornerRadius` /
+  `DisplayBorderThickness` for a panel (`Input*` for an input, `Action*` for a button), as
+  DynamicResource, or `toolkit:Derive.*` on `DisplayRadius`… for partial sides. The global
+  `Dimensions.CornerRadius`/`BorderThickness` only suit app layout the controls never draw.
 
 ### Local styles
 

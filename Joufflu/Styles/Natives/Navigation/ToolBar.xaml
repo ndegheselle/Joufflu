@@ -1,6 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters"
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
@@ -14,22 +15,45 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/Navigation/Menu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+
+    <!--
+        The buttons of a toolbar are items of the display: no fill and a transparent border at rest. Hover,
+        checked and disabled come from the base styles' triggers; the template only drops their press translation
+        and their pill radius.
+    -->
+    <ControlTemplate x:Key="ToolBarButtonTemplate" TargetType="{x:Type ButtonBase}">
+        <Border
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            Tag="{DynamicResource {x:Static joufflu:Dimensions.ActionRadius}}">
+            <Border.CornerRadius>
+                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                </MultiBinding>
+            </Border.CornerRadius>
+            <ContentPresenter
+                Margin="{TemplateBinding Padding}"
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                ContentTemplate="{TemplateBinding ContentTemplate}" />
+        </Border>
+    </ControlTemplate>
+
     <Style
         x:Key="{x:Static ToolBar.ButtonStyleKey}"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="4,2" />
+        <!--  A toolbar is compact: its buttons take the xs padding  -->
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-                <Setter Property="Background" Value="Transparent" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
     </Style>
 
     <Style
@@ -38,66 +62,41 @@
         TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="4,2" />
+        <!--  A toolbar is compact: its buttons take the xs padding  -->
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingXs}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-                <Setter Property="Background" Value="Transparent" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
     </Style>
 
+    <!--  The inputs of a toolbar keep their input look; only the layout is the toolbar's.  -->
     <Style
         x:Key="{x:Static ToolBar.CheckBoxStyleKey}"
         BasedOn="{StaticResource {x:Type CheckBox}}"
         TargetType="{x:Type CheckBox}">
-        <Setter Property="Background" Value="Transparent" />
+        <!--  A gap from the neighbouring items, the toolbar panel has none  -->
         <Setter Property="Margin" Value="4,2" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-                <Setter Property="Background" Value="Transparent" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <Style
         x:Key="{x:Static ToolBar.RadioButtonStyleKey}"
         BasedOn="{StaticResource {x:Type RadioButton}}"
         TargetType="{x:Type RadioButton}">
-        <Setter Property="Background" Value="Transparent" />
+        <!--  A gap from the neighbouring items, the toolbar panel has none  -->
         <Setter Property="Margin" Value="4,2" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-                <Setter Property="Background" Value="Transparent" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <Style
         x:Key="{x:Static ToolBar.TextBoxStyleKey}"
         BasedOn="{StaticResource {x:Type TextBox}}"
         TargetType="{x:Type TextBox}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="4,2" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-                <Setter Property="Background" Value="Transparent" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <Style
@@ -111,7 +110,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
@@ -135,7 +134,7 @@
                                     Opacity="0.5">
                                     <DrawingBrush.Drawing>
                                         <DrawingGroup>
-                                            <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}">
+                                            <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}">
                                                 <GeometryDrawing.Geometry>
                                                     <GeometryGroup>
                                                         <RectangleGeometry Rect="0,0,1,1" />
@@ -162,8 +161,9 @@
         TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
+        <!--  Tighter than an xs button: the button only holds a small arrow  -->
         <Setter Property="Padding" Value="2" />
+        <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -186,7 +186,9 @@
     </Style>
 
     <Style x:Key="{x:Type ToolBar}" TargetType="{x:Type ToolBar}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <!--  No border by default, like the menu bar; the brush is set so a BorderThickness alone draws one.  -->
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
@@ -197,7 +199,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
                         <StackPanel Orientation="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType=ToolBarTray}, FallbackValue={x:Static Orientation.Horizontal}}">
 
                             <Thumb
@@ -223,9 +225,11 @@
                                     PopupAnimation="Slide"
                                     StaysOpen="False">
                                     <Border
-                                        Background="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}"
-                                        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+                                        Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                                        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+                                        Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
+                                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
                                         <ToolBarOverflowPanel
                                             x:Name="PART_ToolBarOverflowPanel"
                                             Focusable="True"
@@ -246,6 +250,10 @@
 
                         <Trigger Property="ToolBarTray.IsLocked" Value="True">
                             <Setter TargetName="ToolBarThumb" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
                         </Trigger>
 
                         <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType=ToolBarTray}}" Value="Vertical">

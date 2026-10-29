@@ -23,7 +23,7 @@ folder for all).
 | Control | Shows |
 |---|---|
 | `Explorer` | Everything: control bar (breadcrumb), tree, list, status bar. Has `ExtraColumns` (passed to its list) |
-| `ExplorerList` | Nodes of the opened folder (folders first, natural order, size column). `SelectedNodes` bindable, `View` = sorted/filtered nodes, `ExtraColumns` |
+| `ExplorerList` | Nodes of the opened folder (folders first, natural order, size column). `SelectedNodes` read-only (bind `OneWay`), `View` = sorted/filtered nodes, `ExtraColumns` |
 | `ExplorerTree` | Loaded hierarchy; folders only by default. Select opens, double-click expands |
 | `ExplorerControlBar` | Breadcrumb/navigation bar alone |
 

@@ -10,7 +10,7 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     d:DataContext="{d:DesignInstance Type=jodels:DataValue}"
     mc:Ignorable="d">
-    <StackPanel Width="200" Margin="4">
+    <StackPanel Width="200">
         <ItemsControl ItemsSource="{Binding Options}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

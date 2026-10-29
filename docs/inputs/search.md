@@ -7,6 +7,8 @@ nav_order: 2
 
 # Search
 
+## Search
+
 A text box that waits for typing to settle (300 ms) before reporting the search,
 to limit calls to an API or database. <kbd>Escape</kbd> clears it.
 
