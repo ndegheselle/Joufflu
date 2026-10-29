@@ -64,11 +64,11 @@
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputSurface2Brush}" Color="{Binding Result, Source={StaticResource InputSurface2Fallback}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBorderBrush}" Color="{Binding Result, Source={StaticResource InputBorderFallback}}" />
     <joufflu:ColorShade
-        x:Key="InputBorderStrongShade"
+        x:Key="InputBorderElevatedShade"
         Amount="0.4"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
         Color="{Binding Result, Source={StaticResource InputBorderFallback}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBorderStrongBrush}" Color="{Binding Result, Source={StaticResource InputBorderStrongShade}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBorderElevatedBrush}" Color="{Binding Result, Source={StaticResource InputBorderElevatedShade}}" />
 
     <!--  Action  -->
     <joufflu:ColorFallback
@@ -87,17 +87,17 @@
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionSurface2Brush}" Color="{Binding Result, Source={StaticResource ActionSurface2Fallback}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBorderBrush}" Color="{Binding Result, Source={StaticResource ActionBorderFallback}}" />
     <joufflu:ColorShade
-        x:Key="ActionHoverShade"
+        x:Key="ActionElevatedShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
         Color="{Binding Result, Source={StaticResource ActionSurface1Fallback}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionHoverBrush}" Color="{Binding Result, Source={StaticResource ActionHoverShade}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionElevatedBrush}" Color="{Binding Result, Source={StaticResource ActionElevatedShade}}" />
     <joufflu:ColorShade
-        x:Key="ActionBorderStrongShade"
+        x:Key="ActionBorderElevatedShade"
         Amount="0.4"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
         Color="{Binding Result, Source={StaticResource ActionBorderFallback}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBorderStrongBrush}" Color="{Binding Result, Source={StaticResource ActionBorderStrongShade}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBorderElevatedBrush}" Color="{Binding Result, Source={StaticResource ActionBorderElevatedShade}}" />
 
     <joufflu:ColorShade
         x:Key="PrimaryElevatedShade"

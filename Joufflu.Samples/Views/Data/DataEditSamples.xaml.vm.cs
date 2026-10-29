@@ -16,7 +16,7 @@ public partial class DataEditSamplesViewModel : ObservableObject
     private string? _json;
 
     public string EditCode =>
-        "<jata:DataEdit Node=\"{Binding Node}\" />\n\n" +
+        "<data:DataEdit Node=\"{Binding Node}\" />\n\n" +
         "Json = Node.ToToken()?.ToString();";
 
     /// <summary>Starts over from an empty root object.</summary>

@@ -76,10 +76,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
             </Trigger>
             <Trigger Property="IsDragging" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -151,7 +151,7 @@
 
         <ControlTemplate.Triggers>
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
             </Trigger>
             <Trigger Property="TickPlacement" Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
@@ -233,7 +233,7 @@
 
         <ControlTemplate.Triggers>
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
             </Trigger>
             <Trigger Property="TickPlacement" Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />

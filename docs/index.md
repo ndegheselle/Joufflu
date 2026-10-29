@@ -28,7 +28,7 @@ can paste into your views.
 ## Highlights
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys; the gallery's **Customize theme** page edits them live and generates the dictionary.
+- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys; the gallery's **Customize theme** window (palette button in its title bar) edits them live and generates the dictionary.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
@@ -37,7 +37,7 @@ can paste into your views.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
 {: .note }
-> The gallery's **Natives** group — WPF's built-in controls restyled to match the
+> The gallery's **Native controls** group — WPF's built-in controls restyled to match the
 > design system (text boxes, combo boxes, data grid, …) — is mostly undocumented
 > here; only natives with named style variants are (see
 > [Native controls](natives/index.md)). Otherwise these pages cover the
@@ -49,7 +49,7 @@ can paste into your views.
 |---|---|
 | [Themes](themes/index.md) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and the live theme customizer |
 | [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon`, the `Card` styles and buttons (solid, soft & outline variants) |
-| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, building a custom input |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, shared width, creating a custom control |
 | [Joufflu controls](controls/index.md) | The optional packages: [Feedback](feedback/index.md) (`Badge`, `Spinner`, toasts), [Inputs](inputs/index.md) (numeric, search, combo boxes, pickers, `Dropdown`…), [Navigation](navigation/index.md) (`NavigationMenu`, overlays, `Paging`), [Data](data/index.md) (`DataFill`, `DataEdit`, `DataDisplay`) and [File explorer](file-explorer/index.md) |
 
 ## Getting started

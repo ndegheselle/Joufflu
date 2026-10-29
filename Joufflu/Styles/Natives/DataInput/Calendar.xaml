@@ -45,7 +45,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

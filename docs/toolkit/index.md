@@ -9,7 +9,8 @@ has_children: true
 Design-system helpers that shape controls and layouts rather than being controls
 themselves. They all live in the `Joufflu.Toolkit` namespace of the core
 `Joufflu` package — `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`,
-`DragSource` and `SharedWidth`. The theme manager, tokens and window have their own section, see
+`DropData`, `DragSource`, `SharedWidth` and `DataGridEditing` (which the `DataGrid` style uses to
+theme the editors of its built-in columns). The theme manager, tokens and window have their own section, see
 [Themes](../themes/index.md).
 
 - **Sizing** — the `Sizing.Size` and `IsSquare` attached properties.
@@ -18,8 +19,8 @@ themselves. They all live in the `Joufflu.Toolkit` namespace of the core
 - **Tooltip** — every `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side and `ThemedTooltip.MaxWidth` where its text wraps.
 - **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it.
 - **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
-- **Shared width**: the `SharedWidth.IsShared` and `IsScope` attached properties, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
-- **Custom input** — the rules an input of your own follows to sit with the Joufflu ones: background and border from the input category tokens, height, then sizes and padding, states, the validation error style and embedded buttons.
+- **Shared width** — the `SharedWidth.IsShared` and `IsScope` attached properties, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
+- **Create a custom control** — the category a control of your own belongs to (display, input, action), the tokens and states of each, then an input built step by step: background and border, height, sizes and padding, states, the validation error style and embedded buttons.
 
 Snippets use the `toolkit` XML namespace for those helpers and `joufflu` for the
 design-system keys, plus `nav` and `feedback` where an example targets one of

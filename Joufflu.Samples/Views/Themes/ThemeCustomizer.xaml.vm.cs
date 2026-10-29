@@ -455,7 +455,7 @@ public class ThemeCustomizerViewModel : ObservableObject
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         _action = new ThemeCategoryEditor(
             "Action",
-            "Buttons and toggle buttons. A stronger background on hover, a strong border on focus, moved down when pressed. The padding is the md one, the other sizes follow it.",
+            "Buttons and toggle buttons. A stronger background on hover, moved down when pressed, no focus border. The padding is the md one, the other sizes follow it.",
             (JColors.ActionSurface1Color, JColors.ActionSurface2Color, JColors.ActionBorderColor),
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         Categories = [_display, _input, _action];
@@ -714,9 +714,9 @@ public class ThemeCustomizerViewModel : ObservableObject
         Color foreground = GlobalColor("ForegroundColor");
         ThemeCategoryValues action = CurrentCategories().First(c => c.Category == _action).Values;
         ThemeCategoryValues input = CurrentCategories().First(c => c.Category == _input).Values;
-        res[JBrushes.ActionHoverBrush] = new SolidColorBrush(ColorShade.Mix(action.Surface1, foreground, 0.1));
-        res[JBrushes.ActionBorderStrongBrush] = new SolidColorBrush(ColorShade.Mix(action.Border, foreground, 0.4));
-        res[JBrushes.InputBorderStrongBrush] = new SolidColorBrush(ColorShade.Mix(input.Border, foreground, 0.4));
+        res[JBrushes.ActionElevatedBrush] = new SolidColorBrush(ColorShade.Mix(action.Surface1, foreground, 0.1));
+        res[JBrushes.ActionBorderElevatedBrush] = new SolidColorBrush(ColorShade.Mix(action.Border, foreground, 0.4));
+        res[JBrushes.InputBorderElevatedBrush] = new SolidColorBrush(ColorShade.Mix(input.Border, foreground, 0.4));
     }
 
     /// <summary>
@@ -834,9 +834,9 @@ public class ThemeCustomizerViewModel : ObservableObject
                 res.Remove(color.Key);
                 res.Remove(BrushKey(color.ResourceName));
             }
-            res.Remove(JBrushes.ActionHoverBrush);
-            res.Remove(JBrushes.ActionBorderStrongBrush);
-            res.Remove(JBrushes.InputBorderStrongBrush);
+            res.Remove(JBrushes.ActionElevatedBrush);
+            res.Remove(JBrushes.ActionBorderElevatedBrush);
+            res.Remove(JBrushes.InputBorderElevatedBrush);
             foreach (var key in AllDimensionKeys())
                 res.Remove(key);
             foreach (var step in _allScales.SelectMany(scale => scale.Steps))

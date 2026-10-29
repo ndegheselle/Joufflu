@@ -29,7 +29,7 @@ public partial class DataDisplaySamplesViewModel : ObservableObject
     public string DisplayCode =>
         "Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode();\n" +
         "Node.Load(JToken.Parse(json), ManualValues);\n\n" +
-        "<jata:DataDisplay Node=\"{Binding Node}\" />";
+        "<data:DataDisplay Node=\"{Binding Node}\" />";
 
     public DataDisplaySamplesViewModel()
     {

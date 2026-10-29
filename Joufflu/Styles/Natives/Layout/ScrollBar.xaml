@@ -60,7 +60,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -92,10 +92,10 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
                         </Trigger>
                         <Trigger Property="IsDragging" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderStrongBrush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

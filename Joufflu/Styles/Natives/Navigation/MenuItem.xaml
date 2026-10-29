@@ -185,7 +185,7 @@
                         </Trigger>
 
                         <Trigger Property="IsHighlighted" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
                         </Trigger>
 
                         <Trigger Property="IsEnabled" Value="False">

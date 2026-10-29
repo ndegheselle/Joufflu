@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace Joufflu.Samples.Views.Toolkit;
 
-public partial class CustomInputSamples : UserControl
+public partial class CustomControlSamples : UserControl
 {
-    public CustomInputSamples()
+    public CustomControlSamples()
     {
         InitializeComponent();
     }

@@ -48,7 +48,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
         <Setter Property="TitleBarForeground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
-        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome

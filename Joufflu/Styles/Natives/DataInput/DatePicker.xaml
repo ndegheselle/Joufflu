@@ -129,7 +129,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">

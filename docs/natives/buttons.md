@@ -30,7 +30,8 @@ matching content colour.
 A tinted background with the semantic hue as text — lower emphasis than solid,
 for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
 ≈24 % on hover), not a dedicated palette entry, so it derives automatically in
-both Light and Dark and follows any custom theme.
+both Light and Dark and follows any custom theme. Secondary is achromatic, so it
+uses a neutral wash instead, lighter (≈8 %, ≈14 % on hover).
 
 ```xml
 <Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
@@ -50,7 +51,7 @@ both Light and Dark and follows any custom theme.
 ## Outline
 
 A coloured border and text over a transparent fill; hovering fills it with the
-soft tint.
+soft tint. Secondary uses the neutral border and foreground.
 
 ```xml
 <Button Style="{StaticResource OutlinePrimaryButton}">Primary</Button>

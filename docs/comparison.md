@@ -24,13 +24,14 @@ this page does not track their releases.
 ## What Joufflu is
 
 - **One design system, not a bag of controls.** Colours, corner radius, spacing,
-  control heights and font sizes are resource keys (`joufflu:Brushes.*`,
-  `joufflu:Dimensions.*`). Every Joufflu control and every restyled native control
-  reads them through `DynamicResource`, so a theme change reaches all of them at once.
+  control heights and font sizes are resource keys (`joufflu:Colors.*`, which the
+  `joufflu:Brushes.*` follow, and `joufflu:Dimensions.*`). Every Joufflu control and
+  every restyled native control reads them through `DynamicResource`, so a theme
+  change reaches all of them at once.
 - **Customizable by design.** Brand colours, corner radius, spacing, control heights
   and font sizes are all tokens: override a few in a dictionary merged after the Joufflu
   resources and every control follows, with no `ControlTemplate` copied or edited.
-  Register a whole palette by name (`ThemeManager.Register`) to make it selectable next
+  Register a whole palette by name (`ThemeManager.Instance.Register`) to make it selectable next
   to Light and Dark. The gallery's **Customize theme** window edits the tokens live,
   starts from presets and generates the dictionary to paste into your app
   ([Customize theme](themes/customize-theme.md)).

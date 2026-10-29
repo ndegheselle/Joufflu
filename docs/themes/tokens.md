@@ -10,7 +10,7 @@ A theme is a collection of the keys below. Every control style reads them
 through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
 leaves out keeps the built-in value.
 
-A theme registered with `ThemeManager` can define both: it is merged right after
+A theme registered with `ThemeManager` can define both colours and dimensions: it is merged right after
 `Resources.xaml`, so its `Dimensions` keys (and `Colors.DisabledOpacity` / `MutedOpacity`) override the built-in
 ones, and change with the theme. A dictionary merged after `Resources.xaml` still overrides
 every theme.
@@ -45,7 +45,7 @@ animations and anything that needs the raw value.
 
 ### Surfaces
 
-The global neutrals a theme defines. The controls do not read them directly but through the three
+Four colours a theme defines for the neutrals. The controls do not read them directly but through the three
 categories below, which fall back to them unless the theme gives a category colour of its own. Use
 them for an app's own layout.
 
@@ -82,7 +82,7 @@ focus is a strong border.
 | `InputSurface1` | The background (`Surface1`). |
 | `InputSurface2` | An elevated part inside: a tag, a track (`Surface2`). |
 | `InputBorder` | The border (`Stroke`). |
-| `InputBorderStrongBrush` | Derived, the border mixed 40% toward `Foreground`: the border of a focused input. |
+| `InputBorderElevatedBrush` | Derived, the border mixed 40% toward `Foreground`: the border of a focused input. |
 
 **Action**: what runs something: button, toggle button. Hover is a stronger background, pressed a
 translation down rather than a colour; an action and an item of a display have no focus border.
@@ -92,8 +92,8 @@ translation down rather than a colour; an action and an item of a display have n
 | `ActionSurface1` | The background (`Base`). |
 | `ActionSurface2` | An elevated part inside (`Surface2`). |
 | `ActionBorder` | The border (`Stroke`). |
-| `ActionHoverBrush` | Derived, the fill mixed 10% toward `Foreground`: a hovered action or display item. |
-| `ActionBorderStrongBrush` | Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb). |
+| `ActionElevatedBrush` | Derived, the fill mixed 10% toward `Foreground`: a hovered action or display item. |
+| `ActionBorderElevatedBrush` | Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb). |
 
 A theme overrides a category by defining its colour, for example inputs set apart from the cards:
 
@@ -132,7 +132,7 @@ button is.
 </tbody>
 </table>
 
-The swatches show the built-in **Light** palette; every theme redefines the same eighteen keys.
+The swatches show the built-in **Light** palette; every theme redefines the same seventeen keys (`Foreground`, the four surfaces and the twelve accent colours).
 The sample gallery renders them live against whichever theme is selected.
 
 ### State
@@ -213,7 +213,7 @@ the inherited body size), like the controls do, so restyling the scale restyles 
 ### Paddings
 
 Space inside a control, one `Thickness` per size. Two families: buttons and anything content shaped
-use `Padding*`, text inputs use `InputPadding*`, whose halved horizontal keeps the caret closer to
+use `ActionPaddingXs`…`ActionPaddingLg`, text inputs use `InputPadding*`, whose halved horizontal keeps the caret closer to
 the border.
 
 | Key | Value | Input key | Value |

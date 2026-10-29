@@ -90,7 +90,7 @@
                             <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="True">
                             <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />

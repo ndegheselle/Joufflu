@@ -204,7 +204,7 @@
                     <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
 

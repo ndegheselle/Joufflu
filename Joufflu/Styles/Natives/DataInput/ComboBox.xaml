@@ -58,7 +58,7 @@
                     <Condition Property="IsHighlighted" Value="True" />
                     <Condition Property="IsSelected" Value="False" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
             </MultiTrigger>
 
             <Trigger Property="IsSelected" Value="True">
@@ -256,7 +256,7 @@
                         </Trigger>
 
                         <Trigger Property="IsDropDownOpen" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
                         </Trigger>
 
                         <Trigger Property="toolkit:Sizing.Size" Value="xs">
@@ -275,7 +275,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">

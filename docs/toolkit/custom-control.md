@@ -1,24 +1,39 @@
 ---
-title: Custom input
+title: Create a custom control
 parent: Toolkit
 nav_order: 8
 ---
 
-# Custom input
+# Create a custom control
 
-An input of your own sits with the Joufflu ones when it reads the same design tokens: the
-**Input** category of [Design tokens](../themes/tokens.html), so a theme restyling the inputs
-restyles it too.
-The gallery's **Custom input** page builds a star `RatingInput` from a bare `Control`
-step by step; this page lists the rules it follows.
+A control of your own sits with the Joufflu ones when it reads the tokens of its
+category, so a theme restyling that category restyles it too. Pick the category the
+control belongs to, then follow its rules. A control derived from a native one
+(`TextBox`, `Button`, `ListBox`…) gets them all by basing its style on the native one.
+
+| Category | What it is | Tokens | States |
+|---|---|---|---|
+| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplaySurface1/2Brush`, `DisplayBorderBrush`, `DisplayCornerRadius`, `DisplayBorderThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None. Its items (rows, entries) are actions without a fill at rest |
+| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputSurface1/2Brush`, `InputBorderBrush`, `InputRadius`, `InputBorderThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; a strong border on focus (`InputBorderElevatedBrush`) |
+| **Action** | Runs something: a button, a toggle, an item of a display | `ActionSurface1/2Brush`, `ActionBorderBrush`, `ActionRadius`, `ActionBorderThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | A stronger background on hover (`ActionElevatedBrush`), moved down when pressed, no focus border |
+
+In every category, disabled is `DisabledOpacity`, selected and checked are the primary,
+and sizes follow `Sizing.Size`. [Design tokens](../themes/tokens.html) lists each key with
+its role and fallback.
+
+## Example: an input
+
+The gallery's **Create a custom control** page builds a star `RatingInput` from a bare
+`Control` step by step, following every rule of the **Input** category by hand; a display
+or an action follows the same steps with the keys of its own category. The rules:
 
 | | Rule | Tokens |
 |---|---|---|
 | **Required** | Background | `Brushes.InputSurface1Brush` (`InputSurface2Brush` for an elevated part inside: a tag, a track) |
-| **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputBorderThickness`, `Dimensions.InputCornerRadius` |
+| **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputBorderThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Focus and disabled states (an input has no hover) | `InputBorderStrongBrush` (focus), `Colors.DisabledOpacity` |
+| Optional | Focus and disabled states (an input has no hover) | `InputBorderElevatedBrush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -56,10 +71,19 @@ template read them from the control:
         <Setter.Value>
             <ControlTemplate TargetType="{x:Type local:RatingInput}">
                 <Grid>
+                    <!-- The radius is clamped to half the height, like the native inputs: a large one gives a pill -->
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.InputCornerRadius}}" />
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
+                        <Border.CornerRadius>
+                            <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </Border.CornerRadius>
+                    </Border>
                     <!-- content -->
                 </Grid>
             </ControlTemplate>
@@ -98,14 +122,19 @@ height alone.
 </Style.Triggers>
 ```
 
-Inputs use the `InputPadding` keys, tighter than the `Padding` keys of the buttons. In the
-template, lay the content over the border inside `Padding`, so it lines up with the text
-of the native inputs:
+Inputs use the `InputPadding` keys, tighter than the `ActionPadding` keys of the buttons.
+The height of a one-line input comes from its size, so, like the native inputs, the
+template lays the content over the border inside the **horizontal** part of `Padding`
+only, centred vertically: it lines up with the text of the native inputs, and a large
+vertical padding never crushes it. `HorizontalThicknessConverter` drops the vertical part:
 
 ```xml
 <Grid>
     <Border ... />
-    <Grid Margin="{TemplateBinding Padding}"> <!-- content --> </Grid>
+    <Grid VerticalAlignment="Center"
+          Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}">
+        <!-- content -->
+    </Grid>
 </Grid>
 ```
 
@@ -116,7 +145,7 @@ when disabled:
 
 ```xml
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderStrongBrush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
@@ -145,11 +174,12 @@ border stays.
 ## Embedded buttons
 
 A button inside the input (clear, open, step…) uses the `EmbeddedButton` style: a
-transparent square of `HeightEmbedded` (20). Placed inside `Padding`, it fits every
-size: the smallest input leaves exactly 24 − 2 × 2 = 20 for it.
+transparent square of `HeightEmbedded` (20). Centred in the content row, which takes
+no vertical padding, it fits every size, down to the 24 of `xs`.
 
 ```xml
-<Grid Margin="{TemplateBinding Padding}">
+<Grid VerticalAlignment="Center"
+      Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}">
     <Grid.ColumnDefinitions>
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" />

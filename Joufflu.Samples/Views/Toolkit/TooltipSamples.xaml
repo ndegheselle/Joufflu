@@ -56,7 +56,7 @@
             </c:CodeExample>
 
             <c:CodeExample
-                Title="Max width"
+                Title="ThemedTooltip.MaxWidth"
                 Code="{Binding MaxWidthCode}"
                 Description="A tooltip is no wider than ThemedTooltip.MaxWidth (320 by default), past which its text wraps.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">

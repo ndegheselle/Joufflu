@@ -69,7 +69,7 @@
                     <Condition Property="IsMouseOver" Value="True" />
                     <Condition Property="IsSelected" Value="False" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
             </MultiTrigger>
 
             <Trigger Property="IsSelected" Value="True">

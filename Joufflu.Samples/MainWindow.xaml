@@ -335,11 +335,11 @@
                         </nav:NavigationItem.Icon>
                         Drag and drop
                     </nav:NavigationItem>
-                    <nav:NavigationItem TargetType="{x:Type toolkitSamples:CustomInputSamplesViewModel}">
+                    <nav:NavigationItem TargetType="{x:Type toolkitSamples:CustomControlSamplesViewModel}">
                         <nav:NavigationItem.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.PencilRuler}" />
                         </nav:NavigationItem.Icon>
-                        Create custom input
+                        Create a custom control
                     </nav:NavigationItem>
 
                     <nav:NavigationTitle>Joufflu controls</nav:NavigationTitle>
@@ -380,7 +380,7 @@
                             <nav:NavigationItem.Icon>
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Hash}" />
                             </nav:NavigationItem.Icon>
-                            Numeric inputs
+                            Numeric &amp; format inputs
                         </nav:NavigationItem>
                         <nav:NavigationItem TargetType="{x:Type inputs:SearchSamplesViewModel}">
                             <nav:NavigationItem.Icon>

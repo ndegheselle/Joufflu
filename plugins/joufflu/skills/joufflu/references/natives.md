@@ -92,10 +92,12 @@ Named `Border` styles for padded, rounded surfaces:
 
 ## Typography
 
-No named text styles. A `TextBlock` takes its font size from `toolkit:Sizing.Size`
+A `TextBlock` takes its font size from `toolkit:Sizing.Size`
 (`xs`…`xl` → `Dimensions.FontSizeXs`…`FontSizeXl`; `md` keeps the inherited body size). The
 size is inherited, so a panel set to `sm`/`lg` sizes its text too. A heading is a size plus a
 `FontWeight`; muted text is dimmed with `Colors.MutedOpacity`, not given another colour.
+Two named styles exist: `TextMuted` (muted opacity, wrapping) and `Title` (semi-bold,
+`FontSizeLg`), e.g. `<TextBlock Style="{StaticResource Title}" />`.
 
 | Role | Markup |
 |---|---|

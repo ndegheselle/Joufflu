@@ -71,7 +71,7 @@ public class DropTargetSamplesViewModel : ObservableObject
         """
         <!-- AllowDrop and the drag events are handled by the behavior -->
         <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
             <Border.Style>
                 <Style TargetType="Border">
                     <Setter Property="Background" Value="Transparent" />

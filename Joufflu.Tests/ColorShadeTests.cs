@@ -68,8 +68,8 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Lightness(Resolve(light, Brushes.ActionHoverBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.ActionSurface1Brush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.ActionHoverBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.ActionSurface1Brush))), "dark");
+            Assert.That(Lightness(Resolve(light, Brushes.ActionElevatedBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.ActionSurface1Brush))), "light");
+            Assert.That(Lightness(Resolve(dark, Brushes.ActionElevatedBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.ActionSurface1Brush))), "dark");
         });
     }
 
@@ -138,8 +138,8 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Resolve(light, Brushes.InputBorderStrongBrush), Is.EqualTo(ColorShade.Mix(Resolve(light, Brushes.InputBorderBrush), foreground, 0.4)));
-            Assert.That(Resolve(light, Brushes.ActionBorderStrongBrush), Is.EqualTo(ColorShade.Mix(Resolve(light, Brushes.ActionBorderBrush), foreground, 0.4)));
+            Assert.That(Resolve(light, Brushes.InputBorderElevatedBrush), Is.EqualTo(ColorShade.Mix(Resolve(light, Brushes.InputBorderBrush), foreground, 0.4)));
+            Assert.That(Resolve(light, Brushes.ActionBorderElevatedBrush), Is.EqualTo(ColorShade.Mix(Resolve(light, Brushes.ActionBorderBrush), foreground, 0.4)));
         });
     }
 
@@ -150,7 +150,7 @@ public class ColorShadeTests
         var theme = new ResourceDictionary { Source = new Uri("/Joufflu;component/Themes/Light.xaml", UriKind.Relative) };
         ResourceDictionary resources = WithBrushes(theme);
         var hover = new Border { Resources = resources };
-        hover.SetResourceReference(Border.BackgroundProperty, Brushes.ActionHoverBrush);
+        hover.SetResourceReference(Border.BackgroundProperty, Brushes.ActionElevatedBrush);
         hover.Measure(new Size(10, 10));
         var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
 

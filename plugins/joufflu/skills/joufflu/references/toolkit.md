@@ -7,7 +7,8 @@ Attached properties that shape controls and layouts. Prefix `toolkit:`
 
 - `Sizing.Size`: `xs` / `sm` / `md` (default) / `lg`. **Inherited**: set on a panel to size
   every child. Scales height (`Dimensions.Height*`), font size and padding. Honoured by
-  buttons, inputs, `TreeView`, `FontIcon` (also `xl`), `Badge`, `Spinner`, the Joufflu inputs.
+  buttons, inputs, `TreeView`, `FontIcon`, `Badge`, `Spinner`, the Joufflu inputs. `xl` is for text
+  (`TextBlock`) and `FontIcon` only; controls fall back to `md`.
 - `Sizing.IsSquare="True"`: width = height, for icon-only buttons.
 
 ```xml

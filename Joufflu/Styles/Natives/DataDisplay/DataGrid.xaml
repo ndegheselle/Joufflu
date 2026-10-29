@@ -198,7 +198,7 @@
                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="CellsBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionHoverBrush}}" />
+                            <Setter TargetName="CellsBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
                         </MultiDataTrigger>
 
                         <!--  The cells give themselves the content colour (see DataGridCell)  -->

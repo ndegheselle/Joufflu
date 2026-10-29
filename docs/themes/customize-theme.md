@@ -26,7 +26,11 @@ customizer has two modes:
   (corner radius, border thickness, spacing) once, and displays, inputs and actions follow them. The
   generated dictionary leaves the category colours out, so they fall back to the global ones, and
   writes the global radius, thickness and spacing into the category keys (`DisplayRadius`,
-  `InputCornerRadius`, `ActionBorderThickness`, `DisplayPadding`…).
+  `InputCornerRadius`, `ActionBorderThickness`, `DisplayPadding`…). It also edits three scales,
+  each set by its md value with the other sizes following by fixed ratios: **Control height**
+  (`HeightXs`..`Lg`), **Font size** (`FontSizeXs`..`Xl`) and **Control padding**
+  (`ActionPaddingXs`..`Lg`, the input paddings at half the horizontal). The control padding scale
+  is shown in the simple mode only.
 - **Complete**: each category gets its own Surface 1, Surface 2, Border, corner radius, border
   thickness and padding (horizontal and vertical), starting from the simple values. The padding is
   the inside of a display (`DisplayPadding`), and the md padding of an input or an action, the

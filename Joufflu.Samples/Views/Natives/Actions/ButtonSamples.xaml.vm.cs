@@ -10,11 +10,15 @@ public class ButtonSamplesViewModel : ObservableObject
         "<Button Style=\"{StaticResource SecondaryButton}\">Secondary</Button>\n" +
         "<Button Style=\"{StaticResource GhostButton}\">Ghost</Button>\n" +
         "<Button Style=\"{StaticResource SuccessButton}\">Success</Button>\n" +
-        "<Button Style=\"{StaticResource DangerButton}\">Danger</Button>";
+        "<Button Style=\"{StaticResource DangerButton}\">Danger</Button>\n" +
+        "<Button Style=\"{StaticResource InfoButton}\">Info</Button>\n" +
+        "<Button Style=\"{StaticResource WarningButton}\">Warning</Button>\n" +
+        "<Button IsEnabled=\"False\">Disabled</Button>";
 
     public string SoftCode =>
         "<!-- Tinted background, semantic hue as text -->\n" +
         "<Button Style=\"{StaticResource SoftPrimaryButton}\">Primary</Button>\n" +
+        "<Button Style=\"{StaticResource SoftSecondaryButton}\">Secondary</Button>\n" +
         "<Button Style=\"{StaticResource SoftSuccessButton}\">Success</Button>\n" +
         "<Button Style=\"{StaticResource SoftInfoButton}\">Info</Button>\n" +
         "<Button Style=\"{StaticResource SoftWarningButton}\">Warning</Button>\n" +
@@ -23,14 +27,21 @@ public class ButtonSamplesViewModel : ObservableObject
     public string OutlineCode =>
         "<!-- Coloured border and text, transparent fill -->\n" +
         "<Button Style=\"{StaticResource OutlinePrimaryButton}\">Primary</Button>\n" +
+        "<Button Style=\"{StaticResource OutlineSecondaryButton}\">Secondary</Button>\n" +
         "<Button Style=\"{StaticResource OutlineSuccessButton}\">Success</Button>\n" +
         "<Button Style=\"{StaticResource OutlineInfoButton}\">Info</Button>\n" +
         "<Button Style=\"{StaticResource OutlineWarningButton}\">Warning</Button>\n" +
         "<Button Style=\"{StaticResource OutlineDangerButton}\">Danger</Button>";
 
     public string IconCode =>
-        "<Button toolkit:Sizing.IsSquare=\"True\">\n" +
+        "<Button toolkit:Sizing.IsSquare=\"True\" Style=\"{StaticResource PrimaryButton}\">\n" +
         "    <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Plus}\" />\n" +
+        "</Button>\n" +
+        "<Button toolkit:Sizing.IsSquare=\"True\">\n" +
+        "    <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Settings}\" />\n" +
+        "</Button>\n" +
+        "<Button toolkit:Sizing.IsSquare=\"True\" Style=\"{StaticResource DangerButton}\">\n" +
+        "    <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Trash}\" />\n" +
         "</Button>";
 
     public string SizesCode =>

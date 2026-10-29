@@ -37,7 +37,7 @@ public class ThemeTokensViewModel : ObservableObject
     [
         new TokenGroup(
             "Surfaces",
-            "Five colours a theme defines for the neutrals. The controls do not read them directly but through the three categories below, which fall back to them unless the theme gives a category colour of its own.",
+            "Four colours a theme defines for the neutrals. The controls do not read them directly but through the three categories below, which fall back to them unless the theme gives a category colour of its own.",
             [
                 new TokenEntry(
                     "Base",
@@ -73,7 +73,7 @@ public class ThemeTokensViewModel : ObservableObject
                 new TokenEntry("InputSurface1", "The background (falls back to Surface1).", Joufflu.Brushes.InputSurface1Brush),
                 new TokenEntry("InputSurface2", "An elevated part inside: a tag, a track (falls back to Surface2).", Joufflu.Brushes.InputSurface2Brush),
                 new TokenEntry("InputBorder", "The border (falls back to Stroke).", Joufflu.Brushes.InputBorderBrush),
-                new TokenEntry("InputBorderStrongBrush", "Derived: the border of a focused input.", Joufflu.Brushes.InputBorderStrongBrush),
+                new TokenEntry("InputBorderElevatedBrush", "Derived: the border of a focused input.", Joufflu.Brushes.InputBorderElevatedBrush),
             ]),
 
         new TokenGroup(
@@ -83,8 +83,8 @@ public class ThemeTokensViewModel : ObservableObject
                 new TokenEntry("ActionSurface1", "The background (falls back to Base).", Joufflu.Brushes.ActionSurface1Brush),
                 new TokenEntry("ActionSurface2", "An elevated part inside (falls back to Surface2).", Joufflu.Brushes.ActionSurface2Brush),
                 new TokenEntry("ActionBorder", "The border (falls back to Stroke).", Joufflu.Brushes.ActionBorderBrush),
-                new TokenEntry("ActionHoverBrush", "Derived: a hovered action or display item.", Joufflu.Brushes.ActionHoverBrush),
-                new TokenEntry("ActionBorderStrongBrush", "Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb).", Joufflu.Brushes.ActionBorderStrongBrush),
+                new TokenEntry("ActionElevatedBrush", "Derived: a hovered action or display item.", Joufflu.Brushes.ActionElevatedBrush),
+                new TokenEntry("ActionBorderElevatedBrush", "Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb).", Joufflu.Brushes.ActionBorderElevatedBrush),
             ]),
 
         new TokenGroup(
@@ -250,7 +250,7 @@ public class ThemeTokensViewModel : ObservableObject
         new TokenGroup(
             "Paddings",
             "Space inside a control, one Thickness per size. Two families: buttons and anything content "
-            + "shaped use Padding*, text inputs use InputPadding*, whose halved horizontal keeps the caret "
+            + "shaped use ActionPadding*, text inputs use InputPadding*, whose halved horizontal keeps the caret "
             + "closer to the border.",
             [
                 new TokenEntry("ActionPaddingXs", "6,2"),
@@ -268,10 +268,10 @@ public class ThemeTokensViewModel : ObservableObject
         "<!-- Always DynamicResource: a theme swap, or the customizer editing a -->\n" +
         "<!-- dimension, has to reach controls already on screen.               -->\n" +
         "<Border\n" +
-        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}\"\n" +
-        "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}\"\n" +
-        "    BorderThickness=\"{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}\"\n" +
-        "    CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}\" />\n\n" +
+        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}\"\n" +
+        "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}\"\n" +
+        "    BorderThickness=\"{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}\"\n" +
+        "    CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}\" />\n\n" +
         "<!-- The raw Color is there for what a brush cannot express -->\n" +
         "<GradientStop Color=\"{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}\" Offset=\"0\" />";
 }

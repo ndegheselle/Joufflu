@@ -152,9 +152,9 @@ C# namespaces (these are the real ones; some doc snippets are off):
   not the global `Base`/`Surface1`/`Surface2`/`Stroke` (kept for an app's own layout).
   Display (card, panel, popup): `DisplaySurface1|DisplaySurface2|DisplayBorder` +
   `Dimensions.DisplayCornerRadius|DisplayBorderThickness|DisplayPadding`. Input (takes a value):
-  `InputSurface1|InputSurface2|InputBorder`, `InputBorderStrongBrush` on focus, no hover, +
+  `InputSurface1|InputSurface2|InputBorder`, `InputBorderElevatedBrush` on focus, no hover, +
   `InputCornerRadius|InputBorderThickness`. Action (runs something): `ActionSurface1|ActionSurface2|ActionBorder`,
-  `ActionHoverBrush` on hover, no focus border, + `ActionCornerRadius|ActionBorderThickness`.
+  `ActionElevatedBrush` on hover, no focus border, + `ActionCornerRadius|ActionBorderThickness`.
   See [references/theming.md](references/theming.md).
 - **Spacing**: `toolkit:Spacing.Gap="8"` on the panel instead of margins on each child.
   Page padding: `{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}`.
@@ -163,7 +163,8 @@ C# namespaces (these are the real ones; some doc snippets are off):
   button: `toolkit:Sizing.IsSquare="True"`.
 - **Text**: size with `toolkit:Sizing.Size` (`xl` page title, `lg` section, `xs` caption) plus
   `FontWeight` for headings; muted text with
-  `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"`. No named text styles.
+  `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"`, or the named `TextMuted` /
+  `Title` styles.
 - **Surfaces**: `<Border Style="{StaticResource Card}">`, nested `CardSecondary`.
 - **Buttons**: `PrimaryButton`, `SecondaryButton`, `GhostButton`, `SuccessButton`,
   `InfoButton`, `WarningButton`, `DangerButton`, plus `Soft*` and `Outline*` variants.
