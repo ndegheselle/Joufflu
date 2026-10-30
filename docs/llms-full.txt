@@ -323,7 +323,7 @@ Its view:
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
-    <StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="12">
+    <StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" toolkit:Spacing.Gap="12">
         <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Home" />
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <Button Command="{Binding SayHelloCommand}" Content="Say hello" />
@@ -482,7 +482,7 @@ A `Card` per group of settings, headings sized with `Sizing.Size`, `Spacing.Gap`
 instead of per-element margins, and a toast to confirm the save.
 
 ```xml
-<StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="16">
+<StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" toolkit:Spacing.Gap="16">
     <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Settings" />
 
     <Border Style="{StaticResource Card}">
@@ -562,7 +562,7 @@ ThemeManager.Instance.Theme = ThemeManager.Dark;
 model which slice to show. The view model filters, counts and slices.
 
 ```xml
-<Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="0,12">
+<Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" toolkit:Spacing.Gap="0,12">
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
@@ -1029,10 +1029,10 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <!-- Always DynamicResource: a theme swap, or the customizer editing a
      dimension, has to reach controls already on screen. -->
 <Border
-    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
+    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
 
 <!-- The raw Color is there for what a brush cannot express -->
 <GradientStop Offset="0" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
@@ -1048,63 +1048,47 @@ Each colour exists twice: `Joufflu.Colors.XColor` holds the `Color`, `Joufflu.Br
 `SolidColorBrush` built from it. Use the brush in the UI; the colour is there for gradients,
 animations and anything that needs the raw value.
 
-### Surfaces
+### Bases
 
-Four colours a theme defines for the neutrals. The controls do not read them directly but through the three
-categories below, which fall back to them unless the theme gives a category colour of its own. Use
-them for an app's own layout.
+Three colours a theme defines for the neutrals. The controls do not read them directly but through the
+three categories below, whose base falls back to them unless the theme gives a category a base of its
+own. Use them for an app's own layout.
 
 | Key | Used for |
 |---|---|
-| `Base` | The page, and by default what an action is filled with, so on a display it reads as set into it. An action is not put directly on the page. |
-| `Surface1` | A card, and by default the background of a display and of an input. |
-| `Surface2` | An elevated part inside a card, and by default the `Surface2` of every category. |
-| `Stroke` | A border or a separator, and by default the border of every category. |
+| `Base0` | The page, and by default what an action is filled with, so on a display it reads as set into it. An action is not put directly on the page. |
+| `Base1` | A card, and by default the base of a display and of an input. |
+| `Base2` | A contrast inside a card, for an app's own layout. |
 
 ### Categories
 
-Every control belongs to one of three categories, each with a background (`Surface1`), an elevated
-background (`Surface2`) and a `Border`. The category colours are optional: a theme that leaves one
-out gets the global colour in brackets, through a `ColorFallback`. The states are always the same,
-derived by mixing a colour toward the `Foreground`, so no theme defines a hover colour. Disabled is
-`DisabledOpacity`, selected and checked are the primary.
+Every control belongs to one of three categories, each with the same four brushes. Only the base is a
+colour, and it is optional: a theme that leaves it out gets the global colour in brackets, through a
+`ColorFallback`. The three others are derived from it by mixing toward the `Foreground`, so the direction
+is right in a light and in a dark theme and no theme defines them.
 
-**Display**: what shows content without being interacted with: card, popup, tooltip, expander,
-group box, and the frame of a list, tree, grid, menu or tab control. No states. Its items (rows,
-menu items, tabs, navigation entries) are actions without a fill at rest.
-
-| Key | Used for |
+| Brush | Used for |
 |---|---|
-| `DisplaySurface1` | The background (`Surface1`). |
-| `DisplaySurface2` | An elevated part: a header, a nested area (`Surface2`). |
-| `DisplayBorder` | The border and the separators (`Stroke`). |
+| `XBase` | The background. |
+| `XBorder` | The base mixed 10% toward `Foreground`: the border, and the parts that sit on the base (a header, a track, a tag). |
+| `XElevated` | The border mixed 10% toward `Foreground`: a border that must stand out from a `XBorder` background (the border of a `CardSecondary`), and the border of an interacted control. |
+| `XInteraction` | The base mixed 10% toward `Foreground`: the background of an interacted control. |
 
-**Input**: what takes a value: text box, combo box, check box, radio button, slider. No hover;
-focus is a strong border.
+An interaction turns the border to `XElevated` and the background to `XInteraction`. A part with no
+border at rest (a row, a menu item, a ghost button) keeps none. Disabled is `DisabledOpacity`, selected
+and checked are the primary.
 
-| Key | Used for |
-|---|---|
-| `InputSurface1` | The background (`Surface1`). |
-| `InputSurface2` | An elevated part inside: a tag, a track (`Surface2`). |
-| `InputBorder` | The border (`Stroke`). |
-| `InputBorderElevatedBrush` | Derived, the border mixed 40% toward `Foreground`: the border of a focused input. |
+| Category | Base | Controls | Interaction |
+|---|---|---|---|
+| **Display** | `DisplayBase` (`Base1`) | Card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. Its items (rows, menu items, tabs, navigation entries) are actions without a fill at rest. | None of its own: `DisplayInteraction` is there for an app's informative hover. |
+| **Input** | `InputBase` (`Base1`) | Text box, combo box, check box, radio button, slider. | On focus. No hover. |
+| **Action** | `ActionBase` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionElevated` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
 
-**Action**: what runs something: button, toggle button. Hover is a stronger background, pressed a
-translation down rather than a colour; an action and an item of a display have no focus border.
-
-| Key | Used for |
-|---|---|
-| `ActionSurface1` | The background (`Base`). |
-| `ActionSurface2` | An elevated part inside (`Surface2`). |
-| `ActionBorder` | The border (`Stroke`). |
-| `ActionElevatedBrush` | Derived, the fill mixed 10% toward `Foreground`: a hovered action or display item. |
-| `ActionBorderElevatedBrush` | Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb). |
-
-A theme overrides a category by defining its colour, for example inputs set apart from the cards:
+A theme overrides a category by defining its base, for example inputs set apart from the cards, with
+their border, elevated and interaction brushes following:
 
 ```xml
-<Color x:Key="{x:Static joufflu:Colors.InputSurface1Color}">#FFFFFF</Color>
-<Color x:Key="{x:Static joufflu:Colors.ActionBorderColor}">#A1A1AA</Color>
+<Color x:Key="{x:Static joufflu:Colors.InputBaseColor}">#FFFFFF</Color>
 ```
 
 `ColorFallback` is public: a library of your own can declare an optional colour the same way (see
@@ -1114,30 +1098,30 @@ A theme overrides a category by defining its colour, for example inputs set apar
 
 | Key | Used for |
 |---|---|
-| `Foreground` | Default text and icon colour, on `Base`, `Surface1` or `Surface2`. |
+| `Foreground` | Default text and icon colour, on any base. |
 
 ### Accents
 
 Six semantic families sharing one shape — the three keys of each are shown side by side below:
-`X` is the fill, `XContent` the text and icons drawn on top of it: the two colours a theme defines.
-The others are brushes only, derived from the fill so no theme defines them. `XElevatedBrush` is the
-fill while hovered or pressed: the fill mixed 10% toward its own `XContent`, so a dark fill with light
-content lightens and a pale one darkens, in a light and in a dark theme alike. `XSoftBrush` is the fill at low opacity (soft buttons,
-selected rows, outline hover) and `XSoftElevatedBrush` its hover, drawn with the fill as text, as a soft
+`X` is the fill, `XForeground` the text and icons drawn on top of it: the two colours a theme defines.
+The others are brushes only, derived from the fill so no theme defines them. `XInteractionBrush` is the
+fill while hovered or pressed: the fill mixed 10% toward its own `XForeground`, so a dark fill with light
+foreground lightens and a pale one darkens, in a light and in a dark theme alike. `XSoftBrush` is the fill at low opacity (soft buttons,
+selected rows, outline hover) and `XSoftInteractionBrush` its hover, drawn with the fill as text, as a soft
 button is.
 
 <table>
 <tbody>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#FAFAFA">Aa</div><code style="font-size:11px">PrimaryElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoftElevated</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D4D4D8;color:#27272A">Aa</div><code style="font-size:11px">SecondaryElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoftElevated</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BD81;color:#004C39">Aa</div><code style="font-size:11px">SuccessElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoftElevated</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#3B82F6;color:#172554">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#1D6FF4;color:#172554">Aa</div><code style="font-size:11px">InfoElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#172554;color:#172554">&nbsp;</div><code style="font-size:11px">InfoContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.14);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.24);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoftElevated</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EEAF00;color:#411E03">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D69D00;color:#411E03">Aa</div><code style="font-size:11px">WarningElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#411E03;color:#411E03">&nbsp;</div><code style="font-size:11px">WarningContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.14);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.24);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoftElevated</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF627D;color:#4D0218">Aa</div><code style="font-size:11px">Danger</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF3E5F;color:#4D0218">Aa</div><code style="font-size:11px">DangerElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#4D0218;color:#4D0218">&nbsp;</div><code style="font-size:11px">DangerContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.14);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.24);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoftElevated</code></div></td><td>Destructive action and validation errors — a delete button, the border of a field in error.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#FAFAFA">Aa</div><code style="font-size:11px">PrimaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoftInteraction</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D4D4D8;color:#27272A">Aa</div><code style="font-size:11px">SecondaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoftInteraction</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BD81;color:#004C39">Aa</div><code style="font-size:11px">SuccessInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoftInteraction</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#3B82F6;color:#172554">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#1D6FF4;color:#172554">Aa</div><code style="font-size:11px">InfoInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#172554;color:#172554">&nbsp;</div><code style="font-size:11px">InfoForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.14);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.24);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoftInteraction</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EEAF00;color:#411E03">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D69D00;color:#411E03">Aa</div><code style="font-size:11px">WarningInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#411E03;color:#411E03">&nbsp;</div><code style="font-size:11px">WarningForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.14);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.24);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoftInteraction</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF627D;color:#4D0218">Aa</div><code style="font-size:11px">Danger</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF3E5F;color:#4D0218">Aa</div><code style="font-size:11px">DangerInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#4D0218;color:#4D0218">&nbsp;</div><code style="font-size:11px">DangerForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.14);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.24);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoftInteraction</code></div></td><td>Destructive action and validation errors — a delete button, the border of a field in error.</td></tr>
 </tbody>
 </table>
 
-The swatches show the built-in **Light** palette; every theme redefines the same seventeen keys (`Foreground`, the four surfaces and the twelve accent colours).
+The swatches show the built-in **Light** palette; every theme redefines the same sixteen keys (`Foreground`, the three bases and the twelve accent colours).
 The sample gallery renders them live against whichever theme is selected.
 
 ### State
@@ -1153,29 +1137,24 @@ The sample gallery renders them live against whichever theme is selected.
 
 ### Shape
 
-A scalar plus the ready made `Thickness`/`CornerRadius` built from it. Bind the scalar through
-[`Derive`](../toolkit/derived-dimensions.html) when you need only some sides or corners, the composite one
-otherwise.
+What a `Border` takes, a `Thickness` or a `CornerRadius`. Bind it through
+[`Derive`](../toolkit/derived-dimensions.html) when you need only some sides or corners.
 
 | Key | Type | Used for |
 |---|---|---|
-| `Thickness` | `double` | Base border width (`1`). |
-| `BorderThickness` | `Thickness` | `Thickness` on all four sides, for a uniform border. |
-| `Radius` | `double` | Base corner radius (`4`). |
-| `CornerRadius` | `CornerRadius` | `Radius` on all four corners, for a uniformly rounded border. |
-| `DisplayRadius`, `InputRadius`, `ActionRadius` | `double` | The radius of each category (`4`). The controls clamp it to half their height, so a large one gives a pill. |
-| `DisplayCornerRadius`, `InputCornerRadius`, `ActionCornerRadius` | `CornerRadius` | The radius of each category on all four corners. |
-| `DisplayBorderThickness`, `InputBorderThickness`, `ActionBorderThickness` | `Thickness` | The border of each category (`1`). |
+| `Thickness` | `Thickness` | The global border (`1`). |
+| `Radius` | `CornerRadius` | The global corner radius (`4`). |
+| `DisplayRadius`, `InputRadius`, `ActionRadius` | `CornerRadius` | The radius of each category (`4`). The controls clamp each corner to half their height, so a large one gives a pill. |
+| `DisplayThickness`, `InputThickness`, `ActionThickness` | `Thickness` | The border of each category (`1`). |
 | `DisplayPadding` | `Thickness` | The padding inside a display (`12`). An action is padded by `ActionPaddingXs`…`ActionPaddingLg`, an input by `InputPaddingXs`…`InputPaddingLg`; a button or an input takes only their horizontal part, its height coming from its size, while a row, a menu item or a tab takes both. |
 | `DisplayPaddingSm` | `Thickness` | The padding inside a compact display: a popup, a menu, a tooltip, a badge (`4`, a third of `DisplayPadding` in the customizer). |
 
-The global `Radius`, `CornerRadius`, `Thickness` and `BorderThickness` are for an app's own layout:
-the controls read the category keys. Override a category key in a dictionary merged after
-`Resources.xaml` (or in a registered theme) to reshape that category alone:
+The global `Radius` and `Thickness` are for an app's own layout: the controls read the category keys.
+Override a category key in a dictionary merged after `Resources.xaml` (or in a registered theme) to
+reshape that category alone:
 
 ```xml
-<CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">16</CornerRadius>
-<system:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</system:Double>
+<CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</CornerRadius>
 ```
 
 ### Layout
@@ -1184,8 +1163,7 @@ Distances between things rather than inside them.
 
 | Key | Type | Used for |
 |---|---|---|
-| `Spacing` | `double` | Standard gap between sibling elements (`12`). Feed it to [`Spacing.Gap`](../toolkit/spacing.html). |
-| `SpacingThickness` | `Thickness` | `Spacing` on all four sides, the standard page padding. |
+| `Spacing` | `Thickness` | Standard gap between sibling elements and page padding (`12`). Feed it to [`Spacing.Gap`](../toolkit/spacing.html). |
 | `TitleBarHeight` | `double` | Height of the custom window title bar (`30`). |
 | `TitleBarHeightOffset` | `Thickness` | `Top` only, used as a margin to push content below an overlapping title bar. |
 
@@ -1254,24 +1232,24 @@ plays in the control styles.
 The controls read the category tokens (`Display*`, `Input*`, `Action*`), not the global ones. The
 customizer has two modes:
 
-- **Simple**: you set the surfaces (Base, Surface 1, Surface 2, Stroke, Foreground) and the shape
+- **Simple**: you set the neutrals (Base 0, Base 1, Base 2, Foreground) and the shape
   (corner radius, border thickness, spacing) once, and displays, inputs and actions follow them. The
   generated dictionary leaves the category colours out, so they fall back to the global ones, and
   writes the global radius, thickness and spacing into the category keys (`DisplayRadius`,
-  `InputCornerRadius`, `ActionBorderThickness`, `DisplayPadding`…). It also edits three scales,
+  `InputRadius`, `ActionThickness`, `DisplayPadding`…). It also edits three scales,
   each set by its md value with the other sizes following by fixed ratios: **Control height**
   (`HeightXs`..`Lg`), **Font size** (`FontSizeXs`..`Xl`) and **Control padding**
   (`ActionPaddingXs`..`Lg`, the input paddings at half the horizontal). The control padding scale
   is shown in the simple mode only.
-- **Complete**: each category gets its own Surface 1, Surface 2, Border, corner radius, border
+- **Complete**: each category gets its own base colour, corner radius, border
   thickness and padding (horizontal and vertical), starting from the simple values. The padding is
   the inside of a display (`DisplayPadding`), and the md padding of an input or an action, the
   other sizes (`InputPaddingXs`..`Lg`, `ActionPaddingXs`..`Lg`) following it with the ratios of the
   control padding, which is only edited in the simple mode. The generated dictionary writes the
-  category colours (`ActionSurface1Color`…) and shapes. Going back to the simple mode drops them.
+  category base colours (`ActionBaseColor`…) and shapes. Going back to the simple mode drops them.
 
-The states are derived either way: hover and the strong focus border follow the category colours.
-A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.BorderThickness` no
+The other brushes of a category (border, elevated, interaction) are derived from its base either way.
+A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` no
 longer reaches the controls.
 
 ```xml
@@ -1450,8 +1428,8 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content, a display: a `DisplaySurface1` fill, a
-`DisplayBorder` border, `DisplayCornerRadius` corners and `DisplayPadding` as padding.
+The primary surface for grouping content, a display: a `DisplayBase` fill, a
+`DisplayBorder` border, `DisplayRadius` corners and `DisplayPadding` as padding.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -1467,8 +1445,9 @@ The primary surface for grouping content, a display: a `DisplaySurface1` fill, a
 
 ## CardSecondary
 
-A subtly inset panel meant to sit **inside** a `Card`. It uses the `DisplaySurface2`
-fill, the elevated part of a display, so it reads as a distinct area of the card.
+A subtly inset panel meant to sit **inside** a `Card`. It uses the `DisplayBorder`
+fill, the part of a display that sits on its base, so it reads as a distinct area of the card, and the
+`DisplayElevated` border to stand out from it.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -1590,7 +1569,7 @@ theme the editors of its built-in columns). The theme manager, tokens and window
 - **Tooltip** — every `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side and `ThemedTooltip.MaxWidth` where its text wraps.
 - **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it.
 - **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
-- **Shared width** — the `SharedWidth.IsShared` and `IsScope` attached properties, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
+- **Shared width** — the `SharedWidth` decorator and its `IsScope` attached property, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
 - **Create a custom control** — the category a control of your own belongs to (display, input, action), the tokens and states of each, then an input built step by step: background and border, height, sizes and padding, states, the validation error style and embedded buttons.
 
 Snippets use the `toolkit` XML namespace for those helpers and `joufflu` for the
@@ -1700,9 +1679,9 @@ plain CLR properties, not dependency properties, so they can only be fed with
 from:
 
 ```xml
-<!-- Baked at load: editing Dimensions.Thickness at runtime does nothing here -->
-<Thickness x:Key="MenuBorderThickness"
-           Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
+<!-- Baked at load: editing BorderWidth at runtime does nothing here -->
+<system:Double x:Key="BorderWidth">1</system:Double>
+<Thickness x:Key="MenuBorderThickness" Right="{StaticResource BorderWidth}" />
 ```
 
 `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` build the
@@ -1711,7 +1690,7 @@ runtime — by the [theme customizer](../themes/customize-theme.html), for insta
 straight through, and no derived resource key has to be declared or re-pushed by
 hand.
 
-Point it at the key of the category the element belongs to (`DisplayBorderThickness`,
+Point it at the key of the category the element belongs to (`DisplayThickness`,
 `DisplayRadius`, `InputRadius`, `ActionRadius`…, see [Design tokens](../themes/tokens.html)), so the
 part follows the rest of the control when a theme reshapes that category. The global `Thickness` and
 `Radius` are for an app's own layout.
@@ -1735,12 +1714,12 @@ Point `Derive.BorderThickness` at a resource key and pick the sides with
 `Derive.BorderThicknessFactor`, in the usual `Left,Top,Right,Bottom` order.
 
 ```xml
-<!-- Right edge only, following Dimensions.DisplayBorderThickness live -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+<!-- Right edge only, following Dimensions.DisplayThickness live -->
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 
 <!-- Open at the bottom, with a doubled top edge -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
         toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
 ```
 
@@ -1749,7 +1728,7 @@ without a keyed `Thickness`:
 
 ```xml
 <Style TargetType="{x:Type nav:NavigationMenu}">
-    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
+    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayThickness}" />
     <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
 </Style>
 ```
@@ -1785,9 +1764,9 @@ Same shape again, on any `FrameworkElement`, with `Derive.MarginFactor`.
 
 ## Notes
 
-- The source resource may be a `double` (the usual case, spread over every side
-  or corner before scaling) or an already built `Thickness` / `CornerRadius`,
-  whose own sides are then scaled.
+- The source resource may be a `Thickness` / `CornerRadius` (every Joufflu shape
+  key is one), whose own sides are then scaled, or a `double`, spread over every
+  side or corner before scaling.
 - `Derive.BorderThickness` applies to `Border` and to any `Control`;
   `Derive.CornerRadius` applies to `Border`; `Derive.Margin` to any
   `FrameworkElement`. Anything else throws.
@@ -1957,7 +1936,7 @@ be dropped — the cursor shows a no-drop sign — and never lights the zone up.
 ```xml
 <!-- AllowDrop and the drag events are handled by the behavior -->
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}">
     <TextBlock VerticalAlignment="Center" Text="Drop .pdf files here" />
 </Border>
 ```
@@ -2021,7 +2000,7 @@ children see it too.
             <Style.Triggers>
                 <!-- True only while accepted data hovers: refused files never highlight -->
                 <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />
                     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 </Trigger>
             </Style.Triggers>
@@ -2114,12 +2093,12 @@ children see it too.
 
 # Shared width
 
-## SharedWidth.IsShared
+## SharedWidth
 
-`SharedWidth.IsShared` lines up inputs that each get a different amount of room, such as
-the rows of a tree at different depths. Every element marked `IsShared` takes the width of
-the narrowest one in its group and is right aligned. Their right edges already line up, so
-their left edges do too.
+`SharedWidth` lines up inputs that each get a different amount of room, such as the rows of
+a tree at different depths. Wrap each input in a `SharedWidth`: it stretches over its cell
+and gives the input the width of the narrowest member of its group, against its right edge.
+Their right edges already line up, so their left edges do too.
 
 Each group is the closest ancestor marked `SharedWidth.IsScope`:
 
@@ -2133,7 +2112,9 @@ Each group is the closest ancestor marked `SharedWidth.IsScope`:
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                <TextBox Grid.Column="1" toolkit:SharedWidth.IsShared="True" Text="{Binding Value}" />
+                <toolkit:SharedWidth Grid.Column="1">
+                    <TextBox Text="{Binding Value}" />
+                </toolkit:SharedWidth>
             </Grid>
         </HierarchicalDataTemplate>
     </TreeView.ItemTemplate>
@@ -2143,10 +2124,12 @@ Each group is the closest ancestor marked `SharedWidth.IsScope`:
 `DataFill` and `DataEdit` use it for their editors.
 
 - Only visible members count: the rows of a collapsed node are ignored until it expands.
-- A member's room is the layout slot its parent gives it, so give it a stretching cell
+- A member's room is the width its parent arranges it at, so give it a stretching cell
   (`*` column, stretched panel). The shared width follows when a member is added or removed
   or the scope is resized.
-- The behaviour sets `HorizontalAlignment` and `Width` on each member, so don't set them yourself.
+- The shared width only changes how the input is laid out, never the size the member asks
+  for. A scope sized to its content (a centered dialog, an `Auto` column, a horizontal
+  scroll) stays stable instead of bouncing between two widths.
 
 ---
 
@@ -2161,9 +2144,9 @@ control belongs to, then follow its rules. A control derived from a native one
 
 | Category | What it is | Tokens | States |
 |---|---|---|---|
-| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplaySurface1/2Brush`, `DisplayBorderBrush`, `DisplayCornerRadius`, `DisplayBorderThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None. Its items (rows, entries) are actions without a fill at rest |
-| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputSurface1/2Brush`, `InputBorderBrush`, `InputRadius`, `InputBorderThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; a strong border on focus (`InputBorderElevatedBrush`) |
-| **Action** | Runs something: a button, a toggle, an item of a display | `ActionSurface1/2Brush`, `ActionBorderBrush`, `ActionRadius`, `ActionBorderThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | A stronger background on hover (`ActionElevatedBrush`), moved down when pressed, no focus border |
+| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplayBase/Border/Elevated/InteractionBrush`, `DisplayRadius`, `DisplayThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None of its own (`DisplayInteractionBrush` is there for an informative hover). Its items (rows, entries) are actions without a fill at rest |
+| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase/Border/Elevated/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputElevatedBrush` and the background `InputInteractionBrush` |
+| **Action** | Runs something: a button, a toggle, an item of a display | `ActionBase/Border/Elevated/InteractionBrush`, `ActionRadius`, `ActionThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | On hover the border turns `ActionElevatedBrush` and the background `ActionInteractionBrush`; moved down when pressed, no focus border |
 
 In every category, disabled is `DisabledOpacity`, selected and checked are the primary,
 and sizes follow `Sizing.Size`. [Design tokens](../themes/tokens.html) lists each key with
@@ -2177,11 +2160,11 @@ or an action follows the same steps with the keys of its own category. The rules
 
 | | Rule | Tokens |
 |---|---|---|
-| **Required** | Background | `Brushes.InputSurface1Brush` (`InputSurface2Brush` for an elevated part inside: a tag, a track) |
-| **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputBorderThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
+| **Required** | Background | `Brushes.InputBaseBrush` (`InputBorderBrush` for a part that sits on it: a tag, a track) |
+| **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Focus and disabled states (an input has no hover) | `InputBorderElevatedBrush` (focus), `Colors.DisabledOpacity` |
+| Optional | Focus and disabled states (an input has no hover) | `InputElevatedBrush` and `InputInteractionBrush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -2211,9 +2194,9 @@ template read them from the control:
 
 ```xml
 <Style TargetType="{x:Type local:RatingInput}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
-    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
+    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
     <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
     <Setter Property="Template">
         <Setter.Value>
@@ -2288,12 +2271,13 @@ vertical padding never crushes it. `HorizontalThicknessConverter` drops the vert
 
 ## States
 
-An input has no hover state: the native inputs strengthen their border on focus, and fade
-when disabled:
+An input has no hover state: on focus the native inputs turn their border to the elevated brush and
+their background to the interaction one, and they fade when disabled:
 
 ```xml
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

@@ -11,14 +11,14 @@
     <UserControl.Resources>
         <Style x:Key="BarBorder" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.Radius}}" />
             <Setter Property="VerticalAlignment" Value="Bottom" />
             <Setter Property="Margin" Value="4,0" />
         </Style>
     </UserControl.Resources>
 
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <Grid toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
+        <Grid toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -26,7 +26,7 @@
             </Grid.ColumnDefinitions>
 
             <!--  ============================ Column 1 ============================  -->
-            <Grid Grid.Column="0" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <Grid Grid.Column="0" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
 
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -140,7 +140,7 @@
 
 
             <!--  ============================ Column 3 ============================  -->
-            <Grid Grid.Column="1" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <Grid Grid.Column="1" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -228,7 +228,7 @@
             </Grid>
 
             <!--  ============================ Column 2 ============================  -->
-            <Grid Grid.Column="2" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            <Grid Grid.Column="2" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
 
                 <Grid.RowDefinitions>
                     <RowDefinition />

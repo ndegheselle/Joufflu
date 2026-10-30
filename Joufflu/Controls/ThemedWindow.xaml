@@ -43,12 +43,12 @@
 
     <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:ThemedWindow}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BaseBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Base0Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="TitleBarForeground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
-        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionInteractionBrush}}" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
@@ -181,7 +181,7 @@
                         </Trigger>
 
                         <Trigger SourceName="PART_CloseButton" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
+                            <Setter TargetName="PART_CloseButton" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerForegroundBrush}}" />
                         </Trigger>
 
                         <Trigger Property="ResizeMode" Value="NoResize">

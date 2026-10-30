@@ -76,8 +76,8 @@ needs `ValidatesOnNotifyDataErrors=False` on that binding, or the whole page is 
 
 Named `Border` styles for padded, rounded surfaces:
 
-- `Card`: a display, `DisplaySurface1` fill, `DisplayBorder`, `DisplayCornerRadius`, `DisplayPadding`.
-- `CardSecondary`: `DisplaySurface2` panel (the elevated part of a display) meant to sit **inside** a `Card`.
+- `Card`: a display, `DisplayBase` fill, `DisplayBorder`, `DisplayRadius`, `DisplayPadding`.
+- `CardSecondary`: `DisplayBorder` panel with a `DisplayElevated` border, meant to sit **inside** a `Card`.
 
 ```xml
 <Border Style="{StaticResource Card}">

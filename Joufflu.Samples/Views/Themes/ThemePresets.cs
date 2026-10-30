@@ -12,7 +12,7 @@ public class ThemePreset
 {
     public string Name { get; }
 
-    /// <summary>Colour per <see cref="ThemeColorEntry.ResourceName"/>; covers all 26 editable keys.</summary>
+    /// <summary>Colour per <see cref="ThemeColorEntry.ResourceName"/>; covers every editable key.</summary>
     public IReadOnlyDictionary<string, Color> Colors { get; }
 
     public Brush Background { get; }
@@ -27,13 +27,13 @@ public class ThemePreset
     {
         Name = name;
         Colors = colors;
-        Background = Swatch(colors["BaseColor"]);
+        Background = Swatch(colors["Base0Color"]);
         Foreground = Swatch(colors["ForegroundColor"]);
-        Border = Swatch(colors["StrokeColor"]);
+        Border = Swatch(colors["Base2Color"]);
         Primary = Swatch(colors["PrimaryColor"]);
         Secondary = Swatch(colors["SecondaryColor"]);
         Accent = Swatch(colors["InfoColor"]);
-        Neutral = Swatch(colors["Surface1Color"]);
+        Neutral = Swatch(colors["Base1Color"]);
     }
 
     private static SolidColorBrush Swatch(Color color)

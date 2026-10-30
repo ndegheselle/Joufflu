@@ -13,8 +13,8 @@
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     d:DataContext="{d:DesignInstance Type=local:ExplorerSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Explorer" />
 
             <c:CodeExample

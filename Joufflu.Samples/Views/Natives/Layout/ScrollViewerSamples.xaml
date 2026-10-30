@@ -5,10 +5,10 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock
                 toolkit:Sizing.Size="xl"
                 FontWeight="Bold"

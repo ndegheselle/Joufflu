@@ -12,8 +12,8 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Navigation"
     d:DataContext="{d:DesignInstance Type=vm:NavigationMenuSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Navigation menu" />
 
             <c:CodeExample
@@ -22,9 +22,9 @@
                 Description="The collapsible side menu in isolation, plugged into its own navigator. Use the chevron to collapse it to an icons-only rail.">
                 <Border
                     Height="280"
-                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.StrokeBrush}}"
-                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.Thickness}}"
+                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.Radius}}"
                     SnapsToDevicePixels="True">
                     <Grid>
                         <Grid.ColumnDefinitions>

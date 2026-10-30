@@ -6,12 +6,12 @@ nav_order: 7
 
 # Shared width
 
-## SharedWidth.IsShared
+## SharedWidth
 
-`SharedWidth.IsShared` lines up inputs that each get a different amount of room, such as
-the rows of a tree at different depths. Every element marked `IsShared` takes the width of
-the narrowest one in its group and is right aligned. Their right edges already line up, so
-their left edges do too.
+`SharedWidth` lines up inputs that each get a different amount of room, such as the rows of
+a tree at different depths. Wrap each input in a `SharedWidth`: it stretches over its cell
+and gives the input the width of the narrowest member of its group, against its right edge.
+Their right edges already line up, so their left edges do too.
 
 Each group is the closest ancestor marked `SharedWidth.IsScope`:
 
@@ -25,7 +25,9 @@ Each group is the closest ancestor marked `SharedWidth.IsScope`:
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                <TextBox Grid.Column="1" toolkit:SharedWidth.IsShared="True" Text="{Binding Value}" />
+                <toolkit:SharedWidth Grid.Column="1">
+                    <TextBox Text="{Binding Value}" />
+                </toolkit:SharedWidth>
             </Grid>
         </HierarchicalDataTemplate>
     </TreeView.ItemTemplate>
@@ -35,7 +37,9 @@ Each group is the closest ancestor marked `SharedWidth.IsScope`:
 `DataFill` and `DataEdit` use it for their editors.
 
 - Only visible members count: the rows of a collapsed node are ignored until it expands.
-- A member's room is the layout slot its parent gives it, so give it a stretching cell
+- A member's room is the width its parent arranges it at, so give it a stretching cell
   (`*` column, stretched panel). The shared width follows when a member is added or removed
   or the scope is resized.
-- The behaviour sets `HorizontalAlignment` and `Width` on each member, so don't set them yourself.
+- The shared width only changes how the input is laid out, never the size the member asks
+  for. A scope sized to its content (a centered dialog, an `Auto` column, a horizontal
+  scroll) stays stable instead of bouncing between two widths.

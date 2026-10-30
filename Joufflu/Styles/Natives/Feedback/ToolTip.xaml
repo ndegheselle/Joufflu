@@ -16,9 +16,9 @@
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
         <Setter Property="toolkit:ThemedTooltip.IsPlaced" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
         <Setter Property="HasDropShadow" Value="True" />
@@ -31,7 +31,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
                         SnapsToDevicePixels="True">
                         <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center">
                             <!--  The text of a string content, wrapped at the max width; based on the implicit style so it still follows Sizing.Size  -->

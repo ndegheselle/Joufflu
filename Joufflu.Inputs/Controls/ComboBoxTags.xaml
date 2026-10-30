@@ -68,7 +68,7 @@
                                             <ContentControl Height="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}">
                                                 <Border
                                                     Margin="1"
-                                                    Background="{DynamicResource {x:Static joufflu:Brushes.InputSurface2Brush}}"
+                                                    Background="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}"
                                                     Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
                                                     <Border.CornerRadius>
                                                         <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
@@ -175,10 +175,10 @@
                                     x:Name="DropDownBorder"
                                     Margin="0,1,0,0"
                                     Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
                                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-                                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                                     <ScrollViewer SnapsToDevicePixels="True">
                                         <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>

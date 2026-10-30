@@ -20,10 +20,10 @@
             MinWidth="280"
             MaxWidth="380"
             Margin="0,0,0,4"
-            Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+            Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="4" />
@@ -36,7 +36,7 @@
                 -->
                 <Border
                     x:Name="ProgressMask"
-                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
                     toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
                     toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
                 <ProgressBar
@@ -61,7 +61,7 @@
 
                     <Grid
                         Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}"
-                        toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                        toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition />

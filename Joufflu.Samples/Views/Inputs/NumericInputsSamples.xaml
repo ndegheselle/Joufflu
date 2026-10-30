@@ -12,8 +12,8 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Inputs"
     d:DataContext="{d:DesignInstance Type=vm:NumericInputsSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Numeric &amp; format inputs" />
 
             <c:CodeExample

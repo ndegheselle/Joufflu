@@ -90,7 +90,7 @@
                             VerticalAlignment="Center"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}"
-                            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}"
+                            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}"
                             CornerRadius="6" />
                         <Track x:Name="PART_Track">
                             <Track.DecreaseRepeatButton>
@@ -175,10 +175,10 @@
                             <!--  DataContext doesn't reliably inherit into a templated Popup's separate visual tree, so flow it in explicitly.  -->
                             <Border
                                 Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
                                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-                                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
+                                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
                                 DataContext="{Binding DataContext, ElementName=Root}">
                                 <StackPanel Width="240" toolkit:Spacing.Gap="4">
 

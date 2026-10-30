@@ -228,7 +228,7 @@ public partial class HomeViewModel : ObservableObject
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
              xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
-    <StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="12">
+    <StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" toolkit:Spacing.Gap="12">
         <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Home" />
         <Border Style="{StaticResource Card}">
             <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">

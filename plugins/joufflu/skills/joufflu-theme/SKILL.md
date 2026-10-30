@@ -29,7 +29,7 @@ Ask for the missing inputs only: base colour(s), light or dark, theme name.
 
 ## 2. Write the palette — `Themes/<Name>.xaml`
 
-Every theme redefines the same 18 accent colours plus surfaces and text. It may also
+Every theme redefines the same 12 accent colours plus the three bases and the foreground. It may also
 override `Dimensions.*` keys (see §5) when its look includes them: `ThemeManager` merges
 it right after `Resources.xaml`, so they win over the defaults.
 The brushes are defined once and `ThemeManager` builds them from whichever theme it
@@ -46,15 +46,13 @@ Template (fill every colour):
 
     <!-- Text -->
     <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#2E3440</Color>
-    <!-- Strokes: borders, separators, icon strokes -->
-    <Color x:Key="{x:Static joufflu:Colors.StrokeColor}">#D8DEE9</Color>
-    <!-- Surfaces -->
-    <Color x:Key="{x:Static joufflu:Colors.BaseColor}">#ECEFF4</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Surface1Color}">#E5E9F0</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Surface2Color}">#DADEE5</Color>
-    <!-- Accents: X / XContent for Primary, Secondary, Success, Info, Warning, Danger -->
+    <!-- Bases -->
+    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#ECEFF4</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#E5E9F0</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#DADEE5</Color>
+    <!-- Accents: X / XForeground for Primary, Secondary, Success, Info, Warning, Danger -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#5E81AC</Color>
-    <Color x:Key="{x:Static joufflu:Colors.PrimaryContentColor}">#FFFFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.PrimaryForegroundColor}">#FFFFFF</Color>
     <!-- … Secondary, Success, Info, Warning, Danger the same way … -->
 </ResourceDictionary>
 ```
@@ -64,30 +62,28 @@ Joufflu repository or the package source is available, copy `Joufflu/Themes/Ligh
 (or `Dark.xaml`) as the starting point so no key is missed. The sample themes in
 `Joufflu.Samples/Themes/` (Nord, Ocean, Dracula, …) follow this layout.
 
-Do **not** define brushes (`XBrush`, `XSoftBrush`, `XSoftElevatedBrush`): `ThemeManager`
+Do **not** define brushes (`XBrush`, `XSoftBrush`, `XSoftInteractionBrush`): `ThemeManager`
 builds them from the colours of every theme it applies, and those take precedence over any
 brush the theme defines.
 
 ### Choosing the colours
 
-- **Surfaces**: `Base` is the page and, by default, what an action (button) is filled with;
-  `Surface1` is a card and, by default, the background of displays and inputs; `Surface2` an
-  elevated part inside (a header, a card secondary, a track); `Stroke` every border. Hover and the
-  focus borders are not colours you define: they are a colour mixed 10-40 % toward `Foreground`, so
-  the direction is right in a light and in a dark theme.
-- **Categories (optional)**: the controls read three categories, each falling back to the
-  globals when the theme leaves it out: Display (`DisplaySurface1Color`, `DisplaySurface2Color`,
-  `DisplayBorderColor` → `Surface1`/`Surface2`/`Stroke`), Input (`InputSurface1Color`,
-  `InputSurface2Color`, `InputBorderColor` → `Surface1`/`Surface2`/`Stroke`) and Action
-  (`ActionSurface1Color`, `ActionSurface2Color`, `ActionBorderColor` → `Base`/`Surface2`/`Stroke`).
-  Define one only to set a category apart, e.g. white inputs on grey cards:
-  `<Color x:Key="{x:Static joufflu:Colors.InputSurface1Color}">#FFFFFF</Color>`.
-- **Text**: `Foreground` must reach at least 4.5:1 contrast on `Base`, `Surface1` and
-  `Surface2`. Muted and disabled text is not a colour: it dims `Foreground` with
+- **Bases**: `Base0` is the page and, by default, what an action (button) is filled with;
+  `Base1` is a card and, by default, the base of displays and inputs; `Base2` a contrast inside a
+  card, for the app's own layout. Borders, hover and focus are not colours you define: each
+  category derives its `Border` (base mixed 10 % toward `Foreground`), `Elevated` (border mixed
+  10 % further) and `Interaction` (base mixed 10 %), so the direction is right in a light and in a
+  dark theme.
+- **Categories (optional)**: the controls read three categories, whose base falls back to the
+  globals when the theme leaves it out: `DisplayBaseColor` → `Base1`, `InputBaseColor` → `Base1`,
+  `ActionBaseColor` → `Base0`. Define one only to set a category apart, e.g. white inputs on grey cards:
+  `<Color x:Key="{x:Static joufflu:Colors.InputBaseColor}">#FFFFFF</Color>`.
+- **Text**: `Foreground` must reach at least 4.5:1 contrast on `Base0`, `Base1` and
+  `Base2`. Muted and disabled text is not a colour: it dims `Foreground` with
   `MutedOpacity` and `DisabledOpacity`.
-- **Accents**: `XContent` is the text on `X`: pick near-white or a very dark shade of the same
-  hue, whichever gives ≥ 4.5:1 on `X`. The hover, `XElevatedBrush`, is not a colour you define: it is
-  `X` mixed 10 % toward `XContent`, so a dark fill with light content lightens and a pale one darkens.
+- **Accents**: `XForeground` is the text on `X`: pick near-white or a very dark shade of the same
+  hue, whichever gives ≥ 4.5:1 on `X`. The hover, `XInteractionBrush`, is not a colour you define: it is
+  `X` mixed 10 % toward `XForeground`, so a dark fill with a light foreground lightens and a pale one darkens.
 - Keep semantics recognisable: Success green, Info blue, Warning amber, Danger red.
   `Secondary` is a neutral, low-emphasis fill.
 - Compute contrast ratios instead of eyeballing when the user cares about accessibility,
@@ -159,14 +155,11 @@ resources in `App.xaml`:
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
-    <!-- Rounder: the controls read the category keys; override the scalar AND the composite -->
-    <sys:Double x:Key="{x:Static joufflu:Dimensions.DisplayRadius}">8</sys:Double>
-    <CornerRadius x:Key="{x:Static joufflu:Dimensions.DisplayCornerRadius}">8</CornerRadius>
-    <sys:Double x:Key="{x:Static joufflu:Dimensions.InputRadius}">8</sys:Double>
-    <CornerRadius x:Key="{x:Static joufflu:Dimensions.InputCornerRadius}">8</CornerRadius>
+    <!-- Rounder: the controls read the category keys -->
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.DisplayRadius}">8</CornerRadius>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.InputRadius}">8</CornerRadius>
     <!-- Pill buttons: a radius of half the height or more (clamped by the buttons) -->
-    <sys:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</sys:Double>
-    <CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">16</CornerRadius>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</CornerRadius>
 
     <!-- Denser controls -->
     <sys:Double x:Key="{x:Static joufflu:Dimensions.HeightMd}">28</sys:Double>
@@ -175,10 +168,9 @@ resources in `App.xaml`:
 </ResourceDictionary>
 ```
 
-Pairs to keep in sync: `XRadius`/`XCornerRadius` per category (`Display`, `Input`, `Action`),
-`Radius`/`CornerRadius` and `Thickness`/`BorderThickness` (global, app layout only), the
-category `XBorderThickness`, `DisplayPadding`,
-`Spacing`/`SpacingThickness`, `TitleBarHeight`/`TitleBarHeightOffset` (`0,<height>,0,0`),
+Shape keys are single values (`XRadius` a `CornerRadius`, `XThickness` a `Thickness` per category
+`Display`, `Input`, `Action`; the global `Radius`, `Thickness` for app layout only; `Spacing` a
+`Thickness`). Pairs to keep in sync: `TitleBarHeight`/`TitleBarHeightOffset` (`0,<height>,0,0`),
 `HeightEmbedded` ≈ 0.625 × `HeightMd`.
 
 The `Joufflu.Samples` gallery has a *Customize theme* window, opened from the palette button in its

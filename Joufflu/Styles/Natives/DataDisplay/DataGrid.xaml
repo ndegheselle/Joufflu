@@ -43,7 +43,7 @@
     <Style TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionThickness}}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <!--  An input fits in any cell; taller content (template columns) still grows the row.  -->
         <Setter Property="MinHeight" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
@@ -80,7 +80,7 @@
                 setter would beat the row's), the row draws the fill. A cell selected alone fills itself.
             -->
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
             </Trigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -151,7 +151,7 @@
                     <Border
                         x:Name="DGR_Border"
                         Background="{TemplateBinding Background}"
-                        toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+                        toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
                         toolkit:Derive.BorderThicknessFactor="0,0,0,1"
                         BorderBrush="{TemplateBinding BorderBrush}">
                         <SelectiveScrollingGrid>
@@ -198,7 +198,7 @@
                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="CellsBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                            <Setter TargetName="CellsBorder" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionInteractionBrush}}" />
                         </MultiDataTrigger>
 
                         <!--  The cells give themselves the content colour (see DataGridCell)  -->
@@ -300,7 +300,7 @@
                             Grid.ColumnSpan="2"
                             toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
                             toolkit:Derive.CornerRadiusFactor="1,1,0,0"
-                            Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+                            Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
 
                         <!--  Header row: the first column mirrors the row header width so the column headers stay aligned with the cells  -->
                         <Grid Grid.Row="0" Grid.Column="0">
@@ -357,9 +357,9 @@
 
     <Style TargetType="{x:Type DataGrid}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="GridLinesVisibility" Value="None" />
         <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
@@ -380,7 +380,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
                         SnapsToDevicePixels="True">
                         <ScrollViewer
                             x:Name="DG_ScrollViewer"

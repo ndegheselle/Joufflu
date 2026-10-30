@@ -15,7 +15,7 @@ live between Light and Dark - no restart, no flicker.
 [![Joufflu.Data on NuGet](https://img.shields.io/nuget/v/Joufflu.Data?label=Joufflu.Data&logo=nuget)](https://www.nuget.org/packages/Joufflu.Data)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
-![preview](./images/preview.PNG)
+![preview](./images/preview-mix.png)
 
 ## Highlights
 
@@ -23,6 +23,8 @@ live between Light and Dark - no restart, no flicker.
 - 🎨 **A real design system, built to be customized** - semantic colours, dimensions, sizing and spacing exposed as override-able resource keys. Change a token and every control follows; the gallery's **Customize theme** window (palette button in its title bar) edits them live, offers presets and generates the dictionary to merge.
 - 🪟 **Custom-chrome window & natives** - a themed application shell plus restyled built-in WPF controls that match out of the box.
 - 📦 **Modular packages** - take just the core styles, or add inputs and navigation only where you need them.
+
+![customizer preview](./images/preview-customizer.png)
 
 Controls :
 - 🧩 **Ready-to-use inputs** - numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.

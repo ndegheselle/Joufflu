@@ -8,10 +8,10 @@ namespace Joufflu;
 /// otherwise. Declared as a resource and read through a binding, it lets a category colour follow the global one
 /// until a theme overrides it:
 /// <code>
-/// &lt;joufflu:ColorFallback x:Key="InputSurface1Fallback"
-///     Color="{DynamicResource {x:Static joufflu:Colors.InputSurface1Color}}"
-///     Fallback="{DynamicResource {x:Static joufflu:Colors.Surface1Color}}" /&gt;
-/// &lt;SolidColorBrush Color="{Binding Result, Source={StaticResource InputSurface1Fallback}}" /&gt;
+/// &lt;joufflu:ColorFallback x:Key="InputBaseFallback"
+///     Color="{DynamicResource {x:Static joufflu:Colors.InputBaseColor}}"
+///     Fallback="{DynamicResource {x:Static joufflu:Colors.Base1Color}}" /&gt;
+/// &lt;SolidColorBrush Color="{Binding Result, Source={StaticResource InputBaseFallback}}" /&gt;
 /// </code>
 /// <para>
 /// <see cref="Color"/> is an <see cref="object"/> rather than a <see cref="System.Windows.Media.Color"/>: a

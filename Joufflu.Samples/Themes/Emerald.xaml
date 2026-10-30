@@ -9,35 +9,34 @@
     <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#333C4D</Color>
 
     <!--  Border Colors  -->
-    <Color x:Key="{x:Static joufflu:Colors.StrokeColor}">#E5E7EB</Color>
 
     <!--  Background Colors  -->
-    <Color x:Key="{x:Static joufflu:Colors.BaseColor}">#FFFFFF</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Surface1Color}">#F4F6F8</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Surface2Color}">#e8ebee</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#FFFFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#F4F6F8</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#e8ebee</Color>
 
     <!--  Primary  -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#66CC8A</Color>
-    <Color x:Key="{x:Static joufflu:Colors.PrimaryContentColor}">#04160B</Color>
+    <Color x:Key="{x:Static joufflu:Colors.PrimaryForegroundColor}">#04160B</Color>
 
     <!--  Secondary  -->
     <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#377CFB</Color>
-    <Color x:Key="{x:Static joufflu:Colors.SecondaryContentColor}">#FFFFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SecondaryForegroundColor}">#FFFFFF</Color>
 
     <!--  Success  -->
     <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#00A96E</Color>
-    <Color x:Key="{x:Static joufflu:Colors.SuccessContentColor}">#FFFFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessForegroundColor}">#FFFFFF</Color>
 
     <!--  Info  -->
     <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#F68067</Color>
-    <Color x:Key="{x:Static joufflu:Colors.InfoContentColor}">#2A0F08</Color>
+    <Color x:Key="{x:Static joufflu:Colors.InfoForegroundColor}">#2A0F08</Color>
 
     <!--  Warning  -->
     <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#FFBE00</Color>
-    <Color x:Key="{x:Static joufflu:Colors.WarningContentColor}">#3A2C00</Color>
+    <Color x:Key="{x:Static joufflu:Colors.WarningForegroundColor}">#3A2C00</Color>
 
     <!--  Danger  -->
     <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#F87272</Color>
-    <Color x:Key="{x:Static joufflu:Colors.DangerContentColor}">#3A0E0E</Color>
+    <Color x:Key="{x:Static joufflu:Colors.DangerForegroundColor}">#3A0E0E</Color>
 
 </ResourceDictionary>

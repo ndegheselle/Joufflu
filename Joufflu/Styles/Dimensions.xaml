@@ -4,47 +4,24 @@
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-    <system:Double x:Key="{x:Static joufflu:Dimensions.Thickness}">1</system:Double>
-    <Thickness
-        x:Key="{x:Static joufflu:Dimensions.BorderThickness}"
-        Bottom="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
-        Left="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
-        Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}"
-        Top="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
-
-    <system:Double x:Key="{x:Static joufflu:Dimensions.Radius}">4</system:Double>
-    <CornerRadius
-        x:Key="{x:Static joufflu:Dimensions.CornerRadius}"
-        BottomLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
-        BottomRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
-        TopLeft="{StaticResource {x:Static joufflu:Dimensions.Radius}}"
-        TopRight="{StaticResource {x:Static joufflu:Dimensions.Radius}}" />
-
-    <system:Double x:Key="{x:Static joufflu:Dimensions.Spacing}">12</system:Double>
-    <Thickness 
-        x:Key="{x:Static joufflu:Dimensions.SpacingThickness}"
-        Bottom="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
-        Left="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
-        Right="{StaticResource {x:Static joufflu:Dimensions.Spacing}}"
-        Top="{StaticResource {x:Static joufflu:Dimensions.Spacing}}" />
+    <Thickness x:Key="{x:Static joufflu:Dimensions.Thickness}">1</Thickness>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.Radius}">4</CornerRadius>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.Spacing}">12</Thickness>
 
     <!--
-        The categories, from the global radius, thickness and spacing. A theme or the customizer overrides one to
-        give a category its own (rounder actions, borderless inputs, roomier cards).
+        The categories. A theme or the customizer overrides one to give a category its own (rounder actions,
+        borderless inputs, roomier cards).
     -->
-    <system:Double x:Key="{x:Static joufflu:Dimensions.DisplayRadius}">4</system:Double>
-    <CornerRadius x:Key="{x:Static joufflu:Dimensions.DisplayCornerRadius}">4</CornerRadius>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayBorderThickness}">1</Thickness>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.DisplayRadius}">4</CornerRadius>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayThickness}">1</Thickness>
     <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayPadding}">12</Thickness>
     <Thickness x:Key="{x:Static joufflu:Dimensions.DisplayPaddingSm}">4</Thickness>
 
-    <system:Double x:Key="{x:Static joufflu:Dimensions.InputRadius}">4</system:Double>
-    <CornerRadius x:Key="{x:Static joufflu:Dimensions.InputCornerRadius}">4</CornerRadius>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.InputBorderThickness}">1</Thickness>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.InputRadius}">4</CornerRadius>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.InputThickness}">1</Thickness>
 
-    <system:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">4</system:Double>
-    <CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">4</CornerRadius>
-    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionBorderThickness}">1</Thickness>
+    <CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionRadius}">4</CornerRadius>
+    <Thickness x:Key="{x:Static joufflu:Dimensions.ActionThickness}">1</Thickness>
 
     <!--  Height of the window title bar  -->
     <system:Double x:Key="{x:Static joufflu:Dimensions.TitleBarHeight}">30</system:Double>

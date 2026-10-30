@@ -19,8 +19,8 @@
             <Setter Property="Width" Value="78" />
             <Setter Property="Height" Value="34" />
             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-            <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
+            <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
         </Style>
 
         <Style x:Key="AccentCaption" TargetType="{x:Type TextBlock}">
@@ -46,8 +46,8 @@
                     VerticalAlignment="Center"
                     c:ResourceSwatch.BackgroundKey="{Binding Swatch}"
                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
+                    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
                     Visibility="{Binding Swatch, Converter={StaticResource NullToVis}}" />
 
                 <TextBlock
@@ -88,7 +88,7 @@
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Content}"
+                                c:ResourceSwatch.ForegroundKey="{Binding Foreground}"
                                 Text="Aa" />
                         </Border>
                         <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name}" />
@@ -103,19 +103,19 @@
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Content}"
+                                c:ResourceSwatch.ForegroundKey="{Binding Foreground}"
                                 Text="Aa" />
                         </Border>
-                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Elevated}" />
+                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Interaction}" />
                     </StackPanel>
 
                     <!--  The content colour on its own  -->
                     <StackPanel Grid.Column="2" toolkit:Spacing.Gap="0,3">
                         <Border
                             HorizontalAlignment="Left"
-                            c:ResourceSwatch.BackgroundKey="{Binding Content}"
+                            c:ResourceSwatch.BackgroundKey="{Binding Foreground}"
                             Style="{StaticResource AccentSwatch}" />
-                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Content}" />
+                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Foreground}" />
                     </StackPanel>
 
                     <!--  The soft tint, with "Aa" in the fill colour as a soft button draws it; set apart as it is a brush only  -->
@@ -137,7 +137,7 @@
                     <StackPanel Grid.Column="4" toolkit:Spacing.Gap="0,3">
                         <Border
                             HorizontalAlignment="Left"
-                            c:ResourceSwatch.BackgroundKey="{Binding SoftElevated}"
+                            c:ResourceSwatch.BackgroundKey="{Binding SoftInteraction}"
                             Style="{StaticResource AccentSwatch}">
                             <TextBlock
                                 HorizontalAlignment="Center"
@@ -145,7 +145,7 @@
                                 c:ResourceSwatch.ForegroundKey="{Binding Fill}"
                                 Text="Aa" />
                         </Border>
-                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}SoftElevated}" />
+                        <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}SoftInteraction}" />
                     </StackPanel>
 
                     <TextBlock
@@ -177,8 +177,8 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock
                 toolkit:Sizing.Size="xl"
                 FontWeight="Bold"

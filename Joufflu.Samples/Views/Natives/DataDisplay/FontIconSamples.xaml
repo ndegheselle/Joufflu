@@ -11,10 +11,10 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Natives.DataDisplay"
     d:DataContext="{d:DesignInstance Type=vm:FontIconSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
         <StackPanel
 
-            toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+            toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock
                 toolkit:Sizing.Size="xl"
                 FontWeight="Bold"

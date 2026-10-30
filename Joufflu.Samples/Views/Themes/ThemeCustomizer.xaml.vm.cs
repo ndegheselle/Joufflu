@@ -285,7 +285,8 @@ public class ThemeDimensionGroup
 }
 
 /// <summary>
-/// One category of the complete mode (Display, Input or Action) : its own colours and shape. The padding is the md one,
+/// One category of the complete mode (Display, Input or Action) : its own base colour, the other brushes derived from
+/// it, and its own shape. The padding is the md one,
 /// per axis : the inside of a display, the xs to lg paddings of an input or an action derived from it by the ratios of
 /// the control padding.
 /// </summary>
@@ -296,9 +297,7 @@ public class ThemeCategoryEditor
 
     public string Description { get; }
 
-    public ThemeColorEntry Surface1 { get; }
-    public ThemeColorEntry Surface2 { get; }
-    public ThemeColorEntry Border { get; }
+    public ThemeColorEntry Base { get; }
     public IReadOnlyList<ThemeColorEntry> Colors { get; }
 
     public ThemeDimensionEntry Radius { get; }
@@ -310,16 +309,14 @@ public class ThemeCategoryEditor
     public ThemeCategoryEditor(
         string name,
         string description,
-        (ComponentResourceKey Surface1, ComponentResourceKey Surface2, ComponentResourceKey Border) keys,
+        ComponentResourceKey baseKey,
         Action<ThemeColorEntry> onColorChanged,
         Action<ThemeDimensionEntry> onDimensionChanged)
     {
         Name = name;
         Description = description;
-        Surface1 = new ThemeColorEntry("Surface 1", $"{name}Surface1Color", keys.Surface1, default, onColorChanged);
-        Surface2 = new ThemeColorEntry("Surface 2", $"{name}Surface2Color", keys.Surface2, default, onColorChanged);
-        Border = new ThemeColorEntry("Border", $"{name}BorderColor", keys.Border, default, onColorChanged);
-        Colors = [Surface1, Surface2, Border];
+        Base = new ThemeColorEntry("Base", $"{name}BaseColor", baseKey, default, onColorChanged);
+        Colors = [Base];
 
         Radius = new ThemeDimensionEntry("Corner radius", $"{name}Radius", 0, 24, 0, onDimensionChanged);
         Thickness = new ThemeDimensionEntry("Border thickness", $"{name}Thickness", 0, 4, 0, onDimensionChanged);
@@ -329,14 +326,12 @@ public class ThemeCategoryEditor
     }
 
     public ThemeCategoryValues Values => new(
-        Surface1.Color, Surface2.Color, Border.Color, Radius.Value, Thickness.Value, PaddingHorizontal.Value, PaddingVertical.Value);
+        Base.Color, Radius.Value, Thickness.Value, PaddingHorizontal.Value, PaddingVertical.Value);
 
     /// <summary>Seeds the editors without pushing them back into the live resources.</summary>
     public void SetSilently(ThemeCategoryValues values)
     {
-        Surface1.SetColorSilently(values.Surface1);
-        Surface2.SetColorSilently(values.Surface2);
-        Border.SetColorSilently(values.Border);
+        Base.SetColorSilently(values.Base);
         SetShapeSilently(values);
     }
 
@@ -350,12 +345,7 @@ public class ThemeCategoryEditor
     }
 
     /// <summary>Seeds the colours alone, keeping the shape.</summary>
-    public void SetColorsSilently(ThemeCategoryValues values)
-    {
-        Surface1.SetColorSilently(values.Surface1);
-        Surface2.SetColorSilently(values.Surface2);
-        Border.SetColorSilently(values.Border);
-    }
+    public void SetColorsSilently(ThemeCategoryValues values) => Base.SetColorSilently(values.Base);
 }
 
 /// <summary>
@@ -381,10 +371,10 @@ public class ThemeCustomizerViewModel : ObservableObject
     private readonly ThemeCategoryEditor _input;
     private readonly ThemeCategoryEditor _action;
 
-    /// <summary>The neutrals: the surfaces, the text and the border.</summary>
+    /// <summary>The neutrals: the bases and the text.</summary>
     public ObservableCollection<ThemeColorGroup> NeutralColorGroups { get; } = new();
 
-    /// <summary>The accents, a fill and the content drawn on it each.</summary>
+    /// <summary>The accents, a fill and the foreground drawn on it each.</summary>
     public ObservableCollection<ThemeColorGroup> AccentColorGroups { get; } = new();
 
     /// <summary>The categories edited on their own in the complete mode.</summary>
@@ -392,7 +382,7 @@ public class ThemeCustomizerViewModel : ObservableObject
 
     private bool _isComplete;
     /// <summary>
-    /// The complete mode : every category (Display, Input, Action) gets its own colours and shape, starting from the
+    /// The complete mode : every category (Display, Input, Action) gets its own base colour and shape, starting from the
     /// global ones. Back in the simple mode, the categories follow the global colours and shape again.
     /// </summary>
     public bool IsComplete
@@ -446,17 +436,17 @@ public class ThemeCustomizerViewModel : ObservableObject
         _display = new ThemeCategoryEditor(
             "Display",
             "Cards, popups, expanders, group boxes, and the frame of lists, trees, grids, menus and tabs. Their items follow the actions. No states.",
-            (JColors.DisplaySurface1Color, JColors.DisplaySurface2Color, JColors.DisplayBorderColor),
+            JColors.DisplayBaseColor,
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         _input = new ThemeCategoryEditor(
             "Input",
-            "Text boxes, combo boxes, check boxes, radio buttons, sliders. No hover, a strong border on focus. The padding is the md one, the other sizes follow it.",
-            (JColors.InputSurface1Color, JColors.InputSurface2Color, JColors.InputBorderColor),
+            "Text boxes, combo boxes, check boxes, radio buttons, sliders. No hover, an elevated border and the interaction background on focus. The padding is the md one, the other sizes follow it.",
+            JColors.InputBaseColor,
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         _action = new ThemeCategoryEditor(
             "Action",
-            "Buttons and toggle buttons. A stronger background on hover, moved down when pressed, no focus border. The padding is the md one, the other sizes follow it.",
-            (JColors.ActionSurface1Color, JColors.ActionSurface2Color, JColors.ActionBorderColor),
+            "Buttons and toggle buttons. An elevated border and the interaction background on hover, moved down when pressed, no focus border. The padding is the md one, the other sizes follow it.",
+            JColors.ActionBaseColor,
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         Categories = [_display, _input, _action];
         SeedCategories();
@@ -485,38 +475,37 @@ public class ThemeCustomizerViewModel : ObservableObject
             return new ThemeColorGroup(header, colors);
         }
 
-        NeutralColorGroups.Add(Group("Surface",
-            ("Base", "BaseColor", JColors.BaseColor),
-            ("Surface 1", "Surface1Color", JColors.Surface1Color),
-            ("Surface 2", "Surface2Color", JColors.Surface2Color)));
+        NeutralColorGroups.Add(Group("Base",
+            ("Base 0", "Base0Color", JColors.Base0Color),
+            ("Base 1", "Base1Color", JColors.Base1Color),
+            ("Base 2", "Base2Color", JColors.Base2Color)));
 
-        NeutralColorGroups.Add(Group("Text and border",
-            ("Foreground", "ForegroundColor", JColors.ForegroundColor),
-            ("Stroke", "StrokeColor", JColors.StrokeColor)));
+        NeutralColorGroups.Add(Group("Text",
+            ("Foreground", "ForegroundColor", JColors.ForegroundColor)));
 
         AccentColorGroups.Add(Group("Primary",
             ("Primary", "PrimaryColor", JColors.PrimaryColor),
-            ("Primary content", "PrimaryContentColor", JColors.PrimaryContentColor)));
+            ("Primary foreground", "PrimaryForegroundColor", JColors.PrimaryForegroundColor)));
 
         AccentColorGroups.Add(Group("Secondary",
             ("Secondary", "SecondaryColor", JColors.SecondaryColor),
-            ("Secondary content", "SecondaryContentColor", JColors.SecondaryContentColor)));
+            ("Secondary foreground", "SecondaryForegroundColor", JColors.SecondaryForegroundColor)));
 
         AccentColorGroups.Add(Group("Success",
             ("Success", "SuccessColor", JColors.SuccessColor),
-            ("Success content", "SuccessContentColor", JColors.SuccessContentColor)));
+            ("Success foreground", "SuccessForegroundColor", JColors.SuccessForegroundColor)));
 
         AccentColorGroups.Add(Group("Info",
             ("Info", "InfoColor", JColors.InfoColor),
-            ("Info content", "InfoContentColor", JColors.InfoContentColor)));
+            ("Info foreground", "InfoForegroundColor", JColors.InfoForegroundColor)));
 
         AccentColorGroups.Add(Group("Warning",
             ("Warning", "WarningColor", JColors.WarningColor),
-            ("Warning content", "WarningContentColor", JColors.WarningContentColor)));
+            ("Warning foreground", "WarningForegroundColor", JColors.WarningForegroundColor)));
 
         AccentColorGroups.Add(Group("Danger",
             ("Danger", "DangerColor", JColors.DangerColor),
-            ("Danger content", "DangerContentColor", JColors.DangerContentColor)));
+            ("Danger foreground", "DangerForegroundColor", JColors.DangerForegroundColor)));
     }
 
     private void BuildDimensionGroups()
@@ -533,7 +522,7 @@ public class ThemeCustomizerViewModel : ObservableObject
         }
 
         ThemeDimensionEntry Dim(string label, string name, double min, double max) =>
-            new(label, name, min, max, ReadDouble(DimensionKey(name)), OnDimensionChanged);
+            new(label, name, min, max, ReadShape(name), OnDimensionChanged);
 
         DimensionGroups.Add(Group("Shape",
             Dim("Corner radius", "Radius", 0, 24),
@@ -669,13 +658,11 @@ public class ThemeCustomizerViewModel : ObservableObject
         double spacing = DimValue("Spacing");
         double paddingHorizontal = _paddingScale.Base;
         double paddingVertical = _paddingScale.VerticalBase;
-        Color surface2 = GlobalColor("Surface2Color");
-        Color stroke = GlobalColor("StrokeColor");
-        yield return (_display, new ThemeCategoryValues(GlobalColor("Surface1Color"), surface2, stroke, radius, thickness, spacing, spacing));
+        yield return (_display, new ThemeCategoryValues(GlobalColor("Base1Color"), radius, thickness, spacing, spacing));
         yield return (_input, new ThemeCategoryValues(
-            GlobalColor("Surface1Color"), surface2, stroke, radius, thickness,
+            GlobalColor("Base1Color"), radius, thickness,
             paddingHorizontal * ThemeScales.InputPaddingHorizontalRatio, paddingVertical));
-        yield return (_action, new ThemeCategoryValues(GlobalColor("BaseColor"), surface2, stroke, radius, thickness, paddingHorizontal, paddingVertical));
+        yield return (_action, new ThemeCategoryValues(GlobalColor("Base0Color"), radius, thickness, paddingHorizontal, paddingVertical));
     }
 
     /// <summary>The colours and shape of every category, its own in the complete mode, the global ones otherwise.</summary>
@@ -687,7 +674,7 @@ public class ThemeCustomizerViewModel : ObservableObject
     /// <summary>
     /// Pushes every colour and the brushes made of them to the live resources. A brush resolves its DynamicResource
     /// colour once, when first used, so overriding a colour alone leaves it as it was : the brushes are overridden
-    /// too, the derived ones (hover, strong border) mixed here the way Brushes.xaml mixes them.
+    /// too, the derived ones (border, elevated, interaction) mixed here the way Brushes.xaml mixes them.
     /// </summary>
     private void ApplyColors()
     {
@@ -698,25 +685,22 @@ public class ThemeCustomizerViewModel : ObservableObject
             res[BrushKey(entry.ResourceName)] = new SolidColorBrush(entry.Color);
         }
 
+        Color foreground = GlobalColor("ForegroundColor");
         foreach ((ThemeCategoryEditor category, ThemeCategoryValues values) in CurrentCategories())
         {
             // The category colours exist only in the complete mode : in the simple one they fall back to the global ones.
-            foreach ((ThemeColorEntry entry, Color color) in new[] { (category.Surface1, values.Surface1), (category.Surface2, values.Surface2), (category.Border, values.Border) })
-            {
-                if (IsComplete)
-                    res[entry.Key] = color;
-                else
-                    res.Remove(entry.Key);
-                res[BrushKey(entry.ResourceName)] = new SolidColorBrush(color);
-            }
-        }
+            if (IsComplete)
+                res[category.Base.Key] = values.Base;
+            else
+                res.Remove(category.Base.Key);
 
-        Color foreground = GlobalColor("ForegroundColor");
-        ThemeCategoryValues action = CurrentCategories().First(c => c.Category == _action).Values;
-        ThemeCategoryValues input = CurrentCategories().First(c => c.Category == _input).Values;
-        res[JBrushes.ActionElevatedBrush] = new SolidColorBrush(ColorShade.Mix(action.Surface1, foreground, 0.1));
-        res[JBrushes.ActionBorderElevatedBrush] = new SolidColorBrush(ColorShade.Mix(action.Border, foreground, 0.4));
-        res[JBrushes.InputBorderElevatedBrush] = new SolidColorBrush(ColorShade.Mix(input.Border, foreground, 0.4));
+            (ComponentResourceKey baseKey, ComponentResourceKey borderKey, ComponentResourceKey elevatedKey, ComponentResourceKey interactionKey) = CategoryBrushKeys(category.Name);
+            Color border = ColorShade.Mix(values.Base, foreground, 0.1);
+            res[baseKey] = new SolidColorBrush(values.Base);
+            res[borderKey] = new SolidColorBrush(border);
+            res[elevatedKey] = new SolidColorBrush(ColorShade.Mix(border, foreground, 0.1));
+            res[interactionKey] = new SolidColorBrush(ColorShade.Mix(values.Base, foreground, 0.1));
+        }
     }
 
     /// <summary>
@@ -730,20 +714,14 @@ public class ThemeCustomizerViewModel : ObservableObject
         double thickness = DimValue("Thickness");
         double spacing = DimValue("Spacing");
 
-        // These base doubles feed a derived Thickness/CornerRadius built with StaticResource,
-        // so the derived key must be overridden explicitly for the live preview to move.
-        res[JDimensions.Radius] = radius;
-        res[JDimensions.CornerRadius] = new CornerRadius(radius);
-        res[JDimensions.Thickness] = thickness;
-        res[JDimensions.BorderThickness] = new Thickness(thickness);
-        res[JDimensions.Spacing] = spacing;
-        res[JDimensions.SpacingThickness] = new Thickness(spacing);
+        res[JDimensions.Radius] = new CornerRadius(radius);
+        res[JDimensions.Thickness] = new Thickness(thickness);
+        res[JDimensions.Spacing] = new Thickness(spacing);
 
         foreach ((ThemeCategoryEditor category, ThemeCategoryValues values) in CurrentCategories())
         {
-            (ComponentResourceKey radiusKey, ComponentResourceKey cornerRadiusKey, ComponentResourceKey thicknessKey) = CategoryShapeKeys(category.Name);
-            res[radiusKey] = values.Radius;
-            res[cornerRadiusKey] = new CornerRadius(values.Radius);
+            (ComponentResourceKey radiusKey, ComponentResourceKey thicknessKey) = CategoryShapeKeys(category.Name);
+            res[radiusKey] = new CornerRadius(values.Radius);
             res[thicknessKey] = new Thickness(values.Thickness);
         }
         ThemeCategoryValues display = CurrentCategories().First(c => c.Category == _display).Values;
@@ -801,21 +779,8 @@ public class ThemeCustomizerViewModel : ObservableObject
     private static ComponentResourceKey InputPaddingKey(string controlPaddingName)
         => PaddingKey(ThemeScales.InputPaddingName(controlPaddingName));
 
-    private void ApplyDimension(ThemeDimensionEntry entry)
-    {
-        var res = Application.Current.Resources;
-        double v = entry.Value;
-        switch (entry.ResourceName)
-        {
-            // The shape feeds the categories too, in the simple mode.
-            case "Radius" or "Thickness" or "Spacing":
-                ApplyShape();
-                break;
-            default:
-                res[DimensionKey(entry.ResourceName)] = v;
-                break;
-        }
-    }
+    // Every dimension edited on its own is the shape, which feeds the categories too in the simple mode.
+    private void ApplyDimension(ThemeDimensionEntry entry) => ApplyShape();
 
     #endregion
 
@@ -834,9 +799,14 @@ public class ThemeCustomizerViewModel : ObservableObject
                 res.Remove(color.Key);
                 res.Remove(BrushKey(color.ResourceName));
             }
-            res.Remove(JBrushes.ActionElevatedBrush);
-            res.Remove(JBrushes.ActionBorderElevatedBrush);
-            res.Remove(JBrushes.InputBorderElevatedBrush);
+            foreach (ThemeCategoryEditor category in Categories)
+            {
+                (ComponentResourceKey baseKey, ComponentResourceKey borderKey, ComponentResourceKey elevatedKey, ComponentResourceKey interactionKey) = CategoryBrushKeys(category.Name);
+                res.Remove(baseKey);
+                res.Remove(borderKey);
+                res.Remove(elevatedKey);
+                res.Remove(interactionKey);
+            }
             foreach (var key in AllDimensionKeys())
                 res.Remove(key);
             foreach (var step in _allScales.SelectMany(scale => scale.Steps))
@@ -849,7 +819,7 @@ public class ThemeCustomizerViewModel : ObservableObject
             foreach (var color in _allColors)
                 color.SetColorSilently(ReadColor(color.Key));
             foreach (var dim in _allDimensions)
-                dim.SetValueSilently(ReadDouble(DimensionKey(dim.ResourceName)));
+                dim.SetValueSilently(ReadShape(dim.ResourceName));
             foreach (var scale in _allScales)
             {
                 // Re-seed from the restored md step, the one the base value is read from.
@@ -917,6 +887,15 @@ public class ThemeCustomizerViewModel : ObservableObject
     private static Thickness ReadThickness(ComponentResourceKey key)
         => Application.Current.TryFindResource(key) is Thickness value ? value : new Thickness(0);
 
+    /// <summary>A shape dimension as the single number edited : the radius of a corner, the width of a side.</summary>
+    private static double ReadShape(string name) => Application.Current.TryFindResource(DimensionKey(name)) switch
+    {
+        CornerRadius radius => radius.TopLeft,
+        Thickness thickness => thickness.Left,
+        double value => value,
+        _ => 0d,
+    };
+
     /// <summary>The brush key derived from a colour's accessor name (e.g. <c>PrimaryColor</c> → <c>PrimaryBrush</c>).</summary>
     private static ComponentResourceKey BrushKey(string colorName)
         => new(typeof(JBrushes), colorName.Replace("Color", "Brush"));
@@ -956,48 +935,36 @@ public class ThemeCustomizerViewModel : ObservableObject
     private static ComponentResourceKey ScaleKey(string name)
         => name.StartsWith("ActionPadding", StringComparison.Ordinal) ? PaddingKey(name) : DimensionKey(name);
 
-    private static (ComponentResourceKey Radius, ComponentResourceKey CornerRadius, ComponentResourceKey BorderThickness) CategoryShapeKeys(string category) => category switch
+    private static (ComponentResourceKey Radius, ComponentResourceKey Thickness) CategoryShapeKeys(string category) => category switch
     {
-        "Display" => (JDimensions.DisplayRadius, JDimensions.DisplayCornerRadius, JDimensions.DisplayBorderThickness),
-        "Input" => (JDimensions.InputRadius, JDimensions.InputCornerRadius, JDimensions.InputBorderThickness),
-        "Action" => (JDimensions.ActionRadius, JDimensions.ActionCornerRadius, JDimensions.ActionBorderThickness),
+        "Display" => (JDimensions.DisplayRadius, JDimensions.DisplayThickness),
+        "Input" => (JDimensions.InputRadius, JDimensions.InputThickness),
+        "Action" => (JDimensions.ActionRadius, JDimensions.ActionThickness),
         _ => throw new ArgumentOutOfRangeException(nameof(category), category, "Unknown category"),
     };
 
-    private static readonly (ComponentResourceKey Radius, ComponentResourceKey CornerRadius)[] CategoryRadiusKeys =
-    [
-        (JDimensions.DisplayRadius, JDimensions.DisplayCornerRadius),
-        (JDimensions.InputRadius, JDimensions.InputCornerRadius),
-        (JDimensions.ActionRadius, JDimensions.ActionCornerRadius),
-    ];
-
-    private static readonly ComponentResourceKey[] CategoryBorderThicknessKeys =
-        [JDimensions.DisplayBorderThickness, JDimensions.InputBorderThickness, JDimensions.ActionBorderThickness];
+    private static (ComponentResourceKey Base, ComponentResourceKey Border, ComponentResourceKey Elevated, ComponentResourceKey Interaction) CategoryBrushKeys(string category) => category switch
+    {
+        "Display" => (JBrushes.DisplayBaseBrush, JBrushes.DisplayBorderBrush, JBrushes.DisplayElevatedBrush, JBrushes.DisplayInteractionBrush),
+        "Input" => (JBrushes.InputBaseBrush, JBrushes.InputBorderBrush, JBrushes.InputElevatedBrush, JBrushes.InputInteractionBrush),
+        "Action" => (JBrushes.ActionBaseBrush, JBrushes.ActionBorderBrush, JBrushes.ActionElevatedBrush, JBrushes.ActionInteractionBrush),
+        _ => throw new ArgumentOutOfRangeException(nameof(category), category, "Unknown category"),
+    };
 
     private IEnumerable<ComponentResourceKey> AllDimensionKeys()
     {
         yield return JDimensions.Radius;
-        yield return JDimensions.CornerRadius;
         yield return JDimensions.Thickness;
-        yield return JDimensions.BorderThickness;
         yield return JDimensions.Spacing;
-        yield return JDimensions.SpacingThickness;
         yield return JDimensions.HeightEmbedded;
-        foreach ((ComponentResourceKey radius, ComponentResourceKey cornerRadius) in CategoryRadiusKeys)
+        foreach (string category in new[] { "Display", "Input", "Action" })
         {
+            (ComponentResourceKey radius, ComponentResourceKey thickness) = CategoryShapeKeys(category);
             yield return radius;
-            yield return cornerRadius;
+            yield return thickness;
         }
-        foreach (ComponentResourceKey borderThickness in CategoryBorderThicknessKeys)
-            yield return borderThickness;
         yield return JDimensions.DisplayPadding;
         yield return JDimensions.DisplayPaddingSm;
-        foreach (var dim in _allDimensions)
-        {
-            if (dim.ResourceName is "Radius" or "Thickness" or "Spacing")
-                continue;
-            yield return DimensionKey(dim.ResourceName);
-        }
     }
 
     #endregion

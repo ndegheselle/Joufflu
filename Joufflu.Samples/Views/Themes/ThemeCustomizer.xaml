@@ -198,7 +198,7 @@
 
     </UserControl.Resources>
 
-    <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="4">
+    <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" toolkit:Spacing.Gap="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -265,7 +265,7 @@
             <StackPanel toolkit:Spacing.Gap="4">
                 <StackPanel toolkit:Spacing.Gap="4">
                     <!--  Colours  -->
-                    <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                    <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
                         <TextBlock
                             toolkit:Sizing.Size="xl"
                             FontWeight="SemiBold"
@@ -292,7 +292,7 @@
                 </StackPanel>
 
                 <!--  Categories, complete mode only  -->
-                <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Visibility="{Binding IsComplete, Converter={StaticResource BoolToVis}}">
+                <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" Visibility="{Binding IsComplete, Converter={StaticResource BoolToVis}}">
                     <TextBlock
                         toolkit:Sizing.Size="xl"
                         FontWeight="SemiBold"

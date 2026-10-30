@@ -27,7 +27,7 @@ A `Card` per group of settings, headings sized with `Sizing.Size`, `Spacing.Gap`
 instead of per-element margins, and a toast to confirm the save.
 
 ```xml
-<StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="16">
+<StackPanel Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" toolkit:Spacing.Gap="16">
     <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" Text="Settings" />
 
     <Border Style="{StaticResource Card}">
@@ -107,7 +107,7 @@ ThemeManager.Instance.Theme = ThemeManager.Dark;
 model which slice to show. The view model filters, counts and slices.
 
 ```xml
-<Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="0,12">
+<Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" toolkit:Spacing.Gap="0,12">
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
