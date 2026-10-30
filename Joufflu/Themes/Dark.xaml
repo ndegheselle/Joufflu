@@ -3,12 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu">
 
-    <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#FFFAFAFA</Color>
+    <!--  daisyUI's "dark" theme, converted from OKLCH.  -->
 
+    <!--  Foreground  -->
+    <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#ECF9FF</Color>
 
-    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#0a0a0a</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#171717</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#252525</Color>
+    <!--  Background  -->
+    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#1D232A</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#191E24</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#15191E</Color>
 
     <!--  Primary: white background, zinc-900 content  -->
     <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#FFFAFAFA</Color>
@@ -18,20 +21,20 @@
     <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#FF27272A</Color>
     <Color x:Key="{x:Static joufflu:Colors.SecondaryForegroundColor}">#FFFAFAFA</Color>
 
-    <!--  Success: green-500 / green-950 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#00d390</Color>
-    <Color x:Key="{x:Static joufflu:Colors.SuccessForegroundColor}">#004c39</Color>
+    <!--  Success  -->
+    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#00D390</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessForegroundColor}">#004C39</Color>
 
-    <!--  Info: blue-500 / blue-950 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#FF3B82F6</Color>
-    <Color x:Key="{x:Static joufflu:Colors.InfoForegroundColor}">#FF172554</Color>
+    <!--  Info  -->
+    <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#00BAFE</Color>
+    <Color x:Key="{x:Static joufflu:Colors.InfoForegroundColor}">#042E49</Color>
 
-    <!--  Warning: yellow-500 / yellow-950 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#FFEAB308</Color>
-    <Color x:Key="{x:Static joufflu:Colors.WarningForegroundColor}">#FF422006</Color>
+    <!--  Warning  -->
+    <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#FCB700</Color>
+    <Color x:Key="{x:Static joufflu:Colors.WarningForegroundColor}">#793205</Color>
 
-    <!--  Danger (Destructive): red-900 background, red-200 content  -->
-    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#ff627d</Color>
-    <Color x:Key="{x:Static joufflu:Colors.DangerForegroundColor}">#4d0218</Color>
+    <!--  Danger  -->
+    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#FF627D</Color>
+    <Color x:Key="{x:Static joufflu:Colors.DangerForegroundColor}">#4D0218</Color>
 
 </ResourceDictionary>

@@ -60,7 +60,7 @@ Template (fill every colour):
 Write out every line in the real file; don't leave the `…` placeholders. If the
 Joufflu repository or the package source is available, copy `Joufflu/Themes/Light.xaml`
 (or `Dark.xaml`) as the starting point so no key is missed. The sample themes in
-`Joufflu.Samples/Themes/` (Nord, Ocean, Dracula, …) follow this layout.
+`Joufflu.Samples/Themes/` (Cupcake, Synthwave, Winter, …) follow this layout.
 
 Do **not** define brushes (`XBrush`, `XSoftBrush`, `XSoftInteractionBrush`): `ThemeManager`
 builds them from the colours of every theme it applies, and those take precedence over any

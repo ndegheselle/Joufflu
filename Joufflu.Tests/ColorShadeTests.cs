@@ -103,28 +103,24 @@ public class ColorShadeTests
     }
 
     [Test]
-    public void A_dark_primary_lightens_on_hover_in_the_light_theme_and_a_pale_one_darkens_in_the_dark_theme()
+    public void A_filled_colour_moves_toward_its_content_on_hover([Values("Light", "Dark")] string theme)
     {
-        ResourceDictionary light = BuiltIn("Light");
-        ResourceDictionary dark = BuiltIn("Dark");
+        ResourceDictionary resources = BuiltIn(theme);
 
         Assert.Multiple(() =>
         {
-            Assert.That(Lightness(Resolve(light, Brushes.PrimaryInteractionBrush)), Is.GreaterThan(Lightness(Resolve(light, Brushes.PrimaryBrush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.PrimaryInteractionBrush)), Is.LessThan(Lightness(Resolve(dark, Brushes.PrimaryBrush))), "dark");
-        });
-    }
-
-    [Test]
-    public void A_pale_secondary_darkens_in_the_light_theme_and_lightens_in_the_dark_one()
-    {
-        ResourceDictionary light = BuiltIn("Light");
-        ResourceDictionary dark = BuiltIn("Dark");
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(Lightness(Resolve(light, Brushes.SecondaryInteractionBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.SecondaryBrush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.SecondaryInteractionBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.SecondaryBrush))), "dark");
+            foreach ((ComponentResourceKey fill, ComponentResourceKey interaction, ComponentResourceKey content) in new[]
+            {
+                (Brushes.PrimaryBrush, Brushes.PrimaryInteractionBrush, Brushes.PrimaryForegroundBrush),
+                (Brushes.SecondaryBrush, Brushes.SecondaryInteractionBrush, Brushes.SecondaryForegroundBrush),
+            })
+            {
+                double target = Lightness(Resolve(resources, content));
+                Assert.That(
+                    Math.Abs(Lightness(Resolve(resources, interaction)) - target),
+                    Is.LessThan(Math.Abs(Lightness(Resolve(resources, fill)) - target)),
+                    $"{fill}");
+            }
         });
     }
 
@@ -174,10 +170,11 @@ public class ColorShadeTests
         hover.SetResourceReference(Border.BackgroundProperty, Brushes.ActionInteractionBrush);
         hover.Measure(new Size(10, 10));
         var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
+        Color foreground = Resolve(resources, Brushes.ForegroundBrush);
 
         theme[Colors.Base0Color] = pink;
 
-        Assert.That(((SolidColorBrush)hover.Background).Color, Is.EqualTo(ColorShade.Mix(pink, Black, 0.1)));
+        Assert.That(((SolidColorBrush)hover.Background).Color, Is.EqualTo(ColorShade.Mix(pink, foreground, 0.1)));
     }
 
     /// <summary>A theme paired with a fresh copy of the brushes, as ThemeManager does.</summary>

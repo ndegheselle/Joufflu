@@ -25,12 +25,13 @@ namespace Joufflu.Samples
             // Register custom themes so they can be selected alongside the built-in System/Light/Dark
             // (and offered as presets by the theme customizer). Register before Initialize() so a
             // persisted custom selection is restored on launch.
-            RegisterTheme("Ocean", isDark: true);
             RegisterTheme("Cupcake", isDark: false);
-            RegisterTheme("Emerald", isDark: false);
             RegisterTheme("Corporate", isDark: false);
-            RegisterTheme("Nord", isDark: false);
+            RegisterTheme("Winter", isDark: false);
             RegisterTheme("Synthwave", isDark: true);
+            RegisterTheme("Black", isDark: true);
+            RegisterTheme("Dim", isDark: true);
+            RegisterTheme("Aqua", isDark: true);
             RegisterTheme("Dracula", isDark: true);
             RegisterTheme("Debug", isDark: true);
 

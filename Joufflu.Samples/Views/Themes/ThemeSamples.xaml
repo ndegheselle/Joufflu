@@ -38,7 +38,7 @@
             <c:CodeExample
                 Title="Theme switcher"
                 Code="{Binding SwitcherCode}"
-                Description="Plain RadioButtons bound to ThemeManager. Pick a theme by name and the whole gallery re-themes live; this app remembers the choice across launches itself. 'Ocean' is a custom theme this app registered at startup — it sits alongside the built-ins.">
+                Description="Plain RadioButtons bound to ThemeManager. Pick a theme by name and the whole gallery re-themes live; this app remembers the choice across launches itself. 'Synthwave' is a custom theme this app registered at startup — it sits alongside the built-ins.">
                 <StackPanel toolkit:Spacing.Gap="4">
 
                     <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=System, Mode=TwoWay}" ToolTip="Follow the system theme">
@@ -62,10 +62,10 @@
                         </StackPanel>
                     </RadioButton>
 
-                    <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=Ocean, Mode=TwoWay}" ToolTip="Use the custom Ocean theme">
+                    <RadioButton IsChecked="{Binding Theme, Source={x:Static themes:ThemeManager.Instance}, Converter={StaticResource EnumMatch}, ConverterParameter=Synthwave, Mode=TwoWay}" ToolTip="Use the custom Synthwave theme">
                         <StackPanel toolkit:Spacing.Gap="6,0" Orientation="Horizontal">
                             <fonts:FontIcon VerticalAlignment="Center" Text="{x:Static fonts:LucideFontIcons.Palette}" />
-                            <TextBlock VerticalAlignment="Center" Text="Ocean (custom)" />
+                            <TextBlock VerticalAlignment="Center" Text="Synthwave (custom)" />
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>

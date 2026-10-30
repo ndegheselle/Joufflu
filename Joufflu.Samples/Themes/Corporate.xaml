@@ -3,40 +3,38 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
 
-    <!--  A custom "Corporate" palette shipped by the sample app, registered with ThemeManager at startup.  -->
+    <!--  daisyUI's "corporate" palette shipped by the sample app, registered with ThemeManager at startup.  -->
 
-    <!--  Foreground Colors  -->
+    <!--  Foreground  -->
     <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#181A2A</Color>
 
-    <!--  Border Colors  -->
-
-    <!--  Background Colors  -->
-    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#FFFFFF</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#F7F9FC</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#eaecef</Color>
+    <!--  Background  -->
+    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#E8E8E8</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#FFFFFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#D1D1D1</Color>
 
     <!--  Primary  -->
-    <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#4B6BFB</Color>
+    <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#0082CE</Color>
     <Color x:Key="{x:Static joufflu:Colors.PrimaryForegroundColor}">#FFFFFF</Color>
 
     <!--  Secondary  -->
-    <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#7B92B2</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#61738D</Color>
     <Color x:Key="{x:Static joufflu:Colors.SecondaryForegroundColor}">#FFFFFF</Color>
 
     <!--  Success  -->
-    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#36D399</Color>
-    <Color x:Key="{x:Static joufflu:Colors.SuccessForegroundColor}">#04160B</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#00A43B</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessForegroundColor}">#FFFFFF</Color>
 
     <!--  Info  -->
-    <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#3ABFF8</Color>
-    <Color x:Key="{x:Static joufflu:Colors.InfoForegroundColor}">#06222E</Color>
+    <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#0090B5</Color>
+    <Color x:Key="{x:Static joufflu:Colors.InfoForegroundColor}">#FFFFFF</Color>
 
     <!--  Warning  -->
-    <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#FBBD23</Color>
-    <Color x:Key="{x:Static joufflu:Colors.WarningForegroundColor}">#3A2C00</Color>
+    <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#FDC700</Color>
+    <Color x:Key="{x:Static joufflu:Colors.WarningForegroundColor}">#000000</Color>
 
     <!--  Danger  -->
-    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#F87272</Color>
-    <Color x:Key="{x:Static joufflu:Colors.DangerForegroundColor}">#3A0E0E</Color>
+    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#FF6266</Color>
+    <Color x:Key="{x:Static joufflu:Colors.DangerForegroundColor}">#000000</Color>
 
 </ResourceDictionary>

@@ -1,0 +1,40 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu">
+
+    <!--  daisyUI's "dim" palette shipped by the sample app, registered with ThemeManager at startup.  -->
+
+    <!--  Foreground  -->
+    <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#B2CCD6</Color>
+
+    <!--  Background  -->
+    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#2A303C</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#242933</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#20252E</Color>
+
+    <!--  Primary  -->
+    <Color x:Key="{x:Static joufflu:Colors.PrimaryColor}">#9FE88D</Color>
+    <Color x:Key="{x:Static joufflu:Colors.PrimaryForegroundColor}">#091307</Color>
+
+    <!--  Secondary  -->
+    <Color x:Key="{x:Static joufflu:Colors.SecondaryColor}">#FF7D5D</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SecondaryForegroundColor}">#160503</Color>
+
+    <!--  Success  -->
+    <Color x:Key="{x:Static joufflu:Colors.SuccessColor}">#62EFBD</Color>
+    <Color x:Key="{x:Static joufflu:Colors.SuccessForegroundColor}">#03140D</Color>
+
+    <!--  Info  -->
+    <Color x:Key="{x:Static joufflu:Colors.InfoColor}">#28EBFF</Color>
+    <Color x:Key="{x:Static joufflu:Colors.InfoForegroundColor}">#011316</Color>
+
+    <!--  Warning  -->
+    <Color x:Key="{x:Static joufflu:Colors.WarningColor}">#EFD057</Color>
+    <Color x:Key="{x:Static joufflu:Colors.WarningForegroundColor}">#141003</Color>
+
+    <!--  Danger  -->
+    <Color x:Key="{x:Static joufflu:Colors.DangerColor}">#FFAE9B</Color>
+    <Color x:Key="{x:Static joufflu:Colors.DangerForegroundColor}">#160B09</Color>
+
+</ResourceDictionary>
