@@ -89,14 +89,14 @@ public class SharedWidthTests
     private TextBox AddRow(double labelWidth)
     {
         var editor = new TextBox();
-        SharedWidth.SetIsShared(editor, true);
-        Grid.SetColumn(editor, 1);
+        var member = new SharedWidth { Child = editor };
+        Grid.SetColumn(member, 1);
 
         var row = new Grid();
         row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         row.ColumnDefinitions.Add(new ColumnDefinition());
         row.Children.Add(new Border { Width = labelWidth });
-        row.Children.Add(editor);
+        row.Children.Add(member);
         _rows.Children.Add(row);
         return editor;
     }

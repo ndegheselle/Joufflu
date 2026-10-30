@@ -146,19 +146,22 @@ properties consumers must override. `BorderThickness` works on `Border` and any 
 
 ## SharedWidth
 
-Lines up inputs that get different room (rows of a tree at different depths): every element
-with `SharedWidth.IsShared="True"` takes the width of the narrowest one in its group and is
-right aligned. The group is the closest ancestor with `SharedWidth.IsScope="True"`.
+Lines up inputs that get different room (rows of a tree at different depths): every input
+wrapped in a `SharedWidth` takes the width of the narrowest one in its group, right aligned.
+The group is the closest ancestor with `SharedWidth.IsScope="True"`.
 
 ```xml
 <TreeView toolkit:SharedWidth.IsScope="True">
     <!-- in the item template, the input sits in a * column -->
-    <TextBox Grid.Column="1" toolkit:SharedWidth.IsShared="True" />
+    <toolkit:SharedWidth Grid.Column="1">
+        <TextBox />
+    </toolkit:SharedWidth>
 </TreeView>
 ```
 
-Only visible members count. It sets `HorizontalAlignment` and `Width` on members: don't set
-them yourself. `DataFill` and `DataEdit` already use it for their editors.
+Only visible members count. The shared width never changes the size a member asks for, so a
+scope sized to its content (centered dialog) stays stable. `DataFill` and `DataEdit` already
+use it for their editors.
 
 ## Animate
 

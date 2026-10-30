@@ -130,8 +130,7 @@
                 <Grid
                     MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}"
                     Margin="0,0,2,0"
-                    VerticalAlignment="Center"
-                    toolkit:Spacing.Gap="4">
+                    VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
@@ -140,12 +139,15 @@
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                     <!--  A forced value is flagged the way the toggle forcing it reads.  -->
                     <jonts:FontIcon
+                        Margin="4,0,0,0"
                         Grid.Column="1"
                         ToolTip="Forced value"
                         Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
                     <TextBlock
+                        toolkit:Derive.Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}"
+                        toolkit:Derive.MarginFactor="1,0"
                         Grid.Column="2"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
