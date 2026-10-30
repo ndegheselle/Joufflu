@@ -6,9 +6,10 @@ nav_order: 1
 
 # Typography
 
-There are no named text styles: a `TextBlock` takes its size from the same
-`Sizing.Size` the controls use, and muted text is dimmed with a token rather than
-given a colour of its own. A plain `<TextBlock>` is the default body size.
+A `TextBlock` takes its size from the same `Sizing.Size` the controls use, and
+muted text is dimmed with a token rather than given a colour of its own. A plain
+`<TextBlock>` is the default body size. Two named styles cover the common cases:
+`TextMuted` (muted opacity, wrapping) and `Title` (semi-bold, `FontSizeLg`).
 
 ## Sizes
 
@@ -46,6 +47,17 @@ sits in.
 <TextBlock Text="Default body text" />
 <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
            Text="Muted text" />
+```
+
+## Named styles
+
+`TextMuted` applies the `MutedOpacity` token and wraps the text, for descriptions
+and hints. `Title` is semi-bold at the `FontSizeLg` size, for a card or section
+title.
+
+```xml
+<TextBlock Style="{StaticResource Title}" Text="Card title" />
+<TextBlock Style="{StaticResource TextMuted}" Text="A longer description that wraps." />
 ```
 
 {: .note }

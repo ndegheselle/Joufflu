@@ -15,8 +15,14 @@ The button is not wrapped in a control: it stays a plain `ToggleButton` you own,
 so its `Style`, its content, its triggers and every attached property
 (`Sizing.IsSquare`, `Sizing.Size`, `Derive.*`, …) apply directly to it.
 
+## Dropdown
+
+`Dropdown.Popup` hangs the popup off the button, open while it is checked.
+`Dropdown.CloseOnClick` dismisses it when a button inside it is clicked, the way
+picking a command from a menu does (see [Closing on click](#closing-on-click)).
+
 ```xml
-<ToggleButton Content="Actions">
+<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
     <inputs:Dropdown.Popup>
         <StackPanel toolkit:Spacing.Gap="4">
             <Button Content="Rename" Style="{StaticResource GhostButton}" />
@@ -35,16 +41,27 @@ so its `Style`, its content, its triggers and every attached property
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
 | `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, background, border, corner radius. |
 
-`BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight` open it
-upward — useful for a dropdown sitting near the bottom of the window.
+## Popup placement
+
+`Dropdown.Placement` anchors a corner of the popup to the matching corner of the
+button. `BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight`
+open it upward — useful for a dropdown sitting near the bottom of the window.
+`Dropdown.HorizontalOffset` and `Dropdown.VerticalOffset` add to that placement.
 
 ```xml
+<!-- BottomLeft (default), BottomRight, TopLeft, TopRight -->
 <ToggleButton Content="Filter" inputs:Dropdown.Placement="BottomRight">
-    ...
+    <inputs:Dropdown.Popup>
+        <TextBlock Text="Opens down, right aligned." />
+    </inputs:Dropdown.Popup>
 </ToggleButton>
 ```
 
-An icon-only dropdown is just an icon-only toggle button:
+## Button style
+
+Because the button is a real `ToggleButton`, every `ToggleButton` style and
+attached property works directly on it, `Sizing.IsSquare` and `Sizing.Size`
+included. An icon-only dropdown is just an icon-only toggle button:
 
 ```xml
 <ToggleButton

@@ -35,14 +35,25 @@ public static class ThemeScales
     /// <summary>Control paddings, symmetric : the ratio applies to the horizontal and to the vertical alike.</summary>
     public static readonly IReadOnlyList<ThemeScaleSize> Padding =
     [
-        new("xs", "PaddingXs", 0.5),
-        new("sm", "PaddingSm", 0.75),
-        new("md", "PaddingMd", 1),
-        new("lg", "PaddingLg", 1.5),
+        new("xs", "ActionPaddingXs", 0.5),
+        new("sm", "ActionPaddingSm", 0.75),
+        new("md", "ActionPaddingMd", 1),
+        new("lg", "ActionPaddingLg", 1.5),
     ];
 
     /// <summary>Ratio of <c>Dimensions.HeightEmbedded</c> to the control height's md value.</summary>
     public const double EmbeddedHeightRatio = 0.625;
+
+    /// <summary>Ratio of <c>Dimensions.DisplayPaddingSm</c>, the inside of a compact display, to <c>DisplayPadding</c>.</summary>
+    public const double DisplayPaddingSmRatio = 1d / 3;
+
+    /// <summary>The inside of a compact display (a popup, a tooltip), from the inside of a display.</summary>
+    public static Thickness DisplayPaddingSm(double horizontal, double vertical)
+    {
+        double smHorizontal = Derive(horizontal, DisplayPaddingSmRatio);
+        double smVertical = Derive(vertical, DisplayPaddingSmRatio);
+        return new Thickness(smHorizontal, smVertical, smHorizontal, smVertical);
+    }
 
     /// <summary>Horizontal ratio of the text input paddings to the control paddings they follow.</summary>
     public const double InputPaddingHorizontalRatio = 0.5;
@@ -58,11 +69,67 @@ public static class ThemeScales
         double inputHorizontal = horizontal * InputPaddingHorizontalRatio;
         return new Thickness(inputHorizontal, vertical, inputHorizontal, vertical);
     }
+
+    /// <summary>The input padding key a padding size feeds (<c>ActionPaddingSm</c> gives <c>InputPaddingSm</c>).</summary>
+    public static string InputPaddingName(string actionPaddingName) => actionPaddingName.Replace("Action", "Input");
+
+    /// <summary>
+    /// The action padding of one size : the control padding in the simple mode, the action's own md padding in the
+    /// complete one, at the size's ratio.
+    /// </summary>
+    public static Thickness ActionPadding(double ratio, ThemeValues values)
+        => values.Categories is { } categories
+            ? Sized(ratio, categories.Action.PaddingHorizontal, categories.Action.PaddingVertical)
+            : Sized(ratio, values.PaddingMdHorizontal, values.PaddingMdVertical);
+
+    /// <summary>
+    /// The input padding of one size : the control padding at half the horizontal in the simple mode, the input's own
+    /// md padding in the complete one, at the size's ratio.
+    /// </summary>
+    public static Thickness InputPadding(double ratio, ThemeValues values)
+    {
+        if (values.Categories is { } categories)
+            return Sized(ratio, categories.Input.PaddingHorizontal, categories.Input.PaddingVertical);
+        Thickness action = Sized(ratio, values.PaddingMdHorizontal, values.PaddingMdVertical);
+        return InputPadding(action.Left, action.Top);
+    }
+
+    private static Thickness Sized(double ratio, double horizontalMd, double verticalMd)
+    {
+        double horizontal = Derive(horizontalMd, ratio);
+        double vertical = Derive(verticalMd, ratio);
+        return new Thickness(horizontal, vertical, horizontal, vertical);
+    }
+}
+
+/// <summary>
+/// The colours and the shape of one category (Display, Input or Action) in the complete mode. The padding is the md
+/// one : the inside of a display as it is, the xs to lg paddings of an input or an action derived from it.
+/// </summary>
+public sealed record ThemeCategoryValues(
+    Color Surface1,
+    Color Surface2,
+    Color Border,
+    double Radius,
+    double Thickness,
+    double PaddingHorizontal,
+    double PaddingVertical);
+
+/// <summary>The categories of the complete mode, each with its own colours and shape.</summary>
+public sealed record ThemeCategories(ThemeCategoryValues Display, ThemeCategoryValues Input, ThemeCategoryValues Action)
+{
+    public IEnumerable<(string Name, ThemeCategoryValues Values)> All()
+    {
+        yield return ("Display", Display);
+        yield return ("Input", Input);
+        yield return ("Action", Action);
+    }
 }
 
 /// <summary>
 /// What the <i>Customize theme</i> page edits, as plain values : the colours by their <c>Joufflu.Colors</c> name, the
-/// shape dimensions and the md value of each scale.
+/// shape dimensions and the md value of each scale. <see cref="Categories"/> is the complete mode, null in the simple
+/// one, where every category follows the global colours and shape.
 /// </summary>
 public sealed record ThemeValues(
     IReadOnlyList<KeyValuePair<string, Color>> Colors,
@@ -72,7 +139,8 @@ public sealed record ThemeValues(
     double HeightMd,
     double FontSizeMd,
     double PaddingMdHorizontal,
-    double PaddingMdVertical);
+    double PaddingMdVertical,
+    ThemeCategories? Categories = null);
 
 /// <summary>
 /// Writes the resource dictionary a <see cref="ThemeValues"/> amounts to, a drop-in merged after
@@ -96,11 +164,24 @@ public static class ThemeDictionaryWriter
             xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}}}\">{Hex(color)}</Color>");
         xaml.AppendLine();
 
+        // The simple mode leaves the category colours out, so they fall back to the global ones.
+        if (values.Categories is not null)
+        {
+            xaml.AppendLine("    <!--  Category colors  -->");
+            foreach ((string name, ThemeCategoryValues category) in values.Categories.All())
+            {
+                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}Surface1Color}}\">{Hex(category.Surface1)}</Color>");
+                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}Surface2Color}}\">{Hex(category.Surface2)}</Color>");
+                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}BorderColor}}\">{Hex(category.Border)}</Color>");
+            }
+            xaml.AppendLine();
+        }
+
         AppendShape(xaml, values);
         AppendScale(xaml, "Control height", ThemeScales.Height, values.HeightMd);
         AppendEmbeddedHeight(xaml, values.HeightMd);
         AppendScale(xaml, "Font size", ThemeScales.FontSize, values.FontSizeMd);
-        AppendPaddings(xaml, values.PaddingMdHorizontal, values.PaddingMdVertical);
+        AppendPaddings(xaml, values);
 
         xaml.Append("</ResourceDictionary>");
         return xaml.ToString();
@@ -117,6 +198,25 @@ public static class ThemeDictionaryWriter
         xaml.AppendLine();
         xaml.AppendLine(DoubleEntry("Spacing", values.Spacing));
         xaml.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.SpacingThickness}}\">{Num(values.Spacing)}</Thickness>");
+        xaml.AppendLine();
+
+        // Each category has its own shape, the global one in the simple mode: the controls read only these.
+        xaml.AppendLine("    <!--  Categories  -->");
+        foreach (string category in new[] { "Display", "Input", "Action" })
+        {
+            ThemeCategoryValues? own = values.Categories?.All().First(c => c.Name == category).Values;
+            double radius = own?.Radius ?? values.Radius;
+            double thickness = own?.Thickness ?? values.Thickness;
+            xaml.AppendLine(DoubleEntry($"{category}Radius", radius));
+            xaml.AppendLine($"    <CornerRadius x:Key=\"{{x:Static joufflu:Dimensions.{category}CornerRadius}}\">{Num(radius)}</CornerRadius>");
+            xaml.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{category}BorderThickness}}\">{Num(thickness)}</Thickness>");
+        }
+        ThemeCategoryValues? display = values.Categories?.Display;
+        double displayHorizontal = display?.PaddingHorizontal ?? values.Spacing;
+        double displayVertical = display?.PaddingVertical ?? values.Spacing;
+        xaml.AppendLine(ThicknessEntry("DisplayPadding", displayHorizontal, displayVertical));
+        Thickness displaySm = ThemeScales.DisplayPaddingSm(displayHorizontal, displayVertical);
+        xaml.AppendLine(ThicknessEntry("DisplayPaddingSm", displaySm.Left, displaySm.Top));
         xaml.AppendLine();
     }
 
@@ -136,25 +236,23 @@ public static class ThemeDictionaryWriter
         xaml.AppendLine();
     }
 
-    private static void AppendPaddings(StringBuilder xaml, double horizontalMd, double verticalMd)
+    private static void AppendPaddings(StringBuilder xaml, ThemeValues values)
     {
-        xaml.AppendLine("    <!--  Control padding  -->");
+        xaml.AppendLine("    <!--  Action padding  -->");
         foreach (ThemeScaleSize size in ThemeScales.Padding)
         {
-            double horizontal = ThemeScales.Derive(horizontalMd, size.Ratio);
-            double vertical = ThemeScales.Derive(verticalMd, size.Ratio);
-            xaml.AppendLine(ThicknessEntry(size.ResourceName, horizontal, vertical));
+            Thickness action = ThemeScales.ActionPadding(size.Ratio, values);
+            xaml.AppendLine(ThicknessEntry(size.ResourceName, action.Left, action.Top));
         }
         xaml.AppendLine();
 
-        // The input paddings ride along with the control paddings, at half the horizontal.
-        xaml.AppendLine("    <!--  Input padding (control padding at half the horizontal)  -->");
+        xaml.AppendLine(values.Categories is null
+            ? "    <!--  Input padding (control padding at half the horizontal)  -->"
+            : "    <!--  Input padding  -->");
         foreach (ThemeScaleSize size in ThemeScales.Padding)
         {
-            double horizontal = ThemeScales.Derive(horizontalMd, size.Ratio);
-            double vertical = ThemeScales.Derive(verticalMd, size.Ratio);
-            Thickness input = ThemeScales.InputPadding(horizontal, vertical);
-            xaml.AppendLine(ThicknessEntry("Input" + size.ResourceName, input.Left, input.Top));
+            Thickness input = ThemeScales.InputPadding(size.Ratio, values);
+            xaml.AppendLine(ThicknessEntry(ThemeScales.InputPaddingName(size.ResourceName), input.Left, input.Top));
         }
         xaml.AppendLine();
     }

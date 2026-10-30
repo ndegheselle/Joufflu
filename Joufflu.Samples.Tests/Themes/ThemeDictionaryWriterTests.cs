@@ -29,7 +29,7 @@ public class ThemeDictionaryWriterTests
     public void The_shipped_md_values_reproduce_every_shipped_dimension()
     {
         ResourceDictionary shipped = LoadShippedDimensions();
-        Thickness paddingMd = (Thickness)shipped[JDimensions.PaddingMd];
+        Thickness paddingMd = (Thickness)shipped[JDimensions.ActionPaddingMd];
         var defaults = new ThemeValues(
             [],
             Thickness: (double)shipped[JDimensions.Thickness],
@@ -65,13 +65,64 @@ public class ThemeDictionaryWriterTests
     }
 
     [Test]
+    public void Every_category_takes_the_global_shape()
+    {
+        ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(Edited));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(generated[JDimensions.ActionRadius], Is.EqualTo(8d));
+            Assert.That(generated[JDimensions.InputCornerRadius], Is.EqualTo(new CornerRadius(8)));
+            Assert.That(generated[JDimensions.DisplayBorderThickness], Is.EqualTo(new Thickness(2)));
+            Assert.That(generated[JDimensions.DisplayPadding], Is.EqualTo(new Thickness(16)));
+        });
+    }
+
+    [Test]
+    public void The_simple_mode_leaves_the_category_colours_to_their_fallback()
+    {
+        ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(Edited));
+
+        Assert.That(generated.Contains(JColors.ActionSurface1Color), Is.False);
+    }
+
+    [Test]
+    public void The_complete_mode_writes_each_category_with_its_own_colours_and_shape()
+    {
+        var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
+        var grey = Color.FromRgb(0x80, 0x80, 0x80);
+        ThemeValues complete = Edited with
+        {
+            Categories = new ThemeCategories(
+                Display: new ThemeCategoryValues(grey, grey, grey, Radius: 12, Thickness: 1, PaddingHorizontal: 20, PaddingVertical: 14),
+                Input: new ThemeCategoryValues(grey, grey, grey, Radius: 2, Thickness: 1, PaddingHorizontal: 10, PaddingVertical: 4),
+                Action: new ThemeCategoryValues(pink, grey, grey, Radius: 99, Thickness: 0, PaddingHorizontal: 20, PaddingVertical: 8)),
+        };
+
+        ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(complete));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(generated[JColors.ActionSurface1Color], Is.EqualTo(pink));
+            Assert.That(generated[JDimensions.ActionRadius], Is.EqualTo(99d));
+            Assert.That(generated[JDimensions.ActionBorderThickness], Is.EqualTo(new Thickness(0)));
+            Assert.That(generated[JDimensions.DisplayCornerRadius], Is.EqualTo(new CornerRadius(12)));
+            Assert.That(generated[JDimensions.DisplayPadding], Is.EqualTo(new Thickness(20, 14, 20, 14)));
+            Assert.That(generated[JDimensions.DisplayPaddingSm], Is.EqualTo(new Thickness(7, 5, 7, 5)), "a third of the display padding");
+            Assert.That(generated[JDimensions.InputPaddingLg], Is.EqualTo(new Thickness(15, 6, 15, 6)), "the input's own md padding at the lg ratio");
+            Assert.That(generated[JDimensions.ActionPaddingLg], Is.EqualTo(new Thickness(30, 12, 30, 12)), "the action's own, not the control padding");
+            Assert.That(generated[JDimensions.Radius], Is.EqualTo(8d), "the global shape stays, for an app's own layout");
+        });
+    }
+
+    [Test]
     public void Every_size_follows_its_scale_md_value()
     {
         ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(Edited));
 
         Assert.That(generated[JDimensions.HeightLg], Is.EqualTo(50d));
         Assert.That(generated[JDimensions.HeightEmbedded], Is.EqualTo(25d));
-        Assert.That(generated[JDimensions.PaddingLg], Is.EqualTo(new Thickness(24, 9, 24, 9)));
+        Assert.That(generated[JDimensions.ActionPaddingLg], Is.EqualTo(new Thickness(24, 9, 24, 9)));
         Assert.That(generated[JDimensions.InputPaddingLg], Is.EqualTo(new Thickness(12, 9, 12, 9)));
     }
 

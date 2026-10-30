@@ -23,6 +23,7 @@
                     Should not be there then AllowContentOverTitleBar is not set.
                 -->
                 <Border
+                    x:Name="TransparentBackdrop"
                     Height="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeight}}"
                     Background="#000000"
                     IsHitTestVisible="False"
@@ -39,20 +40,22 @@
 
             <Border
                 x:Name="Panel"
-                Margin="24"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Background="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}"
-                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid x:Name="Header">
+                    <Grid
+                        x:Name="Header"
+                        toolkit:Derive.Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
+                        toolkit:Derive.MarginFactor="0,0,0,1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -99,11 +102,14 @@
                 <Setter TargetName="CloseButton" Property="Visibility" Value="Collapsed" />
             </DataTrigger>
             <DataTrigger Binding="{Binding Options.FullScreen}" Value="True">
-                <Setter TargetName="Panel" Property="Margin" Value="0" />
+                <Setter TargetName="Panel" Property="Margin" Value="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}" />
                 <Setter TargetName="Panel" Property="HorizontalAlignment" Value="Stretch" />
                 <Setter TargetName="Panel" Property="VerticalAlignment" Value="Stretch" />
                 <Setter TargetName="Panel" Property="BorderThickness" Value="0" />
                 <Setter TargetName="Panel" Property="CornerRadius" Value="0" />
+                <Setter TargetName="TransparentBackdrop" Property="Opacity" Value="1" />
+                <!--  Gives the title bar back the window's own background  -->
+                <Setter TargetName="TransparentBackdrop" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=Window}}" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

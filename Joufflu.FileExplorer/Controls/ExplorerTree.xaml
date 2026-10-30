@@ -15,7 +15,7 @@
                 <ControlTemplate TargetType="{x:Type local:ExplorerTree}">
                     <TreeView
                         x:Name="PART_ItemsHost"
-                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
+                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <TreeView.ItemsSource>
                             <!--  The loaded root, keeping only the kinds of node the tree shows.  -->

@@ -8,12 +8,12 @@
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">16</system:Double>
-    <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeight}">16</system:Double>
+    <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">16</system:Double>
     <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarButtonHeightKey}">16</system:Double>
     <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}">16</system:Double>
 
     <Style x:Key="ScrollBarButton" TargetType="{x:Type RepeatButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollBar}}}" />
         <Setter Property="BorderBrush" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollBar}}}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -32,9 +32,16 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}"
+                        Tag="{DynamicResource {x:Static joufflu:Dimensions.ActionRadius}}"
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}">
+                        <Border.CornerRadius>
+                            <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </Border.CornerRadius>
 
                         <Grid Margin="{TemplateBinding Padding}" MaxWidth="8" MaxHeight="8">
                             <Viewbox Stretch="Uniform">
@@ -53,9 +60,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -74,7 +79,7 @@
                         <Border
                             Name="Border"
                             Background="{TemplateBinding Background}"
-                            Tag="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.ActionRadius}}">
                             <Border.CornerRadius>
                                 <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
                                     <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
@@ -87,7 +92,10 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderElevatedBrush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -192,7 +200,7 @@
     </ControlTemplate>
 
     <Style TargetType="{x:Type ScrollBar}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="SnapsToDevicePixels" Value="False" />
@@ -200,7 +208,7 @@
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeight}}" />
+                <Setter Property="Height" Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}" />
                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">

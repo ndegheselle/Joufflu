@@ -123,3 +123,13 @@ The feather toggle swaps a field's editor for the entries that fit it, plus **un
 (the property is left out) when not required and **null** when nullable. It is disabled
 when nothing fits. Objects and arrays have it too: forced, their properties or items are
 hidden and the entry is written in their place, and they come back as they were once released.
+
+An entry that takes any name is a `DataManualPattern`, the name written between braces:
+
+```csharp
+new DataManualPattern(null, "$row.columns['{column name}']"),
+```
+
+The list shows it as the hint `$row.columns['column name']`, which can't be picked. Typing
+`unit price` offers `$row.columns['unit price']` in its place. `Load` forces a value the
+pattern writes back to it.

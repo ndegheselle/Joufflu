@@ -71,14 +71,14 @@ public class DropTargetSamplesViewModel : ObservableObject
         """
         <!-- AllowDrop and the drag events are handled by the behavior -->
         <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
             <Border.Style>
                 <Style TargetType="Border">
                     <Setter Property="Background" Value="Transparent" />
                     <Style.Triggers>
                         <!-- True only while accepted data hovers: refused files never highlight -->
                         <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
                             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                         </Trigger>
                     </Style.Triggers>

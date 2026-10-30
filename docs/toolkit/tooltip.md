@@ -6,45 +6,51 @@ nav_order: 4
 
 # Tooltip
 
-## ThemedTooltip.Content
-
-Set `ThemedTooltip.Content` on **any** element to attach a themed tooltip that shows
-instantly on hover. It builds on the native `ToolTip`, so screen-edge flipping and
-fade-in keep working, but unlike the native tooltip it appears with no delay, unless the
-element sets `ToolTipService.InitialShowDelay` or `BetweenShowDelay` itself.
-
-`ThemedTooltip.Content` is an `object`: it accepts a plain string or arbitrary XAML.
+Set `ToolTip` the usual way, as a string or arbitrary XAML: every tooltip is themed. Its
+style places it with a custom placement rather than at the mouse, centred on a side of
+the element and kept a small gap clear of it, and WPF flips it to the opposite side
+when it would run off a screen edge. The show delay is the native one.
 
 ```xml
 <!-- A string tooltip -->
-<Button Content="Save" toolkit:ThemedTooltip.Content="Save your changes" />
+<Button Content="Save" ToolTip="Save your changes" />
 
 <!-- Arbitrary content: icons, panels, anything -->
 <Button Content="Rich tooltip">
-    <toolkit:ThemedTooltip.Content>
+    <Button.ToolTip>
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
             <TextBlock Text="Arbitrary content, icons included." />
         </StackPanel>
-    </toolkit:ThemedTooltip.Content>
+    </Button.ToolTip>
 </Button>
 ```
 
 ## ThemedTooltip.Placement
 
-`ThemedTooltip.Placement` chooses which side the tooltip sits on — `Top`, `Bottom`
-(default), `Left` or `Right`. It is centered on the shared edge, kept a small gap
-clear of the element, and still flips automatically when it would run off a screen
-edge.
+`ThemedTooltip.Placement`, set on the element, chooses which side its tooltip sits on —
+`Top`, `Bottom` (default), `Left` or `Right`.
 
 ```xml
-<Button Content="Top"    toolkit:ThemedTooltip.Content="Placed above" toolkit:ThemedTooltip.Placement="Top" />
-<Button Content="Bottom" toolkit:ThemedTooltip.Content="Placed below" toolkit:ThemedTooltip.Placement="Bottom" />
-<Button Content="Left"   toolkit:ThemedTooltip.Content="Placed left"  toolkit:ThemedTooltip.Placement="Left" />
-<Button Content="Right"  toolkit:ThemedTooltip.Content="Placed right" toolkit:ThemedTooltip.Placement="Right" />
+<Button Content="Top"    ToolTip="Placed above" toolkit:ThemedTooltip.Placement="Top" />
+<Button Content="Bottom" ToolTip="Placed below" toolkit:ThemedTooltip.Placement="Bottom" />
+<Button Content="Left"   ToolTip="Placed left"  toolkit:ThemedTooltip.Placement="Left" />
+<Button Content="Right"  ToolTip="Placed right" toolkit:ThemedTooltip.Placement="Right" />
+```
+
+## ThemedTooltip.MaxWidth
+
+`ThemedTooltip.MaxWidth`, set on the element, is the width past which the text of its
+tooltip wraps: `320` by default.
+
+```xml
+<Button Content="Narrow"
+        toolkit:ThemedTooltip.MaxWidth="160"
+        ToolTip="A long description, wrapped at a narrower max width." />
 ```
 
 {: .note }
-> Setting `ThemedTooltip.Content` to `null` removes the tooltip, so it composes with
-> triggers — the [navigation menu](../navigation/navigation-menu.md) attaches a
-> right-placed tooltip to each item only while the menu is collapsed.
+> The style sets the tooltip's own `Placement`, so `ToolTipService.Placement` on an
+> element no longer moves it: use `ThemedTooltip.Placement`. A `ToolTip` set from a
+> trigger composes as usual — the [navigation menu](../navigation/navigation-menu.md)
+> gives each item a right-placed tooltip only while the menu is collapsed.

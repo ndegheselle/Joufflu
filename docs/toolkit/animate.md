@@ -6,6 +6,8 @@ nav_order: 5
 
 # Animate
 
+Attached properties that animate any element without touching its template.
+
 ## Animate.Bounce
 
 `Bounce` loops a vertical hop on any element — a notification badge, a
@@ -39,6 +41,8 @@ slow idle nudge rather than a slower hop.
 <!-- bounce nobody can see, resumed when the element is back   -->
 <Border Visibility="Collapsed" toolkit:Animate.Bounce="True" />
 ```
+
+## Binding the bounce
 
 `Bounce` is a plain boolean, so bind it to a view-model flag to start and stop
 the loop at runtime.

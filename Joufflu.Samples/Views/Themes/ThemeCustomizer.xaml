@@ -2,8 +2,8 @@
     x:Class="Joufflu.Samples.Views.Themes.ThemeCustomizer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
     xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -31,11 +31,25 @@
             </Grid>
         </DataTemplate>
 
+        <!--  One colour group: a card with its title and a row per colour  -->
+        <DataTemplate x:Key="ColorGroupTemplate" DataType="{x:Type vm:ThemeColorGroup}">
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock
+                        toolkit:Sizing.Size="lg"
+                        FontWeight="SemiBold"
+                        Text="{Binding Header}"
+                        TextWrapping="Wrap" />
+                    <ItemsControl ItemTemplate="{StaticResource ColorRowTemplate}" ItemsSource="{Binding Colors}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
         <!--  One editable dimension row: label + slider + value  -->
         <DataTemplate x:Key="DimensionRowTemplate" DataType="{x:Type vm:ThemeDimensionEntry}">
             <Grid Margin="0,3" toolkit:Spacing.Gap="10,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="90" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
@@ -53,7 +67,7 @@
                     Value="{Binding Value, Mode=TwoWay}" />
                 <Border
                     Grid.Column="2"
-                    MinWidth="52"
+                    MinWidth="32"
                     VerticalAlignment="Center">
                     <StackPanel
                         HorizontalAlignment="Right"
@@ -68,55 +82,27 @@
 
         <!--  One size family: a base slider (two for paddings) + the value derived for each size  -->
         <DataTemplate x:Key="ScaleRowTemplate" DataType="{x:Type vm:ThemeScaleEntry}">
-            <StackPanel Margin="0,3" toolkit:Spacing.Gap="0,6">
-                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Label}" />
-                <!--  Base value(s), the sliders every size is derived from  -->
-                <Grid toolkit:Spacing.Gap="10,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+            <Border Style="{StaticResource Card}">
+                <StackPanel Margin="0,3" toolkit:Spacing.Gap="0,6">
                     <TextBlock
-                        Grid.Column="0"
-                        VerticalAlignment="Center"
-                        Text="{Binding BaseLabel, StringFormat=Base ({0})}" />
-                    <StackPanel Grid.Column="1" toolkit:Spacing.Gap="0,4">
-                        <Grid toolkit:Spacing.Gap="10,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="28" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Grid.Column="0"
-                                VerticalAlignment="Center"
-                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                                Text="{Binding AxisLabel}" />
-                            <Slider
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                IsSnapToTickEnabled="True"
-                                Maximum="{Binding Maximum}"
-                                Minimum="{Binding Minimum}"
-                                TickFrequency="1"
-                                Value="{Binding Base, Mode=TwoWay}" />
-                            <Border
-                                Grid.Column="2"
-                                MinWidth="52"
-                                VerticalAlignment="Center">
-                                <StackPanel
-                                    HorizontalAlignment="Right"
-                                    toolkit:Spacing.Gap="4,0"
-                                    Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Base, StringFormat=0}" />
-                                    <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="{Binding Unit, Mode=OneWay}" />
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-                        <ContentControl Visibility="{Binding HasVertical, Converter={StaticResource BoolToVis}}">
+                        toolkit:Sizing.Size="lg"
+                        FontWeight="SemiBold"
+                        Text="{Binding Label}"
+                        TextWrapping="Wrap" />
+                    <!--  Base value(s), the sliders every size is derived from  -->
+                    <Grid toolkit:Spacing.Gap="10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Text="{Binding BaseLabel, StringFormat=Base ({0})}" />
+                        <StackPanel Grid.Column="1" toolkit:Spacing.Gap="0,4">
                             <Grid toolkit:Spacing.Gap="10,0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="28" />
+                                    <ColumnDefinition Width="14" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
@@ -124,7 +110,7 @@
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                                    Text="V" />
+                                    Text="{Binding AxisLabel}" />
                                 <Slider
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
@@ -132,355 +118,274 @@
                                     Maximum="{Binding Maximum}"
                                     Minimum="{Binding Minimum}"
                                     TickFrequency="1"
-                                    Value="{Binding VerticalBase, Mode=TwoWay}" />
+                                    Value="{Binding Base, Mode=TwoWay}" />
                                 <Border
                                     Grid.Column="2"
-                                    MinWidth="52"
+                                    MinWidth="32"
                                     VerticalAlignment="Center">
                                     <StackPanel
                                         HorizontalAlignment="Right"
                                         toolkit:Spacing.Gap="4,0"
                                         Orientation="Horizontal">
-                                        <TextBlock Text="{Binding VerticalBase, StringFormat=0}" />
+                                        <TextBlock Text="{Binding Base, StringFormat=0}" />
                                         <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="{Binding Unit, Mode=OneWay}" />
                                     </StackPanel>
                                 </Border>
                             </Grid>
-                        </ContentControl>
-                    </StackPanel>
-                </Grid>
+                            <ContentControl Visibility="{Binding HasVertical, Converter={StaticResource BoolToVis}}">
+                                <Grid toolkit:Spacing.Gap="10,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                        Text="V" />
+                                    <Slider
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        IsSnapToTickEnabled="True"
+                                        Maximum="{Binding Maximum}"
+                                        Minimum="{Binding Minimum}"
+                                        TickFrequency="1"
+                                        Value="{Binding VerticalBase, Mode=TwoWay}" />
+                                    <Border
+                                        Grid.Column="2"
+                                        MinWidth="32"
+                                        VerticalAlignment="Center">
+                                        <StackPanel
+                                            HorizontalAlignment="Right"
+                                            toolkit:Spacing.Gap="4,0"
+                                            Orientation="Horizontal">
+                                            <TextBlock Text="{Binding VerticalBase, StringFormat=0}" />
+                                            <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="{Binding Unit, Mode=OneWay}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </ContentControl>
+                        </StackPanel>
+                    </Grid>
 
-                <!--  Derived values, one per size  -->
-                <ItemsControl Margin="120,0,0,0" ItemsSource="{Binding Steps}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vm:ThemeScaleStep}">
-                            <Grid toolkit:Spacing.Gap="10,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="28" />
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    Grid.Column="0"
-                                    Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                                    Text="{Binding Label}" />
-                                <TextBlock Grid.Column="1" Text="{Binding Display, Mode=OneWay}" />
-                                <TextBlock
-                                    Grid.Column="2"
-                                    Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground200Brush}}"
-                                    Text="{Binding Ratio, StringFormat=×{0}}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+                    <!--  Derived values, one per size  -->
+                    <ItemsControl ItemsSource="{Binding Steps}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:ThemeScaleStep}">
+                                <Grid toolkit:Spacing.Gap="10,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                        Text="{Binding Label}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Display, Mode=OneWay}" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                        Text="{Binding Ratio, StringFormat=×{0}}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
         </DataTemplate>
 
     </UserControl.Resources>
 
-    <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" toolkit:Spacing.Gap="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  Header  -->
-        <StackPanel Grid.Row="0">
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Customize theme" />
-            <TextBlock
-                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                Text="Tweak colours and dimensions and watch the whole gallery update live. Copy or save the generated dictionary and merge it into your app after the Joufflu resources to apply it."
-                TextWrapping="Wrap" />
-        </StackPanel>
-
-        <!--  Editor | Preview  -->
-        <Grid Grid.Row="1" toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="440" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-
-            <!--  Editor  -->
-            <Border Grid.Column="0" Style="{StaticResource Card}">
-                <DockPanel>
-                    <StackPanel
-                        toolkit:Spacing.Gap="8,0"
-                        DockPanel.Dock="Top"
-                        Orientation="Horizontal">
-                        <Button Command="{Binding CopyCommand}" Style="{StaticResource PrimaryButton}">Copy XAML</Button>
-                        <Button Command="{Binding SaveCommand}" Style="{StaticResource SecondaryButton}">Save .xaml…</Button>
-                        <Button Command="{Binding ResetCommand}" Style="{StaticResource GhostButton}">Reset</Button>
-                    </StackPanel>
-
-                    <ScrollViewer Margin="0,12,0,0" VerticalScrollBarVisibility="Auto">
-                        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-                            <!--  Preset themes  -->
-                            <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-                                <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Preset themes" />
-                                <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type vm:ThemePreset}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition Width="auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                                <StackPanel
-                                                    Grid.Column="1"
-                                                    toolkit:Spacing.Gap="2,0"
-                                                    Orientation="Horizontal">
-                                                    <Border
-                                                        Width="18"
-                                                        Height="18"
-                                                        Background="{Binding Primary}"
-                                                        CornerRadius="2" />
-                                                    <Border
-                                                        Width="18"
-                                                        Height="18"
-                                                        Background="{Binding Secondary}"
-                                                        CornerRadius="2" />
-                                                    <Border
-                                                        Width="18"
-                                                        Height="18"
-                                                        Background="{Binding Accent}"
-                                                        CornerRadius="2" />
-                                                    <Border
-                                                        Width="18"
-                                                        Height="18"
-                                                        Background="{Binding Neutral}"
-                                                        CornerRadius="2" />
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <!--  Colours  -->
-                            <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-                                <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Colours" />
-                                <ItemsControl ItemsSource="{Binding ColorGroups}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type vm:ThemeColorGroup}">
-                                            <StackPanel Margin="0,0,0,10">
-                                                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Header}" />
-                                                <ItemsControl ItemTemplate="{StaticResource ColorRowTemplate}" ItemsSource="{Binding Colors}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-
-                            <!--  Dimensions  -->
-                            <StackPanel toolkit:Spacing.Gap="0,10">
-                                <TextBlock toolkit:Sizing.Size="xl" FontWeight="SemiBold" TextWrapping="Wrap" Text="Dimensions" />
-                                <ItemsControl ItemsSource="{Binding DimensionGroups}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type vm:ThemeDimensionGroup}">
-                                            <StackPanel Margin="0,0,0,10">
-                                                <TextBlock toolkit:Sizing.Size="lg" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Header}" />
-                                                <ItemsControl ItemTemplate="{StaticResource DimensionRowTemplate}" ItemsSource="{Binding Dimensions}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                <ItemsControl ItemTemplate="{StaticResource ScaleRowTemplate}" ItemsSource="{Binding Scales}">
-                                    <ItemsControl.ItemContainerStyle>
-                                        <Style TargetType="ContentPresenter">
-                                            <Setter Property="Margin" Value="0,0,0,10" />
-                                        </Style>
-                                    </ItemsControl.ItemContainerStyle>
-                                </ItemsControl>
-                            </StackPanel>
-                        </StackPanel>
-                    </ScrollViewer>
-                </DockPanel>
-            </Border>
-
-            <!--  Preview  -->
-            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
-
-                    <!--  Semantic swatches  -->
-                    <Border Style="{StaticResource Card}">
-                        <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Palette" />
-                            <WrapPanel toolkit:Spacing.Gap="8,8">
-                                <Border
-                                    Width="120"
-                                    Height="56"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock
-                                        Margin="8"
-                                        VerticalAlignment="Bottom"
-                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}"
-                                        Text="Primary" />
-                                </Border>
-                                <Border
-                                    Width="120"
-                                    Height="56"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock
-                                        Margin="8"
-                                        VerticalAlignment="Bottom"
-                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}"
-                                        Text="Secondary" />
-                                </Border>
-                                <Border
-                                    Width="120"
-                                    Height="56"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock
-                                        Margin="8"
-                                        VerticalAlignment="Bottom"
-                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}"
-                                        Text="Success" />
-                                </Border>
-                                <Border
-                                    Width="120"
-                                    Height="56"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock
-                                        Margin="8"
-                                        VerticalAlignment="Bottom"
-                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}"
-                                        Text="Info" />
-                                </Border>
-                                <Border
-                                    Width="120"
-                                    Height="56"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock
-                                        Margin="8"
-                                        VerticalAlignment="Bottom"
-                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}"
-                                        Text="Warning" />
-                                </Border>
-                                <Border
-                                    Width="120"
-                                    Height="56"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
-                                    <TextBlock
-                                        Margin="8"
-                                        VerticalAlignment="Bottom"
-                                        Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}"
-                                        Text="Danger" />
-                                </Border>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <!--  Buttons  -->
-                    <Border Style="{StaticResource Card}">
-                        <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Buttons" />
-                            <WrapPanel toolkit:Spacing.Gap="8,8">
-                                <Button>Default</Button>
-                                <Button Style="{StaticResource PrimaryButton}">Primary</Button>
-                                <Button Style="{StaticResource SecondaryButton}">Secondary</Button>
-                                <Button Style="{StaticResource SuccessButton}">Success</Button>
-                                <Button Style="{StaticResource DangerButton}">Danger</Button>
-                                <Button Style="{StaticResource GhostButton}">Ghost</Button>
-                                <Button IsEnabled="False">Disabled</Button>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <!--  Sizes (one control per size variant so the height/font-size sliders have visible targets)  -->
-                    <Border Style="{StaticResource Card}">
-                        <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Sizes" />
-                            <WrapPanel VerticalAlignment="Center" toolkit:Spacing.Gap="8,8">
-                                <Button toolkit:Sizing.Size="xs" Style="{StaticResource PrimaryButton}">Extra small</Button>
-                                <Button toolkit:Sizing.Size="sm" Style="{StaticResource PrimaryButton}">Small</Button>
-                                <Button toolkit:Sizing.Size="md" Style="{StaticResource PrimaryButton}">Medium</Button>
-                                <Button toolkit:Sizing.Size="lg" Style="{StaticResource PrimaryButton}">Large</Button>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <!--  Inputs  -->
-                    <Border Style="{StaticResource Card}">
-                        <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Inputs" />
-                            <WrapPanel toolkit:Spacing.Gap="12,10">
-                                <TextBox Width="180" Text="Editable text" />
-                                <ComboBox Width="160" SelectedIndex="0">
-                                    <ComboBoxItem>First option</ComboBoxItem>
-                                    <ComboBoxItem>Second option</ComboBoxItem>
-                                    <ComboBoxItem>Third option</ComboBoxItem>
-                                </ComboBox>
-                                <CheckBox
-                                    VerticalAlignment="Center"
-                                    Content="Checkbox"
-                                    IsChecked="True" />
-                                <StackPanel
-                                    VerticalAlignment="Center"
-                                    toolkit:Spacing.Gap="8,0"
-                                    Orientation="Horizontal">
-                                    <RadioButton Content="One" IsChecked="True" />
-                                    <RadioButton Content="Two" />
-                                </StackPanel>
-                            </WrapPanel>
-                            <Slider
-                                Maximum="100"
-                                Minimum="0"
-                                Value="60" />
-                            <ProgressBar
-                                Height="8"
-                                Maximum="100"
-                                Value="60" />
-                        </StackPanel>
-                    </Border>
-
-                    <!--  Surface layers + badges  -->
-                    <Border Style="{StaticResource Card}">
-                        <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Surfaces &amp; badges" />
-                            <Border Style="{StaticResource Card}">
-                                <StackPanel toolkit:Spacing.Gap="0,8">
-                                    <TextBlock Text="Elevated surface (Background 100)" />
-                                    <Border Style="{StaticResource CardSecondary}">
-                                        <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" Text="Selected surface (Background 200)" />
-                                    </Border>
-                                    <WrapPanel toolkit:Spacing.Gap="8,8">
-                                        <feedback:Badge>Default</feedback:Badge>
-                                        <feedback:Badge toolkit:Sizing.Size="xs">Small</feedback:Badge>
-                                    </WrapPanel>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-
-                    <!--  Generated dictionary  -->
-                    <Border Style="{StaticResource Card}">
-                        <StackPanel toolkit:Spacing.Gap="0,10">
-                            <TextBlock toolkit:Sizing.Size="lg" FontWeight="Bold" TextWrapping="Wrap" Text="Generated dictionary" />
-                            <Border Style="{StaticResource CardSecondary}">
-                                <TextBox
-                                    MaxHeight="360"
-                                    MinHeight="200"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    FontFamily="Consolas, Cascadia Mono, monospace"
-                                    Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                                    HorizontalScrollBarVisibility="Auto"
-                                    IsReadOnly="True"
-                                    Text="{Binding GeneratedXaml, Mode=OneWay}"
-                                    TextWrapping="NoWrap"
-                                    VerticalScrollBarVisibility="Auto" />
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-            </ScrollViewer>
+            <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}">Use complete mode</CheckBox>
+            </StackPanel>
+            <StackPanel
+                Grid.Column="1"
+                toolkit:Spacing.Gap="4"
+                Orientation="Horizontal">
+                <Button Command="{Binding ResetCommand}" Style="{StaticResource GhostButton}">Reset</Button>
+                <Button Command="{Binding CopyCommand}" Style="{StaticResource PrimaryButton}">Copy XAML</Button>
+                <Button Command="{Binding SaveCommand}" Style="{StaticResource SecondaryButton}">Save .xaml…</Button>
+            </StackPanel>
         </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel toolkit:Spacing.Gap="4">
+                <StackPanel toolkit:Spacing.Gap="4">
+                    <Border Style="{StaticResource Card}">
+                        <!--  Preset themes  -->
+                        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                            <TextBlock
+                                toolkit:Sizing.Size="xl"
+                                FontWeight="SemiBold"
+                                Text="Preset themes"
+                                TextWrapping="Wrap" />
+                            <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset, Mode=TwoWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:ThemePreset}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                            <StackPanel
+                                                Grid.Column="1"
+                                                toolkit:Spacing.Gap="2,0"
+                                                Orientation="Horizontal">
+                                                <Border
+                                                    Width="18"
+                                                    Height="18"
+                                                    Background="{Binding Primary}"
+                                                    CornerRadius="2" />
+                                                <Border
+                                                    Width="18"
+                                                    Height="18"
+                                                    Background="{Binding Secondary}"
+                                                    CornerRadius="2" />
+                                                <Border
+                                                    Width="18"
+                                                    Height="18"
+                                                    Background="{Binding Accent}"
+                                                    CornerRadius="2" />
+                                                <Border
+                                                    Width="18"
+                                                    Height="18"
+                                                    Background="{Binding Neutral}"
+                                                    CornerRadius="2" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+                    <!--  Colours  -->
+                    <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                        <TextBlock
+                            toolkit:Sizing.Size="xl"
+                            FontWeight="SemiBold"
+                            Text="Colours"
+                            TextWrapping="Wrap" />
+                        <StackPanel>
+                            <!--  The neutrals apart: the surfaces have three colours, every accent two, so the accents share one row height  -->
+                            <ItemsControl ItemTemplate="{StaticResource ColorGroupTemplate}" ItemsSource="{Binding NeutralColorGroups}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid toolkit:Spacing.Gap="4" Columns="3" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                            <ItemsControl ItemTemplate="{StaticResource ColorGroupTemplate}" ItemsSource="{Binding AccentColorGroups}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid toolkit:Spacing.Gap="4" Columns="3" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!--  Categories, complete mode only  -->
+                <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" Visibility="{Binding IsComplete, Converter={StaticResource BoolToVis}}">
+                    <TextBlock
+                        toolkit:Sizing.Size="xl"
+                        FontWeight="SemiBold"
+                        Text="Categories"
+                        TextWrapping="Wrap" />
+                    <ItemsControl ItemsSource="{Binding Categories}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid toolkit:Spacing.Gap="4" Columns="3" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:ThemeCategoryEditor}">
+                                <Border Style="{StaticResource Card}">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                Style="{StaticResource Title}"
+                                                Text="{Binding Name}"
+                                                TextWrapping="Wrap" />
+                                            <fonts:FontIcon
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
+                                                Text="{x:Static fonts:LucideFontIcons.Info}"
+                                                ToolTip="{Binding Description}" />
+                                        </Grid>
+                                        <ItemsControl ItemTemplate="{StaticResource ColorRowTemplate}" ItemsSource="{Binding Colors}" />
+                                        <ItemsControl ItemTemplate="{StaticResource DimensionRowTemplate}" ItemsSource="{Binding Dimensions}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!--  Dimensions  -->
+                <StackPanel toolkit:Spacing.Gap="0,10">
+                    <TextBlock
+                        toolkit:Sizing.Size="xl"
+                        FontWeight="SemiBold"
+                        Text="Dimensions"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                        Text="In the complete mode, the shape below is the one of an app's own layout: the controls take the radius, border and padding of their category, and the control padding gives way to them."
+                        TextWrapping="Wrap"
+                        Visibility="{Binding IsComplete, Converter={StaticResource BoolToVis}}" />
+                    <ItemsControl ItemsSource="{Binding DimensionGroups}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:ThemeDimensionGroup}">
+                                <Border Style="{StaticResource Card}">
+                                    <StackPanel>
+                                        <TextBlock
+                                            toolkit:Sizing.Size="lg"
+                                            FontWeight="SemiBold"
+                                            Text="{Binding Header}"
+                                            TextWrapping="Wrap" />
+                                        <ItemsControl ItemTemplate="{StaticResource DimensionRowTemplate}" ItemsSource="{Binding Dimensions}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <ItemsControl ItemTemplate="{StaticResource ScaleRowTemplate}" ItemsSource="{Binding Scales}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid toolkit:Spacing.Gap="4" Columns="3" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <!--  The control padding is hidden in the complete mode, where each category has its own  -->
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Margin" Value="0,0,0,10" />
+                                <Setter Property="Visibility" Value="{Binding IsShown, Converter={StaticResource BoolToVis}}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

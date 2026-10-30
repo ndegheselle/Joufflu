@@ -1,7 +1,6 @@
 using System.Windows;
 using Joufflu.Assets.Fonts;
 using Joufflu.Data.Model;
-using Joufflu.Toolkit;
 
 namespace Joufflu.Data.Controls;
 
@@ -32,7 +31,7 @@ public class DataIcon : FontIcon
     private void Refresh()
     {
         Text = GlyphOf(Type);
-        ThemedTooltip.SetContent(this, Type?.ToString() ?? "null");
+        ToolTip = Type?.ToString() ?? "null";
     }
 
     /// <summary>The glyph [type] is read by.</summary>

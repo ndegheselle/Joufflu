@@ -14,19 +14,13 @@
     </ResourceDictionary.MergedDictionaries>
 
     <DataTemplate DataType="{x:Type fileSystem:FileSystemFile}">
-        <StackPanel
-            Margin="0,4"
-            toolkit:Spacing.Gap="4"
-            Orientation="Horizontal">
+        <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.File}" />
             <TextBlock Text="{Binding Name}" />
         </StackPanel>
     </DataTemplate>
     <DataTemplate DataType="{x:Type fileSystem:FileSystemDirectory}">
-        <StackPanel
-            Margin="0,4"
-            toolkit:Spacing.Gap="4"
-            Orientation="Horizontal">
+        <StackPanel toolkit:Spacing.Gap="4" Orientation="Horizontal">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Folder}" />
             <TextBlock Text="{Binding Name}" />
         </StackPanel>

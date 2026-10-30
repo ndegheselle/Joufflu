@@ -193,10 +193,20 @@ public static class DataFactory
         return fits ? null : RawOf(token);
     }
 
-    /// <summary>The first of [manualValues] fitting [node] that writes [token].</summary>
+    /// <summary>
+    /// The first of [manualValues] fitting [node] that writes [token], a pattern being filled with
+    /// the name [token] gives it.
+    /// </summary>
     private static DataManualValue? MatchOf(DataNode node, JToken token, IReadOnlyList<DataManualValue> manualValues)
-        => manualValues.FirstOrDefault(entry =>
-            entry.Fits(node.Type) && JToken.DeepEquals(DataValue.TokenOf(entry.Value), token));
+    {
+        object? raw = (token as JValue)?.Value;
+        DataManualValue? match = manualValues.FirstOrDefault(entry => entry.Fits(node.Type) && entry switch
+        {
+            DataManualPattern pattern => pattern.Matches(raw),
+            _ => JToken.DeepEquals(DataValue.TokenOf(entry.Value), token)
+        });
+        return match is DataManualPattern matched ? matched.Fill((string)raw!) : match;
+    }
 
     /// <summary>[token] as an entry of its own, kept as it is rather than lost.</summary>
     private static DataManualValue RawOf(JToken token) => new(null, token is JValue raw ? raw.Value : token);

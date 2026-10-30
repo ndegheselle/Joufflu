@@ -35,7 +35,7 @@ keep them for short labels.
 
 <!-- Icon-only button: IsSquare makes width = height; composes with any variant -->
 <Button toolkit:Sizing.IsSquare="True" Style="{StaticResource GhostButton}"
-        toolkit:ThemedTooltip.Content="Add">
+        ToolTip="Add">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
 </Button>
 
@@ -76,8 +76,8 @@ needs `ValidatesOnNotifyDataErrors=False` on that binding, or the whole page is 
 
 Named `Border` styles for padded, rounded surfaces:
 
-- `Card`: `Background100` fill, themed border, corner radius, standard padding.
-- `CardSecondary`: recessed panel (deeper `Background`) meant to sit **inside** a `Card`.
+- `Card`: a display, `DisplaySurface1` fill, `DisplayBorder`, `DisplayCornerRadius`, `DisplayPadding`.
+- `CardSecondary`: `DisplaySurface2` panel (the elevated part of a display) meant to sit **inside** a `Card`.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -92,10 +92,12 @@ Named `Border` styles for padded, rounded surfaces:
 
 ## Typography
 
-No named text styles. A `TextBlock` takes its font size from `toolkit:Sizing.Size`
+A `TextBlock` takes its font size from `toolkit:Sizing.Size`
 (`xs`…`xl` → `Dimensions.FontSizeXs`…`FontSizeXl`; `md` keeps the inherited body size). The
 size is inherited, so a panel set to `sm`/`lg` sizes its text too. A heading is a size plus a
 `FontWeight`; muted text is dimmed with `Colors.MutedOpacity`, not given another colour.
+Two named styles exist: `TextMuted` (muted opacity, wrapping) and `Title` (semi-bold,
+`FontSizeLg`), e.g. `<TextBlock Style="{StaticResource Title}" />`.
 
 | Role | Markup |
 |---|---|

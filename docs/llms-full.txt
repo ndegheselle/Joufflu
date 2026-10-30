@@ -31,7 +31,7 @@ can paste into your views.
 ## Highlights
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys; the gallery's **Customize theme** page edits them live and generates the dictionary.
+- 🎨 **A real design system, built to be customized** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys; the gallery's **Customize theme** window (palette button in its title bar) edits them live and generates the dictionary.
 - 🧩 **Ready-to-use inputs** — numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** — a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** — breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
@@ -40,7 +40,7 @@ can paste into your views.
 - 📦 **Modular packages** — take just the core styles, or add inputs and navigation only where you need them.
 
 {: .note }
-> The gallery's **Natives** group — WPF's built-in controls restyled to match the
+> The gallery's **Native controls** group — WPF's built-in controls restyled to match the
 > design system (text boxes, combo boxes, data grid, …) — is mostly undocumented
 > here; only natives with named style variants are (see
 > [Native controls](natives/index.md)). Otherwise these pages cover the
@@ -52,7 +52,7 @@ can paste into your views.
 |---|---|
 | [Themes](themes/index.md) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and the live theme customizer |
 | [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon`, the `Card` styles and buttons (solid, soft & outline variants) |
-| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, building a custom input |
+| [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, shared width, creating a custom control |
 | [Joufflu controls](controls/index.md) | The optional packages: [Feedback](feedback/index.md) (`Badge`, `Spinner`, toasts), [Inputs](inputs/index.md) (numeric, search, combo boxes, pickers, `Dropdown`…), [Navigation](navigation/index.md) (`NavigationMenu`, overlays, `Paging`), [Data](data/index.md) (`DataFill`, `DataEdit`, `DataDisplay`) and [File explorer](file-explorer/index.md) |
 
 ## Getting started
@@ -518,7 +518,7 @@ private void Save()
 Customizing is overriding tokens, not restyling controls. Create a dictionary with
 the keys you want to change, merge it **after** the Joufflu resources, and every
 control, restyled native and Joufflu control picks the change up. Use the gallery's
-**Customize theme** page to pick colours and dimensions live and copy the generated
+**Customize theme** window (the palette button in its title bar) to pick colours and dimensions live and copy the generated
 dictionary rather than writing it by hand.
 
 ```xml
@@ -657,85 +657,29 @@ resizes every control inside it.
 
 ---
 
-<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/comparison.md -->
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/themes/index.md -->
 
-# Joufflu vs other WPF UI libraries
+# Themes
 
-Which WPF UI library should you pick for a modern-looking desktop app? This page
-says where Joufflu fits and, as importantly, where another library is the better
-choice. Check each project's own repository for its current status before deciding:
-this page does not track their releases.
+The theme layer of the core `Joufflu` package: the window wrapping the app, the
+palettes switched at runtime, the tokens a theme is made of and the live editor
+generating your own. `ThemeManager` lives in the `Joufflu.Themes` namespace,
+`ThemedWindow` in `Joufflu.Controls` and the token keys on `Joufflu.Colors`,
+`Joufflu.Brushes` and `Joufflu.Dimensions`.
 
-## At a glance
+- **Application shell** — the window styles, and the overlay/toast containers wrapping the app.
+- **Theme** — `ThemeManager` for System/Light/Dark plus registering custom themes, and how to bind a theme switcher UI to it.
+- **Design tokens** — the reference of every `Colors`, `Brushes` and `Dimensions` key a theme is made of, and the role each one plays in the control styles.
+- **Customize theme** — the live theme editor and preset themes.
 
-| You want | Reach for |
-|---|---|
-| A neutral, modern look that you can make your own by overriding tokens, with live Light / Dark theming, a themed window, and inputs, navigation, modals and toasts that already match | **Joufflu** |
-| A Material Design look | MaterialDesignInXaml |
-| A Windows 11 / Fluent look | WPF-UI, ModernWpf, or the Fluent theme built into recent .NET versions of WPF |
-| A Metro-style window and controls | MahApps.Metro |
-| The widest catalogue of ready-made controls | HandyControl, Extended WPF Toolkit |
-| Plain WPF with only a few touch-ups | Hand-written styles |
+Snippets use the `joufflu` XML namespace for the design-system keys, plus `nav`
+and `feedback` for the application shell containers:
 
-## What Joufflu is
-
-- **One design system, not a bag of controls.** Colours, corner radius, spacing,
-  control heights and font sizes are resource keys (`joufflu:Brushes.*`,
-  `joufflu:Dimensions.*`). Every Joufflu control and every restyled native control
-  reads them through `DynamicResource`, so a theme change reaches all of them at once.
-- **Customizable by design.** Brand colours, corner radius, spacing, control heights
-  and font sizes are all tokens: override a few in a dictionary merged after the Joufflu
-  resources and every control follows, with no `ControlTemplate` copied or edited.
-  Register a whole palette by name (`ThemeManager.Register`) to make it selectable next
-  to Light and Dark. The gallery's **Customize theme** page edits the tokens live,
-  starts from presets and generates the dictionary to paste into your app
-  ([Customize theme](themes/customize-theme.md)).
-- **Restyled natives.** Buttons, text boxes, combo boxes, data grids and the rest of the
-  built-in WPF controls pick up the style from the implicit styles, with no
-  `Style=` needed on each one.
-- **The pieces an app shell needs.** `ThemedWindow` (custom chrome), `NavigationMenu` and
-  a view-model-first `Navigator`, awaitable modal overlays (`await overlays.Confirm(...)`),
-  stacking toasts, paging, badges, a spinner, a file explorer and JSON-schema driven
-  data trees.
-- **Typed, explicit APIs.** Layout and size helpers are attached properties
-  (`Spacing.Gap`, `Sizing.Size`, `Derive.Margin`) checked by the XAML compiler, with no
-  reflection or string-based conventions.
-- **Modular.** Core styles in `Joufflu`; inputs, navigation, feedback, file explorer and
-  data are separate NuGet packages you add only when needed.
-- **Built to be read by AI agents.** [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt),
-  [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
-  and a Claude Code plugin give an agent the exact namespaces, names and wiring.
-
-## When not to pick Joufflu
-
-Be honest about the trade-offs:
-
-- **It is young and has a single maintainer.** Expect API changes between 0.x versions
-  (see the changelog), and a smaller community than the long-established libraries.
-- **It targets `net10.0-windows` only.** Older .NET Framework and earlier .NET versions
-  are not supported.
-- **It has its own look.** Tokens let you re-colour and re-proportion it, but it does
-  not reproduce Material Design or Windows 11 Fluent visuals. If your product must
-  follow one of those design languages, use a library built for it.
-- **The control catalogue is focused.** There is no ribbon, docking manager, charting
-  or property grid. Combine Joufflu with a dedicated library for those, or write them
-  against the same tokens.
-
-## Migrating or mixing
-
-- To move an existing view onto Joufflu, replace hardcoded colours and sizes with the
-  tokens and named styles, and delete local styles that fight the implicit ones. The
-  `joufflu-restyle` skill of the [Claude Code plugin](https://github.com/ndegheselle/Joufflu/tree/main/plugins/joufflu)
-  automates this audit.
-- Two libraries that both restyle the native controls will fight over the implicit
-  styles. If you mix, keep one of them in charge of the natives and use the other only
-  for controls it alone provides.
-
-## Next steps
-
-- [Getting started](index.md#getting-started)
-- [Tutorial: a navigable app shell](tutorial.md)
-- [Recipes](recipes.md): complete, copy-paste screens
+```xml
+xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
+```
 
 ---
 
@@ -769,7 +713,7 @@ buttons.
 </controls:ThemedWindow>
 ```
 
-### Application icon
+### AppIcon
 
 The title bar shows no icon by default. Add an `AppIcon` to
 `ThemedWindow.TitleBarContent` to bring it back: it shows the application's icon (or
@@ -788,7 +732,7 @@ closes the window, like a native icon.
 `TitleBarContent` shares its cell with the title text, so collapse the title or pad it
 when both are shown.
 
-### Title bar over content
+### AllowContentOverTitleBar
 
 Set `AllowContentOverTitleBar="True"` to draw content beneath a transparent title
 bar instead of below it. A full-height side panel's background then reaches the
@@ -1027,7 +971,7 @@ ThemeManager.Instance.Initialize();
 `Settings.settings`, …). The sample app persists a small JSON file under `%AppData%` — see its
 `App.xaml.cs` for the full working example.
 
-## Building a theme switcher
+## Theme switcher
 
 No dedicated switcher control — bind any UI directly to `ThemeManager.Instance.Theme`. Map each
 theme name to a `RadioButton` with the enum-to-boolean converter (it compares by value, so it works
@@ -1071,7 +1015,7 @@ A theme is a collection of the keys below. Every control style reads them
 through `DynamicResource`, so a theme only has to redefine what it wants to change — anything it
 leaves out keeps the built-in value.
 
-A theme registered with `ThemeManager` can define both: it is merged right after
+A theme registered with `ThemeManager` can define both colours and dimensions: it is merged right after
 `Resources.xaml`, so its `Dimensions` keys (and `Colors.DisabledOpacity` / `MutedOpacity`) override the built-in
 ones, and change with the theme. A dictionary merged after `Resources.xaml` still overrides
 every theme.
@@ -1085,10 +1029,10 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <!-- Always DynamicResource: a theme swap, or the customizer editing a
      dimension, has to reach controls already on screen. -->
 <Border
-    Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
-    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+    BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
 
 <!-- The raw Color is there for what a brush cannot express -->
 <GradientStop Offset="0" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
@@ -1106,47 +1050,94 @@ animations and anything that needs the raw value.
 
 ### Surfaces
 
-The neutral ground every control is drawn on, from the furthest back to the closest.
+Four colours a theme defines for the neutrals. The controls do not read them directly but through the three
+categories below, which fall back to them unless the theme gives a category colour of its own. Use
+them for an app's own layout.
 
 | Key | Used for |
 |---|---|
-| `Background` | Window and page background, the furthest back surface. |
-| `Background100` | Elevated surface sitting on top of the background: cards, popups, drop-downs, data rows. |
-| `Background200` | Transient surface: hovered ghost button, hovered or selected row, slider track. |
-| `Border` | Default border of every framed control (text box, card, drop-down). |
-| `Border100` | Stronger border, used when a control is hovered or focused, and for separator lines. |
+| `Base` | The page, and by default what an action is filled with, so on a display it reads as set into it. An action is not put directly on the page. |
+| `Surface1` | A card, and by default the background of a display and of an input. |
+| `Surface2` | An elevated part inside a card, and by default the `Surface2` of every category. |
+| `Stroke` | A border or a separator, and by default the border of every category. |
+
+### Categories
+
+Every control belongs to one of three categories, each with a background (`Surface1`), an elevated
+background (`Surface2`) and a `Border`. The category colours are optional: a theme that leaves one
+out gets the global colour in brackets, through a `ColorFallback`. The states are always the same,
+derived by mixing a colour toward the `Foreground`, so no theme defines a hover colour. Disabled is
+`DisabledOpacity`, selected and checked are the primary.
+
+**Display**: what shows content without being interacted with: card, popup, tooltip, expander,
+group box, and the frame of a list, tree, grid, menu or tab control. No states. Its items (rows,
+menu items, tabs, navigation entries) are actions without a fill at rest.
+
+| Key | Used for |
+|---|---|
+| `DisplaySurface1` | The background (`Surface1`). |
+| `DisplaySurface2` | An elevated part: a header, a nested area (`Surface2`). |
+| `DisplayBorder` | The border and the separators (`Stroke`). |
+
+**Input**: what takes a value: text box, combo box, check box, radio button, slider. No hover;
+focus is a strong border.
+
+| Key | Used for |
+|---|---|
+| `InputSurface1` | The background (`Surface1`). |
+| `InputSurface2` | An elevated part inside: a tag, a track (`Surface2`). |
+| `InputBorder` | The border (`Stroke`). |
+| `InputBorderElevatedBrush` | Derived, the border mixed 40% toward `Foreground`: the border of a focused input. |
+
+**Action**: what runs something: button, toggle button. Hover is a stronger background, pressed a
+translation down rather than a colour; an action and an item of a display have no focus border.
+
+| Key | Used for |
+|---|---|
+| `ActionSurface1` | The background (`Base`). |
+| `ActionSurface2` | An elevated part inside (`Surface2`). |
+| `ActionBorder` | The border (`Stroke`). |
+| `ActionElevatedBrush` | Derived, the fill mixed 10% toward `Foreground`: a hovered action or display item. |
+| `ActionBorderElevatedBrush` | Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb). |
+
+A theme overrides a category by defining its colour, for example inputs set apart from the cards:
+
+```xml
+<Color x:Key="{x:Static joufflu:Colors.InputSurface1Color}">#FFFFFF</Color>
+<Color x:Key="{x:Static joufflu:Colors.ActionBorderColor}">#A1A1AA</Color>
+```
+
+`ColorFallback` is public: a library of your own can declare an optional colour the same way (see
+`Joufflu/Styles/Brushes.xaml`).
 
 ### Text
 
-The suffix says how much the text recedes.
-
 | Key | Used for |
 |---|---|
-| `Foreground` | Default text and icon colour, on `Background` or `Background100`. |
-| `Foreground100` | Secondary colour the controls use for their own labels: column headers, inactive tabs, section titles. For muted text of your own, dim it with `MutedOpacity` instead. |
-| `Foreground200` | Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item. |
+| `Foreground` | Default text and icon colour, on `Base`, `Surface1` or `Surface2`. |
 
 ### Accents
 
 Six semantic families sharing one shape — the three keys of each are shown side by side below:
-`X` is the fill, `X100` the same fill while hovered or pressed, `XContent` the text and icons drawn
-on top of both (the `Aa` in the first two tiles). The last two tiles are brushes only, derived from
-the fill so no theme defines them: `XSoftBrush`, the fill at low opacity (soft buttons, selected
-rows, outline hover), and `XSoft100Brush`, its hover — drawn with the fill as text, as a soft button
-is.
+`X` is the fill, `XContent` the text and icons drawn on top of it: the two colours a theme defines.
+The others are brushes only, derived from the fill so no theme defines them. `XElevatedBrush` is the
+fill while hovered or pressed: the fill mixed 10% toward its own `XContent`, so a dark fill with light
+content lightens and a pale one darkens, in a light and in a dark theme alike. `XSoftBrush` is the fill at low opacity (soft buttons,
+selected rows, outline hover) and `XSoftElevatedBrush` its hover, drawn with the fill as text, as a soft
+button is.
 
 <table>
 <tbody>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft100</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D4D4D8;color:#27272A">Aa</div><code style="font-size:11px">Secondary100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft100</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BD81;color:#004C39">Aa</div><code style="font-size:11px">Success100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft100</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#3B82F6;color:#172554">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#1D6FF4;color:#172554">Aa</div><code style="font-size:11px">Info100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#172554;color:#172554">&nbsp;</div><code style="font-size:11px">InfoContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.14);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.24);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft100</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EEAF00;color:#411E03">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D69D00;color:#411E03">Aa</div><code style="font-size:11px">Warning100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#411E03;color:#411E03">&nbsp;</div><code style="font-size:11px">WarningContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.14);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.24);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft100</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF627D;color:#4D0218">Aa</div><code style="font-size:11px">Danger</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF3E5F;color:#4D0218">Aa</div><code style="font-size:11px">Danger100</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#4D0218;color:#4D0218">&nbsp;</div><code style="font-size:11px">DangerContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.14);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.24);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft100</code></div></td><td>Destructive action and validation errors — a delete button, the border of a field in error.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#FAFAFA">Aa</div><code style="font-size:11px">PrimaryElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoftElevated</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D4D4D8;color:#27272A">Aa</div><code style="font-size:11px">SecondaryElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoftElevated</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BD81;color:#004C39">Aa</div><code style="font-size:11px">SuccessElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoftElevated</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#3B82F6;color:#172554">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#1D6FF4;color:#172554">Aa</div><code style="font-size:11px">InfoElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#172554;color:#172554">&nbsp;</div><code style="font-size:11px">InfoContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.14);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.24);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoftElevated</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EEAF00;color:#411E03">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D69D00;color:#411E03">Aa</div><code style="font-size:11px">WarningElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#411E03;color:#411E03">&nbsp;</div><code style="font-size:11px">WarningContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.14);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.24);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoftElevated</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF627D;color:#4D0218">Aa</div><code style="font-size:11px">Danger</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF3E5F;color:#4D0218">Aa</div><code style="font-size:11px">DangerElevated</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#4D0218;color:#4D0218">&nbsp;</div><code style="font-size:11px">DangerContent</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.14);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.24);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoftElevated</code></div></td><td>Destructive action and validation errors — a delete button, the border of a field in error.</td></tr>
 </tbody>
 </table>
 
-The swatches show the built-in **Light** palette; every theme redefines the same eighteen keys.
+The swatches show the built-in **Light** palette; every theme redefines the same seventeen keys (`Foreground`, the four surfaces and the twelve accent colours).
 The sample gallery renders them live against whichever theme is selected.
 
 ### State
@@ -1172,6 +1163,20 @@ otherwise.
 | `BorderThickness` | `Thickness` | `Thickness` on all four sides, for a uniform border. |
 | `Radius` | `double` | Base corner radius (`4`). |
 | `CornerRadius` | `CornerRadius` | `Radius` on all four corners, for a uniformly rounded border. |
+| `DisplayRadius`, `InputRadius`, `ActionRadius` | `double` | The radius of each category (`4`). The controls clamp it to half their height, so a large one gives a pill. |
+| `DisplayCornerRadius`, `InputCornerRadius`, `ActionCornerRadius` | `CornerRadius` | The radius of each category on all four corners. |
+| `DisplayBorderThickness`, `InputBorderThickness`, `ActionBorderThickness` | `Thickness` | The border of each category (`1`). |
+| `DisplayPadding` | `Thickness` | The padding inside a display (`12`). An action is padded by `ActionPaddingXs`…`ActionPaddingLg`, an input by `InputPaddingXs`…`InputPaddingLg`; a button or an input takes only their horizontal part, its height coming from its size, while a row, a menu item or a tab takes both. |
+| `DisplayPaddingSm` | `Thickness` | The padding inside a compact display: a popup, a menu, a tooltip, a badge (`4`, a third of `DisplayPadding` in the customizer). |
+
+The global `Radius`, `CornerRadius`, `Thickness` and `BorderThickness` are for an app's own layout:
+the controls read the category keys. Override a category key in a dictionary merged after
+`Resources.xaml` (or in a registered theme) to reshape that category alone:
+
+```xml
+<CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">16</CornerRadius>
+<system:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">16</system:Double>
+```
 
 ### Layout
 
@@ -1213,17 +1218,17 @@ the inherited body size), like the controls do, so restyling the scale restyles 
 ### Paddings
 
 Space inside a control, one `Thickness` per size. Two families: buttons and anything content shaped
-use `Padding*`, text inputs use `InputPadding*`, whose halved horizontal keeps the caret closer to
+use `ActionPaddingXs`…`ActionPaddingLg`, text inputs use `InputPadding*`, whose halved horizontal keeps the caret closer to
 the border.
 
 | Key | Value | Input key | Value |
 |---|---|---|---|
-| `PaddingXs` | `6,2` | `InputPaddingXs` | `3,2` |
-| `PaddingSm` | `9,3` | `InputPaddingSm` | `4.5,3` |
-| `PaddingMd` | `12,4` | `InputPaddingMd` | `6,4` |
-| `PaddingLg` | `18,6` | `InputPaddingLg` | `9,6` |
+| `ActionPaddingXs` | `6,2` | `InputPaddingXs` | `3,2` |
+| `ActionPaddingSm` | `9,3` | `InputPaddingSm` | `4.5,3` |
+| `ActionPaddingMd` | `12,4` | `InputPaddingMd` | `6,4` |
+| `ActionPaddingLg` | `18,6` | `InputPaddingLg` | `9,6` |
 
-`PaddingMd` and `InputPaddingMd` are the defaults.
+`ActionPaddingMd` and `InputPaddingMd` are the defaults.
 
 See the **Design tokens** page in the sample gallery for the same reference with live swatches.
 
@@ -1234,7 +1239,9 @@ See the **Design tokens** page in the sample gallery for the same reference with
 # Customize theme
 
 The gallery's theme customizer tweaks colours and dimensions with the whole
-gallery updating live. Start from a **preset theme**, then copy or save the
+gallery updating live. It opens in a window of its own, from the palette button
+next to the light / dark switch in the gallery's title bar, so the gallery behind
+it is the preview. Start from a **preset theme**, then copy or save the
 generated resource dictionary and merge it into your app **after** the Joufflu
 resources to apply it.
 
@@ -1244,6 +1251,29 @@ The design system is exposed as resource keys you override in a dictionary:
 colour is enough for every brush to follow. [Design tokens](tokens.html) lists them all, with the role each one
 plays in the control styles.
 
+The controls read the category tokens (`Display*`, `Input*`, `Action*`), not the global ones. The
+customizer has two modes:
+
+- **Simple**: you set the surfaces (Base, Surface 1, Surface 2, Stroke, Foreground) and the shape
+  (corner radius, border thickness, spacing) once, and displays, inputs and actions follow them. The
+  generated dictionary leaves the category colours out, so they fall back to the global ones, and
+  writes the global radius, thickness and spacing into the category keys (`DisplayRadius`,
+  `InputCornerRadius`, `ActionBorderThickness`, `DisplayPadding`…). It also edits three scales,
+  each set by its md value with the other sizes following by fixed ratios: **Control height**
+  (`HeightXs`..`Lg`), **Font size** (`FontSizeXs`..`Xl`) and **Control padding**
+  (`ActionPaddingXs`..`Lg`, the input paddings at half the horizontal). The control padding scale
+  is shown in the simple mode only.
+- **Complete**: each category gets its own Surface 1, Surface 2, Border, corner radius, border
+  thickness and padding (horizontal and vertical), starting from the simple values. The padding is
+  the inside of a display (`DisplayPadding`), and the md padding of an input or an action, the
+  other sizes (`InputPaddingXs`..`Lg`, `ActionPaddingXs`..`Lg`) following it with the ratios of the
+  control padding, which is only edited in the simple mode. The generated dictionary writes the
+  category colours (`ActionSurface1Color`…) and shapes. Going back to the simple mode drops them.
+
+The states are derived either way: hover and the strong focus border follow the category colours.
+A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.BorderThickness` no
+longer reaches the controls.
+
 ```xml
 <!-- Merge your overrides AFTER the Joufflu resources -->
 <ResourceDictionary.MergedDictionaries>
@@ -1252,8 +1282,30 @@ plays in the control styles.
 </ResourceDictionary.MergedDictionaries>
 ```
 
-Run the **`Joufflu.Samples`** app and open *Customize theme* to generate a
-dictionary interactively.
+Run the **`Joufflu.Samples`** app and click the palette button in the title bar to
+generate a dictionary interactively.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/natives/index.md -->
+
+# Native controls
+
+WPF's built-in controls, restyled to match the design system. No special types
+needed — a plain `<Button>`, `<TextBox>` or `<ComboBox>` picks up the themed look
+as soon as the styles are merged (see [Getting started](../index.md#getting-started)).
+
+This section covers the core visuals and the button variants:
+
+- **Typography** — text sizes, muted text and the `TextMuted` / `Title` styles.
+- **Font icon** — the bundled Lucide icon font, sized like the text.
+- **Card** — the themed container for grouped content.
+- **Buttons** — the solid, soft, outline and ghost variants in the semantic colours.
+
+The other natives (text box, combo box, check box, list, tree, data grid, tabs,
+menus…) are restyled transparently and need nothing beyond the merged styles; they
+are shown in the **Native controls** group of the **`Joufflu.Samples`** gallery
+rather than here.
 
 ---
 
@@ -1261,9 +1313,10 @@ dictionary interactively.
 
 # Typography
 
-There are no named text styles: a `TextBlock` takes its size from the same
-`Sizing.Size` the controls use, and muted text is dimmed with a token rather than
-given a colour of its own. A plain `<TextBlock>` is the default body size.
+A `TextBlock` takes its size from the same `Sizing.Size` the controls use, and
+muted text is dimmed with a token rather than given a colour of its own. A plain
+`<TextBlock>` is the default body size. Two named styles cover the common cases:
+`TextMuted` (muted opacity, wrapping) and `Title` (semi-bold, `FontSizeLg`).
 
 ## Sizes
 
@@ -1301,6 +1354,17 @@ sits in.
 <TextBlock Text="Default body text" />
 <TextBlock Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
            Text="Muted text" />
+```
+
+## Named styles
+
+`TextMuted` applies the `MutedOpacity` token and wraps the text, for descriptions
+and hints. `Title` is semi-bold at the `FontSizeLg` size, for a card or section
+title.
+
+```xml
+<TextBlock Style="{StaticResource Title}" Text="Card title" />
+<TextBlock Style="{StaticResource TextMuted}" Text="A longer description that wraps." />
 ```
 
 {: .note }
@@ -1386,8 +1450,8 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content: a `Background100` fill, a themed border,
-rounded corners and the standard spacing as padding.
+The primary surface for grouping content, a display: a `DisplaySurface1` fill, a
+`DisplayBorder` border, `DisplayCornerRadius` corners and `DisplayPadding` as padding.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -1403,8 +1467,8 @@ rounded corners and the standard spacing as padding.
 
 ## CardSecondary
 
-A subtly inset panel meant to sit **inside** a `Card`. It uses the deeper
-`Background` fill so it reads as a recessed area against the card surface.
+A subtly inset panel meant to sit **inside** a `Card`. It uses the `DisplaySurface2`
+fill, the elevated part of a display, so it reads as a distinct area of the card.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -1418,8 +1482,9 @@ A subtly inset panel meant to sit **inside** a `Card`. It uses the deeper
 ```
 
 {: .note }
-> Both styles derive their fill, border, corner radius and padding from the theme
-> resources, so they follow Light / Dark and any custom theme automatically.
+> Both styles read the display tokens (see [Design tokens](../themes/tokens.html)), so
+> they follow Light / Dark and any custom theme automatically, and a theme restyles every
+> card by overriding the `Display*` colours or dimensions.
 
 ---
 
@@ -1451,7 +1516,8 @@ matching content colour.
 A tinted background with the semantic hue as text — lower emphasis than solid,
 for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
 ≈24 % on hover), not a dedicated palette entry, so it derives automatically in
-both Light and Dark and follows any custom theme.
+both Light and Dark and follows any custom theme. Secondary is achromatic, so it
+uses a neutral wash instead, lighter (≈8 %, ≈14 % on hover).
 
 ```xml
 <Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
@@ -1471,7 +1537,7 @@ both Light and Dark and follows any custom theme.
 ## Outline
 
 A coloured border and text over a transparent fill; hovering fills it with the
-soft tint.
+soft tint. Secondary uses the neutral border and foreground.
 
 ```xml
 <Button Style="{StaticResource OutlinePrimaryButton}">Primary</Button>
@@ -1507,6 +1573,39 @@ The inherited `Sizing.Size` attached property (`xs` / `sm` / `md` /
 
 ---
 
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/index.md -->
+
+# Toolkit
+
+Design-system helpers that shape controls and layouts rather than being controls
+themselves. They all live in the `Joufflu.Toolkit` namespace of the core
+`Joufflu` package — `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`,
+`DropData`, `DragSource`, `SharedWidth` and `DataGridEditing` (which the `DataGrid` style uses to
+theme the editors of its built-in columns). The theme manager, tokens and window have their own section, see
+[Themes](../themes/index.md).
+
+- **Sizing** — the `Sizing.Size` and `IsSquare` attached properties.
+- **Spacing** — the `Spacing.Gap` attached property for gaps between children.
+- **Derived dimensions** — the `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` attached properties, with their factors scaling the value side by side, for thicknesses, radii and margins that follow the theme live.
+- **Tooltip** — every `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side and `ThemedTooltip.MaxWidth` where its text wraps.
+- **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it.
+- **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
+- **Shared width** — the `SharedWidth.IsShared` and `IsScope` attached properties, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
+- **Create a custom control** — the category a control of your own belongs to (display, input, action), the tokens and states of each, then an input built step by step: background and border, height, sizes and padding, states, the validation error style and embedded buttons.
+
+Snippets use the `toolkit` XML namespace for those helpers and `joufflu` for the
+design-system keys, plus `nav` and `feedback` where an example targets one of
+their controls:
+
+```xml
+xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
+```
+
+---
+
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/sizing.md -->
 
 # Sizing
@@ -1514,7 +1613,9 @@ The inherited `Sizing.Size` attached property (`xs` / `sm` / `md` /
 ## Sizing.Size
 
 The inherited `Size` attached property (`xs` / `sm` / `md` / `lg`) scales height,
-font size and padding. `xl` exists too, for icons only: it enlarges a `FontIcon`. Since it inherits, setting it on a panel sizes every child.
+font size and padding. `xl` exists too, for text and icons: a `TextBlock` takes
+the `FontSizeXl` size and a `FontIcon` grows, while controls fall back to `md`.
+Since it inherits, setting it on a panel sizes every child.
 
 ```xml
 <!-- Attached property drives height, font size and padding -->
@@ -1610,6 +1711,11 @@ runtime — by the [theme customizer](../themes/customize-theme.html), for insta
 straight through, and no derived resource key has to be declared or re-pushed by
 hand.
 
+Point it at the key of the category the element belongs to (`DisplayBorderThickness`,
+`DisplayRadius`, `InputRadius`, `ActionRadius`…, see [Design tokens](../themes/tokens.html)), so the
+part follows the rest of the control when a theme reshapes that category. The global `Thickness` and
+`Radius` are for an app's own layout.
+
 ## Factors
 
 Each of the three properties has a matching factor, a `Thickness` (or a
@@ -1629,12 +1735,12 @@ Point `Derive.BorderThickness` at a resource key and pick the sides with
 `Derive.BorderThicknessFactor`, in the usual `Left,Top,Right,Bottom` order.
 
 ```xml
-<!-- Right edge only, following Dimensions.Thickness live -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<!-- Right edge only, following Dimensions.DisplayBorderThickness live -->
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 
 <!-- Open at the bottom, with a doubled top edge -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
         toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
 ```
 
@@ -1643,7 +1749,7 @@ without a keyed `Thickness`:
 
 ```xml
 <Style TargetType="{x:Type nav:NavigationMenu}">
-    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.Thickness}" />
+    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
     <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
 </Style>
 ```
@@ -1663,7 +1769,7 @@ Same shape, with `Derive.CornerRadiusFactor` in the
 
 ```xml
 <!-- Top corners only, matching the border it sits in -->
-<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+<Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
         toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
 ```
 
@@ -1707,54 +1813,62 @@ xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 
 # Tooltip
 
-## ThemedTooltip.Content
-
-Set `ThemedTooltip.Content` on **any** element to attach a themed tooltip that shows
-instantly on hover. It builds on the native `ToolTip`, so screen-edge flipping and
-fade-in keep working, but unlike the native tooltip it appears with no delay, unless the
-element sets `ToolTipService.InitialShowDelay` or `BetweenShowDelay` itself.
-
-`ThemedTooltip.Content` is an `object`: it accepts a plain string or arbitrary XAML.
+Set `ToolTip` the usual way, as a string or arbitrary XAML: every tooltip is themed. Its
+style places it with a custom placement rather than at the mouse, centred on a side of
+the element and kept a small gap clear of it, and WPF flips it to the opposite side
+when it would run off a screen edge. The show delay is the native one.
 
 ```xml
 <!-- A string tooltip -->
-<Button Content="Save" toolkit:ThemedTooltip.Content="Save your changes" />
+<Button Content="Save" ToolTip="Save your changes" />
 
 <!-- Arbitrary content: icons, panels, anything -->
 <Button Content="Rich tooltip">
-    <toolkit:ThemedTooltip.Content>
+    <Button.ToolTip>
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
             <TextBlock Text="Arbitrary content, icons included." />
         </StackPanel>
-    </toolkit:ThemedTooltip.Content>
+    </Button.ToolTip>
 </Button>
 ```
 
 ## ThemedTooltip.Placement
 
-`ThemedTooltip.Placement` chooses which side the tooltip sits on — `Top`, `Bottom`
-(default), `Left` or `Right`. It is centered on the shared edge, kept a small gap
-clear of the element, and still flips automatically when it would run off a screen
-edge.
+`ThemedTooltip.Placement`, set on the element, chooses which side its tooltip sits on —
+`Top`, `Bottom` (default), `Left` or `Right`.
 
 ```xml
-<Button Content="Top"    toolkit:ThemedTooltip.Content="Placed above" toolkit:ThemedTooltip.Placement="Top" />
-<Button Content="Bottom" toolkit:ThemedTooltip.Content="Placed below" toolkit:ThemedTooltip.Placement="Bottom" />
-<Button Content="Left"   toolkit:ThemedTooltip.Content="Placed left"  toolkit:ThemedTooltip.Placement="Left" />
-<Button Content="Right"  toolkit:ThemedTooltip.Content="Placed right" toolkit:ThemedTooltip.Placement="Right" />
+<Button Content="Top"    ToolTip="Placed above" toolkit:ThemedTooltip.Placement="Top" />
+<Button Content="Bottom" ToolTip="Placed below" toolkit:ThemedTooltip.Placement="Bottom" />
+<Button Content="Left"   ToolTip="Placed left"  toolkit:ThemedTooltip.Placement="Left" />
+<Button Content="Right"  ToolTip="Placed right" toolkit:ThemedTooltip.Placement="Right" />
+```
+
+## ThemedTooltip.MaxWidth
+
+`ThemedTooltip.MaxWidth`, set on the element, is the width past which the text of its
+tooltip wraps: `320` by default.
+
+```xml
+<Button Content="Narrow"
+        toolkit:ThemedTooltip.MaxWidth="160"
+        ToolTip="A long description, wrapped at a narrower max width." />
 ```
 
 {: .note }
-> Setting `ThemedTooltip.Content` to `null` removes the tooltip, so it composes with
-> triggers — the [navigation menu](../navigation/navigation-menu.md) attaches a
-> right-placed tooltip to each item only while the menu is collapsed.
+> The style sets the tooltip's own `Placement`, so `ToolTipService.Placement` on an
+> element no longer moves it: use `ThemedTooltip.Placement`. A `ToolTip` set from a
+> trigger composes as usual — the [navigation menu](../navigation/navigation-menu.md)
+> gives each item a right-placed tooltip only while the menu is collapsed.
 
 ---
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md -->
 
 # Animate
+
+Attached properties that animate any element without touching its template.
 
 ## Animate.Bounce
 
@@ -1789,6 +1903,8 @@ slow idle nudge rather than a slower hop.
 <!-- bounce nobody can see, resumed when the element is back   -->
 <Border Visibility="Collapsed" toolkit:Animate.Bounce="True" />
 ```
+
+## Binding the bounce
 
 `Bounce` is a plain boolean, so bind it to a view-model flag to start and stop
 the loop at runtime.
@@ -1841,7 +1957,7 @@ be dropped — the cursor shows a no-drop sign — and never lights the zone up.
 ```xml
 <!-- AllowDrop and the drag events are handled by the behavior -->
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
     <TextBlock VerticalAlignment="Center" Text="Drop .pdf files here" />
 </Border>
 ```
@@ -1905,7 +2021,7 @@ children see it too.
             <Style.Triggers>
                 <!-- True only while accepted data hovers: refused files never highlight -->
                 <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Primary100Brush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
                     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 </Trigger>
             </Style.Triggers>
@@ -1994,21 +2110,78 @@ children see it too.
 
 ---
 
-<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/custom-input.md -->
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/shared-width.md -->
 
-# Custom input
+# Shared width
 
-An input of your own sits with the Joufflu ones when it reads the same design tokens.
-The gallery's **Custom input** page builds a star `RatingInput` from a bare `Control`
-step by step; this page lists the rules it follows.
+## SharedWidth.IsShared
+
+`SharedWidth.IsShared` lines up inputs that each get a different amount of room, such as
+the rows of a tree at different depths. Every element marked `IsShared` takes the width of
+the narrowest one in its group and is right aligned. Their right edges already line up, so
+their left edges do too.
+
+Each group is the closest ancestor marked `SharedWidth.IsScope`:
+
+```xml
+<TreeView toolkit:SharedWidth.IsScope="True" ItemsSource="{Binding Fields}">
+    <TreeView.ItemTemplate>
+        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+            <Grid toolkit:Spacing.Gap="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                <TextBox Grid.Column="1" toolkit:SharedWidth.IsShared="True" Text="{Binding Value}" />
+            </Grid>
+        </HierarchicalDataTemplate>
+    </TreeView.ItemTemplate>
+</TreeView>
+```
+
+`DataFill` and `DataEdit` use it for their editors.
+
+- Only visible members count: the rows of a collapsed node are ignored until it expands.
+- A member's room is the layout slot its parent gives it, so give it a stretching cell
+  (`*` column, stretched panel). The shared width follows when a member is added or removed
+  or the scope is resized.
+- The behaviour sets `HorizontalAlignment` and `Width` on each member, so don't set them yourself.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/custom-control.md -->
+
+# Create a custom control
+
+A control of your own sits with the Joufflu ones when it reads the tokens of its
+category, so a theme restyling that category restyles it too. Pick the category the
+control belongs to, then follow its rules. A control derived from a native one
+(`TextBox`, `Button`, `ListBox`…) gets them all by basing its style on the native one.
+
+| Category | What it is | Tokens | States |
+|---|---|---|---|
+| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplaySurface1/2Brush`, `DisplayBorderBrush`, `DisplayCornerRadius`, `DisplayBorderThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None. Its items (rows, entries) are actions without a fill at rest |
+| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputSurface1/2Brush`, `InputBorderBrush`, `InputRadius`, `InputBorderThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; a strong border on focus (`InputBorderElevatedBrush`) |
+| **Action** | Runs something: a button, a toggle, an item of a display | `ActionSurface1/2Brush`, `ActionBorderBrush`, `ActionRadius`, `ActionBorderThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | A stronger background on hover (`ActionElevatedBrush`), moved down when pressed, no focus border |
+
+In every category, disabled is `DisabledOpacity`, selected and checked are the primary,
+and sizes follow `Sizing.Size`. [Design tokens](../themes/tokens.html) lists each key with
+its role and fallback.
+
+## Example: an input
+
+The gallery's **Create a custom control** page builds a star `RatingInput` from a bare
+`Control` step by step, following every rule of the **Input** category by hand; a display
+or an action follows the same steps with the keys of its own category. The rules:
 
 | | Rule | Tokens |
 |---|---|---|
-| **Required** | Background | `Brushes.BackgroundBrush` |
-| **Required** | Border colour and thickness | `Brushes.BorderBrush`, `Dimensions.BorderThickness`, `Dimensions.CornerRadius` |
+| **Required** | Background | `Brushes.InputSurface1Brush` (`InputSurface2Brush` for an elevated part inside: a tag, a track) |
+| **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputBorderThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Hover, focus and disabled states | `Background100Brush`, `Border100Brush`, `Colors.DisabledOpacity` |
+| Optional | Focus and disabled states (an input has no hover) | `InputBorderElevatedBrush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -2038,18 +2211,27 @@ template read them from the control:
 
 ```xml
 <Style TargetType="{x:Type local:RatingInput}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+    <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
     <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
     <Setter Property="Template">
         <Setter.Value>
             <ControlTemplate TargetType="{x:Type local:RatingInput}">
                 <Grid>
+                    <!-- The radius is clamped to half the height, like the native inputs: a large one gives a pill -->
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
+                        <Border.CornerRadius>
+                            <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </Border.CornerRadius>
+                    </Border>
                     <!-- content -->
                 </Grid>
             </ControlTemplate>
@@ -2088,28 +2270,30 @@ height alone.
 </Style.Triggers>
 ```
 
-Inputs use the `InputPadding` keys, tighter than the `Padding` keys of the buttons. In the
-template, lay the content over the border inside `Padding`, so it lines up with the text
-of the native inputs:
+Inputs use the `InputPadding` keys, tighter than the `ActionPadding` keys of the buttons.
+The height of a one-line input comes from its size, so, like the native inputs, the
+template lays the content over the border inside the **horizontal** part of `Padding`
+only, centred vertically: it lines up with the text of the native inputs, and a large
+vertical padding never crushes it. `HorizontalThicknessConverter` drops the vertical part:
 
 ```xml
 <Grid>
     <Border ... />
-    <Grid Margin="{TemplateBinding Padding}"> <!-- content --> </Grid>
+    <Grid VerticalAlignment="Center"
+          Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}">
+        <!-- content -->
+    </Grid>
 </Grid>
 ```
 
 ## States
 
-The native inputs lighten their background on hover and their border on focus, and fade
+An input has no hover state: the native inputs strengthen their border on focus, and fade
 when disabled:
 
 ```xml
-<Trigger Property="IsMouseOver" Value="True">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-</Trigger>
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
@@ -2126,7 +2310,7 @@ border red:
 ```xml
 <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
 
-<!-- In Style.Triggers, after the hover and focus triggers so it wins over them -->
+<!-- In Style.Triggers, after the focus trigger so it wins over it -->
 <Trigger Property="Validation.HasError" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
 </Trigger>
@@ -2138,11 +2322,12 @@ border stays.
 ## Embedded buttons
 
 A button inside the input (clear, open, step…) uses the `EmbeddedButton` style: a
-transparent square of `HeightEmbedded` (20). Placed inside `Padding`, it fits every
-size: the smallest input leaves exactly 24 − 2 × 2 = 20 for it.
+transparent square of `HeightEmbedded` (20). Centred in the content row, which takes
+no vertical padding, it fits every size, down to the 24 of `xs`.
 
 ```xml
-<Grid Margin="{TemplateBinding Padding}">
+<Grid VerticalAlignment="Center"
+      Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}">
     <Grid.ColumnDefinitions>
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" />
@@ -2171,8 +2356,51 @@ Put the input next to a `TextBox` and compare them:
 
 - in each size, with `Sizing.Size` on a parent panel;
 - after switching between Light and Dark, and to a custom theme;
-- hovered, focused and disabled;
+- focused and disabled;
 - with a binding error, with and without `Validation.ErrorTemplate="{x:Null}"`.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/controls/index.md -->
+
+# Joufflu controls
+
+The controls Joufflu adds on top of the restyled natives, one optional package
+each. They all build on the core `Joufflu` package and read the same design
+tokens, so they follow the theme like the natives do.
+
+| Section | Package | What's inside |
+|---|---|---|
+| [Feedback](../feedback/index.md) | `Joufflu.Feedback` | `Badge`, `Spinner`, toasts |
+| [Inputs](../inputs/index.md) | `Joufflu.Inputs` | `NumericUpDown`, `DecimalUpDown`, `TimeSpanPicker`, `FormatTextBox`, `Search`, `ComboBoxSearch`, `ComboBoxTags`, `TextEditable`, `FilePicker`, `ColorPicker`, `Dropdown` |
+| [Navigation](../navigation/index.md) | `Joufflu.Navigation` | `NavigationMenu`, overlays (modal dialogs), `Paging` |
+| [Data](../data/index.md) | `Joufflu.Data` | `DataFill`, `DataEdit`, `DataDisplay` |
+| [File explorer](../file-explorer/index.md) | `Joufflu.FileExplorer` | `ExplorerList`, `ExplorerTree`, `Explorer` and their sources |
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/index.md -->
+
+# Feedback
+
+Feedback controls from the optional
+[`Joufflu.Feedback`](https://www.nuget.org/packages/Joufflu.Feedback) package,
+built on the design system.
+
+- **Badge** — a themed pill in the semantic colours.
+- **Spinner** — an indeterminate loading indicator.
+- **Toasts** — transient notifications shown from a service, stacked in any corner by a `ToastContainer`.
+
+Add the package (`dotnet add package Joufflu.Feedback`). Only the core
+`Resources.xaml` needs merging: the controls' styles load from the package's
+`Themes/Generic.xaml`. The controls live in the
+`Joufflu.Feedback.Controls` namespace:
+
+```xml
+xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+```
 
 ---
 
@@ -2250,20 +2478,7 @@ When the app also uses an
 </feedback:ToastContainer>
 ```
 
-### Position
-
-`Position` picks the corner the stack sits in: `TopRight` (the default), `TopLeft`,
-`BottomRight` or `BottomLeft`. The newest toast always sits closest to that corner,
-so the stack grows away from it. Bind it to change corners at runtime — the
-gallery's **Toasts** page does exactly that.
-
-```xml
-<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
-    <!-- the whole app -->
-</feedback:ToastContainer>
-```
-
-## Showing a toast
+## Toast types
 
 Show them from an injected `IToastService` (in `Joufflu.Feedback`):
 
@@ -2277,6 +2492,48 @@ toasts.Show(new ToastOptions { Message = "Sticky", Duration = TimeSpan.Zero });
 
 A `Duration` of `TimeSpan.Zero` makes a toast sticky: it stays until the user
 closes it.
+
+## Position
+
+The `ToastContainer`'s `Position` picks the corner the stack sits in: `TopRight` (the default), `TopLeft`,
+`BottomRight` or `BottomLeft`. The newest toast always sits closest to that corner,
+so the stack grows away from it. Bind it to change corners at runtime — the
+gallery's **Toasts** page does exactly that.
+
+```xml
+<feedback:ToastContainer Toasts="{Binding Toasts}" Position="BottomRight">
+    <!-- the whole app -->
+</feedback:ToastContainer>
+```
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/index.md -->
+
+# Inputs
+
+Inputs from the `Joufflu.Inputs` library. Two-way bindable like the built-in WPF
+inputs.
+
+- **Numeric & format inputs** — `NumericUpDown`, `DecimalUpDown`,
+  `TimeSpanPicker` and the underlying `FormatTextBox`.
+- **Search** — a debounced `Search` box.
+- **Search combo box** — the searchable `ComboBoxSearch`.
+- **Combo box tags** — multi-selection built on `ComboBoxSearch`.
+- **Text editable** — a value that becomes editable on demand.
+- **File picker** — pick a file through the system dialog.
+- **Color picker** — pick a colour with a saturation square, hue and alpha
+  sliders.
+- **Dropdown** — attached properties opening a popup of any content off a `ToggleButton`.
+
+All snippets assume these XML namespaces:
+
+```xml
+xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+```
 
 ---
 
@@ -2352,11 +2609,30 @@ The `format` namespace is:
 xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
 ```
 
+## Validation
+
+Binding errors (here from an ObservableValidator) turn the input's border red, and
+`ValidationErrorTemplate` adds a corner badge whose tooltip lists them. Bring each
+value in range to clear it: a rating from 1 to 10, a ratio from 0 to 1, at most
+one hour. The last input sets `Validation.ErrorTemplate` to `{x:Null}`: no badge,
+only the red border.
+
+```xml
+<inputs:NumericUpDown Value="{Binding Rating, Mode=TwoWay}" />
+<inputs:DecimalUpDown Value="{Binding Ratio, Mode=TwoWay}" />
+<inputs:TimeSpanPicker Value="{Binding ShortDuration, Mode=TwoWay}" />
+
+<!-- Opt out of the template: only the input's own red border remains -->
+<inputs:NumericUpDown Validation.ErrorTemplate="{x:Null}" Value="{Binding Rating, Mode=TwoWay}" />
+```
+
 ---
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/search.md -->
 
 # Search
+
+## Search
 
 A text box that waits for typing to settle (300 ms) before reporting the search,
 to limit calls to an API or database. <kbd>Escape</kbd> clears it.
@@ -2378,6 +2654,8 @@ to limit calls to an API or database. <kbd>Escape</kbd> clears it.
 
 # Search combo box
 
+## ComboBoxSearch
+
 An editable combo box that filters its items as you type, on the text
 `DisplayMemberPath` shows for each item.
 
@@ -2389,6 +2667,21 @@ the item already picked.
 ```xml
 <inputs:ComboBoxSearch ItemsSource="{Binding Countries}"
                        SelectedItem="{Binding SelectedCountry}" />
+```
+
+## Validation
+
+Binding errors (here from an ObservableValidator) turn the input's border red, and
+`ValidationErrorTemplate` adds a corner badge whose tooltip lists them. Pick a
+country to clear it. The second input sets `Validation.ErrorTemplate` to
+`{x:Null}`: no badge, only the red border.
+
+```xml
+<inputs:ComboBoxSearch ItemsSource="{Binding Countries}"
+                       SelectedItem="{Binding RequiredCountry}" />
+
+<!-- Opt out of the template: only the input's own red border remains -->
+<inputs:ComboBoxSearch Validation.ErrorTemplate="{x:Null}" ... />
 ```
 
 ---
@@ -2416,6 +2709,21 @@ Bind `SelectedItems` to a mutable `IList` (the gallery uses an
 `string`). The control edits that list in place. Changes made to its contents from
 the view model are not picked up: assign a new collection instead.
 
+## Validation
+
+Binding errors (here from an ObservableValidator) turn the input's border red, and
+`ValidationErrorTemplate` adds a corner badge whose tooltip lists them. Pick a
+second country to clear it. The second input sets `Validation.ErrorTemplate` to
+`{x:Null}`: no badge, only the red border.
+
+```xml
+<inputs:ComboBoxTags ItemsSource="{Binding Countries}"
+                     SelectedItems="{Binding RequiredCountries}" />
+
+<!-- Opt out of the template: only the input's own red border remains -->
+<inputs:ComboBoxTags Validation.ErrorTemplate="{x:Null}" ... />
+```
+
 ---
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/text-editable.md -->
@@ -2431,6 +2739,20 @@ a form.
 <inputs:TextEditable Text="{Binding EditableText, Mode=TwoWay}" />
 ```
 
+## Validation
+
+Binding errors (here from an ObservableValidator) turn the input's border red, and
+`ValidationErrorTemplate` adds a corner badge whose tooltip lists them. Shorten
+the title to 10 characters to clear it. The second input sets
+`Validation.ErrorTemplate` to `{x:Null}`: no badge, only the red border.
+
+```xml
+<inputs:TextEditable Text="{Binding ShortText, Mode=TwoWay}" />
+
+<!-- Opt out of the template: only the input's own red text and border remain -->
+<inputs:TextEditable Validation.ErrorTemplate="{x:Null}" Text="{Binding ShortText, Mode=TwoWay}" />
+```
+
 ---
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/file-picker.md -->
@@ -2444,6 +2766,20 @@ button.
 
 ```xml
 <inputs:FilePicker FilePath="{Binding FilePath, Mode=TwoWay}" />
+```
+
+## Validation
+
+Binding errors (here from an ObservableValidator) turn the input's border red, and
+`ValidationErrorTemplate` adds a corner badge whose tooltip lists them. Choose a
+file to clear it. The second input sets `Validation.ErrorTemplate` to `{x:Null}`:
+no badge, only the red border.
+
+```xml
+<inputs:FilePicker FilePath="{Binding RequiredFilePath}" />
+
+<!-- Opt out of the template: only the input's own red border remains -->
+<inputs:FilePicker Validation.ErrorTemplate="{x:Null}" FilePath="{Binding RequiredFilePath}" />
 ```
 
 ---
@@ -2470,6 +2806,20 @@ The popup provides:
 - an editable **hex** field and an **opacity** percentage. A `#RRGGBB` hex keeps the
   opacity, a pasted `#AARRGGBB` sets it too.
 
+## Validation
+
+Binding errors (here from an ObservableValidator) turn the input's border red, and
+`ValidationErrorTemplate` adds a corner badge whose tooltip lists them. Pick an
+opaque colour to clear it. The second input sets `Validation.ErrorTemplate` to
+`{x:Null}`: no badge, only the red border.
+
+```xml
+<inputs:ColorPicker Color="{Binding OpaqueColor}" />
+
+<!-- Opt out of the template: only the input's own red border remains -->
+<inputs:ColorPicker Validation.ErrorTemplate="{x:Null}" Color="{Binding OpaqueColor}" />
+```
+
 ---
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/dropdown.md -->
@@ -2484,8 +2834,14 @@ The button is not wrapped in a control: it stays a plain `ToggleButton` you own,
 so its `Style`, its content, its triggers and every attached property
 (`Sizing.IsSquare`, `Sizing.Size`, `Derive.*`, …) apply directly to it.
 
+## Dropdown
+
+`Dropdown.Popup` hangs the popup off the button, open while it is checked.
+`Dropdown.CloseOnClick` dismisses it when a button inside it is clicked, the way
+picking a command from a menu does (see [Closing on click](#closing-on-click)).
+
 ```xml
-<ToggleButton Content="Actions">
+<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
     <inputs:Dropdown.Popup>
         <StackPanel toolkit:Spacing.Gap="4">
             <Button Content="Rename" Style="{StaticResource GhostButton}" />
@@ -2504,16 +2860,27 @@ so its `Style`, its content, its triggers and every attached property
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
 | `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, background, border, corner radius. |
 
-`BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight` open it
-upward — useful for a dropdown sitting near the bottom of the window.
+## Popup placement
+
+`Dropdown.Placement` anchors a corner of the popup to the matching corner of the
+button. `BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight`
+open it upward — useful for a dropdown sitting near the bottom of the window.
+`Dropdown.HorizontalOffset` and `Dropdown.VerticalOffset` add to that placement.
 
 ```xml
+<!-- BottomLeft (default), BottomRight, TopLeft, TopRight -->
 <ToggleButton Content="Filter" inputs:Dropdown.Placement="BottomRight">
-    ...
+    <inputs:Dropdown.Popup>
+        <TextBlock Text="Opens down, right aligned." />
+    </inputs:Dropdown.Popup>
 </ToggleButton>
 ```
 
-An icon-only dropdown is just an icon-only toggle button:
+## Button style
+
+Because the button is a real `ToggleButton`, every `ToggleButton` style and
+attached property works directly on it, `Sizing.IsSquare` and `Sizing.Size`
+included. An icon-only dropdown is just an icon-only toggle button:
 
 ```xml
 <ToggleButton
@@ -2606,6 +2973,27 @@ the host is a plain ancestor inside the popup, so that lookup stays in one tree:
 
 `PlacementTarget` is the `ToggleButton` itself, so the same route reaches its
 properties — `IsChecked`, a `Tag`, an inherited value — not just its `DataContext`.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/navigation/index.md -->
+
+# Navigation
+
+Navigation building blocks from `Joufflu.Navigation`:
+
+- **Navigation menu** — a collapsible side menu driven by a `Navigator`.
+- **Overlays** — modal dialogs stacked above the current page, plus a standard confirmation.
+- **Paging** — a page selector for browsing large sets of data.
+
+The view models use `Navigator`, `Overlayer` / `IOverlayer` and `IPage` from the
+`Joufflu.Navigation` namespace. The XAML snippets use the `nav` XML namespace, plus
+`vm` for your own view models:
+
+```xml
+xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:vm="clr-namespace:MyApp.ViewModels"
+```
 
 ---
 
@@ -2904,14 +3292,17 @@ private void UpdatePage()
 > default, so without it the control would never push the new page back to the
 > view model.
 
-## Without a known total
+## Paging without a known total
 
 Leave `Total` at its `-1` default when the size of the set is unknown (a cursor-based
 API, a stream). The range label is hidden and the page list grows one page ahead of
 the current one, so the user can always move forward:
 
 ```xml
-<nav:Paging PageNumber="{Binding PageNumber, Mode=TwoWay}" Capacity="{Binding Capacity, Mode=TwoWay}" />
+<!-- Total left at its -1 default -->
+<nav:Paging
+    PageNumber="{Binding PageNumber, Mode=TwoWay}"
+    Capacity="{Binding Capacity, Mode=TwoWay}" />
 ```
 
 Set `Total` as soon as you know it and the control switches back to a bounded list.
@@ -3048,6 +3439,16 @@ The feather toggle swaps a field's editor for the entries that fit it, plus **un
 when nothing fits. Objects and arrays have it too: forced, their properties or items are
 hidden and the entry is written in their place, and they come back as they were once released.
 
+An entry that takes any name is a `DataManualPattern`, the name written between braces:
+
+```csharp
+new DataManualPattern(null, "$row.columns['{column name}']"),
+```
+
+The list shows it as the hint `$row.columns['column name']`, which can't be picked. Typing
+`unit price` offers `$row.columns['unit price']` in its place. `Load` forces a value the
+pattern writes back to it.
+
 ---
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md -->
@@ -3065,6 +3466,8 @@ and shape are fixed, only values and array items change.
 
 - A property's `description` shows as an info tooltip.
 - **Add** on an array clones its `Template`; array items can be removed.
+- Every editor takes the width of the narrowest one, so they line up whatever their depth
+  (see [shared width](../toolkit/shared-width.md)).
 - The feather toggle forces a field, object or array to one of the
   [manual values](index.md#manual-values), hiding the properties or items of an object or an array.
 
@@ -3135,9 +3538,9 @@ Only expanding and collapsing nodes changes the tree.
 A themed file explorer from the optional
 [`Joufflu.FileExplorer`](https://www.nuget.org/packages/Joufflu.FileExplorer) package.
 
-- **Explorer** — everything together: control bar, tree, list and a status bar.
 - **List** — the nodes of the opened folder, with extra columns of your own.
 - **Tree** — the loaded hierarchy, folders only by default.
+- **Explorer** — everything together: control bar, tree, list and a status bar.
 - **Sources** — what the controls display: the disk, the disk watched live, or a source of your own.
 
 Add the package (`dotnet add package Joufflu.FileExplorer`; it brings
@@ -3151,6 +3554,8 @@ xmlns:base="clr-namespace:Joufflu.FileExplorer.Controls.Base;assembly=Joufflu.Fi
 xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu.FileExplorer"
 xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
 ```
 
 ## Sources
@@ -3213,8 +3618,8 @@ menu.
 <fileExplorer:ExplorerList Source="{Binding Source}" />
 ```
 
-`SelectedNodes` is bindable, so a status bar can count the selection, and `View` gives
-the sorted and filtered nodes as the list displays them.
+`SelectedNodes` is read-only: bind it `OneWay`, for a status bar counting the
+selection say. `View` gives the sorted and filtered nodes as the list displays them.
 
 ## Extra columns
 
@@ -3514,3 +3919,86 @@ The nodes it hands over are `IExplorerNode`s: a `Name`, a `Path`, a `ModifiedAt`
 the `Parent` directory, `IExplorerDirectory` adding its `Children` and its
 `DirectoryTree` (itself and its ancestors, from the root, which the breadcrumb shows),
 and `IExplorerFile` a `Size`.
+
+---
+
+<!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/comparison.md -->
+
+# Joufflu vs other WPF UI libraries
+
+Which WPF UI library should you pick for a modern-looking desktop app? This page
+says where Joufflu fits and, as importantly, where another library is the better
+choice. Check each project's own repository for its current status before deciding:
+this page does not track their releases.
+
+## At a glance
+
+| You want | Reach for |
+|---|---|
+| A neutral, modern look that you can make your own by overriding tokens, with live Light / Dark theming, a themed window, and inputs, navigation, modals and toasts that already match | **Joufflu** |
+| A Material Design look | MaterialDesignInXaml |
+| A Windows 11 / Fluent look | WPF-UI, ModernWpf, or the Fluent theme built into recent .NET versions of WPF |
+| A Metro-style window and controls | MahApps.Metro |
+| The widest catalogue of ready-made controls | HandyControl, Extended WPF Toolkit |
+| Plain WPF with only a few touch-ups | Hand-written styles |
+
+## What Joufflu is
+
+- **One design system, not a bag of controls.** Colours, corner radius, spacing,
+  control heights and font sizes are resource keys (`joufflu:Colors.*`, which the
+  `joufflu:Brushes.*` follow, and `joufflu:Dimensions.*`). Every Joufflu control and
+  every restyled native control reads them through `DynamicResource`, so a theme
+  change reaches all of them at once.
+- **Customizable by design.** Brand colours, corner radius, spacing, control heights
+  and font sizes are all tokens: override a few in a dictionary merged after the Joufflu
+  resources and every control follows, with no `ControlTemplate` copied or edited.
+  Register a whole palette by name (`ThemeManager.Instance.Register`) to make it selectable next
+  to Light and Dark. The gallery's **Customize theme** window edits the tokens live,
+  starts from presets and generates the dictionary to paste into your app
+  ([Customize theme](themes/customize-theme.md)).
+- **Restyled natives.** Buttons, text boxes, combo boxes, data grids and the rest of the
+  built-in WPF controls pick up the style from the implicit styles, with no
+  `Style=` needed on each one.
+- **The pieces an app shell needs.** `ThemedWindow` (custom chrome), `NavigationMenu` and
+  a view-model-first `Navigator`, awaitable modal overlays (`await overlays.Confirm(...)`),
+  stacking toasts, paging, badges, a spinner, a file explorer and JSON-schema driven
+  data trees.
+- **Typed, explicit APIs.** Layout and size helpers are attached properties
+  (`Spacing.Gap`, `Sizing.Size`, `Derive.Margin`) checked by the XAML compiler, with no
+  reflection or string-based conventions.
+- **Modular.** Core styles in `Joufflu`; inputs, navigation, feedback, file explorer and
+  data are separate NuGet packages you add only when needed.
+- **Built to be read by AI agents.** [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt),
+  [`llms-full.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms-full.txt)
+  and a Claude Code plugin give an agent the exact namespaces, names and wiring.
+
+## When not to pick Joufflu
+
+Be honest about the trade-offs:
+
+- **It is young and has a single maintainer.** Expect API changes between 0.x versions
+  (see the changelog), and a smaller community than the long-established libraries.
+- **It targets `net10.0-windows` only.** Older .NET Framework and earlier .NET versions
+  are not supported.
+- **It has its own look.** Tokens let you re-colour and re-proportion it, but it does
+  not reproduce Material Design or Windows 11 Fluent visuals. If your product must
+  follow one of those design languages, use a library built for it.
+- **The control catalogue is focused.** There is no ribbon, docking manager, charting
+  or property grid. Combine Joufflu with a dedicated library for those, or write them
+  against the same tokens.
+
+## Migrating or mixing
+
+- To move an existing view onto Joufflu, replace hardcoded colours and sizes with the
+  tokens and named styles, and delete local styles that fight the implicit ones. The
+  `joufflu-restyle` skill of the [Claude Code plugin](https://github.com/ndegheselle/Joufflu/tree/main/plugins/joufflu)
+  automates this audit.
+- Two libraries that both restyle the native controls will fight over the implicit
+  styles. If you mix, keep one of them in charge of the natives and use the other only
+  for controls it alone provides.
+
+## Next steps
+
+- [Getting started](index.md#getting-started)
+- [Tutorial: a navigable app shell](tutorial.md)
+- [Recipes](recipes.md): complete, copy-paste screens

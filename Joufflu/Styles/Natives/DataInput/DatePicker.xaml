@@ -1,8 +1,12 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Converters"
     xmlns:joufflu="clr-namespace:Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit">
+
+    <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+    <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <Style x:Key="{x:Type DatePickerTextBox}" TargetType="DatePickerTextBox">
         <Setter Property="BorderThickness" Value="0" />
@@ -16,6 +20,7 @@
                     <ScrollViewer
                         Name="PART_ContentHost"
                         Margin="{TemplateBinding Padding}"
+                        VerticalAlignment="Center"
                         Focusable="False"
                         HorizontalScrollBarVisibility="Hidden"
                         Template="{DynamicResource TextBoxScrollViewerTemplate}"
@@ -25,14 +30,19 @@
         </Setter>
     </Style>
 
+    <!--
+        An input: no hover, a strong border on focus. The height comes from the size, so the field takes only the
+        horizontal part of its padding and centres its text. The calendar button is an embedded ghost action, inset
+        from the right as the text is from the left; the calendar pop-up a display (Calendar.xaml).
+    -->
     <Style x:Key="{x:Type DatePicker}" TargetType="DatePicker">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingMd}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="CalendarStyle" Value="{DynamicResource {x:Type Calendar}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -53,14 +63,22 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}" />
+                            Tag="{DynamicResource {x:Static joufflu:Dimensions.InputRadius}}">
+                            <Border.CornerRadius>
+                                <MultiBinding Converter="{StaticResource MaxCornerRadiusConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Border.CornerRadius>
+                        </Border>
 
                         <DatePickerTextBox
                             x:Name="PART_TextBox"
                             Grid.Column="0"
-                            Padding="{TemplateBinding Padding}"
+                            Padding="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            VerticalContentAlignment="Center"
                             Background="{TemplateBinding Background}"
                             Focusable="{TemplateBinding Focusable}"
                             Foreground="{TemplateBinding Foreground}" />
@@ -69,14 +87,12 @@
                             x:Name="PART_Button"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Margin="0,4,4,4"
-                            Padding="4"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Background="Transparent"
-                            BorderBrush="Transparent"
-                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            toolkit:Derive.Margin="{x:Static joufflu:Dimensions.InputPaddingMd}"
+                            toolkit:Derive.MarginFactor="0,0,1,0"
                             Focusable="False"
-                            Foreground="{TemplateBinding Foreground}">
+                            Foreground="{TemplateBinding Foreground}"
+                            Style="{DynamicResource EmbeddedButton}">
                             <Viewbox Width="14" Height="14">
                                 <Path
                                     Data="M 0 2 L 0 11 L 11 11 L 11 2 Z M 0 5 L 11 5 M 3 0 L 3 4 M 8 0 L 8 4"
@@ -97,8 +113,14 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
-                        <Trigger Property="Validation.HasError" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+                        <Trigger Property="toolkit:Sizing.Size" Value="xs">
+                            <Setter TargetName="PART_Button" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingXs}" />
+                        </Trigger>
+                        <Trigger Property="toolkit:Sizing.Size" Value="sm">
+                            <Setter TargetName="PART_Button" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingSm}" />
+                        </Trigger>
+                        <Trigger Property="toolkit:Sizing.Size" Value="lg">
+                            <Setter TargetName="PART_Button" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.InputPaddingLg}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -106,18 +128,12 @@
         </Setter>
 
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.Border100Brush}}" />
-            </Trigger>
-
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.BackgroundBrush}}" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
             </Trigger>
 
             <Trigger Property="Validation.HasError" Value="True">
@@ -128,17 +144,17 @@
             <Trigger Property="toolkit:Sizing.Size" Value="xs">
                 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingXs}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingXs}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="sm">
                 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingSm}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingSm}}" />
             </Trigger>
             <Trigger Property="toolkit:Sizing.Size" Value="lg">
                 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightLg}}" />
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeLg}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.PaddingLg}}" />
+                <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.InputPaddingLg}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

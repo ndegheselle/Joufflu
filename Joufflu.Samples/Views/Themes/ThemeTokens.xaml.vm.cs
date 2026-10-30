@@ -24,7 +24,7 @@ public sealed record AccentEntry(
     ComponentResourceKey Hover,
     ComponentResourceKey Content,
     ComponentResourceKey Soft,
-    ComponentResourceKey Soft100);
+    ComponentResourceKey SoftElevated);
 
 /// <summary>
 /// Reference of every key a theme is made of. The descriptions are the roles the keys actually play
@@ -37,46 +37,64 @@ public class ThemeTokensViewModel : ObservableObject
     [
         new TokenGroup(
             "Surfaces",
-            "The neutral ground every control is drawn on, from the furthest back to the closest.",
+            "Four colours a theme defines for the neutrals. The controls do not read them directly but through the three categories below, which fall back to them unless the theme gives a category colour of its own.",
             [
                 new TokenEntry(
-                    "Background",
-                    "Window and page background, the furthest back surface.",
-                    Joufflu.Brushes.BackgroundBrush),
+                    "Base",
+                    "The page, and by default what an action is filled with, so on a display it reads as set into it. An action is not put directly on the page.",
+                    Joufflu.Brushes.BaseBrush),
                 new TokenEntry(
-                    "Background100",
-                    "Elevated surface sitting on top of the background: cards, popups, drop-downs, data rows.",
-                    Joufflu.Brushes.Background100Brush),
+                    "Surface1",
+                    "A card, and by default the background of a display and of an input.",
+                    Joufflu.Brushes.Surface1Brush),
                 new TokenEntry(
-                    "Background200",
-                    "Transient surface: hovered ghost button, hovered or selected row, slider track.",
-                    Joufflu.Brushes.Background200Brush),
+                    "Surface2",
+                    "An elevated part inside a card, and by default the Surface2 of every category.",
+                    Joufflu.Brushes.Surface2Brush),
                 new TokenEntry(
-                    "Border",
-                    "Default border of every framed control (text box, card, drop-down).",
-                    Joufflu.Brushes.BorderBrush),
-                new TokenEntry(
-                    "Border100",
-                    "Stronger border, used when a control is hovered or focused and for separator lines.",
-                    Joufflu.Brushes.Border100Brush),
+                    "Stroke",
+                    "A border or a separator, and by default the border of every category.",
+                    Joufflu.Brushes.StrokeBrush),
+            ]),
+
+        new TokenGroup(
+            "Display",
+            "What shows content without being interacted with: card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. No states. Its items (rows, menu items, tabs) are actions without a fill at rest.",
+            [
+                new TokenEntry("DisplaySurface1", "The background (falls back to Surface1).", Joufflu.Brushes.DisplaySurface1Brush),
+                new TokenEntry("DisplaySurface2", "An elevated part: a header, a nested area (falls back to Surface2).", Joufflu.Brushes.DisplaySurface2Brush),
+                new TokenEntry("DisplayBorder", "The border and the separators (falls back to Stroke).", Joufflu.Brushes.DisplayBorderBrush),
+            ]),
+
+        new TokenGroup(
+            "Input",
+            "What takes a value: text box, combo box, check box, radio button, slider. No hover; focus is a strong border, the border mixed 40% toward the Foreground. Checked is the primary.",
+            [
+                new TokenEntry("InputSurface1", "The background (falls back to Surface1).", Joufflu.Brushes.InputSurface1Brush),
+                new TokenEntry("InputSurface2", "An elevated part inside: a tag, a track (falls back to Surface2).", Joufflu.Brushes.InputSurface2Brush),
+                new TokenEntry("InputBorder", "The border (falls back to Stroke).", Joufflu.Brushes.InputBorderBrush),
+                new TokenEntry("InputBorderElevatedBrush", "Derived: the border of a focused input.", Joufflu.Brushes.InputBorderElevatedBrush),
+            ]),
+
+        new TokenGroup(
+            "Action",
+            "What runs something: button, toggle button. Hover is a stronger background, the fill mixed 10% toward the Foreground; pressed a translation down, not a colour; no focus border. Checked and selected are the primary.",
+            [
+                new TokenEntry("ActionSurface1", "The background (falls back to Base).", Joufflu.Brushes.ActionSurface1Brush),
+                new TokenEntry("ActionSurface2", "An elevated part inside (falls back to Surface2).", Joufflu.Brushes.ActionSurface2Brush),
+                new TokenEntry("ActionBorder", "The border (falls back to Stroke).", Joufflu.Brushes.ActionBorderBrush),
+                new TokenEntry("ActionElevatedBrush", "Derived: a hovered action or display item.", Joufflu.Brushes.ActionElevatedBrush),
+                new TokenEntry("ActionBorderElevatedBrush", "Derived: a grip hovered or dragged (scroll bar thumb, grid splitter, slider thumb).", Joufflu.Brushes.ActionBorderElevatedBrush),
             ]),
 
         new TokenGroup(
             "Text",
-            "Foreground of text and icons. The suffix says how much the text recedes.",
+            "Foreground of text and icons. Dim it with MutedOpacity or DisabledOpacity rather than a lighter colour.",
             [
                 new TokenEntry(
                     "Foreground",
-                    "Default text and icon colour, on Background or Background100.",
+                    "Default text and icon colour, on Base, Surface1 or Surface2.",
                     Joufflu.Brushes.ForegroundBrush),
-                new TokenEntry(
-                    "Foreground100",
-                    "Secondary colour the controls use for their own labels: column headers, inactive tabs, section titles. For muted text of your own, dim it with MutedOpacity instead.",
-                    Joufflu.Brushes.Foreground100Brush),
-                new TokenEntry(
-                    "Foreground200",
-                    "Dimmed text on inactive or disabled-selected surfaces: the inactive window title bar, a disabled selected list item.",
-                    Joufflu.Brushes.Foreground200Brush),
             ]),
 
     ];
@@ -91,50 +109,50 @@ public class ThemeTokensViewModel : ObservableObject
             "Primary",
             "Main call to action: the default filled button, the selected tab or navigation entry.",
             Joufflu.Brushes.PrimaryBrush,
-            Joufflu.Brushes.Primary100Brush,
+            Joufflu.Brushes.PrimaryElevatedBrush,
             Joufflu.Brushes.PrimaryContentBrush,
             Joufflu.Brushes.PrimarySoftBrush,
-            Joufflu.Brushes.PrimarySoft100Brush),
+            Joufflu.Brushes.PrimarySoftElevatedBrush),
         new AccentEntry(
             "Secondary",
             "Neutral filled action, for a button that must read as a button without competing with Primary.",
             Joufflu.Brushes.SecondaryBrush,
-            Joufflu.Brushes.Secondary100Brush,
+            Joufflu.Brushes.SecondaryElevatedBrush,
             Joufflu.Brushes.SecondaryContentBrush,
             Joufflu.Brushes.SecondarySoftBrush,
-            Joufflu.Brushes.SecondarySoft100Brush),
+            Joufflu.Brushes.SecondarySoftElevatedBrush),
         new AccentEntry(
             "Success",
             "Confirmation: success toast, valid state, positive badge.",
             Joufflu.Brushes.SuccessBrush,
-            Joufflu.Brushes.Success100Brush,
+            Joufflu.Brushes.SuccessElevatedBrush,
             Joufflu.Brushes.SuccessContentBrush,
             Joufflu.Brushes.SuccessSoftBrush,
-            Joufflu.Brushes.SuccessSoft100Brush),
+            Joufflu.Brushes.SuccessSoftElevatedBrush),
         new AccentEntry(
             "Info",
             "Neutral information: info toast, informative badge.",
             Joufflu.Brushes.InfoBrush,
-            Joufflu.Brushes.Info100Brush,
+            Joufflu.Brushes.InfoElevatedBrush,
             Joufflu.Brushes.InfoContentBrush,
             Joufflu.Brushes.InfoSoftBrush,
-            Joufflu.Brushes.InfoSoft100Brush),
+            Joufflu.Brushes.InfoSoftElevatedBrush),
         new AccentEntry(
             "Warning",
             "Something needs attention but nothing is broken yet.",
             Joufflu.Brushes.WarningBrush,
-            Joufflu.Brushes.Warning100Brush,
+            Joufflu.Brushes.WarningElevatedBrush,
             Joufflu.Brushes.WarningContentBrush,
             Joufflu.Brushes.WarningSoftBrush,
-            Joufflu.Brushes.WarningSoft100Brush),
+            Joufflu.Brushes.WarningSoftElevatedBrush),
         new AccentEntry(
             "Danger",
             "Destructive action and validation errors - a delete button, the border of a field in error.",
             Joufflu.Brushes.DangerBrush,
-            Joufflu.Brushes.Danger100Brush,
+            Joufflu.Brushes.DangerElevatedBrush,
             Joufflu.Brushes.DangerContentBrush,
             Joufflu.Brushes.DangerSoftBrush,
-            Joufflu.Brushes.DangerSoft100Brush),
+            Joufflu.Brushes.DangerSoftElevatedBrush),
     ];
 
     /// <summary>The odd ones out of <c>Joufflu.Colors</c>: numbers rather than colours.</summary>
@@ -171,6 +189,21 @@ public class ThemeTokensViewModel : ObservableObject
                 new TokenEntry(
                     "CornerRadius",
                     "CornerRadius - Radius on all four corners, for a uniformly rounded border."),
+                new TokenEntry(
+                    "DisplayRadius, InputRadius, ActionRadius",
+                    "double - the radius of each category (Radius). The controls clamp it to half their height, so a large one gives a pill."),
+                new TokenEntry(
+                    "DisplayCornerRadius, InputCornerRadius, ActionCornerRadius",
+                    "CornerRadius - the radius of each category on all four corners."),
+                new TokenEntry(
+                    "DisplayBorderThickness, InputBorderThickness, ActionBorderThickness",
+                    "Thickness - the border of each category (BorderThickness)."),
+                new TokenEntry(
+                    "DisplayPadding",
+                    "Thickness - the padding inside a display (SpacingThickness). An action is padded by ActionPaddingXs..Lg, an input by InputPaddingXs..Lg, horizontally only : their height comes from the size."),
+                new TokenEntry(
+                    "DisplayPaddingSm",
+                    "Thickness - the padding inside a compact display: a popup, a menu, a tooltip, a badge (a third of DisplayPadding, 4)."),
             ]),
 
         new TokenGroup(
@@ -217,13 +250,13 @@ public class ThemeTokensViewModel : ObservableObject
         new TokenGroup(
             "Paddings",
             "Space inside a control, one Thickness per size. Two families: buttons and anything content "
-            + "shaped use Padding*, text inputs use InputPadding*, whose halved horizontal keeps the caret "
+            + "shaped use ActionPadding*, text inputs use InputPadding*, whose halved horizontal keeps the caret "
             + "closer to the border.",
             [
-                new TokenEntry("PaddingXs", "6,2"),
-                new TokenEntry("PaddingSm", "9,3"),
-                new TokenEntry("PaddingMd", "12,4 - the default."),
-                new TokenEntry("PaddingLg", "18,6"),
+                new TokenEntry("ActionPaddingXs", "6,2"),
+                new TokenEntry("ActionPaddingSm", "9,3"),
+                new TokenEntry("ActionPaddingMd", "12,4 - the default."),
+                new TokenEntry("ActionPaddingLg", "18,6"),
                 new TokenEntry("InputPaddingXs", "3,2"),
                 new TokenEntry("InputPaddingSm", "4.5,3"),
                 new TokenEntry("InputPaddingMd", "6,4 - the default."),
@@ -235,10 +268,10 @@ public class ThemeTokensViewModel : ObservableObject
         "<!-- Always DynamicResource: a theme swap, or the customizer editing a -->\n" +
         "<!-- dimension, has to reach controls already on screen.               -->\n" +
         "<Border\n" +
-        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}\"\n" +
-        "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}\"\n" +
-        "    BorderThickness=\"{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}\"\n" +
-        "    CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}\" />\n\n" +
+        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}\"\n" +
+        "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}\"\n" +
+        "    BorderThickness=\"{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}\"\n" +
+        "    CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}\" />\n\n" +
         "<!-- The raw Color is there for what a brush cannot express -->\n" +
         "<GradientStop Color=\"{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}\" Offset=\"0\" />";
 }

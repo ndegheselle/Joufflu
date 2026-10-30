@@ -74,3 +74,20 @@ The `format` namespace is:
 ```xml
 xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
 ```
+
+## Validation
+
+Binding errors (here from an ObservableValidator) turn the input's border red, and
+`ValidationErrorTemplate` adds a corner badge whose tooltip lists them. Bring each
+value in range to clear it: a rating from 1 to 10, a ratio from 0 to 1, at most
+one hour. The last input sets `Validation.ErrorTemplate` to `{x:Null}`: no badge,
+only the red border.
+
+```xml
+<inputs:NumericUpDown Value="{Binding Rating, Mode=TwoWay}" />
+<inputs:DecimalUpDown Value="{Binding Ratio, Mode=TwoWay}" />
+<inputs:TimeSpanPicker Value="{Binding ShortDuration, Mode=TwoWay}" />
+
+<!-- Opt out of the template: only the input's own red border remains -->
+<inputs:NumericUpDown Validation.ErrorTemplate="{x:Null}" Value="{Binding Rating, Mode=TwoWay}" />
+```

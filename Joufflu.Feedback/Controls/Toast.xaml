@@ -20,65 +20,84 @@
             MinWidth="280"
             MaxWidth="380"
             Margin="0,0,0,4"
-            Background="{DynamicResource {x:Static joufflu:Brushes.Background100Brush}}"
-            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.BorderBrush}}"
-            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.BorderThickness}}"
-            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+            Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+            BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="4" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
+                <!--
+                    The card does not clip its content: the progress bar is masked by a border rounded like the
+                    card's top corners, so it does not poke over them.
+                -->
+                <Border
+                    x:Name="ProgressMask"
+                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                    toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
+                    toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
                 <ProgressBar
                     x:Name="Progress"
-                    Grid.ColumnSpan="4"
                     Height="4"
                     local:ToastProgress.Duration="{Binding Options.Duration}"
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
                     Maximum="100"
                     Minimum="0"
-                    Value="100" />
+                    Value="100">
+                    <ProgressBar.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=ProgressMask}" />
+                    </ProgressBar.OpacityMask>
+                </ProgressBar>
 
-                <Grid
-                    Grid.Row="1"
-                    Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
-                    toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                <!--  The close button in its own column, so a long message never runs under it  -->
+                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <fonts:FontIcon
-                        x:Name="Icon"
-                        VerticalAlignment="Center"
-                        toolkit:Sizing.Size="xl"
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
-                        Text="{Binding Icon}" />
 
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock
-                            FontWeight="Bold"
-                            Text="{Binding Options.Title}"
-                            TextWrapping="Wrap"
-                            Visibility="{Binding HasTitle, Converter={StaticResource BoolToVis}}" />
-                        <TextBlock
-                            Foreground="{DynamicResource {x:Static joufflu:Brushes.Foreground100Brush}}"
-                            Text="{Binding Options.Message}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
+                    <Grid
+                        Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}"
+                        toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <fonts:FontIcon
+                            x:Name="Icon"
+                            VerticalAlignment="Center"
+                            toolkit:Sizing.Size="xl"
+                            Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
+                            Text="{Binding Icon}" />
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Text="{Binding Options.Title}"
+                                TextWrapping="Wrap"
+                                Visibility="{Binding HasTitle, Converter={StaticResource BoolToVis}}" />
+                            <TextBlock
+                                Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                                Text="{Binding Options.Message}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Button
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        toolkit:Derive.Margin="{x:Static joufflu:Dimensions.DisplayPaddingSm}"
+                        toolkit:Derive.MarginFactor="0,1,1,0"
+                        toolkit:Sizing.IsSquare="True"
+                        toolkit:Sizing.Size="xs"
+                        Command="{Binding CloseCommand}"
+                        Style="{StaticResource GhostButton}">
+                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
+                    </Button>
                 </Grid>
-
-                <Button
-                    Grid.Row="1"
-                    Margin="2"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    toolkit:Sizing.IsSquare="True"
-                    toolkit:Sizing.Size="xs"
-                    Command="{Binding CloseCommand}"
-                    Style="{StaticResource GhostButton}">
-                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
-                </Button>
             </Grid>
         </Border>
 

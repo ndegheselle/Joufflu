@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Joufflu.Data.Model;
+using Joufflu.Toolkit;
 // System.Windows carries a DataObject of its own; the tree's node is the one meant here.
 using DataObject = Joufflu.Data.Model.DataObject;
 
@@ -44,6 +45,12 @@ public class DataControlBase : UserControl
     {
         get => (IEnumerable<DataManualValue>?)GetValue(ManualValuesProperty);
         set => SetValue(ManualValuesProperty, value);
+    }
+
+    public DataControlBase()
+    {
+        // Lines the editors up across the depths of the tree, see the editor host styles.
+        SharedWidth.SetIsScope(this, true);
     }
 
     protected override void OnContentChanged(object oldContent, object newContent)

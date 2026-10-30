@@ -26,6 +26,16 @@
                 TextWrapping="Wrap" />
 
             <c:CodeExample
+                Title="App setup"
+                Code="{Binding SetupCode}"
+                Description="Merge only the control styles in App.xaml. Initialize() inserts the matching Light/Dark dictionary right after them at runtime — no theme dictionary is hardcoded." />
+
+            <c:CodeExample
+                Title="ThemeManager"
+                Code="{Binding ManagerCode}"
+                Description="The manager owns the active theme. Initialize it once at startup, then set Theme from anywhere. When Theme is System, it reads the Windows theme and keeps following it while the app runs." />
+
+            <c:CodeExample
                 Title="Theme switcher"
                 Code="{Binding SwitcherCode}"
                 Description="Plain RadioButtons bound to ThemeManager. Pick a theme by name and the whole gallery re-themes live; this app remembers the choice across launches itself. 'Ocean' is a custom theme this app registered at startup — it sits alongside the built-ins.">
@@ -60,16 +70,6 @@
                     </RadioButton>
                 </StackPanel>
             </c:CodeExample>
-
-            <c:CodeExample
-                Title="ThemeManager"
-                Code="{Binding ManagerCode}"
-                Description="The manager owns the active theme. Initialize it once at startup, then set Theme from anywhere. When Theme is System, it reads the Windows theme and keeps following it while the app runs." />
-
-            <c:CodeExample
-                Title="App setup"
-                Code="{Binding SetupCode}"
-                Description="Merge only the control styles in App.xaml. Initialize() inserts the matching Light/Dark dictionary right after them at runtime — no theme dictionary is hardcoded." />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
