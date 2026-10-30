@@ -5,7 +5,7 @@
 
     <!--  The WPF theme gives a menu the system menu font size: the body size instead, so it follows the font scale  -->
     <Style x:Key="{x:Type Menu}" TargetType="{x:Type Menu}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
@@ -15,10 +15,10 @@
     </Style>
 
     <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
         <Setter Property="HasDropShadow" Value="True" />
         <Setter Property="Template">
@@ -30,7 +30,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Padding="{TemplateBinding Padding}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
                         Margin="0,0,8,8">
                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
                     </Border>

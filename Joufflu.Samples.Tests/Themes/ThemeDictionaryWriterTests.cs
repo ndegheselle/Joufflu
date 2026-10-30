@@ -32,9 +32,9 @@ public class ThemeDictionaryWriterTests
         Thickness paddingMd = (Thickness)shipped[JDimensions.ActionPaddingMd];
         var defaults = new ThemeValues(
             [],
-            Thickness: (double)shipped[JDimensions.Thickness],
-            Radius: (double)shipped[JDimensions.Radius],
-            Spacing: (double)shipped[JDimensions.Spacing],
+            Thickness: ((Thickness)shipped[JDimensions.Thickness]).Left,
+            Radius: ((CornerRadius)shipped[JDimensions.Radius]).TopLeft,
+            Spacing: ((Thickness)shipped[JDimensions.Spacing]).Left,
             HeightMd: (double)shipped[JDimensions.HeightMd],
             FontSizeMd: (double)shipped[JDimensions.FontSizeMd],
             PaddingMdHorizontal: paddingMd.Left,
@@ -60,8 +60,8 @@ public class ThemeDictionaryWriterTests
     {
         ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(Edited));
 
-        Assert.That(generated[JDimensions.CornerRadius], Is.EqualTo(new CornerRadius(8)));
-        Assert.That(generated[JDimensions.BorderThickness], Is.EqualTo(new Thickness(2)));
+        Assert.That(generated[JDimensions.Radius], Is.EqualTo(new CornerRadius(8)));
+        Assert.That(generated[JDimensions.Thickness], Is.EqualTo(new Thickness(2)));
     }
 
     [Test]
@@ -71,9 +71,9 @@ public class ThemeDictionaryWriterTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(generated[JDimensions.ActionRadius], Is.EqualTo(8d));
-            Assert.That(generated[JDimensions.InputCornerRadius], Is.EqualTo(new CornerRadius(8)));
-            Assert.That(generated[JDimensions.DisplayBorderThickness], Is.EqualTo(new Thickness(2)));
+            Assert.That(generated[JDimensions.ActionRadius], Is.EqualTo(new CornerRadius(8)));
+            Assert.That(generated[JDimensions.InputRadius], Is.EqualTo(new CornerRadius(8)));
+            Assert.That(generated[JDimensions.DisplayThickness], Is.EqualTo(new Thickness(2)));
             Assert.That(generated[JDimensions.DisplayPadding], Is.EqualTo(new Thickness(16)));
         });
     }
@@ -83,7 +83,7 @@ public class ThemeDictionaryWriterTests
     {
         ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(Edited));
 
-        Assert.That(generated.Contains(JColors.ActionSurface1Color), Is.False);
+        Assert.That(generated.Contains(JColors.ActionBaseColor), Is.False);
     }
 
     [Test]
@@ -94,24 +94,24 @@ public class ThemeDictionaryWriterTests
         ThemeValues complete = Edited with
         {
             Categories = new ThemeCategories(
-                Display: new ThemeCategoryValues(grey, grey, grey, Radius: 12, Thickness: 1, PaddingHorizontal: 20, PaddingVertical: 14),
-                Input: new ThemeCategoryValues(grey, grey, grey, Radius: 2, Thickness: 1, PaddingHorizontal: 10, PaddingVertical: 4),
-                Action: new ThemeCategoryValues(pink, grey, grey, Radius: 99, Thickness: 0, PaddingHorizontal: 20, PaddingVertical: 8)),
+                Display: new ThemeCategoryValues(grey, Radius: 12, Thickness: 1, PaddingHorizontal: 20, PaddingVertical: 14),
+                Input: new ThemeCategoryValues(grey, Radius: 2, Thickness: 1, PaddingHorizontal: 10, PaddingVertical: 4),
+                Action: new ThemeCategoryValues(pink, Radius: 99, Thickness: 0, PaddingHorizontal: 20, PaddingVertical: 8)),
         };
 
         ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(complete));
 
         Assert.Multiple(() =>
         {
-            Assert.That(generated[JColors.ActionSurface1Color], Is.EqualTo(pink));
-            Assert.That(generated[JDimensions.ActionRadius], Is.EqualTo(99d));
-            Assert.That(generated[JDimensions.ActionBorderThickness], Is.EqualTo(new Thickness(0)));
-            Assert.That(generated[JDimensions.DisplayCornerRadius], Is.EqualTo(new CornerRadius(12)));
+            Assert.That(generated[JColors.ActionBaseColor], Is.EqualTo(pink));
+            Assert.That(generated[JDimensions.ActionRadius], Is.EqualTo(new CornerRadius(99)));
+            Assert.That(generated[JDimensions.ActionThickness], Is.EqualTo(new Thickness(0)));
+            Assert.That(generated[JDimensions.DisplayRadius], Is.EqualTo(new CornerRadius(12)));
             Assert.That(generated[JDimensions.DisplayPadding], Is.EqualTo(new Thickness(20, 14, 20, 14)));
             Assert.That(generated[JDimensions.DisplayPaddingSm], Is.EqualTo(new Thickness(7, 5, 7, 5)), "a third of the display padding");
             Assert.That(generated[JDimensions.InputPaddingLg], Is.EqualTo(new Thickness(15, 6, 15, 6)), "the input's own md padding at the lg ratio");
             Assert.That(generated[JDimensions.ActionPaddingLg], Is.EqualTo(new Thickness(30, 12, 30, 12)), "the action's own, not the control padding");
-            Assert.That(generated[JDimensions.Radius], Is.EqualTo(8d), "the global shape stays, for an app's own layout");
+            Assert.That(generated[JDimensions.Radius], Is.EqualTo(new CornerRadius(8)), "the global shape stays, for an app's own layout");
         });
     }
 

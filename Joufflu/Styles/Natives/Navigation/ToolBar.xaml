@@ -54,6 +54,11 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style
@@ -67,6 +72,11 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Template" Value="{StaticResource ToolBarButtonTemplate}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!--  The inputs of a toolbar keep their input look; only the layout is the toolbar's.  -->
@@ -182,11 +192,14 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="Transparent" />
             </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="{x:Type ToolBar}" TargetType="{x:Type ToolBar}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <!--  No border by default, like the menu bar; the brush is set so a BorderThickness alone draws one.  -->
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -199,7 +212,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                         <StackPanel Orientation="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType=ToolBarTray}, FallbackValue={x:Static Orientation.Horizontal}}">
 
                             <Thumb
@@ -225,11 +238,11 @@
                                     PopupAnimation="Slide"
                                     StaysOpen="False">
                                     <Border
-                                        Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                                        Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
                                         BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-                                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
+                                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
                                         Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
-                                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                                         <ToolBarOverflowPanel
                                             x:Name="PART_ToolBarOverflowPanel"
                                             Focusable="True"

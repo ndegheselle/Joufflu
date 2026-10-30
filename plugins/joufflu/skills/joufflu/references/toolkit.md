@@ -64,7 +64,7 @@ it cheap (look at paths, not file contents).
 
 ```xml
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}">
     <Border.Style>
         <Style TargetType="Border">
             <!-- Set Background/BorderBrush in the style, not on the element, so the trigger can override -->
@@ -72,7 +72,7 @@ it cheap (look at paths, not file contents).
             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
             <Style.Triggers>
                 <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />
                     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 </Trigger>
             </Style.Triggers>
@@ -121,12 +121,12 @@ to `Opacity 0.4`). The drag is a blocking call.
 ## Derive (theme-following thicknesses, radii and margins)
 
 A `Thickness`/`CornerRadius` resource built from a scalar is baked at load. `Derive`
-builds it on the element from a live `DynamicResource`, with a per-side factor
+builds it on the element from a live `DynamicResource` (a `Thickness`, a `CornerRadius` or a scalar), with a per-side factor
 (`0` drops the side, `1` keeps it, other values scale it).
 
 ```xml
 <!-- Right border only; order Left,Top,Right,Bottom -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 <!-- Top corners only; order TopLeft,TopRight,BottomRight,BottomLeft -->
 <Border toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
@@ -137,7 +137,7 @@ builds it on the element from a live `DynamicResource`, with a per-side factor
 ```
 
 Point it at the key of the element's category (`DisplayRadius`, `InputRadius`, `ActionRadius`,
-`DisplayBorderThickness`…) so it follows a theme reshaping that category. The value is the
+`DisplayThickness`…) so it follows a theme reshaping that category. The value is the
 resource **key** (`{x:Static …}`), not a `DynamicResource`. It is written
 with `SetCurrentValue`, which beats style setters and local values: don't also set the fed
 property in the same style, move triggers onto the `Derive` property, and don't use it for

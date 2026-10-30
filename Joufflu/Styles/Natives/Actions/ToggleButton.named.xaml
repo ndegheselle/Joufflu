@@ -22,6 +22,11 @@
         TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!--  ============================ Solid ============================  -->
@@ -30,16 +35,17 @@
         x:Key="PrimaryToggleButton"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -48,16 +54,17 @@
         x:Key="SecondaryToggleButton"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryElevatedBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryInteractionBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -66,16 +73,17 @@
         x:Key="SuccessToggleButton"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessElevatedBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessForegroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessInteractionBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -84,16 +92,17 @@
         x:Key="InfoToggleButton"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoElevatedBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoForegroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoInteractionBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -102,16 +111,17 @@
         x:Key="WarningToggleButton"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningElevatedBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningForegroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningInteractionBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -120,16 +130,17 @@
         x:Key="DangerToggleButton"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerElevatedBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerForegroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerInteractionBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -145,10 +156,11 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -156,7 +168,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -170,10 +182,11 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -181,7 +194,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -195,10 +208,11 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessSoftElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessSoftInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -206,7 +220,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -220,10 +234,11 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoSoftElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoSoftInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -231,7 +246,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -245,10 +260,11 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningSoftElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningSoftInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -256,7 +272,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -270,10 +286,11 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerSoftElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerSoftInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -281,7 +298,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -301,10 +318,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimarySoftBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -312,7 +330,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -326,10 +344,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -337,7 +356,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -351,10 +370,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessSoftBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -362,7 +382,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -376,10 +396,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoSoftBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -387,7 +408,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -401,10 +422,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningSoftBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -412,7 +434,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -426,10 +448,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerSoftBrush}}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
             </Trigger>
             <MultiTrigger>
@@ -437,7 +460,7 @@
                     <Condition Property="IsChecked" Value="True" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerInteractionBrush}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -451,5 +474,10 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="toolkit:Sizing.IsSquare" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

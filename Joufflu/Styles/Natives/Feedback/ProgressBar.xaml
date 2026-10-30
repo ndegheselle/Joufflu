@@ -8,7 +8,7 @@
 
     <Style x:Key="{x:Type ProgressBar}" TargetType="ProgressBar">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="8" />

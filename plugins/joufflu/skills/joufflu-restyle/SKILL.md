@@ -66,15 +66,15 @@ Map by **role**, not by closest hue:
 
 | Original role | Token |
 |---|---|
-| Window/page background | Remove it (the `Window` style sets it) or `Brushes.BaseBrush` |
-| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplaySurface1Brush` |
-| Inset panel inside a card | `CardSecondary` / `Brushes.DisplaySurface2Brush` |
-| Background of a custom input / button | `Brushes.InputSurface1Brush` / `Brushes.ActionSurface1Brush` |
-| Hover of a row or custom clickable item | `Brushes.ActionElevatedBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
+| Window/page background | Remove it (the `Window` style sets it) or `Brushes.Base0Brush` |
+| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplayBaseBrush` |
+| Inset panel inside a card | `CardSecondary` / `Brushes.DisplayBorderBrush` |
+| Background of a custom input / button | `Brushes.InputBaseBrush` / `Brushes.ActionBaseBrush` |
+| Hover of a row or custom clickable item | `Brushes.ActionInteractionBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
-| Borders, separators | The category's border: `Brushes.DisplayBorderBrush` (panels, separators), `InputBorderBrush` (`InputBorderElevatedBrush` on focus), `ActionBorderBrush` (no focus border) |
-| Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryContentBrush` |
+| Borders, separators | The category's border: `Brushes.DisplayBorderBrush` (panels, separators; `DisplayElevatedBrush` for a border on a `DisplayBorderBrush` background), `InputBorderBrush` (`InputElevatedBrush` on focus), `ActionBorderBrush` (`ActionElevatedBrush` on hover, no focus border) |
+| Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryForegroundBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
 | Light tinted highlight | `Brushes.XSoftBrush` |
 
@@ -103,15 +103,15 @@ destructive `DangerButton`; secondary semantic actions `Soft*` or `Outline*`. Ic
 
 - Uniform child margins → `toolkit:Spacing.Gap` on the panel (and remove the child
   margins: they are overwritten anyway).
-- Page padding → `Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"`.
+- Page padding → `Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}"`.
 - Control heights/font sizes/paddings → remove them; use `toolkit:Sizing.Size` on the
   control or its panel for a denser/larger area.
 - Headings → `toolkit:Sizing.Size` (`xl` page title, `lg` section) plus `FontWeight`;
   captions `Sizing.Size="xs"`; secondary text `Colors.MutedOpacity`; drop literal `FontSize`.
-- Literal `CornerRadius`/`BorderThickness` → the category keys, `Dimensions.DisplayCornerRadius` /
-  `DisplayBorderThickness` for a panel (`Input*` for an input, `Action*` for a button), as
+- Literal `CornerRadius`/`BorderThickness` → the category keys, `Dimensions.DisplayRadius` /
+  `DisplayThickness` for a panel (`Input*` for an input, `Action*` for a button), as
   DynamicResource, or `toolkit:Derive.*` on `DisplayRadius`… for partial sides. The global
-  `Dimensions.CornerRadius`/`BorderThickness` only suit app layout the controls never draw.
+  `Dimensions.Radius`/`Thickness` only suit app layout the controls never draw.
 
 ### Local styles
 

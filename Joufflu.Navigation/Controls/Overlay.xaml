@@ -42,10 +42,10 @@
                 x:Name="Panel"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                 <Grid Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -54,7 +54,7 @@
 
                     <Grid
                         x:Name="Header"
-                        toolkit:Derive.Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
+                        toolkit:Derive.Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}"
                         toolkit:Derive.MarginFactor="0,0,0,1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -117,7 +117,7 @@
     <!--  ==================== Confirmation ====================  -->
     <!--  Implicit template: the standard content shown by IOverlayer.Confirm().  -->
     <DataTemplate DataType="{x:Type nav:ConfirmationContent}">
-        <Grid toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+        <Grid toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />

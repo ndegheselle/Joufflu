@@ -13,9 +13,9 @@
     -->
     <Style x:Key="{x:Type CheckBox}" TargetType="CheckBox">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
         <Setter Property="Padding" Value="6,0,0,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -80,18 +80,25 @@
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                             <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="CheckMark" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                            <Setter TargetName="CheckMark" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                             <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                            <Setter TargetName="IndeterminateMark" Property="Fill" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                            <Setter TargetName="IndeterminateMark" Property="Fill" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
                             <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
+                            <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}" />
                         </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocused" Value="True" />
+                                <Condition Property="IsChecked" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bullet" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}" />
+                        </MultiTrigger>
                         <Trigger Property="Validation.HasError" Value="True">
                             <Setter TargetName="Bullet" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                         </Trigger>

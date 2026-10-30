@@ -13,9 +13,9 @@ plain CLR properties, not dependency properties, so they can only be fed with
 from:
 
 ```xml
-<!-- Baked at load: editing Dimensions.Thickness at runtime does nothing here -->
-<Thickness x:Key="MenuBorderThickness"
-           Right="{StaticResource {x:Static joufflu:Dimensions.Thickness}}" />
+<!-- Baked at load: editing BorderWidth at runtime does nothing here -->
+<system:Double x:Key="BorderWidth">1</system:Double>
+<Thickness x:Key="MenuBorderThickness" Right="{StaticResource BorderWidth}" />
 ```
 
 `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` build the
@@ -24,7 +24,7 @@ runtime — by the [theme customizer](../themes/customize-theme.html), for insta
 straight through, and no derived resource key has to be declared or re-pushed by
 hand.
 
-Point it at the key of the category the element belongs to (`DisplayBorderThickness`,
+Point it at the key of the category the element belongs to (`DisplayThickness`,
 `DisplayRadius`, `InputRadius`, `ActionRadius`…, see [Design tokens](../themes/tokens.html)), so the
 part follows the rest of the control when a theme reshapes that category. The global `Thickness` and
 `Radius` are for an app's own layout.
@@ -48,12 +48,12 @@ Point `Derive.BorderThickness` at a resource key and pick the sides with
 `Derive.BorderThicknessFactor`, in the usual `Left,Top,Right,Bottom` order.
 
 ```xml
-<!-- Right edge only, following Dimensions.DisplayBorderThickness live -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+<!-- Right edge only, following Dimensions.DisplayThickness live -->
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
         toolkit:Derive.BorderThicknessFactor="0,0,1,0" />
 
 <!-- Open at the bottom, with a doubled top edge -->
-<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+<Border toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
         toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
 ```
 
@@ -62,7 +62,7 @@ without a keyed `Thickness`:
 
 ```xml
 <Style TargetType="{x:Type nav:NavigationMenu}">
-    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
+    <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayThickness}" />
     <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
 </Style>
 ```
@@ -98,9 +98,9 @@ Same shape again, on any `FrameworkElement`, with `Derive.MarginFactor`.
 
 ## Notes
 
-- The source resource may be a `double` (the usual case, spread over every side
-  or corner before scaling) or an already built `Thickness` / `CornerRadius`,
-  whose own sides are then scaled.
+- The source resource may be a `Thickness` / `CornerRadius` (every Joufflu shape
+  key is one), whose own sides are then scaled, or a `double`, spread over every
+  side or corner before scaling.
 - `Derive.BorderThickness` applies to `Border` and to any `Control`;
   `Derive.CornerRadius` applies to `Border`; `Derive.Margin` to any
   `FrameworkElement`. Anything else throws.

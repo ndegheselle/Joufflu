@@ -6,9 +6,9 @@
     
     <Style x:Key="{x:Type GroupBox}" TargetType="GroupBox">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
@@ -20,7 +20,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}" />
+                            CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
 
                         <Grid>
                             <Grid.RowDefinitions>
@@ -33,7 +33,7 @@
                                 Grid.Row="0"
                                 toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
                                 toolkit:Derive.CornerRadiusFactor="1,1,0,0"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}">
+                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}">
                                 <!--  Same horizontal inset as the content so both line up, half the vertical one: a band, not a section  -->
                                 <ContentPresenter
                                     toolkit:Derive.Margin="{TemplateBinding Padding}"

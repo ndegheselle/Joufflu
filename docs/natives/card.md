@@ -12,8 +12,8 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content, a display: a `DisplaySurface1` fill, a
-`DisplayBorder` border, `DisplayCornerRadius` corners and `DisplayPadding` as padding.
+The primary surface for grouping content, a display: a `DisplayBase` fill, a
+`DisplayBorder` border, `DisplayRadius` corners and `DisplayPadding` as padding.
 
 ```xml
 <Border Style="{StaticResource Card}">
@@ -29,8 +29,9 @@ The primary surface for grouping content, a display: a `DisplaySurface1` fill, a
 
 ## CardSecondary
 
-A subtly inset panel meant to sit **inside** a `Card`. It uses the `DisplaySurface2`
-fill, the elevated part of a display, so it reads as a distinct area of the card.
+A subtly inset panel meant to sit **inside** a `Card`. It uses the `DisplayBorder`
+fill, the part of a display that sits on its base, so it reads as a distinct area of the card, and the
+`DisplayElevated` border to stand out from it.
 
 ```xml
 <Border Style="{StaticResource Card}">

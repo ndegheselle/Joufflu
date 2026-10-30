@@ -11,8 +11,8 @@
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Toolkit"
     d:DataContext="{d:DesignInstance Type=vm:DropTargetSamplesViewModel}"
     mc:Ignorable="d">
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Drag and drop" />
 
             <c:CodeExample
@@ -28,8 +28,8 @@
                     <Border
                         Height="150"
                         toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                         <!--  Background and BorderBrush are styled and not set here, so the trigger can override them.  -->
                         <Border.Style>
                             <Style TargetType="Border">
@@ -115,8 +115,8 @@
                                     Padding="8,4"
                                     toolkit:DragSource.AllowedEffects="Move"
                                     toolkit:DragSource.Data="{Binding}"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.Surface1Brush}}"
-                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.CornerRadius}}">
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.Base1Brush}}"
+                                    CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
                                     <Border.Style>
                                         <Style TargetType="Border">
                                             <Style.Triggers>

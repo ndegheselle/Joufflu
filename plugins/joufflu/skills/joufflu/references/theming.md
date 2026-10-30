@@ -83,16 +83,13 @@ wins over it):
 ```xml
 <!-- Themes/Overrides.xaml — xmlns:sys="clr-namespace:System;assembly=System.Runtime" -->
 <!-- Rounder buttons only: the controls read the category keys, not the global Radius -->
-<sys:Double x:Key="{x:Static joufflu:Dimensions.ActionRadius}">8</sys:Double>
-<CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionCornerRadius}">8</CornerRadius>
+<CornerRadius x:Key="{x:Static joufflu:Dimensions.ActionRadius}">8</CornerRadius>
 ```
 
-The controls read the per-category shape (`DisplayRadius`/`InputRadius`/`ActionRadius`, their
-`…CornerRadius` and `…BorderThickness`, `DisplayPadding`), not the global `Radius`,
-`CornerRadius`, `Thickness` or `BorderThickness`, which are for an app's own layout. A rounder UI
-overrides the three categories. When overriding a scalar, also override the composite built from
-it (`XRadius` → `XCornerRadius`, `Spacing` → `SpacingThickness`, `TitleBarHeight` →
-`TitleBarHeightOffset`), since composites are baked at load. A large radius gives a pill: the
+The controls read the per-category shape (`DisplayRadius`/`InputRadius`/`ActionRadius` as
+`CornerRadius`, `…Thickness` as `Thickness`, `DisplayPadding`), not the global `Radius` or
+`Thickness`, which are for an app's own layout. A rounder UI overrides the three categories. When
+overriding `TitleBarHeight`, also override `TitleBarHeightOffset`, since it is baked at load. A large radius gives a pill: the
 controls clamp it to half their height. The `Joufflu.Samples` gallery's *Customize theme* window (palette button in its title bar)
 generates a ready-to-merge dictionary interactively.
 
@@ -102,15 +99,15 @@ Keys are `ComponentResourceKey` statics (typos fail the build). Always `DynamicR
 
 ```xml
 <!-- A panel of your own is a display: same tokens as Card -->
-<Border Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+<Border Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
         BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
         Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
 <GradientStop Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" Offset="0" />
 ```
 
-From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.DisplaySurface1Brush);`
+From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.DisplayBaseBrush);`
 (`SetResourceReference` keeps it dynamic; `FindResource` would freeze the current value).
 
 ## Colours — `joufflu:Colors.XColor` (Color) / `joufflu:Brushes.XBrush` (SolidColorBrush)
@@ -119,57 +116,56 @@ Use the brush in UI; the colour is for gradients and animations.
 
 | Group | X | Used for |
 |---|---|---|
-| Surfaces (global) | `Base` | The page; default fill of an action |
-| | `Surface1` | A card; default background of a display and an input |
-| | `Surface2` | An elevated part inside a card; default `Surface2` of every category |
-| | `Stroke` | Borders, separators; default border of every category |
-| Display | `DisplaySurface1`, `DisplaySurface2`, `DisplayBorder` | Card, popup, tooltip, expander, group box, frame of a list/tree/grid/menu/tab control. Fall back to `Surface1`, `Surface2`, `Stroke` |
-| Input | `InputSurface1`, `InputSurface2`, `InputBorder` | Text box, combo box, check box, radio button, slider (`Surface2`: a tag, a track). Fall back to `Surface1`, `Surface2`, `Stroke` |
-| | derived | `InputBorderElevatedBrush`: the border 40 % toward `Foreground`, a focused input |
-| Action | `ActionSurface1`, `ActionSurface2`, `ActionBorder` | Button, toggle button. Fall back to `Base`, `Surface2`, `Stroke` |
-| | derived | `ActionElevatedBrush` (fill 10 % toward `Foreground`, hover), `ActionBorderElevatedBrush` (a hovered or dragged grip) |
+| Bases (global) | `Base0` | The page; default base of an action |
+| | `Base1` | A card; default base of a display and an input |
+| | `Base2` | A contrast inside a card, for an app's own layout |
+| Display | `DisplayBase` (colour) | Card, popup, tooltip, expander, group box, frame of a list/tree/grid/menu/tab control. Falls back to `Base1` |
+| Input | `InputBase` (colour) | Text box, combo box, check box, radio button, slider. Falls back to `Base1` |
+| Action | `ActionBase` (colour) | Button, toggle button. Falls back to `Base0` |
+| Every category | derived brushes | `XBorderBrush` (base 10 % toward `Foreground`: the border, and a part on the base: header, track, tag), `XElevatedBrush` (border 10 % further: a border on a `XBorder` background, the border of an interacted control), `XInteractionBrush` (base 10 %: the background of an interacted control) |
 | Text | `Foreground` | Default text and icons |
-| Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XContent` (text/icons on the fill) as colours, and the brush `XElevatedBrush` (hover/pressed fill), `X` mixed 10 % toward `XContent` |
+| Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XForeground` (text/icons on the fill) as colours, and the brush `XInteractionBrush` (hover/pressed fill), `X` mixed 10 % toward `XForeground` |
 
-The controls never read the global surfaces: they read a category, so a custom control picks the
-category it belongs to. The category colours are optional; a theme that leaves one out gets the
-global one through a `ColorFallback` (public, in `Joufflu`). A theme overrides one category alone:
-`<Color x:Key="{x:Static joufflu:Colors.InputSurface1Color}">#FFFFFF</Color>`.
+The controls never read the global bases: they read a category, so a custom control picks the
+category it belongs to. The category base is its only colour, and optional; a theme that leaves it
+out gets the global one through a `ColorFallback` (public, in `Joufflu`). A theme overrides one category alone:
+`<Color x:Key="{x:Static joufflu:Colors.InputBaseColor}">#FFFFFF</Color>`.
 
-State rules, the same for every control: a display has none; an input has no hover and a strong
-border (`InputBorderElevatedBrush`) on focus; an action takes `ActionElevatedBrush` on hover,
-no focus border and translates down when pressed (no colour); the items of a
+State rules, the same for every control: an interaction turns the border to `XElevatedBrush` and the
+background to `XInteractionBrush` (a part with no border at rest keeps none). A display has none of its
+own (`DisplayInteractionBrush` is for an app's informative hover); an input is interacted on focus, no
+hover; an action on hover, no focus border, and translates down when pressed (no colour); a grip
+(scroll bar thumb, grid splitter, slider thumb) turns `ActionElevatedBrush` hovered or dragged; the items of a
 display (rows, menu items, tabs, nav entries) are ghost actions (no fill at rest); disabled is
 `DisabledOpacity`; selected and checked are `Primary`. No theme defines a hover colour.
 
-Removed (breaking): `BaseHoverBrush`, `Surface1HoverBrush`, `Surface2HoverBrush`,
-`StrokeStrongBrush`. Use `ActionElevatedBrush`, `InputBorderElevatedBrush` / `ActionBorderElevatedBrush`.
+Removed (breaking): `Stroke`, `Surface1`/`Surface2` (now `Base1`/`Base2`), `Base` (now `Base0`), the
+category `Surface1`/`Surface2`/`Border` colours (only `XBaseColor` remains), `XContent` (now
+`XForeground`), `XElevatedBrush` of an accent (now `XInteractionBrush`), `InputBorderElevatedBrush`
+(now `InputElevatedBrush`), `ActionBorderElevatedBrush` (now `ActionElevatedBrush`; the old
+`ActionElevatedBrush` hover is now `ActionInteractionBrush`).
 
 Also available, derived automatically from the accent colour (not per theme):
-`Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoftElevatedBrush`
+`Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoftInteractionBrush`
 (≈24 %, its hover) for each accent.
 
 `Colors.DisabledOpacity` (double, `0.5`): opacity of a disabled control.
 `Colors.MutedOpacity` (double, `0.65`): opacity of muted text (placeholders, hints, descriptions).
 
-Pairing rule: text on an `X` fill uses `XContent`; text on surfaces uses `Foreground*`.
+Pairing rule: text on an `X` fill uses `XForeground`; text on a base uses `Foreground`.
 `Danger` is also the colour of validation errors.
 
 ## Dimensions — `joufflu:Dimensions.*`
 
 | Key | Type | Default | Role |
 |---|---|---|---|
-| `Thickness` | double | 1 | Base border width (app layout) |
-| `BorderThickness` | Thickness | 1 | Uniform border (app layout) |
-| `Radius` | double | 4 | Base corner radius (app layout) |
-| `CornerRadius` | CornerRadius | 4 | Uniform radius (app layout) |
-| `DisplayRadius` / `InputRadius` / `ActionRadius` | double | 4 | Category radius, clamped to half the control height (large = pill) |
-| `DisplayCornerRadius` / `InputCornerRadius` / `ActionCornerRadius` | CornerRadius | 4 | Category radius on all corners |
-| `DisplayBorderThickness` / `InputBorderThickness` / `ActionBorderThickness` | Thickness | 1 | Category border |
+| `Thickness` | Thickness | 1 | Global border (app layout) |
+| `Radius` | CornerRadius | 4 | Global corner radius (app layout) |
+| `DisplayRadius` / `InputRadius` / `ActionRadius` | CornerRadius | 4 | Category radius, each corner clamped to half the control height (large = pill) |
+| `DisplayThickness` / `InputThickness` / `ActionThickness` | Thickness | 1 | Category border |
 | `DisplayPadding` | Thickness | 12 | Padding inside a display (card) |
 | `DisplayPaddingSm` | Thickness | 4 | Padding inside a compact display (popup, menu, tooltip, badge) |
-| `Spacing` | double | 12 | Standard gap between siblings |
-| `SpacingThickness` | Thickness | 12 | Standard page padding |
+| `Spacing` | Thickness | 12 | Standard gap between siblings and page padding |
 | `TitleBarHeight` | double | 30 | Custom title bar height |
 | `TitleBarHeightOffset` | Thickness | 0,30,0,0 | Margin pushing content below an overlapping title bar |
 | `HeightXs` / `Sm` / `Md` / `Lg` | double | 24 / 28 / 32 / 40 | Single-line control heights |

@@ -41,7 +41,7 @@
                         <Border Margin="{DynamicResource {x:Static joufflu:Dimensions.TitleBarHeightOffset}}">
                             <ItemsControl
                                 x:Name="ToastStack"
-                                Margin="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}"
+                                Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
                                 ItemTemplate="{StaticResource ToastTemplate}"

@@ -40,7 +40,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionThickness}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -132,11 +132,11 @@
                             <Border
                                 x:Name="SubMenuPopupBorder"
                                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
-                                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}"
+                                BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
                                 Margin="0,0,8,8"
                                 Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
-                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                                CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                                 <StackPanel
                                     IsItemsHost="True"
                                     KeyboardNavigation.DirectionalNavigation="Cycle"
@@ -185,7 +185,7 @@
                         </Trigger>
 
                         <Trigger Property="IsHighlighted" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionInteractionBrush}}" />
                         </Trigger>
 
                         <Trigger Property="IsEnabled" Value="False">

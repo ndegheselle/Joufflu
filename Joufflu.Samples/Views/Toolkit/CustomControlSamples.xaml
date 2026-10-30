@@ -14,8 +14,8 @@
         <ResourceDictionary Source="pack://application:,,,/Joufflu.Samples;component/Views/Toolkit/RatingInput.xaml" />
     </UserControl.Resources>
 
-    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.SpacingThickness}}">
+    <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Create a custom control" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
@@ -30,9 +30,9 @@
                         <TextBlock Text="Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list." TextWrapping="Wrap" />
                         <TextBlock
                             Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                            Text="DisplaySurface1/2Brush, DisplayBorderBrush, DisplayCornerRadius, DisplayBorderThickness, DisplayPadding (DisplayPaddingSm when compact)."
+                            Text="DisplayBase/Border/Elevated/InteractionBrush, DisplayRadius, DisplayThickness, DisplayPadding (DisplayPaddingSm when compact)."
                             TextWrapping="Wrap" />
-                        <TextBlock Text="No states. Its items (rows, entries) are actions without a fill at rest." TextWrapping="Wrap" />
+                        <TextBlock Text="No interaction of its own (DisplayInteractionBrush is there for an informative hover). Its items (rows, entries) are actions without a fill at rest." TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource Card}">
@@ -41,9 +41,9 @@
                         <TextBlock Text="Takes a value: a text field, a picker, a rating, a check." TextWrapping="Wrap" />
                         <TextBlock
                             Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                            Text="InputSurface1/2Brush, InputBorderBrush, InputRadius, InputBorderThickness, InputPaddingXs..Lg, HeightXs..Lg."
+                            Text="InputBase/Border/Elevated/InteractionBrush, InputRadius, InputThickness, InputPaddingXs..Lg, HeightXs..Lg."
                             TextWrapping="Wrap" />
-                        <TextBlock Text="No hover; a strong border on focus (InputBorderElevatedBrush). The example below builds one." TextWrapping="Wrap" />
+                        <TextBlock Text="No hover; on focus the border turns InputElevatedBrush and the background InputInteractionBrush. The example below builds one." TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource Card}">
@@ -52,9 +52,9 @@
                         <TextBlock Text="Runs something: a button, a toggle, an item of a display." TextWrapping="Wrap" />
                         <TextBlock
                             Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                            Text="ActionSurface1/2Brush, ActionBorderBrush, ActionRadius, ActionBorderThickness, ActionPaddingXs..Lg, HeightXs..Lg."
+                            Text="ActionBase/Border/Elevated/InteractionBrush, ActionRadius, ActionThickness, ActionPaddingXs..Lg, HeightXs..Lg."
                             TextWrapping="Wrap" />
-                        <TextBlock Text="A stronger background on hover (ActionElevatedBrush), moved down when pressed, no focus border." TextWrapping="Wrap" />
+                        <TextBlock Text="On hover the border turns ActionElevatedBrush and the background ActionInteractionBrush, moved down when pressed, no focus border." TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
             </UniformGrid>

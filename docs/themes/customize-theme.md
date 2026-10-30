@@ -22,24 +22,24 @@ plays in the control styles.
 The controls read the category tokens (`Display*`, `Input*`, `Action*`), not the global ones. The
 customizer has two modes:
 
-- **Simple**: you set the surfaces (Base, Surface 1, Surface 2, Stroke, Foreground) and the shape
+- **Simple**: you set the neutrals (Base 0, Base 1, Base 2, Foreground) and the shape
   (corner radius, border thickness, spacing) once, and displays, inputs and actions follow them. The
   generated dictionary leaves the category colours out, so they fall back to the global ones, and
   writes the global radius, thickness and spacing into the category keys (`DisplayRadius`,
-  `InputCornerRadius`, `ActionBorderThickness`, `DisplayPadding`…). It also edits three scales,
+  `InputRadius`, `ActionThickness`, `DisplayPadding`…). It also edits three scales,
   each set by its md value with the other sizes following by fixed ratios: **Control height**
   (`HeightXs`..`Lg`), **Font size** (`FontSizeXs`..`Xl`) and **Control padding**
   (`ActionPaddingXs`..`Lg`, the input paddings at half the horizontal). The control padding scale
   is shown in the simple mode only.
-- **Complete**: each category gets its own Surface 1, Surface 2, Border, corner radius, border
+- **Complete**: each category gets its own base colour, corner radius, border
   thickness and padding (horizontal and vertical), starting from the simple values. The padding is
   the inside of a display (`DisplayPadding`), and the md padding of an input or an action, the
   other sizes (`InputPaddingXs`..`Lg`, `ActionPaddingXs`..`Lg`) following it with the ratios of the
   control padding, which is only edited in the simple mode. The generated dictionary writes the
-  category colours (`ActionSurface1Color`…) and shapes. Going back to the simple mode drops them.
+  category base colours (`ActionBaseColor`…) and shapes. Going back to the simple mode drops them.
 
-The states are derived either way: hover and the strong focus border follow the category colours.
-A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.BorderThickness` no
+The other brushes of a category (border, elevated, interaction) are derived from its base either way.
+A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` no
 longer reaches the controls.
 
 ```xml

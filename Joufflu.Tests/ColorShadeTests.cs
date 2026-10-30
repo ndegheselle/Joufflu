@@ -68,8 +68,8 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Lightness(Resolve(light, Brushes.ActionElevatedBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.ActionSurface1Brush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.ActionElevatedBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.ActionSurface1Brush))), "dark");
+            Assert.That(Lightness(Resolve(light, Brushes.ActionInteractionBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.ActionBaseBrush))), "light");
+            Assert.That(Lightness(Resolve(dark, Brushes.ActionInteractionBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.ActionBaseBrush))), "dark");
         });
     }
 
@@ -80,10 +80,9 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Resolve(light, Brushes.ActionSurface1Brush), Is.EqualTo(Resolve(light, Brushes.BaseBrush)), "an action is filled with the page");
-            Assert.That(Resolve(light, Brushes.InputSurface1Brush), Is.EqualTo(Resolve(light, Brushes.Surface1Brush)));
-            Assert.That(Resolve(light, Brushes.DisplaySurface2Brush), Is.EqualTo(Resolve(light, Brushes.Surface2Brush)));
-            Assert.That(Resolve(light, Brushes.DisplayBorderBrush), Is.EqualTo(Resolve(light, Brushes.StrokeBrush)));
+            Assert.That(Resolve(light, Brushes.ActionBaseBrush), Is.EqualTo(Resolve(light, Brushes.Base0Brush)), "an action is filled with the page");
+            Assert.That(Resolve(light, Brushes.InputBaseBrush), Is.EqualTo(Resolve(light, Brushes.Base1Brush)));
+            Assert.That(Resolve(light, Brushes.DisplayBaseBrush), Is.EqualTo(Resolve(light, Brushes.Base1Brush)));
         });
     }
 
@@ -92,14 +91,14 @@ public class ColorShadeTests
     {
         var theme = new ResourceDictionary { Source = new Uri("/Joufflu;component/Themes/Light.xaml", UriKind.Relative) };
         var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
-        theme[Colors.InputSurface1Color] = pink;
+        theme[Colors.InputBaseColor] = pink;
 
         ResourceDictionary resources = WithBrushes(theme);
 
         Assert.Multiple(() =>
         {
-            Assert.That(Resolve(resources, Brushes.InputSurface1Brush), Is.EqualTo(pink));
-            Assert.That(Resolve(resources, Brushes.DisplaySurface1Brush), Is.EqualTo(Resolve(resources, Brushes.Surface1Brush)), "the other categories keep the global one");
+            Assert.That(Resolve(resources, Brushes.InputBaseBrush), Is.EqualTo(pink));
+            Assert.That(Resolve(resources, Brushes.DisplayBaseBrush), Is.EqualTo(Resolve(resources, Brushes.Base1Brush)), "the other categories keep the global one");
         });
     }
 
@@ -111,8 +110,8 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Lightness(Resolve(light, Brushes.PrimaryElevatedBrush)), Is.GreaterThan(Lightness(Resolve(light, Brushes.PrimaryBrush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.PrimaryElevatedBrush)), Is.LessThan(Lightness(Resolve(dark, Brushes.PrimaryBrush))), "dark");
+            Assert.That(Lightness(Resolve(light, Brushes.PrimaryInteractionBrush)), Is.GreaterThan(Lightness(Resolve(light, Brushes.PrimaryBrush))), "light");
+            Assert.That(Lightness(Resolve(dark, Brushes.PrimaryInteractionBrush)), Is.LessThan(Lightness(Resolve(dark, Brushes.PrimaryBrush))), "dark");
         });
     }
 
@@ -124,13 +123,13 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Lightness(Resolve(light, Brushes.SecondaryElevatedBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.SecondaryBrush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.SecondaryElevatedBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.SecondaryBrush))), "dark");
+            Assert.That(Lightness(Resolve(light, Brushes.SecondaryInteractionBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.SecondaryBrush))), "light");
+            Assert.That(Lightness(Resolve(dark, Brushes.SecondaryInteractionBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.SecondaryBrush))), "dark");
         });
     }
 
     [Test]
-    public void The_strong_borders_are_the_category_border_mixed_toward_the_foreground()
+    public void The_category_brushes_are_derived_from_its_base()
     {
         ResourceDictionary light = BuiltIn("Light");
 
@@ -138,9 +137,31 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Resolve(light, Brushes.InputBorderElevatedBrush), Is.EqualTo(ColorShade.Mix(Resolve(light, Brushes.InputBorderBrush), foreground, 0.4)));
-            Assert.That(Resolve(light, Brushes.ActionBorderElevatedBrush), Is.EqualTo(ColorShade.Mix(Resolve(light, Brushes.ActionBorderBrush), foreground, 0.4)));
+            foreach ((ComponentResourceKey baseKey, ComponentResourceKey border, ComponentResourceKey elevated, ComponentResourceKey interaction) in new[]
+            {
+                (Brushes.DisplayBaseBrush, Brushes.DisplayBorderBrush, Brushes.DisplayElevatedBrush, Brushes.DisplayInteractionBrush),
+                (Brushes.InputBaseBrush, Brushes.InputBorderBrush, Brushes.InputElevatedBrush, Brushes.InputInteractionBrush),
+                (Brushes.ActionBaseBrush, Brushes.ActionBorderBrush, Brushes.ActionElevatedBrush, Brushes.ActionInteractionBrush),
+            })
+            {
+                Color @base = Resolve(light, baseKey);
+                Assert.That(Resolve(light, border), Is.EqualTo(ColorShade.Mix(@base, foreground, 0.1)), $"{border}");
+                Assert.That(Resolve(light, elevated), Is.EqualTo(ColorShade.Mix(Resolve(light, border), foreground, 0.1)), $"{elevated}");
+                Assert.That(Resolve(light, interaction), Is.EqualTo(ColorShade.Mix(@base, foreground, 0.1)), $"{interaction}");
+            }
         });
+    }
+
+    [Test]
+    public void A_category_base_defined_by_the_theme_moves_its_derived_brushes()
+    {
+        var theme = new ResourceDictionary { Source = new Uri("/Joufflu;component/Themes/Light.xaml", UriKind.Relative) };
+        var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
+        theme[Colors.DisplayBaseColor] = pink;
+
+        ResourceDictionary resources = WithBrushes(theme);
+
+        Assert.That(Resolve(resources, Brushes.DisplayBorderBrush), Is.EqualTo(ColorShade.Mix(pink, Resolve(resources, Brushes.ForegroundBrush), 0.1)));
     }
 
     /// <summary>The theme customizer redefines a colour while the app runs: the derived brushes must follow it.</summary>
@@ -150,11 +171,11 @@ public class ColorShadeTests
         var theme = new ResourceDictionary { Source = new Uri("/Joufflu;component/Themes/Light.xaml", UriKind.Relative) };
         ResourceDictionary resources = WithBrushes(theme);
         var hover = new Border { Resources = resources };
-        hover.SetResourceReference(Border.BackgroundProperty, Brushes.ActionElevatedBrush);
+        hover.SetResourceReference(Border.BackgroundProperty, Brushes.ActionInteractionBrush);
         hover.Measure(new Size(10, 10));
         var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
 
-        theme[Colors.BaseColor] = pink;
+        theme[Colors.Base0Color] = pink;
 
         Assert.That(((SolidColorBrush)hover.Background).Color, Is.EqualTo(ColorShade.Mix(pink, Black, 0.1)));
     }

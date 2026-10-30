@@ -10,7 +10,7 @@ namespace Joufflu;
 /// <code>
 /// &lt;joufflu:ColorShade x:Key="HoverShade" Amount="0.1"
 ///     Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}"
-///     Toward="{DynamicResource {x:Static joufflu:Colors.PrimaryContentColor}}" /&gt;
+///     Toward="{DynamicResource {x:Static joufflu:Colors.PrimaryForegroundColor}}" /&gt;
 /// &lt;SolidColorBrush Color="{Binding Result, Source={StaticResource HoverShade}}" /&gt;
 /// </code>
 /// <para>

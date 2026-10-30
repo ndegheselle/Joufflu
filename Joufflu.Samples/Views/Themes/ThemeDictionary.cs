@@ -103,13 +103,12 @@ public static class ThemeScales
 }
 
 /// <summary>
-/// The colours and the shape of one category (Display, Input or Action) in the complete mode. The padding is the md
-/// one : the inside of a display as it is, the xs to lg paddings of an input or an action derived from it.
+/// The base colour and the shape of one category (Display, Input or Action) in the complete mode, its other brushes
+/// derived from the base. The padding is the md one : the inside of a display as it is, the xs to lg paddings of an
+/// input or an action derived from it.
 /// </summary>
 public sealed record ThemeCategoryValues(
-    Color Surface1,
-    Color Surface2,
-    Color Border,
+    Color Base,
     double Radius,
     double Thickness,
     double PaddingHorizontal,
@@ -169,11 +168,7 @@ public static class ThemeDictionaryWriter
         {
             xaml.AppendLine("    <!--  Category colors  -->");
             foreach ((string name, ThemeCategoryValues category) in values.Categories.All())
-            {
-                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}Surface1Color}}\">{Hex(category.Surface1)}</Color>");
-                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}Surface2Color}}\">{Hex(category.Surface2)}</Color>");
-                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}BorderColor}}\">{Hex(category.Border)}</Color>");
-            }
+                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}BaseColor}}\">{Hex(category.Base)}</Color>");
             xaml.AppendLine();
         }
 
@@ -190,14 +185,9 @@ public static class ThemeDictionaryWriter
     private static void AppendShape(StringBuilder xaml, ThemeValues values)
     {
         xaml.AppendLine("    <!--  Dimensions  -->");
-        xaml.AppendLine(DoubleEntry("Thickness", values.Thickness));
-        xaml.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.BorderThickness}}\">{Num(values.Thickness)}</Thickness>");
-        xaml.AppendLine();
-        xaml.AppendLine(DoubleEntry("Radius", values.Radius));
-        xaml.AppendLine($"    <CornerRadius x:Key=\"{{x:Static joufflu:Dimensions.CornerRadius}}\">{Num(values.Radius)}</CornerRadius>");
-        xaml.AppendLine();
-        xaml.AppendLine(DoubleEntry("Spacing", values.Spacing));
-        xaml.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.SpacingThickness}}\">{Num(values.Spacing)}</Thickness>");
+        xaml.AppendLine(ThicknessEntry("Thickness", values.Thickness, values.Thickness));
+        xaml.AppendLine(RadiusEntry("Radius", values.Radius));
+        xaml.AppendLine(ThicknessEntry("Spacing", values.Spacing, values.Spacing));
         xaml.AppendLine();
 
         // Each category has its own shape, the global one in the simple mode: the controls read only these.
@@ -207,9 +197,8 @@ public static class ThemeDictionaryWriter
             ThemeCategoryValues? own = values.Categories?.All().First(c => c.Name == category).Values;
             double radius = own?.Radius ?? values.Radius;
             double thickness = own?.Thickness ?? values.Thickness;
-            xaml.AppendLine(DoubleEntry($"{category}Radius", radius));
-            xaml.AppendLine($"    <CornerRadius x:Key=\"{{x:Static joufflu:Dimensions.{category}CornerRadius}}\">{Num(radius)}</CornerRadius>");
-            xaml.AppendLine($"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{category}BorderThickness}}\">{Num(thickness)}</Thickness>");
+            xaml.AppendLine(RadiusEntry($"{category}Radius", radius));
+            xaml.AppendLine(ThicknessEntry($"{category}Thickness", thickness, thickness));
         }
         ThemeCategoryValues? display = values.Categories?.Display;
         double displayHorizontal = display?.PaddingHorizontal ?? values.Spacing;
@@ -262,6 +251,9 @@ public static class ThemeDictionaryWriter
 
     private static string ThicknessEntry(string name, double horizontal, double vertical)
         => $"    <Thickness x:Key=\"{{x:Static joufflu:Dimensions.{name}}}\">{Num(horizontal)},{Num(vertical)}</Thickness>";
+
+    private static string RadiusEntry(string name, double radius)
+        => $"    <CornerRadius x:Key=\"{{x:Static joufflu:Dimensions.{name}}}\">{Num(radius)}</CornerRadius>";
 
     private static string Hex(Color color) => $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
 

@@ -8,7 +8,7 @@
     <!--  ============================ Badge ============================  -->
     <Style TargetType="{x:Type controls:Badge}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface2Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Setter Property="FontWeight" Value="SemiBold" />
@@ -26,7 +26,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}"
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
                         SnapsToDevicePixels="True">
                         <!--  A badge reads as a pill, wider than tall: its sides take twice the padding, its top and bottom half  -->
                         <ContentPresenter
@@ -42,27 +42,27 @@
         <Style.Triggers>
             <Trigger Property="Variant" Value="Primary">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
             </Trigger>
             <Trigger Property="Variant" Value="Secondary">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
             </Trigger>
             <Trigger Property="Variant" Value="Success">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessForegroundBrush}}" />
             </Trigger>
             <Trigger Property="Variant" Value="Info">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.InfoForegroundBrush}}" />
             </Trigger>
             <Trigger Property="Variant" Value="Warning">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningForegroundBrush}}" />
             </Trigger>
             <Trigger Property="Variant" Value="Danger">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerForegroundBrush}}" />
             </Trigger>
 
             <Trigger Property="toolkit:Sizing.Size" Value="xs">

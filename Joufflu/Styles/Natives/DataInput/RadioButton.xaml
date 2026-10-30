@@ -10,9 +10,9 @@
     -->
     <Style x:Key="{x:Type RadioButton}" TargetType="RadioButton">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
         <Setter Property="Padding" Value="6,0,0,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -32,7 +32,7 @@
                                 <Ellipse
                                     x:Name="InnerCircle"
                                     Margin="4"
-                                    Fill="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}"
+                                    Fill="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}"
                                     Visibility="Collapsed" />
                             </Grid>
                         </BulletDecorator.Bullet>
@@ -51,8 +51,15 @@
                             <Setter TargetName="InnerCircle" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}" />
+                            <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}" />
                         </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocused" Value="True" />
+                                <Condition Property="IsChecked" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="OuterCircle" Property="Fill" Value="{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}" />
+                        </MultiTrigger>
                         <Trigger Property="Validation.HasError" Value="True">
                             <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                         </Trigger>

@@ -18,7 +18,7 @@ be dropped — the cursor shows a no-drop sign — and never lights the zone up.
 ```xml
 <!-- AllowDrop and the drag events are handled by the behavior -->
 <Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
-        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}">
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}">
     <TextBlock VerticalAlignment="Center" Text="Drop .pdf files here" />
 </Border>
 ```
@@ -82,7 +82,7 @@ children see it too.
             <Style.Triggers>
                 <!-- True only while accepted data hovers: refused files never highlight -->
                 <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryElevatedBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />
                     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 </Trigger>
             </Style.Triggers>

@@ -13,7 +13,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionThickness}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -98,7 +98,7 @@
                                 Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayBorderThickness}"
+                                toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
                                 toolkit:Derive.BorderThicknessFactor="1,0,0,0"
                                 toolkit:Derive.Margin="{x:Static joufflu:Dimensions.HeightMd}"
                                 toolkit:Derive.MarginFactor="0.5,0,0,0"
@@ -165,14 +165,14 @@
                     <Condition Property="IsSelected" Value="False" />
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionInteractionBrush}}" />
                 </MultiTrigger.Setters>
             </MultiTrigger>
 
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryContentBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryForegroundBrush}}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
@@ -199,8 +199,8 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource TreeViewItemStyle}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Template">
             <Setter.Value>
@@ -210,7 +210,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayCornerRadius}}">
+                        CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
                         <ScrollViewer
                             Margin="{TemplateBinding Padding}"
                             Padding="0"

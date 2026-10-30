@@ -12,7 +12,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionThickness}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionPaddingMd}}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -22,7 +22,7 @@
                         <Border
                             x:Name="Border"
                             toolkit:Derive.BorderThicknessFactor="1,1,1,0"
-                            toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.ActionBorderThickness}"
+                            toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.ActionThickness}"
                             toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.ActionRadius}"
                             toolkit:Derive.CornerRadiusFactor="1,1,0,0"
                             Background="{TemplateBinding Background}"
@@ -44,9 +44,9 @@
                     <ControlTemplate.Triggers>
                         <!--  Overlaps the page's top border by its thickness, so the tab and the page join  -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="OuterGrid" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
+                            <Setter TargetName="OuterGrid" Property="toolkit:Derive.Margin" Value="{x:Static joufflu:Dimensions.DisplayThickness}" />
                             <Setter TargetName="OuterGrid" Property="toolkit:Derive.MarginFactor" Value="0,0,0,-1" />
-                            <Setter TargetName="Border" Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayBorderThickness}" />
+                            <Setter TargetName="Border" Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayThickness}" />
                             <Setter TargetName="Border" Property="toolkit:Derive.CornerRadius" Value="{x:Static joufflu:Dimensions.DisplayRadius}" />
                         </Trigger>
 
@@ -69,11 +69,11 @@
                     <Condition Property="IsMouseOver" Value="True" />
                     <Condition Property="IsSelected" Value="False" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionInteractionBrush}}" />
             </MultiTrigger>
 
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
             </Trigger>
 
@@ -97,9 +97,9 @@
     <Style x:Key="{x:Type TabControl}" TargetType="TabControl">
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplaySurface1Brush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayBorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>

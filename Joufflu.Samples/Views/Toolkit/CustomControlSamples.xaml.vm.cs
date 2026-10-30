@@ -27,10 +27,10 @@ public class CustomControlSamplesViewModel : ObservableValidator
 
     public string MinimumCode =>
         "<Style x:Key=\"RatingInputMinimal\" TargetType=\"{x:Type local:RatingInput}\">\n" +
-        "    <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputSurface1Brush}}\" />\n" +
+        "    <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}\" />\n" +
         "    <Setter Property=\"Padding\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}\" />\n" +
         "    <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}\" />\n" +
-        "    <Setter Property=\"BorderThickness\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputBorderThickness}}\" />\n" +
+        "    <Setter Property=\"BorderThickness\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}\" />\n" +
         "    <Setter Property=\"Height\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}\" />\n" +
         "    <Setter Property=\"Template\" Value=\"{StaticResource RatingInputTemplate}\" />\n" +
         "</Style>\n\n" +
@@ -53,7 +53,8 @@ public class CustomControlSamplesViewModel : ObservableValidator
         "<Setter Property=\"Padding\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}\" />\n\n" +
         "<Style.Triggers>\n" +
         "    <Trigger Property=\"IsKeyboardFocusWithin\" Value=\"True\">\n" +
-        "        <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorderElevatedBrush}}\" />\n" +
+        "        <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}\" />\n" +
+        "        <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}\" />\n" +
         "    </Trigger>\n" +
         "    <Trigger Property=\"toolkit:Sizing.Size\" Value=\"xs\">\n" +
         "        <Setter Property=\"Height\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.HeightXs}}\" />\n" +
