@@ -42,14 +42,11 @@
                             <TextBox
                                 x:Name="CodeArea"
                                 Grid.Row="2"
-                                Height="Auto"
+                                Style="{StaticResource MultilineTextBox}"
                                 MaxHeight="320"
-                                VerticalAlignment="Stretch"
                                 FontFamily="Consolas, Cascadia Mono, monospace"
-                                HorizontalScrollBarVisibility="Auto"
                                 IsReadOnly="True"
-                                Text="{TemplateBinding Code}"
-                                TextWrapping="NoWrap" />
+                                Text="{TemplateBinding Code}"/>
                         </Grid>
                     </Border>
 

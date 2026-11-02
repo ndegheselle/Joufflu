@@ -50,11 +50,8 @@
                     <PasswordBox Password="secret" />
                     <TextBox
                         Height="70"
-                        VerticalContentAlignment="Top"
-                        AcceptsReturn="True"
-                        Text="Multi-line&#x0a;text box"
-                        TextWrapping="Wrap"
-                        VerticalScrollBarVisibility="Auto" />
+                        Style="{StaticResource MultilineTextBox}"
+                        Text="Multi-line&#x0a;text box" />
                 </StackPanel>
             </c:CodeExample>
         </StackPanel>

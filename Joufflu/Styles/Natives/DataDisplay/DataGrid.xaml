@@ -300,7 +300,10 @@
                             Grid.ColumnSpan="2"
                             toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
                             toolkit:Derive.CornerRadiusFactor="1,1,0,0"
-                            Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+                            toolkit:Derive.BorderThicknessFactor="0,0,0,1"
+                            toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
+                            
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"/>
 
                         <!--  Header row: the first column mirrors the row header width so the column headers stay aligned with the cells  -->
                         <Grid Grid.Row="0" Grid.Column="0">

@@ -1,5 +1,5 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Joufflu.Samples.Views.Natives.DataInput;
 
@@ -33,5 +33,5 @@ public class TextBoxSamplesViewModel : ObservableValidator
 
     public string OtherCode =>
         "<PasswordBox />\n" +
-        "<TextBox AcceptsReturn=\"True\" TextWrapping=\"Wrap\" />";
+        "<TextBox Style=\"{StaticResource MultilineTextBox}\" />";
 }
