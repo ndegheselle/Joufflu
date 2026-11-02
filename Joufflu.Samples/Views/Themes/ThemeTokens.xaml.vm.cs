@@ -57,7 +57,8 @@ public class ThemeTokensViewModel : ObservableObject
             "Display",
             "What shows content without being interacted with: card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. No interaction of its own, Interaction is there for an app's informative hover. Its items (rows, menu items, tabs) are actions without a fill at rest.",
             [
-                new TokenEntry("DisplayBase", "The background (falls back to Base1). The only colour of the category.", Joufflu.Brushes.DisplayBaseBrush),
+                new TokenEntry("DisplayBase0", "The background (falls back to Base1). The colour the others are derived from.", Joufflu.Brushes.DisplayBase0Brush),
+                new TokenEntry("DisplayBase1", "A contrast inside the display, the header of a group box or a grid (falls back to Base2). Its own colour, not derived.", Joufflu.Brushes.DisplayBase1Brush),
                 new TokenEntry("DisplayBorder", "Derived: the base mixed 10% toward the Foreground. The border, and the parts that sit on the base (a header, a track, a tag).", Joufflu.Brushes.DisplayBorderBrush),
                 new TokenEntry("DisplayElevated", "Derived: the border mixed 10% toward the Foreground. A border that must stand out from a Border background, and the border of an interacted control.", Joufflu.Brushes.DisplayElevatedBrush),
                 new TokenEntry("DisplayInteraction", "Derived: the base mixed 10% toward the Foreground. The background of an interacted control.", Joufflu.Brushes.DisplayInteractionBrush),
@@ -67,7 +68,8 @@ public class ThemeTokensViewModel : ObservableObject
             "Input",
             "What takes a value: text box, combo box, check box, radio button, slider. No hover; focus turns the border to Elevated and the background to Interaction. Checked is the primary.",
             [
-                new TokenEntry("InputBase", "The background (falls back to Base1). The only colour of the category.", Joufflu.Brushes.InputBaseBrush),
+                new TokenEntry("InputBase0", "The background (falls back to Base1). The colour the others are derived from.", Joufflu.Brushes.InputBase0Brush),
+                new TokenEntry("InputBase1", "A contrast inside the input (falls back to Base2). Its own colour, not derived.", Joufflu.Brushes.InputBase1Brush),
                 new TokenEntry("InputBorder", "Derived: the base mixed 10% toward the Foreground. The border, and the parts that sit on the base (a header, a track, a tag).", Joufflu.Brushes.InputBorderBrush),
                 new TokenEntry("InputElevated", "Derived: the border mixed 10% toward the Foreground. A border that must stand out from a Border background, and the border of an interacted control.", Joufflu.Brushes.InputElevatedBrush),
                 new TokenEntry("InputInteraction", "Derived: the base mixed 10% toward the Foreground. The background of an interacted control.", Joufflu.Brushes.InputInteractionBrush),
@@ -77,7 +79,7 @@ public class ThemeTokensViewModel : ObservableObject
             "Action",
             "What runs something: button, toggle button. Hover turns the border to Elevated and the background to Interaction; pressed is a translation down, not a colour; no focus border. A grip (scroll bar thumb, grid splitter, slider thumb) turns Elevated when hovered or dragged. Checked and selected are the primary.",
             [
-                new TokenEntry("ActionBase", "The background (falls back to Base0). The only colour of the category.", Joufflu.Brushes.ActionBaseBrush),
+                new TokenEntry("ActionBase0", "The background (falls back to Base0). The only colour of the category.", Joufflu.Brushes.ActionBase0Brush),
                 new TokenEntry("ActionBorder", "Derived: the base mixed 10% toward the Foreground. The border, and the parts that sit on the base (a header, a track, a tag).", Joufflu.Brushes.ActionBorderBrush),
                 new TokenEntry("ActionElevated", "Derived: the border mixed 10% toward the Foreground. A border that must stand out from a Border background, and the border of an interacted control.", Joufflu.Brushes.ActionElevatedBrush),
                 new TokenEntry("ActionInteraction", "Derived: the base mixed 10% toward the Foreground. The background of an interacted control.", Joufflu.Brushes.ActionInteractionBrush),
@@ -255,7 +257,7 @@ public class ThemeTokensViewModel : ObservableObject
         "<!-- Always DynamicResource: a theme swap, or the customizer editing a -->\n" +
         "<!-- dimension, has to reach controls already on screen.               -->\n" +
         "<Border\n" +
-        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}\"\n" +
+        "    Background=\"{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}\"\n" +
         "    BorderBrush=\"{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}\"\n" +
         "    BorderThickness=\"{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}\"\n" +
         "    CornerRadius=\"{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}\" />\n\n" +

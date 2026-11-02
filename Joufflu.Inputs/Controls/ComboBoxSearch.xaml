@@ -131,7 +131,7 @@
                                     x:Name="DropDownBorder"
                                     Margin="0,1,0,0"
                                     Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
                                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
                                     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">

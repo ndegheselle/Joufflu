@@ -27,7 +27,7 @@ public class CustomControlSamplesViewModel : ObservableValidator
 
     public string MinimumCode =>
         "<Style x:Key=\"RatingInputMinimal\" TargetType=\"{x:Type local:RatingInput}\">\n" +
-        "    <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}\" />\n" +
+        "    <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}\" />\n" +
         "    <Setter Property=\"Padding\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}\" />\n" +
         "    <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}\" />\n" +
         "    <Setter Property=\"BorderThickness\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}\" />\n" +

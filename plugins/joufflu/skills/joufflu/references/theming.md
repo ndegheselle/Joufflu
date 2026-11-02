@@ -99,7 +99,7 @@ Keys are `ComponentResourceKey` statics (typos fail the build). Always `DynamicR
 
 ```xml
 <!-- A panel of your own is a display: same tokens as Card -->
-<Border Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+<Border Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
         BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
@@ -107,7 +107,7 @@ Keys are `ComponentResourceKey` statics (typos fail the build). Always `DynamicR
 <GradientStop Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" Offset="0" />
 ```
 
-From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.DisplayBaseBrush);`
+From C#: `element.SetResourceReference(Border.BackgroundProperty, Joufflu.Brushes.DisplayBase0Brush);`
 (`SetResourceReference` keeps it dynamic; `FindResource` would freeze the current value).
 
 ## Colours — `joufflu:Colors.XColor` (Color) / `joufflu:Brushes.XBrush` (SolidColorBrush)
@@ -119,9 +119,9 @@ Use the brush in UI; the colour is for gradients and animations.
 | Bases (global) | `Base0` | The page; default base of an action |
 | | `Base1` | A card; default base of a display and an input |
 | | `Base2` | A contrast inside a card, for an app's own layout |
-| Display | `DisplayBase` (colour) | Card, popup, tooltip, expander, group box, frame of a list/tree/grid/menu/tab control. Falls back to `Base1` |
-| Input | `InputBase` (colour) | Text box, combo box, check box, radio button, slider. Falls back to `Base1` |
-| Action | `ActionBase` (colour) | Button, toggle button. Falls back to `Base0` |
+| Display | `DisplayBase0`, `DisplayBase1` (colours) | Card, popup, tooltip, expander, group box, frame of a list/tree/grid/menu/tab control. `DisplayBase0` falls back to `Base1`; `DisplayBase1`, a contrast inside it (group box and data grid header), to `Base2` |
+| Input | `InputBase0`, `InputBase1` (colours) | Text box, combo box, check box, radio button, slider. `InputBase0` falls back to `Base1`; `InputBase1`, a contrast inside it, to `Base2` |
+| Action | `ActionBase0` (colour) | Button, toggle button. Falls back to `Base0` |
 | Every category | derived brushes | `XBorderBrush` (base 10 % toward `Foreground`: the border, and a part on the base: header, track, tag), `XElevatedBrush` (border 10 % further: a border on a `XBorder` background, the border of an interacted control), `XInteractionBrush` (base 10 %: the background of an interacted control) |
 | Text | `Foreground` | Default text and icons |
 | Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XForeground` (text/icons on the fill) as colours, and the brush `XInteractionBrush` (hover/pressed fill), `X` mixed 10 % toward `XForeground` |
@@ -129,7 +129,7 @@ Use the brush in UI; the colour is for gradients and animations.
 The controls never read the global bases: they read a category, so a custom control picks the
 category it belongs to. The category base is its only colour, and optional; a theme that leaves it
 out gets the global one through a `ColorFallback` (public, in `Joufflu`). A theme overrides one category alone:
-`<Color x:Key="{x:Static joufflu:Colors.InputBaseColor}">#FFFFFF</Color>`.
+`<Color x:Key="{x:Static joufflu:Colors.InputBase0Color}">#FFFFFF</Color>`.
 
 State rules, the same for every control: an interaction turns the border to `XElevatedBrush` and the
 background to `XInteractionBrush` (a part with no border at rest keeps none). A display has none of its

@@ -36,7 +36,7 @@ customizer has two modes:
   the inside of a display (`DisplayPadding`), and the md padding of an input or an action, the
   other sizes (`InputPaddingXs`..`Lg`, `ActionPaddingXs`..`Lg`) following it with the ratios of the
   control padding, which is only edited in the simple mode. The generated dictionary writes the
-  category base colours (`ActionBaseColor`…) and shapes. Going back to the simple mode drops them.
+  category base colours (`ActionBase0Color`…) and shapes. Going back to the simple mode drops them.
 
 The other brushes of a category (border, elevated, interaction) are derived from its base either way.
 A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` no

@@ -83,7 +83,7 @@ public class ThemeDictionaryWriterTests
     {
         ResourceDictionary generated = Parse(ThemeDictionaryWriter.Write(Edited));
 
-        Assert.That(generated.Contains(JColors.ActionBaseColor), Is.False);
+        Assert.That(generated.Contains(JColors.ActionBase0Color), Is.False);
     }
 
     [Test]
@@ -94,8 +94,8 @@ public class ThemeDictionaryWriterTests
         ThemeValues complete = Edited with
         {
             Categories = new ThemeCategories(
-                Display: new ThemeCategoryValues(grey, Radius: 12, Thickness: 1, PaddingHorizontal: 20, PaddingVertical: 14),
-                Input: new ThemeCategoryValues(grey, Radius: 2, Thickness: 1, PaddingHorizontal: 10, PaddingVertical: 4),
+                Display: new ThemeCategoryValues(grey, Radius: 12, Thickness: 1, PaddingHorizontal: 20, PaddingVertical: 14, Base1: pink),
+                Input: new ThemeCategoryValues(grey, Radius: 2, Thickness: 1, PaddingHorizontal: 10, PaddingVertical: 4, Base1: pink),
                 Action: new ThemeCategoryValues(pink, Radius: 99, Thickness: 0, PaddingHorizontal: 20, PaddingVertical: 8)),
         };
 
@@ -103,7 +103,9 @@ public class ThemeDictionaryWriterTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(generated[JColors.ActionBaseColor], Is.EqualTo(pink));
+            Assert.That(generated[JColors.ActionBase0Color], Is.EqualTo(pink));
+            Assert.That(generated[JColors.DisplayBase1Color], Is.EqualTo(pink));
+            Assert.That(generated[JColors.InputBase1Color], Is.EqualTo(pink));
             Assert.That(generated[JDimensions.ActionRadius], Is.EqualTo(new CornerRadius(99)));
             Assert.That(generated[JDimensions.ActionThickness], Is.EqualTo(new Thickness(0)));
             Assert.That(generated[JDimensions.DisplayRadius], Is.EqualTo(new CornerRadius(12)));

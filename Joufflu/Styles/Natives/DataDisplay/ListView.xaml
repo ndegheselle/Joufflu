@@ -43,7 +43,7 @@
                                 Padding="{TemplateBinding Padding}"
                                 toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
                                 toolkit:Derive.CornerRadiusFactor="1,1,0,0"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase1Brush}}"
                                 DockPanel.Dock="Top">
                                 <ScrollViewer
                                     Padding="0"
@@ -233,7 +233,7 @@
 
     <Style x:Key="{x:Type ListView}" TargetType="ListView">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="Template">

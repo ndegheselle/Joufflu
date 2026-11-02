@@ -133,7 +133,7 @@
                                 x:Name="SubMenuPopupBorder"
                                 BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                                 BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
-                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+                                Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
                                 Margin="0,0,8,8"
                                 Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
                                 CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">

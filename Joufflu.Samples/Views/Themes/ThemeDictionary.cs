@@ -105,14 +105,16 @@ public static class ThemeScales
 /// <summary>
 /// The base colour and the shape of one category (Display, Input or Action) in the complete mode, its other brushes
 /// derived from the base. The padding is the md one : the inside of a display as it is, the xs to lg paddings of an
-/// input or an action derived from it.
+/// input or an action derived from it. <see cref="Base1"/> is the contrast inside a display or an input (a header
+/// band), null for an action.
 /// </summary>
 public sealed record ThemeCategoryValues(
-    Color Base,
+    Color Base0,
     double Radius,
     double Thickness,
     double PaddingHorizontal,
-    double PaddingVertical);
+    double PaddingVertical,
+    Color? Base1 = null);
 
 /// <summary>The categories of the complete mode, each with its own colours and shape.</summary>
 public sealed record ThemeCategories(ThemeCategoryValues Display, ThemeCategoryValues Input, ThemeCategoryValues Action)
@@ -168,7 +170,11 @@ public static class ThemeDictionaryWriter
         {
             xaml.AppendLine("    <!--  Category colors  -->");
             foreach ((string name, ThemeCategoryValues category) in values.Categories.All())
-                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}BaseColor}}\">{Hex(category.Base)}</Color>");
+            {
+                xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}Base0Color}}\">{Hex(category.Base0)}</Color>");
+                if (category.Base1 is Color base1)
+                    xaml.AppendLine($"    <Color x:Key=\"{{x:Static joufflu:Colors.{name}Base1Color}}\">{Hex(base1)}</Color>");
+            }
             xaml.AppendLine();
         }
 

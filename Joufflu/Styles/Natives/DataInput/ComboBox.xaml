@@ -112,7 +112,7 @@
     <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
         <Setter Property="ItemContainerStyle" Value="{StaticResource {x:Type ComboBoxItem}}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
@@ -227,7 +227,7 @@
                                     MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}"
                                     Margin="0,1,0,0"
                                     Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
-                                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+                                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
                                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
                                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
                                     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"

@@ -12,12 +12,14 @@
         keep the colours of the first one.
 
         The global neutrals: Base0 is the page, Base1 a card, Base2 a contrast inside it, for an app's own layout.
-        The controls do not read them directly but through three categories, each with four brushes: Base (the
+        The controls do not read them directly but through three categories, each with four brushes: Base0 (the
         background), Border (the border, and the parts that sit on the base: a header, a track, a tag), Elevated (a
         stronger border: one that must stand out from a Border background, and the border of an interacted control)
-        and Interaction (the background of an interacted control). Only Base is a colour: a theme may define a
+        and Interaction (the background of an interacted control). Only Base0 is a colour: a theme may define a
         category's, and if it does not, a ColorFallback gives the global one (an action is filled with Base0, so on
         a display it reads as set into it). The other three are derived from it.
+        A display and an input have a fifth, Base1, a contrast inside them (a header band), their own colour falling
+        back to Base2.
         An interaction turns the border to Elevated and the background to Interaction:
         - Display: none of its own, Interaction is there for an app's informative hover.
         - Input: when focused.
@@ -34,14 +36,14 @@
 
     <!--  Display  -->
     <joufflu:ColorFallback
-        x:Key="DisplayBaseFallback"
-        Color="{DynamicResource {x:Static joufflu:Colors.DisplayBaseColor}}"
+        x:Key="DisplayBase0Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.DisplayBase0Color}}"
         Fallback="{DynamicResource {x:Static joufflu:Colors.Base1Color}}" />
     <joufflu:ColorShade
         x:Key="DisplayBorderShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{Binding Result, Source={StaticResource DisplayBaseFallback}}" />
+        Color="{Binding Result, Source={StaticResource DisplayBase0Fallback}}" />
     <joufflu:ColorShade
         x:Key="DisplayElevatedShade"
         Amount="0.1"
@@ -51,22 +53,28 @@
         x:Key="DisplayInteractionShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{Binding Result, Source={StaticResource DisplayBaseFallback}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplayBaseBrush}" Color="{Binding Result, Source={StaticResource DisplayBaseFallback}}" />
+        Color="{Binding Result, Source={StaticResource DisplayBase0Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplayBase0Brush}" Color="{Binding Result, Source={StaticResource DisplayBase0Fallback}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplayBorderBrush}" Color="{Binding Result, Source={StaticResource DisplayBorderShade}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplayElevatedBrush}" Color="{Binding Result, Source={StaticResource DisplayElevatedShade}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplayInteractionBrush}" Color="{Binding Result, Source={StaticResource DisplayInteractionShade}}" />
+    <!--  A contrast inside a display (a header band), its own colour rather than derived from Base0  -->
+    <joufflu:ColorFallback
+        x:Key="DisplayBase1Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.DisplayBase1Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.Base2Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.DisplayBase1Brush}" Color="{Binding Result, Source={StaticResource DisplayBase1Fallback}}" />
 
     <!--  Input  -->
     <joufflu:ColorFallback
-        x:Key="InputBaseFallback"
-        Color="{DynamicResource {x:Static joufflu:Colors.InputBaseColor}}"
+        x:Key="InputBase0Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.InputBase0Color}}"
         Fallback="{DynamicResource {x:Static joufflu:Colors.Base1Color}}" />
     <joufflu:ColorShade
         x:Key="InputBorderShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{Binding Result, Source={StaticResource InputBaseFallback}}" />
+        Color="{Binding Result, Source={StaticResource InputBase0Fallback}}" />
     <joufflu:ColorShade
         x:Key="InputElevatedShade"
         Amount="0.1"
@@ -76,22 +84,28 @@
         x:Key="InputInteractionShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{Binding Result, Source={StaticResource InputBaseFallback}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBaseBrush}" Color="{Binding Result, Source={StaticResource InputBaseFallback}}" />
+        Color="{Binding Result, Source={StaticResource InputBase0Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBase0Brush}" Color="{Binding Result, Source={StaticResource InputBase0Fallback}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBorderBrush}" Color="{Binding Result, Source={StaticResource InputBorderShade}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputElevatedBrush}" Color="{Binding Result, Source={StaticResource InputElevatedShade}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputInteractionBrush}" Color="{Binding Result, Source={StaticResource InputInteractionShade}}" />
+    <!--  A contrast inside an input, its own colour rather than derived from Base0  -->
+    <joufflu:ColorFallback
+        x:Key="InputBase1Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.InputBase1Color}}"
+        Fallback="{DynamicResource {x:Static joufflu:Colors.Base2Color}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.InputBase1Brush}" Color="{Binding Result, Source={StaticResource InputBase1Fallback}}" />
 
     <!--  Action  -->
     <joufflu:ColorFallback
-        x:Key="ActionBaseFallback"
-        Color="{DynamicResource {x:Static joufflu:Colors.ActionBaseColor}}"
+        x:Key="ActionBase0Fallback"
+        Color="{DynamicResource {x:Static joufflu:Colors.ActionBase0Color}}"
         Fallback="{DynamicResource {x:Static joufflu:Colors.Base0Color}}" />
     <joufflu:ColorShade
         x:Key="ActionBorderShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{Binding Result, Source={StaticResource ActionBaseFallback}}" />
+        Color="{Binding Result, Source={StaticResource ActionBase0Fallback}}" />
     <joufflu:ColorShade
         x:Key="ActionElevatedShade"
         Amount="0.1"
@@ -101,8 +115,8 @@
         x:Key="ActionInteractionShade"
         Amount="0.1"
         Toward="{DynamicResource {x:Static joufflu:Colors.ForegroundColor}}"
-        Color="{Binding Result, Source={StaticResource ActionBaseFallback}}" />
-    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBaseBrush}" Color="{Binding Result, Source={StaticResource ActionBaseFallback}}" />
+        Color="{Binding Result, Source={StaticResource ActionBase0Fallback}}" />
+    <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBase0Brush}" Color="{Binding Result, Source={StaticResource ActionBase0Fallback}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionBorderBrush}" Color="{Binding Result, Source={StaticResource ActionBorderShade}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionElevatedBrush}" Color="{Binding Result, Source={StaticResource ActionElevatedShade}}" />
     <SolidColorBrush x:Key="{x:Static joufflu:Brushes.ActionInteractionBrush}" Color="{Binding Result, Source={StaticResource ActionInteractionShade}}" />

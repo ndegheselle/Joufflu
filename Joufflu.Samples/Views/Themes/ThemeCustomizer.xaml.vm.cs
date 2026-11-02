@@ -297,7 +297,9 @@ public class ThemeCategoryEditor
 
     public string Description { get; }
 
-    public ThemeColorEntry Base { get; }
+    public ThemeColorEntry Base0 { get; }
+    /// <summary>The contrast inside the category (a header band), a display's and an input's, null for an action.</summary>
+    public ThemeColorEntry? Base1 { get; }
     public IReadOnlyList<ThemeColorEntry> Colors { get; }
 
     public ThemeDimensionEntry Radius { get; }
@@ -309,14 +311,17 @@ public class ThemeCategoryEditor
     public ThemeCategoryEditor(
         string name,
         string description,
-        ComponentResourceKey baseKey,
+        ComponentResourceKey base0Key,
+        ComponentResourceKey? base1Key,
         Action<ThemeColorEntry> onColorChanged,
         Action<ThemeDimensionEntry> onDimensionChanged)
     {
         Name = name;
         Description = description;
-        Base = new ThemeColorEntry("Base", $"{name}BaseColor", baseKey, default, onColorChanged);
-        Colors = [Base];
+        Base0 = new ThemeColorEntry("Base 0", $"{name}Base0Color", base0Key, default, onColorChanged);
+        if (base1Key is not null)
+            Base1 = new ThemeColorEntry("Base 1", $"{name}Base1Color", base1Key, default, onColorChanged);
+        Colors = Base1 is null ? [Base0] : [Base0, Base1];
 
         Radius = new ThemeDimensionEntry("Corner radius", $"{name}Radius", 0, 24, 0, onDimensionChanged);
         Thickness = new ThemeDimensionEntry("Border thickness", $"{name}Thickness", 0, 4, 0, onDimensionChanged);
@@ -326,12 +331,12 @@ public class ThemeCategoryEditor
     }
 
     public ThemeCategoryValues Values => new(
-        Base.Color, Radius.Value, Thickness.Value, PaddingHorizontal.Value, PaddingVertical.Value);
+        Base0.Color, Radius.Value, Thickness.Value, PaddingHorizontal.Value, PaddingVertical.Value, Base1?.Color);
 
     /// <summary>Seeds the editors without pushing them back into the live resources.</summary>
     public void SetSilently(ThemeCategoryValues values)
     {
-        Base.SetColorSilently(values.Base);
+        SetColorsSilently(values);
         SetShapeSilently(values);
     }
 
@@ -345,7 +350,12 @@ public class ThemeCategoryEditor
     }
 
     /// <summary>Seeds the colours alone, keeping the shape.</summary>
-    public void SetColorsSilently(ThemeCategoryValues values) => Base.SetColorSilently(values.Base);
+    public void SetColorsSilently(ThemeCategoryValues values)
+    {
+        Base0.SetColorSilently(values.Base0);
+        if (Base1 is not null && values.Base1 is Color base1)
+            Base1.SetColorSilently(base1);
+    }
 }
 
 /// <summary>
@@ -435,18 +445,21 @@ public class ThemeCustomizerViewModel : ObservableObject
 
         _display = new ThemeCategoryEditor(
             "Display",
-            "Cards, popups, expanders, group boxes, and the frame of lists, trees, grids, menus and tabs. Their items follow the actions. No states.",
-            JColors.DisplayBaseColor,
+            "Cards, popups, expanders, group boxes, and the frame of lists, trees, grids, menus and tabs. Their items follow the actions. No states. Base 1 is the contrast inside it: the header of a group box or a grid.",
+            JColors.DisplayBase0Color,
+            JColors.DisplayBase1Color,
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         _input = new ThemeCategoryEditor(
             "Input",
-            "Text boxes, combo boxes, check boxes, radio buttons, sliders. No hover, an elevated border and the interaction background on focus. The padding is the md one, the other sizes follow it.",
-            JColors.InputBaseColor,
+            "Text boxes, combo boxes, check boxes, radio buttons, sliders. No hover, an elevated border and the interaction background on focus. The padding is the md one, the other sizes follow it. Base 1 is the contrast inside it.",
+            JColors.InputBase0Color,
+            JColors.InputBase1Color,
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         _action = new ThemeCategoryEditor(
             "Action",
             "Buttons and toggle buttons. An elevated border and the interaction background on hover, moved down when pressed, no focus border. The padding is the md one, the other sizes follow it.",
-            JColors.ActionBaseColor,
+            JColors.ActionBase0Color,
+            null,
             OnCategoryColorChanged, OnCategoryDimensionChanged);
         Categories = [_display, _input, _action];
         SeedCategories();
@@ -658,10 +671,11 @@ public class ThemeCustomizerViewModel : ObservableObject
         double spacing = DimValue("Spacing");
         double paddingHorizontal = _paddingScale.Base;
         double paddingVertical = _paddingScale.VerticalBase;
-        yield return (_display, new ThemeCategoryValues(GlobalColor("Base1Color"), radius, thickness, spacing, spacing));
+        yield return (_display, new ThemeCategoryValues(
+            GlobalColor("Base1Color"), radius, thickness, spacing, spacing, GlobalColor("Base2Color")));
         yield return (_input, new ThemeCategoryValues(
             GlobalColor("Base1Color"), radius, thickness,
-            paddingHorizontal * ThemeScales.InputPaddingHorizontalRatio, paddingVertical));
+            paddingHorizontal * ThemeScales.InputPaddingHorizontalRatio, paddingVertical, GlobalColor("Base2Color")));
         yield return (_action, new ThemeCategoryValues(GlobalColor("Base0Color"), radius, thickness, paddingHorizontal, paddingVertical));
     }
 
@@ -690,16 +704,26 @@ public class ThemeCustomizerViewModel : ObservableObject
         {
             // The category colours exist only in the complete mode : in the simple one they fall back to the global ones.
             if (IsComplete)
-                res[category.Base.Key] = values.Base;
+                res[category.Base0.Key] = values.Base0;
             else
-                res.Remove(category.Base.Key);
+                res.Remove(category.Base0.Key);
 
             (ComponentResourceKey baseKey, ComponentResourceKey borderKey, ComponentResourceKey elevatedKey, ComponentResourceKey interactionKey) = CategoryBrushKeys(category.Name);
-            Color border = ColorShade.Mix(values.Base, foreground, 0.1);
-            res[baseKey] = new SolidColorBrush(values.Base);
+            Color border = ColorShade.Mix(values.Base0, foreground, 0.1);
+            res[baseKey] = new SolidColorBrush(values.Base0);
             res[borderKey] = new SolidColorBrush(border);
             res[elevatedKey] = new SolidColorBrush(ColorShade.Mix(border, foreground, 0.1));
-            res[interactionKey] = new SolidColorBrush(ColorShade.Mix(values.Base, foreground, 0.1));
+            res[interactionKey] = new SolidColorBrush(ColorShade.Mix(values.Base0, foreground, 0.1));
+
+            // The contrast of a display or an input, its own colour rather than derived from Base0.
+            if (category.Base1 is not null && values.Base1 is Color base1)
+            {
+                if (IsComplete)
+                    res[category.Base1.Key] = base1;
+                else
+                    res.Remove(category.Base1.Key);
+                res[BrushKey(category.Base1.ResourceName)] = new SolidColorBrush(base1);
+            }
         }
     }
 
@@ -945,9 +969,9 @@ public class ThemeCustomizerViewModel : ObservableObject
 
     private static (ComponentResourceKey Base, ComponentResourceKey Border, ComponentResourceKey Elevated, ComponentResourceKey Interaction) CategoryBrushKeys(string category) => category switch
     {
-        "Display" => (JBrushes.DisplayBaseBrush, JBrushes.DisplayBorderBrush, JBrushes.DisplayElevatedBrush, JBrushes.DisplayInteractionBrush),
-        "Input" => (JBrushes.InputBaseBrush, JBrushes.InputBorderBrush, JBrushes.InputElevatedBrush, JBrushes.InputInteractionBrush),
-        "Action" => (JBrushes.ActionBaseBrush, JBrushes.ActionBorderBrush, JBrushes.ActionElevatedBrush, JBrushes.ActionInteractionBrush),
+        "Display" => (JBrushes.DisplayBase0Brush, JBrushes.DisplayBorderBrush, JBrushes.DisplayElevatedBrush, JBrushes.DisplayInteractionBrush),
+        "Input" => (JBrushes.InputBase0Brush, JBrushes.InputBorderBrush, JBrushes.InputElevatedBrush, JBrushes.InputInteractionBrush),
+        "Action" => (JBrushes.ActionBase0Brush, JBrushes.ActionBorderBrush, JBrushes.ActionElevatedBrush, JBrushes.ActionInteractionBrush),
         _ => throw new ArgumentOutOfRangeException(nameof(category), category, "Unknown category"),
     };
 

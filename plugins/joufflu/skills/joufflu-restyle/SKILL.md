@@ -67,9 +67,9 @@ Map by **role**, not by closest hue:
 | Original role | Token |
 |---|---|
 | Window/page background | Remove it (the `Window` style sets it) or `Brushes.Base0Brush` |
-| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplayBaseBrush` |
+| Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplayBase0Brush` |
 | Inset panel inside a card | `CardSecondary` / `Brushes.DisplayBorderBrush` |
-| Background of a custom input / button | `Brushes.InputBaseBrush` / `Brushes.ActionBaseBrush` |
+| Background of a custom input / button | `Brushes.InputBase0Brush` / `Brushes.ActionBase0Brush` |
 | Hover of a row or custom clickable item | `Brushes.ActionInteractionBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |

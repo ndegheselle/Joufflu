@@ -13,9 +13,9 @@ control belongs to, then follow its rules. A control derived from a native one
 
 | Category | What it is | Tokens | States |
 |---|---|---|---|
-| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplayBase/Border/Elevated/InteractionBrush`, `DisplayRadius`, `DisplayThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None of its own (`DisplayInteractionBrush` is there for an informative hover). Its items (rows, entries) are actions without a fill at rest |
-| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase/Border/Elevated/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputElevatedBrush` and the background `InputInteractionBrush` |
-| **Action** | Runs something: a button, a toggle, an item of a display | `ActionBase/Border/Elevated/InteractionBrush`, `ActionRadius`, `ActionThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | On hover the border turns `ActionElevatedBrush` and the background `ActionInteractionBrush`; moved down when pressed, no focus border |
+| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplayBase0/Border/Elevated/InteractionBrush`, `DisplayRadius`, `DisplayThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None of its own (`DisplayInteractionBrush` is there for an informative hover). Its items (rows, entries) are actions without a fill at rest |
+| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase0/Border/Elevated/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputElevatedBrush` and the background `InputInteractionBrush` |
+| **Action** | Runs something: a button, a toggle, an item of a display | `ActionBase0/Border/Elevated/InteractionBrush`, `ActionRadius`, `ActionThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | On hover the border turns `ActionElevatedBrush` and the background `ActionInteractionBrush`; moved down when pressed, no focus border |
 
 In every category, disabled is `DisabledOpacity`, selected and checked are the primary,
 and sizes follow `Sizing.Size`. [Design tokens](../themes/tokens.html) lists each key with
@@ -29,7 +29,7 @@ or an action follows the same steps with the keys of its own category. The rules
 
 | | Rule | Tokens |
 |---|---|---|
-| **Required** | Background | `Brushes.InputBaseBrush` (`InputBorderBrush` for a part that sits on it: a tag, a track) |
+| **Required** | Background | `Brushes.InputBase0Brush` (`InputBorderBrush` for a part that sits on it: a tag, a track) |
 | **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
@@ -63,7 +63,7 @@ template read them from the control:
 
 ```xml
 <Style TargetType="{x:Type local:RatingInput}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
     <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
     <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />

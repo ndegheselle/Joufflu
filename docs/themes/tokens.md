@@ -24,7 +24,7 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <!-- Always DynamicResource: a theme swap, or the customizer editing a
      dimension, has to reach controls already on screen. -->
 <Border
-    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
@@ -75,15 +75,15 @@ and checked are the primary.
 
 | Category | Base | Controls | Interaction |
 |---|---|---|---|
-| **Display** | `DisplayBase` (`Base1`) | Card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. Its items (rows, menu items, tabs, navigation entries) are actions without a fill at rest. | None of its own: `DisplayInteraction` is there for an app's informative hover. |
-| **Input** | `InputBase` (`Base1`) | Text box, combo box, check box, radio button, slider. | On focus. No hover. |
-| **Action** | `ActionBase` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionElevated` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
+| **Display** | `DisplayBase0` (`Base1`), `DisplayBase1` (`Base2`) | Card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. Its items (rows, menu items, tabs, navigation entries) are actions without a fill at rest. `DisplayBase1` is a contrast inside it (the header of a group box or a data grid), its own colour, not derived. | None of its own: `DisplayInteraction` is there for an app's informative hover. |
+| **Input** | `InputBase0` (`Base1`), `InputBase1` (`Base2`) | Text box, combo box, check box, radio button, slider. `InputBase1` is a contrast inside it, its own colour, not derived. | On focus. No hover. |
+| **Action** | `ActionBase0` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionElevated` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
 
 A theme overrides a category by defining its base, for example inputs set apart from the cards, with
 their border, elevated and interaction brushes following:
 
 ```xml
-<Color x:Key="{x:Static joufflu:Colors.InputBaseColor}">#FFFFFF</Color>
+<Color x:Key="{x:Static joufflu:Colors.InputBase0Color}">#FFFFFF</Color>
 ```
 
 `ColorFallback` is public: a library of your own can declare an optional colour the same way (see

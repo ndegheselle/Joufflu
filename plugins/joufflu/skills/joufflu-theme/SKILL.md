@@ -75,9 +75,9 @@ brush the theme defines.
   10 % further) and `Interaction` (base mixed 10 %), so the direction is right in a light and in a
   dark theme.
 - **Categories (optional)**: the controls read three categories, whose base falls back to the
-  globals when the theme leaves it out: `DisplayBaseColor` → `Base1`, `InputBaseColor` → `Base1`,
-  `ActionBaseColor` → `Base0`. Define one only to set a category apart, e.g. white inputs on grey cards:
-  `<Color x:Key="{x:Static joufflu:Colors.InputBaseColor}">#FFFFFF</Color>`.
+  globals when the theme leaves it out: `DisplayBase0Color` → `Base1`, `DisplayBase1Color` (group box and data grid header) → `Base2`, `InputBase0Color` → `Base1`, `InputBase1Color` → `Base2`,
+  `ActionBase0Color` → `Base0`. Define one only to set a category apart, e.g. white inputs on grey cards:
+  `<Color x:Key="{x:Static joufflu:Colors.InputBase0Color}">#FFFFFF</Color>`.
 - **Text**: `Foreground` must reach at least 4.5:1 contrast on `Base0`, `Base1` and
   `Base2`. Muted and disabled text is not a colour: it dims `Foreground` with
   `MutedOpacity` and `DisabledOpacity`.

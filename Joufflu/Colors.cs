@@ -14,14 +14,16 @@ public static class Colors
     // Only the base is a colour, the other brushes of a category are derived from it.
     // Display: what shows content without being interacted with (card, popup, expander, group box, the frame of a
     // list, tree, grid, menu or tab control).
-    public static ComponentResourceKey DisplayBaseColor => new ComponentResourceKey(typeof(Colors), "DisplayBaseColor"); // (Base1)
+    public static ComponentResourceKey DisplayBase0Color => new ComponentResourceKey(typeof(Colors), "DisplayBase0Color"); // (Base1)
+    public static ComponentResourceKey DisplayBase1Color => new ComponentResourceKey(typeof(Colors), "DisplayBase1Color"); // (Base2) A contrast inside a display, for an app's own layout.
 
     // Input: what takes a value (text box, combo box, check box, radio button, slider).
-    public static ComponentResourceKey InputBaseColor => new ComponentResourceKey(typeof(Colors), "InputBaseColor"); // (Base1)
+    public static ComponentResourceKey InputBase0Color => new ComponentResourceKey(typeof(Colors), "InputBase0Color"); // (Base1)
+    public static ComponentResourceKey InputBase1Color => new ComponentResourceKey(typeof(Colors), "InputBase1Color"); // (Base2) A contrast inside an input.
 
     // Action: what runs something (button, toggle button). The items of a display (rows, menu items, tabs) are
     // actions without a fill at rest. Filled with the page colour by default, so on a display it reads as set into it.
-    public static ComponentResourceKey ActionBaseColor => new ComponentResourceKey(typeof(Colors), "ActionBaseColor"); // (Base0)
+    public static ComponentResourceKey ActionBase0Color => new ComponentResourceKey(typeof(Colors), "ActionBase0Color"); // (Base0)
 
     // Primary
     public static ComponentResourceKey PrimaryColor => new ComponentResourceKey(typeof(Colors), "PrimaryColor");
@@ -62,7 +64,7 @@ public static class Brushes
     public static ComponentResourceKey Base2Brush => new ComponentResourceKey(typeof(Brushes), "Base2Brush");
 
     // Every category has the same four, derived from its base:
-    // - Base: the background.
+    // - Base0: the background.
     // - Border: the border, and the parts that sit on the base (a header, a track, a tag).
     // - Elevated: derived from Border, a border that must stand out from a Border background, and the border of an
     //   interacted control.
@@ -70,20 +72,24 @@ public static class Brushes
     // An interaction (an action hovered, an input focused) turns the border to Elevated and the background to Interaction.
 
     // Display: no interaction of its own, Interaction is there for an app's informative hover.
-    public static ComponentResourceKey DisplayBaseBrush => new ComponentResourceKey(typeof(Brushes), "DisplayBaseBrush");
+    public static ComponentResourceKey DisplayBase0Brush => new ComponentResourceKey(typeof(Brushes), "DisplayBase0Brush");
+    // A contrast inside a display (Base2 by default), not derived from Base0 and with no brushes of its own.
+    public static ComponentResourceKey DisplayBase1Brush => new ComponentResourceKey(typeof(Brushes), "DisplayBase1Brush");
     public static ComponentResourceKey DisplayBorderBrush => new ComponentResourceKey(typeof(Brushes), "DisplayBorderBrush");
     public static ComponentResourceKey DisplayElevatedBrush => new ComponentResourceKey(typeof(Brushes), "DisplayElevatedBrush");
     public static ComponentResourceKey DisplayInteractionBrush => new ComponentResourceKey(typeof(Brushes), "DisplayInteractionBrush");
 
     // Input: interacted when focused.
-    public static ComponentResourceKey InputBaseBrush => new ComponentResourceKey(typeof(Brushes), "InputBaseBrush");
+    public static ComponentResourceKey InputBase0Brush => new ComponentResourceKey(typeof(Brushes), "InputBase0Brush");
+    // A contrast inside an input (Base2 by default), not derived from Base0 and with no brushes of its own.
+    public static ComponentResourceKey InputBase1Brush => new ComponentResourceKey(typeof(Brushes), "InputBase1Brush");
     public static ComponentResourceKey InputBorderBrush => new ComponentResourceKey(typeof(Brushes), "InputBorderBrush");
     public static ComponentResourceKey InputElevatedBrush => new ComponentResourceKey(typeof(Brushes), "InputElevatedBrush");
     public static ComponentResourceKey InputInteractionBrush => new ComponentResourceKey(typeof(Brushes), "InputInteractionBrush");
 
     // Action: interacted when hovered, a translation when pressed. A grip (a scroll bar thumb, a grid splitter, a
     // slider thumb) is drawn with Border and turns Elevated when hovered or dragged.
-    public static ComponentResourceKey ActionBaseBrush => new ComponentResourceKey(typeof(Brushes), "ActionBaseBrush");
+    public static ComponentResourceKey ActionBase0Brush => new ComponentResourceKey(typeof(Brushes), "ActionBase0Brush");
     public static ComponentResourceKey ActionBorderBrush => new ComponentResourceKey(typeof(Brushes), "ActionBorderBrush");
     public static ComponentResourceKey ActionElevatedBrush => new ComponentResourceKey(typeof(Brushes), "ActionElevatedBrush");
     public static ComponentResourceKey ActionInteractionBrush => new ComponentResourceKey(typeof(Brushes), "ActionInteractionBrush");

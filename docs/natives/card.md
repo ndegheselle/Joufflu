@@ -12,7 +12,7 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content, a display: a `DisplayBase` fill, a
+The primary surface for grouping content, a display: a `DisplayBase0` fill, a
 `DisplayBorder` border, `DisplayRadius` corners and `DisplayPadding` as padding.
 
 ```xml

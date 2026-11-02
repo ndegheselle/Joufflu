@@ -76,7 +76,7 @@ needs `ValidatesOnNotifyDataErrors=False` on that binding, or the whole page is 
 
 Named `Border` styles for padded, rounded surfaces:
 
-- `Card`: a display, `DisplayBase` fill, `DisplayBorder`, `DisplayRadius`, `DisplayPadding`.
+- `Card`: a display, `DisplayBase0` fill, `DisplayBorder`, `DisplayRadius`, `DisplayPadding`.
 - `CardSecondary`: `DisplayBorder` panel with a `DisplayElevated` border, meant to sit **inside** a `Card`.
 
 ```xml

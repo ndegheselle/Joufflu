@@ -20,7 +20,7 @@
             MinWidth="280"
             MaxWidth="380"
             Margin="0,0,0,4"
-            Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+            Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
             BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
             BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
             CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
@@ -36,7 +36,7 @@
                 -->
                 <Border
                     x:Name="ProgressMask"
-                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+                    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
                     toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
                     toolkit:Derive.CornerRadiusFactor="1,1,0,0" />
                 <ProgressBar

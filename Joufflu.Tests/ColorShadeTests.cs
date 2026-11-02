@@ -68,8 +68,8 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Lightness(Resolve(light, Brushes.ActionInteractionBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.ActionBaseBrush))), "light");
-            Assert.That(Lightness(Resolve(dark, Brushes.ActionInteractionBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.ActionBaseBrush))), "dark");
+            Assert.That(Lightness(Resolve(light, Brushes.ActionInteractionBrush)), Is.LessThan(Lightness(Resolve(light, Brushes.ActionBase0Brush))), "light");
+            Assert.That(Lightness(Resolve(dark, Brushes.ActionInteractionBrush)), Is.GreaterThan(Lightness(Resolve(dark, Brushes.ActionBase0Brush))), "dark");
         });
     }
 
@@ -80,9 +80,9 @@ public class ColorShadeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(Resolve(light, Brushes.ActionBaseBrush), Is.EqualTo(Resolve(light, Brushes.Base0Brush)), "an action is filled with the page");
-            Assert.That(Resolve(light, Brushes.InputBaseBrush), Is.EqualTo(Resolve(light, Brushes.Base1Brush)));
-            Assert.That(Resolve(light, Brushes.DisplayBaseBrush), Is.EqualTo(Resolve(light, Brushes.Base1Brush)));
+            Assert.That(Resolve(light, Brushes.ActionBase0Brush), Is.EqualTo(Resolve(light, Brushes.Base0Brush)), "an action is filled with the page");
+            Assert.That(Resolve(light, Brushes.InputBase0Brush), Is.EqualTo(Resolve(light, Brushes.Base1Brush)));
+            Assert.That(Resolve(light, Brushes.DisplayBase0Brush), Is.EqualTo(Resolve(light, Brushes.Base1Brush)));
         });
     }
 
@@ -91,14 +91,14 @@ public class ColorShadeTests
     {
         var theme = new ResourceDictionary { Source = new Uri("/Joufflu;component/Themes/Light.xaml", UriKind.Relative) };
         var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
-        theme[Colors.InputBaseColor] = pink;
+        theme[Colors.InputBase0Color] = pink;
 
         ResourceDictionary resources = WithBrushes(theme);
 
         Assert.Multiple(() =>
         {
-            Assert.That(Resolve(resources, Brushes.InputBaseBrush), Is.EqualTo(pink));
-            Assert.That(Resolve(resources, Brushes.DisplayBaseBrush), Is.EqualTo(Resolve(resources, Brushes.Base1Brush)), "the other categories keep the global one");
+            Assert.That(Resolve(resources, Brushes.InputBase0Brush), Is.EqualTo(pink));
+            Assert.That(Resolve(resources, Brushes.DisplayBase0Brush), Is.EqualTo(Resolve(resources, Brushes.Base1Brush)), "the other categories keep the global one");
         });
     }
 
@@ -135,9 +135,9 @@ public class ColorShadeTests
         {
             foreach ((ComponentResourceKey baseKey, ComponentResourceKey border, ComponentResourceKey elevated, ComponentResourceKey interaction) in new[]
             {
-                (Brushes.DisplayBaseBrush, Brushes.DisplayBorderBrush, Brushes.DisplayElevatedBrush, Brushes.DisplayInteractionBrush),
-                (Brushes.InputBaseBrush, Brushes.InputBorderBrush, Brushes.InputElevatedBrush, Brushes.InputInteractionBrush),
-                (Brushes.ActionBaseBrush, Brushes.ActionBorderBrush, Brushes.ActionElevatedBrush, Brushes.ActionInteractionBrush),
+                (Brushes.DisplayBase0Brush, Brushes.DisplayBorderBrush, Brushes.DisplayElevatedBrush, Brushes.DisplayInteractionBrush),
+                (Brushes.InputBase0Brush, Brushes.InputBorderBrush, Brushes.InputElevatedBrush, Brushes.InputInteractionBrush),
+                (Brushes.ActionBase0Brush, Brushes.ActionBorderBrush, Brushes.ActionElevatedBrush, Brushes.ActionInteractionBrush),
             })
             {
                 Color @base = Resolve(light, baseKey);
@@ -153,7 +153,7 @@ public class ColorShadeTests
     {
         var theme = new ResourceDictionary { Source = new Uri("/Joufflu;component/Themes/Light.xaml", UriKind.Relative) };
         var pink = Color.FromRgb(0xff, 0xc0, 0xcb);
-        theme[Colors.DisplayBaseColor] = pink;
+        theme[Colors.DisplayBase0Color] = pink;
 
         ResourceDictionary resources = WithBrushes(theme);
 

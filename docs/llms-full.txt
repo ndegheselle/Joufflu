@@ -1029,7 +1029,7 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <!-- Always DynamicResource: a theme swap, or the customizer editing a
      dimension, has to reach controls already on screen. -->
 <Border
-    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBaseBrush}}"
+    Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
@@ -1080,15 +1080,15 @@ and checked are the primary.
 
 | Category | Base | Controls | Interaction |
 |---|---|---|---|
-| **Display** | `DisplayBase` (`Base1`) | Card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. Its items (rows, menu items, tabs, navigation entries) are actions without a fill at rest. | None of its own: `DisplayInteraction` is there for an app's informative hover. |
-| **Input** | `InputBase` (`Base1`) | Text box, combo box, check box, radio button, slider. | On focus. No hover. |
-| **Action** | `ActionBase` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionElevated` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
+| **Display** | `DisplayBase0` (`Base1`), `DisplayBase1` (`Base2`) | Card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. Its items (rows, menu items, tabs, navigation entries) are actions without a fill at rest. `DisplayBase1` is a contrast inside it (the header of a group box or a data grid), its own colour, not derived. | None of its own: `DisplayInteraction` is there for an app's informative hover. |
+| **Input** | `InputBase0` (`Base1`), `InputBase1` (`Base2`) | Text box, combo box, check box, radio button, slider. `InputBase1` is a contrast inside it, its own colour, not derived. | On focus. No hover. |
+| **Action** | `ActionBase0` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionElevated` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
 
 A theme overrides a category by defining its base, for example inputs set apart from the cards, with
 their border, elevated and interaction brushes following:
 
 ```xml
-<Color x:Key="{x:Static joufflu:Colors.InputBaseColor}">#FFFFFF</Color>
+<Color x:Key="{x:Static joufflu:Colors.InputBase0Color}">#FFFFFF</Color>
 ```
 
 `ColorFallback` is public: a library of your own can declare an optional colour the same way (see
@@ -1246,7 +1246,7 @@ customizer has two modes:
   the inside of a display (`DisplayPadding`), and the md padding of an input or an action, the
   other sizes (`InputPaddingXs`..`Lg`, `ActionPaddingXs`..`Lg`) following it with the ratios of the
   control padding, which is only edited in the simple mode. The generated dictionary writes the
-  category base colours (`ActionBaseColor`…) and shapes. Going back to the simple mode drops them.
+  category base colours (`ActionBase0Color`…) and shapes. Going back to the simple mode drops them.
 
 The other brushes of a category (border, elevated, interaction) are derived from its base either way.
 A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` no
@@ -1428,7 +1428,7 @@ padded, rounded surfaces. Apply them through the `Style` property of a plain
 
 ## Card
 
-The primary surface for grouping content, a display: a `DisplayBase` fill, a
+The primary surface for grouping content, a display: a `DisplayBase0` fill, a
 `DisplayBorder` border, `DisplayRadius` corners and `DisplayPadding` as padding.
 
 ```xml
@@ -2144,9 +2144,9 @@ control belongs to, then follow its rules. A control derived from a native one
 
 | Category | What it is | Tokens | States |
 |---|---|---|---|
-| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplayBase/Border/Elevated/InteractionBrush`, `DisplayRadius`, `DisplayThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None of its own (`DisplayInteractionBrush` is there for an informative hover). Its items (rows, entries) are actions without a fill at rest |
-| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase/Border/Elevated/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputElevatedBrush` and the background `InputInteractionBrush` |
-| **Action** | Runs something: a button, a toggle, an item of a display | `ActionBase/Border/Elevated/InteractionBrush`, `ActionRadius`, `ActionThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | On hover the border turns `ActionElevatedBrush` and the background `ActionInteractionBrush`; moved down when pressed, no focus border |
+| **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplayBase0/Border/Elevated/InteractionBrush`, `DisplayRadius`, `DisplayThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None of its own (`DisplayInteractionBrush` is there for an informative hover). Its items (rows, entries) are actions without a fill at rest |
+| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase0/Border/Elevated/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputElevatedBrush` and the background `InputInteractionBrush` |
+| **Action** | Runs something: a button, a toggle, an item of a display | `ActionBase0/Border/Elevated/InteractionBrush`, `ActionRadius`, `ActionThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | On hover the border turns `ActionElevatedBrush` and the background `ActionInteractionBrush`; moved down when pressed, no focus border |
 
 In every category, disabled is `DisabledOpacity`, selected and checked are the primary,
 and sizes follow `Sizing.Size`. [Design tokens](../themes/tokens.html) lists each key with
@@ -2160,7 +2160,7 @@ or an action follows the same steps with the keys of its own category. The rules
 
 | | Rule | Tokens |
 |---|---|---|
-| **Required** | Background | `Brushes.InputBaseBrush` (`InputBorderBrush` for a part that sits on it: a tag, a track) |
+| **Required** | Background | `Brushes.InputBase0Brush` (`InputBorderBrush` for a part that sits on it: a tag, a track) |
 | **Required** | Border colour, thickness and radius | `Brushes.InputBorderBrush`, `Dimensions.InputThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
@@ -2194,7 +2194,7 @@ template read them from the control:
 
 ```xml
 <Style TargetType="{x:Type local:RatingInput}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBaseBrush}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}" />
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
     <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
     <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
