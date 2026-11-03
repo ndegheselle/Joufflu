@@ -31,6 +31,8 @@ public class ToastSamplesViewModel : ObservableObject
 
     public ICommand StackCommand { get; }
 
+    public ICommand LoadingCommand { get; }
+
     public ToastSamplesViewModel(IToastService toasts)
     {
         _toasts = toasts;
@@ -51,7 +53,35 @@ public class ToastSamplesViewModel : ObservableObject
             for (int i = 0; i < 3; i++)
                 _toasts.Info($"Stacked toast #{++_counter}");
         });
+        LoadingCommand = new AsyncRelayCommand(UploadAsync);
     }
+
+    /// <summary>Fakes a three-file upload to show a loading toast being updated.</summary>
+    private async Task UploadAsync()
+    {
+        ToastInstance toast = _toasts.Loading("Preparing…", "Uploading files");
+
+        for (int file = 1; file <= 3; file++)
+        {
+            await Task.Delay(1000);
+            toast.Message = $"File {file} of 3";
+        }
+
+        await Task.Delay(1000);
+        toast.Type = ToastType.Success;
+        toast.Title = "Upload complete";
+        toast.Message = "3 files uploaded.";
+        toast.Duration = TimeSpan.FromSeconds(5);
+    }
+
+    public string LoadingCode =>
+        "ToastInstance toast = toasts.Loading(\"Preparing…\", \"Uploading files\");\n" +
+        "toast.Message = \"File 1 of 3\";\n" +
+        "// once done\n" +
+        "toast.Type = ToastType.Success;\n" +
+        "toast.Title = \"Upload complete\";\n" +
+        "toast.Message = \"3 files uploaded.\";\n" +
+        "toast.Duration = TimeSpan.FromSeconds(5); // starts the auto-dismiss";
 
     public string PositionCode =>
         "<feedback:ToastContainer Toasts=\"{Binding Toasts}\"\n" +

@@ -47,7 +47,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 - [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/index.md): the `Joufflu.Feedback` package, its setup and XML namespaces.
 - [Badge](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/badge.md): themed pill in the semantic colours, sized via `Sizing.Size`.
 - [Spinner](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/spinner.md): indeterminate loading indicator.
-- [Toasts](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/toasts.md): transient notifications from `IToastService`, including sticky toasts.
+- [Toasts](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/feedback/toasts.md): transient notifications from `IToastService`, including sticky toasts and loading toasts updated from their `ToastInstance`.
 
 ## Inputs (`Joufflu.Inputs`)
 

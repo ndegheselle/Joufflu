@@ -43,6 +43,16 @@
             </c:CodeExample>
 
             <c:CodeExample
+                Title="Loading toast"
+                Code="{Binding LoadingCode}"
+                Description="A loading toast shows a spinner and stays until updated. Change its type, title, message or duration from the returned instance once the work progresses or ends.">
+                <Button
+                    HorizontalAlignment="Left"
+                    Command="{Binding LoadingCommand}"
+                    Content="Upload files" />
+            </c:CodeExample>
+
+            <c:CodeExample
                 Title="Position"
                 Code="{Binding PositionCode}"
                 Description="The ToastContainer wrapping the app stacks its toasts in the corner given by Position. The newest toast always sits closest to that corner. Pick one and raise a toast above to see it move.">

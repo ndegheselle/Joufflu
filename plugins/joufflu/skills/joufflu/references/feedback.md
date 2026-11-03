@@ -5,7 +5,7 @@ xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedbac
 ```
 
 ```csharp
-using Joufflu.Feedback;            // ToastService, IToastService, ToastOptions, ToastType
+using Joufflu.Feedback;            // ToastService, IToastService, ToastOptions, ToastType, ToastInstance
 using Joufflu.Feedback.Controls;   // ToastContainer, ToastPosition, Badge, BadgeVariant, Spinner
 ```
 
@@ -53,7 +53,20 @@ _toasts.Show(new ToastOptions { Message = "Sticky", Type = ToastType.Info, Durat
 
 - Default duration 5 s; `TimeSpan.Zero` = sticky until closed.
 - Each call returns a `ToastInstance`; `_toasts.Close(instance)` removes it early.
-- `ToastType`: `Info`, `Success`, `Warning`, `Danger` (`Error(...)` shows a `Danger` toast).
+- `ToastType`: `Info`, `Success`, `Warning`, `Danger`, `Loading` (`Error(...)` shows a `Danger` toast).
+- `ToastInstance.Type`, `Title`, `Message` and `Duration` are observable and settable while the
+  toast is shown; setting `Duration` restarts the countdown.
+
+Long-running work: a sticky toast with a spinner, updated as it progresses:
+
+```csharp
+ToastInstance toast = _toasts.Loading("Preparing…", "Uploading files");
+toast.Message = "File 1 of 3";
+// once done (or ToastType.Danger on failure)
+toast.Type = ToastType.Success;
+toast.Message = "3 files uploaded.";
+toast.Duration = TimeSpan.FromSeconds(5);   // starts the auto-dismiss
+```
 
 Use toasts for transient outcomes ("Saved", "Copy failed"); use an overlay (`Confirm`) when
 the user must decide.

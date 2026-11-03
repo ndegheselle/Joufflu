@@ -42,7 +42,7 @@
                 <ProgressBar
                     x:Name="Progress"
                     Height="4"
-                    local:ToastProgress.Duration="{Binding Options.Duration}"
+                    local:ToastProgress.Duration="{Binding Duration}"
                     Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
                     Maximum="100"
                     Minimum="0"
@@ -72,16 +72,21 @@
                             toolkit:Sizing.Size="xl"
                             Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
                             Text="{Binding Icon}" />
+                        <local:Spinner
+                            x:Name="Spinner"
+                            HorizontalAlignment="Center"
+                            toolkit:Sizing.Size="sm"
+                            Visibility="Collapsed" />
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock
                                 FontWeight="Bold"
-                                Text="{Binding Options.Title}"
+                                Text="{Binding Title}"
                                 TextWrapping="Wrap"
                                 Visibility="{Binding HasTitle, Converter={StaticResource BoolToVis}}" />
                             <TextBlock
                                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                                Text="{Binding Options.Message}"
+                                Text="{Binding Message}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
                     </Grid>
@@ -102,17 +107,22 @@
         </Border>
 
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Options.Type}" Value="Success">
+            <DataTrigger Binding="{Binding Type}" Value="Success">
                 <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
                 <Setter TargetName="Progress" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Options.Type}" Value="Warning">
+            <DataTrigger Binding="{Binding Type}" Value="Warning">
                 <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
                 <Setter TargetName="Progress" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Options.Type}" Value="Danger">
+            <DataTrigger Binding="{Binding Type}" Value="Danger">
                 <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                 <Setter TargetName="Progress" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Loading">
+                <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="Spinner" Property="Visibility" Value="Visible" />
+                <Setter TargetName="Progress" Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

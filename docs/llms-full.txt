@@ -2477,6 +2477,24 @@ toasts.Show(new ToastOptions { Message = "Sticky", Duration = TimeSpan.Zero });
 A `Duration` of `TimeSpan.Zero` makes a toast sticky: it stays until the user
 closes it.
 
+## Loading toast
+
+A loading toast shows a spinner and stays until updated. Change its type, title,
+message or duration from the returned instance once the work progresses or ends:
+
+```csharp
+ToastInstance toast = toasts.Loading("Preparing…", "Uploading files");
+toast.Message = "File 1 of 3";
+// once done
+toast.Type = ToastType.Success;
+toast.Title = "Upload complete";
+toast.Message = "3 files uploaded.";
+toast.Duration = TimeSpan.FromSeconds(5); // starts the auto-dismiss
+```
+
+Every `ToastInstance` can be updated this way, not only loading ones. Setting
+`Duration` restarts the countdown from that moment.
+
 ## Position
 
 The `ToastContainer`'s `Position` picks the corner the stack sits in: `TopRight` (the default), `TopLeft`,

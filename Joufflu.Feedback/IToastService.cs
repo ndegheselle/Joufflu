@@ -22,6 +22,12 @@ public interface IToastService
 
     ToastInstance Error(string message, string title = "");
 
+    /// <summary>
+    /// Sticky toast with a spinner. Update the returned instance once the work is done
+    /// (e.g. <see cref="ToastInstance.Type"/> and <see cref="ToastInstance.Duration"/>).
+    /// </summary>
+    ToastInstance Loading(string message, string title = "");
+
     void Close(ToastInstance toast);
 }
 
@@ -30,7 +36,8 @@ public enum ToastType
     Info,
     Success,
     Warning,
-    Danger
+    Danger,
+    Loading
 }
 
 /// <summary>Description of a toast to display.</summary>
@@ -47,18 +54,62 @@ public class ToastOptions
 }
 
 /// <summary>
-/// A live toast hosted by the <see cref="ToastService"/>.
+/// A live toast hosted by the <see cref="ToastService"/>. Its type, texts and duration can be
+/// changed while it is displayed.
 /// </summary>
 public class ToastInstance : ObservableObject
 {
     private readonly ToastService _service;
-    private readonly DispatcherTimer? _timer;
+    private readonly DispatcherTimer _timer = new();
 
-    public ToastOptions Options { get; }
-    public bool HasTitle => !string.IsNullOrEmpty(Options.Title);
+    private ToastType _type;
+    public ToastType Type
+    {
+        get => _type;
+        set
+        {
+            if (SetProperty(ref _type, value))
+                OnPropertyChanged(nameof(Icon));
+        }
+    }
 
-    /// <summary>Lucide glyph representing the toast type.</summary>
-    public string Icon => Options.Type switch
+    private string _title;
+    public string Title
+    {
+        get => _title;
+        set
+        {
+            if (SetProperty(ref _title, value))
+                OnPropertyChanged(nameof(HasTitle));
+        }
+    }
+
+    public bool HasTitle => !string.IsNullOrEmpty(Title);
+
+    private string _message;
+    public string Message
+    {
+        get => _message;
+        set => SetProperty(ref _message, value);
+    }
+
+    private TimeSpan _duration;
+    /// <summary>
+    /// Time before the toast auto-dismisses, counted from the moment it is set.
+    /// <see cref="TimeSpan.Zero"/> keeps it sticky.
+    /// </summary>
+    public TimeSpan Duration
+    {
+        get => _duration;
+        set
+        {
+            if (SetProperty(ref _duration, value))
+                StartTimer();
+        }
+    }
+
+    /// <summary>Lucide glyph representing the toast type (a loading toast shows a spinner instead).</summary>
+    public string Icon => Type switch
     {
         ToastType.Success => LucideFontIcons.BadgeCheck,
         ToastType.Warning => LucideFontIcons.BadgeAlert,
@@ -71,37 +122,33 @@ public class ToastInstance : ObservableObject
     public ToastInstance(ToastOptions options, ToastService service)
     {
         _service = service;
-        Options = options;
+        _type = options.Type;
+        _title = options.Title;
+        _message = options.Message;
+        _duration = options.Duration;
 
         CloseCommand = new RelayCommand(() => _service.Close(this));
-
-        if (Options.Duration > TimeSpan.Zero)
-        {
-            _timer = new DispatcherTimer { Interval = Options.Duration };
-            _timer.Tick += OnTick;
-        }
+        _timer.Tick += OnTick;
     }
 
     private void OnTick(object? sender, EventArgs e)
     {
-        StopTimer();
         _service.Close(this);
     }
 
     internal void StartTimer()
     {
-        if (_timer == null)
+        _timer.Stop();
+        if (Duration <= TimeSpan.Zero)
             return;
+
+        _timer.Interval = Duration;
         _timer.Start();
     }
 
     internal void StopTimer()
     {
-        if (_timer == null)
-            return;
-
         _timer.Stop();
-        _timer.Tick -= OnTick;
     }
 }
 
@@ -133,6 +180,9 @@ public class ToastService : ObservableObject, IToastService
 
     public ToastInstance Error(string message, string title = "")
         => Show(new ToastOptions { Type = ToastType.Danger, Message = message, Title = title });
+
+    public ToastInstance Loading(string message, string title = "")
+        => Show(new ToastOptions { Type = ToastType.Loading, Message = message, Title = title, Duration = TimeSpan.Zero });
 
     public void Close(ToastInstance toast)
     {
