@@ -29,7 +29,7 @@ public class CustomControlSamplesViewModel : ObservableValidator
         "<Style x:Key=\"RatingInputMinimal\" TargetType=\"{x:Type local:RatingInput}\">\n" +
         "    <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}\" />\n" +
         "    <Setter Property=\"Padding\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}\" />\n" +
-        "    <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}\" />\n" +
+        "    <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorder0Brush}}\" />\n" +
         "    <Setter Property=\"BorderThickness\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}\" />\n" +
         "    <Setter Property=\"Height\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}\" />\n" +
         "    <Setter Property=\"Template\" Value=\"{StaticResource RatingInputTemplate}\" />\n" +
@@ -53,7 +53,7 @@ public class CustomControlSamplesViewModel : ObservableValidator
         "<Setter Property=\"Padding\" Value=\"{DynamicResource {x:Static joufflu:Dimensions.InputPaddingMd}}\" />\n\n" +
         "<Style.Triggers>\n" +
         "    <Trigger Property=\"IsKeyboardFocusWithin\" Value=\"True\">\n" +
-        "        <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}\" />\n" +
+        "        <Setter Property=\"BorderBrush\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}\" />\n" +
         "        <Setter Property=\"Background\" Value=\"{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}\" />\n" +
         "    </Trigger>\n" +
         "    <Trigger Property=\"toolkit:Sizing.Size\" Value=\"xs\">\n" +

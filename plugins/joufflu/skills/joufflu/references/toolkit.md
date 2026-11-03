@@ -69,7 +69,7 @@ it cheap (look at paths, not file contents).
         <Style TargetType="Border">
             <!-- Set Background/BorderBrush in the style, not on the element, so the trigger can override -->
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
             <Style.Triggers>
                 <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
                     <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryInteractionBrush}}" />

@@ -4,16 +4,16 @@
     xmlns:joufflu="clr-namespace:Joufflu">
     <Style x:Key="Card" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
     </Style>
 
     <Style x:Key="CardSecondary" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <!--  Its background is the border colour, so its border is the elevated one  -->
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayElevatedBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder1Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />

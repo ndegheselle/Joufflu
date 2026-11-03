@@ -201,7 +201,7 @@
     <Style x:Key="{x:Type ToolBar}" TargetType="{x:Type ToolBar}">
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}" />
         <!--  No border by default, like the menu bar; the brush is set so a BorderThickness alone draws one.  -->
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
@@ -239,7 +239,7 @@
                                     StaysOpen="False">
                                     <Border
                                         Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
-                                        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                                        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
                                         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
                                         Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
                                         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">

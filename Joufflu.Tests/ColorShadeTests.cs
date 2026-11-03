@@ -135,9 +135,9 @@ public class ColorShadeTests
         {
             foreach ((ComponentResourceKey baseKey, ComponentResourceKey border, ComponentResourceKey elevated, ComponentResourceKey interaction) in new[]
             {
-                (Brushes.DisplayBase0Brush, Brushes.DisplayBorderBrush, Brushes.DisplayElevatedBrush, Brushes.DisplayInteractionBrush),
-                (Brushes.InputBase0Brush, Brushes.InputBorderBrush, Brushes.InputElevatedBrush, Brushes.InputInteractionBrush),
-                (Brushes.ActionBase0Brush, Brushes.ActionBorderBrush, Brushes.ActionElevatedBrush, Brushes.ActionInteractionBrush),
+                (Brushes.DisplayBase0Brush, Brushes.DisplayBorder0Brush, Brushes.DisplayBorder1Brush, Brushes.DisplayInteractionBrush),
+                (Brushes.InputBase0Brush, Brushes.InputBorder0Brush, Brushes.InputBorder1Brush, Brushes.InputInteractionBrush),
+                (Brushes.ActionBase0Brush, Brushes.ActionBorder0Brush, Brushes.ActionBorder1Brush, Brushes.ActionInteractionBrush),
             })
             {
                 Color @base = Resolve(light, baseKey);
@@ -157,7 +157,7 @@ public class ColorShadeTests
 
         ResourceDictionary resources = WithBrushes(theme);
 
-        Assert.That(Resolve(resources, Brushes.DisplayBorderBrush), Is.EqualTo(ColorShade.Mix(pink, Resolve(resources, Brushes.ForegroundBrush), 0.1)));
+        Assert.That(Resolve(resources, Brushes.DisplayBorder0Brush), Is.EqualTo(ColorShade.Mix(pink, Resolve(resources, Brushes.ForegroundBrush), 0.1)));
     }
 
     /// <summary>The theme customizer redefines a colour while the app runs: the derived brushes must follow it.</summary>

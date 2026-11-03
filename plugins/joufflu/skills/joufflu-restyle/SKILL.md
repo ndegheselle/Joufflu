@@ -68,12 +68,12 @@ Map by **role**, not by closest hue:
 |---|---|
 | Window/page background | Remove it (the `Window` style sets it) or `Brushes.Base0Brush` |
 | Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplayBase0Brush` |
-| Inset panel inside a card | `CardSecondary` / `Brushes.DisplayBorderBrush` |
+| Inset panel inside a card | `CardSecondary` / `Brushes.DisplayBorder0Brush` |
 | Background of a custom input / button | `Brushes.InputBase0Brush` / `Brushes.ActionBase0Brush` |
 | Hover of a row or custom clickable item | `Brushes.ActionInteractionBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
-| Borders, separators | The category's border: `Brushes.DisplayBorderBrush` (panels, separators; `DisplayElevatedBrush` for a border on a `DisplayBorderBrush` background), `InputBorderBrush` (`InputElevatedBrush` on focus), `ActionBorderBrush` (`ActionElevatedBrush` on hover, no focus border) |
+| Borders, separators | The category's border: `Brushes.DisplayBorder0Brush` (panels, separators; `DisplayBorder1Brush` for a border on a `DisplayBorder0Brush` background), `InputBorder0Brush` (`InputBorder1Brush` on focus), `ActionBorder0Brush` (`ActionBorder1Brush` on hover, no focus border) |
 | Brand / main action | `Brushes.PrimaryBrush`, text on it `PrimaryForegroundBrush` |
 | Green OK, blue info, orange warning, red error/delete | `Success*`, `Info*`, `Warning*`, `Danger*` |
 | Light tinted highlight | `Brushes.XSoftBrush` |

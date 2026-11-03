@@ -44,10 +44,10 @@
     <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:ThemedWindow}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.Base0Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="TitleBarForeground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <Setter Property="WindowButtonHighlightBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionInteractionBrush}}" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>

@@ -100,7 +100,7 @@ Keys are `ComponentResourceKey` statics (typos fail the build). Always `DynamicR
 ```xml
 <!-- A panel of your own is a display: same tokens as Card -->
 <Border Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
-        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+        BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
         BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}"
         Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
@@ -122,7 +122,7 @@ Use the brush in UI; the colour is for gradients and animations.
 | Display | `DisplayBase0`, `DisplayBase1` (colours) | Card, popup, tooltip, expander, group box, frame of a list/tree/grid/menu/tab control. `DisplayBase0` falls back to `Base1`; `DisplayBase1`, a contrast inside it (group box and data grid header), to `Base2` |
 | Input | `InputBase0`, `InputBase1` (colours) | Text box, combo box, check box, radio button, slider. `InputBase0` falls back to `Base1`; `InputBase1`, a contrast inside it, to `Base2` |
 | Action | `ActionBase0` (colour) | Button, toggle button. Falls back to `Base0` |
-| Every category | derived brushes | `XBorderBrush` (base 10 % toward `Foreground`: the border, and a part on the base: header, track, tag), `XElevatedBrush` (border 10 % further: a border on a `XBorder` background, the border of an interacted control), `XInteractionBrush` (base 10 %: the background of an interacted control) |
+| Every category | derived brushes | `XBorder0Brush` (base 10 % toward `Foreground`: the border, and a part on the base: header, track, tag), `XBorder1Brush` (border 10 % further: a border on a `XBorder0` background, the border of an interacted control), `XInteractionBrush` (base 10 %: the background of an interacted control) |
 | Text | `Foreground` | Default text and icons |
 | Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XForeground` (text/icons on the fill) as colours, and the brush `XInteractionBrush` (hover/pressed fill), `X` mixed 10 % toward `XForeground` |
 
@@ -131,19 +131,13 @@ category it belongs to. The category base is its only colour, and optional; a th
 out gets the global one through a `ColorFallback` (public, in `Joufflu`). A theme overrides one category alone:
 `<Color x:Key="{x:Static joufflu:Colors.InputBase0Color}">#FFFFFF</Color>`.
 
-State rules, the same for every control: an interaction turns the border to `XElevatedBrush` and the
+State rules, the same for every control: an interaction turns the border to `XBorder1Brush` and the
 background to `XInteractionBrush` (a part with no border at rest keeps none). A display has none of its
 own (`DisplayInteractionBrush` is for an app's informative hover); an input is interacted on focus, no
 hover; an action on hover, no focus border, and translates down when pressed (no colour); a grip
-(scroll bar thumb, grid splitter, slider thumb) turns `ActionElevatedBrush` hovered or dragged; the items of a
+(scroll bar thumb, grid splitter, slider thumb) turns `ActionBorder1Brush` hovered or dragged; the items of a
 display (rows, menu items, tabs, nav entries) are ghost actions (no fill at rest); disabled is
 `DisabledOpacity`; selected and checked are `Primary`. No theme defines a hover colour.
-
-Removed (breaking): `Stroke`, `Surface1`/`Surface2` (now `Base1`/`Base2`), `Base` (now `Base0`), the
-category `Surface1`/`Surface2`/`Border` colours (only `XBaseColor` remains), `XContent` (now
-`XForeground`), `XElevatedBrush` of an accent (now `XInteractionBrush`), `InputBorderElevatedBrush`
-(now `InputElevatedBrush`), `ActionBorderElevatedBrush` (now `ActionElevatedBrush`; the old
-`ActionElevatedBrush` hover is now `ActionInteractionBrush`).
 
 Also available, derived automatically from the accent colour (not per theme):
 `Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoftInteractionBrush`

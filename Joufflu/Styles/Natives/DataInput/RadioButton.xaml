@@ -11,7 +11,7 @@
     <Style x:Key="{x:Type RadioButton}" TargetType="RadioButton">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
         <Setter Property="Padding" Value="6,0,0,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -51,7 +51,7 @@
                             <Setter TargetName="InnerCircle" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}" />
+                            <Setter TargetName="OuterCircle" Property="Stroke" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

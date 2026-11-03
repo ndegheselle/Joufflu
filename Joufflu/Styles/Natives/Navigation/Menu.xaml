@@ -17,7 +17,7 @@
     <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
         <Setter Property="HasDropShadow" Value="True" />

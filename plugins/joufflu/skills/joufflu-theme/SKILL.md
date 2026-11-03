@@ -71,7 +71,7 @@ brush the theme defines.
 - **Bases**: `Base0` is the page and, by default, what an action (button) is filled with;
   `Base1` is a card and, by default, the base of displays and inputs; `Base2` a contrast inside a
   card, for the app's own layout. Borders, hover and focus are not colours you define: each
-  category derives its `Border` (base mixed 10 % toward `Foreground`), `Elevated` (border mixed
+  category derives its `Border0` (base mixed 10 % toward `Foreground`), `Border1` (border mixed
   10 % further) and `Interaction` (base mixed 10 %), so the direction is right in a light and in a
   dark theme.
 - **Categories (optional)**: the controls read three categories, whose base falls back to the

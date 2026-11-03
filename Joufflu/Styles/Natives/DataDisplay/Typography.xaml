@@ -26,6 +26,6 @@
     </Style>
 
     <Style TargetType="{x:Type Separator}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
     </Style>
 </ResourceDictionary>

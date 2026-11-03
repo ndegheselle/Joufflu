@@ -42,7 +42,7 @@
                                             ViewportUnits="Absolute">
                                             <DrawingBrush.Drawing>
                                                 <DrawingGroup>
-                                                    <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}">
+                                                    <GeometryDrawing Brush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}">
                                                         <GeometryDrawing.Geometry>
                                                             <GeometryGroup>
                                                                 <RectangleGeometry Rect="0,0,50,50" />
@@ -144,7 +144,7 @@
                         toolkit:DropTarget.Effect="Move">
                         <Border.Style>
                             <Style TargetType="Border" BasedOn="{StaticResource Card}">
-                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
                                 <Style.Triggers>
                                     <Trigger Property="toolkit:DropTarget.IsDragOver" Value="True">
                                         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" />

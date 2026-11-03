@@ -36,14 +36,14 @@ style (not hard-coded in the template), always with `DynamicResource`. Never the
 
 ```xml
 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}" />
-<Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+<Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder0Brush}}" />
 <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
 <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />  <!-- one-line inputs only -->
 ```
 
 The template's surface reads them from the control, with the input radius clamped to half the
 height like the native inputs (a part that sits on it, a tag or a track, takes
-`InputBorderBrush`). The height comes from the size, so the content takes only the horizontal
+`InputBorder0Brush`). The height comes from the size, so the content takes only the horizontal
 part of `Padding` and is centred:
 
 ```xml
@@ -100,7 +100,7 @@ after focus):
 
 ```xml
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

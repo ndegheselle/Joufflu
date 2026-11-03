@@ -17,7 +17,7 @@
         <Setter Property="toolkit:ThemedTooltip.IsPlaced" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeSm}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />

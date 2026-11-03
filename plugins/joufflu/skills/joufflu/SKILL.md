@@ -150,7 +150,7 @@ C# namespaces (these are the real ones; some doc snippets are off):
   derived `XInteraction`). Always `DynamicResource`, never `StaticResource`, for theme values.
 - **Neutrals by category**: a control of your own reads the brushes and shape of its category,
   not the global `Base0`/`Base1`/`Base2` (kept for an app's own layout). Every category has
-  `XBase|XBorder|XElevated|XInteraction`, an interaction turning the border to `XElevated` and the
+  `XBase|XBorder0|XBorder1|XInteraction`, an interaction turning the border to `XBorder1` and the
   background to `XInteraction`. Display (card, panel, popup): `Display*` +
   `Dimensions.DisplayRadius|DisplayThickness|DisplayPadding`, no interaction of its own. Input (takes a
   value): `Input*`, interacted on focus, no hover, + `InputRadius|InputThickness`. Action (runs

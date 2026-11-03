@@ -30,7 +30,7 @@
                         <TextBlock Text="Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list." TextWrapping="Wrap" />
                         <TextBlock
                             Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                            Text="DisplayBase0/Border/Elevated/InteractionBrush, DisplayRadius, DisplayThickness, DisplayPadding (DisplayPaddingSm when compact)."
+                            Text="DisplayBase0/Border0/Border1/InteractionBrush, DisplayRadius, DisplayThickness, DisplayPadding (DisplayPaddingSm when compact)."
                             TextWrapping="Wrap" />
                         <TextBlock Text="No interaction of its own (DisplayInteractionBrush is there for an informative hover). Its items (rows, entries) are actions without a fill at rest." TextWrapping="Wrap" />
                     </StackPanel>
@@ -41,9 +41,9 @@
                         <TextBlock Text="Takes a value: a text field, a picker, a rating, a check." TextWrapping="Wrap" />
                         <TextBlock
                             Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                            Text="InputBase0/Border/Elevated/InteractionBrush, InputRadius, InputThickness, InputPaddingXs..Lg, HeightXs..Lg."
+                            Text="InputBase0/Border0/Border1/InteractionBrush, InputRadius, InputThickness, InputPaddingXs..Lg, HeightXs..Lg."
                             TextWrapping="Wrap" />
-                        <TextBlock Text="No hover; on focus the border turns InputElevatedBrush and the background InputInteractionBrush. The example below builds one." TextWrapping="Wrap" />
+                        <TextBlock Text="No hover; on focus the border turns InputBorder1Brush and the background InputInteractionBrush. The example below builds one." TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource Card}">
@@ -52,9 +52,9 @@
                         <TextBlock Text="Runs something: a button, a toggle, an item of a display." TextWrapping="Wrap" />
                         <TextBlock
                             Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                            Text="ActionBase0/Border/Elevated/InteractionBrush, ActionRadius, ActionThickness, ActionPaddingXs..Lg, HeightXs..Lg."
+                            Text="ActionBase0/Border0/Border1/InteractionBrush, ActionRadius, ActionThickness, ActionPaddingXs..Lg, HeightXs..Lg."
                             TextWrapping="Wrap" />
-                        <TextBlock Text="On hover the border turns ActionElevatedBrush and the background ActionInteractionBrush, moved down when pressed, no focus border." TextWrapping="Wrap" />
+                        <TextBlock Text="On hover the border turns ActionBorder1Brush and the background ActionInteractionBrush, moved down when pressed, no focus border." TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
             </UniformGrid>

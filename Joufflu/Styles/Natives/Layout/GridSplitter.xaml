@@ -5,14 +5,14 @@
 
     <!--  A grip, as a scroll bar thumb: a separator at rest, strong while hovered or dragged.  -->
     <Style x:Key="{x:Type GridSplitter}" TargetType="GridSplitter">
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorder1Brush}}" />
             </Trigger>
             <Trigger Property="IsDragging" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorder1Brush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

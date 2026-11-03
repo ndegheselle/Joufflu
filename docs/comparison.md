@@ -55,8 +55,8 @@ this page does not track their releases.
 
 Be honest about the trade-offs:
 
-- **It is young and has a single maintainer.** Expect API changes between 0.x versions
-  (see the changelog), and a smaller community than the long-established libraries.
+- **It is young and has a single maintainer.** Expect API changes between 0.x versions,
+  and a smaller community than the long-established libraries.
 - **It targets `net10.0-windows` only.** Older .NET Framework and earlier .NET versions
   are not supported.
 - **It has its own look.** Tokens let you re-colour and re-proportion it, but it does

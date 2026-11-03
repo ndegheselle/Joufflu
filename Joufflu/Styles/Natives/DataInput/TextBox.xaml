@@ -59,7 +59,7 @@
     <Style x:Key="TextBoxDefaultStyle" TargetType="Control">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBase0Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.InputThickness}}" />
         <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static joufflu:Dimensions.FontSizeMd}}" />
@@ -89,9 +89,10 @@
 
                         <ScrollViewer
                             x:Name="PART_ContentHost"
-                            Margin="{TemplateBinding Padding, Converter={StaticResource HorizontalThicknessConverter}}"
+                            Margin="{TemplateBinding Padding,
+                                                     Converter={StaticResource HorizontalThicknessConverter}}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="Stretch"
                             Template="{StaticResource TextBoxScrollViewerTemplate}" />
                     </Border>
 
@@ -108,7 +109,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

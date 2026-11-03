@@ -25,7 +25,7 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
      dimension, has to reach controls already on screen. -->
 <Border
     Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
-    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
 
@@ -65,11 +65,11 @@ is right in a light and in a dark theme and no theme defines them.
 | Brush | Used for |
 |---|---|
 | `XBase` | The background. |
-| `XBorder` | The base mixed 10% toward `Foreground`: the border, and the parts that sit on the base (a header, a track, a tag). |
-| `XElevated` | The border mixed 10% toward `Foreground`: a border that must stand out from a `XBorder` background (the border of a `CardSecondary`), and the border of an interacted control. |
+| `XBorder0` | The base mixed 10% toward `Foreground`: the border, and the parts that sit on the base (a header, a track, a tag). |
+| `XBorder1` | The border mixed 10% toward `Foreground`: a border that must stand out from a `XBorder0` background (the border of a `CardSecondary`), and the border of an interacted control. |
 | `XInteraction` | The base mixed 10% toward `Foreground`: the background of an interacted control. |
 
-An interaction turns the border to `XElevated` and the background to `XInteraction`. A part with no
+An interaction turns the border to `XBorder1` and the background to `XInteraction`. A part with no
 border at rest (a row, a menu item, a ghost button) keeps none. Disabled is `DisabledOpacity`, selected
 and checked are the primary.
 
@@ -77,7 +77,7 @@ and checked are the primary.
 |---|---|---|---|
 | **Display** | `DisplayBase0` (`Base1`), `DisplayBase1` (`Base2`) | Card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. Its items (rows, menu items, tabs, navigation entries) are actions without a fill at rest. `DisplayBase1` is a contrast inside it (the header of a group box or a data grid), its own colour, not derived. | None of its own: `DisplayInteraction` is there for an app's informative hover. |
 | **Input** | `InputBase0` (`Base1`), `InputBase1` (`Base2`) | Text box, combo box, check box, radio button, slider. `InputBase1` is a contrast inside it, its own colour, not derived. | On focus. No hover. |
-| **Action** | `ActionBase0` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionElevated` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
+| **Action** | `ActionBase0` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionBorder1` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
 
 A theme overrides a category by defining its base, for example inputs set apart from the cards, with
 their border, elevated and interaction brushes following:

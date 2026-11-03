@@ -65,33 +65,33 @@ public static class Brushes
 
     // Every category has the same four, derived from its base:
     // - Base0: the background.
-    // - Border: the border, and the parts that sit on the base (a header, a track, a tag).
-    // - Elevated: derived from Border, a border that must stand out from a Border background, and the border of an
+    // - Border0: the border, and the parts that sit on the base (a header, a track, a tag).
+    // - Border1: derived from Border0, a border that must stand out from a Border0 background, and the border of an
     //   interacted control.
     // - Interaction: the background of an interacted control.
-    // An interaction (an action hovered, an input focused) turns the border to Elevated and the background to Interaction.
+    // An interaction (an action hovered, an input focused) turns the border to Border1 and the background to Interaction.
 
     // Display: no interaction of its own, Interaction is there for an app's informative hover.
     public static ComponentResourceKey DisplayBase0Brush => new ComponentResourceKey(typeof(Brushes), "DisplayBase0Brush");
     // A contrast inside a display (Base2 by default), not derived from Base0 and with no brushes of its own.
     public static ComponentResourceKey DisplayBase1Brush => new ComponentResourceKey(typeof(Brushes), "DisplayBase1Brush");
-    public static ComponentResourceKey DisplayBorderBrush => new ComponentResourceKey(typeof(Brushes), "DisplayBorderBrush");
-    public static ComponentResourceKey DisplayElevatedBrush => new ComponentResourceKey(typeof(Brushes), "DisplayElevatedBrush");
+    public static ComponentResourceKey DisplayBorder0Brush => new ComponentResourceKey(typeof(Brushes), "DisplayBorder0Brush");
+    public static ComponentResourceKey DisplayBorder1Brush => new ComponentResourceKey(typeof(Brushes), "DisplayBorder1Brush");
     public static ComponentResourceKey DisplayInteractionBrush => new ComponentResourceKey(typeof(Brushes), "DisplayInteractionBrush");
 
     // Input: interacted when focused.
     public static ComponentResourceKey InputBase0Brush => new ComponentResourceKey(typeof(Brushes), "InputBase0Brush");
     // A contrast inside an input (Base2 by default), not derived from Base0 and with no brushes of its own.
     public static ComponentResourceKey InputBase1Brush => new ComponentResourceKey(typeof(Brushes), "InputBase1Brush");
-    public static ComponentResourceKey InputBorderBrush => new ComponentResourceKey(typeof(Brushes), "InputBorderBrush");
-    public static ComponentResourceKey InputElevatedBrush => new ComponentResourceKey(typeof(Brushes), "InputElevatedBrush");
+    public static ComponentResourceKey InputBorder0Brush => new ComponentResourceKey(typeof(Brushes), "InputBorder0Brush");
+    public static ComponentResourceKey InputBorder1Brush => new ComponentResourceKey(typeof(Brushes), "InputBorder1Brush");
     public static ComponentResourceKey InputInteractionBrush => new ComponentResourceKey(typeof(Brushes), "InputInteractionBrush");
 
     // Action: interacted when hovered, a translation when pressed. A grip (a scroll bar thumb, a grid splitter, a
-    // slider thumb) is drawn with Border and turns Elevated when hovered or dragged.
+    // slider thumb) is drawn with Border0 and turns Border1 when hovered or dragged.
     public static ComponentResourceKey ActionBase0Brush => new ComponentResourceKey(typeof(Brushes), "ActionBase0Brush");
-    public static ComponentResourceKey ActionBorderBrush => new ComponentResourceKey(typeof(Brushes), "ActionBorderBrush");
-    public static ComponentResourceKey ActionElevatedBrush => new ComponentResourceKey(typeof(Brushes), "ActionElevatedBrush");
+    public static ComponentResourceKey ActionBorder0Brush => new ComponentResourceKey(typeof(Brushes), "ActionBorder0Brush");
+    public static ComponentResourceKey ActionBorder1Brush => new ComponentResourceKey(typeof(Brushes), "ActionBorder1Brush");
     public static ComponentResourceKey ActionInteractionBrush => new ComponentResourceKey(typeof(Brushes), "ActionInteractionBrush");
 
     // Primary

@@ -48,7 +48,7 @@
                 <Border
                     Height="80"
                     Background="{DynamicResource {x:Static joufflu:Brushes.Base1Brush}}"
-                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                    BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
                     BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.Thickness}}"
                     CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.Radius}}">
                     <TextBlock

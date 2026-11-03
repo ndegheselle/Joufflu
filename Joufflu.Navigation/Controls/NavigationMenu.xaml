@@ -150,7 +150,7 @@
                             Padding="8,0,0,0"
                             toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
                             toolkit:Derive.BorderThicknessFactor="1,0,0,0"
-                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
                             Visibility="Collapsed">
                             <ItemsPresenter />
                         </Border>
@@ -168,7 +168,7 @@
                             <Setter TargetName="ChildrenHost" Property="Padding" Value="0" />
                             <Setter TargetName="ChildrenHost" Property="toolkit:Derive.BorderThicknessFactor" Value="0" />
                             <!--  Collapsed: no indent to show nesting, so shade the children to keep them visually grouped  -->
-                            <Setter TargetName="ChildrenHost" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+                            <Setter TargetName="ChildrenHost" Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
                             <Setter TargetName="ChildrenHost" Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />
                             <Setter TargetName="HeaderButton" Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
                             <Setter TargetName="HeaderButton" Property="HorizontalContentAlignment" Value="Center" />
@@ -185,26 +185,28 @@
 
     <!--  ============================ NavigationTitle ============================  -->
     <Style TargetType="{x:Type nav:NavigationTitle}">
+        <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nav:NavigationTitle}">
-                    <Grid Margin="0,12,0,4">
+                    <Grid Margin="{TemplateBinding Padding}">
                         <ContentPresenter
                             x:Name="TitleText"
-                            TextBlock.FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}"
-                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                            TextBlock.FontSize="{DynamicResource {x:Static joufflu:Dimensions.FontSizeXs}}" />
 
                         <Border
                             x:Name="TitleLine"
                             VerticalAlignment="Center"
                             toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
                             toolkit:Derive.BorderThicknessFactor="0,1,0,0"
-                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
                             Visibility="Collapsed" />
                     </Grid>
 
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsCollapsed, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}" Value="True">
+                            <Setter Property="Padding" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}" />
                             <Setter TargetName="TitleText" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="TitleLine" Property="Visibility" Value="Visible" />
                         </DataTrigger>
@@ -218,7 +220,7 @@
     <Style TargetType="{x:Type nav:NavigationMenu}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
         <!--  Right edge only: the menu just separates itself from the content beside it.  -->
         <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayThickness}" />
         <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />

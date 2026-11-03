@@ -49,7 +49,7 @@
 
     <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBase0Brush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorderBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.ActionThickness}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -79,7 +79,7 @@
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.ActionInteractionBrush}}" />
             </Trigger>
             <Trigger Property="IsDragging" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorder1Brush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -151,7 +151,7 @@
 
         <ControlTemplate.Triggers>
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorder1Brush}}" />
             </Trigger>
             <Trigger Property="TickPlacement" Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
@@ -233,7 +233,7 @@
 
         <ControlTemplate.Triggers>
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionElevatedBrush}}" />
+                <Setter TargetName="Thumb" Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.ActionBorder1Brush}}" />
             </Trigger>
             <Trigger Property="TickPlacement" Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
@@ -250,8 +250,8 @@
 
     <Style x:Key="{x:Type Slider}" TargetType="Slider">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorderBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder0Brush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder0Brush}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="16" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />

@@ -49,9 +49,8 @@ Prefer Joufflu over hand-written styles, templates and dialogs whenever the task
 - Small related types (navigation, feedback) live together in one file.
 - When the public API changes, in the same commit: update the page in `docs/`, the
   matching entry in `docs/llms.txt`, `plugins/joufflu/skills/joufflu/references/*.md`,
-  regenerate `docs/llms-full.txt` (`pwsh docs/build-llms-full.ps1`), bump the plugin
-  `version` in `plugins/joufflu/.claude-plugin/plugin.json`, and add an entry under the
-  package's *unreleased* heading in `changelog.md`.
+  regenerate `docs/llms-full.txt` (`pwsh docs/build-llms-full.ps1`) and bump the plugin
+  `version` in `plugins/joufflu/.claude-plugin/plugin.json`.
 - `.github/workflows/tests.yml` builds the solution and runs every test project on each push
   and pull request (WPF only builds on Windows). Packages are published by the other workflows
   in `.github/workflows`; see `publishing.md`.

@@ -9,8 +9,8 @@
     <Color x:Key="{x:Static joufflu:Colors.ForegroundColor}">#18181B</Color>
 
     <!--  Background  -->
-    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#FFFFFF</Color>
-    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#F8F8F8</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base0Color}">#F8F8F8</Color>
+    <Color x:Key="{x:Static joufflu:Colors.Base1Color}">#FFFFFF</Color>
     <Color x:Key="{x:Static joufflu:Colors.Base2Color}">#EEEEEE</Color>
 
     <!--  Primary: zinc-900 background, white content  -->

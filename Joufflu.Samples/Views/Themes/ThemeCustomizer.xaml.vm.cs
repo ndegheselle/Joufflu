@@ -708,11 +708,11 @@ public class ThemeCustomizerViewModel : ObservableObject
             else
                 res.Remove(category.Base0.Key);
 
-            (ComponentResourceKey baseKey, ComponentResourceKey borderKey, ComponentResourceKey elevatedKey, ComponentResourceKey interactionKey) = CategoryBrushKeys(category.Name);
+            (ComponentResourceKey baseKey, ComponentResourceKey border0Key, ComponentResourceKey border1Key, ComponentResourceKey interactionKey) = CategoryBrushKeys(category.Name);
             Color border = ColorShade.Mix(values.Base0, foreground, 0.1);
             res[baseKey] = new SolidColorBrush(values.Base0);
-            res[borderKey] = new SolidColorBrush(border);
-            res[elevatedKey] = new SolidColorBrush(ColorShade.Mix(border, foreground, 0.1));
+            res[border0Key] = new SolidColorBrush(border);
+            res[border1Key] = new SolidColorBrush(ColorShade.Mix(border, foreground, 0.1));
             res[interactionKey] = new SolidColorBrush(ColorShade.Mix(values.Base0, foreground, 0.1));
 
             // The contrast of a display or an input, its own colour rather than derived from Base0.
@@ -825,10 +825,10 @@ public class ThemeCustomizerViewModel : ObservableObject
             }
             foreach (ThemeCategoryEditor category in Categories)
             {
-                (ComponentResourceKey baseKey, ComponentResourceKey borderKey, ComponentResourceKey elevatedKey, ComponentResourceKey interactionKey) = CategoryBrushKeys(category.Name);
+                (ComponentResourceKey baseKey, ComponentResourceKey border0Key, ComponentResourceKey border1Key, ComponentResourceKey interactionKey) = CategoryBrushKeys(category.Name);
                 res.Remove(baseKey);
-                res.Remove(borderKey);
-                res.Remove(elevatedKey);
+                res.Remove(border0Key);
+                res.Remove(border1Key);
                 res.Remove(interactionKey);
             }
             foreach (var key in AllDimensionKeys())
@@ -967,11 +967,11 @@ public class ThemeCustomizerViewModel : ObservableObject
         _ => throw new ArgumentOutOfRangeException(nameof(category), category, "Unknown category"),
     };
 
-    private static (ComponentResourceKey Base, ComponentResourceKey Border, ComponentResourceKey Elevated, ComponentResourceKey Interaction) CategoryBrushKeys(string category) => category switch
+    private static (ComponentResourceKey Base, ComponentResourceKey Border0, ComponentResourceKey Border1, ComponentResourceKey Interaction) CategoryBrushKeys(string category) => category switch
     {
-        "Display" => (JBrushes.DisplayBase0Brush, JBrushes.DisplayBorderBrush, JBrushes.DisplayElevatedBrush, JBrushes.DisplayInteractionBrush),
-        "Input" => (JBrushes.InputBase0Brush, JBrushes.InputBorderBrush, JBrushes.InputElevatedBrush, JBrushes.InputInteractionBrush),
-        "Action" => (JBrushes.ActionBase0Brush, JBrushes.ActionBorderBrush, JBrushes.ActionElevatedBrush, JBrushes.ActionInteractionBrush),
+        "Display" => (JBrushes.DisplayBase0Brush, JBrushes.DisplayBorder0Brush, JBrushes.DisplayBorder1Brush, JBrushes.DisplayInteractionBrush),
+        "Input" => (JBrushes.InputBase0Brush, JBrushes.InputBorder0Brush, JBrushes.InputBorder1Brush, JBrushes.InputInteractionBrush),
+        "Action" => (JBrushes.ActionBase0Brush, JBrushes.ActionBorder0Brush, JBrushes.ActionBorder1Brush, JBrushes.ActionInteractionBrush),
         _ => throw new ArgumentOutOfRangeException(nameof(category), category, "Unknown category"),
     };
 
