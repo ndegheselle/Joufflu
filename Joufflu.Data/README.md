@@ -3,6 +3,7 @@
 **JSON values as themed trees for [Joufflu](https://www.nuget.org/packages/Joufflu).**
 
 Fill a value in against a JSON Schema, or build one from scratch, instead of typing raw JSON.
+Show one read only, even a file of millions of nodes.
 
 [![Joufflu.Data on NuGet](https://img.shields.io/nuget/v/Joufflu.Data?label=Joufflu.Data&logo=nuget)](https://www.nuget.org/packages/Joufflu.Data)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/ndegheselle/Joufflu/blob/main/LICENSE)
@@ -18,6 +19,7 @@ Fill a value in against a JSON Schema, or build one from scratch, instead of typ
 | `ToDataNode()` | Builds the tree of an [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) `JsonSchema`. |
 | `ToJsonSchema()` | Builds the `JsonSchema` of a tree, the reverse of `ToDataNode()`. |
 | `Load()` | Fills a tree with a JSON value, the reverse of `ToToken()`. |
+| `ReadDataNode()` | Reads a tree straight from a `JsonReader`, for large files. |
 | `DataManualValue` | A value a field can be forced to instead of its editor. |
 
 ## Getting started

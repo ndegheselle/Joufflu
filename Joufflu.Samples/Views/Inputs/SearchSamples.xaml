@@ -18,7 +18,7 @@
             <c:CodeExample
                 Title="Search"
                 Code="{Binding SearchCode}"
-                Description="A text box with a built-in delay before it raises SearchChanged, to limit calls to an API or database. Escape clears it.">
+                Description="A text box that waits for typing to settle (300 ms) before reporting the search, to limit calls to an API or database. Escape clears it.">
                 <StackPanel toolkit:Spacing.Gap="4">
                     <inputs:Search toolkit:Sizing.Size="xs" />
                     <inputs:Search toolkit:Sizing.Size="sm" />

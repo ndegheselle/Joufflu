@@ -27,7 +27,6 @@ xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu
 xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
 ```
 
 ## Sources

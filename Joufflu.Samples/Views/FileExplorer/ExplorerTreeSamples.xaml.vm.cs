@@ -8,7 +8,7 @@ namespace Joufflu.Samples.Views.FileExplorer;
 
 public class ExplorerTreeSamplesViewModel : ObservableObject
 {
-    /// <summary>Source driving the tree, with a navigation and history of its own.</summary>
+    /// <summary>Source driving the tree, with a navigation of its own.</summary>
     public IExplorerSource Source { get; private set; }
 
     public string ExplorerTreeCode =>

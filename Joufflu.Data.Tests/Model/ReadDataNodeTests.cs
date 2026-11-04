@@ -46,4 +46,10 @@ public class ReadDataNodeTests
 
         Assert.That(node.ToToken()!.ToString(Formatting.None), Is.EqualTo("[1,2]"));
     }
+
+    [Test]
+    public void A_reader_with_no_value_is_refused()
+    {
+        Assert.Throws<JsonReaderException>(() => Read("  // only a comment"));
+    }
 }

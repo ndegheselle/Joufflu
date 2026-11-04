@@ -30,7 +30,8 @@ orientation, `WrapPanel` and `Grid` on both axes. `"8"` is uniform, `"8,12"` is
 ```
 
 ⚠️ Implemented with child margins: a `Margin` set directly on a child is overwritten while
-the gap is active. Put extra space on a wrapper instead.
+the gap is active. Put extra space on a wrapper instead. A `WrapPanel` gives every child the
+gap after it, so it keeps one trailing gap on its right and bottom edges.
 
 ## Tooltip
 
@@ -52,6 +53,8 @@ Every native `ToolTip` is themed: its style centres it on a side of the element 
 `ThemedTooltip.Placement` (on the element): `Top`, `Bottom` (default), `Left`, `Right`.
 `ThemedTooltip.MaxWidth` (on the element): width past which the text wraps, `320` by default.
 `ToolTipService.Placement` is overridden by the style; the show delay is the native one.
+A `ToolTip` style of your own keeps the placement if it is `BasedOn="{StaticResource {x:Type ToolTip}}"`
+or sets `toolkit:ThemedTooltip.IsPlaced="True"`.
 
 ## Drag and drop
 
@@ -138,7 +141,8 @@ builds it on the element from a live `DynamicResource` (a `Thickness`, a `Corner
 
 Point it at the key of the element's category (`DisplayRadius`, `InputRadius`, `ActionRadius`,
 `DisplayThickness`…) so it follows a theme reshaping that category. The value is the
-resource **key** (`{x:Static …}`), not a `DynamicResource`. It is written
+resource **key** (`{x:Static …}`), not a `DynamicResource`; a `Thickness`/`CornerRadius`/`double`
+value is taken as is (`Derive.Margin="{TemplateBinding Padding}"` in a template). It is written
 with `SetCurrentValue`, which beats style setters and local values: don't also set the fed
 property in the same style, move triggers onto the `Derive` property, and don't use it for
 properties consumers must override. `BorderThickness` works on `Border` and any `Control`,
@@ -186,7 +190,8 @@ one element and compose with an existing `RenderTransform`. Both pause while hid
 
 ## Converters (`Joufflu.Converters`, prefix `conv:`)
 
-Declare them in resources yourself; none are registered under a key by the library.
+Declare them in your own resources (or use the `Default` instance where there is one): the keys
+Joufflu's own dictionaries declare are not part of its API.
 
 | Converter | Behaviour |
 |---|---|
@@ -196,6 +201,8 @@ Declare them in resources yourself; none are registered under a key by the libra
 | `VisibilityConverter` (`VisibilityConverter.Default`) | Same truthiness as `BooleanConverter` → `Visible`/`Collapsed`; `ConverterParameter=False` inverts |
 | `EnumMatchToBooleanConverter` | `value.Equals(parameter)`; two-way for `RadioButton` groups bound to one enum/string |
 | `TypeConverter` | Value → its `Type` (for `DataTrigger Value="{x:Type …}"`) |
+| `HorizontalThicknessConverter` (`HorizontalThicknessConverter.Default`) | `Thickness` → its left/right only (content of a one-line input) |
+| `MaxCornerRadiusConverter` (multi) | Radius, width, height → the radius clamped to half the smaller side (input/button surfaces) |
 
 ```xml
 <conv:EnumMatchToBooleanConverter x:Key="EnumMatch" />

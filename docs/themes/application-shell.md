@@ -32,6 +32,11 @@ buttons.
 </controls:ThemedWindow>
 ```
 
+The bar takes its colours from the theme: `TitleBarBackground` (`DisplayBorder0Brush`,
+transparent with `AllowContentOverTitleBar`), `TitleBarForeground` (`ForegroundBrush`)
+and `WindowButtonHighlightBrush`, the hover of the minimize and maximize buttons
+(`ActionInteractionBrush`). Set them on the window to recolour it.
+
 ### AppIcon
 
 The title bar shows no icon by default. Add an `AppIcon` to

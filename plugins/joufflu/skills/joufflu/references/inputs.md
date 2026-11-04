@@ -65,6 +65,8 @@ between groups, arrows up/down increment.
   `PromptChar` (default `-`), `SelectsWhole` (default `true`; `false` keeps a caret in the group).
 - From code: `box.Parts.Add(new IntegerGroup { Max = 59 });`
 - Values: `Values` (list, one per group), `ValuesChanged` event.
+- `ShowDeleteButton="False"` / `ShowIncrementsButtons="False"` hide the clear / spin buttons
+  (plain properties: set them, don't bind or style them).
 
 ## Search
 
@@ -81,7 +83,9 @@ Code-behind: `search.SearchChanged += text => Filter(text);`, `search.ClearSearc
 ## ComboBoxSearch
 
 Editable `ComboBox` filtering its items as you type, on `DisplayMemberPath` (or
-`ToString()`). The chevron or <kbd>Up</kbd>/<kbd>Down</kbd> open the full list.
+`ToString()`). The chevron or <kbd>Up</kbd>/<kbd>Down</kbd> open the full list;
+<kbd>Escape</kbd> closes it and clears the selection. Text matching no item is cleared when
+the focus leaves.
 
 ```xml
 <inputs:ComboBoxSearch ItemsSource="{Binding Countries}"
@@ -112,7 +116,9 @@ Shows a value that turns into a text box on demand (inline rename, outside a for
 <inputs:TextEditable Text="{Binding Name, Mode=TwoWay}" />
 ```
 
-`TextChanged` event carries `Text` and `OldText`.
+Double click or the pencil button edits; <kbd>Enter</kbd> or the check commits,
+<kbd>Escape</kbd> or the cross cancels. `TextChanged` event (on commit) carries `Text`
+and `OldText`.
 
 ## FilePicker
 
@@ -120,13 +126,18 @@ Shows a value that turns into a text box on demand (inline rename, outside a for
 <inputs:FilePicker FilePath="{Binding FilePath, Mode=TwoWay}" />
 ```
 
-`Options` takes a `FilePickerOptions` (`Filter`, e.g. `"PDF|*.pdf"`, and
-`DefaultExtension`), set from code or a resource.
+Picks a file only (no folder). The path can also be typed. `Options` takes a
+`FilePickerOptions` (`Filter`, e.g. `"PDF|*.pdf"`, and `DefaultExtension`), set from
+code, a resource or a binding:
+
+```xml
+<inputs:FilePicker FilePath="{Binding FilePath}" Options="{Binding JsonFileOptions}" />
+```
 
 ## ColorPicker
 
 Hex field plus a popup (saturation/brightness square, hue slider, alpha slider, opacity %).
-`#RRGGBB` keeps the opacity, a pasted `#AARRGGBB` sets it too.
+`#RRGGBB` (or a colour name) keeps the opacity, a pasted `#AARRGGBB` sets it too.
 
 ```xml
 <inputs:ColorPicker Color="{Binding Color, Mode=TwoWay}" />
@@ -161,7 +172,7 @@ stays a plain `ToggleButton` you style freely.
 | `Dropdown.HorizontalOffset` | 0 | Extra horizontal offset |
 | `Dropdown.VerticalOffset` | 2 | Extra vertical offset (small gap from the button) |
 | `Dropdown.CloseOnClick` | false | Close when a `ButtonBase` inside is clicked (also CheckBox/RadioButton!) |
-| `Dropdown.PopupStyle` | null | Style for `inputs:DropdownPopupHost` (padding defaults to 0) |
+| `Dropdown.PopupStyle` | null | Style for `inputs:DropdownPopupHost`: `Padding` (default `DisplayPaddingSm`), `Foreground` or `Template`; background, border and radius come from the theme tokens, not from its properties |
 
 ```xml
 <inputs:Dropdown.PopupStyle>

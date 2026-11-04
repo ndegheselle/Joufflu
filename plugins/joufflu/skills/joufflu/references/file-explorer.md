@@ -125,6 +125,7 @@ you key one on its type (multi-selection and empty-area menus are keyed on `obje
 </fileExplorer:Explorer>
 ```
 
-In a shared `ExtraColumns` cell, show type-specific content with a `DataTrigger` on
-`{Binding Converter={StaticResource NodeTypeConverter}}` (`conv:TypeConverter`) against
-`{x:Type local:VirtualFile}`.
+An `ExtraColumns` column is shared by every row: for a cell bound to a property only a custom
+node type has, pick the template by node type with a `DataTemplateSelector` on
+`CellTemplateSelector` (an empty `DataTemplate` for the other rows), so the binding never runs
+on nodes lacking the property.

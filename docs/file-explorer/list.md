@@ -18,7 +18,8 @@ menu.
 ```
 
 `SelectedNodes` is read-only: bind it `OneWay`, for a status bar counting the
-selection say. `View` gives the sorted and filtered nodes as the list displays them.
+selection for instance. `View` gives the sorted and filtered nodes as the list
+displays them.
 
 ## Extra columns
 

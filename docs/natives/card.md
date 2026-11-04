@@ -45,6 +45,6 @@ fill, the part of a display that sits on its base, so it reads as a distinct are
 ```
 
 {: .note }
-> Both styles read the display tokens (see [Design tokens](../themes/tokens.html)), so
+> Both styles read the display tokens (see [Design tokens](../themes/tokens.md)), so
 > they follow Light / Dark and any custom theme automatically, and a theme restyles every
 > card by overriding the `Display*` colours or dimensions.

@@ -10,7 +10,7 @@
 
     <!--
         Soft/outline tints live in Styles/Brushes.xaml so the rest of the library can reach them. Every variant keeps
-        the action border thickness with a transparent border at rest and on hover, so it is the size of the other actions; hover
+        the action border thickness, transparent where it shows no border, so it is the size of the other actions; hover
         is the variant's own, pressed and disabled the base style's.
     -->
 

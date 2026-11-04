@@ -17,7 +17,7 @@ namespace Joufflu.Inputs.Controls
         private const string PartSaturationArea = "PART_SaturationArea";
         private const string PartSaturationSelector = "PART_SaturationSelector";
 
-        // Every edit goes to the model, then the model is shown back : the guard keeps showing it from counting as
+        // Every edit goes to the model, then the model is shown back: the guard keeps showing it from counting as
         // an edit.
         private readonly ColorModel _model = new();
         private bool _isShowingModel;
@@ -279,7 +279,7 @@ namespace Joufflu.Inputs.Controls
         #endregion
 
         /// <summary>
-        /// Shows the model in every property : the colour, its hex, HSB and alpha, and the brushes previewing it.
+        /// Shows the model in every property: the colour, its hex, HSB and alpha, and the brushes previewing it.
         /// </summary>
         private void ShowModel()
         {

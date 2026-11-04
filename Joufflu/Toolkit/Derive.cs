@@ -22,9 +22,9 @@ namespace Joufflu.Toolkit;
 /// A border rounded on its top corners only, drawn on every side but the bottom:
 /// <code>
 /// &lt;Border
-///     toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.Thickness}"
+///     toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
 ///     toolkit:Derive.BorderThicknessFactor="1,1,1,0"
-///     toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.Radius}"
+///     toolkit:Derive.CornerRadius="{x:Static joufflu:Dimensions.DisplayRadius}"
 ///     toolkit:Derive.CornerRadiusFactor="1,1,0,0" /&gt;
 /// </code>
 /// </example>

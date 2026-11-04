@@ -9,9 +9,10 @@ nav_order: 1
 
 ## Collapsible side menu
 
-The collapsible side menu plugged into its own `Navigator`. The chevron collapses
-it to an icons-only rail. A `NavigationGroup` displays like an item but expands to
-reveal children, and groups can nest.
+The collapsible side menu plugged into its own `Navigator`. The collapse button
+folds it to an icons-only rail. A `NavigationGroup` displays like an item but expands
+to reveal children, and groups can nest. A `NavigationTitle` labels a section and
+turns into a separator line once collapsed.
 
 When collapsed, each item and group hides its label and surfaces it as a
 right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
@@ -27,7 +28,10 @@ button and the items stay clickable. The `Header` is therefore not interactive.
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}">
     <!-- Optional header slot, hidden when collapsed -->
     <nav:NavigationMenu.Header>
-        <TextBlock FontWeight="SemiBold" Text="My app" />
+        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
+            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Rocket}" />
+            <TextBlock Text="My app" />
+        </StackPanel>
     </nav:NavigationMenu.Header>
     <nav:NavigationTitle>Demo</nav:NavigationTitle>
     <!-- An item targets the type of the page it navigates to -->

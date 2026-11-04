@@ -15,7 +15,7 @@ public sealed record TokenGroup(string Title, string Description, IReadOnlyList<
 
 /// <summary>
 /// One accent family, the keys it is made of shown side by side rather than described: the fill, the
-/// hover and pressed fill, the foreground drawn on top of both, then the soft tint and its hover.
+/// hover fill, the foreground drawn on top of both, then the soft tint and its hover.
 /// </summary>
 public sealed record AccentEntry(
     string Name,

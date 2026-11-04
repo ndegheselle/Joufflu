@@ -10,7 +10,10 @@ using CommunityToolkit.Mvvm.Input;
 namespace Joufflu.Inputs.Controls
 {
     /// <summary>
-    /// Inspired from : https://stackoverflow.com/a/41986141/10404482 
+    /// An editable <see cref="ComboBox"/> that filters its items as the user types, on the text
+    /// <see cref="ItemsControl.DisplayMemberPath"/> shows for each item. Text matching no item is
+    /// cleared when the focus leaves, so the box never shows a value that is not selected.
+    /// <para>Inspired from https://stackoverflow.com/a/41986141/10404482.</para>
     /// </summary>
     public partial class ComboBoxSearch : ComboBox
     {
@@ -33,7 +36,6 @@ namespace Joufflu.Inputs.Controls
 
         public ComboBoxSearch()
         {
-            // Set default options
             IsEditable = true;
             StaysOpenOnEdit = true;
             IsTextSearchEnabled = false;
@@ -153,7 +155,7 @@ namespace Joufflu.Inputs.Controls
             {
                 IsDropDownOpen = true;
 
-                // HACK : prevent the default behavior of the combobox to select all the text when the dropdown is opened
+                // HACK: prevent the default behavior of the combobox to select all the text when the dropdown is opened
                 if (_editableTextBox != null)
                     _editableTextBox.SelectionStart = _editableTextBox.Text.Length;
             }
@@ -173,7 +175,7 @@ namespace Joufflu.Inputs.Controls
 
         protected override void OnDropDownOpened(EventArgs e)
         {
-            // Opened through the chevron (or the arrow keys) rather than by typing : the text is
+            // Opened through the chevron (or the arrow keys) rather than by typing: the text is
             // then the item that is selected, not a search, so the whole list has to be shown back
             // instead of the single item the previous filter left.
             RefreshFilter(true);
@@ -185,7 +187,7 @@ namespace Joufflu.Inputs.Controls
         {
             if (_editableTextBox != null)
             {
-                // Show italic text if no item is selected
+                // Italic marks a search in progress, upright text a picked item.
                 if (SelectedItem != null)
                 {
                     Text = TextOf(SelectedItem);
@@ -222,7 +224,6 @@ namespace Joufflu.Inputs.Controls
             if (ItemsSource == null)
                 return;
 
-            // Prevent unnecessary refresh if the text has not changed
             if (!force && _previousRefreshText == Text)
                 return;
             _previousRefreshText = Text;

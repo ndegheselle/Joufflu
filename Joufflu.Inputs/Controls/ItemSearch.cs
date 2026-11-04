@@ -10,7 +10,7 @@ namespace Joufflu.Inputs.Controls
     internal static class ItemSearch
     {
         /// <summary>
-        /// The text [item] shows : the value at [displayMemberPath], dotted paths such as <c>Address.City</c>
+        /// The text [item] shows: the value at [displayMemberPath], dotted paths such as <c>Address.City</c>
         /// included, or the item itself when there is no path.
         /// </summary>
         public static string TextOf(object? item, string? displayMemberPath)
@@ -43,7 +43,7 @@ namespace Joufflu.Inputs.Controls
                 return false;
             if (string.IsNullOrEmpty(search))
                 return true;
-            // Text left by a selection is not something the user searched for : the list stays whole so that the
+            // Text left by a selection is not something the user searched for: the list stays whole so that the
             // other choices remain reachable once an item has been picked.
             if (selectedItem is not null && search == TextOf(selectedItem, displayMemberPath))
                 return true;

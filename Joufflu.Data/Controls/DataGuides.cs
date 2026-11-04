@@ -5,8 +5,8 @@ namespace Joufflu.Data.Controls;
 
 /// <summary>
 /// The indent of a row of <see cref="DataDisplay"/>, with a guide line per level above it. Each line
-/// sits under the chevron of its level, as a tree view draws it under an expanded node: the rows
-/// being laid flat, each one draws its part of the lines.
+/// sits under the chevron of its level, as Joufflu's TreeView style draws it under an expanded node:
+/// the rows being laid flat, each one draws its part of the lines.
 /// </summary>
 public class DataGuides : FrameworkElement
 {
@@ -53,7 +53,7 @@ public class DataGuides : FrameworkElement
         set => SetValue(LineBrushProperty, value);
     }
 
-    /// <summary>The indent of a level: half a chevron then the line, as the tree view's own.</summary>
+    /// <summary>The indent of a level: half a chevron then the line, as in Joufflu's TreeView style.</summary>
     private double Step => ChevronSize / 2 + LineThickness.Left;
 
     protected override Size MeasureOverride(Size availableSize) => new(Depth * Step, 0);

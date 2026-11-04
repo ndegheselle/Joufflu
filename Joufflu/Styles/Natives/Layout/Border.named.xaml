@@ -12,7 +12,7 @@
 
     <Style x:Key="CardSecondary" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
-        <!--  Its background is the border colour, so its border is the elevated one  -->
+        <!--  Its background is the border colour, so its border is the next one, Border1  -->
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder1Brush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
         <Setter Property="CornerRadius" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}" />

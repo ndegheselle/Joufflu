@@ -21,7 +21,9 @@ Pill in the semantic colours. `Variant`: `Default`, `Primary`, `Secondary`, `Suc
 
 ## Spinner
 
-Indeterminate loading indicator; colour from `Foreground`, diameter from `Sizing.Size`.
+Indeterminate loading indicator; colour from `Foreground` (primary brush by default),
+diameter from `Sizing.Size`. It stops turning while collapsed or hidden, so toggling
+`Visibility` is enough.
 
 ```xml
 <feedback:Spinner toolkit:Sizing.Size="lg"
@@ -41,7 +43,8 @@ Host once, around the whole app (and around the `OverlayContainer` if any):
 `Position` (`ToastPosition`): `TopRight` (default), `TopLeft`, `BottomRight`, `BottomLeft`.
 The newest toast sits closest to the corner.
 
-Own one `ToastService` in the shell view model and inject it as `IToastService`:
+Own one `ToastService` in the shell view model, bind it to `Toasts` and inject it as
+`IToastService` (an unbound container creates a private service the pages cannot reach):
 
 ```csharp
 _toasts.Info("A neutral message.", "Heads up");   // (message, title = "")
@@ -55,7 +58,7 @@ _toasts.Show(new ToastOptions { Message = "Sticky", Type = ToastType.Info, Durat
 - Each call returns a `ToastInstance`; `_toasts.Close(instance)` removes it early.
 - `ToastType`: `Info`, `Success`, `Warning`, `Danger`, `Loading` (`Error(...)` shows a `Danger` toast).
 - `ToastInstance.Type`, `Title`, `Message` and `Duration` are observable and settable while the
-  toast is shown; setting `Duration` restarts the countdown.
+  toast is shown; changing `Duration` restarts the countdown.
 
 Long-running work: a sticky toast with a spinner, updated as it progresses:
 

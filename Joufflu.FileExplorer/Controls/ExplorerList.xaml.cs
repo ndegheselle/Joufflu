@@ -118,7 +118,7 @@ public class ExplorerList : ExplorerNodesControl
         // Self or parent : a click on the blank part of a row reports the row itself.
         => MoreVisualTreeHelper.FindSelfOrParent(source, typeof(ListViewItem)) as ListViewItem;
 
-    /// <summary>Ignore listview columns header</summary>
+    /// <summary>A column header has no node behind it, so no menu.</summary>
     protected override bool IsMenuIgnored(DependencyObject? source)
         => MoreVisualTreeHelper.FindParent<GridViewColumnHeader>(source) != null;
 }

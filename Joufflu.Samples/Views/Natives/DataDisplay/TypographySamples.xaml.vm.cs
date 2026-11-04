@@ -20,4 +20,8 @@ public class TypographySamplesViewModel : ObservableObject
         "<TextBlock Text=\"Default body text\" />\n" +
         "<TextBlock Opacity=\"{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}\"\n" +
         "           Text=\"Muted text\" />";
+
+    public string NamedStylesCode =>
+        "<TextBlock Style=\"{StaticResource Title}\" Text=\"Card title\" />\n" +
+        "<TextBlock Style=\"{StaticResource TextMuted}\" Text=\"A longer description that wraps.\" />";
 }

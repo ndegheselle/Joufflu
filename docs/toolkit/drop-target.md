@@ -74,7 +74,8 @@ trigger needs to highlight a valid drop. It inherits, so template and content
 children see it too.
 
 ```xml
-<Border toolkit:DropTarget.Command="{Binding DropFilesCommand}">
+<Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}">
     <!-- Background and BorderBrush are styled, not set on the Border, so the trigger can override them -->
     <Border.Style>
         <Style TargetType="Border">

@@ -14,10 +14,12 @@ Navigation building blocks from `Joufflu.Navigation`:
 - **Paging** — a page selector for browsing large sets of data.
 
 The view models use `Navigator`, `Overlayer` / `IOverlayer` and `IPage` from the
-`Joufflu.Navigation` namespace. The XAML snippets use the `nav` XML namespace, plus
-`vm` for your own view models:
+`Joufflu.Navigation` namespace. The XAML snippets use the `nav` XML namespace, the
+core `fonts` and `toolkit` ones, plus `vm` for your own view models:
 
 ```xml
 xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 xmlns:vm="clr-namespace:MyApp.ViewModels"
 ```

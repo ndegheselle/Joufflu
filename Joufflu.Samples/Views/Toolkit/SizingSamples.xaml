@@ -24,7 +24,7 @@
             <c:CodeExample
                 Title="Sizing.Size"
                 Code="{Binding SizeCode}"
-                Description="The inherited Size attached property (xs / sm / md / lg) scales height, font size and padding. Because it inherits, setting it on a panel sizes every child.">
+                Description="The inherited Size attached property (xs / sm / md / lg) scales height, font size and padding. xl exists too, for text and icons: controls fall back to md. Because it inherits, setting it on a panel sizes every child.">
                 <StackPanel toolkit:Spacing.Gap="12">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" toolkit:Spacing.Gap="8,0">
                         <Button toolkit:Sizing.Size="xs" VerticalAlignment="Center">xs</Button>

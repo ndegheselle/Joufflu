@@ -7,7 +7,9 @@ using CommunityToolkit.Mvvm.Input;
 namespace Joufflu.Inputs.Controls
 {
     /// <summary>
-    /// Text that can be edited, can be used outside a form to indicate clearly that a value can be edited
+    /// A value shown as text that turns into a text box on demand, to make it clear outside a form
+    /// that the value can be edited. A double click or the pencil button starts the edit, Enter or
+    /// the check commits it, Escape or the cross cancels it.
     /// </summary>
     [TemplatePart(Name = ElementTextBox, Type = typeof(FrameworkElement))]
     public partial class TextEditable : ContentControl, INotifyPropertyChanged
@@ -24,6 +26,7 @@ namespace Joufflu.Inputs.Controls
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        /// <summary>Raised when an edit is committed with a new text, carrying the old one too.</summary>
         public event EventHandler<TextEditedArgs>? TextChanged;
 
         public static readonly DependencyProperty TextProperty =

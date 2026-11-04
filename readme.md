@@ -28,7 +28,7 @@ live between Light and Dark - no restart, no flicker.
 
 Controls :
 - 🧩 **Ready-to-use inputs** - numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
-- 🧭 **Navigation & overlays** - a navigation menu, a view-model-first page container and awaitable modal dialogs.
+- 🧭 **Navigation & overlays** - a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** - breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
 - 🧾 **JSON data trees** - fill a value in against a JSON Schema, or build one from scratch.
 
@@ -112,8 +112,8 @@ The last five are the optional Joufflu control packages, all built on the core
 The design system is exposed as resource keys you can override in your own
 dictionary (merged **after** the Joufflu resources):
 
-- **Colours / brushes** - `joufflu:Colors.*` and `joufflu:Brushes.*`, including
-  the semantic families (primary, secondary, success, info, warning, danger).
+- **Colours** - `joufflu:Colors.*`, including the semantic families (primary,
+  secondary, success, info, warning, danger); the `joufflu:Brushes.*` follow them.
 - **Dimensions** - `joufflu:Dimensions.*` (corner radius, border thickness,
   spacing, control heights, font sizes and padding per size).
 
@@ -122,8 +122,8 @@ generate a ready-to-merge dictionary.
 
 ## Running the samples
 
-- Created with Visual Studio Community 2022, requires the *.NET Desktop
-  development* workload.
+- Targets `net10.0-windows`: needs the .NET 10 SDK, or Visual Studio 2026 with the
+  *.NET Desktop development* workload.
 - Open `Joufflu.sln` and start the `Joufflu.Samples` project to explore
   every control, theme and toolkit helper interactively.
 

@@ -4,12 +4,18 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Joufflu.Inputs.Controls
 {
+    /// <summary>What the system dialog of a <see cref="FilePicker"/> offers.</summary>
     public class FilePickerOptions
     {
+        /// <summary>The dialog's file types, as <c>Microsoft.Win32.OpenFileDialog.Filter</c> reads them: <c>"JSON files|*.json|All files|*.*"</c>.</summary>
         public string Filter { get; set; } = "";
         public string DefaultExtension { get; set; } = "*.*";
     }
 
+    /// <summary>
+    /// A file path, typed or chosen through the system open dialog, with a button to clear it.
+    /// Two-way bindable through <see cref="FilePath"/>.
+    /// </summary>
     public partial class FilePicker : Control
     {
         static FilePicker()
@@ -50,7 +56,6 @@ namespace Joufflu.Inputs.Controls
         private void Select()
         {
             Options ??= new FilePickerOptions();
-            // Open file dialog
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.DefaultExt = Options.DefaultExtension;
             dialog.Filter = Options.Filter;

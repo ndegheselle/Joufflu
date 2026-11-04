@@ -78,7 +78,7 @@ public class OverlaySamplesViewModel : ObservableObject
         "string? name = await overlays.ShowAsync(new SampleFormViewModel(overlays));\n" +
         "\n" +
         "// Any object works too, its options being given at show time\n" +
-        "bool? result = await overlays.ShowAsync(content,new OverlayOptions { Title = \"...\" });\n" +
+        "bool? result = await overlays.ShowAsync(content, new OverlayOptions { Title = \"...\" });\n" +
         "\n" +
         "// Standard confirmation, no content of your own\n" +
         "bool? confirmed = await overlays.Confirm(\"Delete the selected item?\", \"Please confirm\");";
@@ -95,27 +95,28 @@ public class ConfirmViewModel : ObservableObject
 /// <summary>
 /// Overlay content with an editable field, used by the form overlay demo. Implementing
 /// <see cref="IOverlayContent{TResult}"/> gives it its own options and the result it is awaited for;
-/// the close cross dismisses it, Cancel cancels it and Save validates it.
+/// the close cross dismisses it, Cancel cancels it and Save validates it. A click away doesn't close it, so a stray
+/// click doesn't lose what was typed.
 /// </summary>
 public partial class SampleFormViewModel : ObservableObject, IOverlayContent<string>
 {
-    private readonly IOverlayer overlayer;
+    private readonly IOverlayer _overlays;
+
+    public SampleFormViewModel(IOverlayer overlays) => _overlays = overlays;
+
+    public OverlayOptions Options { get; } = new() { Title = "Edit profile", CloseOnClickAway = false };
+
     [ObservableProperty]
     private string _name = "Ada Lovelace";
+
     [ObservableProperty]
     private bool _subscribe = true;
 
     public string? Result => Name;
-    public OverlayOptions Options => new OverlayOptions() { Title = "Edit profile" };
-
-    public SampleFormViewModel(IOverlayer overlayer)
-    {
-        this.overlayer = overlayer;
-    }
 
     [RelayCommand]
-    private void Save() => overlayer.Validate(this);
+    private void Save() => _overlays.Validate(this);
 
     [RelayCommand]
-    private void Cancel() => overlayer.Cancel(this);
+    private void Cancel() => _overlays.Cancel(this);
 }

@@ -22,8 +22,9 @@ The popup provides:
 - a **saturation / brightness** square you can drag,
 - a **hue** slider,
 - an **alpha** slider (checkerboard behind a transparent → opaque ramp),
-- an editable **hex** field and an **opacity** percentage. A `#RRGGBB` hex keeps the
-  opacity, a pasted `#AARRGGBB` sets it too.
+- an editable **hex** field and an **opacity** percentage. A `#RRGGBB` hex (or a
+  colour name such as `Teal`) keeps the opacity, a pasted `#AARRGGBB` sets it too.
+  Text that spells no colour reverts to the current one.
 
 ## Validation
 

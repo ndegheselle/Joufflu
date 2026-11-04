@@ -12,7 +12,8 @@ using CommunityToolkit.Mvvm.Input;
 namespace Joufflu.Inputs.Controls
 {
     /// <summary>
-    /// Either get the display member path or the ToString() of the object
+    /// The text a tag shows: the item's value at the <c>DisplayMemberPath</c> given as second value,
+    /// or its <c>ToString()</c> when there is none.
     /// </summary>
     public class DisplayMemberPathConverter : IMultiValueConverter
     {
@@ -31,6 +32,10 @@ namespace Joufflu.Inputs.Controls
         { throw new NotSupportedException(); }
     }
 
+    /// <summary>
+    /// A <see cref="ComboBoxSearch"/> selecting several items, shown as removable tags and kept in
+    /// <see cref="SelectedItems"/>. Already selected items leave the list, so none is picked twice.
+    /// </summary>
     public partial class ComboBoxTags : ComboBoxSearch
     {
         static ComboBoxTags()
@@ -63,10 +68,12 @@ namespace Joufflu.Inputs.Controls
         // Guards the internal -> source mirroring while we are loading source -> internal.
         private bool _syncingSelection;
 
+        /// <summary>Whether <c>Enter</c> adds the typed text as a tag when it matches no item.</summary>
         public bool AllowAdd { get; set; } = false;
 
-        // Only add to selection then clicking or pressing enter (like combobox with IsEditable = false)
-        // Sad that the combobox doesn't allow to set this behavior
+        // Up and Down move the selection through the list, and an editable ComboBox offers no way
+        // to keep that from committing it. Only a click or Enter should add a tag, so the selection
+        // change an arrow key causes is skipped.
         private bool _ignoreNextSelection = false;
         private Popup? _popup;
         #endregion
@@ -75,6 +82,8 @@ namespace Joufflu.Inputs.Controls
         {
             _internalSelectedItems.CollectionChanged += OnInternalSelectedItemsChanged;
 
+            // The tags wrap and grow the control, but an open popup does not follow its target's
+            // size on its own: nudging the offset makes it place itself again.
             SizeChanged += (s, e) =>
             {
                 if (_popup == null)
@@ -174,7 +183,7 @@ namespace Joufflu.Inputs.Controls
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            // Backspace is handled in OnPreviewKeyDown alone : handling it here too removed two tags per key.
+            // Backspace is handled in OnPreviewKeyDown alone: handling it here too removed two tags per key.
             if (e.Key == Key.Enter)
             {
                 if (SelectedItem != null)
@@ -196,7 +205,7 @@ namespace Joufflu.Inputs.Controls
         #region Methods
         protected override bool DoesItemPassFilter(object value)
         {
-            // If the item is already selected, don't show it in the list
+            // A selected item is a tag already: listing it again would let it be picked twice.
             if (InternalSelectedItems.Contains(value) == true)
                 return false;
 

@@ -12,5 +12,5 @@ public class CheckBoxSamplesViewModel : ObservableObject
         "<CheckBox Content=\"Bound\" IsChecked=\"{Binding IsChecked}\" />\n" +
         "<CheckBox Content=\"Unchecked\" />\n" +
         "<CheckBox Content=\"Indeterminate\" IsThreeState=\"True\" IsChecked=\"{x:Null}\" />\n" +
-        "<CheckBox Content=\"Disabled\" IsEnabled=\"False\" />";
+        "<CheckBox Content=\"Disabled\" IsChecked=\"True\" IsEnabled=\"False\" />";
 }

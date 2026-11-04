@@ -57,11 +57,11 @@ Point `Derive.BorderThickness` at a resource key and pick the sides with
         toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
 ```
 
-Both properties work in a `Style` setter, so a control can derive its own border
+Both properties work in a `Style` setter, so a style can derive its border
 without a keyed `Thickness`:
 
 ```xml
-<Style TargetType="{x:Type nav:NavigationMenu}">
+<Style x:Key="SidePanel" TargetType="Border">
     <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayThickness}" />
     <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
 </Style>
@@ -69,11 +69,13 @@ without a keyed `Thickness`:
 
 > **In a style, the fed property stops being overridable.** The derived value is
 > pushed with `SetCurrentValue`, which outranks a style setter — and even a local
-> value. So do not also set the property it feeds (here `BorderThickness`) in the
-> same style, move any `Style.Triggers` that change it onto the `Derive` property,
-> and expect that a consumer can no longer override it. When the fed property has
-> to stay overridable — a control's `Padding`, say — give it a plain keyed default
-> instead of deriving it.
+> value; only an animation or a template trigger still takes over. So do not also
+> set the property it feeds (here `BorderThickness`) in the same style, move any
+> `Style.Triggers` that change it onto the `Derive` property, and expect that a
+> consumer can no longer override it. `Derive` fits a value the control owns — a
+> `Border` inside a template. When the fed property has to stay overridable — a
+> text input's `Padding`, say — give it a plain keyed default
+> (`Dimensions.InputPadding*`) instead.
 
 ## Derive.CornerRadius
 
@@ -101,21 +103,10 @@ Same shape again, on any `FrameworkElement`, with `Derive.MarginFactor`.
 - The source resource may be a `Thickness` / `CornerRadius` (every Joufflu shape
   key is one), whose own sides are then scaled, or a `double`, spread over every
   side or corner before scaling.
+- Pass the resource **key** (`{x:Static …}`): `Derive` follows the resource
+  itself. A `Thickness`, `CornerRadius` or `double` value is taken as is instead,
+  so inside a template `toolkit:Derive.Margin="{TemplateBinding Padding}"` scales
+  the control's own padding.
 - `Derive.BorderThickness` applies to `Border` and to any `Control`;
   `Derive.CornerRadius` applies to `Border`; `Derive.Margin` to any
   `FrameworkElement`. Anything else throws.
-- The derived value is written with `SetCurrentValue`, which outranks a style
-  setter : a style deriving a value should not also set the property it feeds,
-  and the `Style.Triggers` meant to change it have to move to the `Derive`
-  property instead. An animation or a template trigger still takes over. So
-  `Derive` fits a value the control owns — a `Border` inside a template — not one
-  a consumer overrides : a property like a text input's `Padding` carries a plain
-  keyed default (`Dimensions.InputPadding*`) instead, which a local value or a
-  style still beats.
-
-Snippets use these XML namespaces:
-
-```xml
-xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
-```

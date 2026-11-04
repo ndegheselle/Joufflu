@@ -151,9 +151,9 @@ public static class DataFactory
     extension(JsonReader reader)
     {
         /// <summary>
-        /// The node the next value of [reader] reads as, the same one <c>ToDataNode</c> gives for its
-        /// token, under [key]. Built straight from the reader: a large file is never held twice, once
-        /// as tokens and once as nodes.
+        /// The node the value [reader] is on (the next one when it is on none yet) reads as, the same
+        /// one <c>ToDataNode</c> gives for its token, under [key]. Built straight from the reader: a
+        /// large file is never held twice, once as tokens and once as nodes.
         /// </summary>
         public DataNode ReadDataNode(string? key = null)
         {
@@ -162,7 +162,7 @@ public static class DataFactory
             if (!isOnValue)
                 throw new JsonReaderException("There is no JSON value to read.");
 
-            // The same keys come back on every item of an array: one string each instead of one a time.
+            // The same keys come back on every item of an array: one string per key instead of one per item.
             if (reader is JsonTextReader { PropertyNameTable: null } textReader)
                 textReader.PropertyNameTable = new SharedNameTable();
 

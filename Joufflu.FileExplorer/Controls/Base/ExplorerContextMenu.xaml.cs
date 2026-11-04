@@ -63,7 +63,8 @@ namespace Joufflu.FileExplorer.Controls.Base
         public ICommand BeginRenameCommand { get; }
 
         /// <summary>
-        /// Every selected node, the menu was opened on the first one.
+        /// Nodes the menu acts on : the one it was opened on first, followed by the rest of the selection when that
+        /// node is part of it.
         /// </summary>
         public IReadOnlyList<IExplorerNode> Nodes { get; }
 

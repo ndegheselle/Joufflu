@@ -19,8 +19,8 @@ public static class Dimensions
     public static ComponentResourceKey HeightMd => new(typeof(Dimensions), "HeightMd");
     public static ComponentResourceKey HeightLg => new(typeof(Dimensions), "HeightLg");
 
-    // 0.625 of HeightMd, kept in sync automatically by the theme customizer. Used by the small
-    // "clear" close buttons embedded inside other controls (search, combobox, numeric input…).
+    // The EmbeddedButton, a button inside an input (clear, open, step…). 0.625 of HeightMd, kept in sync by the
+    // theme customizer.
     public static ComponentResourceKey HeightEmbedded => new(typeof(Dimensions), "HeightEmbedded");
 
     public static ComponentResourceKey FontSizeXs => new(typeof(Dimensions), "FontSizeXs");
@@ -49,8 +49,8 @@ public static class Dimensions
     public static ComponentResourceKey InputRadius => new(typeof(Dimensions), "InputRadius");
     public static ComponentResourceKey InputThickness => new(typeof(Dimensions), "InputThickness");
 
-    // Text inputs read tighter than a button, the horizontal padding is half a button padding so
-    // that the text is more flused against the border
+    // Half the horizontal padding of an action, so the text of an input sits closer to its border than a
+    // button label does.
     public static ComponentResourceKey InputPaddingXs => new(typeof(Dimensions), "InputPaddingXs");
     public static ComponentResourceKey InputPaddingSm => new(typeof(Dimensions), "InputPaddingSm");
     public static ComponentResourceKey InputPaddingMd => new(typeof(Dimensions), "InputPaddingMd");

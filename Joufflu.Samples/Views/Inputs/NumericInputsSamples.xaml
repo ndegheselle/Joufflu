@@ -19,7 +19,7 @@
             <c:CodeExample
                 Title="NumericUpDown"
                 Code="{Binding NumericCode}"
-                Description="Selects a whole number. Built on FormatTextBox with the numeric format, clear and increment/decrement buttons included.">
+                Description="Selects a whole number (long?). Built on FormatTextBox with a single IntegerGroup, plus clear and increment/decrement buttons.">
                 <StackPanel toolkit:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:NumericUpDown Width="180" Value="{Binding NumericValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding NumericValue, StringFormat='Value: {0}'}" />
@@ -29,7 +29,7 @@
             <c:CodeExample
                 Title="DecimalUpDown"
                 Code="{Binding DecimalCode}"
-                Description="Selects a decimal value through a single DecimalGroup.">
+                Description="Selects a decimal? value, through a single DecimalGroup.">
                 <StackPanel toolkit:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:DecimalUpDown Width="180" Value="{Binding DecimalValue, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding DecimalValue, StringFormat='Value: {0}'}" />
@@ -39,10 +39,26 @@
             <c:CodeExample
                 Title="TimeSpanPicker"
                 Code="{Binding TimeSpanCode}"
-                Description="Selects a TimeSpan through a days/hours/minutes/seconds format.">
+                Description="Selects a TimeSpan? through a days/hours/minutes/seconds format.">
                 <StackPanel toolkit:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:TimeSpanPicker Width="180" Value="{Binding Duration, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding Duration, StringFormat='Value: {0}'}" />
+                </StackPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Bounds and format"
+                Code="{Binding BoundsCode}"
+                Description="To bound or format the number of a NumericUpDown or a DecimalUpDown, write its group yourself: a group given as content replaces the default one (which is nullable and keeps its own caret, so set those back when you want them).">
+                <StackPanel toolkit:Spacing.Gap="12,0" Orientation="Horizontal">
+                    <inputs:NumericUpDown Width="180" Value="{Binding Quantity, Mode=TwoWay}">
+                        <format:IntegerGroup
+                            IsNullable="True"
+                            Max="99"
+                            Min="0"
+                            SelectsWhole="False" />
+                    </inputs:NumericUpDown>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Quantity, StringFormat='Value: {0}'}" />
                 </StackPanel>
             </c:CodeExample>
 

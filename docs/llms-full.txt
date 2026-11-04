@@ -51,7 +51,7 @@ can paste into your views.
 | Section | What's inside |
 |---|---|
 | [Themes](themes/index.md) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and the live theme customizer |
-| [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon`, the `Card` styles and buttons (solid, soft & outline variants) |
+| [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon` and `Chevron`, the `Card` styles, buttons and toggle buttons (solid, soft & outline variants) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, shared width, creating a custom control |
 | [Joufflu controls](controls/index.md) | The optional packages: [Feedback](feedback/index.md) (`Badge`, `Spinner`, toasts), [Inputs](inputs/index.md) (numeric, search, combo boxes, pickers, `Dropdown`…), [Navigation](navigation/index.md) (`NavigationMenu`, overlays, `Paging`), [Data](data/index.md) (`DataFill`, `DataEdit`, `DataDisplay`) and [File explorer](file-explorer/index.md) |
 
@@ -713,6 +713,11 @@ buttons.
 </controls:ThemedWindow>
 ```
 
+The bar takes its colours from the theme: `TitleBarBackground` (`DisplayBorder0Brush`,
+transparent with `AllowContentOverTitleBar`), `TitleBarForeground` (`ForegroundBrush`)
+and `WindowButtonHighlightBrush`, the hover of the minimize and maximize buttons
+(`ActionInteractionBrush`). Set them on the window to recolour it.
+
 ### AppIcon
 
 The title bar shows no icon by default. Add an `AppIcon` to
@@ -869,7 +874,7 @@ merged dictionary; since every control reads its colours through `DynamicResourc
 UI re-themes live.
 
 The keys themselves — what each colour and dimension is used for — are listed in
-[Design tokens](tokens.html).
+[Design tokens](tokens.md).
 
 Themes are selected **by name**. Three are always available — `System`, `Light` and `Dark` —
 and you can register your own palettes so they become selectable alongside the built-ins.
@@ -919,8 +924,8 @@ settings differently (see [Persisting the theme](#persisting-the-theme)).
 ## Registering a custom theme
 
 A custom theme is just a resource dictionary with the same keys as `Light.xaml` / `Dark.xaml`
-(see [Customize theme](customize-theme.html) to generate one). It can also override any
-[dimension](tokens.html#dimensions) — a denser or rounder theme — since the manager merges it right
+(see [Customize theme](customize-theme.md) to generate one). It can also override any
+[dimension](tokens.md#dimensions) — a denser or rounder theme — since the manager merges it right
 after `Resources.xaml`. Register it by name — from a pack
 `Uri` or an in-memory `ResourceDictionary` — and it becomes selectable through `Theme`, appearing
 in the `Themes` list next to the built-ins:
@@ -1038,8 +1043,8 @@ xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 <GradientStop Offset="0" Color="{DynamicResource {x:Static joufflu:Colors.PrimaryColor}}" />
 ```
 
-See [Theme](theme.html) for swapping palettes at runtime, [Customize theme](customize-theme.html)
-for editing these values live, and [Derived dimensions](../toolkit/derived-dimensions.html) for scaling one
+See [Theme](theme.md) for swapping palettes at runtime, [Customize theme](customize-theme.md)
+for editing these values live, and [Derived dimensions](../toolkit/derived-dimensions.md) for scaling one
 per side or per corner.
 
 ## Colors
@@ -1085,7 +1090,7 @@ and checked are the primary.
 | **Action** | `ActionBase0` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionBorder1` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
 
 A theme overrides a category by defining its base, for example inputs set apart from the cards, with
-their border, elevated and interaction brushes following:
+their `Border0`, `Border1` and `Interaction` brushes following:
 
 ```xml
 <Color x:Key="{x:Static joufflu:Colors.InputBase0Color}">#FFFFFF</Color>
@@ -1102,22 +1107,22 @@ their border, elevated and interaction brushes following:
 
 ### Accents
 
-Six semantic families sharing one shape — the three keys of each are shown side by side below:
+Six semantic families sharing one shape — the five keys of each are shown side by side below:
 `X` is the fill, `XForeground` the text and icons drawn on top of it: the two colours a theme defines.
 The others are brushes only, derived from the fill so no theme defines them. `XInteractionBrush` is the
-fill while hovered or pressed: the fill mixed 10% toward its own `XForeground`, so a dark fill with light
+fill while hovered (and a checked solid toggle button): the fill mixed 10% toward its own `XForeground`, so a dark fill with light
 foreground lightens and a pale one darkens, in a light and in a dark theme alike. `XSoftBrush` is the fill at low opacity (soft buttons,
-selected rows, outline hover) and `XSoftInteractionBrush` its hover, drawn with the fill as text, as a soft
+outline hover) and `XSoftInteractionBrush` its hover, drawn with the fill as text, as a soft
 button is.
 
 <table>
 <tbody>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#FAFAFA">Aa</div><code style="font-size:11px">PrimaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoftInteraction</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D4D4D8;color:#27272A">Aa</div><code style="font-size:11px">SecondaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoftInteraction</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BD81;color:#004C39">Aa</div><code style="font-size:11px">SuccessInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoftInteraction</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#3B82F6;color:#172554">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#1D6FF4;color:#172554">Aa</div><code style="font-size:11px">InfoInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#172554;color:#172554">&nbsp;</div><code style="font-size:11px">InfoForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.14);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(59,130,246,.24);color:#3B82F6">Aa</div><code style="font-size:11px">InfoSoftInteraction</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EEAF00;color:#411E03">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D69D00;color:#411E03">Aa</div><code style="font-size:11px">WarningInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#411E03;color:#411E03">&nbsp;</div><code style="font-size:11px">WarningForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.14);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(238,175,0,.24);color:#EEAF00">Aa</div><code style="font-size:11px">WarningSoftInteraction</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF627D;color:#4D0218">Aa</div><code style="font-size:11px">Danger</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF3E5F;color:#4D0218">Aa</div><code style="font-size:11px">DangerInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#4D0218;color:#4D0218">&nbsp;</div><code style="font-size:11px">DangerForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.14);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.24);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoftInteraction</code></div></td><td>Destructive action and validation errors — a delete button, the border of a field in error.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#2F2F31;color:#FAFAFA">Aa</div><code style="font-size:11px">PrimaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoftInteraction</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D1D1D4;color:#27272A">Aa</div><code style="font-size:11px">SecondaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoftInteraction</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00C687;color:#004C39">Aa</div><code style="font-size:11px">SuccessInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoftInteraction</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BAFE;color:#042E49">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00ACEC;color:#042E49">Aa</div><code style="font-size:11px">InfoInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#042E49;color:#042E49">&nbsp;</div><code style="font-size:11px">InfoForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,186,254,.14);color:#00BAFE">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,186,254,.24);color:#00BAFE">Aa</div><code style="font-size:11px">InfoSoftInteraction</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FCB700;color:#793205">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EFAA00;color:#793205">Aa</div><code style="font-size:11px">WarningInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#793205;color:#793205">&nbsp;</div><code style="font-size:11px">WarningForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(252,183,0,.14);color:#FCB700">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(252,183,0,.24);color:#FCB700">Aa</div><code style="font-size:11px">WarningSoftInteraction</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FF627D;color:#4D0218">Aa</div><code style="font-size:11px">Danger</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#ED5873;color:#4D0218">Aa</div><code style="font-size:11px">DangerInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#4D0218;color:#4D0218">&nbsp;</div><code style="font-size:11px">DangerForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.14);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(255,98,125,.24);color:#FF627D">Aa</div><code style="font-size:11px">DangerSoftInteraction</code></div></td><td>Destructive action and validation errors — a delete button, the border of a field in error.</td></tr>
 </tbody>
 </table>
 
@@ -1138,7 +1143,7 @@ The sample gallery renders them live against whichever theme is selected.
 ### Shape
 
 What a `Border` takes, a `Thickness` or a `CornerRadius`. Bind it through
-[`Derive`](../toolkit/derived-dimensions.html) when you need only some sides or corners.
+[`Derive`](../toolkit/derived-dimensions.md) when you need only some sides or corners.
 
 | Key | Type | Used for |
 |---|---|---|
@@ -1163,13 +1168,13 @@ Distances between things rather than inside them.
 
 | Key | Type | Used for |
 |---|---|---|
-| `Spacing` | `Thickness` | Standard gap between sibling elements and page padding (`12`). Feed it to [`Spacing.Gap`](../toolkit/spacing.html). |
+| `Spacing` | `Thickness` | Standard gap between sibling elements and page padding (`12`). Feed it to [`Spacing.Gap`](../toolkit/spacing.md). |
 | `TitleBarHeight` | `double` | Height of the custom window title bar (`30`). |
 | `TitleBarHeightOffset` | `Thickness` | `Top` only, used as a margin to push content below an overlapping title bar. |
 
 ### Control heights
 
-Vertical size of single line controls. [`Sizing.Size`](../toolkit/sizing.html) picks one of the four; `md` is
+Vertical size of single line controls. [`Sizing.Size`](../toolkit/sizing.md) picks one of the four; `md` is
 the default written in the base styles, so only `xs`/`sm`/`lg` appear in the size triggers.
 
 | Key | Value | Used for |
@@ -1178,11 +1183,11 @@ the default written in the base styles, so only `xs`/`sm`/`lg` appear in the siz
 | `HeightSm` | `28` | |
 | `HeightMd` | `32` | The default. |
 | `HeightLg` | `40` | Prominent, touch friendly controls. |
-| `HeightEmbedded` | `20` | `0.625` of `HeightMd`, kept in sync by the theme customizer. The small clear button embedded inside a search box, combo box or numeric input. |
+| `HeightEmbedded` | `20` | `0.625` of `HeightMd`, kept in sync by the theme customizer. The `EmbeddedButton`, a button inside an input (clear, open, step…). |
 
 ### Font sizes
 
-A `TextBlock` picks one through [`Sizing.Size`](../natives/typography.html) (`xs` to `xl`; `md` keeps
+A `TextBlock` picks one through [`Sizing.Size`](../natives/typography.md) (`xs` to `xl`; `md` keeps
 the inherited body size), like the controls do, so restyling the scale restyles the text.
 
 | Key | Value |
@@ -1226,7 +1231,7 @@ resources to apply it.
 The design system is exposed as resource keys you override in a dictionary:
 `joufflu:Colors.*` for the colours and `joufflu:Dimensions.*` for the metrics. The
 `joufflu:Brushes.*` are built from the colours by the core resources, so overriding a
-colour is enough for every brush to follow. [Design tokens](tokens.html) lists them all, with the role each one
+colour is enough for every brush to follow. [Design tokens](tokens.md) lists them all, with the role each one
 plays in the control styles.
 
 The controls read the category tokens (`Display*`, `Input*`, `Action*`), not the global ones. The
@@ -1248,9 +1253,9 @@ customizer has two modes:
   control padding, which is only edited in the simple mode. The generated dictionary writes the
   category base colours (`ActionBase0Color`…) and shapes. Going back to the simple mode drops them.
 
-The other brushes of a category (border, elevated, interaction) are derived from its base either way.
-A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` no
-longer reaches the controls.
+The other brushes of a category (`Border0`, `Border1`, `Interaction`) are derived from its base either way.
+A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` does
+not reach the controls: override the category keys.
 
 ```xml
 <!-- Merge your overrides AFTER the Joufflu resources -->
@@ -1276,14 +1281,29 @@ as soon as the styles are merged (see [Getting started](../index.md#getting-star
 This section covers the core visuals and the button variants:
 
 - **Typography** — text sizes, muted text and the `TextMuted` / `Title` styles.
-- **Font icon** — the bundled Lucide icon font, sized like the text.
+- **Font icon** — the bundled Lucide icon font, sized like the text, and the `Chevron` of expandable headers.
 - **Card** — the themed container for grouped content.
-- **Buttons** — the solid, soft, outline and ghost variants in the semantic colours.
+- **Buttons** — the solid, soft, outline and ghost variants in the semantic colours, and their toggle button twins.
 
 The other natives (text box, combo box, check box, list, tree, data grid, tabs,
 menus…) are restyled transparently and need nothing beyond the merged styles; they
 are shown in the **Native controls** group of the **`Joufflu.Samples`** gallery
-rather than here.
+rather than here. A few of them have a named style or a setting worth knowing:
+
+```xml
+<!-- Multi-line text: accepts Return, takes the height it is given, scrolls instead of wrapping -->
+<TextBox Height="120" Style="{StaticResource MultilineTextBox}" />
+
+<!-- A destructive menu item -->
+<MenuItem Header="Delete" Style="{StaticResource DangerMenuItem}" />
+
+<!-- A long list: scroll by item and only build the items in view -->
+<ListBox ScrollViewer.CanContentScroll="True" ItemsSource="{Binding Items}" />
+```
+
+Binding errors turn an input's border red and add a corner badge listing them, the
+`ValidationErrorTemplate`; see [Create a custom control](../toolkit/custom-control.md)
+to give an input of your own the same.
 
 ---
 
@@ -1372,8 +1392,16 @@ property through `x:Static`.
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
 
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
 </UserControl>
 ```
+
+The constants are named after the Lucide icons in PascalCase (the close glyph is
+the lowercase `x`). Check `LucideFontIcons` with IntelliSense rather than guessing
+a name.
 
 ## Sizes
 
@@ -1399,6 +1427,9 @@ brush to give an icon a semantic hue.
     Text="{x:Static fonts:LucideFontIcons.Leaf}" />
 <fonts:FontIcon
     Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}"
+    Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+<fonts:FontIcon
+    Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}"
     Text="{x:Static fonts:LucideFontIcons.Leaf}" />
 <fonts:FontIcon
     Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
@@ -1480,7 +1511,7 @@ fill, the part of a display that sits on its base, so it reads as a distinct are
 ```
 
 {: .note }
-> Both styles read the display tokens (see [Design tokens](../themes/tokens.html)), so
+> Both styles read the display tokens (see [Design tokens](../themes/tokens.md)), so
 > they follow Light / Dark and any custom theme automatically, and a theme restyles every
 > card by overriding the `Display*` colours or dimensions.
 
@@ -1496,7 +1527,7 @@ give it a semantic intent and a visual emphasis — solid, soft or outline.
 ## Variants
 
 The solid named styles map to the semantic brushes: a filled background with its
-matching content colour.
+matching content colour. `GhostButton` has no fill or border; hovering fills it.
 
 ```xml
 <Button>Default</Button>
@@ -1507,6 +1538,7 @@ matching content colour.
 <Button Style="{StaticResource DangerButton}">Danger</Button>
 <Button Style="{StaticResource InfoButton}">Info</Button>
 <Button Style="{StaticResource WarningButton}">Warning</Button>
+<Button IsEnabled="False">Disabled</Button>
 ```
 
 ## Soft
@@ -1514,8 +1546,8 @@ matching content colour.
 A tinted background with the semantic hue as text — lower emphasis than solid,
 for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
 ≈24 % on hover), not a dedicated palette entry, so it derives automatically in
-both Light and Dark and follows any custom theme. Secondary is achromatic, so it
-uses a neutral wash instead, lighter (≈8 %, ≈14 % on hover).
+both Light and Dark and follows any custom theme. Secondary is achromatic, so its
+tint is lighter (≈8 %, ≈14 % on hover).
 
 ```xml
 <Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
@@ -1555,6 +1587,12 @@ any variant.
 <Button toolkit:Sizing.IsSquare="True" Style="{StaticResource PrimaryButton}">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
 </Button>
+<Button toolkit:Sizing.IsSquare="True">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+</Button>
+<Button toolkit:Sizing.IsSquare="True" Style="{StaticResource DangerButton}">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+</Button>
 ```
 
 ## Sizes
@@ -1568,6 +1606,40 @@ The inherited `Sizing.Size` attached property (`xs` / `sm` / `md` /
 <Button toolkit:Sizing.Size="md">MD</Button>
 <Button toolkit:Sizing.Size="lg">LG</Button>
 ```
+
+A button inside an input (clear, open, step…) uses `EmbeddedButton`: see
+[Create a custom control](../toolkit/custom-control.md).
+
+## Toggle buttons
+
+A plain `<ToggleButton>` is themed like a button and filled with the primary
+colour when checked. The ghost, solid, soft and outline styles each have a toggle
+twin, the `Button` suffix replaced by `ToggleButton`. Checked, the ghost toggle
+turns primary, a solid one takes its hover shade, and soft and outline ones turn
+solid.
+
+```xml
+<ToggleButton IsChecked="True">Default</ToggleButton>
+<ToggleButton Style="{StaticResource PrimaryToggleButton}">Primary</ToggleButton>
+<ToggleButton Style="{StaticResource GhostToggleButton}">Ghost</ToggleButton>
+<ToggleButton Style="{StaticResource SoftSuccessToggleButton}">Success</ToggleButton>
+<ToggleButton Style="{StaticResource OutlineDangerToggleButton}">Danger</ToggleButton>
+```
+
+`IconToggleButton` is a ready-made square toggle for a single icon, transparent
+until hovered or checked. `IsSquare` composes with any other variant.
+
+```xml
+<ToggleButton Style="{StaticResource IconToggleButton}">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+</ToggleButton>
+<ToggleButton toolkit:Sizing.IsSquare="True" Style="{StaticResource PrimaryToggleButton}">
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+</ToggleButton>
+```
+
+The chevron toggle of a tree row, `ChevronToggleButton`, is on the
+[Font icon](icons.md#chevron) page.
 
 ---
 
@@ -1591,14 +1663,14 @@ theme the editors of its built-in columns). The theme manager, tokens and window
 - **Shared width** — the `SharedWidth` decorator and its `IsScope` attached property, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
 - **Create a custom control** — the category a control of your own belongs to (display, input, action), the tokens and states of each, then an input built step by step: background and border, height, sizes and padding, states, the validation error style and embedded buttons.
 
-Snippets use the `toolkit` XML namespace for those helpers and `joufflu` for the
-design-system keys, plus `nav` and `feedback` where an example targets one of
-their controls:
+Snippets use the `toolkit` XML namespace for those helpers, `joufflu` for the
+design-system keys and `fonts` for the icons, plus `feedback` where an example
+targets one of its controls:
 
 ```xml
 xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
-xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
 xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
 ```
 
@@ -1683,7 +1755,9 @@ horizontal, `Top` vertical).
 
 {: .note }
 > Spacing is implemented through child margins, so any margin set directly on a
-> child is overwritten while spacing is active.
+> child is overwritten while spacing is active. A `WrapPanel` doesn't know where its
+> lines break, so each child gets the gap after it: the panel keeps one trailing gap
+> on its right and bottom edges.
 
 ---
 
@@ -1742,11 +1816,11 @@ Point `Derive.BorderThickness` at a resource key and pick the sides with
         toolkit:Derive.BorderThicknessFactor="1,2,1,0" />
 ```
 
-Both properties work in a `Style` setter, so a control can derive its own border
+Both properties work in a `Style` setter, so a style can derive its border
 without a keyed `Thickness`:
 
 ```xml
-<Style TargetType="{x:Type nav:NavigationMenu}">
+<Style x:Key="SidePanel" TargetType="Border">
     <Setter Property="toolkit:Derive.BorderThickness" Value="{x:Static joufflu:Dimensions.DisplayThickness}" />
     <Setter Property="toolkit:Derive.BorderThicknessFactor" Value="0,0,1,0" />
 </Style>
@@ -1754,11 +1828,13 @@ without a keyed `Thickness`:
 
 > **In a style, the fed property stops being overridable.** The derived value is
 > pushed with `SetCurrentValue`, which outranks a style setter — and even a local
-> value. So do not also set the property it feeds (here `BorderThickness`) in the
-> same style, move any `Style.Triggers` that change it onto the `Derive` property,
-> and expect that a consumer can no longer override it. When the fed property has
-> to stay overridable — a control's `Padding`, say — give it a plain keyed default
-> instead of deriving it.
+> value; only an animation or a template trigger still takes over. So do not also
+> set the property it feeds (here `BorderThickness`) in the same style, move any
+> `Style.Triggers` that change it onto the `Derive` property, and expect that a
+> consumer can no longer override it. `Derive` fits a value the control owns — a
+> `Border` inside a template. When the fed property has to stay overridable — a
+> text input's `Padding`, say — give it a plain keyed default
+> (`Dimensions.InputPadding*`) instead.
 
 ## Derive.CornerRadius
 
@@ -1786,24 +1862,13 @@ Same shape again, on any `FrameworkElement`, with `Derive.MarginFactor`.
 - The source resource may be a `Thickness` / `CornerRadius` (every Joufflu shape
   key is one), whose own sides are then scaled, or a `double`, spread over every
   side or corner before scaling.
+- Pass the resource **key** (`{x:Static …}`): `Derive` follows the resource
+  itself. A `Thickness`, `CornerRadius` or `double` value is taken as is instead,
+  so inside a template `toolkit:Derive.Margin="{TemplateBinding Padding}"` scales
+  the control's own padding.
 - `Derive.BorderThickness` applies to `Border` and to any `Control`;
   `Derive.CornerRadius` applies to `Border`; `Derive.Margin` to any
   `FrameworkElement`. Anything else throws.
-- The derived value is written with `SetCurrentValue`, which outranks a style
-  setter : a style deriving a value should not also set the property it feeds,
-  and the `Style.Triggers` meant to change it have to move to the `Derive`
-  property instead. An animation or a template trigger still takes over. So
-  `Derive` fits a value the control owns — a `Border` inside a template — not one
-  a consumer overrides : a property like a text input's `Padding` carries a plain
-  keyed default (`Dimensions.InputPadding*`) instead, which a local value or a
-  style still beats.
-
-Snippets use these XML namespaces:
-
-```xml
-xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
-xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
-```
 
 ---
 
@@ -1856,7 +1921,10 @@ tooltip wraps: `320` by default.
 
 {: .note }
 > The style sets the tooltip's own `Placement`, so `ToolTipService.Placement` on an
-> element no longer moves it: use `ThemedTooltip.Placement`. A `ToolTip` set from a
+> element no longer moves it: use `ThemedTooltip.Placement`. The style does it through
+> `ThemedTooltip.IsPlaced="True"`, so a `ToolTip` style of your own keeps the placement
+> when it is based on the Joufflu one (`BasedOn="{StaticResource {x:Type ToolTip}}"`) or
+> sets that property itself. A `ToolTip` set from a
 > trigger composes as usual — the [navigation menu](../navigation/navigation-menu.md)
 > gives each item a right-placed tooltip only while the menu is collapsed.
 
@@ -2041,7 +2109,8 @@ trigger needs to highlight a valid drop. It inherits, so template and content
 children see it too.
 
 ```xml
-<Border toolkit:DropTarget.Command="{Binding DropFilesCommand}">
+<Border toolkit:DropTarget.Command="{Binding DropFilesCommand}"
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}">
     <!-- Background and BorderBrush are styled, not set on the Border, so the trigger can override them -->
     <Border.Style>
         <Style TargetType="Border">
@@ -2276,6 +2345,16 @@ Setting them in the style rather than in the template keeps them overridable, an
 the triggers below change them. A multi-line input (a list, a text area) leaves the
 height alone.
 
+`MaxCornerRadiusConverter`, and `HorizontalThicknessConverter` below, are in
+`Joufflu.Converters`: declare them in the dictionary holding the style (see
+[Embedded buttons](#embedded-buttons) for why).
+
+```xml
+<!-- xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu" -->
+<converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+<converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
+```
+
 ## Sizes and padding
 
 `Sizing.Size` is inherited: a panel set to `lg` expects every input in it to grow. Set the
@@ -2431,7 +2510,7 @@ Add the package (`dotnet add package Joufflu.Feedback`). Only the core
 
 ```xml
 xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
-xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 ```
 
@@ -2443,14 +2522,17 @@ xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 
 ## Variants
 
-A pill themed from the semantic brushes. Set `Variant` (`Default`, `Primary`,
-`Secondary`, `Success`, `Info`, `Warning`, `Danger`).
+A pill themed from the semantic brushes. Pick a variant with the `Variant`
+property (`Default` when unset).
 
 ```xml
 <feedback:Badge>Default</feedback:Badge>
 <feedback:Badge Variant="Primary">Primary</feedback:Badge>
-<feedback:Badge Variant="Success">Active</feedback:Badge>
-<feedback:Badge Variant="Danger">3</feedback:Badge>
+<feedback:Badge Variant="Secondary">Secondary</feedback:Badge>
+<feedback:Badge Variant="Success">Success</feedback:Badge>
+<feedback:Badge Variant="Info">Info</feedback:Badge>
+<feedback:Badge Variant="Warning">Warning</feedback:Badge>
+<feedback:Badge Variant="Danger">Danger</feedback:Badge>
 ```
 
 ## Sizes
@@ -2459,6 +2541,8 @@ Sized through the inherited `Sizing.Size` attached property.
 
 ```xml
 <feedback:Badge Variant="Primary" toolkit:Sizing.Size="xs">xs</feedback:Badge>
+<feedback:Badge Variant="Primary" toolkit:Sizing.Size="sm">sm</feedback:Badge>
+<feedback:Badge Variant="Primary">md</feedback:Badge>
 <feedback:Badge Variant="Primary" toolkit:Sizing.Size="lg">lg</feedback:Badge>
 ```
 
@@ -2470,13 +2554,20 @@ Sized through the inherited `Sizing.Size` attached property.
 
 ## Loading indicator
 
-An indeterminate loading indicator. Colour comes from `Foreground`, diameter from
-`Sizing.Size`.
+An indeterminate loading indicator. Colour comes from `Foreground` (the primary
+brush by default), diameter from `Sizing.Size`.
 
 ```xml
+<feedback:Spinner toolkit:Sizing.Size="xs" />
+<feedback:Spinner toolkit:Sizing.Size="sm" />
 <feedback:Spinner />
 <feedback:Spinner toolkit:Sizing.Size="lg" />
+<feedback:Spinner toolkit:Sizing.Size="lg"
+                  Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
 ```
+
+A collapsed or hidden spinner stops turning, so it can stay in the view and be shown
+through `Visibility` while work runs.
 
 ---
 
@@ -2498,6 +2589,9 @@ everything:
     <!-- the whole app -->
 </feedback:ToastContainer>
 ```
+
+The container creates a `ToastService` of its own when none is bound; bind one from
+your shell view model to share it with the pages, behind `IToastService`.
 
 When the app also uses an
 [`OverlayContainer`](../navigation/overlays.md#hosting-the-overlays), wrap it
@@ -2541,8 +2635,9 @@ toast.Message = "3 files uploaded.";
 toast.Duration = TimeSpan.FromSeconds(5); // starts the auto-dismiss
 ```
 
-Every `ToastInstance` can be updated this way, not only loading ones. Setting
-`Duration` restarts the countdown from that moment.
+Every `ToastInstance` can be updated this way, not only loading ones. Changing
+`Duration` restarts the countdown from that moment. `toasts.Close(toast)` removes a
+toast early.
 
 ## Position
 
@@ -2617,6 +2712,8 @@ Selects a `TimeSpan?` through a days/hours/minutes/seconds format.
 <inputs:TimeSpanPicker Value="{Binding Duration, Mode=TwoWay}" />
 ```
 
+## Bounds and format
+
 To bound or format the number of a `NumericUpDown` or a `DecimalUpDown`, write its
 group yourself: a group given as content replaces the default one (which is
 nullable and keeps its own caret, so set those back when you want them).
@@ -2653,12 +2750,8 @@ each group read into its own value and navigated with <kbd>Tab</kbd> / arrows.
 | `SelectsWhole` | `true` | Selected, typed over and emptied as one thing; when `false` the group keeps its own caret, like a plain text box. |
 
 `Values` holds one value per group, raising `ValuesChanged`.
-
-The `format` namespace is:
-
-```xml
-xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
-```
+`ShowDeleteButton="False"` and `ShowIncrementsButtons="False"` hide the clear and
+increment/decrement buttons, on every format input.
 
 ## Validation
 
@@ -2711,9 +2804,10 @@ An editable combo box that filters its items as you type, on the text
 `DisplayMemberPath` shows for each item.
 
 The chevron on the right opens the list, as do <kbd>Up</kbd> and <kbd>Down</kbd>.
-Opening it that way shows every choice, even once an item is selected : the text
+Opening it that way shows every choice, even once an item is selected: the text
 left behind by a selection is not a search, so it does not filter the list down to
-the item already picked.
+the item already picked. <kbd>Escape</kbd> closes the list and clears the selection,
+and text matching no item is cleared when the focus leaves.
 
 ```xml
 <inputs:ComboBoxSearch ItemsSource="{Binding Countries}"
@@ -2743,8 +2837,9 @@ country to clear it. The second input sets `Validation.ErrorTemplate` to
 
 ## ComboBoxTags
 
-Builds on `ComboBoxSearch` to select several items, shown as removable tags. Set
-`AllowAdd="True"` to let users add values not in the source list.
+Builds on `ComboBoxSearch` to select several items, shown as removable tags.
+Selected items leave the list. Set `AllowAdd="True"` to let users add values not in
+the source list.
 
 ```xml
 <inputs:ComboBoxTags AllowAdd="True"
@@ -2784,11 +2879,15 @@ second country to clear it. The second input sets `Validation.ErrorTemplate` to
 ## TextEditable
 
 Displays a value that turns into an editable text box on demand, for use outside
-a form.
+a form. A double click or the pencil button starts the edit; <kbd>Enter</kbd> or the
+check commits it, <kbd>Escape</kbd> or the cross cancels it.
 
 ```xml
 <inputs:TextEditable Text="{Binding EditableText, Mode=TwoWay}" />
 ```
+
+`Text` only changes on commit. The `TextChanged` event then reports the new `Text`
+and the `OldText`.
 
 ## Validation
 
@@ -2813,10 +2912,28 @@ the title to 10 characters to clear it. The second input sets
 ## FilePicker
 
 Selects a file through the system dialog and exposes the chosen path, with a clear
-button.
+button. The path can also be typed.
 
 ```xml
 <inputs:FilePicker FilePath="{Binding FilePath, Mode=TwoWay}" />
+```
+
+## File types
+
+`Options` takes a `FilePickerOptions`: `Filter` lists the file types the dialog
+offers, in `OpenFileDialog.Filter` syntax, and `DefaultExtension` is the extension it
+appends to a typed name.
+
+```xml
+<inputs:FilePicker FilePath="{Binding ImagePath}" Options="{Binding ImageOptions}" />
+```
+
+```csharp
+public FilePickerOptions ImageOptions { get; } = new()
+{
+    Filter = "Images (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*",
+    DefaultExtension = ".png"
+};
 ```
 
 ## Validation
@@ -2854,8 +2971,9 @@ The popup provides:
 - a **saturation / brightness** square you can drag,
 - a **hue** slider,
 - an **alpha** slider (checkerboard behind a transparent → opaque ramp),
-- an editable **hex** field and an **opacity** percentage. A `#RRGGBB` hex keeps the
-  opacity, a pasted `#AARRGGBB` sets it too.
+- an editable **hex** field and an **opacity** percentage. A `#RRGGBB` hex (or a
+  colour name such as `Teal`) keeps the opacity, a pasted `#AARRGGBB` sets it too.
+  Text that spells no colour reverts to the current one.
 
 ## Validation
 
@@ -2897,6 +3015,7 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
         <StackPanel toolkit:Spacing.Gap="4">
             <Button Content="Rename" Style="{StaticResource GhostButton}" />
             <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
+            <Button Content="Delete" Style="{StaticResource GhostButton}" />
         </StackPanel>
     </inputs:Dropdown.Popup>
 </ToggleButton>
@@ -2909,7 +3028,7 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
 | `Dropdown.HorizontalOffset` | `double` | `0` | Extra horizontal offset applied on top of the placement. |
 | `Dropdown.VerticalOffset` | `double` | `2` | Extra vertical offset applied on top of the placement, a small gap from the button by default. |
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
-| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, background, border, corner radius. |
+| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
 
 ## Popup placement
 
@@ -2949,18 +3068,7 @@ included. An icon-only dropdown is just an icon-only toggle button:
 
 By default the popup stays open until you click outside it. For a menu of commands
 that is rarely what you want, so `Dropdown.CloseOnClick` dismisses it as soon as a
-button inside is clicked:
-
-```xml
-<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
-    <inputs:Dropdown.Popup>
-        <StackPanel toolkit:Spacing.Gap="4">
-            <Button Content="Rename" Style="{StaticResource GhostButton}" />
-            <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
-        </StackPanel>
-    </inputs:Dropdown.Popup>
-</ToggleButton>
-```
+button inside is clicked, as in the first example above.
 
 It listens for `ButtonBase.Click`, not for any mouse click, so a `TextBox`, a
 `Slider` or a `ComboBox` in the popup stays usable. The flip side is that a
@@ -2975,8 +3083,7 @@ The popup content is wrapped in a `DropdownPopupHost`, a `ContentControl` whose
 default style draws the themed border. A `Popup` is only a positioning primitive —
 it derives from `FrameworkElement`, so it has no template, background or padding of
 its own — which is why `Dropdown.PopupStyle` targets the host rather than the popup.
-Padding, background, border and corner radius all go through it, based on the
-default style to keep the theme:
+Base it on the default style to keep the theme:
 
 ```xml
 <ToggleButton Content="Padded">
@@ -2993,8 +3100,11 @@ default style to keep the theme:
 </ToggleButton>
 ```
 
-Padding defaults to `0`, so content sits flush against the border unless you ask
-otherwise.
+`Padding` defaults to `Dimensions.DisplayPaddingSm`. The default template draws the
+background, border and corner radius straight from the theme tokens
+(`DisplayBase0Brush`, `DisplayBorder0Brush`, `DisplayRadius`): setting `Background`
+or `BorderBrush` in the style changes nothing. Override those tokens, or give the
+style a `Template` of your own.
 
 ## Bindings inside the popup
 
@@ -3038,11 +3148,13 @@ Navigation building blocks from `Joufflu.Navigation`:
 - **Paging** — a page selector for browsing large sets of data.
 
 The view models use `Navigator`, `Overlayer` / `IOverlayer` and `IPage` from the
-`Joufflu.Navigation` namespace. The XAML snippets use the `nav` XML namespace, plus
-`vm` for your own view models:
+`Joufflu.Navigation` namespace. The XAML snippets use the `nav` XML namespace, the
+core `fonts` and `toolkit` ones, plus `vm` for your own view models:
 
 ```xml
 xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 xmlns:vm="clr-namespace:MyApp.ViewModels"
 ```
 
@@ -3054,9 +3166,10 @@ xmlns:vm="clr-namespace:MyApp.ViewModels"
 
 ## Collapsible side menu
 
-The collapsible side menu plugged into its own `Navigator`. The chevron collapses
-it to an icons-only rail. A `NavigationGroup` displays like an item but expands to
-reveal children, and groups can nest.
+The collapsible side menu plugged into its own `Navigator`. The collapse button
+folds it to an icons-only rail. A `NavigationGroup` displays like an item but expands
+to reveal children, and groups can nest. A `NavigationTitle` labels a section and
+turns into a separator line once collapsed.
 
 When collapsed, each item and group hides its label and surfaces it as a
 right-placed [tooltip](../toolkit/tooltip.md) on hover, keeping the icons-only
@@ -3072,7 +3185,10 @@ button and the items stay clickable. The `Header` is therefore not interactive.
 <nav:NavigationMenu Navigator="{Binding DemoNavigator}">
     <!-- Optional header slot, hidden when collapsed -->
     <nav:NavigationMenu.Header>
-        <TextBlock FontWeight="SemiBold" Text="My app" />
+        <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
+            <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Rocket}" />
+            <TextBlock Text="My app" />
+        </StackPanel>
     </nav:NavigationMenu.Header>
     <nav:NavigationTitle>Demo</nav:NavigationTitle>
     <!-- An item targets the type of the page it navigates to -->
@@ -3186,8 +3302,8 @@ one of three ways that tell the caller how it ended:
 | `overlays.Cancel(content)` | `false` |
 | `overlays.Ignore(content)` | `null` — also what the close cross and a click on the dimmed background do |
 
-Each closes the overlay showing that content, whichever is on top, so content
-opening another overlay of its own kind still closes itself.
+Each closes the overlay showing that exact content, even when another overlay sits
+above it.
 
 `OverlayOptions` exposes `Title`, `ShowCloseButton`, `CloseOnClickAway` (set
 `false` to force the user through the action buttons) and `FullScreen`.
@@ -3222,7 +3338,7 @@ public partial class SampleFormViewModel : ObservableObject, IOverlayContent<str
     public OverlayOptions Options { get; } = new() { Title = "Edit profile", CloseOnClickAway = false };
 
     [ObservableProperty]
-    private string _name = "Joe Doe";
+    private string _name = "Ada Lovelace";
 
     public string? Result => Name;
 
@@ -3395,8 +3511,9 @@ using DataObject = Joufflu.Data.Model.DataObject; // System.Windows has one too
 
 ## Nodes
 
-The controls take a `Node`, a `DataObject` root: `DataFill` and `DataEdit` edit it in place,
-`DataDisplay` only shows it.
+The controls take a `Node`: `DataFill` and `DataEdit` edit a `DataObject` root in place,
+`DataDisplay` only shows it, and takes any node or a `JToken`
+([Data display](data-display.md#show-a-node)).
 
 | Node | Holds |
 |---|---|
@@ -3468,7 +3585,8 @@ Node = (DataObject)JObject.Parse(json).ToDataNode();
 ```
 
 `ReadDataNode()` gives the same tree straight from a `JsonReader`, for a large file: it is never
-held as tokens too. A key given twice keeps its last value, comments are skipped.
+held as tokens too ([open a file](data-display.md#open-a-file)). A key given twice keeps its last
+value, comments are skipped.
 
 ```csharp
 using var reader = new JsonTextReader(File.OpenText(path));
@@ -3569,45 +3687,64 @@ Without a bound `Node`, it starts from an empty object. `ManualValues` works as 
 
 `DataDisplay` shows a node read only: the key, the type and the value of each node.
 
-```xml
-<data:DataDisplay Node="{Binding Node}" />
-```
-
 ```csharp
 Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode();
 Node.Load(JToken.Parse(json), ManualValues);
 ```
 
+```xml
+<data:DataDisplay Node="{Binding Node}" />
+```
+
+- `Node` takes any `DataNode`: an object shows its properties as the first level, an array or a
+  value is that level itself.
 - Values read the way their editor shows them: the name of a `Choice` option, a date without
   its time when it has none, a time span as `[d.]hh:mm:ss`.
-- **null**, and **undefined** on a field forced to nothing, are greyed and italic, apart from
-  a text saying "null".
+- A value runs on one line: a line break shows as `↵`, a text past 1000 characters is cut.
+- **null** and **undefined** are greyed and italic, apart from a text saying "null".
 - A value forced to one of the [manual values](index.md#manual-values) is flagged with a
   feather. A forced object or array shows the entry instead of its properties or items.
 - A node with a `Description` shows it on an info icon, as in [Data fill](data-fill.md).
 
-- `Node` takes any `DataNode`: an object shows its properties as the first level, an array or a
-  value is shown as that level itself. A `JToken` can be bound to it directly, read as `ToDataNode` does.
-- A value runs on one line: a line break shows as `↵`, a text past 1000 characters is cut.
+The user can only expand and collapse nodes. The display follows the node: values and keys
+changed, children added or removed, a node forced or expanded in code show up before the next
+render.
 
-Only expanding and collapsing nodes changes the tree. The display follows the node: children added
-or removed, a node forced or expanded in code show up before the next render.
+## Show a JToken
 
-## Large files
-
-Read the file with `ReadDataNode()` off the UI thread, then show the node:
+A `JToken` bound to `Node` is read as `ToDataNode()` does ([From JSON](index.md#from-json)), so a
+plain value is shown without building a node first.
 
 ```csharp
-using var reader = new JsonTextReader(File.OpenText(path));
+public JToken Token { get; } = new JValue("Hello");
+```
+
+```xml
+<data:DataDisplay Node="{Binding Token}" />
+```
+
+## Open a file
+
+Read the file with [`ReadDataNode()`](index.md#from-json) off the UI thread, then show the node:
+
+```csharp
+// When FilePath changes
+using var reader = new JsonTextReader(File.OpenText(FilePath));
 Node = await Task.Run(() => reader.ReadDataNode());
 ```
 
-- `ReadDataNode()` builds the node straight from the reader, without a `JToken` in between: a
-  file is held once, as nodes, and read about a third faster.
+```xml
+<inputs:FilePicker FilePath="{Binding FilePath}" Options="{Binding JsonFileOptions}" />
+<data:DataDisplay Node="{Binding Node}" />
+```
+
+- The file is never held as tokens too, only as nodes.
 - The tree is laid flat in rows of one height, and only the rows in view are built. A file of
   millions of nodes scrolls, expands and collapses as a small one does.
 - Give the display a height (a `Grid` row, a fixed `Height`). In a `StackPanel` or a
   `ScrollViewer` it is measured with endless room, and builds every row.
+
+`inputs:FilePicker` is the [file picker](../inputs/file-picker.md) of `Joufflu.Inputs`.
 
 ---
 
@@ -3635,7 +3772,6 @@ xmlns:fileSystem="clr-namespace:Joufflu.FileExplorer.FileSystem;assembly=Joufflu
 xmlns:icons="clr-namespace:Joufflu.FileExplorer.Icons;assembly=Joufflu.FileExplorer"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
 xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
-xmlns:conv="clr-namespace:Joufflu.Converters;assembly=Joufflu"
 ```
 
 ## Sources
@@ -3699,7 +3835,8 @@ menu.
 ```
 
 `SelectedNodes` is read-only: bind it `OneWay`, for a status bar counting the
-selection say. `View` gives the sorted and filtered nodes as the list displays them.
+selection for instance. `View` gives the sorted and filtered nodes as the list
+displays them.
 
 ## Extra columns
 
@@ -3777,6 +3914,14 @@ counting its items and the selected ones.
 The parts share the `Source` of the explorer, which is what keeps them in sync.
 `ExtraColumns` is handed over to its list, see
 [extra columns](list.md#extra-columns).
+
+Each part is a control of its own, to lay out differently: `ExplorerControlBar` (the
+breadcrumb, each folder reopened by a click, and a button up to the parent folder),
+[`ExplorerTree`](tree.md) and [`ExplorerList`](list.md), bound to the same source.
+
+```xml
+<fileExplorer:ExplorerControlBar Source="{Binding Source}" />
+```
 
 ## Custom node template
 
@@ -3919,6 +4064,16 @@ public class VirtualFilesSource : FileSystemSource
     // Nothing to hand over to the shell : a virtual file is opened by the application itself.
     public override Task Open(IExplorerNode node) { ... }
 }
+
+// Template of the cells of the extra column, chosen by node type.
+public class PinnedCellTemplateSelector : DataTemplateSelector
+{
+    public DataTemplate? PinnedTemplate { get; set; }
+    public DataTemplate? EmptyTemplate { get; set; }
+
+    public override DataTemplate? SelectTemplate(object item, DependencyObject container)
+        => item is VirtualFile ? PinnedTemplate : EmptyTemplate;
+}
 ```
 
 The context menu of a node type is a `DataTemplate` keyed with
@@ -3934,7 +4089,14 @@ node as their `CommandParameter`.
 ```xml
 <fileExplorer:Explorer Source="{Binding VirtualSource}">
     <fileExplorer:Explorer.Resources>
-        <conv:TypeConverter x:Key="NodeTypeConverter" />
+        <!-- Cells of the extra column : the box only exists on the rows carrying the state -->
+        <DataTemplate x:Key="PinnedCell">
+            <CheckBox IsChecked="{Binding IsPinned, Mode=OneWay}" IsHitTestVisible="False" />
+        </DataTemplate>
+        <DataTemplate x:Key="EmptyCell" />
+        <local:PinnedCellTemplateSelector x:Key="PinnedCellSelector"
+                                          PinnedTemplate="{StaticResource PinnedCell}"
+                                          EmptyTemplate="{StaticResource EmptyCell}" />
 
         <!-- Visual of the virtual nodes, implicit as the ones of the library are -->
         <DataTemplate DataType="{x:Type local:VirtualFile}">
@@ -3955,26 +4117,10 @@ node as their `CommandParameter`.
         </DataTemplate>
     </fileExplorer:Explorer.Resources>
     <fileExplorer:Explorer.ExtraColumns>
-        <GridViewColumn Header="Pinned" Width="70">
-            <GridViewColumn.CellTemplate>
-                <DataTemplate>
-                    <!-- The column is shared by every row : only the virtual nodes show a box -->
-                    <CheckBox IsChecked="{Binding IsPinned, Mode=OneWay}" IsHitTestVisible="False">
-                        <CheckBox.Style>
-                            <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Value="{x:Type local:VirtualFile}"
-                                                 Binding="{Binding Converter={StaticResource NodeTypeConverter}}">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </CheckBox.Style>
-                    </CheckBox>
-                </DataTemplate>
-            </GridViewColumn.CellTemplate>
-        </GridViewColumn>
+        <!-- The column is shared by every row : its template is chosen by node type,
+             so IsPinned is only bound on the rows that have it -->
+        <GridViewColumn Header="Pinned" Width="70"
+                        CellTemplateSelector="{StaticResource PinnedCellSelector}" />
     </fileExplorer:Explorer.ExtraColumns>
 </fileExplorer:Explorer>
 ```

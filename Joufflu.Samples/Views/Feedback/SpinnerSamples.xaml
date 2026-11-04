@@ -18,14 +18,14 @@
             <c:CodeExample
                 Title="Loading indicator"
                 Code="{Binding Code}"
-                Description="An indeterminate loading indicator. Color comes from Foreground, diameter from Sizing.Size.">
+                Description="An indeterminate loading indicator. Colour comes from Foreground (the primary brush by default), diameter from Sizing.Size. A collapsed or hidden spinner stops turning, so it can stay in the view and be shown through Visibility while work runs.">
                 <StackPanel
                     VerticalAlignment="Center"
                     toolkit:Spacing.Gap="16,0"
                     Orientation="Horizontal">
                     <feedback:Spinner toolkit:Sizing.Size="xs" />
                     <feedback:Spinner toolkit:Sizing.Size="sm" />
-                    <feedback:Spinner toolkit:Sizing.Size="md" />
+                    <feedback:Spinner />
                     <feedback:Spinner toolkit:Sizing.Size="lg" />
                     <feedback:Spinner toolkit:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" />
                 </StackPanel>

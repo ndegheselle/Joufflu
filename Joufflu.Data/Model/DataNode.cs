@@ -38,7 +38,10 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
         OnChanged();
     }
 
-    /// <summary>For DataNode with children and to prevent binding errors.</summary>
+    /// <summary>
+    /// Whether the children are shown. Values have it too, so a tree binds it on every row without
+    /// a binding error.
+    /// </summary>
     [ObservableProperty]
     private bool _isExpanded = true;
 

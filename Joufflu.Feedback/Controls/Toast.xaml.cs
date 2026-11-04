@@ -4,6 +4,11 @@ using System.Windows.Media.Animation;
 
 namespace Joufflu.Feedback.Controls;
 
+/// <summary>
+/// Fills a toast's progress bar over its <see cref="Joufflu.Feedback.ToastInstance.Duration"/>, so the
+/// bar shows how close the auto-dismiss is. Restarted whenever the duration changes; a zero duration
+/// (a sticky toast) leaves the bar full.
+/// </summary>
 public static class ToastProgress
 {
     public static readonly DependencyProperty DurationProperty =

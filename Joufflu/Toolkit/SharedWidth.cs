@@ -31,6 +31,7 @@ namespace Joufflu.Toolkit;
 /// </summary>
 public class SharedWidth : Decorator
 {
+    /// <summary>Marks the element whose <see cref="SharedWidth"/> descendants form one group.</summary>
     public static readonly DependencyProperty IsScopeProperty = DependencyProperty.RegisterAttached(
         "IsScope",
         typeof(bool),

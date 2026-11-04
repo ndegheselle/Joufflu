@@ -10,11 +10,15 @@ nav_order: 5
 ## TextEditable
 
 Displays a value that turns into an editable text box on demand, for use outside
-a form.
+a form. A double click or the pencil button starts the edit; <kbd>Enter</kbd> or the
+check commits it, <kbd>Escape</kbd> or the cross cancels it.
 
 ```xml
 <inputs:TextEditable Text="{Binding EditableText, Mode=TwoWay}" />
 ```
+
+`Text` only changes on commit. The `TextChanged` event then reports the new `Text`
+and the `OldText`.
 
 ## Validation
 

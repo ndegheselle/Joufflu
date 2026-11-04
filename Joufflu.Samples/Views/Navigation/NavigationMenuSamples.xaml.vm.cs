@@ -66,6 +66,9 @@ public class NavigationMenuSamplesViewModel : ObservableObject
         "    </nav:NavigationItem>\n" +
         "    <!-- A group displays like an item but expands to reveal children -->\n" +
         "    <nav:NavigationGroup Header=\"Parent\">\n" +
+        "        <nav:NavigationGroup.Icon>\n" +
+        "            <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.Folder}\" />\n" +
+        "        </nav:NavigationGroup.Icon>\n" +
         "        <nav:NavigationItem TargetType=\"{x:Type vm:DemoSubmenu1Page}\">Submenu 1</nav:NavigationItem>\n" +
         "        <nav:NavigationItem TargetType=\"{x:Type vm:DemoSubmenu2Page}\">Submenu 2</nav:NavigationItem>\n" +
         "        <!-- Groups can nest -->\n" +

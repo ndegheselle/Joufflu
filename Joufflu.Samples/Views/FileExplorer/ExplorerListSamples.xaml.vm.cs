@@ -36,9 +36,9 @@ public class ExplorerListSamplesViewModel : ObservableObject
     public string ExplorerListFilterCode =>
         "<fileExplorer:ExplorerList Source=\"{Binding Source}\" VisibleNodes=\"Files\" />";
 
-    public ExplorerListSamplesViewModel(IToastService toats)
+    public ExplorerListSamplesViewModel(IToastService toasts)
     {
-        Source = new FileSystemSource(Directory.GetCurrentDirectory(), toats);
+        Source = new FileSystemSource(Directory.GetCurrentDirectory(), toasts);
         Source.Open();
     }
 }

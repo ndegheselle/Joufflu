@@ -18,7 +18,7 @@
             <c:CodeExample
                 Title="TextEditable"
                 Code="{Binding TextEditableCode}"
-                Description="Displays a value that can be turned into an editable text box on demand, useful outside of a form.">
+                Description="Displays a value that turns into an editable text box on demand, for use outside a form. A double click or the pencil button starts the edit; Enter or the check commits it, Escape or the cross cancels it.">
                 <StackPanel toolkit:Spacing.Gap="12,0" Orientation="Horizontal">
                     <inputs:TextEditable Width="220" Text="{Binding EditableText, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding EditableText, StringFormat='Value: {0}'}" />

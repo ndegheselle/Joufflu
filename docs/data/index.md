@@ -29,8 +29,9 @@ using DataObject = Joufflu.Data.Model.DataObject; // System.Windows has one too
 
 ## Nodes
 
-The controls take a `Node`, a `DataObject` root: `DataFill` and `DataEdit` edit it in place,
-`DataDisplay` only shows it.
+The controls take a `Node`: `DataFill` and `DataEdit` edit a `DataObject` root in place,
+`DataDisplay` only shows it, and takes any node or a `JToken`
+([Data display](data-display.md#show-a-node)).
 
 | Node | Holds |
 |---|---|
@@ -102,7 +103,8 @@ Node = (DataObject)JObject.Parse(json).ToDataNode();
 ```
 
 `ReadDataNode()` gives the same tree straight from a `JsonReader`, for a large file: it is never
-held as tokens too. A key given twice keeps its last value, comments are skipped.
+held as tokens too ([open a file](data-display.md#open-a-file)). A key given twice keeps its last
+value, comments are skipped.
 
 ```csharp
 using var reader = new JsonTextReader(File.OpenText(path));

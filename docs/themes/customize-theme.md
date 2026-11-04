@@ -16,7 +16,7 @@ resources to apply it.
 The design system is exposed as resource keys you override in a dictionary:
 `joufflu:Colors.*` for the colours and `joufflu:Dimensions.*` for the metrics. The
 `joufflu:Brushes.*` are built from the colours by the core resources, so overriding a
-colour is enough for every brush to follow. [Design tokens](tokens.html) lists them all, with the role each one
+colour is enough for every brush to follow. [Design tokens](tokens.md) lists them all, with the role each one
 plays in the control styles.
 
 The controls read the category tokens (`Display*`, `Input*`, `Action*`), not the global ones. The
@@ -38,9 +38,9 @@ customizer has two modes:
   control padding, which is only edited in the simple mode. The generated dictionary writes the
   category base colours (`ActionBase0Color`…) and shapes. Going back to the simple mode drops them.
 
-The other brushes of a category (border, elevated, interaction) are derived from its base either way.
-A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` no
-longer reaches the controls.
+The other brushes of a category (`Border0`, `Border1`, `Interaction`) are derived from its base either way.
+A hand-written dictionary overriding only `Dimensions.Radius` or `Dimensions.Thickness` does
+not reach the controls: override the category keys.
 
 ```xml
 <!-- Merge your overrides AFTER the Joufflu resources -->

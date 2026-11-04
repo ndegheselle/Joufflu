@@ -21,6 +21,14 @@ The parts share the `Source` of the explorer, which is what keeps them in sync.
 `ExtraColumns` is handed over to its list, see
 [extra columns](list.md#extra-columns).
 
+Each part is a control of its own, to lay out differently: `ExplorerControlBar` (the
+breadcrumb, each folder reopened by a click, and a button up to the parent folder),
+[`ExplorerTree`](tree.md) and [`ExplorerList`](list.md), bound to the same source.
+
+```xml
+<fileExplorer:ExplorerControlBar Source="{Binding Source}" />
+```
+
 ## Custom node template
 
 The node visuals are implicit templates keyed by node type: redeclaring one in the

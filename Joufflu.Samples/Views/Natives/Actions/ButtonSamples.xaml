@@ -35,7 +35,7 @@
             <c:CodeExample
                 Title="Soft"
                 Code="{Binding SoftCode}"
-                Description="A tinted background — the semantic hue at low opacity — with the hue itself as text. Because the tint is derived by opacity, it adapts to light/dark and to custom themes. Secondary is achromatic, so it uses a neutral foreground wash.">
+                Description="A tinted background — the semantic hue at low opacity — with the hue itself as text. Because the tint is derived by opacity, it adapts to light/dark and to custom themes. Secondary is achromatic, so its tint is lighter.">
                 <WrapPanel toolkit:Spacing.Gap="8,0">
                     <Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
                     <Button Style="{StaticResource SoftSecondaryButton}">Secondary</Button>

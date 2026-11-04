@@ -142,7 +142,7 @@
                                 </Grid>
                             </WrapPanel>
 
-                            <!--  Chevron handle : the tags and the text box take the control surface, so the drop down needs a target of its own  -->
+                            <!--  Chevron handle: the tags and the text box take the control surface, so the drop down needs a target of its own  -->
                             <ToggleButton
                                 x:Name="ToggleButton"
                                 Grid.Column="1"
@@ -158,7 +158,6 @@
                                 Template="{StaticResource ComboBoxChevronToggleButtonTemplate}" />
                         </Grid>
 
-                        <!--  Popup showing items  -->
                         <Popup
                             x:Name="PART_Popup"
                             AllowsTransparency="True"

@@ -12,7 +12,7 @@ merged dictionary; since every control reads its colours through `DynamicResourc
 UI re-themes live.
 
 The keys themselves — what each colour and dimension is used for — are listed in
-[Design tokens](tokens.html).
+[Design tokens](tokens.md).
 
 Themes are selected **by name**. Three are always available — `System`, `Light` and `Dark` —
 and you can register your own palettes so they become selectable alongside the built-ins.
@@ -62,8 +62,8 @@ settings differently (see [Persisting the theme](#persisting-the-theme)).
 ## Registering a custom theme
 
 A custom theme is just a resource dictionary with the same keys as `Light.xaml` / `Dark.xaml`
-(see [Customize theme](customize-theme.html) to generate one). It can also override any
-[dimension](tokens.html#dimensions) — a denser or rounder theme — since the manager merges it right
+(see [Customize theme](customize-theme.md) to generate one). It can also override any
+[dimension](tokens.md#dimensions) — a denser or rounder theme — since the manager merges it right
 after `Resources.xaml`. Register it by name — from a pack
 `Uri` or an in-memory `ResourceDictionary` — and it becomes selectable through `Theme`, appearing
 in the `Themes` list next to the built-ins:

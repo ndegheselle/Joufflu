@@ -19,7 +19,7 @@ namespace Joufflu.FileExplorer.Nodes
     {
         public ObservableCollection<IExplorerNode> Children { get; }
         /// <summary>
-        /// All the parent of the current directory (including this one)
+        /// The directory and its ancestors, from the root down to it : the path the breadcrumb shows.
         /// </summary>
         public IReadOnlyList<IExplorerDirectory> DirectoryTree { get; }
     }

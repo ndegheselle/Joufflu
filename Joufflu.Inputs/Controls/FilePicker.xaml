@@ -60,7 +60,6 @@
                                 Grid.Column="1"
                                 HorizontalAlignment="Right"
                                 Orientation="Horizontal">
-                                <!--  Clear button  -->
                                 <Button
                                     x:Name="ClearButton"
                                     Command="{Binding ClearCommand}"

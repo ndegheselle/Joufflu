@@ -12,7 +12,7 @@ public class DataObjectTypeConverterTests
     private static readonly TypeConverter Converter = TypeDescriptor.GetConverter(typeof(DataObject));
 
     [Test]
-    public void JObjectConvertsToItsNode()
+    public void A_JObject_converts_to_its_node()
     {
         Assert.That(Converter.CanConvertFrom(typeof(JObject)));
 
@@ -22,7 +22,7 @@ public class DataObjectTypeConverterTests
     }
 
     [Test]
-    public void OtherTokensAreTheOnlyPropertyOfTheRoot()
+    public void Any_other_token_is_the_only_property_of_the_root()
     {
         var node = (DataObject)Converter.ConvertFrom(JArray.Parse("[1]"))!;
 

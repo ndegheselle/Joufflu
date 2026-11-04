@@ -13,12 +13,13 @@ public interface IExplorerSource : INotifyPropertyChanged
     IExplorerDirectory? Current { get; }
 
     /// <summary>
-    /// Open the root element and makes it the <see cref="Current"/> one.
+    /// Loads the root directory and makes it the <see cref="Current"/> one. Nothing is displayed before it is called.
     /// </summary>
     Task Open();
 
     /// <summary>
-    /// Open a node, if it's a directory loads the children of a directory and makes it the <see cref="Current"/> one.
+    /// Opens a node : a directory is loaded and made the <see cref="Current"/> one, what a file does is up to the
+    /// source.
     /// </summary>
     Task Open(IExplorerNode node);
 
@@ -46,6 +47,10 @@ public interface IExplorerSource : INotifyPropertyChanged
     /// <summary>Whether something was copied or cut, which <see cref="Paste"/> would paste.</summary>
     bool CanPaste();
 
+    /// <summary>
+    /// Copies, or moves when <paramref name="isMove"/>, the files and directories at <paramref name="paths"/> into
+    /// <paramref name="target"/> : what is dropped on a control, from it or from the Windows explorer.
+    /// </summary>
     Task Transfer(IReadOnlyList<string> paths, IExplorerDirectory target, bool isMove);
 }
 

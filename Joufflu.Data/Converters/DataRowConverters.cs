@@ -12,6 +12,11 @@ namespace Joufflu.Data.Converters;
 /// How deep a row of <see cref="DataDisplay"/> sits: 0 for the first level, the properties of an
 /// object shown or the node itself otherwise.
 /// <para>Bound to the row's node, then to the node shown.</para>
+/// <para>
+/// Read back from the node's parents although <see cref="DataDisplayRows"/> knows each depth: the
+/// rows are the nodes themselves, as an object per row would cost one more object per node of a
+/// large file, millions of them.
+/// </para>
 /// </summary>
 public class DataDepthConverter : IMultiValueConverter
 {

@@ -23,7 +23,7 @@
             <c:CodeExample
                 Title="Animate.Bounce"
                 Code="{Binding BounceCode}"
-                Description="Bounce loops a vertical hop to draw attention to an element : it rises to the full height, lands, then rebounds twice at roughly 42% and 18% of it, each rebound shorter than the last, so it settles rather than pulses. It animates a RenderTransform, so it never affects layout and never moves its neighbours. BounceHeight sets how far it rises (in DIPs) and BounceDuration the length of a full cycle — the hop plus the pause before the next one. A hidden element pauses its own hop and resumes when it comes back, so a bounce left on one costs nothing.">
+                Description="Bounce loops a vertical hop to draw attention to an element: it rises to the full height, lands, then rebounds twice at roughly 42% and 18% of it, each rebound shorter than the last, so it settles rather than pulses. It animates a RenderTransform, so it never affects layout and never moves its neighbours. BounceHeight sets how far it rises (in DIPs) and BounceDuration the length of a full cycle — the hop plus the pause before the next one. A hidden element pauses its own hop and resumes when it comes back, so a bounce left on one costs nothing.">
                 <StackPanel toolkit:Spacing.Gap="0,16">
                     <WrapPanel VerticalAlignment="Center" toolkit:Spacing.Gap="16,12">
                         <Button toolkit:Animate.Bounce="True" Style="{StaticResource PrimaryButton}">Look at me</Button>

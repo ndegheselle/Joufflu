@@ -70,7 +70,7 @@ Map by **role**, not by closest hue:
 | Panel/card/popup background | `<Border Style="{StaticResource Card}">` or `Brushes.DisplayBase0Brush` |
 | Inset panel inside a card | `CardSecondary` / `Brushes.DisplayBorder0Brush` |
 | Background of a custom input / button | `Brushes.InputBase0Brush` / `Brushes.ActionBase0Brush` |
-| Hover of a row or custom clickable item | `Brushes.ActionInteractionBrush` (usually already done by the native style); selected is `PrimarySoftBrush` |
+| Hover of a row or custom clickable item | `Brushes.ActionInteractionBrush` (usually already done by the native style); selected is `PrimaryBrush` with `PrimaryForegroundBrush` text |
 | Normal text | Remove (inherits `Foreground`) |
 | Grey/secondary text | `Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"` |
 | Borders, separators | The category's border: `Brushes.DisplayBorder0Brush` (panels, separators; `DisplayBorder1Brush` for a border on a `DisplayBorder0Brush` background), `InputBorder0Brush` (`InputBorder1Brush` on focus), `ActionBorder0Brush` (`ActionBorder1Brush` on hover, no focus border) |
@@ -140,8 +140,7 @@ Delete `ControlTemplate`s that only reimplemented the default look.
 
 - `dotnet build` passes (token keys are `x:Static`, so typos fail the build: good).
 - Grep the edited files again: no hex colours, no `StaticResource` on Joufflu tokens
-  (except `Margin`/`Thickness` pieces documented as `StaticResource`, like
-  `Dimensions.TitleBarHeightOffset`, and named styles, which are always `StaticResource`).
+  (named styles such as `Card` or `PrimaryButton` are always `StaticResource`).
 - Offer to run the app and switch between Light and Dark to confirm every surface follows.
 
 Summarise what changed per file, and list anything left as-is on purpose (e.g. a brand

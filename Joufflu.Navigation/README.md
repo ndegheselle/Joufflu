@@ -3,7 +3,7 @@
 **Navigation and modal overlays for [Joufflu](https://www.nuget.org/packages/Joufflu).**
 
 A small, view-model-first navigation layer that follows the Joufflu design system:
-a navigation menu, a page container, awaitable modal dialogs and a paging selector.
+a navigation menu driven by a navigator, awaitable modal dialogs and a paging selector.
 
 [![Joufflu.Navigation on NuGet](https://img.shields.io/nuget/v/Joufflu.Navigation?label=Joufflu.Navigation&logo=nuget)](https://www.nuget.org/packages/Joufflu.Navigation)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/ndegheselle/Joufflu/blob/main/LICENSE)
@@ -12,7 +12,8 @@ a navigation menu, a page container, awaitable modal dialogs and a paging select
 
 | Piece | Purpose |
 |---|---|
-| `NavigationMenu` | A themed navigation menu for moving between sections. |
+| `NavigationMenu` | A collapsible side menu of items, groups and section titles, each item targeting a page type. |
+| `Navigator` | Holds the current page (a view model) and turns a page type into the page to show. Pages implementing `IPage` are told when they are shown and left. |
 | `OverlayContainer` | Wraps the whole app and layers the modal overlays above it. |
 | `Overlayer` | Shows awaitable modal overlays (`IOverlayer.ShowAsync`) and closes them with `Validate`, `Cancel` or `Ignore` — plus `Confirm()` for the standard confirmation. |
 | `IOverlayContent` | Overlay content carrying its own `OverlayOptions`. `IOverlayContent<TResult>` adds the `Result` the overlay hands back when validated. |

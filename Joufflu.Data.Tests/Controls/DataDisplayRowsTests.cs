@@ -116,4 +116,25 @@ public class DataDisplayRowsTests
 
         Assert.That(_pending, Is.Empty);
     }
+
+    [Test]
+    public void An_array_shown_is_the_first_level_itself()
+    {
+        DataDisplayRows rows = Show(JToken.Parse("[1, 2]").ToDataNode("list"));
+
+        Assert.That(KeysOf(rows), Is.EqualTo(new[] { "list", "[0]", "[1]" }));
+    }
+
+    [Test]
+    public void Children_removed_from_a_shown_node_lose_their_rows()
+    {
+        DataObject root = Parse("""{ "list": [1, 2, 3], "e": 3 }""");
+        var list = (DataArray)root.Properties[0];
+        DataDisplayRows rows = Show(root);
+
+        list.Remove(list.Values[0]);
+        ApplyPending();
+
+        Assert.That(KeysOf(rows), Is.EqualTo(new[] { "list", "[0]", "[1]", "e" }));
+    }
 }

@@ -67,12 +67,12 @@ never invent a property or method that is not listed here or visible in the pack
 
 | Package | Contents | Depends on |
 |---|---|---|
-| `Joufflu` | Styles of the native WPF controls, `ThemeManager`, `ThemedWindow`, `FontIcon` + Lucide glyphs, toolkit attached properties, converters, design tokens | CommunityToolkit.Mvvm |
+| `Joufflu` | Styles of the native WPF controls, `ThemeManager`, `ThemedWindow`, `FontIcon` + Lucide glyphs, `Chevron`, toolkit attached properties, converters, design tokens | CommunityToolkit.Mvvm |
 | `Joufflu.Inputs` | Input controls and `Dropdown` | Joufflu |
 | `Joufflu.Navigation` | `NavigationMenu`, `Navigator`, overlays, `Paging` | Joufflu |
 | `Joufflu.Feedback` | `Badge`, `Spinner`, toasts, `ToastContainer` | Joufflu |
 | `Joufflu.FileExplorer` | `Explorer`, `ExplorerList`, `ExplorerTree`, `ExplorerControlBar`, sources | Joufflu, Joufflu.Feedback |
-| `Joufflu.Data` | `DataFill`, `DataEdit`, `DataDisplay`, the `DataNode` tree, `JsonSchema.ToDataNode()` | Joufflu, Joufflu.Inputs, NJsonSchema |
+| `Joufflu.Data` | `DataFill`, `DataEdit`, `DataDisplay`, the `DataNode` tree, `JsonSchema.ToDataNode()`, `JsonReader.ReadDataNode()` | Joufflu, Joufflu.Inputs, NJsonSchema |
 
 `Joufflu.Data` API still changes between minor versions: check members against the
 installed package.
@@ -110,8 +110,8 @@ Without step 1 controls render unstyled; without step 2 every themed brush is mi
 | Prefix | Holds |
 |---|---|
 | `joufflu` | `Brushes`, `Colors`, `Dimensions` resource keys |
-| `toolkit` | `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`, `DragSource` |
-| `fonts` | `FontIcon`, `LucideFontIcons` |
+| `toolkit` | `Sizing`, `Spacing`, `Derive`, `SharedWidth`, `ThemedTooltip`, `Animate`, `DropTarget`, `DragSource` |
+| `fonts` | `FontIcon`, `LucideFontIcons`, `Chevron` |
 | `controls` | `ThemedWindow` |
 | `themes` | `ThemeManager` |
 | `conv` | converters |
@@ -131,7 +131,7 @@ xmlns:fileExplorer="clr-namespace:Joufflu.FileExplorer.Controls;assembly=Joufflu
 xmlns:data="clr-namespace:Joufflu.Data.Controls;assembly=Joufflu.Data"
 ```
 
-C# namespaces (these are the real ones; some doc snippets are off):
+C# namespaces:
 
 | Type | Namespace |
 |---|---|
@@ -167,8 +167,10 @@ C# namespaces (these are the real ones; some doc snippets are off):
   `Title` styles.
 - **Surfaces**: `<Border Style="{StaticResource Card}">`, nested `CardSecondary`.
 - **Buttons**: `PrimaryButton`, `SecondaryButton`, `GhostButton`, `SuccessButton`,
-  `InfoButton`, `WarningButton`, `DangerButton`, plus `Soft*` and `Outline*` variants.
-- **Icons**: `<fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />`.
+  `InfoButton`, `WarningButton`, `DangerButton`, plus `Soft*` and `Outline*` variants; each has a
+  `*ToggleButton` twin (`PrimaryToggleButton`…), and `IconToggleButton` for an icon-only toggle.
+- **Icons**: `<fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />`. A header that opens
+  content: `<fonts:Chevron IsExpanded="{Binding IsExpanded}" />` (no hand-made rotating glyph).
 - **Tooltips**: plain `ToolTip="…"` is themed; `toolkit:ThemedTooltip.Placement` picks the side and
   `toolkit:ThemedTooltip.MaxWidth` where the text wraps.
 - **Modals / notifications**: `IOverlayer` and `IToastService`, not `MessageBox`
@@ -188,8 +190,8 @@ Read the one matching the task before writing code:
 
 | File | Covers |
 |---|---|
-| [references/natives.md](references/natives.md) | Named styles: buttons, cards, typography, menu items; `FontIcon`; styled natives |
-| [references/toolkit.md](references/toolkit.md) | `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`/`DragSource`, converters, helpers |
+| [references/natives.md](references/natives.md) | Named styles: buttons and toggle buttons, cards, typography, text boxes (`MultilineTextBox`), menu items, lists; `FontIcon`, `Chevron`; styled natives |
+| [references/toolkit.md](references/toolkit.md) | `Sizing`, `Spacing`, `Derive`, `SharedWidth`, `ThemedTooltip`, `Animate`, `DropTarget`/`DragSource`, converters, helpers |
 | [references/theming.md](references/theming.md) | `ThemeManager`, custom themes, persistence, switcher, every design token |
 | [references/inputs.md](references/inputs.md) | All `Joufflu.Inputs` controls and `Dropdown` |
 | [references/navigation.md](references/navigation.md) | `ThemedWindow` shell, `NavigationMenu`, `Navigator`, overlays, `Paging` |

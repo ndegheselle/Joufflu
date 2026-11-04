@@ -53,7 +53,7 @@
     </ControlTemplate>
 
     <!--
-        An input. No hover; on focus the border turns elevated and the background the interaction one. The height comes from the size, so only the horizontal part of
+        An input. No hover; on focus the border turns Border1 and the background the interaction one. The height comes from the size, so only the horizontal part of
         the padding applies and the text is centred vertically.
     -->
     <Style x:Key="TextBoxDefaultStyle" TargetType="Control">

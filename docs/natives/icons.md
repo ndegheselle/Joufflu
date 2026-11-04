@@ -22,8 +22,16 @@ property through `x:Static`.
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
 
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
 </UserControl>
 ```
+
+The constants are named after the Lucide icons in PascalCase (the close glyph is
+the lowercase `x`). Check `LucideFontIcons` with IntelliSense rather than guessing
+a name.
 
 ## Sizes
 
@@ -49,6 +57,9 @@ brush to give an icon a semantic hue.
     Text="{x:Static fonts:LucideFontIcons.Leaf}" />
 <fonts:FontIcon
     Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}"
+    Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+<fonts:FontIcon
+    Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}"
     Text="{x:Static fonts:LucideFontIcons.Leaf}" />
 <fonts:FontIcon
     Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"

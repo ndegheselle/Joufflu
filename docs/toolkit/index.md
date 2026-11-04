@@ -22,13 +22,13 @@ theme the editors of its built-in columns). The theme manager, tokens and window
 - **Shared width** — the `SharedWidth` decorator and its `IsScope` attached property, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
 - **Create a custom control** — the category a control of your own belongs to (display, input, action), the tokens and states of each, then an input built step by step: background and border, height, sizes and padding, states, the validation error style and embedded buttons.
 
-Snippets use the `toolkit` XML namespace for those helpers and `joufflu` for the
-design-system keys, plus `nav` and `feedback` where an example targets one of
-their controls:
+Snippets use the `toolkit` XML namespace for those helpers, `joufflu` for the
+design-system keys and `fonts` for the icons, plus `feedback` where an example
+targets one of its controls:
 
 ```xml
 xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
 xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
-xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
+xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
 xmlns:feedback="clr-namespace:Joufflu.Feedback.Controls;assembly=Joufflu.Feedback"
 ```

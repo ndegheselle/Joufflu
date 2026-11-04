@@ -85,6 +85,8 @@ public class ExplorerSourcesSamplesViewModel : ObservableObject, IDisposable
         // A source hands its own nodes over along with the ones it reads.
         public class VirtualFilesSource : FileSystemSource
         {
+            public VirtualFilesSource(string rootDirectoryPath, IToastService? toasts) : base(rootDirectoryPath, toasts) { }
+
             protected override void ApplyDirectory(IExplorerDirectory directory, DirectoryRead read)
             {
                 base.ApplyDirectory(directory, read);

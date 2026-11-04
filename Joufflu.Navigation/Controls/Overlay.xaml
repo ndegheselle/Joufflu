@@ -19,8 +19,9 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <!--
-                    HACK : allow the user to still drag the window then an overlay is opened then ThemedWindow.AllowContentOverTitleBar is used.
-                    Should not be there then AllowContentOverTitleBar is not set.
+                    HACK : the title bar strip of the backdrop lets clicks through, so the window can still be dragged
+                    while an overlay is open under ThemedWindow.AllowContentOverTitleBar. It should not be there when
+                    AllowContentOverTitleBar is not set.
                 -->
                 <Border
                     x:Name="TransparentBackdrop"

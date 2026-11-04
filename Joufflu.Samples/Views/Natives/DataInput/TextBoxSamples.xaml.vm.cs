@@ -33,5 +33,5 @@ public class TextBoxSamplesViewModel : ObservableValidator
 
     public string OtherCode =>
         "<PasswordBox />\n" +
-        "<TextBox Style=\"{StaticResource MultilineTextBox}\" />";
+        "<TextBox Height=\"70\" Style=\"{StaticResource MultilineTextBox}\" />";
 }

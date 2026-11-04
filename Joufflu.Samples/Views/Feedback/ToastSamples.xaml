@@ -19,7 +19,7 @@
             <c:CodeExample
                 Title="Toast types"
                 Code="{Binding Code}"
-                Description="Toasts stack in a corner of the window, always above page content and overlays, and auto-dismiss after a few seconds (unless sticky).">
+                Description="Toasts stack in a corner of the window, always above page content and overlays, and auto-dismiss after 5 seconds by default (unless sticky).">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <Button
                         Command="{Binding InfoCommand}"

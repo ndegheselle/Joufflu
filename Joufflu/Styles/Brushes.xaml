@@ -179,9 +179,8 @@
         Soft tints. The soft background is the semantic hue at low opacity rather than a dedicated
         palette colour, so it is derived automatically for the built-in themes and for any custom
         theme (the Color is a DynamicResource; only the opacity is fixed). "Soft" is the resting
-        fill (also used as the selected state of list rows and tree items, and as the outline
-        hover); "SoftInteraction" is its hover, as XInteraction is the hover of X. Secondary is achromatic, so its soft treatment is a
-        neutral foreground wash instead of a hue.
+        fill of a soft button (and the hover of an outline one); "SoftInteraction" is its hover, as XInteraction is the hover of X. Secondary is achromatic, so its tint is
+        lighter than the hued ones.
         
         Like the brushes above, they are keyed by ComponentResourceKey so any style in the library
         can reach them with DynamicResource instead of a same-file StaticResource.

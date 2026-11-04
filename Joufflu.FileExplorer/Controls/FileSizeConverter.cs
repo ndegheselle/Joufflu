@@ -6,8 +6,8 @@ using System.Windows.Data;
 namespace Joufflu.FileExplorer.Controls
 {
     /// <summary>
-    /// Human readable size of a file <see cref="IExplorerNode"/> (or of a <see cref="FileInfo"/> or a path given as a
-    /// string). Directories and nodes without a size on disk convert to null, so their cell stays empty.
+    /// Human readable size of a file <see cref="IExplorerNode"/> (or of a <see cref="FileInfo"/>, or of a length in
+    /// bytes given as a long). Directories and nodes without a size on disk convert to null, so their cell stays empty.
     /// </summary>
     public class FileSizeConverter : IValueConverter
     {

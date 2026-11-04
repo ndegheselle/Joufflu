@@ -22,6 +22,9 @@ everything:
 </feedback:ToastContainer>
 ```
 
+The container creates a `ToastService` of its own when none is bound; bind one from
+your shell view model to share it with the pages, behind `IToastService`.
+
 When the app also uses an
 [`OverlayContainer`](../navigation/overlays.md#hosting-the-overlays), wrap it
 *inside* the `ToastContainer` so toasts stay above the modal overlays:
@@ -64,8 +67,9 @@ toast.Message = "3 files uploaded.";
 toast.Duration = TimeSpan.FromSeconds(5); // starts the auto-dismiss
 ```
 
-Every `ToastInstance` can be updated this way, not only loading ones. Setting
-`Duration` restarts the countdown from that moment.
+Every `ToastInstance` can be updated this way, not only loading ones. Changing
+`Duration` restarts the countdown from that moment. `toasts.Close(toast)` removes a
+toast early.
 
 ## Position
 

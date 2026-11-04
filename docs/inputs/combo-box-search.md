@@ -13,9 +13,10 @@ An editable combo box that filters its items as you type, on the text
 `DisplayMemberPath` shows for each item.
 
 The chevron on the right opens the list, as do <kbd>Up</kbd> and <kbd>Down</kbd>.
-Opening it that way shows every choice, even once an item is selected : the text
+Opening it that way shows every choice, even once an item is selected: the text
 left behind by a selection is not a search, so it does not filter the list down to
-the item already picked.
+the item already picked. <kbd>Escape</kbd> closes the list and clears the selection,
+and text matching no item is cleared when the focus leaves.
 
 ```xml
 <inputs:ComboBoxSearch ItemsSource="{Binding Countries}"

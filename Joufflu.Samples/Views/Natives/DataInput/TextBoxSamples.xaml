@@ -49,7 +49,7 @@
             <c:CodeExample
                 Title="Password &amp; multi-line"
                 Code="{Binding OtherCode}"
-                Description="PasswordBox shares the TextBox styling; a TextBox becomes multi-line with AcceptsReturn.">
+                Description="PasswordBox shares the TextBox styling. The MultilineTextBox style makes a TextBox multi-line: it accepts Return and takes the height it is given.">
                 <StackPanel toolkit:Spacing.Gap="4">
                     <PasswordBox Password="secret" />
                     <TextBox

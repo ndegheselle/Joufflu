@@ -22,7 +22,7 @@
             <c:CodeExample
                 Title="ComboBoxSearch"
                 Code="{Binding ComboSearchCode}"
-                Description="An editable combo box that filters its items as you type. The chevron opens the whole list, whatever is already selected.">
+                Description="An editable combo box that filters its items as you type, on the text DisplayMemberPath shows for each item. The chevron, Up and Down open the whole list, whatever is already selected. Escape closes the list and clears the selection, and text matching no item is cleared when the focus leaves.">
                 <StackPanel
                     Width="360"
                     HorizontalAlignment="Left"

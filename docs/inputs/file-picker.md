@@ -10,10 +10,28 @@ nav_order: 6
 ## FilePicker
 
 Selects a file through the system dialog and exposes the chosen path, with a clear
-button.
+button. The path can also be typed.
 
 ```xml
 <inputs:FilePicker FilePath="{Binding FilePath, Mode=TwoWay}" />
+```
+
+## File types
+
+`Options` takes a `FilePickerOptions`: `Filter` lists the file types the dialog
+offers, in `OpenFileDialog.Filter` syntax, and `DefaultExtension` is the extension it
+appends to a typed name.
+
+```xml
+<inputs:FilePicker FilePath="{Binding ImagePath}" Options="{Binding ImageOptions}" />
+```
+
+```csharp
+public FilePickerOptions ImageOptions { get; } = new()
+{
+    Filter = "Images (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*",
+    DefaultExtension = ".png"
+};
 ```
 
 ## Validation

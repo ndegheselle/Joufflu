@@ -27,6 +27,7 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
         <StackPanel toolkit:Spacing.Gap="4">
             <Button Content="Rename" Style="{StaticResource GhostButton}" />
             <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
+            <Button Content="Delete" Style="{StaticResource GhostButton}" />
         </StackPanel>
     </inputs:Dropdown.Popup>
 </ToggleButton>
@@ -39,7 +40,7 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
 | `Dropdown.HorizontalOffset` | `double` | `0` | Extra horizontal offset applied on top of the placement. |
 | `Dropdown.VerticalOffset` | `double` | `2` | Extra vertical offset applied on top of the placement, a small gap from the button by default. |
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
-| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, background, border, corner radius. |
+| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
 
 ## Popup placement
 
@@ -79,18 +80,7 @@ included. An icon-only dropdown is just an icon-only toggle button:
 
 By default the popup stays open until you click outside it. For a menu of commands
 that is rarely what you want, so `Dropdown.CloseOnClick` dismisses it as soon as a
-button inside is clicked:
-
-```xml
-<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True">
-    <inputs:Dropdown.Popup>
-        <StackPanel toolkit:Spacing.Gap="4">
-            <Button Content="Rename" Style="{StaticResource GhostButton}" />
-            <Button Content="Duplicate" Style="{StaticResource GhostButton}" />
-        </StackPanel>
-    </inputs:Dropdown.Popup>
-</ToggleButton>
-```
+button inside is clicked, as in the first example above.
 
 It listens for `ButtonBase.Click`, not for any mouse click, so a `TextBox`, a
 `Slider` or a `ComboBox` in the popup stays usable. The flip side is that a
@@ -105,8 +95,7 @@ The popup content is wrapped in a `DropdownPopupHost`, a `ContentControl` whose
 default style draws the themed border. A `Popup` is only a positioning primitive —
 it derives from `FrameworkElement`, so it has no template, background or padding of
 its own — which is why `Dropdown.PopupStyle` targets the host rather than the popup.
-Padding, background, border and corner radius all go through it, based on the
-default style to keep the theme:
+Base it on the default style to keep the theme:
 
 ```xml
 <ToggleButton Content="Padded">
@@ -123,8 +112,11 @@ default style to keep the theme:
 </ToggleButton>
 ```
 
-Padding defaults to `0`, so content sits flush against the border unless you ask
-otherwise.
+`Padding` defaults to `Dimensions.DisplayPaddingSm`. The default template draws the
+background, border and corner radius straight from the theme tokens
+(`DisplayBase0Brush`, `DisplayBorder0Brush`, `DisplayRadius`): setting `Background`
+or `BorderBrush` in the style changes nothing. Override those tokens, or give the
+style a `Template` of your own.
 
 ## Bindings inside the popup
 

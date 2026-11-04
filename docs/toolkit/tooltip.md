@@ -51,6 +51,9 @@ tooltip wraps: `320` by default.
 
 {: .note }
 > The style sets the tooltip's own `Placement`, so `ToolTipService.Placement` on an
-> element no longer moves it: use `ThemedTooltip.Placement`. A `ToolTip` set from a
+> element no longer moves it: use `ThemedTooltip.Placement`. The style does it through
+> `ThemedTooltip.IsPlaced="True"`, so a `ToolTip` style of your own keeps the placement
+> when it is based on the Joufflu one (`BasedOn="{StaticResource {x:Type ToolTip}}"`) or
+> sets that property itself. A `ToolTip` set from a
 > trigger composes as usual — the [navigation menu](../navigation/navigation-menu.md)
 > gives each item a right-placed tooltip only while the menu is collapsed.

@@ -18,7 +18,7 @@
             <c:CodeExample
                 Title="ExplorerTree"
                 Code="{Binding ExplorerTreeCode}"
-                Description="Shows the loaded hierarchy, each level sorted on its own so it stays independent from the list. A tree shows only folders by default.">
+                Description="Shows the loaded hierarchy, each level sorted on its own so it stays independent from the list. A tree shows only folders by default. Selecting a folder opens it, and so does expanding it, which selects it; a double click expands it.">
                 <fileExplorer:ExplorerTree Height="300" Source="{Binding Source}" />
             </c:CodeExample>
 

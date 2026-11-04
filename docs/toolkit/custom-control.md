@@ -96,6 +96,16 @@ Setting them in the style rather than in the template keeps them overridable, an
 the triggers below change them. A multi-line input (a list, a text area) leaves the
 height alone.
 
+`MaxCornerRadiusConverter`, and `HorizontalThicknessConverter` below, are in
+`Joufflu.Converters`: declare them in the dictionary holding the style (see
+[Embedded buttons](#embedded-buttons) for why).
+
+```xml
+<!-- xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu" -->
+<converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+<converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
+```
+
 ## Sizes and padding
 
 `Sizing.Size` is inherited: a panel set to `lg` expects every input in it to grow. Set the

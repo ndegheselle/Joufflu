@@ -36,8 +36,8 @@ public class ThemedWindow : Window
 
     #region Properties
     /// <summary>
-    /// Gets or sets the content of the window's title bar
-    /// between the title and the window buttons.
+    /// Content of the title bar, an <see cref="AppIcon"/> for example. It shares its cell with the title,
+    /// so collapse the title (<see cref="TitleVisibility"/>) or pad the content when both are shown.
     /// </summary>
     public object TitleBarContent
     {

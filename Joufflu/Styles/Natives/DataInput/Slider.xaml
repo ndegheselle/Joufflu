@@ -7,7 +7,7 @@
     <converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
 
     <!--
-        An input: the track is its elevated part, the part before the thumb the primary. The thumb is an action, a
+        An input: the track is drawn with InputBorder0, the part before the thumb with the primary. The thumb is an action, a
         stronger fill on hover, a strong border while dragged or when the slider has the keyboard focus.
     -->
     <Style x:Key="SliderButtonStyle" TargetType="{x:Type RepeatButton}">

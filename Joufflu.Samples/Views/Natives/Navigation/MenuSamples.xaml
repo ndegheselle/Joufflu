@@ -43,8 +43,8 @@
 
             <c:CodeExample
                 Title="Context menu"
-                Description="Right-click the area below to open its ContextMenu."
-                Code="&lt;Border&gt;&#x0a;    &lt;Border.ContextMenu&gt;&#x0a;        &lt;ContextMenu&gt;&#x0a;            &lt;MenuItem Header=&quot;Cut&quot; /&gt;&#x0a;        &lt;/ContextMenu&gt;&#x0a;    &lt;/Border.ContextMenu&gt;&#x0a;&lt;/Border&gt;">
+                Description="Right-click the area below to open its ContextMenu. DangerMenuItem colours a destructive item."
+                Code="&lt;Border&gt;&#x0a;    &lt;Border.ContextMenu&gt;&#x0a;        &lt;ContextMenu&gt;&#x0a;            &lt;MenuItem Header=&quot;Cut&quot; /&gt;&#x0a;            &lt;Separator /&gt;&#x0a;            &lt;MenuItem Header=&quot;Delete&quot; Style=&quot;{StaticResource DangerMenuItem}&quot; /&gt;&#x0a;        &lt;/ContextMenu&gt;&#x0a;    &lt;/Border.ContextMenu&gt;&#x0a;&lt;/Border&gt;">
                 <Border
                     Height="80"
                     Background="{DynamicResource {x:Static joufflu:Brushes.Base1Brush}}"
@@ -62,6 +62,8 @@
                             <MenuItem Header="Paste" />
                             <Separator />
                             <MenuItem Header="Select all" />
+                            <Separator />
+                            <MenuItem Header="Delete" Style="{StaticResource DangerMenuItem}" />
                         </ContextMenu>
                     </Border.ContextMenu>
                 </Border>

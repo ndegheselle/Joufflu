@@ -8,7 +8,8 @@ using Joufflu.Assets.Fonts;
 namespace Joufflu.Feedback;
 
 /// <summary>
-/// Hosts a list of stackable toasts that always sit on top of everything else.
+/// Shows toasts. A <see cref="Controls.ToastContainer"/> bound to the same <see cref="ToastService"/>
+/// renders them, stacked above the rest of the UI.
 /// </summary>
 public interface IToastService
 {

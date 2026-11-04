@@ -523,7 +523,7 @@ public abstract partial class ExplorerNodesControl : ExplorerControl
     }
 
     /// <summary>
-    /// Prevent another drag to start after on the same click after one have been canceled.
+    /// Keeps another drag from starting on the same click once one has been cancelled with Escape.
     /// </summary>
     private bool _isCanceled = false;
     private Point _clickPosition;

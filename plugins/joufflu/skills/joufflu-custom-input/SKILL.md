@@ -69,7 +69,14 @@ part of `Padding` and is centred:
 </ControlTemplate>
 ```
 
-No `#RRGGBB`, no literal thickness, radius or height anywhere.
+No `#RRGGBB`, no literal thickness, radius or height anywhere. The two converters come from
+`Joufflu.Converters` (`xmlns:converters="clr-namespace:Joufflu.Converters;assembly=Joufflu"`):
+declare them in the dictionary holding the style, for the reason given in step 5.
+
+```xml
+<converters:MaxCornerRadiusConverter x:Key="MaxCornerRadiusConverter" />
+<converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
+```
 
 ## 3. Optional: sizes and padding
 
@@ -101,6 +108,7 @@ after focus):
 ```xml
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}" />
+    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

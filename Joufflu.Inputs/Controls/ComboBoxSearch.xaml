@@ -99,7 +99,7 @@
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.x}" />
                             </Button>
 
-                            <!--  Chevron handle : the text box takes the control surface, so the drop down needs a target of its own  -->
+                            <!--  Chevron handle: the text box takes the control surface, so the drop down needs a target of its own  -->
                             <ToggleButton
                                 x:Name="ToggleButton"
                                 Grid.Column="2"
@@ -114,7 +114,6 @@
                                 Template="{StaticResource ComboBoxChevronToggleButtonTemplate}" />
                         </Grid>
 
-                        <!--  Popup showing items  -->
                         <Popup
                             x:Name="PART_Popup"
                             AllowsTransparency="True"

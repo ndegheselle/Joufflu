@@ -55,6 +55,16 @@
                         TextWrapping="Wrap" />
                 </StackPanel>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Named styles"
+                Code="{Binding NamedStylesCode}"
+                Description="Title is semi-bold at the FontSizeLg size, for a card or section title. TextMuted applies the MutedOpacity token and wraps the text, for descriptions and hints.">
+                <StackPanel toolkit:Spacing.Gap="4">
+                    <TextBlock Style="{StaticResource Title}" Text="Card title" />
+                    <TextBlock Style="{StaticResource TextMuted}" Text="A longer description that wraps." />
+                </StackPanel>
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

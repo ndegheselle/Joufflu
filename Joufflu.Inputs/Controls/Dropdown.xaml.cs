@@ -151,7 +151,9 @@ namespace Joufflu.Inputs.Controls
         #region PopupStyle
         /// <summary>
         /// Style of the <see cref="DropdownPopupHost"/> drawing the popup chrome — its
-        /// <see cref="Control.Padding"/>, background, border and corner radius. A
+        /// <see cref="Control.Padding"/> and <see cref="Control.Foreground"/>, or a whole new template.
+        /// The default template draws its background, border and corner radius from the theme tokens
+        /// directly, so setting those properties alone changes nothing. A
         /// <see cref="System.Windows.Controls.Primitives.Popup"/> is only a positioning primitive and has
         /// nothing worth styling, so this targets the chrome instead. Base it on the default style to
         /// keep the theme:

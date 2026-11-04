@@ -9,8 +9,8 @@ using Joufflu.Helpers;
 namespace Joufflu.FileExplorer.Controls
 {
     /// <summary>
-    /// Shows the loaded folders and files as a hierarchy in a <see cref="TreeView"/>. Selecting a folder opens it, a
-    /// double click only expands or collapses it.
+    /// Shows the loaded folders, and the files when <see cref="ExplorerNodesControl.VisibleNodes"/> allows them, as a
+    /// hierarchy in a <see cref="TreeView"/>. Selecting a folder opens it, a double click expands it.
     /// </summary>
     public class ExplorerTree : ExplorerNodesControl
     {
@@ -54,8 +54,7 @@ namespace Joufflu.FileExplorer.Controls
         }
 
         /// <summary>
-        /// Expands or collapses a double clicked folder. Opening it is the job of the selection, which a click already
-        /// did.
+        /// Expands a double clicked folder. Opening it is the job of the selection, which the first click already did.
         /// </summary>
         protected override bool OnNodeDoubleClick(IExplorerNode node, FrameworkElement container)
         {

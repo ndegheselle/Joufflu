@@ -9,8 +9,9 @@ nav_order: 4
 
 ## ComboBoxTags
 
-Builds on `ComboBoxSearch` to select several items, shown as removable tags. Set
-`AllowAdd="True"` to let users add values not in the source list.
+Builds on `ComboBoxSearch` to select several items, shown as removable tags.
+Selected items leave the list. Set `AllowAdd="True"` to let users add values not in
+the source list.
 
 ```xml
 <inputs:ComboBoxTags AllowAdd="True"

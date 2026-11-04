@@ -25,8 +25,8 @@ public class NavigationTitle : ContentControl
 
 /// <summary>
 /// A clickable entry hosted by a <see cref="NavigationMenu"/>. Its <see cref="ContentControl.Content"/>
-/// is the expanded content (title, badges, …); the <see cref="Icon"/> is shown when the menu is
-/// collapsed to an icons-only rail. Selecting it navigates to the page resolved from <see cref="TargetType"/>.
+/// is the label (title, badges, …), hidden when the menu is collapsed to an icons-only rail, where only the
+/// <see cref="Icon"/> stays. Selecting it navigates to the page resolved from <see cref="TargetType"/>.
 /// </summary>
 public class NavigationItem : ContentControl
 {
@@ -48,7 +48,7 @@ public class NavigationItem : ContentControl
             new FrameworkPropertyMetadata(typeof(NavigationItem)));
     }
 
-    /// <summary>Content shown when the menu is collapsed (typically a <c>FontIcon</c>).</summary>
+    /// <summary>Shown before the label, and alone when the menu is collapsed (typically a <c>FontIcon</c>).</summary>
     public object? Icon
     {
         get => GetValue(IconProperty);
@@ -65,6 +65,7 @@ public class NavigationItem : ContentControl
         set => SetValue(TargetTypeProperty, value);
     }
 
+    /// <summary>Whether the current page is of <see cref="TargetType"/>. Kept up to date by the menu.</summary>
     public bool IsSelected
     {
         get => (bool)GetValue(IsSelectedProperty);
@@ -96,7 +97,7 @@ public class NavigationGroup : HeaderedItemsControl
     /// <summary>Flips <see cref="IsExpanded"/>.</summary>
     public ICommand ToggleCommand { get; }
 
-    /// <summary>Content shown when the menu is collapsed (typically a <c>FontIcon</c>).</summary>
+    /// <summary>Shown before the header, and alone when the menu is collapsed (typically a <c>FontIcon</c>).</summary>
     public object? Icon
     {
         get => GetValue(IconProperty);
@@ -106,7 +107,9 @@ public class NavigationGroup : HeaderedItemsControl
     public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
         nameof(Icon), typeof(object), typeof(NavigationGroup), new PropertyMetadata(null));
 
-    /// <summary>Whether the child items are shown. Closed by default.</summary>
+    /// <summary>
+    /// Whether the child items are shown. Closed by default, and opened by the menu when it holds the selected item.
+    /// </summary>
     public bool IsExpanded
     {
         get => (bool)GetValue(IsExpandedProperty);

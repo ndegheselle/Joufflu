@@ -15,7 +15,7 @@ matching dictionary into `Application.Resources` at runtime; never merge
 | `Themes` | `ReadOnlyObservableCollection<string>` of every selectable name (built-ins + registered). |
 | `Register(name, Uri source, bool isDark = false)` / `Register(name, ResourceDictionary, bool isDark = false)` | Add or replace a custom theme. Re-registering the active one re-applies it live. |
 | `Unregister(name)` | Remove a custom theme (built-ins can't be removed). |
-| `GetDictionary(name)` | The dictionary of a theme. |
+| `GetDictionary(name)` | A fresh copy of a registered theme's dictionary, to read its palette without selecting it (`null` for `System` or an unknown name). |
 
 The selection is **not persisted**: the app does it.
 
@@ -124,7 +124,7 @@ Use the brush in UI; the colour is for gradients and animations.
 | Action | `ActionBase0` (colour) | Button, toggle button. Falls back to `Base0` |
 | Every category | derived brushes | `XBorder0Brush` (base 10 % toward `Foreground`: the border, and a part on the base: header, track, tag), `XBorder1Brush` (border 10 % further: a border on a `XBorder0` background, the border of an interacted control), `XInteractionBrush` (base 10 %: the background of an interacted control) |
 | Text | `Foreground` | Default text and icons |
-| Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XForeground` (text/icons on the fill) as colours, and the brush `XInteractionBrush` (hover/pressed fill), `X` mixed 10 % toward `XForeground` |
+| Accents | `Primary`, `Secondary`, `Success`, `Info`, `Warning`, `Danger` | Each has `X` (fill) and `XForeground` (text/icons on the fill) as colours, and the brush `XInteractionBrush` (hover fill, and the fill of a checked solid toggle button), `X` mixed 10 % toward `XForeground` |
 
 The controls never read the global bases: they read a category, so a custom control picks the
 category it belongs to. The category base is its only colour, and optional; a theme that leaves it
@@ -140,8 +140,8 @@ display (rows, menu items, tabs, nav entries) are ghost actions (no fill at rest
 `DisabledOpacity`; selected and checked are `Primary`. No theme defines a hover colour.
 
 Also available, derived automatically from the accent colour (not per theme):
-`Brushes.XSoftBrush` (≈14 % tint: soft button, selected row) and `Brushes.XSoftInteractionBrush`
-(≈24 %, its hover) for each accent.
+`Brushes.XSoftBrush` (≈14 % tint, ≈8 % for the achromatic `Secondary`: soft button, outline hover) and `Brushes.XSoftInteractionBrush`
+(≈24 %, ≈14 % for `Secondary`: its hover) for each accent.
 
 `Colors.DisabledOpacity` (double, `0.5`): opacity of a disabled control.
 `Colors.MutedOpacity` (double, `0.65`): opacity of muted text (placeholders, hints, descriptions).
@@ -163,7 +163,7 @@ Pairing rule: text on an `X` fill uses `XForeground`; text on a base uses `Foreg
 | `TitleBarHeight` | double | 30 | Custom title bar height |
 | `TitleBarHeightOffset` | Thickness | 0,30,0,0 | Margin pushing content below an overlapping title bar |
 | `HeightXs` / `Sm` / `Md` / `Lg` | double | 24 / 28 / 32 / 40 | Single-line control heights |
-| `HeightEmbedded` | double | 20 | Small clear button inside an input |
+| `HeightEmbedded` | double | 20 | `EmbeddedButton`, a button inside an input (clear, open, step…) |
 | `FontSizeXs` / `Sm` / `Md` / `Lg` / `Xl` | double | 11 / 12 / 13 / 16 / 24 | Type scale (`Md` = body) |
 | `ActionPaddingXs` / `Sm` / `Md` / `Lg` | Thickness | 6,2 / 9,3 / 12,4 / 18,6 | Buttons and content-shaped controls |
 | `InputPaddingXs` / `Sm` / `Md` / `Lg` | Thickness | 3,2 / 4.5,3 / 6,4 / 9,6 | Text inputs |

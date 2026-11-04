@@ -33,7 +33,7 @@
     <system:Double x:Key="{x:Static joufflu:Dimensions.HeightMd}">32</system:Double>
     <system:Double x:Key="{x:Static joufflu:Dimensions.HeightLg}">40</system:Double>
 
-    <!--  Height of the small "clear" close buttons embedded in other controls (search, combobox, numeric input…); 0.625 of HeightMd  -->
+    <!--  Height of an EmbeddedButton, a button inside an input (clear, open, step…); 0.625 of HeightMd  -->
     <system:Double x:Key="{x:Static joufflu:Dimensions.HeightEmbedded}">20</system:Double>
 
     <!--  Font size  -->

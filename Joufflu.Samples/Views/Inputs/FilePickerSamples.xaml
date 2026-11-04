@@ -18,11 +18,21 @@
             <c:CodeExample
                 Title="FilePicker"
                 Code="{Binding FilePickerCode}"
-                Description="Selects a file through the system dialog and exposes the chosen path with a clear button.">
+                Description="Selects a file through the system dialog and exposes the chosen path, with a clear button. The path can also be typed.">
                 <inputs:FilePicker
                     Width="360"
                     HorizontalAlignment="Left"
                     FilePath="{Binding FilePath, Mode=TwoWay}" />
+            </c:CodeExample>
+            <c:CodeExample
+                Title="File types"
+                Code="{Binding FileTypesCode}"
+                Description="Options takes a FilePickerOptions: Filter lists the file types the dialog offers, in OpenFileDialog.Filter syntax, and DefaultExtension is the extension it appends to a typed name.">
+                <inputs:FilePicker
+                    Width="360"
+                    HorizontalAlignment="Left"
+                    FilePath="{Binding ImagePath}"
+                    Options="{Binding ImageOptions}" />
             </c:CodeExample>
             <c:CodeExample
                 Title="Validation"

@@ -16,11 +16,11 @@ re-theme live between Light and Dark along with the rest of your UI.
 | `DecimalUpDown` | Decimal input with increment/decrement. |
 | `TimeSpanPicker` | Edit a `TimeSpan` value. |
 | `FormatTextBox` | Text box with masked / formatted input. |
-| `Search` | Search box with a text-changed workflow. |
+| `Search` | Debounced search box, reported once typing settles. |
 | `ComboBoxSearch` | Combo box with searchable / filterable items. |
 | `ComboBoxTags` | Multi-select combo box rendering choices as tags. |
-| `TextEditable` | Label that turns into an inline editor on click. |
-| `FilePicker` | Pick a file or folder. |
+| `TextEditable` | Label that turns into an inline editor on double click. |
+| `FilePicker` | Pick a file through the system dialog. |
 | `ColorPicker` | Pick a colour. |
 | `Dropdown` | Attached properties opening a popup of any content off a `ToggleButton`. |
 
@@ -51,7 +51,12 @@ once at startup:
 ThemeManager.Instance.Initialize();
 ```
 
-Then use the input controls from the `Joufflu.Inputs` namespace in your views.
+The controls' own styles load from the package's `Themes/Generic.xaml`, so nothing
+else needs merging. Reference them from the `Joufflu.Inputs.Controls` namespace:
+
+```xml
+xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+```
 
 ## Documentation
 

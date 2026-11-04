@@ -24,8 +24,9 @@ Named styles are applied with `Style="{StaticResource Key}"`.
 
 Every Solid/Soft/Outline key has a `ToggleButton` twin with a `ToggleButton` suffix instead of `Button`
 (`PrimaryToggleButton`, `SoftDangerToggleButton`, `OutlineInfoToggleButton`, `GhostToggleButton`…),
-plus `IconToggleButton` (24×24 transparent icon toggle). Solid variants darken when checked;
-soft and outline variants turn solid.
+plus `IconToggleButton` (transparent icon toggle, square at every size) and `ChevronToggleButton`
+(see Icons below). A plain, ghost or icon toggle turns `Primary` when checked; solid variants take
+their hover fill (`XInteractionBrush`); soft and outline variants turn solid.
 
 A plain `<Button>` has the default look. Soft Success/Warning have low contrast in Light;
 keep them for short labels.
@@ -54,6 +55,18 @@ keep them for short labels.
 ## Menu items
 
 `DangerMenuItem` colours a destructive `MenuItem` (e.g. "Delete" in a `ContextMenu`).
+
+## Text boxes and lists
+
+`MultilineTextBox` makes a `TextBox` multi-line: it accepts Return, stretches to the height it is
+given (no fixed control height), aligns its text to the top and scrolls horizontally instead of wrapping.
+
+```xml
+<TextBox Height="120" Style="{StaticResource MultilineTextBox}" Text="{Binding Notes}" />
+```
+
+A `ListBox` scrolls by pixel and builds every item. For a long list, set
+`ScrollViewer.CanContentScroll="True"` on it to scroll by item and only build the items in view.
 
 ## Validation errors
 

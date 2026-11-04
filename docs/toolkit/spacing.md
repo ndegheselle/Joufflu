@@ -37,4 +37,6 @@ horizontal, `Top` vertical).
 
 {: .note }
 > Spacing is implemented through child margins, so any margin set directly on a
-> child is overwritten while spacing is active.
+> child is overwritten while spacing is active. A `WrapPanel` doesn't know where its
+> lines break, so each child gets the gap after it: the panel keeps one trailing gap
+> on its right and bottom edges.

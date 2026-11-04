@@ -83,10 +83,10 @@ overlay/toast containers full-bleed. A `NavigationMenu` at the top keeps its hea
 
 - `NavigationItem` (`TargetType` = page view-model type, `Icon`, content = label),
   `NavigationGroup` (`Header`, `Icon` shown on the collapsed rail, `IsExpanded` closed by
-  default, nestable), `NavigationTitle` (section label), `NavigationMenu.Header` (hidden when
-  collapsed).
-- A chevron collapses the menu to an icon rail (`IsCollapsed`, bindable); labels then show as
-  right tooltips.
+  default, nestable), `NavigationTitle` (section label, a separator line when collapsed),
+  `NavigationMenu.Header` (hidden when collapsed).
+- The collapse button folds the menu to an icon rail (`IsCollapsed`, bindable); labels then
+  show as right tooltips.
 - An item is selected while `CurrentPage` is of its `TargetType`: give each entry its own
   page type.
 

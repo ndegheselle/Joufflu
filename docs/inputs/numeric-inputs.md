@@ -32,6 +32,8 @@ Selects a `TimeSpan?` through a days/hours/minutes/seconds format.
 <inputs:TimeSpanPicker Value="{Binding Duration, Mode=TwoWay}" />
 ```
 
+## Bounds and format
+
 To bound or format the number of a `NumericUpDown` or a `DecimalUpDown`, write its
 group yourself: a group given as content replaces the default one (which is
 nullable and keeps its own caret, so set those back when you want them).
@@ -68,12 +70,8 @@ each group read into its own value and navigated with <kbd>Tab</kbd> / arrows.
 | `SelectsWhole` | `true` | Selected, typed over and emptied as one thing; when `false` the group keeps its own caret, like a plain text box. |
 
 `Values` holds one value per group, raising `ValuesChanged`.
-
-The `format` namespace is:
-
-```xml
-xmlns:format="clr-namespace:Joufflu.Inputs.Controls.Format;assembly=Joufflu.Inputs"
-```
+`ShowDeleteButton="False"` and `ShowIncrementsButtons="False"` hide the clear and
+increment/decrement buttons, on every format input.
 
 ## Validation
 

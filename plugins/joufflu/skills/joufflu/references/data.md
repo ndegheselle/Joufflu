@@ -16,8 +16,10 @@ using DataObject = Joufflu.Data.Model.DataObject; // always alias: clashes with 
 ## Controls
 
 `DataFill` and `DataEdit` edit a `Node` (`DataObject`, two-way) in place and take an optional
-`ManualValues`. `DataDisplay` only takes a `Node` (one-way), any `DataNode` (an object shows its properties, an array or a value is the first level itself) or a `JToken` bound directly. The editors of `DataFill` and
-`DataEdit` all take the width of the narrowest one (`SharedWidth`), so they line up across depths.
+`ManualValues`. `DataDisplay` only takes a `Node` (one-way): any `DataNode` (an object shows its
+properties, an array or a value is the first level itself) or a `JToken` bound directly (read as
+`ToDataNode()`). The editors of `DataFill` and `DataEdit` all take the width of the narrowest one
+(`SharedWidth`), so they line up across depths.
 
 | Control | Edits |
 |---|---|
@@ -82,7 +84,9 @@ takes types from the values, gives arrays no template and reads `null` as a null
 Large files: `await Task.Run(() => reader.ReadDataNode())`, then bind the node to `DataDisplay`. It
 lays the tree flat in rows of one height and only builds the rows in view (millions of nodes are
 fine), as long as it has a bounded height (not inside a `StackPanel` / `ScrollViewer`). A value
-shows on one line (`↵` for line breaks, cut past 1000 characters).
+shows on one line (`↵` for line breaks, cut past 1000 characters). `ReadDataNode` keeps the last
+value of a key given twice and skips comments.
+
 ## Manual values
 
 A field can be forced to an entry instead of its editor (feather toggle):

@@ -137,7 +137,7 @@ public class ShellViewModel : ObservableObject, IDisposable
         Register<DropTargetSamplesViewModel, DropTargetSamples>(() => new());
         Register<AnimateSamplesViewModel, AnimateSamples>(() => new());
         // Its page links to the Design tokens one; the navigator is created below, before any page is resolved.
-        Register<CustomControlSamplesViewModel, CustomControlSamples>(() => new(() => Navigator.Navigate(typeof(ThemeTokensViewModel))));
+        Register<CustomControlSamplesViewModel, CustomControlSamples>(() => new(() => Navigator?.Navigate(typeof(ThemeTokensViewModel))));
 
         // Themes
         Register(() => new ShellSamples());

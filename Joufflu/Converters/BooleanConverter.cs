@@ -5,17 +5,13 @@ using System.Windows.Data;
 namespace Joufflu.Converters
 {
     /// <summary>
-    /// Convert any value to a boolean.
+    /// Whether a value is "set": a bool as is, a non-empty string, a positive int, a non-empty collection, any other
+    /// non-null value. A <c>"false"</c> parameter inverts the result.
     /// </summary>
     public class BooleanConverter : IValueConverter
     {
         public static BooleanConverter Default { get; } = new BooleanConverter();
 
-        /// <param name="value"></param>
-        /// <param name="targetType"></param>
-        /// <param name="parameter">bool, indicate wheter the result should be true or false</param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
         public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             bool result = false;
@@ -31,7 +27,7 @@ namespace Joufflu.Converters
             else
                 result = value != null;
 
-            // For exemple if the parameter is "false", and the value is null, the result will be true.
+            // For example, with a "false" parameter a null value gives true.
             if (!bool.TryParse(parameter?.ToString(), out var target))
                 target = true;
 
@@ -47,8 +43,8 @@ namespace Joufflu.Converters
     }
 
     /// <summary>
-    /// Permet de convertir une liste de propriété en un booleen (opérateur And / Or en paramètre)
-    /// Il est possible d'utilisé le converter ConverterBooleanInverse dans les Binding du MultiBinding
+    /// Combines the values of a MultiBinding, each read as <see cref="BooleanConverter"/> does, with <c>&amp;&amp;</c>
+    /// (the default) or <c>||</c> given as the parameter.
     /// </summary>
     public class BooleansConverter : IMultiValueConverter
     {

@@ -190,7 +190,6 @@ namespace Joufflu.Inputs.Controls.Format
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            // If escape unfocus the textbox
             if (e.Key == Key.Escape)
             {
                 Keyboard.ClearFocus();
@@ -216,7 +215,6 @@ namespace Joufflu.Inputs.Controls.Format
                 e.Handled = _editor.MoveCaret(+1);
                 ShowEditor();
             }
-            // Up/Down arrows increment or decrement the selected group
             else if (e.Key == Key.Up)
             {
                 if (_editor.SelectedGroup != null)

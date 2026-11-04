@@ -9,6 +9,7 @@ public class NumericInputsSamplesViewModel : ObservableValidator
     private long? _numericValue = 42;
     private decimal? _decimalValue = 3.14m;
     private TimeSpan? _duration = new TimeSpan(0, 1, 30, 0);
+    private long? _quantity = 12;
     private long? _rating = 42;
     private decimal? _ratio = 3.14m;
     private TimeSpan? _shortDuration = new TimeSpan(0, 1, 30, 0);
@@ -20,6 +21,8 @@ public class NumericInputsSamplesViewModel : ObservableValidator
     public decimal? DecimalValue { get => _decimalValue; set => SetProperty(ref _decimalValue, value); }
 
     public TimeSpan? Duration { get => _duration; set => SetProperty(ref _duration, value); }
+
+    public long? Quantity { get => _quantity; set => SetProperty(ref _quantity, value); }
 
     [Range(1, 10, ErrorMessage = "A rating goes from 1 to 10.")]
     public long? Rating { get => _rating; set => SetProperty(ref _rating, value, validate: true); }
@@ -38,6 +41,11 @@ public class NumericInputsSamplesViewModel : ObservableValidator
 
     public string TimeSpanCode =>
         "<inputs:TimeSpanPicker Value=\"{Binding Duration, Mode=TwoWay}\" />";
+
+    public string BoundsCode =>
+        "<inputs:NumericUpDown Value=\"{Binding Quantity, Mode=TwoWay}\">\n" +
+        "    <format:IntegerGroup Min=\"0\" Max=\"99\" IsNullable=\"True\" SelectsWhole=\"False\" />\n" +
+        "</inputs:NumericUpDown>";
 
     public string FormatCode =>
         "<format:FormatTextBox>\n" +

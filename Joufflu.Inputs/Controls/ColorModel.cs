@@ -4,7 +4,7 @@ namespace Joufflu.Inputs.Controls
 {
     /// <summary>
     /// The colour a <see cref="ColorPicker"/> edits, seen as RGB, as hue / saturation / brightness and as hex at
-    /// once : every edit goes through here and the picker only shows the result. Free of rendering so the colour
+    /// once: every edit goes through here and the picker only shows the result. Free of rendering so the colour
     /// rules are tested without a control.
     /// </summary>
     internal sealed class ColorModel
@@ -33,7 +33,7 @@ namespace Joufflu.Inputs.Controls
             Color = color;
             Alpha = color.A / 255d;
             ToHsv(color, out double hue, out double saturation, out double brightness);
-            // Hue is undefined for greys and black : keep it where it was so the slider doesn't jump.
+            // Hue is undefined for greys and black: keep it where it was so the slider doesn't jump.
             if (saturation > 0)
                 Hue = hue;
             Saturation = saturation;

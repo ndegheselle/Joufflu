@@ -39,8 +39,8 @@ one of three ways that tell the caller how it ended:
 | `overlays.Cancel(content)` | `false` |
 | `overlays.Ignore(content)` | `null` — also what the close cross and a click on the dimmed background do |
 
-Each closes the overlay showing that content, whichever is on top, so content
-opening another overlay of its own kind still closes itself.
+Each closes the overlay showing that exact content, even when another overlay sits
+above it.
 
 `OverlayOptions` exposes `Title`, `ShowCloseButton`, `CloseOnClickAway` (set
 `false` to force the user through the action buttons) and `FullScreen`.
@@ -75,7 +75,7 @@ public partial class SampleFormViewModel : ObservableObject, IOverlayContent<str
     public OverlayOptions Options { get; } = new() { Title = "Edit profile", CloseOnClickAway = false };
 
     [ObservableProperty]
-    private string _name = "Joe Doe";
+    private string _name = "Ada Lovelace";
 
     public string? Result => Name;
 

@@ -66,7 +66,7 @@
             </Grid>
         </DataTemplate>
 
-        <!--  One accent family: its three keys drawn side by side, then what the family is for  -->
+        <!--  One accent family: its five keys drawn side by side, then what the family is for  -->
         <DataTemplate x:Key="AccentEntryTemplate" DataType="{x:Type vm:AccentEntry}">
             <Border Style="{StaticResource Card}">
                 <Grid toolkit:Spacing.Gap="4">
@@ -94,7 +94,7 @@
                         <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name}" />
                     </StackPanel>
 
-                    <!--  The same fill as it is drawn while hovered or pressed  -->
+                    <!--  The same fill as it is drawn while hovered  -->
                     <StackPanel Grid.Column="1" toolkit:Spacing.Gap="0,3">
                         <Border
                             HorizontalAlignment="Left"
@@ -218,7 +218,7 @@
                 TextWrapping="Wrap" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                Text="Six semantic families sharing one shape: the fill, the same fill for hover and pressed, and the content drawn on top of both. Only the fill and the content are colours a theme defines. The hover is the fill mixed 10% toward its own content colour, so it stays readable under the same text, and the soft tint (soft buttons, selected rows) and its hover are the fill at a low opacity, drawn with the fill as text."
+                Text="Six semantic families sharing one shape: the fill, the same fill for hover, and the content drawn on top of both. Only the fill and the content are colours a theme defines. The hover is the fill mixed 10% toward its own content colour, so it stays readable under the same text, and the soft tint (soft buttons, outline hover) and its hover are the fill at a low opacity, drawn with the fill as text."
                 TextWrapping="Wrap" />
             <ItemsControl ItemTemplate="{StaticResource AccentEntryTemplate}" ItemsSource="{Binding AccentTokens}">
                 <ItemsControl.ItemsPanel>

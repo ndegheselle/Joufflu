@@ -30,24 +30,21 @@ public class OverlayOptions : ObservableObject
 public interface IOverlayer
 {
     /// <summary>
-    /// Shows [content] as a modal overlay and completes when it is closed.
-    /// The result correspond to the closing action (true then validated, false then canceled, null then ignored).
+    /// Shows <paramref name="content"/> as a modal overlay and completes when it is closed, with how it was closed:
+    /// true when validated, false when cancelled, null when ignored.
     /// </summary>
     Task<bool?> ShowAsync(object content, OverlayOptions? options = null);
 
     /// <summary>
-    /// Show a [content] that is expecting to provide a specific result if validated.
-    /// Return the result provided by the [content] if validated, null otherwise.
+    /// Shows <paramref name="content"/> and completes with its <c>Result</c> when it is validated, the default of
+    /// <typeparamref name="TResult"/> when cancelled or ignored.
     /// </summary>
     Task<TResult?> ShowAsync<TResult>(IOverlayContent<TResult> content, OverlayOptions? options = null);
 
     /// <summary>
-    /// Show a confirmation overlay with a simple message.
+    /// Shows the built-in confirmation: <paramref name="message"/> above a Cancel / Confirm pair, the confirm button
+    /// coloured by <paramref name="type"/>. Completes with true when confirmed, false when cancelled, null when ignored.
     /// </summary>
-    /// <param name="message"></param>
-    /// <param name="title"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
     Task<bool?> Confirm(string message, string title = "", EnumConfirmationType type = EnumConfirmationType.Neutral);
 
     /// <summary> Close [content] by ignoring it (null returned).</summary>
@@ -60,7 +57,7 @@ public interface IOverlayer
 
 /// <summary>
 /// Optional contract for overlay content that wants to provide its own options
-/// (title, close cross, click away, ...) instead of having them supplied at <see cref="IOverlayer.ShowAsync"/> time.
+/// (title, close cross, click away, ...) instead of having them supplied to <c>IOverlayer.ShowAsync</c>.
 /// </summary>
 public interface IOverlayContent : IPage
 {
@@ -68,11 +65,11 @@ public interface IOverlayContent : IPage
 }
 
 /// <summary>
-/// Optional contract for overlay that want to return a specific value.
+/// Optional contract for overlay content that hands a value back to its caller when validated.
 /// </summary>
-/// <typeparam name="TResult"></typeparam>
 public interface IOverlayContent<TResult> : IOverlayContent
 {
+    /// <summary>What the generic <c>IOverlayer.ShowAsync</c> returns once the content is validated.</summary>
     TResult? Result { get; }
 }
 
@@ -110,6 +107,9 @@ public class OverlayInstance : ObservableObject
     }
 }
 
+/// <summary>
+/// Content of the overlay <see cref="IOverlayer.Confirm"/> shows, rendered by an implicit template of the library.
+/// </summary>
 public class ConfirmationContent: IOverlayContent
 {
     public OverlayOptions Options { get; }

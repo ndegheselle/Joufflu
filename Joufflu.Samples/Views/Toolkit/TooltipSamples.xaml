@@ -44,7 +44,7 @@
                 Code="{Binding ContentCode}"
                 Description="ToolTip is an object, so it accepts arbitrary XAML — not just text.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
-                    <Button Content="Rich tooltip" toolkit:ThemedTooltip.Placement="Bottom">
+                    <Button Content="Rich tooltip">
                         <Button.ToolTip>
                             <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />

@@ -56,12 +56,11 @@ public static class Spacing
     }
 
     /// <summary>
-    /// Watches a single panel and re-applies spacing when its children change.
+    /// Re-applies spacing when the children of a single panel change.
     /// <para>
-    /// Dynamically added/removed children (e.g. an ItemsControl's generated items) are
-    /// caught through <see cref="UIElement.LayoutUpdated"/>, but the handler only does work
-    /// when the child count actually changes — on every other layout pass it is a single
-    /// integer comparison, so spacing no longer costs a full margin sweep per layout pass.
+    /// A panel raises no event when a child is added or removed (an ItemsControl generating its
+    /// items, for instance), so <see cref="UIElement.LayoutUpdated"/> is the hook. It fires on
+    /// every layout pass, so the handler only sweeps the margins when the child count changed.
     /// </para>
     /// </summary>
     private sealed class SpacingWatcher

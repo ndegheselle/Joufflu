@@ -10,7 +10,7 @@
     <converters:HorizontalThicknessConverter x:Key="HorizontalThicknessConverter" />
 
     <!--
-        An action. Filled with the action background; on hover the border turns elevated and the background the
+        An action. Filled with the action background; on hover the border turns Border1 and the background the
         interaction one; no focus border; moved down while pressed. The radius is clamped to half the height, so a
         large one gives a pill. The height comes from the size, so only the horizontal part of the padding applies
         and the content is centred vertically.

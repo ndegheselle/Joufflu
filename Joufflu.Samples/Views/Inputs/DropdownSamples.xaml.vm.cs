@@ -10,6 +10,7 @@ public class DropdownSamplesViewModel : ObservableObject
         "        <StackPanel toolkit:Spacing.Gap=\"4\">\n" +
         "            <Button Content=\"Rename\" Style=\"{StaticResource GhostButton}\" />\n" +
         "            <Button Content=\"Duplicate\" Style=\"{StaticResource GhostButton}\" />\n" +
+        "            <Button Content=\"Delete\" Style=\"{StaticResource GhostButton}\" />\n" +
         "        </StackPanel>\n" +
         "    </inputs:Dropdown.Popup>\n" +
         "</ToggleButton>";

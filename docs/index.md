@@ -48,7 +48,7 @@ can paste into your views.
 | Section | What's inside |
 |---|---|
 | [Themes](themes/index.md) | The application shell (`ThemedWindow`), `ThemeManager`, the design tokens and the live theme customizer |
-| [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon`, the `Card` styles and buttons (solid, soft & outline variants) |
+| [Native controls](natives/index.md) | Text sizes and muted text, `FontIcon` and `Chevron`, the `Card` styles, buttons and toggle buttons (solid, soft & outline variants) |
 | [Toolkit](toolkit/index.md) | Sizing, spacing, derived dimensions, tooltips, animation, drag and drop, shared width, creating a custom control |
 | [Joufflu controls](controls/index.md) | The optional packages: [Feedback](feedback/index.md) (`Badge`, `Spinner`, toasts), [Inputs](inputs/index.md) (numeric, search, combo boxes, pickers, `Dropdown`…), [Navigation](navigation/index.md) (`NavigationMenu`, overlays, `Paging`), [Data](data/index.md) (`DataFill`, `DataEdit`, `DataDisplay`) and [File explorer](file-explorer/index.md) |
 

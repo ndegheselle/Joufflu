@@ -23,10 +23,7 @@
                 Code="{Binding Code}"
                 Description="Bind Value to show measurable progress. Drag the slider to update it.">
                 <StackPanel toolkit:Spacing.Gap="8">
-                    <ProgressBar
-                        Height="8"
-                        Maximum="100"
-                        Value="{Binding Progress}" />
+                    <ProgressBar Maximum="100" Value="{Binding Progress}" />
                     <Slider
                         Maximum="100"
                         Minimum="0"
@@ -38,7 +35,7 @@
                 Title="Indeterminate"
                 Code="{Binding IndeterminateCode}"
                 Description="IsIndeterminate shows an animated bar when progress can't be measured.">
-                <ProgressBar Height="8" IsIndeterminate="True" />
+                <ProgressBar IsIndeterminate="True" />
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

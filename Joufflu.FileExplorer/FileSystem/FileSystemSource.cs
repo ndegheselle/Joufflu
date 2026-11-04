@@ -225,7 +225,8 @@ namespace Joufflu.FileExplorer.FileSystem
                 : new FileSystemFile((FileInfo)entry, parent);
 
         /// <summary>
-        /// Open the file with the default programm.
+        /// Opens a file with the application Windows associates with it. A derived source overrides it to open some
+        /// files itself.
         /// </summary>
         protected virtual Task OpenFile(IExplorerFile file)
         {

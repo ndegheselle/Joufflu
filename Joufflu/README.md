@@ -11,20 +11,22 @@ live between Light and Dark — no restart, no flicker.
 [![Joufflu on NuGet](https://img.shields.io/nuget/v/Joufflu?label=Joufflu&logo=nuget)](https://www.nuget.org/packages/Joufflu)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/ndegheselle/Joufflu/blob/main/LICENSE)
 
-![preview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/images/preview.PNG)
+![preview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/images/preview-mix.png)
 
 ## What's inside
 
 - 🌗 **Live Light / Dark theming** — flip the theme at runtime and every control follows instantly.
 - 🎨 **A real design system** — semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
 - 🪟 **Custom-chrome window & natives** — a themed application shell (`ThemedWindow`) plus restyled built-in WPF controls (buttons, text boxes, combo boxes, data grid, …) that match out of the box.
-- 🧰 **Toolkit** — sizing, spacing, tooltip and drop target attached properties in the `Joufflu.Toolkit` namespace, plus `ThemeManager` and live theme customization.
+- 🧰 **Toolkit** — sizing, spacing, derived dimensions, tooltip, animation, drag and drop and shared width attached properties in the `Joufflu.Toolkit` namespace, plus `ThemeManager` and live theme customization.
 
-This is the **core package**. Three optional packages build on it:
+This is the **core package**. Five optional packages build on it:
 
 - [`Joufflu.Feedback`](https://www.nuget.org/packages/Joufflu.Feedback) — badges, spinner & toasts.
 - [`Joufflu.Inputs`](https://www.nuget.org/packages/Joufflu.Inputs) — input controls.
 - [`Joufflu.Navigation`](https://www.nuget.org/packages/Joufflu.Navigation) — navigation, overlays & paging.
+- [`Joufflu.FileExplorer`](https://www.nuget.org/packages/Joufflu.FileExplorer) — a file explorer.
+- [`Joufflu.Data`](https://www.nuget.org/packages/Joufflu.Data) — JSON data trees.
 
 > **Using an AI coding agent?** Point it at
 > [`llms.txt`](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/llms.txt)
@@ -63,13 +65,13 @@ This is the **core package**. Three optional packages build on it:
 The design system is exposed as resource keys you can override in your own
 dictionary (merged **after** the Joufflu resources):
 
-- **Colours / brushes** — `joufflu:Colors.*` and `joufflu:Brushes.*`, including
-  the semantic families (primary, secondary, success, info, warning, danger).
+- **Colours** — `joufflu:Colors.*`, including the semantic families (primary,
+  secondary, success, info, warning, danger); the `joufflu:Brushes.*` follow them.
 - **Dimensions** — `joufflu:Dimensions.*` (corner radius, border thickness,
   spacing, control heights, font sizes and padding per size).
 
-Run the gallery and open **Customize theme** to tweak these interactively and
-generate a ready-to-merge dictionary.
+Run the gallery and open **Customize theme** (palette button in its title bar) to
+tweak these interactively and generate a ready-to-merge dictionary.
 
 ## Documentation
 

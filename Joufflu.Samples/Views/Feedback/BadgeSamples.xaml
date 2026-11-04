@@ -18,7 +18,7 @@
             <c:CodeExample
                 Title="Variants"
                 Code="{Binding VariantsCode}"
-                Description="A pill themed from the semantic brushes. Pick a variant with the Variant property.">
+                Description="A pill themed from the semantic brushes. Pick a variant with the Variant property (Default when unset).">
                 <WrapPanel toolkit:Spacing.Gap="8,0">
                     <feedback:Badge>Default</feedback:Badge>
                     <feedback:Badge Variant="Primary">Primary</feedback:Badge>
@@ -37,7 +37,7 @@
                 <StackPanel toolkit:Spacing.Gap="8,0" Orientation="Horizontal">
                     <feedback:Badge toolkit:Sizing.Size="xs" Variant="Primary">xs</feedback:Badge>
                     <feedback:Badge toolkit:Sizing.Size="sm" Variant="Primary">sm</feedback:Badge>
-                    <feedback:Badge toolkit:Sizing.Size="md" Variant="Primary">md</feedback:Badge>
+                    <feedback:Badge Variant="Primary">md</feedback:Badge>
                     <feedback:Badge toolkit:Sizing.Size="lg" Variant="Primary">lg</feedback:Badge>
                 </StackPanel>
             </c:CodeExample>

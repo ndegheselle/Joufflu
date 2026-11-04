@@ -18,7 +18,7 @@
             <c:CodeExample
                 Title="ComboBoxTags"
                 Code="{Binding TagsCode}"
-                Description="Builds on ComboBoxSearch to allow selecting several items, shown as removable tags.">
+                Description="Builds on ComboBoxSearch to select several items, shown as removable tags. Selected items leave the list. Set AllowAdd to True to let users add values not in the source list.">
                 <inputs:ComboBoxTags
                     Width="360"
                     HorizontalAlignment="Left"

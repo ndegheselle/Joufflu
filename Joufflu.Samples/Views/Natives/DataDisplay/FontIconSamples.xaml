@@ -24,29 +24,37 @@
             <c:CodeExample
                 Title="Glyphs"
                 Code="{Binding Code}"
-                Description="A Lucide icon-font glyph. Foreground uses the design-system brushes and the size follows the inherited Sizing.Size.">
-                <StackPanel toolkit:Spacing.Gap="16">
-                    <WrapPanel toolkit:Spacing.Gap="12,0">
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
-                        <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
-                    </WrapPanel>
+                Description="A glyph of the embedded Lucide icon font, set from a LucideFontIcons constant. FontIcon is a TextBlock, so it aligns like text and goes anywhere content does.">
+                <WrapPanel toolkit:Spacing.Gap="12,0">
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Home}" />
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Bell}" />
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Settings}" />
+                    <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Trash}" />
+                </WrapPanel>
+            </c:CodeExample>
 
-                    <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="12,0">
-                        <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="xs" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="sm" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="md" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="lg" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                    </StackPanel>
+            <c:CodeExample
+                Title="Sizes"
+                Code="{Binding SizesCode}"
+                Description="The size follows the inherited Sizing.Size (xs to xl), so an icon scales with the control or the panel it sits in. md is the default.">
+                <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="12,0">
+                    <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="xs" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="sm" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="md" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    <fonts:FontIcon VerticalAlignment="Center" toolkit:Sizing.Size="lg" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                </StackPanel>
+            </c:CodeExample>
 
-                    <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="12,0">
-                        <fonts:FontIcon toolkit:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon toolkit:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon toolkit:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                        <fonts:FontIcon toolkit:Sizing.Size="lg" Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
-                    </StackPanel>
+            <c:CodeExample
+                Title="Colour"
+                Code="{Binding ColourCode}"
+                Description="Foreground is a normal TextBlock property: point it at a design-system brush to give an icon a semantic hue.">
+                <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="12,0">
+                    <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.PrimaryBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.SuccessBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.WarningBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
+                    <fonts:FontIcon Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}" Text="{x:Static fonts:LucideFontIcons.Leaf}" />
                 </StackPanel>
             </c:CodeExample>
 

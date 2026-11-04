@@ -109,6 +109,16 @@ public class VirtualFilesSource : FileSystemSource
     // Nothing to hand over to the shell : a virtual file is opened by the application itself.
     public override Task Open(IExplorerNode node) { ... }
 }
+
+// Template of the cells of the extra column, chosen by node type.
+public class PinnedCellTemplateSelector : DataTemplateSelector
+{
+    public DataTemplate? PinnedTemplate { get; set; }
+    public DataTemplate? EmptyTemplate { get; set; }
+
+    public override DataTemplate? SelectTemplate(object item, DependencyObject container)
+        => item is VirtualFile ? PinnedTemplate : EmptyTemplate;
+}
 ```
 
 The context menu of a node type is a `DataTemplate` keyed with
@@ -124,7 +134,14 @@ node as their `CommandParameter`.
 ```xml
 <fileExplorer:Explorer Source="{Binding VirtualSource}">
     <fileExplorer:Explorer.Resources>
-        <conv:TypeConverter x:Key="NodeTypeConverter" />
+        <!-- Cells of the extra column : the box only exists on the rows carrying the state -->
+        <DataTemplate x:Key="PinnedCell">
+            <CheckBox IsChecked="{Binding IsPinned, Mode=OneWay}" IsHitTestVisible="False" />
+        </DataTemplate>
+        <DataTemplate x:Key="EmptyCell" />
+        <local:PinnedCellTemplateSelector x:Key="PinnedCellSelector"
+                                          PinnedTemplate="{StaticResource PinnedCell}"
+                                          EmptyTemplate="{StaticResource EmptyCell}" />
 
         <!-- Visual of the virtual nodes, implicit as the ones of the library are -->
         <DataTemplate DataType="{x:Type local:VirtualFile}">
@@ -145,26 +162,10 @@ node as their `CommandParameter`.
         </DataTemplate>
     </fileExplorer:Explorer.Resources>
     <fileExplorer:Explorer.ExtraColumns>
-        <GridViewColumn Header="Pinned" Width="70">
-            <GridViewColumn.CellTemplate>
-                <DataTemplate>
-                    <!-- The column is shared by every row : only the virtual nodes show a box -->
-                    <CheckBox IsChecked="{Binding IsPinned, Mode=OneWay}" IsHitTestVisible="False">
-                        <CheckBox.Style>
-                            <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Value="{x:Type local:VirtualFile}"
-                                                 Binding="{Binding Converter={StaticResource NodeTypeConverter}}">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </CheckBox.Style>
-                    </CheckBox>
-                </DataTemplate>
-            </GridViewColumn.CellTemplate>
-        </GridViewColumn>
+        <!-- The column is shared by every row : its template is chosen by node type,
+             so IsPinned is only bound on the rows that have it -->
+        <GridViewColumn Header="Pinned" Width="70"
+                        CellTemplateSelector="{StaticResource PinnedCellSelector}" />
     </fileExplorer:Explorer.ExtraColumns>
 </fileExplorer:Explorer>
 ```
