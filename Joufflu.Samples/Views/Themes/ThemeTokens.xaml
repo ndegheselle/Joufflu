@@ -118,7 +118,7 @@
                         <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Foreground}" />
                     </StackPanel>
 
-                    <!--  The soft tint, with "Aa" in the fill colour as a soft button draws it; set apart as it is a brush only  -->
+                    <!--  The soft tint, with "Aa" in the colour a soft button writes on it (the fill, the foreground for Secondary); set apart as it is a brush only  -->
                     <StackPanel Grid.Column="3" toolkit:Spacing.Gap="0,3">
                         <Border
                             HorizontalAlignment="Left"
@@ -127,7 +127,7 @@
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Fill}"
+                                c:ResourceSwatch.ForegroundKey="{Binding SoftText}"
                                 Text="Aa" />
                         </Border>
                         <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}Soft}" />
@@ -142,7 +142,7 @@
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                c:ResourceSwatch.ForegroundKey="{Binding Fill}"
+                                c:ResourceSwatch.ForegroundKey="{Binding SoftText}"
                                 Text="Aa" />
                         </Border>
                         <TextBlock Style="{StaticResource AccentCaption}" Text="{Binding Name, StringFormat={}{0}SoftInteraction}" />
@@ -218,7 +218,7 @@
                 TextWrapping="Wrap" />
             <TextBlock
                 Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                Text="Six semantic families sharing one shape: the fill, the same fill for hover, and the content drawn on top of both. Only the fill and the content are colours a theme defines. The hover is the fill mixed 10% toward its own content colour, so it stays readable under the same text, and the soft tint (soft buttons, outline hover) and its hover are the fill at a low opacity, drawn with the fill as text."
+                Text="Six semantic families sharing one shape: the fill, the same fill for hover, and the content drawn on top of both. Only the fill and the content are colours a theme defines. The hover is the fill mixed 10% toward its own content colour, so it stays readable under the same text, and the soft tint (soft buttons, outline hover) and its hover are the fill at a low opacity, drawn with the fill as text. Secondary, whose fill is pale, takes its foreground for both."
                 TextWrapping="Wrap" />
             <ItemsControl ItemTemplate="{StaticResource AccentEntryTemplate}" ItemsSource="{Binding AccentTokens}">
                 <ItemsControl.ItemsPanel>

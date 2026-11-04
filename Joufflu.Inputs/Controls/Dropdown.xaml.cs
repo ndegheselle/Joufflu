@@ -62,6 +62,16 @@ namespace Joufflu.Inputs.Controls
             get { return (UIElement?)GetValue(PlacementTargetProperty); }
             set { SetValue(PlacementTargetProperty, value); }
         }
+
+        /// <summary>The rounding of the popup's border, which a <see cref="Control"/> has no property for.</summary>
+        public static readonly DependencyProperty CornerRadiusProperty = Border.CornerRadiusProperty.AddOwner(typeof(DropdownPopupHost));
+
+        /// <inheritdoc cref="CornerRadiusProperty"/>
+        public CornerRadius CornerRadius
+        {
+            get { return (CornerRadius)GetValue(CornerRadiusProperty); }
+            set { SetValue(CornerRadiusProperty, value); }
+        }
     }
 
     /// <summary>
@@ -135,7 +145,7 @@ namespace Joufflu.Inputs.Controls
             "VerticalOffset",
             typeof(double),
             typeof(Dropdown),
-            new FrameworkPropertyMetadata(2d));
+            new FrameworkPropertyMetadata(0d));
 
         public static double GetVerticalOffset(DependencyObject element)
         {
@@ -150,10 +160,10 @@ namespace Joufflu.Inputs.Controls
 
         #region PopupStyle
         /// <summary>
-        /// Style of the <see cref="DropdownPopupHost"/> drawing the popup chrome — its
-        /// <see cref="Control.Padding"/> and <see cref="Control.Foreground"/>, or a whole new template.
-        /// The default template draws its background, border and corner radius from the theme tokens
-        /// directly, so setting those properties alone changes nothing. A
+        /// Style of the <see cref="DropdownPopupHost"/> drawing the popup chrome: its
+        /// <see cref="Control.Background"/>, <see cref="Control.BorderBrush"/>,
+        /// <see cref="Control.BorderThickness"/>, <see cref="DropdownPopupHost.CornerRadius"/>,
+        /// <see cref="Control.Padding"/> and <see cref="Control.Foreground"/>, or a whole new template. A
         /// <see cref="System.Windows.Controls.Primitives.Popup"/> is only a positioning primitive and has
         /// nothing worth styling, so this targets the chrome instead. Base it on the default style to
         /// keep the theme:

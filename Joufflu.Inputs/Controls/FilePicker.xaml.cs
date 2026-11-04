@@ -9,7 +9,11 @@ namespace Joufflu.Inputs.Controls
     {
         /// <summary>The dialog's file types, as <c>Microsoft.Win32.OpenFileDialog.Filter</c> reads them: <c>"JSON files|*.json|All files|*.*"</c>.</summary>
         public string Filter { get; set; } = "";
-        public string DefaultExtension { get; set; } = "*.*";
+        /// <summary>
+        /// Added to a name typed without one, as <c>Microsoft.Win32.OpenFileDialog.DefaultExt</c> reads it:
+        /// <c>".json"</c>. Empty adds none.
+        /// </summary>
+        public string DefaultExtension { get; set; } = "";
     }
 
     /// <summary>
@@ -55,10 +59,13 @@ namespace Joufflu.Inputs.Controls
         [RelayCommand]
         private void Select()
         {
-            Options ??= new FilePickerOptions();
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.DefaultExt = Options.DefaultExtension;
-            dialog.Filter = Options.Filter;
+            // Read into a local: writing a default back to Options would replace a binding on it.
+            FilePickerOptions options = Options ?? new FilePickerOptions();
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = options.DefaultExtension,
+                Filter = options.Filter
+            };
             if (dialog.ShowDialog() == true)
             {
                 FilePath = dialog.FileName;

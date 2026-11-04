@@ -22,8 +22,9 @@ everything — side menu included:
 </nav:OverlayContainer>
 ```
 
-The container creates an `Overlayer` of its own when none is bound; bind one from
-your shell view model to share it with the pages, behind `IOverlayer`.
+The container creates an `Overlayer` of its own when none is bound. Bind one from
+your shell view model to share it with the pages: `Overlays` takes it as an
+`IOverlayer`, so the shell can expose the contract only.
 
 Toasts have their own [`ToastContainer`](../feedback/toasts.md); wrap it around
 this one to keep them above the overlays.

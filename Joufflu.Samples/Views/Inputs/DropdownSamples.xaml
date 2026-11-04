@@ -77,7 +77,7 @@
             <c:CodeExample
                 Title="Popup chrome"
                 Code="{Binding PopupStyleCode}"
-                Description="Dropdown.PopupStyle styles the DropdownPopupHost drawing the chrome — its Padding (DisplayPaddingSm by default), Foreground or template. Base it on the default style to keep the theme. A Popup itself is only a positioning primitive and has nothing worth styling.">
+                Description="Dropdown.PopupStyle styles the DropdownPopupHost drawing the chrome — its background, border, CornerRadius, Padding (DisplayPaddingSm by default), Foreground or template. Base it on the default style to keep the theme. A Popup itself is only a positioning primitive and has nothing worth styling.">
                 <ToggleButton Content="Padded">
                     <inputs:Dropdown.PopupStyle>
                         <Style BasedOn="{StaticResource {x:Type inputs:DropdownPopupHost}}" TargetType="{x:Type inputs:DropdownPopupHost}">

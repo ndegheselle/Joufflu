@@ -134,13 +134,13 @@ out gets the global one through a `ColorFallback` (public, in `Joufflu`). A them
 State rules, the same for every control: an interaction turns the border to `XBorder1Brush` and the
 background to `XInteractionBrush` (a part with no border at rest keeps none). A display has none of its
 own (`DisplayInteractionBrush` is for an app's informative hover); an input is interacted on focus, no
-hover; an action on hover, no focus border, and translates down when pressed (no colour); a grip
+hover, and keeps its background where text is typed (it would lower the text contrast); an action on hover, no focus border, and translates down when pressed (no colour); a grip
 (scroll bar thumb, grid splitter, slider thumb) turns `ActionBorder1Brush` hovered or dragged; the items of a
 display (rows, menu items, tabs, nav entries) are ghost actions (no fill at rest); disabled is
 `DisabledOpacity`; selected and checked are `Primary`. No theme defines a hover colour.
 
 Also available, derived automatically from the accent colour (not per theme):
-`Brushes.XSoftBrush` (≈14 % tint, ≈8 % for the achromatic `Secondary`: soft button, outline hover) and `Brushes.XSoftInteractionBrush`
+`Brushes.XSoftBrush` (≈14 % tint of the hue: soft button, outline hover; `Secondary` tints its foreground at ≈8 %, and its soft and outline buttons draw text and border with `SecondaryForegroundBrush`) and `Brushes.XSoftInteractionBrush`
 (≈24 %, ≈14 % for `Secondary`: its hover) for each accent.
 
 `Colors.DisabledOpacity` (double, `0.5`): opacity of a disabled control.

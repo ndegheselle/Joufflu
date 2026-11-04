@@ -24,7 +24,8 @@ public sealed record AccentEntry(
     ComponentResourceKey Hover,
     ComponentResourceKey Foreground,
     ComponentResourceKey Soft,
-    ComponentResourceKey SoftInteraction);
+    ComponentResourceKey SoftInteraction,
+    ComponentResourceKey SoftText);
 
 /// <summary>
 /// Reference of every key a theme is made of. The descriptions are the roles the keys actually play
@@ -110,7 +111,8 @@ public class ThemeTokensViewModel : ObservableObject
             Joufflu.Brushes.PrimaryInteractionBrush,
             Joufflu.Brushes.PrimaryForegroundBrush,
             Joufflu.Brushes.PrimarySoftBrush,
-            Joufflu.Brushes.PrimarySoftInteractionBrush),
+            Joufflu.Brushes.PrimarySoftInteractionBrush,
+            Joufflu.Brushes.PrimaryBrush),
         new AccentEntry(
             "Secondary",
             "Neutral filled action, for a button that must read as a button without competing with Primary.",
@@ -118,7 +120,8 @@ public class ThemeTokensViewModel : ObservableObject
             Joufflu.Brushes.SecondaryInteractionBrush,
             Joufflu.Brushes.SecondaryForegroundBrush,
             Joufflu.Brushes.SecondarySoftBrush,
-            Joufflu.Brushes.SecondarySoftInteractionBrush),
+            Joufflu.Brushes.SecondarySoftInteractionBrush,
+            Joufflu.Brushes.SecondaryForegroundBrush),
         new AccentEntry(
             "Success",
             "Confirmation: success toast, valid state, positive badge.",
@@ -126,7 +129,8 @@ public class ThemeTokensViewModel : ObservableObject
             Joufflu.Brushes.SuccessInteractionBrush,
             Joufflu.Brushes.SuccessForegroundBrush,
             Joufflu.Brushes.SuccessSoftBrush,
-            Joufflu.Brushes.SuccessSoftInteractionBrush),
+            Joufflu.Brushes.SuccessSoftInteractionBrush,
+            Joufflu.Brushes.SuccessBrush),
         new AccentEntry(
             "Info",
             "Neutral information: info toast, informative badge.",
@@ -134,7 +138,8 @@ public class ThemeTokensViewModel : ObservableObject
             Joufflu.Brushes.InfoInteractionBrush,
             Joufflu.Brushes.InfoForegroundBrush,
             Joufflu.Brushes.InfoSoftBrush,
-            Joufflu.Brushes.InfoSoftInteractionBrush),
+            Joufflu.Brushes.InfoSoftInteractionBrush,
+            Joufflu.Brushes.InfoBrush),
         new AccentEntry(
             "Warning",
             "Something needs attention but nothing is broken yet.",
@@ -142,7 +147,8 @@ public class ThemeTokensViewModel : ObservableObject
             Joufflu.Brushes.WarningInteractionBrush,
             Joufflu.Brushes.WarningForegroundBrush,
             Joufflu.Brushes.WarningSoftBrush,
-            Joufflu.Brushes.WarningSoftInteractionBrush),
+            Joufflu.Brushes.WarningSoftInteractionBrush,
+            Joufflu.Brushes.WarningBrush),
         new AccentEntry(
             "Danger",
             "Destructive action and validation errors - a delete button, the border of a field in error.",
@@ -150,7 +156,8 @@ public class ThemeTokensViewModel : ObservableObject
             Joufflu.Brushes.DangerInteractionBrush,
             Joufflu.Brushes.DangerForegroundBrush,
             Joufflu.Brushes.DangerSoftBrush,
-            Joufflu.Brushes.DangerSoftInteractionBrush),
+            Joufflu.Brushes.DangerSoftInteractionBrush,
+            Joufflu.Brushes.DangerBrush),
     ];
 
     /// <summary>The odd ones out of <c>Joufflu.Colors</c>: numbers rather than colours.</summary>

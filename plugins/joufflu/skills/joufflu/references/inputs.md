@@ -170,9 +170,9 @@ stays a plain `ToggleButton` you style freely.
 | `Dropdown.Popup` | null | Popup content; setting it makes the button a dropdown |
 | `Dropdown.Placement` | `BottomLeft` | `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight` |
 | `Dropdown.HorizontalOffset` | 0 | Extra horizontal offset |
-| `Dropdown.VerticalOffset` | 2 | Extra vertical offset (small gap from the button) |
+| `Dropdown.VerticalOffset` | 0 | Extra vertical offset (the popup touches the button by default) |
 | `Dropdown.CloseOnClick` | false | Close when a `ButtonBase` inside is clicked (also CheckBox/RadioButton!) |
-| `Dropdown.PopupStyle` | null | Style for `inputs:DropdownPopupHost`: `Padding` (default `DisplayPaddingSm`), `Foreground` or `Template`; background, border and radius come from the theme tokens, not from its properties |
+| `Dropdown.PopupStyle` | null | Style for `inputs:DropdownPopupHost`: `Background`, `BorderBrush`, `BorderThickness`, `CornerRadius`, `Padding` (display tokens by default, `DisplayPaddingSm`), `Foreground` or `Template` |
 
 ```xml
 <inputs:Dropdown.PopupStyle>

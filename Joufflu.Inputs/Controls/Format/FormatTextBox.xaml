@@ -22,7 +22,7 @@
         <!--  Height, font size and padding per size come from the base TextBox style.  -->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                <ControlTemplate TargetType="{x:Type local:FormatTextBox}">
                     <Border
                         Name="Border"
                         Background="{TemplateBinding Background}"
@@ -82,13 +82,13 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding ShowDeleteButton, RelativeSource={RelativeSource Self}}" Value="False">
+                        <Trigger Property="ShowDeleteButton" Value="False">
                             <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowIncrementsButtons, RelativeSource={RelativeSource Self}}" Value="False">
+                        </Trigger>
+                        <Trigger Property="ShowIncrementsButtons" Value="False">
                             <Setter TargetName="PART_DownButton" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="PART_UpButton" Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

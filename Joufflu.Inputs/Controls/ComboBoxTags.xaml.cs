@@ -56,6 +56,19 @@ namespace Joufflu.Inputs.Controls
             get => (IList)GetValue(SelectedItemsProperty);
             set => SetValue(SelectedItemsProperty, value);
         }
+
+        public static readonly DependencyProperty AllowAddProperty = DependencyProperty.Register(
+            nameof(AllowAdd),
+            typeof(bool),
+            typeof(ComboBoxTags),
+            new FrameworkPropertyMetadata(false));
+
+        /// <summary>Whether <c>Enter</c> adds the typed text as a tag when it matches no item.</summary>
+        public bool AllowAdd
+        {
+            get => (bool)GetValue(AllowAddProperty);
+            set => SetValue(AllowAddProperty, value);
+        }
         #endregion
 
         #region Properties
@@ -67,9 +80,6 @@ namespace Joufflu.Inputs.Controls
 
         // Guards the internal -> source mirroring while we are loading source -> internal.
         private bool _syncingSelection;
-
-        /// <summary>Whether <c>Enter</c> adds the typed text as a tag when it matches no item.</summary>
-        public bool AllowAdd { get; set; } = false;
 
         // Up and Down move the selection through the list, and an editable ComboBox offers no way
         // to keep that from committing it. Only a click or Enter should add a tag, so the selection

@@ -14,7 +14,7 @@ control belongs to, then follow its rules. A control derived from a native one
 | Category | What it is | Tokens | States |
 |---|---|---|---|
 | **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplayBase0/Border0/Border1/InteractionBrush`, `DisplayRadius`, `DisplayThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None of its own (`DisplayInteractionBrush` is there for an informative hover). Its items (rows, entries) are actions without a fill at rest |
-| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase0/Border0/Border1/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputBorder1Brush` and the background `InputInteractionBrush` |
+| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase0/Border0/Border1/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputBorder1Brush` (and the background `InputInteractionBrush` when no text is typed in it) |
 | **Action** | Runs something: a button, a toggle, an item of a display | `ActionBase0/Border0/Border1/InteractionBrush`, `ActionRadius`, `ActionThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | On hover the border turns `ActionBorder1Brush` and the background `ActionInteractionBrush`; moved down when pressed, no focus border |
 
 In every category, disabled is `DisabledOpacity`, selected and checked are the primary,
@@ -33,7 +33,7 @@ or an action follows the same steps with the keys of its own category. The rules
 | **Required** | Border colour, thickness and radius | `Brushes.InputBorder0Brush`, `Dimensions.InputThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Focus and disabled states (an input has no hover) | `InputBorder1Brush` and `InputInteractionBrush` (focus), `Colors.DisabledOpacity` |
+| Optional | Focus and disabled states (an input has no hover) | `InputBorder1Brush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -150,13 +150,14 @@ vertical padding never crushes it. `HorizontalThicknessConverter` drops the vert
 
 ## States
 
-An input has no hover state: on focus the native inputs turn their border to the elevated brush and
-their background to the interaction one, and they fade when disabled:
+An input has no hover state: on focus the native inputs turn their border to `InputBorder1Brush`, and
+they fade when disabled. One you type text into keeps its background, as a `TextBox` does: a darker
+fill would lower the contrast of the text. One you only pick from (a combo box, a check box) also turns
+its background to `InputInteractionBrush`.
 
 ```xml
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}" />
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

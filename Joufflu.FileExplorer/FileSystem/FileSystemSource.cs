@@ -265,7 +265,7 @@ namespace Joufflu.FileExplorer.FileSystem
 
         public bool CanPaste()
         {
-            IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out bool isMove);
+            IReadOnlyList<string> paths = ExplorerClipboard.GetPaths(out _);
             return paths.Count > 0;
         }
 

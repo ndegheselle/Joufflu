@@ -1086,7 +1086,7 @@ and checked are the primary.
 | Category | Base | Controls | Interaction |
 |---|---|---|---|
 | **Display** | `DisplayBase0` (`Base1`), `DisplayBase1` (`Base2`) | Card, popup, tooltip, expander, group box, and the frame of a list, tree, grid, menu or tab control. Its items (rows, menu items, tabs, navigation entries) are actions without a fill at rest. `DisplayBase1` is a contrast inside it (the header of a group box or a data grid), its own colour, not derived. | None of its own: `DisplayInteraction` is there for an app's informative hover. |
-| **Input** | `InputBase0` (`Base1`), `InputBase1` (`Base2`) | Text box, combo box, check box, radio button, slider. `InputBase1` is a contrast inside it, its own colour, not derived. | On focus. No hover. |
+| **Input** | `InputBase0` (`Base1`), `InputBase1` (`Base2`) | Text box, combo box, check box, radio button, slider. `InputBase1` is a contrast inside it, its own colour, not derived. | On focus: the border; the background too, except where text is typed. No hover. |
 | **Action** | `ActionBase0` (`Base0`) | Button, toggle button. A grip (scroll bar thumb, grid splitter, slider thumb) turns `ActionBorder1` when hovered or dragged. | On hover. Pressed is a translation down, not a colour; no focus border. |
 
 A theme overrides a category by defining its base, for example inputs set apart from the cards, with
@@ -1113,12 +1113,13 @@ The others are brushes only, derived from the fill so no theme defines them. `XI
 fill while hovered (and a checked solid toggle button): the fill mixed 10% toward its own `XForeground`, so a dark fill with light
 foreground lightens and a pale one darkens, in a light and in a dark theme alike. `XSoftBrush` is the fill at low opacity (soft buttons,
 outline hover) and `XSoftInteractionBrush` its hover, drawn with the fill as text, as a soft
-button is.
+button is. Secondary is the exception: its fill is pale, made to sit under its foreground, so its
+soft tint and the text of its soft and outline buttons come from `SecondaryForeground`.
 
 <table>
 <tbody>
 <tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#18181B;color:#FAFAFA">Aa</div><code style="font-size:11px">Primary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#2F2F31;color:#FAFAFA">Aa</div><code style="font-size:11px">PrimaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FAFAFA;color:#FAFAFA">&nbsp;</div><code style="font-size:11px">PrimaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.14);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(24,24,27,.24);color:#18181B">Aa</div><code style="font-size:11px">PrimarySoftInteraction</code></div></td><td>Main call to action: the default filled button, the selected tab or navigation entry.</td></tr>
-<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D1D1D4;color:#27272A">Aa</div><code style="font-size:11px">SecondaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.08);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(228,228,231,.14);color:#E4E4E7">Aa</div><code style="font-size:11px">SecondarySoftInteraction</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
+<tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#E4E4E7;color:#27272A">Aa</div><code style="font-size:11px">Secondary</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#D1D1D4;color:#27272A">Aa</div><code style="font-size:11px">SecondaryInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#27272A;color:#27272A">&nbsp;</div><code style="font-size:11px">SecondaryForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(39,39,42,.08);color:#27272A">Aa</div><code style="font-size:11px">SecondarySoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(39,39,42,.14);color:#27272A">Aa</div><code style="font-size:11px">SecondarySoftInteraction</code></div></td><td>Neutral filled action, for a button that must read as a button without competing with <code>Primary</code>.</td></tr>
 <tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00D390;color:#004C39">Aa</div><code style="font-size:11px">Success</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00C687;color:#004C39">Aa</div><code style="font-size:11px">SuccessInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#004C39;color:#004C39">&nbsp;</div><code style="font-size:11px">SuccessForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.14);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,211,144,.24);color:#00D390">Aa</div><code style="font-size:11px">SuccessSoftInteraction</code></div></td><td>Confirmation: success toast, valid state, positive badge.</td></tr>
 <tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00BAFE;color:#042E49">Aa</div><code style="font-size:11px">Info</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#00ACEC;color:#042E49">Aa</div><code style="font-size:11px">InfoInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#042E49;color:#042E49">&nbsp;</div><code style="font-size:11px">InfoForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,186,254,.14);color:#00BAFE">Aa</div><code style="font-size:11px">InfoSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(0,186,254,.24);color:#00BAFE">Aa</div><code style="font-size:11px">InfoSoftInteraction</code></div></td><td>Neutral information: info toast, informative badge.</td></tr>
 <tr><td style="white-space:nowrap"><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#FCB700;color:#793205">Aa</div><code style="font-size:11px">Warning</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#EFAA00;color:#793205">Aa</div><code style="font-size:11px">WarningInteraction</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:#793205;color:#793205">&nbsp;</div><code style="font-size:11px">WarningForeground</code></div><div style="display:inline-block;text-align:center;margin-left:8px;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(252,183,0,.14);color:#FCB700">Aa</div><code style="font-size:11px">WarningSoft</code></div><div style="display:inline-block;text-align:center;margin-right:6px"><div style="width:78px;height:34px;line-height:34px;border-radius:4px;border:1px solid rgba(128,128,128,.4);background:rgba(252,183,0,.24);color:#FCB700">Aa</div><code style="font-size:11px">WarningSoftInteraction</code></div></td><td>Something needs attention but nothing is broken yet.</td></tr>
@@ -1546,8 +1547,9 @@ matching content colour. `GhostButton` has no fill or border; hovering fills it.
 A tinted background with the semantic hue as text — lower emphasis than solid,
 for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
 ≈24 % on hover), not a dedicated palette entry, so it derives automatically in
-both Light and Dark and follows any custom theme. Secondary is achromatic, so its
-tint is lighter (≈8 %, ≈14 % on hover).
+both Light and Dark and follows any custom theme. Secondary's colour is a pale fill,
+not a hue, so its soft and outline variants draw with its foreground instead, at a
+lighter tint (≈8 %, ≈14 % on hover).
 
 ```xml
 <Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
@@ -1567,7 +1569,7 @@ tint is lighter (≈8 %, ≈14 % on hover).
 ## Outline
 
 A coloured border and text over a transparent fill; hovering fills it with the
-soft tint. Secondary uses the neutral border and foreground.
+soft tint. Secondary draws its border and text with its foreground.
 
 ```xml
 <Button Style="{StaticResource OutlinePrimaryButton}">Primary</Button>
@@ -2263,7 +2265,7 @@ control belongs to, then follow its rules. A control derived from a native one
 | Category | What it is | Tokens | States |
 |---|---|---|---|
 | **Display** | Shows content without being interacted with: a card, a popup, a tooltip, a panel, the frame of a list | `DisplayBase0/Border0/Border1/InteractionBrush`, `DisplayRadius`, `DisplayThickness`, `DisplayPadding` (`DisplayPaddingSm` when compact) | None of its own (`DisplayInteractionBrush` is there for an informative hover). Its items (rows, entries) are actions without a fill at rest |
-| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase0/Border0/Border1/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputBorder1Brush` and the background `InputInteractionBrush` |
+| **Input** | Takes a value: a text field, a picker, a rating, a check | `InputBase0/Border0/Border1/InteractionBrush`, `InputRadius`, `InputThickness`, `InputPaddingXs`…`Lg`, `HeightXs`…`Lg` | No hover; on focus the border turns `InputBorder1Brush` (and the background `InputInteractionBrush` when no text is typed in it) |
 | **Action** | Runs something: a button, a toggle, an item of a display | `ActionBase0/Border0/Border1/InteractionBrush`, `ActionRadius`, `ActionThickness`, `ActionPaddingXs`…`Lg`, `HeightXs`…`Lg` | On hover the border turns `ActionBorder1Brush` and the background `ActionInteractionBrush`; moved down when pressed, no focus border |
 
 In every category, disabled is `DisabledOpacity`, selected and checked are the primary,
@@ -2282,7 +2284,7 @@ or an action follows the same steps with the keys of its own category. The rules
 | **Required** | Border colour, thickness and radius | `Brushes.InputBorder0Brush`, `Dimensions.InputThickness`, `Dimensions.InputRadius` (clamped to half the height with `MaxCornerRadiusConverter`) |
 | **Required** | Height, for a one-line input | `Dimensions.HeightMd` |
 | Optional | Sizes and padding | `HeightXs`…`HeightLg`, `FontSizeXs`…`FontSizeLg`, `InputPaddingXs`…`InputPaddingLg` |
-| Optional | Focus and disabled states (an input has no hover) | `InputBorder1Brush` and `InputInteractionBrush` (focus), `Colors.DisabledOpacity` |
+| Optional | Focus and disabled states (an input has no hover) | `InputBorder1Brush` (focus), `Colors.DisabledOpacity` |
 | Optional | Validation error style | `DangerBrush`, `ValidationErrorTemplate` |
 | Optional | Buttons inside the input | `EmbeddedButton` |
 
@@ -2399,13 +2401,14 @@ vertical padding never crushes it. `HorizontalThicknessConverter` drops the vert
 
 ## States
 
-An input has no hover state: on focus the native inputs turn their border to the elevated brush and
-their background to the interaction one, and they fade when disabled:
+An input has no hover state: on focus the native inputs turn their border to `InputBorder1Brush`, and
+they fade when disabled. One you type text into keeps its background, as a `TextBox` does: a darker
+fill would lower the contrast of the text. One you only pick from (a combo box, a check box) also turns
+its background to `InputInteractionBrush`.
 
 ```xml
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}" />
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />
@@ -3026,9 +3029,9 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
 | `Dropdown.Popup` | `object` | `null` | Content shown in the popup. Setting it is what turns the button into a dropdown. |
 | `Dropdown.Placement` | `DropdownPlacement` | `BottomLeft` | Corner of the popup anchored to the matching corner of the button: `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight`. |
 | `Dropdown.HorizontalOffset` | `double` | `0` | Extra horizontal offset applied on top of the placement. |
-| `Dropdown.VerticalOffset` | `double` | `2` | Extra vertical offset applied on top of the placement, a small gap from the button by default. |
+| `Dropdown.VerticalOffset` | `double` | `0` | Extra vertical offset applied on top of the placement; the popup touches the button by default. |
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
-| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
+| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its background, border, `CornerRadius`, `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
 
 ## Popup placement
 
@@ -3100,11 +3103,10 @@ Base it on the default style to keep the theme:
 </ToggleButton>
 ```
 
-`Padding` defaults to `Dimensions.DisplayPaddingSm`. The default template draws the
-background, border and corner radius straight from the theme tokens
-(`DisplayBase0Brush`, `DisplayBorder0Brush`, `DisplayRadius`): setting `Background`
-or `BorderBrush` in the style changes nothing. Override those tokens, or give the
-style a `Template` of your own.
+The style sets the host's `Background`, `BorderBrush`, `BorderThickness`,
+`CornerRadius`, `Padding` and `Foreground`. They default to the display tokens:
+`DisplayBase0Brush`, `DisplayBorder0Brush`, `DisplayThickness`, `DisplayRadius` and
+`DisplayPaddingSm`.
 
 ## Bindings inside the popup
 
@@ -3285,8 +3287,9 @@ everything — side menu included:
 </nav:OverlayContainer>
 ```
 
-The container creates an `Overlayer` of its own when none is bound; bind one from
-your shell view model to share it with the pages, behind `IOverlayer`.
+The container creates an `Overlayer` of its own when none is bound. Bind one from
+your shell view model to share it with the pages: `Overlays` takes it as an
+`IOverlayer`, so the shell can expose the contract only.
 
 Toasts have their own [`ToastContainer`](../feedback/toasts.md); wrap it around
 this one to keep them above the overlays.

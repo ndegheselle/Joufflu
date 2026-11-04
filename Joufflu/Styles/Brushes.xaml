@@ -179,8 +179,10 @@
         Soft tints. The soft background is the semantic hue at low opacity rather than a dedicated
         palette colour, so it is derived automatically for the built-in themes and for any custom
         theme (the Color is a DynamicResource; only the opacity is fixed). "Soft" is the resting
-        fill of a soft button (and the hover of an outline one); "SoftInteraction" is its hover, as XInteraction is the hover of X. Secondary is achromatic, so its tint is
-        lighter than the hued ones.
+        fill of a soft button (and the hover of an outline one); "SoftInteraction" is its hover, as XInteraction is the hover of X.
+        Secondary's colour is a pale fill made to sit under its foreground, not a hue: on the base it
+        would barely show. Its tint is drawn from its foreground instead (as are the text and border of
+        its soft and outline buttons), lighter than the hued ones.
         
         Like the brushes above, they are keyed by ComponentResourceKey so any style in the library
         can reach them with DynamicResource instead of a same-file StaticResource.
@@ -198,11 +200,11 @@
     <SolidColorBrush
         x:Key="{x:Static joufflu:Brushes.SecondarySoftBrush}"
         Opacity="0.08"
-        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
+        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryForegroundColor}}" />
     <SolidColorBrush
         x:Key="{x:Static joufflu:Brushes.SecondarySoftInteractionBrush}"
         Opacity="0.14"
-        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryColor}}" />
+        Color="{DynamicResource {x:Static joufflu:Colors.SecondaryForegroundColor}}" />
 
     <SolidColorBrush
         x:Key="{x:Static joufflu:Brushes.SuccessSoftBrush}"

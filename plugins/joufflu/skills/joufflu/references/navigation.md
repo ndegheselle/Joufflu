@@ -20,7 +20,7 @@ Three services, owned by a shell view model and shared with every page:
 | Service | Role | Host control |
 |---|---|---|
 | `Navigator` | Holds `CurrentPage` (a view model) | `ContentControl Content="{Binding Navigator.CurrentPage}"` + `nav:NavigationMenu` |
-| `Overlayer` (`IOverlayer`) | Stack of modal overlays | `nav:OverlayContainer Overlays="…"` |
+| `Overlayer` (`IOverlayer`) | Stack of modal overlays | `nav:OverlayContainer Overlays="…"` (takes an `IOverlayer`) |
 | `ToastService` (`IToastService`) | Notifications | `feedback:ToastContainer Toasts="…"` |
 
 Navigation is **view-model-first**: navigate to a view model, and an implicit

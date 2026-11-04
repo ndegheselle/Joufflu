@@ -138,7 +138,7 @@
         x:Key="SoftSecondaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftBrush}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Style.Triggers>
@@ -230,12 +230,12 @@
         x:Key="OutlineSecondaryButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.SecondaryForegroundBrush}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.SecondarySoftBrush}}" />
             </Trigger>
         </Style.Triggers>

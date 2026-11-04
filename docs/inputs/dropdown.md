@@ -38,9 +38,9 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
 | `Dropdown.Popup` | `object` | `null` | Content shown in the popup. Setting it is what turns the button into a dropdown. |
 | `Dropdown.Placement` | `DropdownPlacement` | `BottomLeft` | Corner of the popup anchored to the matching corner of the button: `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight`. |
 | `Dropdown.HorizontalOffset` | `double` | `0` | Extra horizontal offset applied on top of the placement. |
-| `Dropdown.VerticalOffset` | `double` | `2` | Extra vertical offset applied on top of the placement, a small gap from the button by default. |
+| `Dropdown.VerticalOffset` | `double` | `0` | Extra vertical offset applied on top of the placement; the popup touches the button by default. |
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
-| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
+| `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its background, border, `CornerRadius`, `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
 
 ## Popup placement
 
@@ -112,11 +112,10 @@ Base it on the default style to keep the theme:
 </ToggleButton>
 ```
 
-`Padding` defaults to `Dimensions.DisplayPaddingSm`. The default template draws the
-background, border and corner radius straight from the theme tokens
-(`DisplayBase0Brush`, `DisplayBorder0Brush`, `DisplayRadius`): setting `Background`
-or `BorderBrush` in the style changes nothing. Override those tokens, or give the
-style a `Template` of your own.
+The style sets the host's `Background`, `BorderBrush`, `BorderThickness`,
+`CornerRadius`, `Padding` and `Foreground`. They default to the display tokens:
+`DisplayBase0Brush`, `DisplayBorder0Brush`, `DisplayThickness`, `DisplayRadius` and
+`DisplayPaddingSm`.
 
 ## Bindings inside the popup
 

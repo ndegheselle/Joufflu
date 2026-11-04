@@ -35,7 +35,7 @@
             <c:CodeExample
                 Title="Soft"
                 Code="{Binding SoftCode}"
-                Description="A tinted background — the semantic hue at low opacity — with the hue itself as text. Because the tint is derived by opacity, it adapts to light/dark and to custom themes. Secondary is achromatic, so its tint is lighter.">
+                Description="A tinted background — the semantic hue at low opacity — with the hue itself as text. Because the tint is derived by opacity, it adapts to light/dark and to custom themes. Secondary's colour is a pale fill, not a hue: its soft variant draws with its foreground, at a lighter tint.">
                 <WrapPanel toolkit:Spacing.Gap="8,0">
                     <Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
                     <Button Style="{StaticResource SoftSecondaryButton}">Secondary</Button>
@@ -49,7 +49,7 @@
             <c:CodeExample
                 Title="Outline"
                 Code="{Binding OutlineCode}"
-                Description="A coloured border and text over a transparent fill; hovering fills it with the soft tint. Secondary uses the neutral border and foreground.">
+                Description="A coloured border and text over a transparent fill; hovering fills it with the soft tint. Secondary draws its border and text with its foreground.">
                 <WrapPanel toolkit:Spacing.Gap="8,0">
                     <Button Style="{StaticResource OutlinePrimaryButton}">Primary</Button>
                     <Button Style="{StaticResource OutlineSecondaryButton}">Secondary</Button>

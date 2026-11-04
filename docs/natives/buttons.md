@@ -31,8 +31,9 @@ matching content colour. `GhostButton` has no fill or border; hovering fills it.
 A tinted background with the semantic hue as text — lower emphasis than solid,
 for secondary actions. The tint is the semantic colour at low opacity (≈14 %,
 ≈24 % on hover), not a dedicated palette entry, so it derives automatically in
-both Light and Dark and follows any custom theme. Secondary is achromatic, so its
-tint is lighter (≈8 %, ≈14 % on hover).
+both Light and Dark and follows any custom theme. Secondary's colour is a pale fill,
+not a hue, so its soft and outline variants draw with its foreground instead, at a
+lighter tint (≈8 %, ≈14 % on hover).
 
 ```xml
 <Button Style="{StaticResource SoftPrimaryButton}">Primary</Button>
@@ -52,7 +53,7 @@ tint is lighter (≈8 %, ≈14 % on hover).
 ## Outline
 
 A coloured border and text over a transparent fill; hovering fills it with the
-soft tint. Secondary uses the neutral border and foreground.
+soft tint. Secondary draws its border and text with its foreground.
 
 ```xml
 <Button Style="{StaticResource OutlinePrimaryButton}">Primary</Button>

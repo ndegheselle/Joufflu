@@ -25,12 +25,18 @@ public class OverlayContainer : ContentControl
         SetCurrentValue(OverlaysProperty, new Overlayer());
     }
 
-    public Overlayer Overlays
+    /// <summary>
+    /// The service whose overlays are shown. Typed by its contract, so a shell can bind the
+    /// <see cref="IOverlayer"/> it hands its pages. The template draws the stack of an
+    /// <see cref="Overlayer"/> (its <see cref="Overlayer.Overlays"/>): an implementation of your
+    /// own shows nothing unless it exposes the same.
+    /// </summary>
+    public IOverlayer Overlays
     {
-        get => (Overlayer)GetValue(OverlaysProperty);
+        get => (IOverlayer)GetValue(OverlaysProperty);
         set => SetValue(OverlaysProperty, value);
     }
 
     public static readonly DependencyProperty OverlaysProperty = DependencyProperty.Register(
-        nameof(Overlays), typeof(Overlayer), typeof(OverlayContainer), new PropertyMetadata(null));
+        nameof(Overlays), typeof(IOverlayer), typeof(OverlayContainer), new PropertyMetadata(null));
 }

@@ -103,12 +103,13 @@ and a large vertical padding never crushes it.
 ## 4. Optional: states and validation
 
 An input has **no hover** state. Add, in this order, to `Style.Triggers` (the error must come
-after focus):
+after focus). Keep the background on focus when text is typed in the input, as `TextBox` does (a
+darker fill lowers the text contrast); an input you only pick from also sets `Background` to
+`InputInteractionBrush`:
 
 ```xml
 <Trigger Property="IsKeyboardFocusWithin" Value="True">
     <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.InputBorder1Brush}}" />
-    <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.InputInteractionBrush}}" />
 </Trigger>
 <Trigger Property="IsEnabled" Value="False">
     <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.DisabledOpacity}}" />

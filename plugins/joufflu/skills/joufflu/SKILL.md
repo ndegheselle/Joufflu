@@ -153,7 +153,7 @@ C# namespaces:
   `XBase|XBorder0|XBorder1|XInteraction`, an interaction turning the border to `XBorder1` and the
   background to `XInteraction`. Display (card, panel, popup): `Display*` +
   `Dimensions.DisplayRadius|DisplayThickness|DisplayPadding`, no interaction of its own. Input (takes a
-  value): `Input*`, interacted on focus, no hover, + `InputRadius|InputThickness`. Action (runs
+  value): `Input*`, interacted on focus (border only where text is typed), no hover, + `InputRadius|InputThickness`. Action (runs
   something): `Action*`, interacted on hover, no focus border, + `ActionRadius|ActionThickness`.
   See [references/theming.md](references/theming.md).
 - **Spacing**: `toolkit:Spacing.Gap="8"` on the panel instead of margins on each child.

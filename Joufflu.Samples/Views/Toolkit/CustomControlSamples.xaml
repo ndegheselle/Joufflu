@@ -43,7 +43,7 @@
                             Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                             Text="InputBase0/Border0/Border1/InteractionBrush, InputRadius, InputThickness, InputPaddingXs..Lg, HeightXs..Lg."
                             TextWrapping="Wrap" />
-                        <TextBlock Text="No hover; on focus the border turns InputBorder1Brush and the background InputInteractionBrush. The example below builds one." TextWrapping="Wrap" />
+                        <TextBlock Text="No hover; on focus the border turns InputBorder1Brush, and the background InputInteractionBrush unless text is typed in it. The example below builds one, a rating picked rather than typed." TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource Card}">

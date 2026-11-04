@@ -1,6 +1,4 @@
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,16 +15,12 @@ namespace Joufflu.Inputs.Controls.Format
     [TemplatePart(Name = "PART_ClearButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_UpButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_DownButton", Type = typeof(Button))]
-    public class FormatTextBox : TextBox, INotifyPropertyChanged
+    public class FormatTextBox : TextBox
     {
         static FormatTextBox()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FormatTextBox), new FrameworkPropertyMetadata(typeof(FormatTextBox)));
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? name = null)
-        { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }
 
         public event EventHandler<List<object?>>? ValuesChanged;
 
@@ -53,24 +47,37 @@ namespace Joufflu.Inputs.Controls.Format
             ValuesChanged?.Invoke(this, Values);
         }
 
+        public static readonly DependencyProperty ShowDeleteButtonProperty = DependencyProperty.Register(
+            nameof(ShowDeleteButton),
+            typeof(bool),
+            typeof(FormatTextBox),
+            new FrameworkPropertyMetadata(true));
+
+        /// <summary>Whether the button clearing the value is shown.</summary>
+        public bool ShowDeleteButton
+        {
+            get => (bool)GetValue(ShowDeleteButtonProperty);
+            set => SetValue(ShowDeleteButtonProperty, value);
+        }
+
+        public static readonly DependencyProperty ShowIncrementsButtonsProperty = DependencyProperty.Register(
+            nameof(ShowIncrementsButtons),
+            typeof(bool),
+            typeof(FormatTextBox),
+            new FrameworkPropertyMetadata(true));
+
+        /// <summary>Whether the up and down buttons changing the selected group are shown.</summary>
+        public bool ShowIncrementsButtons
+        {
+            get => (bool)GetValue(ShowIncrementsButtonsProperty);
+            set => SetValue(ShowIncrementsButtonsProperty, value);
+        }
+
         #endregion
 
         #region Properties
 
         #region Options
-        private bool _showDeleteButton = true;
-        public bool ShowDeleteButton
-        {
-            get => _showDeleteButton;
-            set { _showDeleteButton = value; OnPropertyChanged(); }
-        }
-
-        private bool _showIncrementsButtons = true;
-        public bool ShowIncrementsButtons
-        {
-            get => _showIncrementsButtons;
-            set { _showIncrementsButtons = value; OnPropertyChanged(); }
-        }
 
         /// <summary>
         /// What the box shows, in order: <see cref="IntegerGroup"/>s and <see cref="DecimalGroup"/>s
