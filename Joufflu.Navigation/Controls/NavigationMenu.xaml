@@ -134,13 +134,13 @@
                                     VerticalAlignment="Center"
                                     ContentSource="Header" />
 
-                                <fonts:FontIcon
+                                <fonts:Chevron
                                     x:Name="Chevron"
                                     Grid.Column="2"
                                     Margin="8,0,0,0"
-                                    VerticalAlignment="Center"
                                     FontSize="16"
-                                    Text="{x:Static fonts:LucideFontIcons.ChevronDown}" />
+                                    IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Placement="Trailing" />
                             </Grid>
                         </Button>
 
@@ -159,7 +159,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="ChildrenHost" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="Chevron" Property="Text" Value="{x:Static fonts:LucideFontIcons.ChevronUp}" />
                         </Trigger>
                         <DataTrigger Binding="{Binding IsCollapsed, RelativeSource={RelativeSource AncestorType={x:Type nav:NavigationMenu}}}" Value="True">
                             <Setter TargetName="ContentPresenter" Property="Visibility" Value="Collapsed" />

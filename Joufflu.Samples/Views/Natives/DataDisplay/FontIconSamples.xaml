@@ -49,6 +49,16 @@
                     </StackPanel>
                 </StackPanel>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Chevron"
+                Code="{Binding ChevronCode}"
+                Description="The chevron of a header that opens content, its glyph following IsExpanded. Leading (before the header, as in a tree) points right then down, Trailing (after it, as in an expander) points down then up. ChevronToggleButton is the toggle of a tree row built on it.">
+                <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="12,0">
+                    <ToggleButton x:Name="ChevronToggle" Style="{StaticResource ChevronToggleButton}" />
+                    <fonts:Chevron IsExpanded="{Binding IsChecked, ElementName=ChevronToggle}" Placement="Trailing" />
+                </StackPanel>
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

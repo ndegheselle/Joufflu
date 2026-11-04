@@ -134,4 +134,13 @@ source or check IntelliSense; don't guess.
                 Text="{x:Static fonts:LucideFontIcons.Trash}" />
 ```
 
+`Chevron` (a `FontIcon`) is the chevron of a header that opens content: `IsExpanded` picks the
+glyph, no animation. `Placement="Leading"` (default, tree) right → down, `"Trailing"` (expander,
+menu group) down → up. `ChevronToggleButton` is the square, chrome-less tree-row expander built on it.
+
+```xml
+<ToggleButton IsChecked="{Binding IsExpanded}" Style="{StaticResource ChevronToggleButton}" />
+<fonts:Chevron IsExpanded="{Binding IsExpanded}" Placement="Trailing" />
+```
+
 Its size follows the inherited `Sizing.Size`, so an icon inside a `lg` button is `lg`.

@@ -65,3 +65,22 @@ See [Buttons](buttons.md#icon-buttons).
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />
 </Button>
 ```
+
+## Chevron
+
+`Chevron` is the `FontIcon` of a header that opens content below it: its glyph
+follows `IsExpanded`. `Placement="Leading"` (the default, before the header as in a
+tree) points right, then down once open; `Placement="Trailing"` (after the header,
+as in an expander) points down, then up. The glyph switches without an animation.
+The tree view, expander, navigation group and data display all use it.
+
+`ChevronToggleButton` is the expander of a tree row built on it: a bare, square,
+non-focusable toggle in the row's foreground.
+
+```xml
+<!-- A tree row's expander -->
+<ToggleButton IsChecked="{Binding IsExpanded}" Style="{StaticResource ChevronToggleButton}" />
+
+<!-- After a header -->
+<fonts:Chevron IsExpanded="{Binding IsExpanded}" Placement="Trailing" />
+```

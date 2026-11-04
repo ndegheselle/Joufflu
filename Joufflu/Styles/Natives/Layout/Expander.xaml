@@ -42,46 +42,14 @@
                                 RecognizesAccessKey="True"
                                 SnapsToDevicePixels="True" />
 
-                            <fonts:FontIcon
-                                x:Name="Chevron"
+                            <fonts:Chevron
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                RenderTransformOrigin="0.5,0.5"
-                                Text="{x:Static fonts:LucideFontIcons.ChevronDown}">
-                                <fonts:FontIcon.RenderTransform>
-                                    <RotateTransform Angle="0" />
-                                </fonts:FontIcon.RenderTransform>
-                            </fonts:FontIcon>
+                                IsExpanded="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                Placement="Trailing" />
                         </Grid>
                     </Border>
 
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Chevron"
-                                            Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(RotateTransform.Angle)"
-                                            To="-180"
-                                            Duration="0:0:0.2" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Chevron"
-                                            Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(RotateTransform.Angle)"
-                                            To="0"
-                                            Duration="0:0:0.2" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
