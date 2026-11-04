@@ -33,7 +33,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 - [Spacing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
 - [Derived dimensions](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/derived-dimensions.md): `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` with their per-side and per-corner factors, scaling a theme dimension (a category key such as `DisplayRadius`) live.
 - [Tooltip](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md): every native `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side, `ThemedTooltip.MaxWidth` (320 by default) where the text wraps.
-- [Animate](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md): `Animate.Bounce` looping a vertical hop on any element, with `BounceHeight` and `BounceDuration`.
+- [Animate](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md): `Animate.Bounce` looping a vertical hop on any element, with `BounceHeight` and `BounceDuration`; `Animate.Spin` turning it around its centre, with `SpinDuration`.
 - [Drag and drop](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/drop-target.md): `DropTarget.Command` turning any element into a drop target, the `CanExecute` filter, the `DropData` parameter carrying the dragged data and where the drop landed, the `IsDragOver` highlight and the reported `Effect`; and `DragSource.Data`, `AllowedEffects` and `IsDragging` turning any element into a drag source.
 - [Shared width](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/shared-width.md): the `SharedWidth` decorator giving every input of a group the width of the narrowest one, right aligned, so inputs line up across the depths of a tree; groups scoped by `SharedWidth.IsScope`.
 - [Create a custom control](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/custom-control.md): the category a control of your own belongs to (Display, Input, Action) with the tokens and states of each, then an input that matches the Joufflu ones — required `InputBase0Brush`, `InputBorder0Brush`, `InputThickness`, `InputRadius` and height tokens; optional size triggers with `InputPadding`, focus (`InputBorder1Brush` border and `InputInteractionBrush` background, no hover) and disabled states, the `Validation.HasError` border plus `ValidationErrorTemplate` badge, and `EmbeddedButton` for inner buttons.
@@ -70,10 +70,10 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 
 ## Data (`Joufflu.Data`)
 
-- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree, `ToToken()`, `ToDataNode()` from an NJsonSchema `JsonSchema` (editor and JSON per type), and `ManualValues` (`DataManualPattern` for entries taking any name).
+- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree, `ToToken()`, `ToDataNode()` from an NJsonSchema `JsonSchema` (editor and JSON per type) or a `JToken`, `ReadDataNode()` from a `JsonReader`, and `ManualValues` (`DataManualPattern` for entries taking any name).
 - [Data fill](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md): `DataFill`, filling in a node built from a schema.
 - [Data edit](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md): `DataEdit`, building a node from scratch.
-- [Data display](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-display.md): `DataDisplay`, showing a node read only with the key, type and value of each node.
+- [Data display](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-display.md): `DataDisplay`, showing a node read only with the key, type and value of each node; large files with `JsonReader.ReadDataNode()`, only the rows in view built.
 
 ## File explorer (`Joufflu.FileExplorer`)
 

@@ -24,6 +24,7 @@ public partial class DataObject : DataNode, IDataParent
         {
             _properties.CollectionChanged -= OnPropertiesChanged;
             _properties = value;
+            _properties.Owner = this;
             _properties.CollectionChanged += OnPropertiesChanged;
 
             foreach (DataNode property in value)
@@ -37,6 +38,7 @@ public partial class DataObject : DataNode, IDataParent
 
     public DataObject(string? key) : base(EnumDataType.Object, key)
     {
+        _properties.Owner = this;
         _properties.CollectionChanged += OnPropertiesChanged;
     }
 

@@ -16,8 +16,23 @@ namespace Joufflu.Data.Converters;
 /// </summary>
 public class DataValueTextConverter : IMultiValueConverter
 {
+    /// <summary>
+    /// Longer than any row is wide. Trimming still has the whole text measured, so a value of a few
+    /// megabytes (an embedded file, say) would stall the row showing it.
+    /// </summary>
+    private const int MaxShownLength = 1000;
+
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        => values.ElementAtOrDefault(0) is DataNode node ? TextOf(node, culture) : "";
+    {
+        if (values.ElementAtOrDefault(0) is not DataNode node)
+            return "";
+
+        string text = TextOf(node, culture);
+        if (text.Length > MaxShownLength)
+            text = text[..MaxShownLength] + "…";
+        // Rows are one line high: a text running on more lines would spill over the rows below.
+        return text.ReplaceLineEndings("↵");
+    }
 
     /// <summary>What [node] holds, as text.</summary>
     public static string TextOf(DataNode node, CultureInfo culture)

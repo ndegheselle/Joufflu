@@ -90,6 +90,41 @@
                     </WrapPanel>
                 </StackPanel>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Animate.Spin"
+                Code="{Binding SpinCode}"
+                Description="Spin turns an element endlessly around its own centre, clockwise and at constant speed, whatever its RenderTransformOrigin. SpinDuration sets the time of one full turn. Like Bounce it runs on the RenderTransform, pauses while hidden, and is a plain boolean you can bind; the two can run together on the same element. The Spinner is built on it.">
+                <StackPanel toolkit:Spacing.Gap="0,12">
+                    <CheckBox Content="Is refreshing" IsChecked="{Binding IsRefreshing, Mode=TwoWay}" />
+                    <WrapPanel VerticalAlignment="Center" toolkit:Spacing.Gap="16,12">
+                        <fonts:FontIcon
+                            VerticalAlignment="Center"
+                            toolkit:Animate.Spin="True"
+                            FontSize="20"
+                            Text="{x:Static fonts:LucideFontIcons.Loader}" />
+                        <fonts:FontIcon
+                            VerticalAlignment="Center"
+                            toolkit:Animate.Spin="True"
+                            toolkit:Animate.SpinDuration="0:0:3"
+                            FontSize="20"
+                            Text="{x:Static fonts:LucideFontIcons.Settings}" />
+                        <fonts:FontIcon
+                            VerticalAlignment="Center"
+                            toolkit:Animate.Spin="{Binding IsRefreshing}"
+                            FontSize="20"
+                            Text="{x:Static fonts:LucideFontIcons.RefreshCw}" />
+                        <!--  Spin and Bounce together: it hops while it turns  -->
+                        <fonts:FontIcon
+                            VerticalAlignment="Center"
+                            toolkit:Animate.Bounce="True"
+                            toolkit:Animate.Spin="True"
+                            toolkit:Animate.SpinDuration="0:0:2"
+                            FontSize="20"
+                            Text="{x:Static fonts:LucideFontIcons.LoaderPinwheel}" />
+                    </WrapPanel>
+                </StackPanel>
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

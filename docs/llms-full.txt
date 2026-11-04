@@ -1567,7 +1567,7 @@ theme the editors of its built-in columns). The theme manager, tokens and window
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.
 - **Derived dimensions** — the `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` attached properties, with their factors scaling the value side by side, for thicknesses, radii and margins that follow the theme live.
 - **Tooltip** — every `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side and `ThemedTooltip.MaxWidth` where its text wraps.
-- **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it.
+- **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it, and `Animate.Spin` for an endless turn around its centre, with `SpinDuration` setting its speed.
 - **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
 - **Shared width** — the `SharedWidth` decorator and its `IsScope` attached property, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
 - **Create a custom control** — the category a control of your own belongs to (display, input, action), the tokens and states of each, then an input built step by step: background and border, height, sizes and padding, states, the validation error style and embedded buttons.
@@ -1906,17 +1906,47 @@ the loop at runtime.
 > so changing either while the element is bouncing restarts the hop from the top
 > of its cycle.
 
+## Animate.Spin
+
+`Spin` turns an element endlessly, clockwise and at constant speed — a loading
+glyph, a refresh icon while it works. `SpinDuration` sets the time of one full
+turn (default `0:0:1`). The `Spinner` of `Joufflu.Feedback` is built on it.
+
+The element turns around its own centre whatever its `RenderTransformOrigin`,
+and keeps doing so when it is resized. Like the bounce it runs on the
+`RenderTransform`, so it never affects layout; a transform already on the
+element is kept, and the element turns as that transform draws it.
+
+```xml
+<!-- Spin turns any element around its centre, template untouched -->
+<fonts:FontIcon toolkit:Animate.Spin="True" Text="{x:Static fonts:LucideFontIcons.Loader}" />
+
+<!-- SpinDuration is the time of one full turn -->
+<fonts:FontIcon
+    toolkit:Animate.Spin="True"
+    toolkit:Animate.SpinDuration="0:0:3"
+    Text="{x:Static fonts:LucideFontIcons.Settings}" />
+
+<!-- A plain bool too: spin a refresh icon only while it works -->
+<fonts:FontIcon
+    toolkit:Animate.Spin="{Binding IsRefreshing}"
+    Text="{x:Static fonts:LucideFontIcons.RefreshCw}" />
+```
+
+`Spin` and `Bounce` can be set on the same element: it hops while it turns,
+and each stops on its own.
+
 ## Hidden elements and lifetime
 
-The hop pauses itself whenever the element is not visible — `Collapsed` or
-`Hidden`, under a collapsed ancestor, or out of the visual tree — parks at rest,
-and starts again from the top of its cycle when the element comes back.
-A bounce left on a hidden element therefore costs no frames.
+Every animation pauses itself whenever the element is not visible — `Collapsed`
+or `Hidden`, under a collapsed ancestor, or out of the visual tree — parks at
+rest, and starts again from the top of its cycle when the element comes back.
+An animation left on a hidden element therefore costs no frames.
 
 Nothing has to be unhooked for the element to be collected: the helper keeps no
-reference back to it, and an element dropped with `Bounce` still `True` is
-collected exactly like one that was stopped first — WPF retires the clock once
-its target goes away.
+reference back to it, and an element dropped with `Bounce` or `Spin` still
+`True` is collected exactly like one that was stopped first — WPF retires the
+clock once its target goes away.
 
 ---
 
@@ -3418,6 +3448,14 @@ Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, f
 Node = (DataObject)JObject.Parse(json).ToDataNode();
 ```
 
+`ReadDataNode()` gives the same tree straight from a `JsonReader`, for a large file: it is never
+held as tokens too. A key given twice keeps its last value, comments are skipped.
+
+```csharp
+using var reader = new JsonTextReader(File.OpenText(path));
+DataNode node = reader.ReadDataNode();
+```
+
 `Changed` is raised when the data of a node or of anything under it changes, to react to an
 edit anywhere in the tree: a key, a value, the manual mode or entry, an array template,
 children added or removed. Expanding a node, flagging a duplicate key or moving a node to
@@ -3531,8 +3569,26 @@ Node.Load(JToken.Parse(json), ManualValues);
 
 - `Node` takes any `DataNode`: an object shows its properties as the first level, an array or a
   value is shown as that level itself. A `JToken` can be bound to it directly, read as `ToDataNode` does.
+- A value runs on one line: a line break shows as `↵`, a text past 1000 characters is cut.
 
-Only expanding and collapsing nodes changes the tree.
+Only expanding and collapsing nodes changes the tree. The display follows the node: children added
+or removed, a node forced or expanded in code show up before the next render.
+
+## Large files
+
+Read the file with `ReadDataNode()` off the UI thread, then show the node:
+
+```csharp
+using var reader = new JsonTextReader(File.OpenText(path));
+Node = await Task.Run(() => reader.ReadDataNode());
+```
+
+- `ReadDataNode()` builds the node straight from the reader, without a `JToken` in between: a
+  file is held once, as nodes, and read about a third faster.
+- The tree is laid flat in rows of one height, and only the rows in view are built. A file of
+  millions of nodes scrolls, expands and collapses as a small one does.
+- Give the display a height (a `Grid` row, a fixed `Height`). In a `StackPanel` or a
+  `ScrollViewer` it is measured with endless room, and builds every row.
 
 ---
 

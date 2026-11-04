@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NJsonSchema;
 using System.Globalization;
 
@@ -145,6 +146,92 @@ public static class DataFactory
             LoadValue(value, token, []);
             return value;
         }
+    }
+
+    extension(JsonReader reader)
+    {
+        /// <summary>
+        /// The node the next value of [reader] reads as, the same one <c>ToDataNode</c> gives for its
+        /// token, under [key]. Built straight from the reader: a large file is never held twice, once
+        /// as tokens and once as nodes.
+        /// </summary>
+        public DataNode ReadDataNode(string? key = null)
+        {
+            // From the token the reader is on, as JToken.ReadFrom does, comments skipped.
+            bool isOnValue = reader.TokenType is not (JsonToken.None or JsonToken.Comment) || NextToken(reader);
+            if (!isOnValue)
+                throw new JsonReaderException("There is no JSON value to read.");
+
+            // The same keys come back on every item of an array: one string each instead of one a time.
+            if (reader is JsonTextReader { PropertyNameTable: null } textReader)
+                textReader.PropertyNameTable = new SharedNameTable();
+
+            return ReadNode(reader, key);
+        }
+    }
+
+    /// <summary>Reads the node [reader] is on, leaving the reader on its last token.</summary>
+    private static DataNode ReadNode(JsonReader reader, string? key)
+    {
+        switch (reader.TokenType)
+        {
+            case JsonToken.StartObject:
+                return ReadObject(reader, key);
+            case JsonToken.StartArray:
+                var array = new DataArray(key, null);
+                while (NextToken(reader) && reader.TokenType != JsonToken.EndArray)
+                    array.Add(ReadNode(reader, null));
+                return array;
+            case JsonToken.Undefined:
+                return JValue.CreateUndefined().ToDataNode(key);
+            default:
+                // A short lived token, so a value is read exactly as ToDataNode reads it.
+                var token = new JValue(reader.Value);
+                return token.ToDataNode(key);
+        }
+    }
+
+    private static DataObject ReadObject(JsonReader reader, string? key)
+    {
+        DataNodeCollection properties = [];
+        // A key given twice keeps its last value, as JObject does.
+        Dictionary<string, int> indexes = new(StringComparer.Ordinal);
+        while (NextToken(reader) && reader.TokenType == JsonToken.PropertyName)
+        {
+            string name = (string)reader.Value!;
+            NextToken(reader);
+            DataNode property = ReadNode(reader, name);
+
+            if (indexes.TryGetValue(name, out int index))
+                properties[index] = property;
+            else
+            {
+                indexes[name] = properties.Count;
+                properties.Add(property);
+            }
+        }
+
+        return new DataObject(key) { Properties = properties };
+    }
+
+    /// <summary>Keeps every key it is asked for, where <see cref="DefaultJsonNameTable"/> only knows those added up front.</summary>
+    private sealed class SharedNameTable : JsonNameTable
+    {
+        private readonly DefaultJsonNameTable _names = new();
+
+        public override string Get(char[] key, int start, int length)
+            => _names.Get(key, start, length) ?? _names.Add(new string(key, start, length));
+    }
+
+    /// <summary>Moves [reader] to its next token that is not a comment, false at the end.</summary>
+    private static bool NextToken(JsonReader reader)
+    {
+        while (reader.Read())
+        {
+            if (reader.TokenType != JsonToken.Comment)
+                return true;
+        }
+        return false;
     }
 
     private static void Load(DataNode node, JToken? token, IReadOnlyList<DataManualValue> manualValues)

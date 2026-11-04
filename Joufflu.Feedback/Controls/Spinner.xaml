@@ -16,46 +16,23 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:Spinner}">
                     <Viewbox>
+                        <!--
+                            Animate.Spin pauses itself while hidden (e.g. in a toast that isn't loading),
+                            so an endless turn never ticks for nothing.
+                        -->
                         <Grid
                             Width="24"
                             Height="24"
-                            RenderTransformOrigin="0.5,0.5">
+                            toolkit:Animate.Spin="True"
+                            toolkit:Animate.SpinDuration="0:0:0.9">
                             <Path
                                 Data="M 12 2 A 10 10 0 1 1 2 12"
                                 Stroke="{TemplateBinding Foreground}"
                                 StrokeEndLineCap="Round"
                                 StrokeStartLineCap="Round"
                                 StrokeThickness="3" />
-                            <Grid.RenderTransform>
-                                <RotateTransform x:Name="Rotation" Angle="0" />
-                            </Grid.RenderTransform>
                         </Grid>
                     </Viewbox>
-
-                    <ControlTemplate.Triggers>
-                        <!--
-                            Only spins while shown: Loaded fires even when collapsed (e.g. in a toast that
-                            isn't loading), and an endless animation would tick every frame for nothing.
-                        -->
-                        <Trigger Property="IsVisible" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard x:Name="Spin">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            RepeatBehavior="Forever"
-                                            Storyboard.TargetName="Rotation"
-                                            Storyboard.TargetProperty="Angle"
-                                            From="0"
-                                            To="360"
-                                            Duration="0:0:0.9" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Spin" />
-                            </Trigger.ExitActions>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

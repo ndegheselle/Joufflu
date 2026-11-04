@@ -7,6 +7,7 @@
     xmlns:jata="clr-namespace:Joufflu.Data.Controls"
     xmlns:jodels="clr-namespace:Joufflu.Data.Model"
     xmlns:jonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:jonverters="clr-namespace:Joufflu.Data.Converters"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:local="clr-namespace:Joufflu.Data.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,9 +17,11 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Joufflu;component/Styles/Natives/DataDisplay/TreeView.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Joufflu.Data;component/Controls/DataResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <jonverters:DataDepthConverter x:Key="DepthConverter" />
+            <jonverters:DataChevronVisibilityConverter x:Key="ChevronVisibilityConverter" />
 
             <!--  Header of a node: its key and its type  -->
             <DataTemplate x:Key="DataNodeHeader">
@@ -38,9 +41,9 @@
                     <jonts:FontIcon
                         Grid.Column="2"
                         HorizontalAlignment="Right"
-                        ToolTip="{Binding Description}"
                         Foreground="{DynamicResource {x:Static joufflu:Brushes.InfoBrush}}"
                         Text="{x:Static jonts:LucideFontIcons.Info}"
+                        ToolTip="{Binding Description}"
                         Visibility="{Binding Description, Converter={x:Static converters:VisibilityConverter.Default}}" />
                 </Grid>
             </DataTemplate>
@@ -76,9 +79,9 @@
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
                     <jonts:FontIcon
                         Grid.Column="1"
-                        ToolTip="Forced value"
                         Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
                         Text="{x:Static jonts:LucideFontIcons.Feather}"
+                        ToolTip="Forced value"
                         Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
                     <TextBlock
                         Grid.Column="2"
@@ -94,95 +97,183 @@
                     </TextBlock>
                 </Grid>
             </DataTemplate>
+
+            <!--  The indent of a row and the guide lines of the levels above it.  -->
+            <Style x:Key="DataRowGuides" TargetType="jata:DataGuides">
+                <Setter Property="ChevronSize" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
+                <Setter Property="LineThickness" Value="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}" />
+                <Setter Property="LineBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
+                <Setter Property="Depth">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource DepthConverter}">
+                            <Binding />
+                            <Binding Path="Node" RelativeSource="{RelativeSource AncestorType={x:Type local:DataDisplay}}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--
+                Expands the node of its row, as a tree view's expander. Turned without an animation: the rows
+                being reused while scrolling, an expanded one coming into view would turn each time.
+            -->
+            <Style x:Key="DataChevron" TargetType="ToggleButton">
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <!--  The row's, which turns to the primary foreground once selected.  -->
+                <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
+                <Setter Property="Width" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="ClickMode" Value="Press" />
+                <Setter Property="IsChecked" Value="{Binding IsExpanded}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border Background="Transparent">
+                                <jonts:FontIcon
+                                    x:Name="Icon"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Text="{x:Static jonts:LucideFontIcons.ChevronRight}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="Icon" Property="RenderTransform">
+                                        <Setter.Value>
+                                            <RotateTransform Angle="90" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <TreeView ItemsSource="{Binding Roots}">
-        <TreeView.ItemContainerStyle>
-            <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
-                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+
+    <!--
+        The tree laid flat (see DataDisplayRows): rows of a single height, only the ones in view built
+        and reused while scrolling, so a file of millions of nodes scrolls as a small one.
+    -->
+    <ListBox
+        x:Name="RowList"
+        Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"
+        BorderThickness="{DynamicResource {x:Static joufflu:Dimensions.DisplayThickness}}"
+        ScrollViewer.CanContentScroll="True"
+        VirtualizingPanel.IsVirtualizing="True"
+        VirtualizingPanel.ScrollUnit="Pixel"
+        VirtualizingPanel.VirtualizationMode="Recycling">
+        <ListBox.ItemContainerStyle>
+            <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                 <!--
-                    Same rows as DataEdit and DataFill: no item padding, a row as tall as their sm inputs (the MinHeight
-                    of the row templates), so the three read alike side by side.
+                    Same rows as DataEdit and DataFill: no item padding, a row as tall as its chevron, so the three read
+                    alike side by side. A fixed height also keeps every row alike, which is what lets the list skip the
+                    rows out of view without measuring them.
                 -->
+                <Setter Property="Height" Value="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
                 <Setter Property="Padding" Value="0" />
+                <!--
+                    The guide lines run from row to row: a border, even transparent, would cut them at each row. A
+                    selected row's border is its background anyway.
+                -->
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <!--  As tall as the row, so the guide lines meet: the headers center themselves in it.  -->
+                <Setter Property="VerticalContentAlignment" Value="Stretch" />
             </Style>
-        </TreeView.ItemContainerStyle>
-        <TreeView.Resources>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataArray}">
-                <HierarchicalDataTemplate.ItemsSource>
-                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
-                        <Binding />
-                        <Binding Path="IsManual" />
-                    </MultiBinding>
-                </HierarchicalDataTemplate.ItemsSource>
-                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataParentRow}" />
-            </HierarchicalDataTemplate>
-            <HierarchicalDataTemplate DataType="{x:Type jodels:DataObject}">
-                <HierarchicalDataTemplate.ItemsSource>
-                    <MultiBinding Converter="{StaticResource ChildrenConverter}">
-                        <Binding />
-                        <Binding Path="IsManual" />
-                    </MultiBinding>
-                </HierarchicalDataTemplate.ItemsSource>
-                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataParentRow}" />
-            </HierarchicalDataTemplate>
-            <DataTemplate DataType="{x:Type jodels:DataValue}">
-                <Grid
-                    MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}"
-                    Margin="0,0,2,0"
-                    VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
-                    <!--  A forced value is flagged the way the toggle forcing it reads.  -->
-                    <jonts:FontIcon
-                        Margin="4,0,0,0"
-                        Grid.Column="1"
-                        ToolTip="Forced value"
-                        Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
-                        Text="{x:Static jonts:LucideFontIcons.Feather}"
-                        Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
-                    <TextBlock
-                        toolkit:Derive.Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}"
-                        toolkit:Derive.MarginFactor="1,0"
-                        Grid.Column="2"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        TextTrimming="CharacterEllipsis">
-                        <TextBlock.Text>
-                            <MultiBinding Converter="{StaticResource ValueTextConverter}">
-                                <Binding />
-                                <Binding Path="Value" />
+        </ListBox.ItemContainerStyle>
+        <ListBox.Resources>
+            <DataTemplate DataType="{x:Type jodels:DataArray}">
+                <DockPanel>
+                    <jata:DataGuides Style="{StaticResource DataRowGuides}" />
+                    <ToggleButton Style="{StaticResource DataChevron}">
+                        <ToggleButton.Visibility>
+                            <MultiBinding Converter="{StaticResource ChevronVisibilityConverter}">
                                 <Binding Path="IsManual" />
-                                <Binding Path="ManualEntry" />
+                                <Binding Path="Values.Count" />
                             </MultiBinding>
-                        </TextBlock.Text>
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <!--  Null and undefined are no value: they read apart from a text saying "null".  -->
-                                    <DataTrigger Binding="{Binding Value}" Value="{x:Null}">
-                                        <Setter Property="FontStyle" Value="Italic" />
-                                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
-                                    </DataTrigger>
-                                    <!--  Forced to nothing yet, which writes nothing: read as undefined.  -->
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding IsManual}" Value="True" />
-                                            <Condition Binding="{Binding ManualEntry}" Value="{x:Null}" />
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="FontStyle" Value="Italic" />
-                                        <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
-                                    </MultiDataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                </Grid>
+                        </ToggleButton.Visibility>
+                    </ToggleButton>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataParentRow}" />
+                </DockPanel>
             </DataTemplate>
-        </TreeView.Resources>
-    </TreeView>
+            <DataTemplate DataType="{x:Type jodels:DataObject}">
+                <DockPanel>
+                    <jata:DataGuides Style="{StaticResource DataRowGuides}" />
+                    <ToggleButton Style="{StaticResource DataChevron}">
+                        <ToggleButton.Visibility>
+                            <MultiBinding Converter="{StaticResource ChevronVisibilityConverter}">
+                                <Binding Path="IsManual" />
+                                <Binding Path="Properties.Count" />
+                            </MultiBinding>
+                        </ToggleButton.Visibility>
+                    </ToggleButton>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataParentRow}" />
+                </DockPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type jodels:DataValue}">
+                <DockPanel>
+                    <jata:DataGuides Style="{StaticResource DataRowGuides}" />
+                    <!--  No children, no chevron: its room is kept so the headers line up.  -->
+                    <FrameworkElement Width="{DynamicResource {x:Static joufflu:Dimensions.HeightMd}}" />
+                    <Grid
+                        MinHeight="{DynamicResource {x:Static joufflu:Dimensions.HeightSm}}"
+                        Margin="0,0,2,0"
+                        VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DataNodeHeader}" />
+                        <!--  A forced value is flagged the way the toggle forcing it reads.  -->
+                        <jonts:FontIcon
+                            Grid.Column="1"
+                            Margin="4,0,0,0"
+                            Opacity="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}"
+                            Text="{x:Static jonts:LucideFontIcons.Feather}"
+                            ToolTip="Forced value"
+                            Visibility="{Binding IsManual, Converter={x:Static converters:VisibilityConverter.Default}}" />
+                        <TextBlock
+                            Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            toolkit:Derive.Margin="{DynamicResource {x:Static joufflu:Dimensions.DisplayPadding}}"
+                            toolkit:Derive.MarginFactor="1,0"
+                            TextTrimming="CharacterEllipsis">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource ValueTextConverter}">
+                                    <Binding />
+                                    <Binding Path="Value" />
+                                    <Binding Path="IsManual" />
+                                    <Binding Path="ManualEntry" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <!--  Null and undefined are no value: they read apart from a text saying "null".  -->
+                                        <DataTrigger Binding="{Binding Value}" Value="{x:Null}">
+                                            <Setter Property="FontStyle" Value="Italic" />
+                                            <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                                        </DataTrigger>
+                                        <!--  Forced to nothing yet, which writes nothing: read as undefined.  -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsManual}" Value="True" />
+                                                <Condition Binding="{Binding ManualEntry}" Value="{x:Null}" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="FontStyle" Value="Italic" />
+                                            <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </DockPanel>
+            </DataTemplate>
+        </ListBox.Resources>
+    </ListBox>
 </UserControl>

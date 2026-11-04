@@ -12,6 +12,14 @@ public class AnimateSamplesViewModel : ObservableObject
         set => SetProperty(ref _hasUnread, value);
     }
 
+    /// <summary>Drives the bound spin example so the turn can be started and stopped from the page.</summary>
+    private bool _isRefreshing = true;
+    public bool IsRefreshing
+    {
+        get => _isRefreshing;
+        set => SetProperty(ref _isRefreshing, value);
+    }
+
     public string BounceCode =>
         "<!-- Bounce loops a vertical hop on any element, template untouched -->\n" +
         "<Button toolkit:Animate.Bounce=\"True\">Look at me</Button>\n\n" +
@@ -35,4 +43,17 @@ public class AnimateSamplesViewModel : ObservableObject
         "        <RotateTransform Angle=\"8\" />\n" +
         "    </Border.RenderTransform>\n" +
         "</Border>";
+
+    public string SpinCode =>
+        "<!-- Spin turns any element around its centre, template untouched -->\n" +
+        "<fonts:FontIcon toolkit:Animate.Spin=\"True\" Text=\"{x:Static fonts:LucideFontIcons.Loader}\" />\n\n" +
+        "<!-- SpinDuration is the time of one full turn -->\n" +
+        "<fonts:FontIcon\n" +
+        "    toolkit:Animate.Spin=\"True\"\n" +
+        "    toolkit:Animate.SpinDuration=\"0:0:3\"\n" +
+        "    Text=\"{x:Static fonts:LucideFontIcons.Settings}\" />\n\n" +
+        "<!-- A plain bool too: spin a refresh icon only while it works -->\n" +
+        "<fonts:FontIcon\n" +
+        "    toolkit:Animate.Spin=\"{Binding IsRefreshing}\"\n" +
+        "    Text=\"{x:Static fonts:LucideFontIcons.RefreshCw}\" />";
 }

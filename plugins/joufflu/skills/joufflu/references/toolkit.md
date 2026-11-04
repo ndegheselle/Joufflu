@@ -173,7 +173,16 @@ use it for their editors.
 ```
 
 Looping hop through a `RenderTransform` (no layout impact). `BounceHeight` in DIPs
-(default 6), `BounceDuration` = full cycle incl. pause (default 1 s). Paused while hidden.
+(default 6), `BounceDuration` = full cycle incl. pause (default 1 s).
+
+```xml
+<fonts:FontIcon toolkit:Animate.Spin="{Binding IsRefreshing}" Text="{x:Static fonts:LucideFontIcons.RefreshCw}" />
+<fonts:FontIcon toolkit:Animate.Spin="True" toolkit:Animate.SpinDuration="0:0:2" Text="{x:Static fonts:LucideFontIcons.Loader}" />
+```
+
+Endless clockwise turn around the element's centre (whatever its `RenderTransformOrigin`),
+`SpinDuration` = one turn (default 1 s). `Feedback.Spinner` uses it. Spin and Bounce combine on
+one element and compose with an existing `RenderTransform`. Both pause while hidden.
 
 ## Converters (`Joufflu.Converters`, prefix `conv:`)
 

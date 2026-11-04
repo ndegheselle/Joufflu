@@ -31,8 +31,10 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
 
     partial void OnKeyChanged(string? value)
     {
-        if (Parent is not null)
-            ValidateKeys(Parent.Children);
+        // An array keys its items by their index, unique by construction: checking them would make
+        // re-keying a large array after a removal quadratic.
+        if (Parent is DataObject parent)
+            ValidateKeys(parent.Properties);
         OnChanged();
     }
 
@@ -137,17 +139,19 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     /// Flags every node of [siblings] whose key another one already uses. JSON keys are case
     /// sensitive, so is the comparison; a node without a key writes nothing and clashes with none.
     /// </summary>
-    internal static void ValidateKeys(IEnumerable<DataNode> siblings)
+    internal static void ValidateKeys(IReadOnlyList<DataNode> siblings)
     {
-        List<DataNode> nodes = [.. siblings];
-        HashSet<string> duplicates = [.. nodes
-            .Where(node => node.Key is not null)
-            .GroupBy(node => node.Key!, StringComparer.Ordinal)
-            .Where(group => group.Count() > 1)
-            .Select(group => group.Key)];
+        // Run on every object of a loaded file: a single set, a second one only once a key clashes.
+        HashSet<string> keys = new(siblings.Count, StringComparer.Ordinal);
+        HashSet<string>? duplicates = null;
+        foreach (DataNode node in siblings)
+        {
+            if (node.Key is not null && !keys.Add(node.Key))
+                (duplicates ??= new(StringComparer.Ordinal)).Add(node.Key);
+        }
 
-        foreach (DataNode node in nodes)
-            node.SetKeyError(node.Key is not null && duplicates.Contains(node.Key)
+        foreach (DataNode node in siblings)
+            node.SetKeyError(node.Key is not null && duplicates?.Contains(node.Key) == true
                 ? $"The key [{node.Key}] is already used."
                 : null);
     }
@@ -203,6 +207,9 @@ public interface IDataParent
 /// </summary>
 public class DataNodeCollection : ObservableCollection<DataNode>
 {
+    /// <summary>The object or array the children belong to, which a change of the collection is about.</summary>
+    internal DataNode? Owner { get; set; }
+
     protected override void ClearItems()
     {
         while (Count > 0)

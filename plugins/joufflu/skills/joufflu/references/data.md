@@ -71,6 +71,7 @@ manual mode/entry, array template, children); not on expand, key validation or r
 ```csharp
 node.Load(token, ManualValues);             // fill a tree (e.g. from a schema) with a JSON value
 DataNode draft = token.ToDataNode();        // infer a tree from a JSON value, for DataEdit
+DataNode big = jsonReader.ReadDataNode();    // same tree straight from a JsonReader, no JToken: large files
 ```
 
 `Load` keeps the node's shape: a value matching a manual value, or one its editor can't hold, is
@@ -78,6 +79,10 @@ forced (kept, not lost); a property missing from the token is forced to undefine
 required; array items are rebuilt from `Template` (inferred when none). `JToken.ToDataNode()`
 takes types from the values, gives arrays no template and reads `null` as a nullable string.
 
+Large files: `await Task.Run(() => reader.ReadDataNode())`, then bind the node to `DataDisplay`. It
+lays the tree flat in rows of one height and only builds the rows in view (millions of nodes are
+fine), as long as it has a bounded height (not inside a `StackPanel` / `ScrollViewer`). A value
+shows on one line (`↵` for line breaks, cut past 1000 characters).
 ## Manual values
 
 A field can be forced to an entry instead of its editor (feather toggle):

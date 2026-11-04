@@ -17,7 +17,7 @@ theme the editors of its built-in columns). The theme manager, tokens and window
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.
 - **Derived dimensions** — the `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` attached properties, with their factors scaling the value side by side, for thicknesses, radii and margins that follow the theme live.
 - **Tooltip** — every `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side and `ThemedTooltip.MaxWidth` where its text wraps.
-- **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it.
+- **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it, and `Animate.Spin` for an endless turn around its centre, with `SpinDuration` setting its speed.
 - **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
 - **Shared width** — the `SharedWidth` decorator and its `IsScope` attached property, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
 - **Create a custom control** — the category a control of your own belongs to (display, input, action), the tokens and states of each, then an input built step by step: background and border, height, sizes and padding, states, the validation error style and embedded buttons.

@@ -101,6 +101,14 @@ Without a schema, `ToDataNode()` on a `JToken` infers the tree from the value, f
 Node = (DataObject)JObject.Parse(json).ToDataNode();
 ```
 
+`ReadDataNode()` gives the same tree straight from a `JsonReader`, for a large file: it is never
+held as tokens too. A key given twice keeps its last value, comments are skipped.
+
+```csharp
+using var reader = new JsonTextReader(File.OpenText(path));
+DataNode node = reader.ReadDataNode();
+```
+
 `Changed` is raised when the data of a node or of anything under it changes, to react to an
 edit anywhere in the tree: a key, a value, the manual mode or entry, an array template,
 children added or removed. Expanding a node, flagging a duplicate key or moving a node to

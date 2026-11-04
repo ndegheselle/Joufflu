@@ -20,6 +20,7 @@ public partial class DataArray : DataNode, IDataParent
     public DataArray(string? key, DataNode? template) : base(EnumDataType.Array, key)
     {
         Template = template;
+        Values.Owner = this;
         Values.CollectionChanged += OnValuesChanged;
     }
 

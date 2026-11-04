@@ -10,20 +10,25 @@ namespace Joufflu.Toolkit;
 /// Set <see cref="BounceProperty"/> to <c>true</c> for a looping vertical hop — useful to draw
 /// attention to an element (a notification badge, a call-to-action button). Because it is a plain
 /// boolean it can be bound, so the hop starts and stops with your view model:
-/// <c>toolkit:Animate.Bounce="{Binding HasUnread}"</c>.
+/// <c>toolkit:Animate.Bounce="{Binding HasUnread}"</c>. Tune the hop with
+/// <see cref="BounceHeightProperty"/> and <see cref="BounceDurationProperty"/>.
 /// </para>
 /// <para>
-/// The animation runs on a <see cref="TranslateTransform"/> added to the element's
-/// <see cref="UIElement.RenderTransform"/>, so it never affects layout and never moves its
-/// neighbours. Any transform already set is kept and composed with it, and restored when the
-/// bounce stops. Tune the hop with <see cref="BounceHeightProperty"/> and
-/// <see cref="BounceDurationProperty"/>.
+/// Set <see cref="SpinProperty"/> to <c>true</c> for an endless turn around the element's own
+/// centre — a loading glyph, a refresh icon while it works. <see cref="SpinDurationProperty"/>
+/// sets the time of one full turn.
 /// </para>
 /// <para>
-/// The hop pauses itself whenever the element is not visible — collapsed or hidden, under a
-/// collapsed ancestor, or out of the visual tree — and resumes when it comes back, so a bounce
-/// left on a hidden element costs nothing. Nothing needs to be unhooked to let the element be
-/// collected either, whether the bounce was stopped first or not.
+/// Both run on transforms added to the element's <see cref="UIElement.RenderTransform"/>, so they
+/// never affect layout and never move its neighbours, and they can run together on the same
+/// element. Any transform already set is kept and composed with them, and restored once both
+/// have stopped.
+/// </para>
+/// <para>
+/// The animations pause themselves whenever the element is not visible — collapsed or hidden,
+/// under a collapsed ancestor, or out of the visual tree — and resume when it comes back, so an
+/// animation left on a hidden element costs nothing. Nothing needs to be unhooked to let the
+/// element be collected either, whether the animation was stopped first or not.
 /// </para>
 /// </summary>
 public static class Animate
@@ -67,26 +72,55 @@ public static class Animate
     public static Duration GetBounceDuration(DependencyObject obj) => (Duration)obj.GetValue(BounceDurationProperty);
     public static void SetBounceDuration(DependencyObject obj, Duration value) => obj.SetValue(BounceDurationProperty, value);
 
+    /// <summary>Whether the element turns continuously around its centre. Bindable: <c>false</c> stops it and restores the element.</summary>
+    public static readonly DependencyProperty SpinProperty =
+        DependencyProperty.RegisterAttached(
+            "Spin",
+            typeof(bool),
+            typeof(Animate),
+            new PropertyMetadata(false, OnSpinChanged));
+
+    public static bool GetSpin(DependencyObject obj) => (bool)obj.GetValue(SpinProperty);
+    public static void SetSpin(DependencyObject obj, bool value) => obj.SetValue(SpinProperty, value);
+
+    /// <summary>Time of one full clockwise turn (defaults to 1s).</summary>
+    public static readonly DependencyProperty SpinDurationProperty =
+        DependencyProperty.RegisterAttached(
+            "SpinDuration",
+            typeof(Duration),
+            typeof(Animate),
+            new PropertyMetadata(new Duration(TimeSpan.FromSeconds(1)), OnSpinSettingChanged));
+
+    public static Duration GetSpinDuration(DependencyObject obj) => (Duration)obj.GetValue(SpinDurationProperty);
+    public static void SetSpinDuration(DependencyObject obj, Duration value) => obj.SetValue(SpinDurationProperty, value);
+
     /// <summary>
-    /// The transform the bounce animates, the transform it replaced, and the clock driving it.
-    /// Kept per-element so the animation can be paused, removed, and the original
-    /// <see cref="UIElement.RenderTransform"/> put back.
+    /// The transforms the animations drive, the transform they replaced, and the clocks driving
+    /// them. Kept per-element so each animation can be paused or removed on its own, and the
+    /// original <see cref="UIElement.RenderTransform"/> put back once none is left.
     /// </summary>
     private static readonly DependencyProperty StateProperty =
         DependencyProperty.RegisterAttached(
             "State",
-            typeof(BounceState),
+            typeof(AnimationState),
             typeof(Animate),
             new PropertyMetadata(null));
 
-    private sealed class BounceState(TranslateTransform translate, Transform? original)
+    private sealed class AnimationState(Transform? original)
     {
-        public TranslateTransform Translate { get; } = translate;
-
         public Transform? Original { get; } = original;
 
+        public RotateTransform Rotate { get; } = new();
+
+        public TranslateTransform Translate { get; } = new();
+
         /// <summary>Replaced whenever the hop is rebuilt, so only the current clock is controlled.</summary>
-        public AnimationClock? Clock { get; set; }
+        public AnimationClock? BounceClock { get; set; }
+
+        /// <summary>Replaced whenever the turn is rebuilt, so only the current clock is controlled.</summary>
+        public AnimationClock? SpinClock { get; set; }
+
+        public bool IsIdle => BounceClock is null && SpinClock is null;
     }
 
     private static void OnBounceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -95,95 +129,196 @@ public static class Animate
             return;
 
         if ((bool)e.NewValue)
-            Start(element);
+            StartBounce(element);
         else
-            Stop(element);
+            StopBounce(element);
     }
 
     // Height and duration are baked into the key frames, so a change while bouncing needs a rebuild.
     private static void OnBounceSettingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is UIElement element && GetBounce(element))
-            Start(element);
+            StartBounce(element);
     }
 
-    private static void Start(UIElement element)
+    private static void OnSpinChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (element.GetValue(StateProperty) is not BounceState state)
-        {
-            var translate = new TranslateTransform();
-            Transform? original = element.RenderTransform;
+        if (d is not UIElement element)
+            return;
 
-            // Transform.Identity is the default and is frozen, so treat it as "no transform" rather
-            // than composing with it; anything else is kept so the bounce doesn't drop a rotation or
-            // scale the element already had.
-            if (original is null || original == Transform.Identity)
-            {
-                original = null;
-                element.RenderTransform = translate;
-            }
-            else
-            {
-                // A transform declared in XAML can be frozen; clone it before putting it in a group.
-                Transform composed = original.IsFrozen ? original.Clone() : original;
-                element.RenderTransform = new TransformGroup { Children = { composed, translate } };
-            }
-
-            state = new BounceState(translate, original);
-            element.SetValue(StateProperty, state);
-            // Only while the element is on screen: a hop nobody can see is wasted frames, and
-            // nothing else ever stops it — the animation repeats forever. IsVisible covers
-            // Collapsed/Hidden, a collapsed ancestor and being out of the tree altogether, in one
-            // flag. The handler is a static method, so subscribing roots nothing.
-            element.IsVisibleChanged += OnIsVisibleChanged;
-        }
-
-        // A clock of our own (rather than BeginAnimation) is what makes the animation pausable.
-        AnimationClock clock = BuildBounce(element).CreateClock();
-        state.Clock = clock;
-        state.Translate.ApplyAnimationClock(TranslateTransform.YProperty, clock);
-
-        // An element gets its first IsVisibleChanged only once it is rendered, so a bounce set in
-        // XAML starts out invisible and is resumed by the handler below.
-        if (!element.IsVisible)
-            clock.Controller?.Pause();
+        if ((bool)e.NewValue)
+            StartSpin(element);
+        else
+            StopSpin(element);
     }
 
-    private static void Stop(UIElement element)
+    // The duration is baked into the animation, so a change while spinning needs a rebuild.
+    private static void OnSpinSettingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (element.GetValue(StateProperty) is not BounceState state)
+        if (d is UIElement element && GetSpin(element))
+            StartSpin(element);
+    }
+
+    private static void StartBounce(UIElement element)
+    {
+        AnimationState state = Attach(element);
+        state.BounceClock = Run(element, state.Translate, TranslateTransform.YProperty, BuildBounce(element));
+    }
+
+    private static void StopBounce(UIElement element)
+    {
+        if (element.GetValue(StateProperty) is not AnimationState state)
+            return;
+
+        // Passing null removes the animation and lets the property fall back to its local value (0).
+        state.Translate.ApplyAnimationClock(TranslateTransform.YProperty, null);
+        state.BounceClock = null;
+        DetachIfIdle(element, state);
+    }
+
+    private static void StartSpin(UIElement element)
+    {
+        AnimationState state = Attach(element);
+        UpdateSpinCentre(element, state);
+        state.SpinClock = Run(element, state.Rotate, RotateTransform.AngleProperty, BuildSpin(element));
+    }
+
+    private static void StopSpin(UIElement element)
+    {
+        if (element.GetValue(StateProperty) is not AnimationState state)
+            return;
+
+        state.Rotate.ApplyAnimationClock(RotateTransform.AngleProperty, null);
+        state.SpinClock = null;
+        DetachIfIdle(element, state);
+    }
+
+    /// <summary>
+    /// Swaps the element's transform for a group holding its original transform, then the turn,
+    /// then the hop — so the element spins as it is drawn, and the hop moves it without moving the
+    /// centre it spins around. Shared by both animations; a no-op once installed.
+    /// </summary>
+    private static AnimationState Attach(UIElement element)
+    {
+        if (element.GetValue(StateProperty) is AnimationState state)
+            return state;
+
+        Transform? original = element.RenderTransform;
+        // Transform.Identity is the default and is frozen, so treat it as "no transform" rather
+        // than composing with it; anything else is kept so the animation doesn't drop a rotation
+        // or scale the element already had.
+        if (original == Transform.Identity)
+            original = null;
+
+        state = new AnimationState(original);
+        var group = new TransformGroup();
+        // A transform declared in XAML can be frozen; clone it before putting it in a group.
+        if (original is not null)
+            group.Children.Add(original.IsFrozen ? original.Clone() : original);
+        group.Children.Add(state.Rotate);
+        group.Children.Add(state.Translate);
+        element.RenderTransform = group;
+
+        element.SetValue(StateProperty, state);
+        // Only while the element is on screen: an animation nobody can see is wasted frames, and
+        // nothing else ever stops it — it repeats forever. IsVisible covers Collapsed/Hidden, a
+        // collapsed ancestor and being out of the tree altogether, in one flag. The handlers are
+        // static methods, so subscribing roots nothing.
+        element.IsVisibleChanged += OnIsVisibleChanged;
+        if (element is FrameworkElement framework)
+            framework.SizeChanged += OnSizeChanged;
+
+        return state;
+    }
+
+    private static void DetachIfIdle(UIElement element, AnimationState state)
+    {
+        if (!state.IsIdle)
             return;
 
         element.IsVisibleChanged -= OnIsVisibleChanged;
-        // Passing null removes the animation and lets the property fall back to its local value (0).
-        state.Translate.ApplyAnimationClock(TranslateTransform.YProperty, null);
-        state.Clock = null;
+        if (element is FrameworkElement framework)
+            framework.SizeChanged -= OnSizeChanged;
         element.RenderTransform = state.Original ?? Transform.Identity;
         element.SetValue(StateProperty, null);
     }
 
-    // Hidden, collapsed, or no longer in the tree: hold the clock rather than let it tick against
-    // nothing. It starts again from rest when the element comes back.
+    // A clock of our own (rather than BeginAnimation) is what makes the animation pausable.
+    private static AnimationClock Run(UIElement element, Animatable target, DependencyProperty property, AnimationTimeline animation)
+    {
+        AnimationClock clock = animation.CreateClock();
+        target.ApplyAnimationClock(property, clock);
+
+        // An element gets its first IsVisibleChanged only once it is rendered, so an animation set
+        // in XAML starts out invisible and is resumed by the handler below.
+        if (!element.IsVisible)
+            clock.Controller?.Pause();
+
+        return clock;
+    }
+
+    // Hidden, collapsed, or no longer in the tree: hold the clocks rather than let them tick
+    // against nothing. They start again from rest when the element comes back.
     private static void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if (sender is not UIElement element || element.GetValue(StateProperty) is not BounceState state)
+        if (sender is not UIElement element || element.GetValue(StateProperty) is not AnimationState state)
             return;
 
-        ClockController? controller = state.Clock?.Controller;
-        if (controller is null)
-            return;
+        bool visible = (bool)e.NewValue;
+        Toggle(state.BounceClock?.Controller, visible);
+        Toggle(state.SpinClock?.Controller, visible);
 
-        if ((bool)e.NewValue)
+        static void Toggle(ClockController? controller, bool visible)
         {
-            controller.Resume();
+            if (controller is null)
+                return;
+
+            if (visible)
+            {
+                controller.Resume();
+            }
+            else
+            {
+                controller.Pause();
+                // Park it at rest rather than mid-air: the element would otherwise come back
+                // offset for a frame before the animation brings it back.
+                controller.Seek(TimeSpan.Zero, TimeSeekOrigin.BeginTime);
+            }
         }
-        else
-        {
-            controller.Pause();
-            // Park it at rest rather than mid-air: the element would otherwise come back offset
-            // for a frame before the next hop brings it down.
-            controller.Seek(TimeSpan.Zero, TimeSeekOrigin.BeginTime);
-        }
+    }
+
+    private static void OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (sender is UIElement element && element.GetValue(StateProperty) is AnimationState state)
+            UpdateSpinCentre(element, state);
+    }
+
+    /// <summary>
+    /// Points the turn at the middle of the element, whatever its
+    /// <see cref="UIElement.RenderTransformOrigin"/>: the whole transform is drawn relative to that
+    /// origin, so the centre is offset by it, then carried through the original transform the
+    /// turn is composed after. Kept current on resize since the middle moves with the size.
+    /// </summary>
+    private static void UpdateSpinCentre(UIElement element, AnimationState state)
+    {
+        Size size = element.RenderSize;
+        Point origin = element.RenderTransformOrigin;
+        var centre = new Point(size.Width * (0.5 - origin.X), size.Height * (0.5 - origin.Y));
+        if (state.Original is not null)
+            centre = state.Original.Value.Transform(centre);
+
+        state.Rotate.CenterX = centre.X;
+        state.Rotate.CenterY = centre.Y;
+    }
+
+    /// <summary>A full clockwise turn at constant speed, repeated forever, so the loop has no seam.</summary>
+    private static DoubleAnimation BuildSpin(UIElement element)
+    {
+        Duration duration = GetSpinDuration(element);
+        // A turn can be set to Automatic/Forever, which would never complete one revolution.
+        TimeSpan turn = duration.HasTimeSpan ? duration.TimeSpan : TimeSpan.FromSeconds(1);
+
+        return new DoubleAnimation(0, 360, turn) { RepeatBehavior = RepeatBehavior.Forever };
     }
 
     /// <summary>

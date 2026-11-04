@@ -6,19 +6,17 @@
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu">
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
-        <StackPanel
-
-            toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
+        <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
             <TextBlock
                 toolkit:Sizing.Size="xl"
                 FontWeight="Bold"
-                TextWrapping="Wrap"
-                Text="Grid splitter" />
+                Text="Grid splitter"
+                TextWrapping="Wrap" />
 
             <c:CodeExample
                 Title="Resizable panes"
-                Description="Drag the bar between the two panes to redistribute space in the Grid."
-                Code="&lt;Grid&gt;&#x0a;    &lt;Grid.ColumnDefinitions&gt;&#x0a;        &lt;ColumnDefinition /&gt;&#x0a;        &lt;ColumnDefinition Width=&quot;Auto&quot; /&gt;&#x0a;        &lt;ColumnDefinition /&gt;&#x0a;    &lt;/Grid.ColumnDefinitions&gt;&#x0a;    &lt;GridSplitter Grid.Column=&quot;1&quot; Width=&quot;6&quot; /&gt;&#x0a;&lt;/Grid&gt;">
+                Code="&lt;Grid&gt;&#x0a;    &lt;Grid.ColumnDefinitions&gt;&#x0a;        &lt;ColumnDefinition /&gt;&#x0a;        &lt;ColumnDefinition Width=&quot;Auto&quot; /&gt;&#x0a;        &lt;ColumnDefinition /&gt;&#x0a;    &lt;/Grid.ColumnDefinitions&gt;&#x0a;    &lt;Grid.RowDefinitions&gt;&#x0a;        &lt;RowDefinition /&gt;&#x0a;        &lt;RowDefinition Height=&quot;Auto&quot; /&gt;&#x0a;        &lt;RowDefinition /&gt;&#x0a;    &lt;/Grid.RowDefinitions&gt;&#x0a;&#x0a;    &lt;!-- The alignment picks the side that is resized:          --&gt;&#x0a;    &lt;!-- Left / Top     its own column (row) and the one before  --&gt;&#x0a;    &lt;!-- Right / Bottom its own column (row) and the one after   --&gt;&#x0a;    &lt;!-- Center         the columns (rows) on both sides         --&gt;&#x0a;    &lt;GridSplitter Grid.Column=&quot;1&quot; Width=&quot;4&quot; HorizontalAlignment=&quot;Center&quot; /&gt;&#x0a;    &lt;GridSplitter Grid.Row=&quot;1&quot; Grid.ColumnSpan=&quot;3&quot; Height=&quot;4&quot; VerticalAlignment=&quot;Center&quot; /&gt;&#x0a;&lt;/Grid&gt;"
+                Description="Drag a bar to redistribute space in the Grid. Set HorizontalAlignment on a splitter between columns, or VerticalAlignment on one between rows, to pick the side that is resized: Left / Top resizes its own column (row) and the one before, Right / Bottom its own and the one after, Center the ones on both sides. Always set it: both alignments are Stretch by default, which leaves WPF to guess the direction from the bar's size.">
                 <Border
                     Height="180"
                     BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
@@ -31,11 +29,18 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock
-                            Grid.Column="0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Text="Left pane" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" Style="{StaticResource Card}">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="Left pane" />
+                        </Border>
 
                         <GridSplitter
                             Grid.Column="1"
@@ -43,11 +48,31 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Stretch" />
 
-                        <TextBlock
+                        <Border
                             Grid.Column="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Text="Right pane" />
+                            Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}"
+                            Style="{StaticResource Card}">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="Right pane" />
+                        </Border>
+
+                        <GridSplitter
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3"
+                            Height="4"
+                            VerticalAlignment="Center" />
+                        <Border
+                            Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            Margin="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}"
+                            Style="{StaticResource Card}">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="Bottom pane" />
+                        </Border>
                     </Grid>
                 </Border>
             </c:CodeExample>

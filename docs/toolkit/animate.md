@@ -65,14 +65,44 @@ the loop at runtime.
 > so changing either while the element is bouncing restarts the hop from the top
 > of its cycle.
 
+## Animate.Spin
+
+`Spin` turns an element endlessly, clockwise and at constant speed — a loading
+glyph, a refresh icon while it works. `SpinDuration` sets the time of one full
+turn (default `0:0:1`). The `Spinner` of `Joufflu.Feedback` is built on it.
+
+The element turns around its own centre whatever its `RenderTransformOrigin`,
+and keeps doing so when it is resized. Like the bounce it runs on the
+`RenderTransform`, so it never affects layout; a transform already on the
+element is kept, and the element turns as that transform draws it.
+
+```xml
+<!-- Spin turns any element around its centre, template untouched -->
+<fonts:FontIcon toolkit:Animate.Spin="True" Text="{x:Static fonts:LucideFontIcons.Loader}" />
+
+<!-- SpinDuration is the time of one full turn -->
+<fonts:FontIcon
+    toolkit:Animate.Spin="True"
+    toolkit:Animate.SpinDuration="0:0:3"
+    Text="{x:Static fonts:LucideFontIcons.Settings}" />
+
+<!-- A plain bool too: spin a refresh icon only while it works -->
+<fonts:FontIcon
+    toolkit:Animate.Spin="{Binding IsRefreshing}"
+    Text="{x:Static fonts:LucideFontIcons.RefreshCw}" />
+```
+
+`Spin` and `Bounce` can be set on the same element: it hops while it turns,
+and each stops on its own.
+
 ## Hidden elements and lifetime
 
-The hop pauses itself whenever the element is not visible — `Collapsed` or
-`Hidden`, under a collapsed ancestor, or out of the visual tree — parks at rest,
-and starts again from the top of its cycle when the element comes back.
-A bounce left on a hidden element therefore costs no frames.
+Every animation pauses itself whenever the element is not visible — `Collapsed`
+or `Hidden`, under a collapsed ancestor, or out of the visual tree — parks at
+rest, and starts again from the top of its cycle when the element comes back.
+An animation left on a hidden element therefore costs no frames.
 
 Nothing has to be unhooked for the element to be collected: the helper keeps no
-reference back to it, and an element dropped with `Bounce` still `True` is
-collected exactly like one that was stopped first — WPF retires the clock once
-its target goes away.
+reference back to it, and an element dropped with `Bounce` or `Spin` still
+`True` is collected exactly like one that was stopped first — WPF retires the
+clock once its target goes away.

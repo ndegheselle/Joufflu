@@ -100,9 +100,11 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{DynamicResource {x:Static joufflu:Dimensions.DisplayRadius}}">
+                        <!--  Off by default: set ScrollViewer.CanContentScroll on the list to only build the items in view.  -->
                         <ScrollViewer
                             Margin="{TemplateBinding Padding}"
                             Padding="0"
+                            CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
                             Focusable="False">
                             <ItemsPresenter />
                         </ScrollViewer>

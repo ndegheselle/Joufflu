@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Joufflu.Data.Model;
 // System.Windows carries a DataObject of its own; the tree's node is the one meant here.
 using DataObject = Joufflu.Data.Model.DataObject;
@@ -43,9 +44,19 @@ public partial class DataDisplay : UserControl
     /// <summary>The first level of the tree, what <see cref="Node"/> shows.</summary>
     public IEnumerable<DataNode>? Roots => (IEnumerable<DataNode>?)GetValue(RootsProperty);
 
+    private readonly DataDisplayRows _rows;
+
     public DataDisplay()
     {
         InitializeComponent();
+
+        // Applied before the next render, once whatever changed the tree in the meantime is done.
+        _rows = new DataDisplayRows(apply => Dispatcher.BeginInvoke(DispatcherPriority.DataBind, apply));
+        RowList.ItemsSource = _rows;
+
+        // Only followed while shown: a tree kept by its host would otherwise keep the rows alive.
+        Loaded += (_, _) => _rows.Show(Node);
+        Unloaded += (_, _) => _rows.Show(null);
     }
 
     private static void OnNodeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -57,6 +68,10 @@ public partial class DataDisplay : UserControl
             _ => null
         };
         d.SetValue(RootsPropertyKey, roots);
+
+        var display = (DataDisplay)d;
+        if (display.IsLoaded)
+            display._rows.Show((DataNode?)e.NewValue);
     }
 
     protected override void OnContentChanged(object oldContent, object newContent)

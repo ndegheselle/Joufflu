@@ -27,14 +27,19 @@ public partial class DataValue : DataNode
             Value = entry.Value;
     }
 
-    /// <summary> The choices a closed list offers for the enumerations. </summary>
-    public ObservableCollection<DataEnumOption> Options { get; }
+    private ObservableCollection<DataEnumOption>? _options;
+
+    /// <summary>
+    /// The choices a closed list offers for the enumerations. Only created when asked for or given:
+    /// most values are no enumeration, and a large file holds millions of them.
+    /// </summary>
+    public ObservableCollection<DataEnumOption> Options => _options ??= NewOptions([]);
 
     /// <summary>[isNullable] is set here as the default value depends on it.</summary>
     public DataValue(EnumDataType type, string? key, IEnumerable<DataEnumOption> options, bool isNullable = false) : base(type, key)
     {
-        Options = [.. options];
-        Options.CollectionChanged += (_, _) => OnChanged();
+        if (options is not IReadOnlyCollection<DataEnumOption> { Count: 0 })
+            _options = NewOptions(options);
         IsNullable = isNullable;
         Value = Default();
     }
@@ -94,7 +99,7 @@ public partial class DataValue : DataNode
     /// The options (copied in a new list) and the manual entry are records, shared as they are. [ManualEntry] goes in
     /// before [Value], which it would otherwise overwrite.
     /// </summary>
-    public override DataValue Clone() => new(Type, Key, Options, IsNullable)
+    public override DataValue Clone() => new(Type, Key, (IEnumerable<DataEnumOption>?)_options ?? [], IsNullable)
     {
         Description = Description,
         IsManual = IsManual,
@@ -102,6 +107,13 @@ public partial class DataValue : DataNode
         Value = Value is JToken token ? token.DeepClone() : Value,
         IsRequired = IsRequired,
     };
+
+    private ObservableCollection<DataEnumOption> NewOptions(IEnumerable<DataEnumOption> options)
+    {
+        ObservableCollection<DataEnumOption> created = [.. options];
+        created.CollectionChanged += (_, _) => OnChanged();
+        return created;
+    }
 
     /// <summary>Whether [value] is one the editor of [Type] holds.</summary>
     private bool Holds(object? value) => value is null ? IsNullable : Type switch
