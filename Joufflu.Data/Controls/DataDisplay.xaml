@@ -96,7 +96,7 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <TreeView ItemsSource="{Binding Node.Properties}">
+    <TreeView ItemsSource="{Binding Roots}">
         <TreeView.ItemContainerStyle>
             <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />

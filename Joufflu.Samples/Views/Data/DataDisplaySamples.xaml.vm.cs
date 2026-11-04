@@ -31,6 +31,13 @@ public partial class DataDisplaySamplesViewModel : ObservableObject
         "Node.Load(JToken.Parse(json), ManualValues);\n\n" +
         "<data:DataDisplay Node=\"{Binding Node}\" />";
 
+    /// <summary>A token given as is: <see cref="Node"/> reads it as a node.</summary>
+    public JToken Token { get; } = new JValue("Hello");
+
+    public string TokenCode =>
+        "public JToken Token { get; } = new JValue(\"Hello\");\n\n" +
+        "<data:DataDisplay Node=\"{Binding Token}\" />";
+
     public DataDisplaySamplesViewModel()
     {
         Node = (DataObject)JsonSchema.FromType<Order>().ToDataNode();

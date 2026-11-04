@@ -33,19 +33,28 @@
                     </Viewbox>
 
                     <ControlTemplate.Triggers>
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation
-                                        RepeatBehavior="Forever"
-                                        Storyboard.TargetName="Rotation"
-                                        Storyboard.TargetProperty="Angle"
-                                        From="0"
-                                        To="360"
-                                        Duration="0:0:0.9" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
+                        <!--
+                            Only spins while shown: Loaded fires even when collapsed (e.g. in a toast that
+                            isn't loading), and an endless animation would tick every frame for nothing.
+                        -->
+                        <Trigger Property="IsVisible" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard x:Name="Spin">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            RepeatBehavior="Forever"
+                                            Storyboard.TargetName="Rotation"
+                                            Storyboard.TargetProperty="Angle"
+                                            From="0"
+                                            To="360"
+                                            Duration="0:0:0.9" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="Spin" />
+                            </Trigger.ExitActions>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

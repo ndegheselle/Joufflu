@@ -37,6 +37,13 @@
                         VerticalScrollBarVisibility="Auto" />
                 </Grid>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="Show a JToken"
+                Code="{Binding TokenCode}"
+                Description="A JToken bound to Node is read as ToDataNode does, so a plain value (here a string) is shown without building a node first.">
+                <data:DataDisplay Node="{Binding Token}" />
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

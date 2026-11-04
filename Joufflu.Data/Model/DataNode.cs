@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Joufflu.Data.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace Joufflu.Data.Model;
@@ -19,6 +20,7 @@ public enum EnumDataType
     Object
 }
 
+[TypeConverter(typeof(DataNodeTypeConverter))]
 public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
 {
     [ObservableProperty]

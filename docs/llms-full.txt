@@ -3529,6 +3529,9 @@ Node.Load(JToken.Parse(json), ManualValues);
   feather. A forced object or array shows the entry instead of its properties or items.
 - A node with a `Description` shows it on an info icon, as in [Data fill](data-fill.md).
 
+- `Node` takes any `DataNode`: an object shows its properties as the first level, an array or a
+  value is shown as that level itself. A `JToken` can be bound to it directly, read as `ToDataNode` does.
+
 Only expanding and collapsing nodes changes the tree.
 
 ---

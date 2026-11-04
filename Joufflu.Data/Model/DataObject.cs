@@ -1,9 +1,12 @@
 ﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Joufflu.Data.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace Joufflu.Data.Model;
 
+[TypeConverter(typeof(DataObjectTypeConverter))]
 public partial class DataObject : DataNode, IDataParent
 {
     private DataNodeCollection _properties = [];

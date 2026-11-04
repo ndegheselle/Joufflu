@@ -48,6 +48,9 @@ public partial class DataArrayAddRow(DataArray array)
 {
     public DataArray Array { get; } = array;
 
+    /// <summary>Never expands: there only for the tree, which binds it on every row.</summary>
+    public bool IsExpanded { get; set; }
+
     [RelayCommand]
     private void AddFromTemplate() => Array.AddFromTemplate();
 
@@ -63,6 +66,9 @@ public partial class DataArrayAddRow(DataArray array)
 public partial class DataObjectAddRow(DataObject obj)
 {
     public DataObject Object { get; } = obj;
+
+    /// <summary>Never expands: there only for the tree, which binds it on every row.</summary>
+    public bool IsExpanded { get; set; }
 
     [RelayCommand]
     private void Add(EnumDataType type)
