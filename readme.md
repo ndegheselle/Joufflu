@@ -5,7 +5,12 @@
 Joufflu gives .NET WPF apps a cohesive set of inputs and reusable controls built
 on a design system of themed brushes, dimensions and layout helpers. Every
 control reads its colours through `DynamicResource`, so the whole UI re-themes
-live between Light and Dark - no restart, no flicker.
+live.
+
+Its objective is to provide:
+- Easily accessible, up-to-date [documentation](https://ndegheselle.github.io/Joufflu/).
+- A sample app that serves as a live example: clone `https://github.com/ndegheselle/Joufflu.git` and start `Joufflu.Samples`.
+- A coherent set of [tokens](https://ndegheselle.github.io/Joufflu/themes/tokens.html) that defines a theme, used by every control.
 
 [![Joufflu on NuGet](https://img.shields.io/nuget/v/Joufflu?label=Joufflu&logo=nuget)](https://www.nuget.org/packages/Joufflu)
 [![Joufflu.Feedback on NuGet](https://img.shields.io/nuget/v/Joufflu.Feedback?label=Joufflu.Feedback&logo=nuget)](https://www.nuget.org/packages/Joufflu.Feedback)
@@ -19,14 +24,11 @@ live between Light and Dark - no restart, no flicker.
 
 ## Highlights
 
-- 🌗 **Live Light / Dark theming** - flip the theme at runtime and every control follows instantly.
-- 🎨 **A real design system, built to be customized** - semantic colours, dimensions, sizing and spacing exposed as override-able resource keys. Change a token and every control follows; the gallery's **Customize theme** window (palette button in its title bar) edits them live, offers presets and generates the dictionary to merge.
-- 🪟 **Custom-chrome window & natives** - a themed application shell plus restyled built-in WPF controls that match out of the box.
-- 📦 **Modular packages** - take just the core styles, or add inputs and navigation only where you need them.
+- 🌗 **Live theming** - flip the theme at runtime and every control follows instantly.
+- 🎨 **A real design system, built to be customized** - clear tokens with semantic colours, dimensions, sizing and spacing exposed as override-able resource keys.
+- 🖥️ **Customize theme** - a window (palette button, top right of the gallery's title bar) that edits the tokens live, offers presets and generates the dictionary to merge.
 
-![customizer preview](./images/preview-customizer.png)
-
-Controls :
+Controls, in modular packages:
 - 🧩 **Ready-to-use inputs** - numeric, decimal and timespan pickers, searchable and tag combo boxes, file and colour pickers, inline-editable text, dropdowns.
 - 🧭 **Navigation & overlays** - a navigation menu, a view-model-first page container, awaitable modal dialogs and a paging selector.
 - 🗂️ **A file explorer** - breadcrumb, folder tree and file list sharing a source, with shell-backed file operations and nodes of your own.
@@ -34,6 +36,8 @@ Controls :
 
 Not sure if Joufflu is your fit? See [Joufflu vs other WPF UI libraries](https://ndegheselle.github.io/Joufflu/comparison.html)
 and the copy-paste [recipes](https://ndegheselle.github.io/Joufflu/recipes.html).
+
+![customizer preview](./images/preview-customizer.png)
 
 ## Documentation
 
@@ -131,7 +135,3 @@ generate a ready-to-merge dictionary.
 
 - [Lucide](https://lucide.dev/) icon font
 - [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm) for MVVM boilerplate
-
-I know [Extended WPF Toolkit](https://github.com/xceedsoftware/wpftoolkit) has
-already done all the inputs and much more, but you can't fully appreciate
-something without knowing how hard it is to do.
