@@ -10,11 +10,11 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--
-        A display. Placed on the ThemedTooltip.Placement side of its element (bottom by default), centred, and no
-        wider than its ThemedTooltip.MaxWidth, past which its text wraps.
+        A display. Placed on the Tooltip.Placement side of its element (bottom by default), lined up following its
+        Tooltip.Alignment (centred by default), and no wider than its Tooltip.MaxWidth, past which its text wraps.
     -->
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
-        <Setter Property="toolkit:ThemedTooltip.IsPlaced" Value="True" />
+        <Setter Property="toolkit:Tooltip.IsPlaced" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static joufflu:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />

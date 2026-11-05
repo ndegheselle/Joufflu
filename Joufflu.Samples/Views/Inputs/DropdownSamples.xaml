@@ -34,26 +34,31 @@
             <c:CodeExample
                 Title="Popup placement"
                 Code="{Binding PlacementCode}"
-                Description="Dropdown.Placement anchors a corner of the popup to the matching corner of the button. BottomRight right aligns it, TopLeft and TopRight open it upward — useful near the bottom of the window. Dropdown.HorizontalOffset and Dropdown.VerticalOffset add to that placement.">
+                Description="PopupPlacement set on the button places its popup: Side (Bottom by default, Top, Left or Right), Alignment (Start by default, Center or End) and Gap (2 by default). It flips to the opposite side when it does not fit on the screen. Dropdown.HorizontalOffset and Dropdown.VerticalOffset add to that placement.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
-                    <ToggleButton Content="BottomLeft" inputs:Dropdown.Placement="BottomLeft">
+                    <ToggleButton Content="Bottom, start">
                         <inputs:Dropdown.Popup>
-                            <TextBlock Text="Opens down, left aligned." />
+                            <TextBlock Text="Opens down, left aligned (the default)." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
-                    <ToggleButton Content="BottomRight" inputs:Dropdown.Placement="BottomRight">
+                    <ToggleButton Content="Bottom, end" toolkit:PopupPlacement.Alignment="End">
                         <inputs:Dropdown.Popup>
                             <TextBlock Text="Opens down, right aligned." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
-                    <ToggleButton Content="TopLeft" inputs:Dropdown.Placement="TopLeft">
+                    <ToggleButton
+                        Content="Top, start"
+                        toolkit:PopupPlacement.Side="Top">
                         <inputs:Dropdown.Popup>
                             <TextBlock Text="Opens up, left aligned." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
-                    <ToggleButton Content="TopRight" inputs:Dropdown.Placement="TopRight">
+                    <ToggleButton
+                        Content="Right, center"
+                        toolkit:PopupPlacement.Alignment="Center"
+                        toolkit:PopupPlacement.Side="Right">
                         <inputs:Dropdown.Popup>
-                            <TextBlock Text="Opens up, right aligned." />
+                            <TextBlock Text="Opens on the right, centred." />
                         </inputs:Dropdown.Popup>
                     </ToggleButton>
                 </WrapPanel>
@@ -64,7 +69,7 @@
                 Code="{Binding StyleCode}"
                 Description="Because the button is a real ToggleButton, every ToggleButton style and attached property works directly on it — Sizing.IsSquare and Sizing.Size included.">
                 <ToggleButton
-                    inputs:Dropdown.Placement="BottomRight"
+                    toolkit:PopupPlacement.Alignment="End"
                     toolkit:Sizing.IsSquare="True"
                     toolkit:Sizing.Size="lg">
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />

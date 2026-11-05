@@ -35,12 +35,14 @@ gap after it, so it keeps one trailing gap on its right and bottom edges.
 
 ## Tooltip
 
-Every native `ToolTip` is themed: its style centres it on a side of the element with a small gap
-(not at the mouse) and flips it at screen edges. Set it the usual way.
+Every native `ToolTip` is themed: its style places it on a side of the element with a small gap
+(not at the mouse), centred by default, and flips it at screen edges. Set it the usual way.
+`Tooltip` was named `ThemedTooltip`; its `Placement` takes a `PopupSide` (was `TooltipPlacement`, same values).
 
 ```xml
-<Button Content="Save" ToolTip="Save your changes" toolkit:ThemedTooltip.Placement="Top" />
-<Button Content="Rich" toolkit:ThemedTooltip.MaxWidth="200">
+<Button Content="Save" ToolTip="Save your changes" toolkit:Tooltip.Placement="Top" />
+<Button Content="Menu" ToolTip="Opens the menu" toolkit:Tooltip.Alignment="End" />
+<Button Content="Rich" toolkit:Tooltip.MaxWidth="200">
     <Button.ToolTip>
         <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Info}" />
@@ -50,11 +52,36 @@ Every native `ToolTip` is themed: its style centres it on a side of the element 
 </Button>
 ```
 
-`ThemedTooltip.Placement` (on the element): `Top`, `Bottom` (default), `Left`, `Right`.
-`ThemedTooltip.MaxWidth` (on the element): width past which the text wraps, `320` by default.
+`Tooltip.Placement` (on the element): `Top`, `Bottom` (default), `Left`, `Right`.
+`Tooltip.Alignment` (on the element): `Start`, `Center` (default), `End` — along the side, see below.
+`Tooltip.MaxWidth` (on the element): width past which the text wraps, `320` by default.
 `ToolTipService.Placement` is overridden by the style; the show delay is the native one.
 A `ToolTip` style of your own keeps the placement if it is `BasedOn="{StaticResource {x:Type ToolTip}}"`
-or sets `toolkit:ThemedTooltip.IsPlaced="True"`.
+or sets `toolkit:Tooltip.IsPlaced="True"`.
+
+## Popup placement
+
+`PopupPlacement` places any `Popup` on a side of its `PlacementTarget`, lined up with it, and flips it
+to the opposite side at a screen edge. Use it instead of a hand-written `CustomPopupPlacementCallback`.
+
+```xml
+<Popup PlacementTarget="{Binding ElementName=SearchBox}" StaysOpen="False"
+       toolkit:PopupPlacement.Side="Bottom" toolkit:PopupPlacement.Alignment="End">
+    <inputs:DropdownPopupHost><!-- themed frame + foreground, a Popup inherits neither -->
+        <TextBlock Text="Placed popup" />
+    </inputs:DropdownPopupHost>
+</Popup>
+```
+
+- `PopupPlacement.Side` (`PopupSide?`): `Top`, `Bottom`, `Left`, `Right`; `Bottom` when only the alignment is set.
+- `PopupPlacement.Alignment` (`PopupAlignment?`): `Start`, `Center`, `End`; `Start` when only the side is set.
+  Above or below, `Start` / `End` align the left / right edges; beside, the top / bottom edges.
+- `PopupPlacement.Gap` (`double`, `2` = `PopupPlacement.DefaultGap`, as tooltips): space from the target. Alone it does nothing.
+- Setting `Side` or `Alignment` sets the popup's `Placement="Custom"`; its own `HorizontalOffset` /
+  `VerticalOffset` still add on top. Changing a value while open moves it (the popup is reopened).
+- `PopupPlacement.Place(side, alignment, gap, popupSize, targetSize, offset)` is the public maths.
+- `Tooltip` (always the default gap) is built on it. A `Dropdown` button reads these properties from itself for its popup
+  (`<ToggleButton toolkit:PopupPlacement.Side="Top">`); elsewhere than on a `Popup` they do nothing on their own.
 
 ## Drag and drop
 

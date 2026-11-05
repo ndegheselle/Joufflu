@@ -28,11 +28,11 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 
 ## Toolkit (`Joufflu`, namespace `Joufflu.Toolkit`)
 
-- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/index.md): the design-system helpers (`Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`, `DragSource`, `SharedWidth`…) and the XML namespaces the snippets use.
+- [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/index.md): the design-system helpers (`Sizing`, `Spacing`, `Derive`, `Tooltip`, `PopupPlacement`, `Animate`, `DropTarget`, `DragSource`, `SharedWidth`…) and the XML namespaces the snippets use.
 - [Sizing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/sizing.md): `Sizing.Size` and `IsSquare` attached properties.
 - [Spacing](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/spacing.md): `Spacing.Gap` attached property for gaps between panel children.
 - [Derived dimensions](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/derived-dimensions.md): `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` with their per-side and per-corner factors, scaling a theme dimension (a category key such as `DisplayRadius`) live.
-- [Tooltip](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md): every native `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side, `ThemedTooltip.MaxWidth` (320 by default) where the text wraps.
+- [Tooltip & popup placement](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md): every native `ToolTip` themed and placed on a side of its element; `Tooltip.Placement` picks the side, `Tooltip.Alignment` (`Start`, `Center` by default, `End`) how it lines up, `Tooltip.MaxWidth` (320 by default) where the text wraps; `Tooltip` was `ThemedTooltip`. `PopupPlacement.Side`, `Alignment` and `Gap` (2 by default) place any `Popup` the same way on a side of its `PlacementTarget`, with the opposite side as a fallback at a screen edge; dropdowns use it too.
 - [Animate](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/animate.md): `Animate.Bounce` looping a vertical hop on any element, with `BounceHeight` and `BounceDuration`; `Animate.Spin` turning it around its centre, with `SpinDuration`.
 - [Drag and drop](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/drop-target.md): `DropTarget.Command` turning any element into a drop target, the `CanExecute` filter, the `DropData` parameter carrying the dragged data and where the drop landed, the `IsDragOver` highlight and the reported `Effect`; and `DragSource.Data`, `AllowedEffects` and `IsDragging` turning any element into a drag source.
 - [Shared width](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/shared-width.md): the `SharedWidth` decorator giving every input of a group the width of the narrowest one, right aligned, so inputs line up across the depths of a tree; groups scoped by `SharedWidth.IsScope`.
@@ -59,7 +59,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 - [Text editable](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/text-editable.md): `TextEditable`, a value that becomes an editable text box on demand (double click or pencil to edit, `TextChanged`).
 - [File picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/file-picker.md): `FilePicker`, selects a file through the system dialog or a typed path; `Options` (`FilePickerOptions`: `Filter`, `DefaultExtension`) for file types.
 - [Color picker](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/color-picker.md): `ColorPicker` with hex field and a saturation/hue/alpha popup.
-- [Dropdown](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/dropdown.md): `Dropdown` attached properties turning any `ToggleButton` into a dropdown — popup content, corner placement, offsets, `CloseOnClick` and `PopupStyle`.
+- [Dropdown](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/inputs/dropdown.md): `Dropdown` attached properties turning any `ToggleButton` into a dropdown — popup content, placement through `toolkit:PopupPlacement` set on the button (side, alignment, gap; flipped at a screen edge; replaces `Dropdown.Placement`), offsets, `CloseOnClick` and `PopupStyle`.
 
 ## Navigation (`Joufflu.Navigation`)
 

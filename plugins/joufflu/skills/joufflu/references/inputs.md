@@ -149,7 +149,7 @@ The popup is open while the button is checked and closes on click outside. The b
 stays a plain `ToggleButton` you style freely.
 
 ```xml
-<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True" inputs:Dropdown.Placement="BottomRight">
+<ToggleButton Content="Actions" inputs:Dropdown.CloseOnClick="True" toolkit:PopupPlacement.Alignment="End">
     <inputs:Dropdown.Popup>
         <StackPanel toolkit:Spacing.Gap="4">
             <Button Content="Rename" Command="{Binding RenameCommand}" Style="{StaticResource GhostButton}" />
@@ -159,7 +159,7 @@ stays a plain `ToggleButton` you style freely.
 </ToggleButton>
 
 <!-- Icon-only "more" menu -->
-<ToggleButton toolkit:Sizing.IsSquare="True" inputs:Dropdown.Placement="BottomRight">
+<ToggleButton toolkit:Sizing.IsSquare="True" toolkit:PopupPlacement.Alignment="End">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />
     <inputs:Dropdown.Popup> … </inputs:Dropdown.Popup>
 </ToggleButton>
@@ -168,9 +168,9 @@ stays a plain `ToggleButton` you style freely.
 | Attached property | Default | Purpose |
 |---|---|---|
 | `Dropdown.Popup` | null | Popup content; setting it makes the button a dropdown |
-| `Dropdown.Placement` | `BottomLeft` | `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight` |
+| `toolkit:PopupPlacement.Side` / `Alignment` / `Gap` (on the button) | `Bottom` / `Start` / `2` | Where the popup opens; flips at a screen edge. Replaces `Dropdown.Placement` (`BottomRight` = `Side="Bottom" Alignment="End"`) |
 | `Dropdown.HorizontalOffset` | 0 | Extra horizontal offset |
-| `Dropdown.VerticalOffset` | 0 | Extra vertical offset (the popup touches the button by default) |
+| `Dropdown.VerticalOffset` | 0 | Extra vertical offset (the popup sits 2 DIPs from the button by default) |
 | `Dropdown.CloseOnClick` | false | Close when a `ButtonBase` inside is clicked (also CheckBox/RadioButton!) |
 | `Dropdown.PopupStyle` | null | Style for `inputs:DropdownPopupHost`: `Background`, `BorderBrush`, `BorderThickness`, `CornerRadius`, `Padding` (display tokens by default, `DisplayPaddingSm`), `Foreground` or `Template` |
 

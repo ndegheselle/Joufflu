@@ -41,7 +41,7 @@ Search the XAML (and code-behind that sets visuals) for:
 | `Margin` on every child of a panel | `Spacing.Gap` |
 | Fixed `Height="32"`, `FontSize="…"`, `Padding` on controls or text | `Sizing.Size` |
 | `CornerRadius="4"`, `BorderThickness="1"` literals | Tokens |
-| `ToolTipService.Placement` | `toolkit:ThemedTooltip.Placement` (the `ToolTip` itself stays) |
+| `ToolTipService.Placement` | `toolkit:Tooltip.Placement` (the `ToolTip` itself stays) |
 | `MessageBox.Show`, extra modal `Window`s | Overlays (`Confirm`, `IOverlayContent`) |
 | Status text / popups for success/errors | Toasts |
 | `AllowDrop` + `Drop`/`DragOver` handlers, `DoDragDrop` in `MouseMove` | `DropTarget` / `DragSource` |

@@ -9,7 +9,7 @@ description: >-
   Paging), feedback (`Joufflu.Feedback`: Badge, Spinner, toasts),
   the file explorer (`Joufflu.FileExplorer`), JSON data trees (`Joufflu.Data`:
   DataFill, DataEdit, DataDisplay, DataNode, JsonSchema.ToDataNode), the toolkit attached properties
-  (Sizing, Spacing.Gap, Derive, ThemedTooltip, Animate, DropTarget/DragSource),
+  (Sizing, Spacing.Gap, Derive, Tooltip, PopupPlacement, Animate, DropTarget/DragSource),
   ThemedWindow, FontIcon/Lucide icons, named styles (PrimaryButton, Card…) and
   the design tokens (joufflu:Brushes / Colors / Dimensions). Use it whenever a
   project references Joufflu (a `PackageReference`/`ProjectReference` to Joufflu*,
@@ -110,7 +110,7 @@ Without step 1 controls render unstyled; without step 2 every themed brush is mi
 | Prefix | Holds |
 |---|---|
 | `joufflu` | `Brushes`, `Colors`, `Dimensions` resource keys |
-| `toolkit` | `Sizing`, `Spacing`, `Derive`, `SharedWidth`, `ThemedTooltip`, `Animate`, `DropTarget`, `DragSource` |
+| `toolkit` | `Sizing`, `Spacing`, `Derive`, `SharedWidth`, `Tooltip`, `PopupPlacement`, `Animate`, `DropTarget`, `DragSource` |
 | `fonts` | `FontIcon`, `LucideFontIcons`, `Chevron` |
 | `controls` | `ThemedWindow` |
 | `themes` | `ThemeManager` |
@@ -171,8 +171,8 @@ C# namespaces:
   `*ToggleButton` twin (`PrimaryToggleButton`…), and `IconToggleButton` for an icon-only toggle.
 - **Icons**: `<fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Plus}" />`. A header that opens
   content: `<fonts:Chevron IsExpanded="{Binding IsExpanded}" />` (no hand-made rotating glyph).
-- **Tooltips**: plain `ToolTip="…"` is themed; `toolkit:ThemedTooltip.Placement` picks the side and
-  `toolkit:ThemedTooltip.MaxWidth` where the text wraps.
+- **Tooltips**: plain `ToolTip="…"` is themed; `toolkit:Tooltip.Placement` picks the side, `toolkit:Tooltip.Alignment` how it lines up and
+  `toolkit:Tooltip.MaxWidth` where the text wraps. Place a `Popup` of your own with `toolkit:PopupPlacement.Side` / `Alignment` / `Gap`.
 - **Modals / notifications**: `IOverlayer` and `IToastService`, not `MessageBox`
   or a new `Window`.
 - **Drag and drop**: `toolkit:DropTarget.Command` / `toolkit:DragSource.Data`, not
@@ -191,7 +191,7 @@ Read the one matching the task before writing code:
 | File | Covers |
 |---|---|
 | [references/natives.md](references/natives.md) | Named styles: buttons and toggle buttons, cards, typography, text boxes (`MultilineTextBox`), menu items, lists; `FontIcon`, `Chevron`; styled natives |
-| [references/toolkit.md](references/toolkit.md) | `Sizing`, `Spacing`, `Derive`, `SharedWidth`, `ThemedTooltip`, `Animate`, `DropTarget`/`DragSource`, converters, helpers |
+| [references/toolkit.md](references/toolkit.md) | `Sizing`, `Spacing`, `Derive`, `SharedWidth`, `Tooltip`, `PopupPlacement`, `Animate`, `DropTarget`/`DragSource`, converters, helpers |
 | [references/theming.md](references/theming.md) | `ThemeManager`, custom themes, persistence, switcher, every design token |
 | [references/inputs.md](references/inputs.md) | All `Joufflu.Inputs` controls and `Dropdown` |
 | [references/navigation.md](references/navigation.md) | `ThemedWindow` shell, `NavigationMenu`, `Navigator`, overlays, `Paging` |

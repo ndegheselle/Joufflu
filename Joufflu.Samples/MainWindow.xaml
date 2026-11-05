@@ -21,6 +21,7 @@
     xmlns:nativeNavigation="clr-namespace:Joufflu.Samples.Views.Natives.Navigation"
     xmlns:nav="clr-namespace:Joufflu.Navigation.Controls;assembly=Joufflu.Navigation"
     xmlns:navigation="clr-namespace:Joufflu.Samples.Views.Navigation"
+    xmlns:sampleControls="clr-namespace:Joufflu.Samples.Controls"
     xmlns:themes="clr-namespace:Joufflu.Themes;assembly=Joufflu"
     xmlns:themesSamples="clr-namespace:Joufflu.Samples.Views.Themes"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
@@ -41,6 +42,8 @@
             VerticalAlignment="Center"
             toolkit:Spacing.Gap="2,0"
             Orientation="Horizontal">
+            <!--  Finds a page by its title or summary, as registered in ShellViewModel  -->
+            <sampleControls:PageSearch DataContext="{Binding PageSearch}" />
             <!--  The theme customizer, in a window of its own so the gallery behind it is the preview  -->
             <Button
                 toolkit:Sizing.IsSquare="True"
@@ -321,7 +324,7 @@
                         <nav:NavigationItem.Icon>
                             <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.MessageSquare}" />
                         </nav:NavigationItem.Icon>
-                        Tooltip
+                        Tooltip &amp; popup
                     </nav:NavigationItem>
                     <nav:NavigationItem TargetType="{x:Type toolkitSamples:AnimateSamplesViewModel}">
                         <nav:NavigationItem.Icon>

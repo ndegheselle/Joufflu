@@ -16,8 +16,10 @@ public class DropdownSamplesViewModel : ObservableObject
         "</ToggleButton>";
 
     public string PlacementCode =>
-        "<!-- BottomLeft (default), BottomRight, TopLeft, TopRight -->\n" +
-        "<ToggleButton Content=\"Filter\" inputs:Dropdown.Placement=\"BottomRight\">\n" +
+        "<!-- Side: Bottom (default), Top, Left, Right; Alignment: Start (default), Center, End; Gap: 2 by default -->\n" +
+        "<ToggleButton Content=\"Filter\"\n" +
+        "              toolkit:PopupPlacement.Side=\"Bottom\"\n" +
+        "              toolkit:PopupPlacement.Alignment=\"End\">\n" +
         "    <inputs:Dropdown.Popup>\n" +
         "        <TextBlock Text=\"Opens down, right aligned.\" />\n" +
         "    </inputs:Dropdown.Popup>\n" +
@@ -25,7 +27,7 @@ public class DropdownSamplesViewModel : ObservableObject
 
     public string StyleCode =>
         "<ToggleButton\n" +
-        "    inputs:Dropdown.Placement=\"BottomRight\"\n" +
+        "    toolkit:PopupPlacement.Alignment=\"End\"\n" +
         "    toolkit:Sizing.IsSquare=\"True\"\n" +
         "    toolkit:Sizing.Size=\"lg\">\n" +
         "    <fonts:FontIcon Text=\"{x:Static fonts:LucideFontIcons.EllipsisVertical}\" />\n" +

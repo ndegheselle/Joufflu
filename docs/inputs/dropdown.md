@@ -36,27 +36,42 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
 | Attached property | Type | Default | Purpose |
 |---|---|---|---|
 | `Dropdown.Popup` | `object` | `null` | Content shown in the popup. Setting it is what turns the button into a dropdown. |
-| `Dropdown.Placement` | `DropdownPlacement` | `BottomLeft` | Corner of the popup anchored to the matching corner of the button: `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight`. |
+| `toolkit:PopupPlacement.Side` / `Alignment` / `Gap` | | `Bottom` / `Start` / `2` | Where the popup opens, set on the button (see [Popup placement](#popup-placement)). |
 | `Dropdown.HorizontalOffset` | `double` | `0` | Extra horizontal offset applied on top of the placement. |
-| `Dropdown.VerticalOffset` | `double` | `0` | Extra vertical offset applied on top of the placement; the popup touches the button by default. |
+| `Dropdown.VerticalOffset` | `double` | `0` | Extra vertical offset applied on top of the placement; the popup sits 2 DIPs from the button by default (the `PopupPlacement` gap). |
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
 | `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its background, border, `CornerRadius`, `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
 
 ## Popup placement
 
-`Dropdown.Placement` anchors a corner of the popup to the matching corner of the
-button. `BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight`
-open it upward — useful for a dropdown sitting near the bottom of the window.
+The [`PopupPlacement`](../toolkit/tooltip.md#popupplacement) properties set on the
+button place its popup, the way `ToolTipService.Placement` is set on the element
+owning a tooltip:
+
+- `Side` — `Bottom` (default), `Top`, `Left` or `Right`. `Top` opens it upward,
+  useful for a dropdown sitting near the bottom of the window.
+- `Alignment` — `Start` (default), `Center` or `End`. Below or above the button, `End`
+  right-aligns the popup on it.
+- `Gap` — space between the button and the popup, `2` by default.
+
+When the popup does not fit on the screen, it flips to the opposite side.
 `Dropdown.HorizontalOffset` and `Dropdown.VerticalOffset` add to that placement.
 
 ```xml
-<!-- BottomLeft (default), BottomRight, TopLeft, TopRight -->
-<ToggleButton Content="Filter" inputs:Dropdown.Placement="BottomRight">
+<!-- Side: Bottom (default), Top, Left, Right; Alignment: Start (default), Center, End; Gap: 2 by default -->
+<ToggleButton Content="Filter"
+              toolkit:PopupPlacement.Side="Bottom"
+              toolkit:PopupPlacement.Alignment="End">
     <inputs:Dropdown.Popup>
         <TextBlock Text="Opens down, right aligned." />
     </inputs:Dropdown.Popup>
 </ToggleButton>
 ```
+
+{: .note }
+> `Dropdown.Placement` and its `DropdownPlacement` corners are gone: `BottomRight` is
+> now `Side="Bottom"` with `Alignment="End"`, `TopLeft` is `Side="Top"`. A tooltip on the
+> same button keeps its own `Tooltip.Placement`, so the two popups are placed apart.
 
 ## Button style
 
@@ -66,7 +81,7 @@ included. An icon-only dropdown is just an icon-only toggle button:
 
 ```xml
 <ToggleButton
-    inputs:Dropdown.Placement="BottomRight"
+    toolkit:PopupPlacement.Alignment="End"
     toolkit:Sizing.IsSquare="True"
     toolkit:Sizing.Size="lg">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />

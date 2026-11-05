@@ -5,37 +5,59 @@
     xmlns:c="clr-namespace:Joufflu.Samples.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
     xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
     xmlns:vm="clr-namespace:Joufflu.Samples.Views.Toolkit"
     d:DataContext="{d:DesignInstance Type=vm:TooltipSamplesViewModel}"
+    Unloaded="UserControl_Unloaded"
     mc:Ignorable="d">
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Tooltip" />
+            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="Tooltip &amp; popup placement" />
 
             <c:CodeExample
-                Title="ThemedTooltip.Placement"
+                Title="Tooltip.Placement"
                 Code="{Binding PlacementCode}"
-                Description="Set ToolTip as usual: every tooltip is themed. ThemedTooltip.Placement chooses the side it sits on, centred on the element — Top, Bottom (the default), Left or Right — and it flips to the opposite side near a screen edge.">
+                Description="Set ToolTip as usual: every tooltip is themed. Tooltip.Placement chooses the side it sits on, centred on the element — Top, Bottom (the default), Left or Right — and it flips to the opposite side near a screen edge.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <Button
                         Content="Top"
                         ToolTip="Placed above"
-                        toolkit:ThemedTooltip.Placement="Top" />
+                        toolkit:Tooltip.Placement="Top" />
                     <Button
                         Content="Bottom"
                         ToolTip="Placed below"
-                        toolkit:ThemedTooltip.Placement="Bottom" />
+                        toolkit:Tooltip.Placement="Bottom" />
                     <Button
                         Content="Left"
                         ToolTip="Placed left"
-                        toolkit:ThemedTooltip.Placement="Left" />
+                        toolkit:Tooltip.Placement="Left" />
                     <Button
                         Content="Right"
                         ToolTip="Placed right"
-                        toolkit:ThemedTooltip.Placement="Right" />
+                        toolkit:Tooltip.Placement="Right" />
+                </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="Tooltip.Alignment"
+                Code="{Binding AlignmentCode}"
+                Description="Tooltip.Alignment lines the tooltip up with the element along its side: Start, Center (the default) or End. Above or below, Start aligns the left edges and End the right ones; beside, the top and the bottom edges.">
+                <WrapPanel toolkit:Spacing.Gap="8,8">
+                    <Button
+                        Content="Start"
+                        ToolTip="Aligned on the left edge of the button"
+                        toolkit:Tooltip.Alignment="Start" />
+                    <Button
+                        Content="Center"
+                        ToolTip="Centred under the button"
+                        toolkit:Tooltip.Alignment="Center" />
+                    <Button
+                        Content="End"
+                        ToolTip="Aligned on the right edge of the button"
+                        toolkit:Tooltip.Alignment="End" />
                 </WrapPanel>
             </c:CodeExample>
 
@@ -56,16 +78,55 @@
             </c:CodeExample>
 
             <c:CodeExample
-                Title="ThemedTooltip.MaxWidth"
+                Title="Tooltip.MaxWidth"
                 Code="{Binding MaxWidthCode}"
-                Description="A tooltip is no wider than ThemedTooltip.MaxWidth (320 by default), past which its text wraps.">
+                Description="A tooltip is no wider than Tooltip.MaxWidth (320 by default), past which its text wraps.">
                 <WrapPanel toolkit:Spacing.Gap="8,8">
                     <Button Content="Default width" ToolTip="A long description of what this button does, wrapped once it reaches the default max width of a tooltip rather than running across the screen." />
                     <Button
                         Content="Narrow"
-                        toolkit:ThemedTooltip.MaxWidth="160"
+                        toolkit:Tooltip.MaxWidth="160"
                         ToolTip="The same long description, wrapped at a narrower max width set on the element." />
                 </WrapPanel>
+            </c:CodeExample>
+
+            <c:CodeExample
+                Title="PopupPlacement"
+                Code="{Binding PopupPlacementCode}"
+                Description="Tooltips are placed with PopupPlacement, which places any Popup the same way: on a side of its PlacementTarget (Top, Bottom, Left or Right), lined up with it (Start, Center or End) and a Gap clear of it (2 by default, as tooltips). It flips to the opposite side when it does not fit on the screen.">
+                <StackPanel toolkit:Spacing.Gap="12">
+                    <StackPanel Orientation="Horizontal" toolkit:Spacing.Gap="8">
+                        <ComboBox
+                            Width="120"
+                            ItemsSource="{Binding PopupSides}"
+                            SelectedItem="{Binding SelectedPopupSide}" />
+                        <ComboBox
+                            Width="120"
+                            ItemsSource="{Binding PopupAlignments}"
+                            SelectedItem="{Binding SelectedPopupAlignment}" />
+                    </StackPanel>
+
+                    <!--  Margin keeps room around the anchor for a popup placed on any side.  -->
+                    <Grid Margin="0,56">
+                        <ToggleButton
+                            x:Name="PopupAnchor"
+                            Width="160"
+                            HorizontalAlignment="Center"
+                            Content="Show the popup" />
+                        <!--  Stays open, so it moves while the side and the alignment are changed.  -->
+                        <Popup
+                            AllowsTransparency="True"
+                            IsOpen="{Binding IsChecked, ElementName=PopupAnchor}"
+                            PlacementTarget="{Binding ElementName=PopupAnchor}"
+                            StaysOpen="True"
+                            toolkit:PopupPlacement.Alignment="{Binding SelectedPopupAlignment}"
+                            toolkit:PopupPlacement.Side="{Binding SelectedPopupSide}">
+                            <inputs:DropdownPopupHost>
+                                <TextBlock Text="Placed popup" />
+                            </inputs:DropdownPopupHost>
+                        </Popup>
+                    </Grid>
+                </StackPanel>
             </c:CodeExample>
         </StackPanel>
     </ScrollViewer>

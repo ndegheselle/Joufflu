@@ -7,21 +7,6 @@ using Joufflu.Toolkit;
 namespace Joufflu.Inputs.Controls
 {
     /// <summary>
-    /// Corner of the popup that is anchored to the matching corner of the toggle button.
-    /// </summary>
-    public enum DropdownPlacement
-    {
-        /// <summary>Popup top-left at the button's bottom-left (default, opens downward).</summary>
-        BottomLeft,
-        /// <summary>Popup top-right at the button's bottom-right (right-aligned, opens downward).</summary>
-        BottomRight,
-        /// <summary>Popup bottom-left at the button's top-left (opens upward).</summary>
-        TopLeft,
-        /// <summary>Popup bottom-right at the button's top-right (right-aligned, opens upward).</summary>
-        TopRight
-    }
-
-    /// <summary>
     /// Chrome hosting the dropdown content inside the popup. Only meant to be created by
     /// <see cref="Dropdown"/>; its default style lives in <c>Dropdown.xaml</c>.
     /// </summary>
@@ -78,9 +63,14 @@ namespace Joufflu.Inputs.Controls
     /// Turns any <see cref="ToggleButton"/> into a dropdown: the button stays yours (its own
     /// <see cref="FrameworkElement.Style"/>, <c>Sizing.IsSquare</c>, content, triggers and bindings)
     /// and <see cref="PopupProperty"/> hangs a themed popup off it, open while the button is checked.
+    /// <para>
+    /// The popup is placed with the <see cref="PopupPlacement"/> properties set on the button, the way
+    /// <c>ToolTipService.Placement</c> is set on the element owning the tooltip: below the button and aligned on its
+    /// start when they are left unset.
+    /// </para>
     /// <example>
     /// <code>
-    /// &lt;ToggleButton Content="Actions" inputs:Dropdown.Placement="BottomRight"&gt;
+    /// &lt;ToggleButton Content="Actions" toolkit:PopupPlacement.Side="Bottom" toolkit:PopupPlacement.Alignment="End"&gt;
     ///     &lt;inputs:Dropdown.Popup&gt;
     ///         &lt;TextBlock Text="Anything." /&gt;
     ///     &lt;/inputs:Dropdown.Popup&gt;
@@ -103,27 +93,8 @@ namespace Joufflu.Inputs.Controls
         public static void SetPopup(DependencyObject element, object? value) { element.SetValue(PopupProperty, value); }
         #endregion
 
-        #region Placement
-        /// <summary>Corner alignment of the popup relative to the toggle button.</summary>
-        public static readonly DependencyProperty PlacementProperty = DependencyProperty.RegisterAttached(
-            "Placement",
-            typeof(DropdownPlacement),
-            typeof(Dropdown),
-            new FrameworkPropertyMetadata(DropdownPlacement.BottomLeft, OnPlacementChanged));
-
-        public static DropdownPlacement GetPlacement(DependencyObject element)
-        {
-            return (DropdownPlacement)element.GetValue(PlacementProperty);
-        }
-
-        public static void SetPlacement(DependencyObject element, DropdownPlacement value)
-        {
-            element.SetValue(PlacementProperty, value);
-        }
-        #endregion
-
         #region Offsets
-        /// <summary>Extra horizontal offset applied on top of <see cref="PlacementProperty"/>.</summary>
+        /// <summary>Extra horizontal offset applied on top of the <see cref="PopupPlacement"/> of the button.</summary>
         public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.RegisterAttached(
             "HorizontalOffset",
             typeof(double),
@@ -140,7 +111,7 @@ namespace Joufflu.Inputs.Controls
             element.SetValue(HorizontalOffsetProperty, value);
         }
 
-        /// <summary>Extra vertical offset applied on top of <see cref="PlacementProperty"/>.</summary>
+        /// <summary>Extra vertical offset applied on top of the <see cref="PopupPlacement"/> of the button.</summary>
         public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.RegisterAttached(
             "VerticalOffset",
             typeof(double),
@@ -237,10 +208,10 @@ namespace Joufflu.Inputs.Controls
             if (button.GetValue(PopupInstanceProperty) is Popup previous)
             {
                 previous.IsOpen = false;
+                // The placement bindings included: the popup no longer follows the button.
                 BindingOperations.ClearAllBindings(previous);
                 previous.Child = null;
                 previous.PlacementTarget = null;
-                previous.CustomPopupPlacementCallback = null;
                 button.SetValue(PopupInstanceProperty, null);
             }
 
@@ -266,12 +237,10 @@ namespace Joufflu.Inputs.Controls
             {
                 Child = host,
                 PlacementTarget = button,
-                Placement = PlacementMode.Custom,
                 StaysOpen = false,
                 AllowsTransparency = true
             };
-            popup.CustomPopupPlacementCallback = (popupSize, targetSize, offset)
-                => PlacePopup(button, popupSize, targetSize, offset);
+            BindPlacement(popup, button);
 
             // Two way so a dismissal (StaysOpen=False) unchecks the button.
             popup.SetBinding(
@@ -298,40 +267,26 @@ namespace Joufflu.Inputs.Controls
                 host.Style = style;
         }
 
-        private static void OnPlacementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// Places the popup with the <see cref="PopupPlacement"/> set on the button; <see cref="PopupPlacement"/> moves
+        /// it when a value changes while it is open. Unset on the button, the side and the alignment still reach the
+        /// popup as Bottom and Start: a null would leave it to the native placement, with no gap and no flip.
+        /// </summary>
+        private static void BindPlacement(Popup popup, ToggleButton button)
         {
-            // PlacePopup reads Placement live, the callback only needs to be re-run.
-            if (d.GetValue(PopupInstanceProperty) is Popup popup && popup.IsOpen)
-            {
-                popup.IsOpen = false;
-                popup.IsOpen = true;
-            }
+            Binding side = Bind(button, PopupPlacement.SideProperty);
+            side.TargetNullValue = PopupSide.Bottom;
+            Binding alignment = Bind(button, PopupPlacement.AlignmentProperty);
+            alignment.TargetNullValue = PopupAlignment.Start;
+
+            popup.SetBinding(PopupPlacement.SideProperty, side);
+            popup.SetBinding(PopupPlacement.AlignmentProperty, alignment);
+            popup.SetBinding(PopupPlacement.GapProperty, Bind(button, PopupPlacement.GapProperty));
         }
 
         private static Binding Bind(DependencyObject source, DependencyProperty property)
         {
             return new Binding { Source = source, Path = new PropertyPath(property), Mode = BindingMode.OneWay };
-        }
-
-        private static CustomPopupPlacement[] PlacePopup(
-            ToggleButton button,
-            Size popupSize,
-            Size targetSize,
-            Point offset)
-        {
-            DropdownPlacement placement = GetPlacement(button);
-
-            double x = placement is DropdownPlacement.BottomRight or DropdownPlacement.TopRight
-                ? targetSize.Width - popupSize.Width
-                : 0;
-            double y = placement is DropdownPlacement.TopLeft or DropdownPlacement.TopRight
-                ? -popupSize.Height
-                : targetSize.Height;
-
-            return new[]
-            {
-                new CustomPopupPlacement(new Point(x + offset.X, y + offset.Y), PopupPrimaryAxis.Vertical)
-            };
         }
     }
 }

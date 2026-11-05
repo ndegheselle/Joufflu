@@ -1651,7 +1651,7 @@ The chevron toggle of a tree row, `ChevronToggleButton`, is on the
 
 Design-system helpers that shape controls and layouts rather than being controls
 themselves. They all live in the `Joufflu.Toolkit` namespace of the core
-`Joufflu` package — `Sizing`, `Spacing`, `Derive`, `ThemedTooltip`, `Animate`, `DropTarget`,
+`Joufflu` package — `Sizing`, `Spacing`, `Derive`, `Tooltip`, `PopupPlacement`, `Animate`, `DropTarget`,
 `DropData`, `DragSource`, `SharedWidth` and `DataGridEditing` (which the `DataGrid` style uses to
 theme the editors of its built-in columns). The theme manager, tokens and window have their own section, see
 [Themes](../themes/index.md).
@@ -1659,7 +1659,7 @@ theme the editors of its built-in columns). The theme manager, tokens and window
 - **Sizing** — the `Sizing.Size` and `IsSquare` attached properties.
 - **Spacing** — the `Spacing.Gap` attached property for gaps between children.
 - **Derived dimensions** — the `Derive.BorderThickness`, `Derive.CornerRadius` and `Derive.Margin` attached properties, with their factors scaling the value side by side, for thicknesses, radii and margins that follow the theme live.
-- **Tooltip** — every `ToolTip` themed and centred on a side of its element; `ThemedTooltip.Placement` picks the side and `ThemedTooltip.MaxWidth` where its text wraps.
+- **Tooltip & popup placement** — every `ToolTip` themed and placed on a side of its element; `Tooltip.Placement` picks the side, `Tooltip.Alignment` how it lines up (centred by default) and `Tooltip.MaxWidth` where its text wraps. The `PopupPlacement.Side`, `Alignment` and `Gap` attached properties place any `Popup` the same way, flipped to the opposite side at a screen edge.
 - **Animate** — the `Animate.Bounce` attached property for a looping vertical hop on any element, with `BounceHeight` and `BounceDuration` shaping it, and `Animate.Spin` for an endless turn around its centre, with `SpinDuration` setting its speed.
 - **Drag and drop** — the `DropTarget.Command`, `IsDragOver` and `Effect` attached properties for turning any element into a drop target, with the `DropData` telling what was dropped and where, and `DragSource.Data`, `AllowedEffects` and `IsDragging` for turning any element into a drag source.
 - **Shared width** — the `SharedWidth` decorator and its `IsScope` attached property, which give every input of a group the width of the narrowest one so they line up across the depths of a tree.
@@ -1876,12 +1876,13 @@ Same shape again, on any `FrameworkElement`, with `Derive.MarginFactor`.
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/toolkit/tooltip.md -->
 
-# Tooltip
+# Tooltip & popup placement
 
 Set `ToolTip` the usual way, as a string or arbitrary XAML: every tooltip is themed. Its
 style places it with a custom placement rather than at the mouse, centred on a side of
 the element and kept a small gap clear of it, and WPF flips it to the opposite side
-when it would run off a screen edge. The show delay is the native one.
+when it would run off a screen edge. The show delay is the native one. Any other `Popup`
+is placed the same way with [`PopupPlacement`](#popupplacement).
 
 ```xml
 <!-- A string tooltip -->
@@ -1898,37 +1899,99 @@ when it would run off a screen edge. The show delay is the native one.
 </Button>
 ```
 
-## ThemedTooltip.Placement
+## Tooltip.Placement
 
-`ThemedTooltip.Placement`, set on the element, chooses which side its tooltip sits on —
+`Tooltip.Placement`, set on the element, chooses which side its tooltip sits on —
 `Top`, `Bottom` (default), `Left` or `Right`.
 
 ```xml
-<Button Content="Top"    ToolTip="Placed above" toolkit:ThemedTooltip.Placement="Top" />
-<Button Content="Bottom" ToolTip="Placed below" toolkit:ThemedTooltip.Placement="Bottom" />
-<Button Content="Left"   ToolTip="Placed left"  toolkit:ThemedTooltip.Placement="Left" />
-<Button Content="Right"  ToolTip="Placed right" toolkit:ThemedTooltip.Placement="Right" />
+<Button Content="Top"    ToolTip="Placed above" toolkit:Tooltip.Placement="Top" />
+<Button Content="Bottom" ToolTip="Placed below" toolkit:Tooltip.Placement="Bottom" />
+<Button Content="Left"   ToolTip="Placed left"  toolkit:Tooltip.Placement="Left" />
+<Button Content="Right"  ToolTip="Placed right" toolkit:Tooltip.Placement="Right" />
 ```
 
-## ThemedTooltip.MaxWidth
+## Tooltip.Alignment
 
-`ThemedTooltip.MaxWidth`, set on the element, is the width past which the text of its
+`Tooltip.Alignment`, set on the element, lines its tooltip up with it along that side —
+`Start`, `Center` (default) or `End`. Above or below, `Start` aligns the left edges and
+`End` the right ones; beside, the top and the bottom edges.
+
+```xml
+<Button Content="Start"  ToolTip="Aligned on the left edge"  toolkit:Tooltip.Alignment="Start" />
+<Button Content="Center" ToolTip="Centred under the button" toolkit:Tooltip.Alignment="Center" />
+<Button Content="End"    ToolTip="Aligned on the right edge" toolkit:Tooltip.Alignment="End" />
+```
+
+## Tooltip.MaxWidth
+
+`Tooltip.MaxWidth`, set on the element, is the width past which the text of its
 tooltip wraps: `320` by default.
 
 ```xml
 <Button Content="Narrow"
-        toolkit:ThemedTooltip.MaxWidth="160"
+        toolkit:Tooltip.MaxWidth="160"
         ToolTip="A long description, wrapped at a narrower max width." />
 ```
 
 {: .note }
+> The placement is the one of [`PopupPlacement`](#popupplacement), with its default 2 DIP gap.
 > The style sets the tooltip's own `Placement`, so `ToolTipService.Placement` on an
-> element no longer moves it: use `ThemedTooltip.Placement`. The style does it through
-> `ThemedTooltip.IsPlaced="True"`, so a `ToolTip` style of your own keeps the placement
+> element no longer moves it: use `Tooltip.Placement`. The style does it through
+> `Tooltip.IsPlaced="True"`, so a `ToolTip` style of your own keeps the placement
 > when it is based on the Joufflu one (`BasedOn="{StaticResource {x:Type ToolTip}}"`) or
 > sets that property itself. A `ToolTip` set from a
 > trigger composes as usual — the [navigation menu](../navigation/navigation-menu.md)
 > gives each item a right-placed tooltip only while the menu is collapsed.
+
+{: .note }
+> `Tooltip` was named `ThemedTooltip` before. Its `Placement` takes a `PopupSide`, which
+> replaces `TooltipPlacement` with the same values.
+
+## PopupPlacement
+
+`PopupPlacement` places any `Popup` on a side of its `PlacementTarget`, lined up with it,
+and flips it to the opposite side when it would run off a screen edge. Tooltips and
+[dropdowns](../inputs/dropdown.md) are placed the same way: a dropdown reads these
+properties from its button. Set anywhere else than on a `Popup` or a dropdown button,
+they do nothing.
+
+```xml
+<!-- Under the search box, its right edge on the box's right edge, 2 DIPs below (the default gap) -->
+<Popup PlacementTarget="{Binding ElementName=SearchBox}"
+       toolkit:PopupPlacement.Side="Bottom"
+       toolkit:PopupPlacement.Alignment="End">
+    <inputs:DropdownPopupHost>
+        <TextBlock Text="Placed popup" />
+    </inputs:DropdownPopupHost>
+</Popup>
+```
+
+| Attached property | Type | Default | Purpose |
+|---|---|---|---|
+| `PopupPlacement.Side` | `PopupSide?` | `null` (`Bottom`) | Side of the target the popup sits on: `Top`, `Bottom`, `Left`, `Right`. |
+| `PopupPlacement.Alignment` | `PopupAlignment?` | `null` (`Start`) | How the popup lines up with the target along that side: `Start`, `Center`, `End`. |
+| `PopupPlacement.Gap` | `double` | `2` | Space kept between the target and the popup, on the opposite side too; the same as tooltips. |
+
+Above or below the target, `Start` aligns the left edges and `End` the right ones;
+beside it, the top and the bottom edges. `Center` centres the popup on that side.
+
+Setting `Side` or `Alignment` hands the placement over: the popup's `Placement` becomes
+`Custom` and a `CustomPopupPlacementCallback` reads the three properties each time it
+opens. The one left unset takes its default. A `Gap` alone changes nothing. Clearing
+both gives the popup back its native `Placement`.
+
+- The popup's own `HorizontalOffset` and `VerticalOffset` still apply on top.
+- Changing a property while the popup is open moves it: WPF only places a popup when it
+  opens, so it is closed and reopened.
+- The popup is placed on the preferred side first, then on the opposite side with the
+  same alignment when the first does not fit on the screen. It slides sideways to stay
+  on screen above or below the target, up or down beside it.
+
+{: .note }
+> A `Popup` renders in its own tree, so the theme `Foreground` does not reach its
+> content. Wrap the content in an `inputs:DropdownPopupHost` (from `Joufflu.Inputs`)
+> for the themed frame and foreground, as above.
 
 ---
 
@@ -3027,27 +3090,42 @@ picking a command from a menu does (see [Closing on click](#closing-on-click)).
 | Attached property | Type | Default | Purpose |
 |---|---|---|---|
 | `Dropdown.Popup` | `object` | `null` | Content shown in the popup. Setting it is what turns the button into a dropdown. |
-| `Dropdown.Placement` | `DropdownPlacement` | `BottomLeft` | Corner of the popup anchored to the matching corner of the button: `BottomLeft`, `BottomRight`, `TopLeft`, `TopRight`. |
+| `toolkit:PopupPlacement.Side` / `Alignment` / `Gap` | | `Bottom` / `Start` / `2` | Where the popup opens, set on the button (see [Popup placement](#popup-placement)). |
 | `Dropdown.HorizontalOffset` | `double` | `0` | Extra horizontal offset applied on top of the placement. |
-| `Dropdown.VerticalOffset` | `double` | `0` | Extra vertical offset applied on top of the placement; the popup touches the button by default. |
+| `Dropdown.VerticalOffset` | `double` | `0` | Extra vertical offset applied on top of the placement; the popup sits 2 DIPs from the button by default (the `PopupPlacement` gap). |
 | `Dropdown.CloseOnClick` | `bool` | `false` | Close the popup when a button inside it is clicked. |
 | `Dropdown.PopupStyle` | `Style` | `null` | Style of the `DropdownPopupHost` drawing the chrome — its background, border, `CornerRadius`, `Padding`, `Foreground` or template (see [Popup chrome](#popup-chrome)). |
 
 ## Popup placement
 
-`Dropdown.Placement` anchors a corner of the popup to the matching corner of the
-button. `BottomRight` right-aligns the popup on the button, `TopLeft` / `TopRight`
-open it upward — useful for a dropdown sitting near the bottom of the window.
+The [`PopupPlacement`](../toolkit/tooltip.md#popupplacement) properties set on the
+button place its popup, the way `ToolTipService.Placement` is set on the element
+owning a tooltip:
+
+- `Side` — `Bottom` (default), `Top`, `Left` or `Right`. `Top` opens it upward,
+  useful for a dropdown sitting near the bottom of the window.
+- `Alignment` — `Start` (default), `Center` or `End`. Below or above the button, `End`
+  right-aligns the popup on it.
+- `Gap` — space between the button and the popup, `2` by default.
+
+When the popup does not fit on the screen, it flips to the opposite side.
 `Dropdown.HorizontalOffset` and `Dropdown.VerticalOffset` add to that placement.
 
 ```xml
-<!-- BottomLeft (default), BottomRight, TopLeft, TopRight -->
-<ToggleButton Content="Filter" inputs:Dropdown.Placement="BottomRight">
+<!-- Side: Bottom (default), Top, Left, Right; Alignment: Start (default), Center, End; Gap: 2 by default -->
+<ToggleButton Content="Filter"
+              toolkit:PopupPlacement.Side="Bottom"
+              toolkit:PopupPlacement.Alignment="End">
     <inputs:Dropdown.Popup>
         <TextBlock Text="Opens down, right aligned." />
     </inputs:Dropdown.Popup>
 </ToggleButton>
 ```
+
+{: .note }
+> `Dropdown.Placement` and its `DropdownPlacement` corners are gone: `BottomRight` is
+> now `Side="Bottom"` with `Alignment="End"`, `TopLeft` is `Side="Top"`. A tooltip on the
+> same button keeps its own `Tooltip.Placement`, so the two popups are placed apart.
 
 ## Button style
 
@@ -3057,7 +3135,7 @@ included. An icon-only dropdown is just an icon-only toggle button:
 
 ```xml
 <ToggleButton
-    inputs:Dropdown.Placement="BottomRight"
+    toolkit:PopupPlacement.Alignment="End"
     toolkit:Sizing.IsSquare="True"
     toolkit:Sizing.Size="lg">
     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.EllipsisVertical}" />

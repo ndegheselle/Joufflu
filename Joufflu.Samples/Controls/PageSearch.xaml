@@ -1,0 +1,52 @@
+<UserControl
+    x:Class="Joufflu.Samples.Controls.PageSearch"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Joufflu.Samples.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:inputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    d:DataContext="{d:DesignInstance Type=c:PageSearchViewModel}"
+    mc:Ignorable="d">
+    <Grid>
+        <inputs:Search
+            x:Name="SearchBox"
+            Width="200"
+            Margin="2"
+            toolkit:Sizing.Size="xs"
+            GotKeyboardFocus="SearchBox_GotKeyboardFocus"
+            PreviewKeyDown="SearchBox_PreviewKeyDown"
+            SearchText="{Binding Query}" />
+
+        <!--  Right aligned under the box: the box sits at the right of the title bar.  -->
+        <Popup
+            AllowsTransparency="True"
+            IsOpen="{Binding IsOpen, Mode=TwoWay}"
+            PlacementTarget="{Binding ElementName=SearchBox}"
+            StaysOpen="False"
+            toolkit:PopupPlacement.Alignment="End"
+            toolkit:PopupPlacement.Side="Bottom">
+            <!--  The Dropdown chrome: the themed frame, and the foreground a popup does not inherit.  -->
+            <inputs:DropdownPopupHost Width="360">
+                <ListBox
+                    x:Name="ResultsList"
+                    MaxHeight="420"
+                    ItemsSource="{Binding Results}"
+                    PreviewKeyDown="ResultsList_PreviewKeyDown">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type c:PageEntry}">
+                            <StackPanel toolkit:Spacing.Gap="2" MouseDown="StackPanel_MouseDown">
+                                <TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+                                <TextBlock
+                                    toolkit:Sizing.Size="sm"
+                                    Style="{StaticResource TextMuted}"
+                                    Text="{Binding Summary}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </inputs:DropdownPopupHost>
+        </Popup>
+    </Grid>
+</UserControl>
