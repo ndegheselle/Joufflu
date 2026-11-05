@@ -3,7 +3,7 @@ using Joufflu.Navigation;
 
 namespace Joufflu.Samples.Controls;
 
-/// <summary>A gallery page, as the title bar search lists it.</summary>
+/// <summary>A gallery page, as the search lists it.</summary>
 /// <param name="Title">
 /// The menu label, prefixed with its menu group when it has one ("File explorer / List"): a short label such as
 /// "List" would otherwise be ambiguous in the results.
@@ -11,52 +11,54 @@ namespace Joufflu.Samples.Controls;
 /// <param name="Summary">One sentence telling what the page shows.</param>
 public record PageEntry(Type PageType, string Title, string Summary);
 
-/// <summary>The title bar search: finds the gallery pages matching what is typed and opens the one picked.</summary>
-public partial class PageSearchViewModel : ObservableObject
+/// <summary>
+/// The page search overlay: lists the gallery pages matching what is typed, all of them while nothing is, and closes
+/// with the page picked as its result. The caller navigates once the overlay is closed.
+/// </summary>
+public partial class PageSearchViewModel : ObservableObject, IOverlayContent<PageEntry>
 {
     private readonly IReadOnlyList<PageEntry> _pages;
-    private readonly INavigator _navigator;
+    private readonly IOverlayer _overlays;
+
+    public OverlayOptions Options { get; } = new() { Title = "Search a page" };
 
     /// <summary>The debounced text of the search box.</summary>
     [ObservableProperty]
     public partial string? Query { get; set; }
 
     [ObservableProperty]
-    public partial IReadOnlyList<PageEntry> Results { get; set; } = [];
+    public partial IReadOnlyList<PageEntry> Results { get; set; }
 
-    /// <summary>Whether the results popup is shown.</summary>
-    [ObservableProperty]
-    public partial bool IsOpen { get; set; }
+    /// <summary>The page picked, set when the overlay is validated.</summary>
+    public PageEntry? Result { get; private set; }
 
-    public PageSearchViewModel(IReadOnlyList<PageEntry> pages, INavigator navigator)
+    public PageSearchViewModel(IReadOnlyList<PageEntry> pages, IOverlayer overlays)
     {
         _pages = pages;
-        _navigator = navigator;
+        _overlays = overlays;
+        Results = pages;
     }
 
     partial void OnQueryChanged(string? value)
     {
         Results = Find(_pages, value);
-        IsOpen = Results.Count > 0;
     }
-
-    /// <summary>Shows the results of the current query again, once the popup was dismissed.</summary>
-    public void ShowResults() => IsOpen = Results.Count > 0;
 
     public void Open(PageEntry page)
     {
-        IsOpen = false;
-        _navigator.Navigate(page.PageType);
+        Result = page;
+        _overlays.Validate(this);
     }
 
     /// <summary>
     /// The pages matching [query], best matches first: a title word starting with the query, then the query anywhere
-    /// in the title, then in the summary. Pages matching equally keep their order in [pages].
+    /// in the title, then in the summary. Pages matching equally keep their order in [pages]; every page matches an
+    /// empty query.
     /// </summary>
     public static IReadOnlyList<PageEntry> Find(IEnumerable<PageEntry> pages, string? query)
     {
         if (string.IsNullOrWhiteSpace(query))
-            return [];
+            return pages.ToList();
 
         string search = query.Trim();
         // OrderBy is a stable sort, which is what keeps the given order between pages of the same rank.

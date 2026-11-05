@@ -6,8 +6,8 @@ using System.Windows.Threading;
 namespace Joufflu.Samples.Controls;
 
 /// <summary>
-/// The title bar search box and the popup listing the pages it finds. Down moves from the box to the results, Enter
-/// or a click opens a page, Escape or Up from the first result goes back to the box.
+/// The page search overlay: the search box above the pages it finds. Down moves from the box to the results, Enter or
+/// a click opens a page, Up from the first result goes back to the box.
 /// </summary>
 public partial class PageSearch : UserControl
 {
@@ -18,25 +18,14 @@ public partial class PageSearch : UserControl
         InitializeComponent();
     }
 
-    protected override void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
+    private void UserControl_Loaded(object sender, RoutedEventArgs e)
     {
-        base.OnIsKeyboardFocusWithinChanged(e);
-        // The results popup counts as within: only leaving both the box and the results closes it.
-        if (!IsKeyboardFocusWithin)
-            ViewModel.IsOpen = false;
-    }
-
-    private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-    {
-        // Back in the box with a query still typed: its results show again.
-        ViewModel.ShowResults();
+        // Ready to type as soon as the overlay shows.
+        SearchBox.Focus();
     }
 
     private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (ViewModel.IsOpen == false)
-            ViewModel.ShowResults();
-
         if (e.Key is not (Key.Down or Key.Enter))
             return;
 
@@ -47,7 +36,7 @@ public partial class PageSearch : UserControl
             return;
 
         if (e.Key == Key.Enter)
-            Open(ViewModel.Results[0]);
+            ViewModel.Open(ViewModel.Results[0]);
         else
             FocusResult(0);
         e.Handled = true;
@@ -58,43 +47,34 @@ public partial class PageSearch : UserControl
         switch (e.Key)
         {
             case Key.Enter when ResultsList.SelectedItem is PageEntry page:
-                Open(page);
+                ViewModel.Open(page);
                 e.Handled = true;
                 break;
             case Key.Up when ResultsList.SelectedIndex <= 0:
-            case Key.Escape:
                 SearchBox.Focus();
                 e.Handled = true;
                 break;
         }
     }
 
-    private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e)
+    private void ResultsList_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        var element = sender as FrameworkElement;
-        var context = element?.DataContext as PageEntry;
-        if (context == null)
+        var clicked = (DependencyObject)e.OriginalSource;
+        // Null outside an item, on the scroll bar for instance.
+        if (ItemsControl.ContainerFromElement(ResultsList, clicked) is not ListBoxItem { DataContext: PageEntry page })
             return;
-        Open(context);
+
+        ViewModel.Open(page);
     }
 
     private void FocusResult(int index)
     {
-        ViewModel.ShowResults();
         ResultsList.SelectedIndex = index;
-        // The items are only generated once the popup is shown and laid out.
+        // The containers of a list just filtered are only generated at the next layout.
         Dispatcher.InvokeAsync(() =>
         {
             var container = (ListBoxItem?)ResultsList.ItemContainerGenerator.ContainerFromIndex(index);
             container?.Focus();
         }, DispatcherPriority.Loaded);
-    }
-
-    private void Open(PageEntry page)
-    {
-        ViewModel.Open(page);
-        // The page is reached: the box is emptied, ready for the next search.
-        SearchBox.ClearSearch();
-        Keyboard.ClearFocus();
     }
 }

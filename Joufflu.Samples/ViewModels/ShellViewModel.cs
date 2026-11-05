@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Joufflu.Feedback;
 using Joufflu.Navigation;
 using Joufflu.Samples.Controls;
@@ -47,8 +48,8 @@ public class ShellViewModel : ObservableObject, IDisposable
 
     public Navigator Navigator { get; }
 
-    /// <summary>The title bar search over the registered pages.</summary>
-    public PageSearchViewModel PageSearch { get; }
+    /// <summary>Opens the page search overlay from the title bar.</summary>
+    public IAsyncRelayCommand SearchPageCommand { get; }
 
     /// <summary>
     /// The view drawing each registered view model, as implicit <see cref="DataTemplate"/>s. Merged into the
@@ -212,10 +213,26 @@ public class ShellViewModel : ObservableObject, IDisposable
         Register<ExplorerSourcesSamplesViewModel, ExplorerSourcesSamples>("File explorer / Sources", "Feed the explorer from the file system, a live watcher or nodes of your own.",
             () => new(Toasts));
 
-        Navigator = new Navigator(ResolvePage);
-        PageSearch = new PageSearchViewModel(_pageEntries, Navigator);
+        // The title bar search: an overlay, not a page.
+        RegisterView<PageSearchViewModel, PageSearch>();
+        SearchPageCommand = new AsyncRelayCommand(SearchPageAsync);
 
+        Navigator = new Navigator(ResolvePage);
         Navigator.Navigate(typeof(HomeSamples));
+    }
+
+    /// <summary>
+    /// Shows the page search, a new one each time so it opens on every page, and navigates to the page picked once the
+    /// overlay is closed.
+    /// </summary>
+    private async Task SearchPageAsync()
+    {
+        var search = new PageSearchViewModel(_pageEntries, Overlays);
+        PageEntry? picked = await Overlays.ShowAsync(search);
+        if (picked == null)
+            return;
+
+        Navigator.Navigate(picked.PageType);
     }
 
     /// <summary>
