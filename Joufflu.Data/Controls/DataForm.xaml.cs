@@ -9,7 +9,8 @@ namespace Joufflu.Data.Controls;
 /// <item>the input it is typed with : a file picker or a text of several lines (<see cref="Model.DataInputs"/>),
 /// the editor of its type otherwise ;</item>
 /// <item>its rules (<c>minimum</c>, <c>maximum</c>, <c>minLength</c>, <c>maxLength</c>, <c>pattern</c>),
-/// what breaks them shown under it (<see cref="Model.DataValue.Error"/>).</item>
+/// what breaks them shown on its editor by <c>ValidationErrorTemplate</c> (<see cref="Model.DataValue.Error"/>,
+/// reported on <c>Value</c>).</item>
 /// </list>
 /// A field offers to be forced to a manual value only when the host gives one that fits it : a
 /// form with no <see cref="DataControlBase.ManualValues"/> only edits values.

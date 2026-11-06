@@ -9,7 +9,7 @@ live.
 
 Its objective is to provide:
 - Easily accessible, up-to-date [documentation](https://ndegheselle.github.io/Joufflu/).
-- A sample app that serves as a live example: clone `https://github.com/ndegheselle/Joufflu.git` and start `Joufflu.Samples`.
+- A sample app that serves as a live example: clone `git clone https://github.com/ndegheselle/Joufflu.git` and start `Joufflu.Samples`.
 - A coherent set of [tokens](https://ndegheselle.github.io/Joufflu/themes/tokens.html) that defines a theme, used by every control.
 
 [![Joufflu on NuGet](https://img.shields.io/nuget/v/Joufflu?label=Joufflu&logo=nuget)](https://www.nuget.org/packages/Joufflu)

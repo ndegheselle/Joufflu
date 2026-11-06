@@ -21,7 +21,7 @@
 
             <!--  The errors travel through Tag: the tooltip lives in a popup, out of reach of ElementName.  -->
             <Border
-                Margin="0,-6,-6,0"
+                Margin="0,-3,-3,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Background="{DynamicResource {x:Static joufflu:Brushes.DisplayBase0Brush}}"

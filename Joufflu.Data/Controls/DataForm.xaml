@@ -153,11 +153,6 @@
                             <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
                         </Button>
                     </Grid>
-                    <TextBlock
-                        Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
-                        Text="{Binding Error}"
-                        TextWrapping="Wrap"
-                        Visibility="{Binding Error, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
                 </StackPanel>
             </DataTemplate>
 

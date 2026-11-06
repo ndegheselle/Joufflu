@@ -130,7 +130,7 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
 
     #region Errors
 
-    public bool HasErrors => _keyError is not null;
+    public virtual bool HasErrors => _keyError is not null;
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
@@ -138,11 +138,18 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     /// The key error belongs to [Key] alone: reporting it as an error of the whole node (a null or
     /// empty name) would flag every <c>{Binding}</c> on the node, the tree's row presenters included.
     /// </summary>
-    public IEnumerable GetErrors(string? propertyName)
+    public virtual IEnumerable GetErrors(string? propertyName)
     {
         if (_keyError is not null && propertyName == nameof(Key))
             return new[] { _keyError };
         return Array.Empty<string>();
+    }
+
+    /// <summary>Tells the bindings on [propertyName] to read its errors again.</summary>
+    protected void OnErrorsChanged(string propertyName)
+    {
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        OnPropertyChanged(nameof(HasErrors));
     }
 
     /// <summary>
@@ -182,8 +189,7 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
             return;
 
         _keyError = error;
-        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(Key)));
-        OnPropertyChanged(nameof(HasErrors));
+        OnErrorsChanged(nameof(Key));
     }
 
     #endregion

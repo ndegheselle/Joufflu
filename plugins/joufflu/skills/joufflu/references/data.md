@@ -24,7 +24,7 @@ properties, an array or a value is the first level itself) or a `JToken` bound d
 | Control | Edits |
 |---|---|
 | `DataFill` | Values of a node built from a schema. Shape is fixed; only array items can be added (cloned from `Template`) or removed. |
-| `DataForm` | The same as a form: a labelled field per property (`title`, else the key), its `description` under it, `*` when `required`, the rules (`minimum`, `maximum`, `minLength`, `maxLength`, `pattern`) checked as `DataValue.Error`, a `FilePicker` for `x-input: file` (`x-file-filter` its filter, see `DataInputs`), a box of several lines for `x-input: multiline`. A field offers the manual toggle only for `ManualValues` entries that fit it. |
+| `DataForm` | The same as a form: a labelled field per property (`title`, else the key), its `description` under it, `*` when `required`, the rules (`minimum`, `maximum`, `minLength`, `maxLength`, `pattern`) checked as `DataValue.Error` (also reported on `Value` through `INotifyDataErrorInfo`, so the editor shows `ValidationErrorTemplate`), a `FilePicker` for `x-input: file` (`x-file-filter` its filter, see `DataInputs`), a box of several lines for `x-input: multiline`. A field offers the manual toggle only for `ManualValues` entries that fit it. |
 | `DataEdit` | Everything: properties and items of any type, keys, values, string options of a `Choice`. Starts from an empty object when no `Node` is bound. |
 | `DataDisplay` | Nothing: read only, key, type (an icon, its `EnumDataType` name in the tooltip) and value of each node. `null` / undefined greyed italic, forced values flagged with a feather, `Choice` shown by option name. |
 

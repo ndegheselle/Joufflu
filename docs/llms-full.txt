@@ -3779,8 +3779,10 @@ public class Shipment
 }
 ```
 
-- The broken rule of a value is `DataValue.Error`, null when it breaks none. A forced value is
-  never checked.
+- The broken rule of a value is `DataValue.Error`, null when it breaks none. It is also reported
+  on `Value` through `INotifyDataErrorInfo`, so its editor turns its border red and
+  `ValidationErrorTemplate` adds a corner badge whose tooltip says why (see
+  [Create a custom control](../toolkit/custom-control.md)). A forced value is never checked.
 - **Add** on an array clones its `Template`. Each item, forced or not, has its own remove button.
 - A field offers to be forced only to the [manual values](index.md#manual-values) that fit it:
   `null` and undefined alone don't clutter a form. With no `ManualValues`, the form only edits

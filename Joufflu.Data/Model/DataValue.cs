@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json.Linq;
@@ -17,7 +18,7 @@ public partial class DataValue : DataNode
 
     partial void OnValueChanged(object? value)
     {
-        OnPropertyChanged(nameof(Error));
+        OnErrorChanged();
         OnChanged();
     }
 
@@ -35,6 +36,25 @@ public partial class DataValue : DataNode
     /// checked : it stands for one only known later.
     /// </summary>
     public string? Error => IsManual ? null : Rules.ErrorOf(Value);
+
+    public override bool HasErrors => base.HasErrors || Error is not null;
+
+    /// <summary>
+    /// <see cref="Error"/> is reported on [Value]: the editor bound to it shows it through
+    /// <c>ValidationErrorTemplate</c>, its border turned red.
+    /// </summary>
+    public override IEnumerable GetErrors(string? propertyName)
+    {
+        if (propertyName == nameof(Value))
+            return Error is { } error ? new[] { error } : Array.Empty<string>();
+        return base.GetErrors(propertyName);
+    }
+
+    private void OnErrorChanged()
+    {
+        OnPropertyChanged(nameof(Error));
+        OnErrorsChanged(nameof(Value));
+    }
 
     /// <summary>
     /// Picking a manual entry forces <see cref="Value"/>, which stays the single thing a host
@@ -68,7 +88,7 @@ public partial class DataValue : DataNode
     {
         if (!isManual && !Holds(Value))
             Value = Default();
-        OnPropertyChanged(nameof(Error));
+        OnErrorChanged();
     }
 
     /// <summary>
