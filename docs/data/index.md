@@ -11,6 +11,7 @@ JSON values edited as a tree, from the optional
 [`Joufflu.Data`](https://www.nuget.org/packages/Joufflu.Data) package.
 
 - **Data fill** — fills in a value against a JSON Schema.
+- **Data form** — fills in a value against a JSON Schema as a form, with the inputs and rules the schema gives.
 - **Data edit** — builds a value from scratch.
 - **Data display** — shows a value read only.
 

@@ -39,13 +39,27 @@ public class DataValueTemplateSelector : DataTemplateSelector
     /// <summary>What a schema with no type of its own, or one no editor covers, is filled in with.</summary>
     public DataTemplate? FallbackTemplate { get; set; }
 
+    /// <summary>A text of several lines (<see cref="EnumDataInput.Multiline"/>), the string editor when unset.</summary>
+    public DataTemplate? MultilineTemplate { get; set; }
+
+    /// <summary>A path to a file (<see cref="EnumDataInput.File"/>), the string editor when unset.</summary>
+    public DataTemplate? FileTemplate { get; set; }
+
     public override DataTemplate? SelectTemplate(object item, DependencyObject container)
     {
         if (item is not DataValue value)
             return base.SelectTemplate(item, container);
 
-        return TemplateFor(value.Type) ?? FallbackTemplate;
+        return TemplateFor(value.Input) ?? TemplateFor(value.Type) ?? FallbackTemplate;
     }
+
+    /// <summary>The input [input] is typed through, null for a line of text : the type then decides.</summary>
+    private DataTemplate? TemplateFor(EnumDataInput input) => input switch
+    {
+        EnumDataInput.Multiline => MultilineTemplate,
+        EnumDataInput.File => FileTemplate,
+        _ => null
+    };
 
     /// <summary>
     /// The input corresponding to the [type].

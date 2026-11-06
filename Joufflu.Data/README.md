@@ -13,6 +13,7 @@ Show one read only, even a file of millions of nodes.
 | Piece | Purpose |
 |---|---|
 | `DataFill` | Fills in the values of a node built from a schema. |
+| `DataForm` | The same as a form, with the inputs and rules the schema gives (file picker, range...). |
 | `DataEdit` | Builds a node from scratch. |
 | `DataDisplay` | Shows a node read only: key, type and value. |
 | `DataObject` / `DataArray` / `DataValue` | The edited tree; `ToToken()` returns its JSON. |

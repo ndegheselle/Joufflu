@@ -72,6 +72,7 @@ Joufflu ships as six NuGet packages that build on each other: `Joufflu` (core st
 
 - [Overview](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/index.md): the `DataObject` / `DataArray` / `DataValue` tree, `ToToken()`, `ToDataNode()` from an NJsonSchema `JsonSchema` (editor and JSON per type) or a `JToken`, `ReadDataNode()` from a `JsonReader`, and `ManualValues` (`DataManualPattern` for entries taking any name).
 - [Data fill](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-fill.md): `DataFill`, filling in a node built from a schema.
+- [Data form](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-form.md): `DataForm`, filling in a node built from a schema as a form: labels from `title`, `description`, the required mark, the rules (`minimum`, `maximum`, `minLength`, `maxLength`, `pattern`) checked as `DataValue.Error`, and the inputs of `DataInputs` (`x-input: file` for a `FilePicker` with `x-file-filter`, `x-input: multiline`).
 - [Data edit](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md): `DataEdit`, building a node from scratch.
 - [Data display](https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-display.md): `DataDisplay`, showing a node read only with the key, type and value of each node; any `DataNode` or a `JToken` bound directly; opening a large file with a `FilePicker` and `JsonReader.ReadDataNode()`, only the rows in view built.
 

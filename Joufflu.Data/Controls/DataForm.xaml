@@ -1,0 +1,245 @@
+<local:DataControlBase
+    x:Class="Joufflu.Data.Controls.DataForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Joufflu.Data.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:jata="clr-namespace:Joufflu.Data.Controls"
+    xmlns:jnputs="clr-namespace:Joufflu.Inputs.Controls;assembly=Joufflu.Inputs"
+    xmlns:jodels="clr-namespace:Joufflu.Data.Model"
+    xmlns:jonts="clr-namespace:Joufflu.Assets.Fonts;assembly=Joufflu"
+    xmlns:jonverters="clr-namespace:Joufflu.Converters;assembly=Joufflu"
+    xmlns:joufflu="clr-namespace:Joufflu;assembly=Joufflu"
+    xmlns:local="clr-namespace:Joufflu.Data.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Joufflu.Toolkit;assembly=Joufflu"
+    d:DataContext="{d:DesignInstance Type=local:DataForm}"
+    mc:Ignorable="d">
+    <local:DataControlBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Joufflu.Data;component/Controls/DataResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:DataFileOptionsConverter x:Key="FileOptionsConverter" />
+            <converters:DataManualToggleVisibilityConverter x:Key="ManualToggleVisibilityConverter" />
+
+            <!--#region Editors : the ones of DataResources, and the inputs the schema asks for-->
+            <DataTemplate x:Key="MultilineEditor">
+                <TextBox
+                    Height="auto"
+                    MinHeight="72"
+                    VerticalContentAlignment="Top"
+                    AcceptsReturn="True"
+                    Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="FileEditor">
+                <jnputs:FilePicker FilePath="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Options="{Binding FileFilter, Converter={StaticResource FileOptionsConverter}}" />
+            </DataTemplate>
+
+            <jata:DataValueTemplateSelector
+                x:Key="FormEditorSelector"
+                BooleanTemplate="{StaticResource BooleanEditor}"
+                DateTemplate="{StaticResource DateEditor}"
+                EnumerationTemplate="{StaticResource EnumerationEditor}"
+                FallbackTemplate="{StaticResource StringEditor}"
+                FileTemplate="{StaticResource FileEditor}"
+                IntegerTemplate="{StaticResource IntegerEditor}"
+                MultilineTemplate="{StaticResource MultilineEditor}"
+                NumberTemplate="{StaticResource NumberEditor}"
+                StringTemplate="{StaticResource StringEditor}"
+                TimeTemplate="{StaticResource TimeEditor}" />
+            <!--#endregion-->
+
+            <!--  The editor of a value, swapped for the list of manual values while it is forced.  -->
+            <Style x:Key="FormEditorHost" TargetType="ContentControl">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="ContentTemplateSelector" Value="{StaticResource FormEditorSelector}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsManual}" Value="True">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ManualEditor}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--  The list of manual values of an object or an array, shown while it is forced in place of its fields.  -->
+            <Style x:Key="FormManualHost" TargetType="ContentControl">
+                <Setter Property="Visibility" Value="Collapsed" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsManual}" Value="True">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Content" Value="{Binding}" />
+                        <Setter Property="ContentTemplate" Value="{StaticResource ManualEditor}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--  Only where the host offers something that fits : a form has no use for null and undefined alone.  -->
+            <Style
+                x:Key="FormManualToggle"
+                BasedOn="{StaticResource DataManualToggle}"
+                TargetType="ToggleButton">
+                <Setter Property="IsEnabled" Value="True" />
+                <Setter Property="ToolTip" Value="Point the field at a value instead" />
+                <Setter Property="Visibility">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource ManualToggleVisibilityConverter}">
+                            <Binding />
+                            <Binding Path="ManualValues" RelativeSource="{RelativeSource AncestorType={x:Type local:DataControlBase}}" />
+                            <Binding Path="IsManual" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--  The label of a field, marked when required, and its toggle. An array item has neither : its index says nothing.  -->
+            <DataTemplate x:Key="FormFieldHeader">
+                <Grid toolkit:Spacing.Gap="4" Visibility="{Binding IsArrayItem, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Text="{Binding Label}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
+                        Text="*"
+                        ToolTip="Required"
+                        Visibility="{Binding IsRequired, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
+                    <ToggleButton Grid.Column="2" Style="{StaticResource FormManualToggle}">
+                        <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                    </ToggleButton>
+                </Grid>
+            </DataTemplate>
+
+            <Style x:Key="FormDescription" TargetType="TextBlock">
+                <Setter Property="Text" Value="{Binding Description}" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="Opacity" Value="{DynamicResource {x:Static joufflu:Colors.MutedOpacity}}" />
+                <Setter Property="toolkit:Sizing.Size" Value="sm" />
+                <Setter Property="Visibility" Value="{Binding Description, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
+            </Style>
+
+            <!--  Removes an array item, from the right of its editor.  -->
+            <Style
+                x:Key="FormRemoveButton"
+                BasedOn="{StaticResource DataRemoveButton}"
+                TargetType="Button">
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Visibility" Value="{Binding IsArrayItem, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
+            </Style>
+
+            <!--#region One template per kind of node, shown recursively-->
+            <DataTemplate DataType="{x:Type jodels:DataValue}">
+                <StackPanel toolkit:Spacing.Gap="2">
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
+                    <TextBlock Style="{StaticResource FormDescription}" />
+                    <Grid toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <ContentControl Content="{Binding}" Style="{StaticResource FormEditorHost}" />
+                        <Button Grid.Column="1" Style="{StaticResource FormRemoveButton}">
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                        </Button>
+                    </Grid>
+                    <TextBlock
+                        Foreground="{DynamicResource {x:Static joufflu:Brushes.DangerBrush}}"
+                        Text="{Binding Error}"
+                        TextWrapping="Wrap"
+                        Visibility="{Binding Error, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type jodels:DataObject}">
+                <StackPanel toolkit:Spacing.Gap="2">
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
+                    <TextBlock Style="{StaticResource FormDescription}" />
+                    <!--  The remove button stays, forced or not : an item forced is still an item.  -->
+                    <Grid toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <ContentControl Style="{StaticResource FormManualHost}" />
+                        <!--  The fields of the object, set apart by a line on their left.  -->
+                        <Border
+                            Visibility="{Binding IsManual, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}"
+                            Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
+                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
+                            BorderThickness="2,0,0,0">
+                            <ItemsControl ItemsSource="{Binding Properties}">
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <Setter Property="Margin" Value="0,0,0,8" />
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                        </Border>
+                        <Button Grid.Column="1" Style="{StaticResource FormRemoveButton}">
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type jodels:DataArray}">
+                <StackPanel toolkit:Spacing.Gap="2">
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
+                    <TextBlock Style="{StaticResource FormDescription}" />
+                    <Grid toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <ContentControl Style="{StaticResource FormManualHost}" />
+                        <StackPanel toolkit:Spacing.Gap="4" Visibility="{Binding IsManual, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}">
+                            <!--  Each item removes itself, see the remove button of its template.  -->
+                            <ItemsControl ItemsSource="{Binding Values}">
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <Setter Property="Margin" Value="0,0,0,4" />
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                            <Button
+                                HorizontalAlignment="Left"
+                                toolkit:Sizing.Size="sm"
+                                Command="{Binding AddFromTemplateCommand}"
+                                Style="{StaticResource SoftPrimaryButton}">
+                                <StackPanel toolkit:Spacing.Gap="2" Orientation="Horizontal">
+                                    <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Plus}" />
+                                    <TextBlock VerticalAlignment="Center">Add</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <Button Grid.Column="1" Style="{StaticResource FormRemoveButton}">
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </DataTemplate>
+            <!--#endregion-->
+        </ResourceDictionary>
+    </local:DataControlBase.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <ItemsControl Margin="0,0,4,0" ItemsSource="{Binding Node.Properties}">
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Margin" Value="0,0,0,8" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+    </ScrollViewer>
+</local:DataControlBase>

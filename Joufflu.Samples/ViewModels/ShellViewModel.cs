@@ -198,6 +198,8 @@ public class ShellViewModel : ObservableObject, IDisposable
         // Data (Joufflu.Data library)
         Register<DataFillSamplesViewModel, DataFillSamples>("Data / Data fill", "Fill in JSON data built from a schema.",
             () => new());
+        Register<DataFormSamplesViewModel, DataFormSamples>("Data / Data form", "Fill in JSON data built from a schema as a form.",
+            () => new());
         Register<DataEditSamplesViewModel, DataEditSamples>("Data / Data edit", "Build JSON data from scratch as a tree.",
             () => new());
         Register<DataDisplaySamplesViewModel, DataDisplaySamples>("Data / Data display", "Show JSON data read only, a large file included.",

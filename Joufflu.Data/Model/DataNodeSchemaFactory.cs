@@ -11,39 +11,18 @@ public static class DataFactory
     {
         /// <summary>
         /// The node [schema] describes, under [key]: objects and arrays become the tree of their
-        /// properties and item template, anything else a <see cref="DataValue"/>.
+        /// properties and item template, anything else a <see cref="DataValue"/>. What the schema
+        /// says of the node (its title, description, rules and input) is read from it, see
+        /// <see cref="Controls.DataForm"/>.
         /// </summary>
         public DataNode ToDataNode(string? key = null)
         {
-            schema = schema.ActualSchema;
-            bool isNullable = schema.IsNullable(SchemaType.JsonSchema);
-
-            if (schema.IsObject)
-            {
-                var node = new DataObject(key)
-                {
-                    Properties = [.. schema.ActualProperties.Select(prop =>
-                    {
-                        DataNode property = prop.Value.ToDataNode(prop.Key);
-                        property.IsRequired = prop.Value.IsRequired;
-                        return property;
-                    })],
-                    IsNullable = isNullable
-                };
-
-                return node;
-            }
-            else if (schema.IsArray)
-            {
-                return new DataArray(
-                    key,
-                    schema.Item?.ToDataNode("template") ?? throw new Exception("Schemas with multiple templates are not supported. Only [Item] is supported not [Items]."))
-                {
-                    IsNullable = isNullable
-                };
-            }
-
-            return new DataValue(schema.ToType(), key, schema.Options(), isNullable);
+            DataNode node = NodeOf(schema, key);
+            // A property of a type of its own (a reference) is described on the property rather
+            // than on its type, whose title is the name of a class.
+            node.Title = schema.Title;
+            node.Description = schema.Description ?? schema.ActualSchema.Description;
+            return node;
         }
 
         public EnumDataType ToType()
@@ -92,6 +71,68 @@ public static class DataFactory
             return [.. schema.Enumeration.Select((value, index) =>
             new DataEnumOption(index < names.Length ? names[index] : $"{value}", value))];
         }
+    }
+
+    private static DataNode NodeOf(JsonSchema declared, string? key)
+    {
+        JsonSchema schema = declared.ActualSchema;
+        bool isNullable = schema.IsNullable(SchemaType.JsonSchema);
+
+        if (schema.IsObject)
+        {
+            var node = new DataObject(key)
+            {
+                Properties = [.. schema.ActualProperties.Select(prop =>
+                {
+                    DataNode property = prop.Value.ToDataNode(prop.Key);
+                    property.IsRequired = prop.Value.IsRequired;
+                    return property;
+                })],
+                IsNullable = isNullable
+            };
+
+            return node;
+        }
+        else if (schema.IsArray)
+        {
+            return new DataArray(
+                key,
+                schema.Item?.ToDataNode("template") ?? throw new Exception("Schemas with multiple templates are not supported. Only [Item] is supported not [Items]."))
+            {
+                IsNullable = isNullable
+            };
+        }
+
+        return new DataValue(schema.ToType(), key, schema.Options(), isNullable)
+        {
+            Rules = RulesOf(declared, schema),
+            Input = DataInputs.InputOf(ExtensionOf(declared, schema, DataInputs.SchemaKey)),
+            FileFilter = ExtensionOf(declared, schema, DataInputs.FileFilterSchemaKey) as string ?? "",
+        };
+    }
+
+    /// <summary>
+    /// The rules of a value, read where they are written : on the property itself, or on the type
+    /// it points at.
+    /// </summary>
+    private static DataRules RulesOf(JsonSchema declared, JsonSchema actual)
+    {
+        return new DataRules(
+            declared.Minimum ?? actual.Minimum,
+            declared.Maximum ?? actual.Maximum,
+            declared.MinLength ?? actual.MinLength,
+            declared.MaxLength ?? actual.MaxLength,
+            declared.Pattern ?? actual.Pattern);
+    }
+
+    /// <summary>The extension [key] of the property, or of the type it points at, null when neither has it.</summary>
+    private static object? ExtensionOf(JsonSchema declared, JsonSchema actual, string key)
+    {
+        if (declared.ExtensionData?.TryGetValue(key, out object? declaredValue) == true)
+            return declaredValue;
+        if (actual.ExtensionData?.TryGetValue(key, out object? actualValue) == true)
+            return actualValue;
+        return null;
     }
 
     extension(DataNode node)

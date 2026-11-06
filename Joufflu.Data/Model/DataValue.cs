@@ -15,7 +15,26 @@ public partial class DataValue : DataNode
     [ObservableProperty]
     private object? _value;
 
-    partial void OnValueChanged(object? value) => OnChanged();
+    partial void OnValueChanged(object? value)
+    {
+        OnPropertyChanged(nameof(Error));
+        OnChanged();
+    }
+
+    /// <summary>What the value has to be on top of its type, see <see cref="Error"/>.</summary>
+    public DataRules Rules { get; init; } = DataRules.None;
+
+    /// <summary>How a string is typed in a form, a line of text by default.</summary>
+    public EnumDataInput Input { get; init; }
+
+    /// <summary>The file types offered when <see cref="Input"/> is a file, all of them when empty.</summary>
+    public string FileFilter { get; init; } = "";
+
+    /// <summary>
+    /// Why the value breaks its <see cref="Rules"/>, null when it doesn't. A forced value isn't
+    /// checked : it stands for one only known later.
+    /// </summary>
+    public string? Error => IsManual ? null : Rules.ErrorOf(Value);
 
     /// <summary>
     /// Picking a manual entry forces <see cref="Value"/>, which stays the single thing a host
@@ -49,6 +68,7 @@ public partial class DataValue : DataNode
     {
         if (!isManual && !Holds(Value))
             Value = Default();
+        OnPropertyChanged(nameof(Error));
     }
 
     /// <summary>
@@ -102,6 +122,10 @@ public partial class DataValue : DataNode
     public override DataValue Clone() => new(Type, Key, (IEnumerable<DataEnumOption>?)_options ?? [], IsNullable)
     {
         Description = Description,
+        Title = Title,
+        Rules = Rules,
+        Input = Input,
+        FileFilter = FileFilter,
         IsManual = IsManual,
         ManualEntry = ManualEntry,
         Value = Value is JToken token ? token.DeepClone() : Value,

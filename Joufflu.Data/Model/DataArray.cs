@@ -25,6 +25,7 @@ public partial class DataArray : DataNode, IDataParent
     }
 
     /// <summary>Adds a copy of [Template], nothing when there is no template.</summary>
+    [RelayCommand]
     public void AddFromTemplate()
     {
         if (Template is null)
@@ -86,6 +87,7 @@ public partial class DataArray : DataNode, IDataParent
         var clone = new DataArray(Key, Template?.Clone())
         {
             Description = Description,
+            Title = Title,
             IsExpanded = IsExpanded,
             IsNullable = IsNullable,
             IsRequired = IsRequired,

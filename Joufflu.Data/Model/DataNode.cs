@@ -31,6 +31,7 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
 
     partial void OnKeyChanged(string? value)
     {
+        OnPropertyChanged(nameof(Label));
         // An array keys its items by their index, unique by construction: checking them would make
         // re-keying a large array after a removal quadratic.
         if (Parent is DataObject parent)
@@ -59,6 +60,12 @@ public abstract partial class DataNode : ObservableObject, INotifyDataErrorInfo
     /// <summary>Whether the node is an array item, the only kind <see cref="Controls.DataFill"/> removes.</summary>
     public bool IsArrayItem => Parent is DataArray;
     public string? Description { get; set; }
+
+    /// <summary>What the schema calls the node (its <c>title</c>), null to go by its key.</summary>
+    public string? Title { get; set; }
+
+    /// <summary>The name a form shows the node under : its title, or its key.</summary>
+    public string? Label => Title ?? Key;
 
     /// <summary>
     /// Whether the node is forced from the manual list, an object or an array then leaving its children out.

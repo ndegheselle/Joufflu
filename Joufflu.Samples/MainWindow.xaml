@@ -475,6 +475,12 @@
                             </nav:NavigationItem.Icon>
                             Data fill
                         </nav:NavigationItem>
+                        <nav:NavigationItem TargetType="{x:Type dataSamples:DataFormSamplesViewModel}">
+                            <nav:NavigationItem.Icon>
+                                <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.FileText}" />
+                            </nav:NavigationItem.Icon>
+                            Data form
+                        </nav:NavigationItem>
                         <nav:NavigationItem TargetType="{x:Type dataSamples:DataEditSamplesViewModel}">
                             <nav:NavigationItem.Icon>
                                 <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Pencil}" />

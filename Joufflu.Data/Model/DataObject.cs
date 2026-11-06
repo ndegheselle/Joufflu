@@ -99,6 +99,7 @@ public partial class DataObject : DataNode, IDataParent
     public override DataObject Clone() => new(Key)
     {
         Description = Description,
+        Title = Title,
         IsExpanded = IsExpanded,
         Properties = [.. Properties.Select(property => property.Clone())],
         IsNullable = IsNullable,
