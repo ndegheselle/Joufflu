@@ -3789,6 +3789,26 @@ public class Shipment
   values. A field forced already keeps its toggle, to bring its editor back.
 - The form scrolls on its own: give it a height.
 
+## An array of strings
+
+An array of plain values shows one editor per item, each with its remove button, and **Add**
+appends a new one from the item type of the schema. Items have no label: their index says nothing.
+
+```csharp
+public class Mailing
+{
+    [Description("Who the mail goes to, one address per item.")]
+    public List<string> Recipients { get; set; } = [];
+}
+
+var node = (DataObject)JsonSchema.FromType<Mailing>().ToDataNode();
+node.Load(JObject.Parse("""{ "Recipients": ["alice@example.com", "bob@example.com"] }"""));
+```
+
+```xml
+<data:DataForm Node="{Binding ArrayNode}" />
+```
+
 ---
 
 <!-- source: https://raw.githubusercontent.com/ndegheselle/Joufflu/main/docs/data/data-edit.md -->

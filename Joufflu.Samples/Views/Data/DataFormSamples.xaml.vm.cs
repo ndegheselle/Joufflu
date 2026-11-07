@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Joufflu.Data.Model;
+using Newtonsoft.Json.Linq;
 using NJsonSchema;
 // System.Windows carries a DataObject of its own; the tree's node is the one meant here.
 using DataObject = Joufflu.Data.Model.DataObject;
@@ -30,7 +31,24 @@ public partial class DataFormSamplesViewModel : ObservableObject
         "<data:DataForm Node=\"{Binding Node}\" ManualValues=\"{Binding ManualValues}\" />\n\n" +
         "Json = Node?.ToToken()?.ToString();";
 
-    public DataFormSamplesViewModel() => Generate();
+    /// <summary>The object of the array sample, built from the <see cref="Mailing"/> schema.</summary>
+    [ObservableProperty]
+    private DataObject? _arrayNode;
+
+    /// <summary>The JSON last generated from [ArrayNode].</summary>
+    [ObservableProperty]
+    private string? _arrayJson;
+
+    public string ArrayCode =>
+        "var node = (DataObject)JsonSchema.FromType<Mailing>().ToDataNode();\n" +
+        "node.Load(JObject.Parse(\"\"\"{ \"Recipients\": [\"alice@example.com\", \"bob@example.com\"] }\"\"\"));\n\n" +
+        "<data:DataForm Node=\"{Binding ArrayNode}\" />";
+
+    public DataFormSamplesViewModel()
+    {
+        Generate();
+        GenerateArray();
+    }
 
     /// <summary>A fresh node from the schema, values back to their defaults.</summary>
     [RelayCommand]
@@ -39,6 +57,18 @@ public partial class DataFormSamplesViewModel : ObservableObject
         var schema = JsonSchema.FromType<Shipment>();
         Node = (DataObject)schema.ToDataNode();
     }
+
+    /// <summary>A fresh node from the <see cref="Mailing"/> schema, filled with a few recipients.</summary>
+    [RelayCommand]
+    private void GenerateArray()
+    {
+        var node = (DataObject)JsonSchema.FromType<Mailing>().ToDataNode();
+        node.Load(JObject.Parse("""{ "Recipients": ["alice@example.com", "bob@example.com"] }"""));
+        ArrayNode = node;
+    }
+
+    [RelayCommand]
+    private void GenerateArrayJson() => ArrayJson = ArrayNode?.ToToken()?.ToString();
 
     [RelayCommand]
     private void GenerateJson() => Json = Node?.ToToken()?.ToString();

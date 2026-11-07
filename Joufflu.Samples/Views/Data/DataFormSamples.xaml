@@ -54,6 +54,42 @@
                     </Button>
                 </Grid>
             </c:CodeExample>
+
+            <c:CodeExample
+                Title="An array of strings"
+                Code="{Binding ArrayCode}"
+                Description="An array of plain values shows one editor per item, removed with the button on its right, and adds a new one from the item type of the schema.">
+                <Grid Height="320" toolkit:Spacing.Gap="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <data:DataForm Node="{Binding ArrayNode}" />
+                    <TextBox
+                        Grid.Column="1"
+                        Height="auto"
+                        VerticalContentAlignment="Top"
+                        AcceptsReturn="True"
+                        FontFamily="Consolas"
+                        IsReadOnly="True"
+                        Text="{Binding ArrayJson}"
+                        VerticalScrollBarVisibility="Auto" />
+
+                    <Button Grid.Row="1" Command="{Binding GenerateArrayCommand}">Reset</Button>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Command="{Binding GenerateArrayJsonCommand}"
+                        Style="{StaticResource PrimaryButton}">
+                        Generate json
+                    </Button>
+                </Grid>
+            </c:CodeExample>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

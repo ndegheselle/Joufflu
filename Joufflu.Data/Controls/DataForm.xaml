@@ -23,6 +23,7 @@
 
             <converters:DataFileOptionsConverter x:Key="FileOptionsConverter" />
             <converters:DataManualToggleVisibilityConverter x:Key="ManualToggleVisibilityConverter" />
+            <Thickness x:Key="ItemsSpacing">0,0,0,4</Thickness>
 
             <!--#region Editors : the ones of DataResources, and the inputs the schema asks for-->
             <DataTemplate x:Key="MultilineEditor">
@@ -115,7 +116,10 @@
                         Text="*"
                         ToolTip="Required"
                         Visibility="{Binding IsRequired, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
-                    <ToggleButton Grid.Column="2" Style="{StaticResource FormManualToggle}">
+                    <ToggleButton
+                        Grid.Column="2"
+                        toolkit:Sizing.Size="xs"
+                        Style="{StaticResource DataManualToggle}">
                         <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
                     </ToggleButton>
                 </Grid>
@@ -129,30 +133,18 @@
                 <Setter Property="Visibility" Value="{Binding Description, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
             </Style>
 
-            <!--  Removes an array item, from the right of its editor.  -->
-            <Style
-                x:Key="FormRemoveButton"
-                BasedOn="{StaticResource DataRemoveButton}"
-                TargetType="Button">
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="Visibility" Value="{Binding IsArrayItem, Converter={x:Static jonverters:VisibilityConverter.Default}}" />
+            <!--  The line on the left that sets apart the fields of an object, or an array item.  -->
+            <Style x:Key="FormGroupLine" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
+                <Setter Property="BorderThickness" Value="1,0,0,0" />
             </Style>
 
             <!--#region One template per kind of node, shown recursively-->
             <DataTemplate DataType="{x:Type jodels:DataValue}">
                 <StackPanel toolkit:Spacing.Gap="2">
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
+                    <ContentControl Content="{Binding}" Style="{StaticResource FormEditorHost}" />
                     <TextBlock Style="{StaticResource FormDescription}" />
-                    <Grid toolkit:Spacing.Gap="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <ContentControl Content="{Binding}" Style="{StaticResource FormEditorHost}" />
-                        <Button Grid.Column="1" Style="{StaticResource FormRemoveButton}">
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
-                        </Button>
-                    </Grid>
                 </StackPanel>
             </DataTemplate>
 
@@ -160,52 +152,86 @@
                 <StackPanel toolkit:Spacing.Gap="2">
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
                     <TextBlock Style="{StaticResource FormDescription}" />
-                    <!--  The remove button stays, forced or not : an item forced is still an item.  -->
-                    <Grid toolkit:Spacing.Gap="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+                    <Grid>
                         <ContentControl Style="{StaticResource FormManualHost}" />
-                        <!--  The fields of the object, set apart by a line on their left.  -->
-                        <Border
-                            Visibility="{Binding IsManual, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}"
-                            Padding="{DynamicResource {x:Static joufflu:Dimensions.DisplayPaddingSm}}"
-                            BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}"
-                            BorderThickness="2,0,0,0">
+                        <!--  The fields of the object, set apart by a line on their left. An array item has the line of its item already.  -->
+                        <Border Visibility="{Binding IsManual, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}">
+                            <Border.Style>
+                                <Style BasedOn="{StaticResource FormGroupLine}" TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsArrayItem}" Value="True">
+                                            <Setter Property="BorderThickness" Value="0" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
                             <ItemsControl ItemsSource="{Binding Properties}">
+                                <ItemsControl.Style>
+                                    <Style TargetType="ItemsControl">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsArrayItem}" Value="True">
+                                                <Setter Property="toolkit:Derive.MarginFactor" Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ItemsControl.Style>
                                 <ItemsControl.ItemContainerStyle>
                                     <Style TargetType="ContentPresenter">
-                                        <Setter Property="Margin" Value="0,0,0,8" />
+                                        <Setter Property="Margin" Value="{StaticResource ItemsSpacing}" />
                                     </Style>
                                 </ItemsControl.ItemContainerStyle>
                             </ItemsControl>
                         </Border>
-                        <Button Grid.Column="1" Style="{StaticResource FormRemoveButton}">
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
-                        </Button>
                     </Grid>
                 </StackPanel>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type jodels:DataArray}">
-                <StackPanel toolkit:Spacing.Gap="2">
+                <StackPanel>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
                     <TextBlock Style="{StaticResource FormDescription}" />
-                    <Grid toolkit:Spacing.Gap="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+                    <Grid>
                         <ContentControl Style="{StaticResource FormManualHost}" />
                         <StackPanel toolkit:Spacing.Gap="4" Visibility="{Binding IsManual, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}">
-                            <!--  Each item removes itself, see the remove button of its template.  -->
                             <ItemsControl ItemsSource="{Binding Values}">
                                 <ItemsControl.ItemContainerStyle>
                                     <Style TargetType="ContentPresenter">
-                                        <Setter Property="Margin" Value="0,0,0,4" />
+                                        <Setter Property="Margin" Value="{StaticResource ItemsSpacing}" />
                                     </Style>
                                 </ItemsControl.ItemContainerStyle>
+                                <ItemsControl.ItemTemplate>
+                                    <!--  Any item, whatever its kind, is set apart by a line on its left, its remove button at the end of it.  -->
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <Border
+                                                Grid.Column="0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Stretch"
+                                                toolkit:Derive.BorderThickness="{x:Static joufflu:Dimensions.DisplayThickness}"
+                                                toolkit:Derive.BorderThicknessFactor="1,0,0,0"
+                                                BorderBrush="{DynamicResource {x:Static joufflu:Brushes.DisplayBorder0Brush}}" />
+
+                                            <Button
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom"
+                                                toolkit:Sizing.Size="xs"
+                                                Style="{StaticResource DataRemoveButton}">
+                                                <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
+                                            </Button>
+
+                                            <ContentPresenter Grid.Column="1" Content="{Binding}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
                             </ItemsControl>
                             <Button
                                 HorizontalAlignment="Left"
@@ -218,9 +244,6 @@
                                 </StackPanel>
                             </Button>
                         </StackPanel>
-                        <Button Grid.Column="1" Style="{StaticResource FormRemoveButton}">
-                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Trash}" />
-                        </Button>
                     </Grid>
                 </StackPanel>
             </DataTemplate>
@@ -232,7 +255,7 @@
         <ItemsControl Margin="0,0,4,0" ItemsSource="{Binding Node.Properties}">
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="ContentPresenter">
-                    <Setter Property="Margin" Value="0,0,0,8" />
+                    <Setter Property="Margin" Value="{StaticResource ItemsSpacing}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>

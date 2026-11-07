@@ -13,8 +13,11 @@
     mc:Ignorable="d">
     <ScrollViewer Padding="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}" VerticalScrollBarVisibility="Auto">
         <StackPanel toolkit:Spacing.Gap="{DynamicResource {x:Static joufflu:Dimensions.Spacing}}">
-            <TextBlock toolkit:Sizing.Size="xl" FontWeight="Bold" TextWrapping="Wrap" Text="File picker" />
-
+            <TextBlock
+                toolkit:Sizing.Size="xl"
+                FontWeight="Bold"
+                Text="File picker"
+                TextWrapping="Wrap" />
             <c:CodeExample
                 Title="FilePicker"
                 Code="{Binding FilePickerCode}"
@@ -43,7 +46,7 @@
                     HorizontalAlignment="Left"
                     toolkit:Spacing.Gap="12">
                     <inputs:FilePicker FilePath="{Binding RequiredFilePath, Mode=TwoWay}" />
-                    <inputs:FilePicker Validation.ErrorTemplate="{x:Null}" FilePath="{Binding RequiredFilePath, Mode=TwoWay}" />
+                    <inputs:FilePicker FilePath="{Binding RequiredFilePath, Mode=TwoWay}" Validation.ErrorTemplate="{x:Null}" />
                 </StackPanel>
             </c:CodeExample>
 

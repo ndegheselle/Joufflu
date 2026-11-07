@@ -30,12 +30,30 @@ namespace Joufflu.Inputs.Controls
                 nameof(SearchText),
                 typeof(string),
                 typeof(Search),
-                new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSearchTextChanged));
 
         public string? SearchText
         {
             get => (string?)GetValue(SearchTextProperty);
             set => SetValue(SearchTextProperty, value);
+        }
+
+        /// <summary>
+        /// Shows a search text set from outside (XAML, binding, code) in the box. It is taken as already searched:
+        /// whoever set it knows the query, so it doesn't raise the event or the command again.
+        /// </summary>
+        private static void OnSearchTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var search = (Search)d;
+            string text = (string?)e.NewValue ?? string.Empty;
+            // Set by RaiseSearch from the current text, nothing to show.
+            if (search.Text == text)
+                return;
+
+            search._lastSearch = text;
+            search.Text = text;
+            // Setting the text restarted the debounce through OnTextChanged, there is nothing left to search.
+            search._searchTimer.Stop();
         }
 
         /// <summary>Executed with the debounced search text as parameter whenever the query settles.</summary>

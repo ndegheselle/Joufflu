@@ -28,7 +28,7 @@
     xmlns:views="clr-namespace:Joufflu.Samples.Views"
     xmlns:vm="clr-namespace:Joufflu.Samples.ViewModels"
     Width="1100"
-    Height="790"
+    Height="805"
     d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
     AllowContentOverTitleBar="True"
     WindowStartupLocation="CenterScreen"
@@ -43,10 +43,10 @@
             Orientation="Horizontal">
             <!--  Finds a page by its title or summary, as registered in ShellViewModel, in an overlay  -->
             <Button
-                toolkit:Sizing.Size="sm"
-                Command="{Binding SearchPageCommand}"
                 Width="200"
-                HorizontalContentAlignment="Left">
+                HorizontalContentAlignment="Left"
+                toolkit:Sizing.Size="sm"
+                Command="{Binding SearchPageCommand}">
                 <StackPanel Orientation="Horizontal">
                     <fonts:FontIcon Text="{x:Static fonts:LucideFontIcons.Search}" />
                     <TextBlock Margin="4,0,0,0">Search ...</TextBlock>
@@ -69,7 +69,7 @@
                 Style="{StaticResource GhostButton}">
                 <fonts:FontIcon>
                     <fonts:FontIcon.Style>
-                        <Style TargetType="{x:Type fonts:FontIcon}" BasedOn="{StaticResource {x:Type fonts:FontIcon}}">
+                        <Style BasedOn="{StaticResource {x:Type fonts:FontIcon}}" TargetType="{x:Type fonts:FontIcon}">
                             <Setter Property="Text" Value="{x:Static fonts:LucideFontIcons.Moon}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsDark, Source={x:Static themes:ThemeManager.Instance}}" Value="True">
