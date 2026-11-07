@@ -52,6 +52,8 @@ public class Shipment
   on `Value` through `INotifyDataErrorInfo`, so its editor turns its border red and
   `ValidationErrorTemplate` adds a corner badge whose tooltip says why (see
   [Create a custom control](../toolkit/custom-control.md)). A forced value is never checked.
+- A boolean is a single checkbox holding its label. Forced, it shows its label above the manual
+  values, like any other field.
 - **Add** on an array clones its `Template`. Each item, forced or not, has its own remove button.
 - A field offers to be forced only to the [manual values](index.md#manual-values) that fit it:
   `null` and undefined alone don't clutter a form. With no `ManualValues`, the form only edits

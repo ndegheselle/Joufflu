@@ -23,6 +23,7 @@ public partial class DataFormSamplesViewModel : ObservableObject
     [
         new(EnumDataType.String, "$previous.Customer"),
         new(EnumDataType.Integer, "$previous.Count"),
+        new(EnumDataType.Boolean, "$previous.IsExpress"),
     ];
 
     public string FormCode =>

@@ -140,13 +140,68 @@
                 <Setter Property="BorderThickness" Value="1,0,0,0" />
             </Style>
 
-            <!--#region One template per kind of node, shown recursively-->
-            <DataTemplate DataType="{x:Type jodels:DataValue}">
+            <!--  A value : its label above its editor.  -->
+            <DataTemplate x:Key="FormValueField">
                 <StackPanel toolkit:Spacing.Gap="2">
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
                     <ContentControl Content="{Binding}" Style="{StaticResource FormEditorHost}" />
                     <TextBlock Style="{StaticResource FormDescription}" />
                 </StackPanel>
+            </DataTemplate>
+
+            <!--  A boolean : a single checkbox holding the label, its toggle on the right. An array item has neither label nor toggle.  -->
+            <DataTemplate x:Key="FormBooleanField">
+                <StackPanel toolkit:Spacing.Gap="2">
+                    <Grid toolkit:Spacing.Gap="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding Value}">
+                            <CheckBox.Style>
+                                <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+                                    <Setter Property="Content" Value="{Binding Label}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsArrayItem}" Value="True">
+                                            <Setter Property="Content" Value="{x:Null}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
+                        <ToggleButton
+                            Grid.Column="1"
+                            toolkit:Sizing.Size="xs"
+                            Style="{StaticResource DataManualToggle}"
+                            Visibility="{Binding IsArrayItem, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}">
+                            <jonts:FontIcon Text="{x:Static jonts:LucideFontIcons.Feather}" />
+                        </ToggleButton>
+                    </Grid>
+                    <TextBlock Style="{StaticResource FormDescription}" />
+                </StackPanel>
+            </DataTemplate>
+
+            <!--  A forced boolean has no checkbox left to hold its label : it is shown as any other value.  -->
+            <Style x:Key="FormValueHost" TargetType="ContentControl">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="ContentTemplate" Value="{StaticResource FormValueField}" />
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Type}" Value="Boolean" />
+                            <Condition Binding="{Binding IsManual}" Value="False" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="ContentTemplate" Value="{StaticResource FormBooleanField}" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--#region One template per kind of node, shown recursively-->
+            <DataTemplate DataType="{x:Type jodels:DataValue}">
+                <ContentControl Content="{Binding}" Style="{StaticResource FormValueHost}" />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type jodels:DataObject}">

@@ -32,5 +32,9 @@ public class Shipment
 
     public EnumDelivery Delivery { get; set; }
 
+    [Display(Name = "Express delivery")]
+    [Description("Delivered within a day, a single checkbox holding its label.")]
+    public bool IsExpress { get; set; }
+
     public List<OrderLine> Lines { get; set; } = [];
 }
