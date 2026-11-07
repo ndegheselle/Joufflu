@@ -20,7 +20,8 @@ the source list.
 ```
 
 <kbd>Enter</kbd> adds the typed text when `AllowAdd` is set, and <kbd>Backspace</kbd>
-on an empty text removes the last tag.
+on an empty text removes the last tag. With `AllowAdd` and no `ItemsSource`, it is a free
+list of tags: no chevron, nothing drops down.
 
 Bind `SelectedItems` to a mutable `IList` (the gallery uses an
 `ObservableCollection<object>`; with `AllowAdd` its element type must accept a

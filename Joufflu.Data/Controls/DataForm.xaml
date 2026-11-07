@@ -23,6 +23,7 @@
 
             <converters:DataFileOptionsConverter x:Key="FileOptionsConverter" />
             <converters:DataManualToggleVisibilityConverter x:Key="ManualToggleVisibilityConverter" />
+            <converters:DataArrayValuesConverter x:Key="ArrayValuesConverter" />
             <Thickness x:Key="ItemsSpacing">0,0,0,4</Thickness>
 
             <!--#region Editors : the ones of DataResources, and the inputs the schema asks for-->
@@ -189,10 +190,43 @@
             <DataTemplate DataType="{x:Type jodels:DataArray}">
                 <StackPanel>
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FormFieldHeader}" />
-                    <TextBlock Style="{StaticResource FormDescription}" />
                     <Grid>
                         <ContentControl Style="{StaticResource FormManualHost}" />
-                        <StackPanel toolkit:Spacing.Gap="4" Visibility="{Binding IsManual, Converter={x:Static jonverters:VisibilityConverter.Default}, ConverterParameter=False}">
+                        <!--  An array of strings is a list of tags, typed then added with Enter.  -->
+                        <jnputs:ComboBoxTags
+                            AllowAdd="True"
+                            IsEditable="True"
+                            SelectedItems="{Binding Converter={StaticResource ArrayValuesConverter}}">
+                            <jnputs:ComboBoxTags.Style>
+                                <!--  The theme style still applies under this one : it comes from Generic.xaml.  -->
+                                <Style TargetType="jnputs:ComboBoxTags">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Template.Type}" Value="String" />
+                                                <Condition Binding="{Binding IsManual}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </jnputs:ComboBoxTags.Style>
+                        </jnputs:ComboBoxTags>
+                        <!--  Any other array lists its items, each with its own editor.  -->
+                        <StackPanel toolkit:Spacing.Gap="4">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsManual}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Template.Type}" Value="String">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
                             <ItemsControl ItemsSource="{Binding Values}">
                                 <ItemsControl.ItemContainerStyle>
                                     <Style TargetType="ContentPresenter">
@@ -245,6 +279,7 @@
                             </Button>
                         </StackPanel>
                     </Grid>
+                    <TextBlock Style="{StaticResource FormDescription}" />
                 </StackPanel>
             </DataTemplate>
             <!--#endregion-->

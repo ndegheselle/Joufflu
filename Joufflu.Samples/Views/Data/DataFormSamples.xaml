@@ -58,7 +58,7 @@
             <c:CodeExample
                 Title="An array of strings"
                 Code="{Binding ArrayCode}"
-                Description="An array of plain values shows one editor per item, removed with the button on its right, and adds a new one from the item type of the schema.">
+                Description="An array of strings is a ComboBoxTags : each item is a tag, removed with its cross, and Enter adds the typed text as a new one.">
                 <Grid Height="320" toolkit:Spacing.Gap="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />

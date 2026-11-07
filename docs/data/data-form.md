@@ -60,8 +60,9 @@ public class Shipment
 
 ## An array of strings
 
-An array of plain values shows one editor per item, each with its remove button, and **Add**
-appends a new one from the item type of the schema. Items have no label: their index says nothing.
+An array of strings is a [`ComboBoxTags`](../inputs/combo-box-tags.md): each item is a tag,
+removed with its cross, and **Enter** adds the typed text as a new one. Any other array lists its
+items, each with its own editor and remove button.
 
 ```csharp
 public class Mailing

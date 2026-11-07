@@ -2914,7 +2914,8 @@ the source list.
 ```
 
 <kbd>Enter</kbd> adds the typed text when `AllowAdd` is set, and <kbd>Backspace</kbd>
-on an empty text removes the last tag.
+on an empty text removes the last tag. With `AllowAdd` and no `ItemsSource`, it is a free
+list of tags: no chevron, nothing drops down.
 
 Bind `SelectedItems` to a mutable `IList` (the gallery uses an
 `ObservableCollection<object>`; with `AllowAdd` its element type must accept a
@@ -3791,8 +3792,9 @@ public class Shipment
 
 ## An array of strings
 
-An array of plain values shows one editor per item, each with its remove button, and **Add**
-appends a new one from the item type of the schema. Items have no label: their index says nothing.
+An array of strings is a [`ComboBoxTags`](../inputs/combo-box-tags.md): each item is a tag,
+removed with its cross, and **Enter** adds the typed text as a new one. Any other array lists its
+items, each with its own editor and remove button.
 
 ```csharp
 public class Mailing

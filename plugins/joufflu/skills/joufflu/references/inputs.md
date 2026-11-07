@@ -96,7 +96,8 @@ the focus leaves.
 ## ComboBoxTags
 
 Builds on `ComboBoxSearch`: selected items are shown as removable tags. `AllowAdd="True"`
-lets users add values not in the list.
+lets users add values not in the list; with no `ItemsSource` it is a free list of tags
+(no chevron, no drop down).
 
 ```xml
 <inputs:ComboBoxTags AllowAdd="True"

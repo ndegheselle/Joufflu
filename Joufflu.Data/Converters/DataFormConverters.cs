@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -37,4 +38,83 @@ public class DataManualToggleVisibilityConverter : IMultiValueConverter
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         => throw new NotSupportedException($"{nameof(DataManualToggleVisibilityConverter)} only tells whether the toggle shows.");
+}
+
+/// <summary>The values of a <see cref="DataArray"/> of plain values, as the list a <see cref="ComboBoxTags"/> edits.</summary>
+public class DataArrayValuesConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is DataArray array ? new DataArrayValues(array) : null;
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException($"{nameof(DataArrayValuesConverter)} only reads the array.");
+}
+
+/// <summary>
+/// The values the items of [array] hold, as a list : adding a value adds an item, a copy of the array's template
+/// holding it, removing one removes the first item holding it.
+/// </summary>
+public class DataArrayValues(DataArray array) : IList
+{
+    public object? this[int index]
+    {
+        get => ValueOf(array.Values[index]);
+        set => ((DataValue)array.Values[index]).Value = value;
+    }
+
+    public bool IsReadOnly => false;
+    public bool IsFixedSize => false;
+    public int Count => array.Values.Count;
+    public object SyncRoot => this;
+    public bool IsSynchronized => false;
+
+    public int Add(object? value)
+    {
+        Insert(array.Values.Count, value);
+        return array.Values.Count - 1;
+    }
+
+    public void Insert(int index, object? value)
+    {
+        var item = array.Template?.Clone() as DataValue ?? new DataValue(EnumDataType.String, null, []);
+        item.Value = value;
+        array.Add(item);
+        if (index >= array.Values.Count - 1)
+            return;
+
+        array.Values.Move(array.Values.Count - 1, index);
+        for (int i = 0; i < array.Values.Count; i++)
+            array.Values[i].Key = $"[{i}]";
+    }
+
+    public void Remove(object? value)
+    {
+        int index = IndexOf(value);
+        if (index >= 0)
+            RemoveAt(index);
+    }
+
+    public void RemoveAt(int index) => array.Remove(array.Values[index]);
+
+    public void Clear() => array.Values.Clear();
+
+    public int IndexOf(object? value)
+    {
+        for (int i = 0; i < array.Values.Count; i++)
+            if (Equals(ValueOf(array.Values[i]), value))
+                return i;
+        return -1;
+    }
+
+    public bool Contains(object? value) => IndexOf(value) >= 0;
+
+    public void CopyTo(Array target, int index)
+    {
+        foreach (object? value in this)
+            target.SetValue(value, index++);
+    }
+
+    public IEnumerator GetEnumerator() => array.Values.Select(ValueOf).GetEnumerator();
+
+    private static object? ValueOf(DataNode item) => (item as DataValue)?.Value;
 }

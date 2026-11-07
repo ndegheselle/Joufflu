@@ -151,7 +151,8 @@ namespace Joufflu.Inputs.Controls
                 return;
 
             SelectedIndex = -1;
-            if (IsDropDownOpen == false && !string.IsNullOrEmpty(Text))
+            // Without a list there is nothing to drop down, the text is all there is (ComboBoxTags adding what is typed).
+            if (IsDropDownOpen == false && !string.IsNullOrEmpty(Text) && ItemsSource != null)
             {
                 IsDropDownOpen = true;
 
